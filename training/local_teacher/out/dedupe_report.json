@@ -1,15 +1,22 @@
 {
- "scenarios": "/workspace/pocket-glimmer/training/out/scenarios.jsonl",
- "n_in": 2000,
+ "scenarios": "out/pool.jsonl",
+ "n_in": 3923,
  "eval_files": [
-  "eval/gold_decisions.jsonl",
-  "eval/gold_decisions_v2.jsonl"
+  "eval/gold/gold_all.jsonl",
+  "eval/gold/gold_calibration.jsonl",
+  "eval/gold/gold_test.jsonl",
+  "eval/gold_decisions.jsonl"
  ],
- "n_eval_items": 137,
+ "n_eval_items": 636,
  "method": "normalized exact (context, user utterance) + char-5gram Jaccard>=0.8 (context or utterance)",
- "n_dropped": 56,
- "n_kept": 1944,
+ "n_dropped": 175,
+ "n_kept": 3748,
  "dropped": [
+  {
+   "id": "s0-00032",
+   "why": "near:eval/gold/gold_all.jsonl:g175:ctx=0.37:utt=0.81",
+   "context": "Now: Thu 16:15\nUser location: the gym\nUser: Remind me to pay rent now"
+  },
   {
    "id": "s0-00059",
    "why": "exact_utterance",
@@ -17,8 +24,13 @@
   },
   {
    "id": "s0-00064",
-   "why": "near:eval/gold_decisions.jsonl:g21:ctx=0.91:utt=0.91",
+   "why": "near:eval/gold/gold_all.jsonl:g21:ctx=0.91:utt=0.91",
    "context": "Notification from ShopMart: '20% off sneakers this weekend!'"
+  },
+  {
+   "id": "s0-00067",
+   "why": "near:eval/gold/gold_all.jsonl:g175:ctx=0.39:utt=0.81",
+   "context": "Now: Tue 17:30\nUser location: home\nUser: Remind me to pay rent now"
   },
   {
    "id": "s0-00070",
@@ -46,8 +58,13 @@
    "context": "Network: online\nUser: Send it"
   },
   {
+   "id": "s0-00152",
+   "why": "exact_utterance",
+   "context": "Now: Tue 22:15\nUser location: work\nUser: How do you spell necessary?"
+  },
+  {
    "id": "s0-00194",
-   "why": "near:eval/gold_decisions.jsonl:g19:ctx=0.84:utt=0.84",
+   "why": "near:eval/gold/gold_all.jsonl:g19:ctx=0.84:utt=0.84",
    "context": "Existing memory: User works at Northwind\nNew statement: lol I'd quit Northwind if I won the lottery"
   },
   {
@@ -56,14 +73,34 @@
    "context": "Now: Thu 6:30\nUser location: unknown\nUser: What's 15% of 80?"
   },
   {
+   "id": "s0-00335",
+   "why": "near:eval/gold/gold_all.jsonl:g195:ctx=0.80:utt=0.80",
+   "context": "Trigger: arrive, place: the office\nMemory: User needs to buy batteries"
+  },
+  {
    "id": "s0-00339",
    "why": "exact_context",
    "context": "Network: online\nUser: Move it"
   },
   {
+   "id": "s0-00369",
+   "why": "near:eval/gold/gold_all.jsonl:g175:ctx=0.39:utt=0.81",
+   "context": "Now: Mon 9:42\nUser location: work\nUser: Remind me to pay rent now"
+  },
+  {
+   "id": "s0-00382",
+   "why": "exact_utterance",
+   "context": "Now: Sat 15:55\nUser location: home\nUser: How do you spell necessary?"
+  },
+  {
    "id": "s0-00383",
    "why": "exact_utterance",
    "context": "Now: Fri 8:05\nUser location: work\nNetwork: offline\nUser: Move it"
+  },
+  {
+   "id": "s0-00412",
+   "why": "exact_utterance",
+   "context": "Now: Sun 6:42\nUser location: the gym\nNetwork: online\nUser: How do you spell necessary?"
   },
   {
    "id": "s0-00505",
@@ -74,6 +111,21 @@
    "id": "s0-00528",
    "why": "exact_utterance",
    "context": "Now: Sat 20:42\nUser location: unknown\nNetwork: online\nUser: Do the thing from before"
+  },
+  {
+   "id": "s0-00539",
+   "why": "exact_utterance",
+   "context": "Now: Fri 17:42\nUser location: work\nNetwork: offline\nUser: How do you spell necessary?"
+  },
+  {
+   "id": "s0-00546",
+   "why": "exact_context",
+   "context": "Trigger: arrive, place: the gym\nMemory: User needs to buy batteries"
+  },
+  {
+   "id": "s0-00584",
+   "why": "exact_utterance",
+   "context": "Now: Sun 16:42\nUser location: home\nNetwork: online\nUser: How do you spell necessary?"
   },
   {
    "id": "s0-00590",
@@ -102,8 +154,13 @@
   },
   {
    "id": "s0-00674",
-   "why": "near:eval/gold_decisions.jsonl:g24:ctx=0.36:utt=0.95",
+   "why": "near:eval/gold/gold_all.jsonl:g24:ctx=0.36:utt=0.95",
    "context": "Now: Sun 21:05\nUser location: unknown\nUser: Remind me to water the plants tomorrow at 9am"
+  },
+  {
+   "id": "s0-00676",
+   "why": "exact_context",
+   "context": "User: How do you spell necessary?"
   },
   {
    "id": "s0-00677",
@@ -119,6 +176,11 @@
    "id": "s0-00745",
    "why": "exact_utterance",
    "context": "Now: Wed 14:55\nUser location: home\nNetwork: offline\nUser: Do the thing from before"
+  },
+  {
+   "id": "s0-00754",
+   "why": "near:eval/gold/gold_all.jsonl:g175:ctx=0.37:utt=0.81",
+   "context": "Now: Fri 7:30\nUser location: the gym\nUser: Remind me to pay rent now"
   },
   {
    "id": "s0-00768",
@@ -137,8 +199,13 @@
   },
   {
    "id": "s0-00822",
-   "why": "near:eval/gold_decisions.jsonl:g24:ctx=0.37:utt=0.95",
+   "why": "near:eval/gold/gold_all.jsonl:g24:ctx=0.37:utt=0.95",
    "context": "Now: Sat 10:55\nUser location: the gym\nUser: Remind me to water the plants tomorrow at 9am"
+  },
+  {
+   "id": "s0-00832",
+   "why": "near:eval/gold/gold_all.jsonl:g175:ctx=0.35:utt=0.81",
+   "context": "Now: Sun 23:05\nUser location: commuting\nUser: Remind me to pay rent now"
   },
   {
    "id": "s0-00835",
@@ -151,9 +218,24 @@
    "context": "User: What's 15% of 80?"
   },
   {
+   "id": "s0-00911",
+   "why": "exact_utterance",
+   "context": "Now: Thu 15:15\nUser location: the gym\nUser: How do you spell necessary?"
+  },
+  {
+   "id": "s0-00922",
+   "why": "exact_utterance",
+   "context": "Now: Sat 15:05\nUser location: the gym\nUser: How do you spell necessary?"
+  },
+  {
    "id": "s0-00923",
    "why": "exact_utterance",
    "context": "Now: Tue 14:30\nUser location: unknown\nNetwork: online\nUser: Send it"
+  },
+  {
+   "id": "s0-00931",
+   "why": "near:eval/gold/gold_all.jsonl:g195:ctx=0.80:utt=0.80",
+   "context": "Trigger: arrive, place: the office\nMemory: User needs to buy ibuprofen"
   },
   {
    "id": "s0-00988",
@@ -169,6 +251,16 @@
    "id": "s0-01001",
    "why": "exact_utterance",
    "context": "Now: Wed 7:00\nUser location: a cafe\nNetwork: offline\nUser: Do the thing from before"
+  },
+  {
+   "id": "s0-01020",
+   "why": "exact_context",
+   "context": "Trigger: arrive, place: Whole Foods\nMemory: User needs to buy eggs"
+  },
+  {
+   "id": "s0-01021",
+   "why": "near:eval/gold/gold_all.jsonl:g175:ctx=0.35:utt=0.81",
+   "context": "Now: Wed 10:05\nUser location: commuting\nUser: Remind me to pay rent now"
   },
   {
    "id": "s0-01024",
@@ -191,6 +283,11 @@
    "context": "Now: Fri 18:05\nUser location: home\nUser: What's 15% of 80?"
   },
   {
+   "id": "s0-01158",
+   "why": "exact_utterance",
+   "context": "Now: Sat 6:30\nUser location: the gym\nNetwork: offline\nUser: How do you spell necessary?"
+  },
+  {
    "id": "s0-01169",
    "why": "exact_utterance",
    "context": "Now: Fri 7:05\nUser location: a cafe\nNetwork: online\nUser: Move it"
@@ -206,6 +303,11 @@
    "context": "Now: Sat 11:55\nUser location: work\nNetwork: online\nUser: Move it"
   },
   {
+   "id": "s0-01235",
+   "why": "exact_utterance",
+   "context": "Now: Wed 14:00\nUser location: unknown\nUser: How do you spell necessary?"
+  },
+  {
    "id": "s0-01236",
    "why": "exact_utterance",
    "context": "Now: Wed 8:15\nUser location: home\nNetwork: online\nUser: Send it"
@@ -216,9 +318,34 @@
    "context": "Now: Thu 12:55\nUser location: home\nNetwork: online\nUser: Move it"
   },
   {
+   "id": "s0-01288",
+   "why": "near:eval/gold/gold_all.jsonl:g175:ctx=0.35:utt=0.81",
+   "context": "Now: Tue 11:30\nUser location: commuting\nUser: Remind me to pay rent now"
+  },
+  {
+   "id": "s0-01368",
+   "why": "exact_utterance",
+   "context": "Now: Mon 7:05\nUser location: commuting\nNetwork: online\nUser: How do you spell necessary?"
+  },
+  {
+   "id": "s0-01376",
+   "why": "near:eval/gold/gold_all.jsonl:g175:ctx=0.37:utt=0.81",
+   "context": "Now: Fri 13:30\nUser location: unknown\nUser: Remind me to pay rent now"
+  },
+  {
+   "id": "s0-01377",
+   "why": "exact_utterance",
+   "context": "Now: Tue 12:42\nUser location: a cafe\nUser: How do you spell necessary?"
+  },
+  {
    "id": "s0-01387",
    "why": "exact_utterance",
    "context": "Now: Tue 12:42\nUser location: a cafe\nUser: Remind me to take my vitamins at 8pm"
+  },
+  {
+   "id": "s0-01520",
+   "why": "exact_utterance",
+   "context": "Now: Sat 11:00\nUser location: work\nNetwork: offline\nUser: How do you spell necessary?"
   },
   {
    "id": "s0-01544",
@@ -231,9 +358,19 @@
    "context": "User: What's Priya's email address?"
   },
   {
+   "id": "s0-01565",
+   "why": "exact_utterance",
+   "context": "Now: Fri 17:55\nUser location: unknown\nNetwork: offline\nUser: How do you spell necessary?"
+  },
+  {
    "id": "s0-01575",
    "why": "exact_utterance",
    "context": "Now: Mon 16:05\nUser location: work\nNetwork: offline\nUser: Move it"
+  },
+  {
+   "id": "s0-01586",
+   "why": "exact_utterance",
+   "context": "Now: Thu 11:30\nUser location: work\nUser: How do you spell necessary?"
   },
   {
    "id": "s0-01587",
@@ -241,14 +378,44 @@
    "context": "Now: Fri 23:42\nUser location: unknown\nNetwork: offline\nUser: Move it"
   },
   {
+   "id": "s0-01610",
+   "why": "exact_utterance",
+   "context": "Now: Tue 20:05\nUser location: the gym\nNetwork: online\nUser: How do you spell necessary?"
+  },
+  {
+   "id": "s0-01641",
+   "why": "near:eval/gold/gold_all.jsonl:g201:ctx=0.81:utt=0.81",
+   "context": "Trigger: arrive, place: home\nMemory: User needs to buy dish soap"
+  },
+  {
+   "id": "s0-01653",
+   "why": "near:eval/gold/gold_all.jsonl:g175:ctx=0.37:utt=0.81",
+   "context": "Now: Mon 13:55\nUser location: the gym\nUser: Remind me to pay rent now"
+  },
+  {
+   "id": "s0-01655",
+   "why": "exact_utterance",
+   "context": "Now: Tue 16:15\nUser location: home\nNetwork: online\nUser: How do you spell necessary?"
+  },
+  {
    "id": "s0-01701",
    "why": "exact_utterance",
    "context": "Now: Sun 20:42\nUser location: a cafe\nNetwork: offline\nUser: Send it"
   },
   {
+   "id": "s0-01746",
+   "why": "exact_utterance",
+   "context": "Now: Tue 9:00\nUser location: the gym\nUser: How do you spell necessary?"
+  },
+  {
    "id": "s0-01767",
    "why": "exact_utterance",
    "context": "Now: Sun 22:00\nUser location: a cafe\nNetwork: offline\nUser: Move it"
+  },
+  {
+   "id": "s0-01784",
+   "why": "near:eval/gold/gold_all.jsonl:g188:ctx=0.82:utt=0.82",
+   "context": "Trigger: arrive, place: Whole Foods\nMemory: User needs to buy oat milk"
   },
   {
    "id": "s0-01788",
@@ -281,14 +448,444 @@
    "context": "Network: online\nUser: Do the thing from before"
   },
   {
+   "id": "s0-01841",
+   "why": "near:eval/gold/gold_all.jsonl:g175:ctx=0.39:utt=0.81",
+   "context": "Now: Thu 23:30\nUser location: work\nUser: Remind me to pay rent now"
+  },
+  {
+   "id": "s0-01852",
+   "why": "near:eval/gold/gold_all.jsonl:g195:ctx=0.80:utt=0.80",
+   "context": "Trigger: arrive, place: the office\nMemory: User needs to buy dish soap"
+  },
+  {
    "id": "s0-01856",
    "why": "exact_utterance",
    "context": "Now: Sat 20:05\nUser location: commuting\nNetwork: offline\nUser: Send it"
   },
   {
    "id": "s0-01931",
-   "why": "near:eval/gold_decisions_v2.jsonl:g076:ctx=0.81:utt=0.81",
+   "why": "near:eval/gold/gold_all.jsonl:g076:ctx=0.81:utt=0.81",
    "context": "Trigger: arrive, place: CVS pharmacy\nMemory: User needs to buy eggs"
+  },
+  {
+   "id": "s0-01944",
+   "why": "near:eval/gold/gold_all.jsonl:g175:ctx=0.37:utt=0.81",
+   "context": "Now: Fri 8:42\nUser location: unknown\nUser: Remind me to pay rent now"
+  },
+  {
+   "id": "seed1-s1-00082",
+   "why": "exact_utterance",
+   "context": "Now: Sat 21:00\nUser location: unknown\nNetwork: offline\nUser: What's 15% of 80?"
+  },
+  {
+   "id": "seed1-s1-00106",
+   "why": "exact_utterance",
+   "context": "Now: Wed 16:30\nUser location: a cafe\nNetwork: online\nUser: Send it"
+  },
+  {
+   "id": "seed1-s1-00127",
+   "why": "near:eval/gold/gold_all.jsonl:g175:ctx=0.35:utt=0.81",
+   "context": "Now: Tue 16:55\nUser location: commuting\nUser: Remind me to pay rent now"
+  },
+  {
+   "id": "seed1-s1-00152",
+   "why": "exact_utterance",
+   "context": "Now: Wed 7:55\nUser location: home\nNetwork: online\nUser: Move it"
+  },
+  {
+   "id": "seed1-s1-00211",
+   "why": "exact_utterance",
+   "context": "Now: Mon 8:05\nUser location: unknown\nNetwork: offline\nUser: Send it"
+  },
+  {
+   "id": "seed1-s1-00235",
+   "why": "exact_context",
+   "context": "Network: online\nUser: What's 15% of 80?"
+  },
+  {
+   "id": "seed1-s1-00236",
+   "why": "exact_utterance",
+   "context": "Now: Thu 17:15\nUser location: commuting\nUser: What's Priya's email address?"
+  },
+  {
+   "id": "seed1-s1-00257",
+   "why": "exact_utterance",
+   "context": "Now: Sun 7:05\nUser location: unknown\nUser: What's 15% of 80?"
+  },
+  {
+   "id": "seed1-s1-00297",
+   "why": "exact_utterance",
+   "context": "Now: Thu 23:15\nUser location: work\nUser: What time is it?"
+  },
+  {
+   "id": "seed1-s1-00363",
+   "why": "exact_utterance",
+   "context": "Now: Sat 20:30\nUser location: commuting\nNetwork: offline\nUser: Move it"
+  },
+  {
+   "id": "seed1-s1-00404",
+   "why": "near:eval/gold/gold_all.jsonl:g24:ctx=0.48:utt=0.95",
+   "context": "User: Remind me to water the plants tomorrow at 9am"
+  },
+  {
+   "id": "seed1-s1-00407",
+   "why": "exact_utterance",
+   "context": "Now: Thu 18:42\nUser location: a cafe\nNetwork: offline\nUser: What's 15% of 80?"
+  },
+  {
+   "id": "seed1-s1-00452",
+   "why": "exact_utterance",
+   "context": "Now: Thu 16:42\nUser location: home\nNetwork: online\nUser: How do you spell necessary?"
+  },
+  {
+   "id": "seed1-s1-00463",
+   "why": "exact_utterance",
+   "context": "Now: Tue 17:00\nUser location: home\nNetwork: online\nUser: Remind me to take my vitamins at 8pm"
+  },
+  {
+   "id": "seed1-s1-00533",
+   "why": "exact_utterance",
+   "context": "Now: Tue 7:00\nUser location: commuting\nNetwork: offline\nUser: Send it"
+  },
+  {
+   "id": "seed1-s1-00545",
+   "why": "exact_utterance",
+   "context": "Now: Thu 21:15\nUser location: work\nNetwork: online\nUser: Move it"
+  },
+  {
+   "id": "seed1-s1-00576",
+   "why": "exact_utterance",
+   "context": "Now: Sat 19:42\nUser location: the gym\nUser: How do you spell necessary?"
+  },
+  {
+   "id": "seed1-s1-00599",
+   "why": "exact_utterance",
+   "context": "Now: Sat 19:42\nUser location: home\nUser: How do you spell necessary?"
+  },
+  {
+   "id": "seed1-s1-00776",
+   "why": "exact_utterance",
+   "context": "Now: Sat 15:42\nUser location: commuting\nUser: What time is it?"
+  },
+  {
+   "id": "seed1-s1-00783",
+   "why": "exact_utterance",
+   "context": "Now: Fri 12:55\nUser location: home\nUser: How do you spell necessary?"
+  },
+  {
+   "id": "seed1-s1-00793",
+   "why": "near:eval/gold/gold_all.jsonl:g24:ctx=0.37:utt=0.95",
+   "context": "Now: Tue 18:15\nUser location: commuting\nUser: Remind me to water the plants tomorrow at 9am"
+  },
+  {
+   "id": "seed1-s1-00795",
+   "why": "exact_utterance",
+   "context": "Now: Tue 7:55\nUser location: the gym\nUser: What's 15% of 80?"
+  },
+  {
+   "id": "seed1-s1-00819",
+   "why": "exact_utterance",
+   "context": "Now: Sat 19:55\nUser location: a cafe\nUser: How do you spell necessary?"
+  },
+  {
+   "id": "seed1-s1-00820",
+   "why": "exact_utterance",
+   "context": "Now: Sun 20:55\nUser location: work\nNetwork: online\nUser: How do you spell necessary?"
+  },
+  {
+   "id": "seed1-s1-00821",
+   "why": "exact_utterance",
+   "context": "Now: Thu 12:05\nUser location: home\nUser: Remind me to take my vitamins at 8pm"
+  },
+  {
+   "id": "seed1-s1-00828",
+   "why": "near:eval/gold/gold_all.jsonl:g175:ctx=0.35:utt=0.81",
+   "context": "Now: Mon 15:15\nUser location: commuting\nUser: Remind me to pay rent now"
+  },
+  {
+   "id": "seed1-s1-00829",
+   "why": "exact_utterance",
+   "context": "Now: Tue 11:30\nUser location: work\nUser: What's 15% of 80?"
+  },
+  {
+   "id": "seed1-s1-00831",
+   "why": "exact_utterance",
+   "context": "Now: Thu 15:42\nUser location: work\nUser: What's Priya's email address?"
+  },
+  {
+   "id": "seed1-s1-00841",
+   "why": "exact_utterance",
+   "context": "Now: Sat 6:15\nUser location: commuting\nNetwork: offline\nUser: Move it"
+  },
+  {
+   "id": "seed1-s1-00875",
+   "why": "exact_utterance",
+   "context": "Now: Fri 6:42\nUser location: a cafe\nUser: What's Priya's email address?"
+  },
+  {
+   "id": "seed1-s1-00908",
+   "why": "exact_utterance",
+   "context": "Now: Thu 13:55\nUser location: unknown\nUser: How do you spell necessary?"
+  },
+  {
+   "id": "seed1-s1-00952",
+   "why": "exact_utterance",
+   "context": "Now: Sat 22:30\nUser location: commuting\nUser: What's 15% of 80?"
+  },
+  {
+   "id": "seed1-s1-00998",
+   "why": "exact_utterance",
+   "context": "Now: Mon 19:15\nUser location: unknown\nNetwork: online\nUser: Move it"
+  },
+  {
+   "id": "seed1-s1-01021",
+   "why": "exact_utterance",
+   "context": "Now: Sat 20:00\nUser location: home\nNetwork: online\nUser: Move it"
+  },
+  {
+   "id": "seed1-s1-01032",
+   "why": "exact_utterance",
+   "context": "Now: Sun 23:42\nUser location: unknown\nNetwork: online\nUser: Move it"
+  },
+  {
+   "id": "seed1-s1-01043",
+   "why": "exact_utterance",
+   "context": "Now: Fri 15:05\nUser location: work\nUser: What's 15% of 80?"
+  },
+  {
+   "id": "seed1-s1-01067",
+   "why": "exact_utterance",
+   "context": "Now: Wed 18:30\nUser location: the gym\nNetwork: offline\nUser: Move it"
+  },
+  {
+   "id": "seed1-s1-01079",
+   "why": "exact_utterance",
+   "context": "Now: Sun 13:05\nUser location: the gym\nNetwork: online\nUser: Send it"
+  },
+  {
+   "id": "seed1-s1-01088",
+   "why": "near:eval/gold/gold_all.jsonl:g175:ctx=0.85:utt=0.81",
+   "context": "User: Remind me to pay rent now"
+  },
+  {
+   "id": "seed1-s1-01091",
+   "why": "exact_utterance",
+   "context": "Now: Sun 22:00\nUser location: a cafe\nNetwork: offline\nUser: How do you spell necessary?"
+  },
+  {
+   "id": "seed1-s1-01103",
+   "why": "exact_utterance",
+   "context": "Now: Sun 12:30\nUser location: commuting\nNetwork: online\nUser: Move it"
+  },
+  {
+   "id": "seed1-s1-01111",
+   "why": "exact_utterance",
+   "context": "Now: Sun 21:30\nUser location: home\nUser: Remind me to take my vitamins at 8pm"
+  },
+  {
+   "id": "seed1-s1-01114",
+   "why": "exact_utterance",
+   "context": "Now: Fri 9:00\nUser location: commuting\nNetwork: offline\nUser: How do you spell necessary?"
+  },
+  {
+   "id": "seed1-s1-01133",
+   "why": "near:eval/gold/gold_all.jsonl:g24:ctx=0.37:utt=0.95",
+   "context": "Now: Wed 19:15\nUser location: the gym\nUser: Remind me to water the plants tomorrow at 9am"
+  },
+  {
+   "id": "seed1-s1-01182",
+   "why": "exact_utterance",
+   "context": "Now: Sun 7:15\nUser location: work\nNetwork: offline\nUser: Send it"
+  },
+  {
+   "id": "seed1-s1-01226",
+   "why": "exact_utterance",
+   "context": "Now: Tue 16:15\nUser location: commuting\nNetwork: online\nUser: Send it"
+  },
+  {
+   "id": "seed1-s1-01259",
+   "why": "exact_utterance",
+   "context": "Now: Fri 11:42\nUser location: home\nUser: How do you spell necessary?"
+  },
+  {
+   "id": "seed1-s1-01272",
+   "why": "exact_utterance",
+   "context": "Now: Thu 12:42\nUser location: a cafe\nNetwork: online\nUser: How do you spell necessary?"
+  },
+  {
+   "id": "seed1-s1-01304",
+   "why": "near:eval/gold/gold_all.jsonl:g188:ctx=0.81:utt=0.81",
+   "context": "Trigger: arrive, place: Whole Foods\nMemory: User needs to buy dish soap"
+  },
+  {
+   "id": "seed1-s1-01337",
+   "why": "exact_context",
+   "context": "Trigger: arrive, place: the office\nMemory: User needs to buy eggs"
+  },
+  {
+   "id": "seed1-s1-01344",
+   "why": "exact_utterance",
+   "context": "Now: Mon 9:00\nUser location: the gym\nUser: What time is it?"
+  },
+  {
+   "id": "seed1-s1-01362",
+   "why": "exact_utterance",
+   "context": "Now: Mon 21:15\nUser location: home\nUser: What's 15% of 80?"
+  },
+  {
+   "id": "seed1-s1-01363",
+   "why": "exact_utterance",
+   "context": "Now: Mon 9:00\nUser location: home\nNetwork: online\nUser: How do you spell necessary?"
+  },
+  {
+   "id": "seed1-s1-01372",
+   "why": "near:eval/gold/gold_all.jsonl:g175:ctx=0.39:utt=0.81",
+   "context": "Now: Fri 9:55\nUser location: work\nUser: Remind me to pay rent now"
+  },
+  {
+   "id": "seed1-s1-01386",
+   "why": "exact_utterance",
+   "context": "Now: Wed 21:00\nUser location: the gym\nUser: What's 15% of 80?"
+  },
+  {
+   "id": "seed1-s1-01394",
+   "why": "near:eval/gold/gold_all.jsonl:g188:ctx=0.81:utt=0.81",
+   "context": "Trigger: arrive, place: Whole Foods\nMemory: User needs to buy batteries"
+  },
+  {
+   "id": "seed1-s1-01407",
+   "why": "exact_utterance",
+   "context": "Now: Wed 8:00\nUser location: a cafe\nUser: How do you spell necessary?"
+  },
+  {
+   "id": "seed1-s1-01441",
+   "why": "exact_utterance",
+   "context": "Now: Thu 19:05\nUser location: a cafe\nNetwork: offline\nUser: Send it"
+  },
+  {
+   "id": "seed1-s1-01450",
+   "why": "exact_utterance",
+   "context": "Now: Tue 13:42\nUser location: commuting\nUser: How do you spell necessary?"
+  },
+  {
+   "id": "seed1-s1-01460",
+   "why": "exact_utterance",
+   "context": "Now: Mon 12:15\nUser location: the gym\nUser: How do you spell necessary?"
+  },
+  {
+   "id": "seed1-s1-01499",
+   "why": "exact_utterance",
+   "context": "Now: Sun 21:05\nUser location: a cafe\nUser: What time is it?"
+  },
+  {
+   "id": "seed1-s1-01505",
+   "why": "exact_utterance",
+   "context": "Now: Wed 22:55\nUser location: the gym\nNetwork: offline\nUser: Move it"
+  },
+  {
+   "id": "seed1-s1-01549",
+   "why": "exact_utterance",
+   "context": "Now: Thu 15:00\nUser location: unknown\nUser: What's 15% of 80?"
+  },
+  {
+   "id": "seed1-s1-01562",
+   "why": "exact_utterance",
+   "context": "Now: Tue 17:15\nUser location: work\nNetwork: offline\nUser: What's 15% of 80?"
+  },
+  {
+   "id": "seed1-s1-01596",
+   "why": "exact_utterance",
+   "context": "Now: Wed 16:30\nUser location: a cafe\nUser: What time is it?"
+  },
+  {
+   "id": "seed1-s1-01603",
+   "why": "exact_utterance",
+   "context": "Now: Mon 21:30\nUser location: commuting\nUser: What's 15% of 80?"
+  },
+  {
+   "id": "seed1-s1-01616",
+   "why": "exact_utterance",
+   "context": "Now: Mon 18:05\nUser location: the gym\nNetwork: offline\nUser: Send it"
+  },
+  {
+   "id": "seed1-s1-01654",
+   "why": "exact_utterance",
+   "context": "Now: Mon 12:55\nUser location: work\nUser: What time is it?"
+  },
+  {
+   "id": "seed1-s1-01660",
+   "why": "exact_utterance",
+   "context": "Now: Sun 7:42\nUser location: the gym\nNetwork: online\nUser: How do you spell necessary?"
+  },
+  {
+   "id": "seed1-s1-01694",
+   "why": "exact_utterance",
+   "context": "Now: Sun 13:42\nUser location: the gym\nNetwork: online\nUser: Do the thing from before"
+  },
+  {
+   "id": "seed1-s1-01714",
+   "why": "exact_utterance",
+   "context": "Now: Sat 11:15\nUser location: the gym\nUser: Remind me to take my vitamins at 8pm"
+  },
+  {
+   "id": "seed1-s1-01726",
+   "why": "exact_utterance",
+   "context": "Now: Sun 11:42\nUser location: work\nUser: How do you spell necessary?"
+  },
+  {
+   "id": "seed1-s1-01750",
+   "why": "exact_utterance",
+   "context": "Now: Mon 18:30\nUser location: commuting\nNetwork: online\nUser: What's 15% of 80?"
+  },
+  {
+   "id": "seed1-s1-01761",
+   "why": "exact_utterance",
+   "context": "Now: Thu 9:15\nUser location: a cafe\nUser: What's 15% of 80?"
+  },
+  {
+   "id": "seed1-s1-01772",
+   "why": "exact_utterance",
+   "context": "Now: Sat 10:42\nUser location: commuting\nNetwork: online\nUser: Do the thing from before"
+  },
+  {
+   "id": "seed1-s1-01793",
+   "why": "exact_utterance",
+   "context": "Now: Tue 15:30\nUser location: work\nNetwork: online\nUser: How do you spell necessary?"
+  },
+  {
+   "id": "seed1-s1-01807",
+   "why": "exact_utterance",
+   "context": "Now: Tue 12:42\nUser location: work\nUser: What time is it?"
+  },
+  {
+   "id": "seed1-s1-01819",
+   "why": "exact_context",
+   "context": "User: What time is it?"
+  },
+  {
+   "id": "seed1-s1-01849",
+   "why": "exact_utterance",
+   "context": "Now: Wed 12:55\nUser location: unknown\nNetwork: offline\nUser: Do the thing from before"
+  },
+  {
+   "id": "seed1-s1-01872",
+   "why": "exact_utterance",
+   "context": "Now: Mon 10:55\nUser location: the gym\nUser: How do you spell necessary?"
+  },
+  {
+   "id": "seed1-s1-01908",
+   "why": "exact_utterance",
+   "context": "Now: Wed 10:55\nUser location: work\nNetwork: online\nUser: Move it"
+  },
+  {
+   "id": "seed1-s1-01930",
+   "why": "exact_utterance",
+   "context": "Now: Sat 6:15\nUser location: home\nNetwork: online\nUser: Do the thing from before"
+  },
+  {
+   "id": "seed1-s1-01951",
+   "why": "exact_utterance",
+   "context": "Now: Thu 18:42\nUser location: unknown\nUser: What's 15% of 80?"
   }
  ]
 }

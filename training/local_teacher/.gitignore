@@ -1,0 +1,7 @@
+out/lora-*/
+out/*.log
+out/pool.jsonl
+out/scenarios_seed1.jsonl
+out/LABELING_DONE
+out/AFTER_DONE
+__pycache__/
