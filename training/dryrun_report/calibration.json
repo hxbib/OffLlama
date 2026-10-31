@@ -1,0 +1,22 @@
+{
+  "temperature": {
+    "answerability": 2.4465,
+    "confirmBeforeAct": 2.4465,
+    "contactPick": 1.2968,
+    "eventPick": 0.9181,
+    "memoryConflict": 10.0,
+    "notificationTriage": 2.4465,
+    "nudgeNow": 2.4465,
+    "rememberOrNot": 2.4465,
+    "route": 2.4465,
+    "sensitivity": 2.4465,
+    "timing": 1.2345,
+    "toolChoice": 10.0
+  },
+  "tau": {
+    "contactPick": 0.7565,
+    "eventPick": 0.8606
+  },
+  "defaultTau": 0.8,
+  "_note": "DRY RUN: targets from local Llama-3.2-1B stand-in teacher; do not ship"
+}

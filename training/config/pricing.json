@@ -1,0 +1,9 @@
+{
+  "_README": "PLACEHOLDER prices. Replace with the numbers on each provider's pricing page, then set verified=true. cost.py never calls any API.",
+  "spark-baseten": {"billing": "token", "usd_per_m_input": 1.00, "usd_per_m_output": 4.00, "verified": false},
+  "meta":          {"billing": "token", "usd_per_m_input": 0.50, "usd_per_m_output": 2.00, "verified": false},
+  "glimmer-modal": {"billing": "gpu_hour", "usd_per_gpu_hour": 3.95, "gpus": 1, "requests_per_hour": 20000, "fixed_usd": 2.0,
+                    "verified": false, "_note": "self-hosted vLLM on one H100; requests_per_hour is a guess for 1-token, ~300-token-prompt requests with batching"},
+  "local":         {"billing": "token", "usd_per_m_input": 0, "usd_per_m_output": 0, "verified": true},
+  "local-shuffled":{"billing": "token", "usd_per_m_input": 0, "usd_per_m_output": 0, "verified": true}
+}

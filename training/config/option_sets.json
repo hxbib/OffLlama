@@ -1,0 +1,246 @@
+{
+  "sample_prompt" : "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\nYou are Reflex, the fast decision module of an offline personal assistant. Answer each multiple-choice question with a single letter.<|eot_id|><|start_header_id|>user<|end_header_id|>\n\nContext:\nUser: hello\n\nQuestion: How should the assistant handle the user's request?\nA. Answer directly on the phone (simple chat, facts the assistant remembers, short rewrite)\nB. Use a phone tool (reminder, calendar, contacts, message, memory lookup)\nC. Needs hard reasoning, long writing, or world knowledge: ask the cloud brain\nD. The request is ambiguous: ask the user a short question\nAnswer with one letter.<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\nAnswer:",
+  "sets" : [
+    {
+      "fallback" : "escalate_cloud",
+      "options" : [
+        {
+          "id" : "answer_local",
+          "label" : "Answer directly on the phone (simple chat, facts the assistant remembers, short rewrite)"
+        },
+        {
+          "id" : "tool",
+          "label" : "Use a phone tool (reminder, calendar, contacts, message, memory lookup)"
+        },
+        {
+          "id" : "escalate_cloud",
+          "label" : "Needs hard reasoning, long writing, or world knowledge: ask the cloud brain"
+        },
+        {
+          "id" : "clarify",
+          "label" : "The request is ambiguous: ask the user a short question"
+        }
+      ],
+      "question" : "How should the assistant handle the user's request?",
+      "type" : "route"
+    },
+    {
+      "fallback" : "none",
+      "options" : [
+        {
+          "id" : "create_reminder",
+          "label" : "Create a reminder"
+        },
+        {
+          "id" : "create_event",
+          "label" : "Create a calendar event"
+        },
+        {
+          "id" : "find_event",
+          "label" : "Look up the calendar"
+        },
+        {
+          "id" : "send_message",
+          "label" : "Send a text message to a contact"
+        },
+        {
+          "id" : "lookup_contact",
+          "label" : "Look up a contact's details"
+        },
+        {
+          "id" : "search_memory",
+          "label" : "Search what the assistant remembers about the user"
+        },
+        {
+          "id" : "none",
+          "label" : "None of these tools fits"
+        }
+      ],
+      "question" : "Which tool should be used?",
+      "type" : "toolChoice"
+    },
+    {
+      "fallback" : "no",
+      "options" : [
+        {
+          "id" : "remember_fact",
+          "label" : "Yes: a lasting fact or preference about the user or their people"
+        },
+        {
+          "id" : "remember_temporary",
+          "label" : "Yes, but it expires soon (plan, short-term state)"
+        },
+        {
+          "id" : "no",
+          "label" : "No: nothing worth remembering"
+        }
+      ],
+      "question" : "Should the assistant save something from this message to long-term memory?",
+      "type" : "rememberOrNot"
+    },
+    {
+      "fallback" : "keep_both",
+      "options" : [
+        {
+          "id" : "update",
+          "label" : "The new fact replaces the old one (it changed)"
+        },
+        {
+          "id" : "keep_both",
+          "label" : "Both are true; keep both"
+        },
+        {
+          "id" : "ignore_new",
+          "label" : "The new statement is not a real change; keep the old one"
+        }
+      ],
+      "question" : "A new fact relates to an existing memory. What should happen?",
+      "type" : "memoryConflict"
+    },
+    {
+      "fallback" : "digest",
+      "options" : [
+        {
+          "id" : "interrupt",
+          "label" : "Urgent: tell the user now"
+        },
+        {
+          "id" : "digest",
+          "label" : "Useful but can wait for the next summary"
+        },
+        {
+          "id" : "ignore",
+          "label" : "Noise: ignore"
+        }
+      ],
+      "question" : "How urgent is this incoming notification for the user right now?",
+      "type" : "notificationTriage"
+    },
+    {
+      "fallback" : "confirm",
+      "options" : [
+        {
+          "id" : "act",
+          "label" : "No: low-risk and clearly requested, do it"
+        },
+        {
+          "id" : "confirm",
+          "label" : "Yes: it contacts someone, spends money, deletes, or is unclear"
+        }
+      ],
+      "question" : "Before performing this action, does the assistant need the user's explicit confirmation?",
+      "type" : "confirmBeforeAct"
+    },
+    {
+      "fallback" : "skip",
+      "options" : [
+        {
+          "id" : "nudge",
+          "label" : "Yes: the memory is relevant to this moment"
+        },
+        {
+          "id" : "later",
+          "label" : "Relevant, but a later moment is better"
+        },
+        {
+          "id" : "skip",
+          "label" : "Not relevant"
+        }
+      ],
+      "question" : "Given the trigger and what the assistant remembers, should it nudge the user now?",
+      "type" : "nudgeNow"
+    },
+    {
+      "fallback" : "now",
+      "options" : [
+        {
+          "id" : "now",
+          "label" : "Right now"
+        },
+        {
+          "id" : "at_time",
+          "label" : "At a specific date\/time"
+        },
+        {
+          "id" : "on_arrival",
+          "label" : "When the user arrives at or leaves a place"
+        },
+        {
+          "id" : "recurring",
+          "label" : "Repeatedly on a schedule"
+        }
+      ],
+      "question" : "When should the requested action happen?",
+      "type" : "timing"
+    },
+    {
+      "fallback" : "sensitive",
+      "options" : [
+        {
+          "id" : "ok",
+          "label" : "Yes: nothing sensitive remains"
+        },
+        {
+          "id" : "sensitive",
+          "label" : "No: health, money, intimate or security details; keep on device"
+        }
+      ],
+      "question" : "Is it acceptable to send this request (with names and numbers masked) to a cloud model?",
+      "type" : "sensitivity"
+    },
+    {
+      "fallback" : "no",
+      "options" : [
+        {
+          "id" : "yes",
+          "label" : "Yes, it is simple"
+        },
+        {
+          "id" : "no",
+          "label" : "No, it needs reasoning, fresh facts, or long output"
+        }
+      ],
+      "question" : "Can a small on-device model answer this correctly without the internet?",
+      "type" : "answerability"
+    },
+    {
+      "fallback" : "ask",
+      "options" : [
+        {
+          "id" : "c0",
+          "label" : "Sam Lee"
+        },
+        {
+          "id" : "c1",
+          "label" : "Sam Ortiz"
+        },
+        {
+          "id" : "ask",
+          "label" : "Unclear: ask the user"
+        }
+      ],
+      "question" : "Which contact does the user mean?",
+      "type" : "contactPick"
+    },
+    {
+      "fallback" : "ask",
+      "options" : [
+        {
+          "id" : "e0",
+          "label" : "Dentist"
+        },
+        {
+          "id" : "e1",
+          "label" : "Standup"
+        },
+        {
+          "id" : "ask",
+          "label" : "Unclear: ask the user"
+        }
+      ],
+      "question" : "Which calendar event does the user mean?",
+      "type" : "eventPick"
+    }
+  ],
+  "system" : "You are Reflex, the fast decision module of an offline personal assistant. Answer each multiple-choice question with a single letter."
+}

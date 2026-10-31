@@ -69,6 +69,16 @@ case "decide":
     let d = try await Reflex(engine: engine).decide(set, context: a[3])
     print(d.argmax.id, String(format: "%.3f", d.confidence), d.escalated ? "ESCALATE" : "local", String(format: "%.0fms", d.latencyMs))
     for o in set.options { print(String(format: "  %.3f  %@", d.probabilities[o.id] ?? 0, o.id as NSString)) }
+case "dump-sets":
+    // Machine-readable option sets + one rendered prompt; training/tests/test_parity.py checks Python matches Swift.
+    let sets = OptionSets.staticSets + [OptionSets.contactPick(candidates: ["Sam Lee", "Sam Ortiz"]), OptionSets.eventPick(candidates: ["Dentist", "Standup"])]
+    let obj: [String: Any] = [
+        "system": DecisionPrompt.system,
+        "sets": sets.map { ["type": $0.type.rawValue, "question": $0.question, "fallback": $0.fallbackID,
+                            "options": $0.options.map { ["id": $0.id, "label": $0.label] }] },
+        "sample_prompt": DecisionPrompt.llama3(set: OptionSets.route, context: "User: hello"),
+    ]
+    print(String(decoding: try JSONSerialization.data(withJSONObject: obj, options: [.prettyPrinted, .sortedKeys]), as: UTF8.self))
 case "telemetry":
     print(try TelemetryLog(db: SQLiteDB(path: arg("--db", "e2e-telemetry.sqlite"))).csv(), terminator: "")
 default:
