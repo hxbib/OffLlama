@@ -29,10 +29,19 @@ def body(s: dict, context: str) -> str:
     return out + "Answer with one letter."
 
 
-def llama3(s: dict, context: str) -> str:
-    return ("<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\n" + SYSTEM + "<|eot_id|>"
-            "<|start_header_id|>user<|end_header_id|>\n\n" + body(s, context) + "<|eot_id|>"
-            "<|start_header_id|>assistant<|end_header_id|>\n\nAnswer:")
+SHOTS = _CFG["shots"]
+
+
+def llama3(s: dict, context: str, style: str = "fewShot") -> str:
+    """style="fewShot" for the untrained base model (default, matches the app); "zeroShot" for SFT targets / distilled student."""
+    p = "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\n" + SYSTEM + "<|eot_id|>"
+    if style == "fewShot":
+        for sh in (x for x in SHOTS if x["type"] == s["type"]):
+            ss = get_set(sh["type"], sh["candidates"] or None)
+            letter = LETTERS[[o["id"] for o in ss["options"]].index(sh["answer"])]
+            p += ("<|start_header_id|>user<|end_header_id|>\n\n" + body(ss, sh["context"]) + "<|eot_id|>"
+                  "<|start_header_id|>assistant<|end_header_id|>\n\nAnswer: " + letter + "<|eot_id|>")
+    return p + "<|start_header_id|>user<|end_header_id|>\n\n" + body(s, context) + "<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\nAnswer:"
 
 
 def chat_messages(s: dict, context: str) -> list[dict]:

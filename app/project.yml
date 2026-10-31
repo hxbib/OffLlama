@@ -11,11 +11,7 @@ targets:
     type: application
     platform: iOS
     sources:
-      - path: PocketGlimmer
-        excludes: ["Resources/Models/*.gguf"]
-      - path: PocketGlimmer/Resources/Models
-        optional: true
-        buildPhase: resources
+      - path: PocketGlimmer      # Resources/Models/*.gguf + calibration.json are copied as bundle resources
     dependencies:
       - package: PocketCore
         product: PocketCore
@@ -46,4 +42,3 @@ targets:
         NSRemindersFullAccessUsageDescription: Pocket Glimmer creates and reads reminders you ask for, on this iPhone.
         NSCalendarsFullAccessUsageDescription: Pocket Glimmer creates and looks up events you ask for, on this iPhone.
         NSContactsUsageDescription: Pocket Glimmer finds the right person when you say a name. Contacts never leave the phone.
-        NSUserNotificationsUsageDescription: Proactive nudges based on what you've told Pocket Glimmer.

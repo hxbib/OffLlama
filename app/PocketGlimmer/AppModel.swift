@@ -135,6 +135,11 @@ final class AppModel {
         return nudges
     }
 
+    func cancel(_ item: ChatItem) {
+        if let i = chat.firstIndex(of: item) { chat[i].pending = nil }
+        chat.append(.init(role: .system, text: "Cancelled."))
+    }
+
     func forget(_ f: MemoryFact) { try? memory?.forget(id: f.id); refresh() }
     func exportCSV() -> URL? {
         guard let csv = try? telemetry?.csv() else { return nil }

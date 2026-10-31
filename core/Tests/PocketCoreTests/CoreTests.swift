@@ -18,11 +18,19 @@ final class OptionSetTests: XCTestCase {
         let s = OptionSets.contactPick(candidates: (1...20).map { "Sam \($0)" })
         XCTAssertEqual(s.options.count, 8); XCTAssertEqual(s.options.last?.id, "ask"); XCTAssertEqual(s.fallbackID, "ask")
     }
+    func testFewShotPromptHasExemplarsWithCorrectLetters() {
+        let p = DecisionPrompt.llama3(set: OptionSets.route, context: "User: hi")
+        XCTAssertEqual(p.components(separatedBy: "Answer: ").count - 1, DecisionPrompt.shots.filter { $0.type == .route }.count)
+        XCTAssertTrue(p.contains("Change that one") && p.contains("Answer: D<|eot_id|>"))   // clarify exemplar -> D
+        for sh in DecisionPrompt.shots { XCTAssertNotNil(DecisionPrompt.setFor(sh).letter(forID: sh.answerID), sh.context) }
+        XCTAssertEqual(DecisionPrompt.priorKey(OptionSets.contactPick(candidates: ["a", "b"])), "contactPick#3")
+    }
     func testPromptFormatIsStable() {
-        let p = DecisionPrompt.llama3(set: OptionSets.confirmBeforeAct, context: "User: delete all my photos")
+        let p = DecisionPrompt.llama3(set: OptionSets.confirmBeforeAct, context: "User: delete all my photos", style: .zeroShot)
         XCTAssertTrue(p.hasSuffix("<|start_header_id|>assistant<|end_header_id|>\n\nAnswer:"))
-        XCTAssertTrue(p.contains("A. No: low-risk"))
-        XCTAssertTrue(p.contains("B. Yes: it contacts"))
+        XCTAssertTrue(p.contains("A. Safe and reversible"))
+        XCTAssertTrue(p.contains("B. Risky:"))
+        XCTAssertEqual(p.components(separatedBy: "<|start_header_id|>user").count, 2)  // zero-shot: one user turn
         XCTAssertTrue(p.contains("Context:\nUser: delete all my photos\n\nQuestion: "))
     }
 }
@@ -84,6 +92,25 @@ final class ReflexTests: XCTestCase {
         XCTAssertFalse(lo.escalated)  // p(A) ~ 0.71 >= 0.5
         let hot = try await Reflex(engine: e, profile: .init(temperature: ["route": 5], tau: ["route": 0.5])).decide(OptionSets.route, context: "x")
         XCTAssertTrue(hot.escalated)
+    }
+    func testContextualCalibrationRemovesLetterPrior() async throws {
+        // Model always favours D ("clarify") by +2 regardless of input; prior correction cancels that bias.
+        let e = ScriptedEngine(); e.script(whenPromptContains: "How should", logits: ["A": 0, "B": 1.5, "C": 0, "D": 2])
+        let raw = try await Reflex(engine: e).decide(OptionSets.route, context: "x")
+        XCTAssertEqual(raw.argmax.id, "clarify")
+        let prior = Calibration.softmax([0, 0, 0, 2]).map { log($0) }
+        let fixed = try await Reflex(engine: e, profile: .init(prior: ["route": prior])).decide(OptionSets.route, context: "x")
+        XCTAssertEqual(fixed.argmax.id, "tool")
+    }
+    func testMeasurePriorsCoversAllSets() async throws {
+        let e = ScriptedEngine()
+        let pr = try await Reflex(engine: e).measurePriors()
+        XCTAssertNotNil(pr["route"]); XCTAssertEqual(pr["contactPick#8"]?.count, 8); XCTAssertEqual(pr["eventPick#2"]?.count, 2)
+        XCTAssertEqual(pr.count, OptionSets.staticSets.count + 14)
+    }
+    func testOldCalibrationJSONStillDecodes() throws {
+        let p = try JSONDecoder().decode(CalibrationProfile.self, from: Data(#"{"temperature":{"route":2},"tau":{},"defaultTau":0.7}"#.utf8))
+        XCTAssertEqual(p.defaultTau, 0.7); XCTAssertTrue(p.prior.isEmpty); XCTAssertEqual(p.promptStyle, .fewShot)
     }
     func testMissingLettersGetFloorNotDropped() async throws {
         let e = ScriptedEngine(); e.script(whenPromptContains: "confirmation", logits: ["A": -0.1])

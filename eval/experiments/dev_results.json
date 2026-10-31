@@ -1,0 +1,5926 @@
+{
+ "dev/v0": {
+  "n": 120,
+  "acc": 0.55,
+  "coverage": 0.14166666666666666,
+  "acc_on_covered": 0.7058823529411765,
+  "route_preds": {
+   "clarify": 10
+  },
+  "per_type_acc": {
+   "answerability": 0.5,
+   "confirmBeforeAct": 0.5,
+   "contactPick": 0.91,
+   "eventPick": 0.91,
+   "memoryConflict": 0.56,
+   "notificationTriage": 0.6,
+   "nudgeNow": 0.6,
+   "rememberOrNot": 0.75,
+   "route": 0.3,
+   "sensitivity": 0.3,
+   "timing": 0.4,
+   "toolChoice": 0.27
+  },
+  "median_ms": 530.1394462585449,
+  "rows": [
+   {
+    "type": "toolChoice",
+    "gold": "send_message",
+    "pred": "create_event",
+    "conf": 0.2630852750125302,
+    "ok": false,
+    "ms": 1045.283317565918
+   },
+   {
+    "type": "contactPick",
+    "gold": "c1",
+    "pred": "c1",
+    "conf": 0.6921260213535558,
+    "ok": true,
+    "ms": 469.82789039611816
+   },
+   {
+    "type": "eventPick",
+    "gold": "e2",
+    "pred": "e2",
+    "conf": 0.8393972562338522,
+    "ok": true,
+    "ms": 458.5862159729004
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "remember_fact",
+    "conf": 0.7151561636323791,
+    "ok": true,
+    "ms": 465.04759788513184
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "ignore_new",
+    "pred": "update",
+    "conf": 0.41222626677329766,
+    "ok": false,
+    "ms": 580.3191661834717
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "interrupt",
+    "conf": 0.40239102730581405,
+    "ok": true,
+    "ms": 606.3332557678223
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "act",
+    "conf": 0.5061046278775114,
+    "ok": false,
+    "ms": 735.8660697937012
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "skip",
+    "pred": "nudge",
+    "conf": 0.6128596812779522,
+    "ok": false,
+    "ms": 612.2739315032959
+   },
+   {
+    "type": "timing",
+    "gold": "recurring",
+    "pred": "at_time",
+    "conf": 0.5019860961689436,
+    "ok": false,
+    "ms": 308.8963031768799
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "sensitive",
+    "conf": 0.8218788383770864,
+    "ok": false,
+    "ms": 521.7125415802002
+   },
+   {
+    "type": "answerability",
+    "gold": "yes",
+    "pred": "no",
+    "conf": 0.585538658882789,
+    "ok": false,
+    "ms": 247.3762035369873
+   },
+   {
+    "type": "route",
+    "gold": "escalate_cloud",
+    "pred": "clarify",
+    "conf": 0.519868570135439,
+    "ok": false,
+    "ms": 732.0864200592041
+   },
+   {
+    "type": "toolChoice",
+    "gold": "create_reminder",
+    "pred": "create_event",
+    "conf": 0.26896095287988764,
+    "ok": false,
+    "ms": 776.7219543457031
+   },
+   {
+    "type": "contactPick",
+    "gold": "ask",
+    "pred": "c0",
+    "conf": 0.4720044928526169,
+    "ok": false,
+    "ms": 564.4204616546631
+   },
+   {
+    "type": "eventPick",
+    "gold": "e0",
+    "pred": "e0",
+    "conf": 0.3647849912816794,
+    "ok": true,
+    "ms": 715.1610851287842
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "remember_fact",
+    "conf": 0.7345197295772246,
+    "ok": true,
+    "ms": 605.4542064666748
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "ignore_new",
+    "pred": "update",
+    "conf": 0.4695242048403184,
+    "ok": false,
+    "ms": 709.0885639190674
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "interrupt",
+    "conf": 0.4905312757575793,
+    "ok": true,
+    "ms": 687.462568283081
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "confirm",
+    "conf": 0.6269708075186279,
+    "ok": true,
+    "ms": 437.12520599365234
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "nudge",
+    "conf": 0.7060314090350381,
+    "ok": true,
+    "ms": 638.38791847229
+   },
+   {
+    "type": "timing",
+    "gold": "on_arrival",
+    "pred": "now",
+    "conf": 0.4260142351760948,
+    "ok": false,
+    "ms": 722.6645946502686
+   },
+   {
+    "type": "sensitivity",
+    "gold": "sensitive",
+    "pred": "sensitive",
+    "conf": 0.803421538706182,
+    "ok": true,
+    "ms": 604.4468879699707
+   },
+   {
+    "type": "answerability",
+    "gold": "no",
+    "pred": "no",
+    "conf": 0.569429938462861,
+    "ok": true,
+    "ms": 479.3393611907959
+   },
+   {
+    "type": "route",
+    "gold": "answer_local",
+    "pred": "clarify",
+    "conf": 0.4396248808557557,
+    "ok": false,
+    "ms": 533.6253643035889
+   },
+   {
+    "type": "toolChoice",
+    "gold": "find_event",
+    "pred": "find_event",
+    "conf": 0.2994934014220221,
+    "ok": true,
+    "ms": 930.3326606750488
+   },
+   {
+    "type": "contactPick",
+    "gold": "c2",
+    "pred": "c2",
+    "conf": 0.8536497223106029,
+    "ok": true,
+    "ms": 613.6937141418457
+   },
+   {
+    "type": "eventPick",
+    "gold": "e1",
+    "pred": "e1",
+    "conf": 0.6359194098996188,
+    "ok": true,
+    "ms": 675.9862899780273
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "remember_fact",
+    "conf": 0.8045141462481035,
+    "ok": true,
+    "ms": 724.1344451904297
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "update",
+    "conf": 0.4446537434519511,
+    "ok": true,
+    "ms": 693.3944225311279
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "interrupt",
+    "conf": 0.5315136198371914,
+    "ok": true,
+    "ms": 949.0542411804199
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "act",
+    "pred": "confirm",
+    "conf": 0.5353925986300762,
+    "ok": false,
+    "ms": 738.9278411865234
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "skip",
+    "pred": "nudge",
+    "conf": 0.6606206660556266,
+    "ok": false,
+    "ms": 491.61529541015625
+   },
+   {
+    "type": "timing",
+    "gold": "on_arrival",
+    "pred": "on_arrival",
+    "conf": 0.5944978205199138,
+    "ok": true,
+    "ms": 410.53056716918945
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "sensitive",
+    "conf": 0.811371742113409,
+    "ok": false,
+    "ms": 512.639045715332
+   },
+   {
+    "type": "answerability",
+    "gold": "no",
+    "pred": "no",
+    "conf": 0.5872303853051755,
+    "ok": true,
+    "ms": 426.6805648803711
+   },
+   {
+    "type": "route",
+    "gold": "answer_local",
+    "pred": "clarify",
+    "conf": 0.42983957101674264,
+    "ok": false,
+    "ms": 614.0105724334717
+   },
+   {
+    "type": "toolChoice",
+    "gold": "lookup_contact",
+    "pred": "lookup_contact",
+    "conf": 0.26817508354509856,
+    "ok": true,
+    "ms": 500.92387199401855
+   },
+   {
+    "type": "contactPick",
+    "gold": "c1",
+    "pred": "c1",
+    "conf": 0.6534637708269917,
+    "ok": true,
+    "ms": 456.88605308532715
+   },
+   {
+    "type": "eventPick",
+    "gold": "e1",
+    "pred": "e1",
+    "conf": 0.8480157414055552,
+    "ok": true,
+    "ms": 503.57508659362793
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_temporary",
+    "pred": "remember_fact",
+    "conf": 0.7973132304119288,
+    "ok": false,
+    "ms": 375.37550926208496
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "update",
+    "conf": 0.4129883186999703,
+    "ok": true,
+    "ms": 394.378662109375
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "interrupt",
+    "conf": 0.5670598026098318,
+    "ok": true,
+    "ms": 349.5051860809326
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "confirm",
+    "conf": 0.5251876116524196,
+    "ok": true,
+    "ms": 353.09720039367676
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "skip",
+    "pred": "nudge",
+    "conf": 0.5790120762233507,
+    "ok": false,
+    "ms": 418.1840419769287
+   },
+   {
+    "type": "timing",
+    "gold": "now",
+    "pred": "now",
+    "conf": 0.6328632524729426,
+    "ok": true,
+    "ms": 399.7669219970703
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "sensitive",
+    "conf": 0.8187885792062958,
+    "ok": false,
+    "ms": 445.5990791320801
+   },
+   {
+    "type": "answerability",
+    "gold": "no",
+    "pred": "no",
+    "conf": 0.6330195474547131,
+    "ok": true,
+    "ms": 357.65933990478516
+   },
+   {
+    "type": "route",
+    "gold": "tool",
+    "pred": "clarify",
+    "conf": 0.4012649876123892,
+    "ok": false,
+    "ms": 588.0069732666016
+   },
+   {
+    "type": "toolChoice",
+    "gold": "send_message",
+    "pred": "create_event",
+    "conf": 0.20234237802077024,
+    "ok": false,
+    "ms": 851.4845371246338
+   },
+   {
+    "type": "contactPick",
+    "gold": "c2",
+    "pred": "c2",
+    "conf": 0.9800721120241067,
+    "ok": true,
+    "ms": 684.3366622924805
+   },
+   {
+    "type": "eventPick",
+    "gold": "e1",
+    "pred": "e1",
+    "conf": 0.47500728139070797,
+    "ok": true,
+    "ms": 347.5348949432373
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "remember_fact",
+    "conf": 0.8178933147010078,
+    "ok": true,
+    "ms": 752.0201206207275
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "update",
+    "conf": 0.3979729151060474,
+    "ok": true,
+    "ms": 691.8849945068359
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "ignore",
+    "pred": "interrupt",
+    "conf": 0.505381553932928,
+    "ok": false,
+    "ms": 691.1060810089111
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "confirm",
+    "conf": 0.5255038935311357,
+    "ok": true,
+    "ms": 592.10205078125
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "nudge",
+    "conf": 0.6917503062800666,
+    "ok": true,
+    "ms": 854.7401428222656
+   },
+   {
+    "type": "timing",
+    "gold": "on_arrival",
+    "pred": "at_time",
+    "conf": 0.37429348547715957,
+    "ok": false,
+    "ms": 645.4694271087646
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "sensitive",
+    "conf": 0.779064550239368,
+    "ok": false,
+    "ms": 538.2788181304932
+   },
+   {
+    "type": "answerability",
+    "gold": "no",
+    "pred": "no",
+    "conf": 0.625668667211102,
+    "ok": true,
+    "ms": 576.7476558685303
+   },
+   {
+    "type": "route",
+    "gold": "clarify",
+    "pred": "clarify",
+    "conf": 0.43326483938659355,
+    "ok": true,
+    "ms": 470.6544876098633
+   },
+   {
+    "type": "toolChoice",
+    "gold": "send_message",
+    "pred": "create_event",
+    "conf": 0.31162942407832644,
+    "ok": false,
+    "ms": 576.1244297027588
+   },
+   {
+    "type": "contactPick",
+    "gold": "c0",
+    "pred": "c0",
+    "conf": 0.745218998681808,
+    "ok": true,
+    "ms": 401.0496139526367
+   },
+   {
+    "type": "eventPick",
+    "gold": "e2",
+    "pred": "e2",
+    "conf": 0.9499281540252316,
+    "ok": true,
+    "ms": 622.7881908416748
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "no",
+    "pred": "remember_fact",
+    "conf": 0.8025082801493884,
+    "ok": false,
+    "ms": 399.1541862487793
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "digest",
+    "pred": "interrupt",
+    "conf": 0.40738094261300056,
+    "ok": false,
+    "ms": 584.2900276184082
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "act",
+    "conf": 0.5081956347113006,
+    "ok": false,
+    "ms": 725.7936000823975
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "nudge",
+    "conf": 0.6643234670958961,
+    "ok": true,
+    "ms": 402.10556983947754
+   },
+   {
+    "type": "timing",
+    "gold": "recurring",
+    "pred": "at_time",
+    "conf": 0.38397454375774576,
+    "ok": false,
+    "ms": 586.4536762237549
+   },
+   {
+    "type": "sensitivity",
+    "gold": "sensitive",
+    "pred": "sensitive",
+    "conf": 0.8326301481557127,
+    "ok": true,
+    "ms": 384.6573829650879
+   },
+   {
+    "type": "answerability",
+    "gold": "yes",
+    "pred": "no",
+    "conf": 0.5766118222627538,
+    "ok": false,
+    "ms": 416.1515235900879
+   },
+   {
+    "type": "route",
+    "gold": "clarify",
+    "pred": "clarify",
+    "conf": 0.4410667652259776,
+    "ok": true,
+    "ms": 521.1577415466309
+   },
+   {
+    "type": "toolChoice",
+    "gold": "lookup_contact",
+    "pred": "search_memory",
+    "conf": 0.27709307307728037,
+    "ok": false,
+    "ms": 563.2028579711914
+   },
+   {
+    "type": "contactPick",
+    "gold": "c1",
+    "pred": "c1",
+    "conf": 0.8522191499573762,
+    "ok": true,
+    "ms": 687.0265007019043
+   },
+   {
+    "type": "eventPick",
+    "gold": "e1",
+    "pred": "e1",
+    "conf": 0.7848258076520003,
+    "ok": true,
+    "ms": 458.74834060668945
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "remember_fact",
+    "conf": 0.7388381790285807,
+    "ok": true,
+    "ms": 674.1182804107666
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "ignore_new",
+    "pred": "update",
+    "conf": 0.4350134719666696,
+    "ok": false,
+    "ms": 921.9992160797119
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "interrupt",
+    "conf": 0.4069435511858855,
+    "ok": true,
+    "ms": 659.9099636077881
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "confirm",
+    "conf": 0.5207052964158726,
+    "ok": true,
+    "ms": 423.36511611938477
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "skip",
+    "pred": "nudge",
+    "conf": 0.6391841009831895,
+    "ok": false,
+    "ms": 608.5045337677002
+   },
+   {
+    "type": "timing",
+    "gold": "on_arrival",
+    "pred": "now",
+    "conf": 0.38805360280556755,
+    "ok": false,
+    "ms": 455.83367347717285
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "sensitive",
+    "conf": 0.8717597895303785,
+    "ok": false,
+    "ms": 358.52575302124023
+   },
+   {
+    "type": "answerability",
+    "gold": "yes",
+    "pred": "no",
+    "conf": 0.680022193246393,
+    "ok": false,
+    "ms": 392.3218250274658
+   },
+   {
+    "type": "route",
+    "gold": "answer_local",
+    "pred": "clarify",
+    "conf": 0.5609511443111039,
+    "ok": false,
+    "ms": 608.5772514343262
+   },
+   {
+    "type": "toolChoice",
+    "gold": "find_event",
+    "pred": "create_event",
+    "conf": 0.3814617193428192,
+    "ok": false,
+    "ms": 396.0402011871338
+   },
+   {
+    "type": "contactPick",
+    "gold": "c1",
+    "pred": "c1",
+    "conf": 0.9097493512074813,
+    "ok": true,
+    "ms": 463.17481994628906
+   },
+   {
+    "type": "eventPick",
+    "gold": "e0",
+    "pred": "e0",
+    "conf": 0.4752861497652751,
+    "ok": true,
+    "ms": 432.4214458465576
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "remember_fact",
+    "conf": 0.7735977657550657,
+    "ok": true,
+    "ms": 396.39973640441895
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "update",
+    "conf": 0.4081316628515613,
+    "ok": true,
+    "ms": 607.9051494598389
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "ignore",
+    "pred": "interrupt",
+    "conf": 0.48405640832228675,
+    "ok": false,
+    "ms": 373.2759952545166
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "confirm",
+    "conf": 0.5091466086577074,
+    "ok": true,
+    "ms": 450.7887363433838
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "nudge",
+    "conf": 0.686621495446122,
+    "ok": true,
+    "ms": 423.13432693481445
+   },
+   {
+    "type": "timing",
+    "gold": "at_time",
+    "pred": "at_time",
+    "conf": 0.4296857181037577,
+    "ok": true,
+    "ms": 564.4316673278809
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "sensitive",
+    "conf": 0.7816175999502233,
+    "ok": false,
+    "ms": 513.1199359893799
+   },
+   {
+    "type": "answerability",
+    "gold": "yes",
+    "pred": "no",
+    "conf": 0.5527212563157945,
+    "ok": false,
+    "ms": 555.7031631469727
+   },
+   {
+    "type": "route",
+    "gold": "tool",
+    "pred": "clarify",
+    "conf": 0.4342304738963195,
+    "ok": false,
+    "ms": 594.0299034118652
+   },
+   {
+    "type": "toolChoice",
+    "gold": "create_event",
+    "pred": "create_event",
+    "conf": 0.307310409319251,
+    "ok": true,
+    "ms": 668.3375835418701
+   },
+   {
+    "type": "contactPick",
+    "gold": "c0",
+    "pred": "c0",
+    "conf": 0.4859899041367614,
+    "ok": true,
+    "ms": 485.8238697052002
+   },
+   {
+    "type": "eventPick",
+    "gold": "e0",
+    "pred": "e0",
+    "conf": 0.31050141430787126,
+    "ok": true,
+    "ms": 353.7178039550781
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "update",
+    "conf": 0.4239037795790922,
+    "ok": true,
+    "ms": 513.7395858764648
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "digest",
+    "pred": "ignore",
+    "conf": 0.44411630476510283,
+    "ok": false,
+    "ms": 432.24573135375977
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "act",
+    "pred": "confirm",
+    "conf": 0.5125353289371891,
+    "ok": false,
+    "ms": 530.1394462585449
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "nudge",
+    "conf": 0.6898553846930763,
+    "ok": true,
+    "ms": 390.83361625671387
+   },
+   {
+    "type": "timing",
+    "gold": "on_arrival",
+    "pred": "on_arrival",
+    "conf": 0.43196164437343487,
+    "ok": true,
+    "ms": 355.63111305236816
+   },
+   {
+    "type": "sensitivity",
+    "gold": "sensitive",
+    "pred": "sensitive",
+    "conf": 0.7907298657937186,
+    "ok": true,
+    "ms": 403.20730209350586
+   },
+   {
+    "type": "answerability",
+    "gold": "no",
+    "pred": "no",
+    "conf": 0.6368362813538385,
+    "ok": true,
+    "ms": 409.2872142791748
+   },
+   {
+    "type": "route",
+    "gold": "tool",
+    "pred": "clarify",
+    "conf": 0.41643369467077407,
+    "ok": false,
+    "ms": 535.4800224304199
+   },
+   {
+    "type": "toolChoice",
+    "gold": "lookup_contact",
+    "pred": "search_memory",
+    "conf": 0.25808403714424094,
+    "ok": false,
+    "ms": 406.86607360839844
+   },
+   {
+    "type": "contactPick",
+    "gold": "c0",
+    "pred": "c0",
+    "conf": 0.417537526117695,
+    "ok": true,
+    "ms": 390.33055305480957
+   },
+   {
+    "type": "eventPick",
+    "gold": "e0",
+    "pred": "ask",
+    "conf": 0.3101161245918915,
+    "ok": false,
+    "ms": 635.0686550140381
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "ignore_new",
+    "conf": 0.37015332313911,
+    "ok": false,
+    "ms": 642.0152187347412
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "interrupt",
+    "conf": 0.4976195049754597,
+    "ok": true,
+    "ms": 610.6307506561279
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "act",
+    "pred": "confirm",
+    "conf": 0.5098263484653895,
+    "ok": false,
+    "ms": 477.4148464202881
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "nudge",
+    "conf": 0.6567584503381815,
+    "ok": true,
+    "ms": 405.35426139831543
+   },
+   {
+    "type": "timing",
+    "gold": "recurring",
+    "pred": "at_time",
+    "conf": 0.4967553513528643,
+    "ok": false,
+    "ms": 510.1499557495117
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "sensitive",
+    "conf": 0.7697935170581388,
+    "ok": false,
+    "ms": 664.0064716339111
+   },
+   {
+    "type": "answerability",
+    "gold": "yes",
+    "pred": "no",
+    "conf": 0.6735683783832059,
+    "ok": false,
+    "ms": 758.0616474151611
+   },
+   {
+    "type": "route",
+    "gold": "clarify",
+    "pred": "clarify",
+    "conf": 0.4269232491977686,
+    "ok": true,
+    "ms": 491.4231300354004
+   },
+   {
+    "type": "toolChoice",
+    "gold": "find_event",
+    "pred": "create_event",
+    "conf": 0.47136191931113935,
+    "ok": false,
+    "ms": 694.8394775390625
+   },
+   {
+    "type": "contactPick",
+    "gold": "c2",
+    "pred": "c2",
+    "conf": 0.9479331306025617,
+    "ok": true,
+    "ms": 483.86168479919434
+   },
+   {
+    "type": "eventPick",
+    "gold": "e0",
+    "pred": "e0",
+    "conf": 0.5450969385758905,
+    "ok": true,
+    "ms": 354.2759418487549
+   }
+  ]
+ },
+ "dev/v0+cc": {
+  "n": 120,
+  "acc": 0.49166666666666664,
+  "coverage": 0.06666666666666667,
+  "acc_on_covered": 1.0,
+  "route_preds": {
+   "tool": 8,
+   "answer_local": 1,
+   "clarify": 1
+  },
+  "per_type_acc": {
+   "answerability": 0.5,
+   "confirmBeforeAct": 0.7,
+   "contactPick": 0.91,
+   "eventPick": 0.91,
+   "memoryConflict": 0.33,
+   "notificationTriage": 0.1,
+   "nudgeNow": 0.4,
+   "rememberOrNot": 0.12,
+   "route": 0.4,
+   "sensitivity": 0.7,
+   "timing": 0.3,
+   "toolChoice": 0.36
+  },
+  "median_ms": 473.2494354248047,
+  "rows": [
+   {
+    "type": "toolChoice",
+    "gold": "send_message",
+    "pred": "create_event",
+    "conf": 0.29078600080117983,
+    "ok": false,
+    "ms": 449.9239921569824
+   },
+   {
+    "type": "contactPick",
+    "gold": "c1",
+    "pred": "c1",
+    "conf": 0.604394521119361,
+    "ok": true,
+    "ms": 418.25199127197266
+   },
+   {
+    "type": "eventPick",
+    "gold": "e2",
+    "pred": "e2",
+    "conf": 0.8731046225071,
+    "ok": true,
+    "ms": 352.63991355895996
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "no",
+    "conf": 0.36517591359995566,
+    "ok": false,
+    "ms": 548.5689640045166
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "ignore_new",
+    "pred": "ignore_new",
+    "conf": 0.43770184660871303,
+    "ok": true,
+    "ms": 661.914587020874
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "ignore",
+    "conf": 0.42997328288228515,
+    "ok": false,
+    "ms": 752.9904842376709
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "confirm",
+    "conf": 0.5040366206708952,
+    "ok": true,
+    "ms": 418.7755584716797
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "skip",
+    "pred": "skip",
+    "conf": 0.38339328184167404,
+    "ok": true,
+    "ms": 519.0916061401367
+   },
+   {
+    "type": "timing",
+    "gold": "recurring",
+    "pred": "at_time",
+    "conf": 0.5540941610180433,
+    "ok": false,
+    "ms": 473.2494354248047
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "ok",
+    "conf": 0.6523854255928544,
+    "ok": true,
+    "ms": 817.852258682251
+   },
+   {
+    "type": "answerability",
+    "gold": "yes",
+    "pred": "no",
+    "conf": 0.5030065193814897,
+    "ok": false,
+    "ms": 485.2571487426758
+   },
+   {
+    "type": "route",
+    "gold": "escalate_cloud",
+    "pred": "tool",
+    "conf": 0.31826617397407,
+    "ok": false,
+    "ms": 777.3771286010742
+   },
+   {
+    "type": "toolChoice",
+    "gold": "create_reminder",
+    "pred": "create_event",
+    "conf": 0.2895541221476674,
+    "ok": false,
+    "ms": 73.27556610107422
+   },
+   {
+    "type": "contactPick",
+    "gold": "ask",
+    "pred": "c0",
+    "conf": 0.5475176653555974,
+    "ok": false,
+    "ms": 417.4330234527588
+   },
+   {
+    "type": "eventPick",
+    "gold": "e0",
+    "pred": "e0",
+    "conf": 0.40612165467935757,
+    "ok": true,
+    "ms": 512.0627880096436
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "remember_temporary",
+    "conf": 0.34414568545565877,
+    "ok": false,
+    "ms": 423.504114151001
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "ignore_new",
+    "pred": "ignore_new",
+    "conf": 0.35545323164072123,
+    "ok": true,
+    "ms": 128.46851348876953
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "digest",
+    "conf": 0.44892553958681775,
+    "ok": false,
+    "ms": 357.3892116546631
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "confirm",
+    "conf": 0.6095870468118223,
+    "ok": true,
+    "ms": 488.33513259887695
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "skip",
+    "conf": 0.33989858223603653,
+    "ok": false,
+    "ms": 382.2815418243408
+   },
+   {
+    "type": "timing",
+    "gold": "on_arrival",
+    "pred": "at_time",
+    "conf": 0.2780697213621624,
+    "ok": false,
+    "ms": 669.6000099182129
+   },
+   {
+    "type": "sensitivity",
+    "gold": "sensitive",
+    "pred": "ok",
+    "conf": 0.6252691395396532,
+    "ok": false,
+    "ms": 720.8573818206787
+   },
+   {
+    "type": "answerability",
+    "gold": "no",
+    "pred": "yes",
+    "conf": 0.5273216707418569,
+    "ok": false,
+    "ms": 722.9888439178467
+   },
+   {
+    "type": "route",
+    "gold": "answer_local",
+    "pred": "answer_local",
+    "conf": 0.2820680581027415,
+    "ok": true,
+    "ms": 123.72803688049316
+   },
+   {
+    "type": "toolChoice",
+    "gold": "find_event",
+    "pred": "create_event",
+    "conf": 0.2833981121605285,
+    "ok": false,
+    "ms": 896.0504531860352
+   },
+   {
+    "type": "contactPick",
+    "gold": "c2",
+    "pred": "c2",
+    "conf": 0.9395749203130557,
+    "ok": true,
+    "ms": 601.8555164337158
+   },
+   {
+    "type": "eventPick",
+    "gold": "e1",
+    "pred": "e1",
+    "conf": 0.6172953360406901,
+    "ok": true,
+    "ms": 677.893877029419
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "remember_fact",
+    "conf": 0.41411013071837677,
+    "ok": true,
+    "ms": 829.8547267913818
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "ignore_new",
+    "conf": 0.40032955440001505,
+    "ok": false,
+    "ms": 799.731969833374
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "digest",
+    "conf": 0.46312285396172737,
+    "ok": false,
+    "ms": 666.1050319671631
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "act",
+    "pred": "act",
+    "conf": 0.5019857642969123,
+    "ok": true,
+    "ms": 684.8006248474121
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "skip",
+    "pred": "skip",
+    "conf": 0.39038217739172126,
+    "ok": true,
+    "ms": 434.39483642578125
+   },
+   {
+    "type": "timing",
+    "gold": "on_arrival",
+    "pred": "on_arrival",
+    "conf": 0.39161302206809373,
+    "ok": true,
+    "ms": 392.73715019226074
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "ok",
+    "conf": 0.6154350269251052,
+    "ok": true,
+    "ms": 455.8227062225342
+   },
+   {
+    "type": "answerability",
+    "gold": "no",
+    "pred": "yes",
+    "conf": 0.5162971900787182,
+    "ok": false,
+    "ms": 439.7094249725342
+   },
+   {
+    "type": "route",
+    "gold": "answer_local",
+    "pred": "tool",
+    "conf": 0.3248421853711558,
+    "ok": false,
+    "ms": 113.78931999206543
+   },
+   {
+    "type": "toolChoice",
+    "gold": "lookup_contact",
+    "pred": "lookup_contact",
+    "conf": 0.3434203735302798,
+    "ok": true,
+    "ms": 643.4357166290283
+   },
+   {
+    "type": "contactPick",
+    "gold": "c1",
+    "pred": "c1",
+    "conf": 0.7228032291057616,
+    "ok": true,
+    "ms": 708.381175994873
+   },
+   {
+    "type": "eventPick",
+    "gold": "e1",
+    "pred": "e1",
+    "conf": 0.8516924790953454,
+    "ok": true,
+    "ms": 737.9508018493652
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_temporary",
+    "pred": "remember_fact",
+    "conf": 0.34389307209666164,
+    "ok": false,
+    "ms": 738.0690574645996
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "ignore_new",
+    "conf": 0.41520389948650127,
+    "ok": false,
+    "ms": 733.5515022277832
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "digest",
+    "conf": 0.39290012648632505,
+    "ok": false,
+    "ms": 636.0657215118408
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "confirm",
+    "conf": 0.5001647757411682,
+    "ok": true,
+    "ms": 631.5836906433105
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "skip",
+    "pred": "skip",
+    "conf": 0.38090062973485134,
+    "ok": true,
+    "ms": 840.1038646697998
+   },
+   {
+    "type": "timing",
+    "gold": "now",
+    "pred": "now",
+    "conf": 0.5073236825902002,
+    "ok": true,
+    "ms": 415.77816009521484
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "ok",
+    "conf": 0.6412437464032414,
+    "ok": true,
+    "ms": 390.3498649597168
+   },
+   {
+    "type": "answerability",
+    "gold": "no",
+    "pred": "no",
+    "conf": 0.5463544122145195,
+    "ok": true,
+    "ms": 448.37427139282227
+   },
+   {
+    "type": "route",
+    "gold": "tool",
+    "pred": "tool",
+    "conf": 0.35742267909973013,
+    "ok": true,
+    "ms": 83.4505558013916
+   },
+   {
+    "type": "toolChoice",
+    "gold": "send_message",
+    "pred": "create_event",
+    "conf": 0.19533121458661734,
+    "ok": false,
+    "ms": 116.19734764099121
+   },
+   {
+    "type": "contactPick",
+    "gold": "c2",
+    "pred": "c2",
+    "conf": 0.9880885792671644,
+    "ok": true,
+    "ms": 442.8856372833252
+   },
+   {
+    "type": "eventPick",
+    "gold": "e1",
+    "pred": "e1",
+    "conf": 0.41709917868681967,
+    "ok": true,
+    "ms": 562.3199939727783
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "no",
+    "conf": 0.39112862253831526,
+    "ok": false,
+    "ms": 436.4016056060791
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "ignore_new",
+    "conf": 0.38686469242620397,
+    "ok": false,
+    "ms": 447.30234146118164
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "ignore",
+    "pred": "digest",
+    "conf": 0.4425716634717775,
+    "ok": false,
+    "ms": 443.1171417236328
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "act",
+    "conf": 0.5020072067259874,
+    "ok": false,
+    "ms": 146.54970169067383
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "later",
+    "conf": 0.3706783459320605,
+    "ok": false,
+    "ms": 706.0351371765137
+   },
+   {
+    "type": "timing",
+    "gold": "on_arrival",
+    "pred": "at_time",
+    "conf": 0.4859844060346467,
+    "ok": false,
+    "ms": 635.9121799468994
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "ok",
+    "conf": 0.6454782807238534,
+    "ok": true,
+    "ms": 735.9354496002197
+   },
+   {
+    "type": "answerability",
+    "gold": "no",
+    "pred": "no",
+    "conf": 0.5052222130878844,
+    "ok": true,
+    "ms": 623.8553524017334
+   },
+   {
+    "type": "route",
+    "gold": "clarify",
+    "pred": "tool",
+    "conf": 0.3088399676614116,
+    "ok": false,
+    "ms": 132.00688362121582
+   },
+   {
+    "type": "toolChoice",
+    "gold": "send_message",
+    "pred": "create_event",
+    "conf": 0.29511583050958906,
+    "ok": false,
+    "ms": 783.7603092193604
+   },
+   {
+    "type": "contactPick",
+    "gold": "c0",
+    "pred": "c0",
+    "conf": 0.7995717908816948,
+    "ok": true,
+    "ms": 666.0792827606201
+   },
+   {
+    "type": "eventPick",
+    "gold": "e2",
+    "pred": "e2",
+    "conf": 0.9612641637845724,
+    "ok": true,
+    "ms": 654.656171798706
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "no",
+    "pred": "remember_fact",
+    "conf": 0.4298018784155719,
+    "ok": false,
+    "ms": 503.1712055206299
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "digest",
+    "pred": "digest",
+    "conf": 0.41803781985352595,
+    "ok": true,
+    "ms": 331.5553665161133
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "act",
+    "conf": 0.5058240057431976,
+    "ok": false,
+    "ms": 349.5485782623291
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "later",
+    "conf": 0.34945223785187585,
+    "ok": false,
+    "ms": 356.8000793457031
+   },
+   {
+    "type": "timing",
+    "gold": "recurring",
+    "pred": "at_time",
+    "conf": 0.47238076904113846,
+    "ok": false,
+    "ms": 367.6648139953613
+   },
+   {
+    "type": "sensitivity",
+    "gold": "sensitive",
+    "pred": "ok",
+    "conf": 0.555891498613164,
+    "ok": false,
+    "ms": 399.7535705566406
+   },
+   {
+    "type": "answerability",
+    "gold": "yes",
+    "pred": "yes",
+    "conf": 0.5126872757297773,
+    "ok": true,
+    "ms": 364.3159866333008
+   },
+   {
+    "type": "route",
+    "gold": "clarify",
+    "pred": "tool",
+    "conf": 0.31848963468476876,
+    "ok": false,
+    "ms": 139.42909240722656
+   },
+   {
+    "type": "toolChoice",
+    "gold": "lookup_contact",
+    "pred": "lookup_contact",
+    "conf": 0.27602336375119085,
+    "ok": true,
+    "ms": 817.8093433380127
+   },
+   {
+    "type": "contactPick",
+    "gold": "c1",
+    "pred": "c1",
+    "conf": 0.8435202815574383,
+    "ok": true,
+    "ms": 579.7979831695557
+   },
+   {
+    "type": "eventPick",
+    "gold": "e1",
+    "pred": "e1",
+    "conf": 0.7970347517212016,
+    "ok": true,
+    "ms": 723.212480545044
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "no",
+    "conf": 0.40290090843458776,
+    "ok": false,
+    "ms": 693.0890083312988
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "ignore_new",
+    "pred": "ignore_new",
+    "conf": 0.38138550697631485,
+    "ok": true,
+    "ms": 975.3096103668213
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "ignore",
+    "conf": 0.4106033765747387,
+    "ok": false,
+    "ms": 899.9044895172119
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "act",
+    "conf": 0.5253238336406126,
+    "ok": false,
+    "ms": 715.9066200256348
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "skip",
+    "pred": "skip",
+    "conf": 0.3863168517903406,
+    "ok": true,
+    "ms": 637.5505924224854
+   },
+   {
+    "type": "timing",
+    "gold": "on_arrival",
+    "pred": "at_time",
+    "conf": 0.27979809862582594,
+    "ok": false,
+    "ms": 460.77680587768555
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "ok",
+    "conf": 0.5526580307129536,
+    "ok": true,
+    "ms": 422.9762554168701
+   },
+   {
+    "type": "answerability",
+    "gold": "yes",
+    "pred": "no",
+    "conf": 0.5794130391434603,
+    "ok": false,
+    "ms": 511.65056228637695
+   },
+   {
+    "type": "route",
+    "gold": "answer_local",
+    "pred": "clarify",
+    "conf": 0.3243903303052785,
+    "ok": false,
+    "ms": 72.02982902526855
+   },
+   {
+    "type": "toolChoice",
+    "gold": "find_event",
+    "pred": "create_event",
+    "conf": 0.38509100810018165,
+    "ok": false,
+    "ms": 430.3157329559326
+   },
+   {
+    "type": "contactPick",
+    "gold": "c1",
+    "pred": "c1",
+    "conf": 0.8552281667300744,
+    "ok": true,
+    "ms": 434.7186088562012
+   },
+   {
+    "type": "eventPick",
+    "gold": "e0",
+    "pred": "e0",
+    "conf": 0.5482631554215707,
+    "ok": true,
+    "ms": 530.7497978210449
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "no",
+    "conf": 0.36945834896688595,
+    "ok": false,
+    "ms": 416.6300296783447
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "ignore_new",
+    "conf": 0.3858279838421301,
+    "ok": false,
+    "ms": 513.6892795562744
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "ignore",
+    "pred": "digest",
+    "conf": 0.38674243970063876,
+    "ok": false,
+    "ms": 689.6162033081055
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "confirm",
+    "conf": 0.5206417908193984,
+    "ok": true,
+    "ms": 640.0740146636963
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "skip",
+    "conf": 0.34754014356346014,
+    "ok": false,
+    "ms": 363.4207248687744
+   },
+   {
+    "type": "timing",
+    "gold": "at_time",
+    "pred": "at_time",
+    "conf": 0.5503160211172089,
+    "ok": true,
+    "ms": 456.59613609313965
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "ok",
+    "conf": 0.6456676723190229,
+    "ok": true,
+    "ms": 491.80150032043457
+   },
+   {
+    "type": "answerability",
+    "gold": "yes",
+    "pred": "yes",
+    "conf": 0.5389086850956207,
+    "ok": true,
+    "ms": 350.4946231842041
+   },
+   {
+    "type": "route",
+    "gold": "tool",
+    "pred": "tool",
+    "conf": 0.3715789719241442,
+    "ok": true,
+    "ms": 1022.0675468444824
+   },
+   {
+    "type": "toolChoice",
+    "gold": "create_event",
+    "pred": "create_event",
+    "conf": 0.353572082928685,
+    "ok": true,
+    "ms": 808.887243270874
+   },
+   {
+    "type": "contactPick",
+    "gold": "c0",
+    "pred": "c0",
+    "conf": 0.5905043575690363,
+    "ok": true,
+    "ms": 426.2690544128418
+   },
+   {
+    "type": "eventPick",
+    "gold": "e0",
+    "pred": "e0",
+    "conf": 0.37093358023473594,
+    "ok": true,
+    "ms": 435.9936714172363
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "ignore_new",
+    "conf": 0.3941959097639598,
+    "ok": false,
+    "ms": 349.4300842285156
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "digest",
+    "pred": "ignore",
+    "conf": 0.4577742957626593,
+    "ok": false,
+    "ms": 398.3602523803711
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "act",
+    "pred": "act",
+    "conf": 0.5337850009881966,
+    "ok": true,
+    "ms": 696.6712474822998
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "skip",
+    "conf": 0.3793266629098052,
+    "ok": false,
+    "ms": 653.3827781677246
+   },
+   {
+    "type": "timing",
+    "gold": "on_arrival",
+    "pred": "at_time",
+    "conf": 0.3010526754730203,
+    "ok": false,
+    "ms": 441.18595123291016
+   },
+   {
+    "type": "sensitivity",
+    "gold": "sensitive",
+    "pred": "ok",
+    "conf": 0.647226562056125,
+    "ok": false,
+    "ms": 451.3051509857178
+   },
+   {
+    "type": "answerability",
+    "gold": "no",
+    "pred": "no",
+    "conf": 0.5739695479798174,
+    "ok": true,
+    "ms": 321.3543891906738
+   },
+   {
+    "type": "route",
+    "gold": "tool",
+    "pred": "tool",
+    "conf": 0.30518118991110244,
+    "ok": true,
+    "ms": 537.1298789978027
+   },
+   {
+    "type": "toolChoice",
+    "gold": "lookup_contact",
+    "pred": "lookup_contact",
+    "conf": 0.2709561503730567,
+    "ok": true,
+    "ms": 420.97949981689453
+   },
+   {
+    "type": "contactPick",
+    "gold": "c0",
+    "pred": "c0",
+    "conf": 0.4481886742861139,
+    "ok": true,
+    "ms": 269.3061828613281
+   },
+   {
+    "type": "eventPick",
+    "gold": "e0",
+    "pred": "e2",
+    "conf": 0.3154182284936959,
+    "ok": false,
+    "ms": 432.3737621307373
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "ignore_new",
+    "conf": 0.4683222264025914,
+    "ok": false,
+    "ms": 502.6683807373047
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "digest",
+    "conf": 0.4889554006241742,
+    "ok": false,
+    "ms": 359.59482192993164
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "act",
+    "pred": "act",
+    "conf": 0.5135042910229529,
+    "ok": true,
+    "ms": 410.4135036468506
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "skip",
+    "conf": 0.36701167930360407,
+    "ok": false,
+    "ms": 485.98289489746094
+   },
+   {
+    "type": "timing",
+    "gold": "recurring",
+    "pred": "at_time",
+    "conf": 0.6190041273517749,
+    "ok": false,
+    "ms": 353.55186462402344
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "ok",
+    "conf": 0.639776017594638,
+    "ok": true,
+    "ms": 398.98133277893066
+   },
+   {
+    "type": "answerability",
+    "gold": "yes",
+    "pred": "no",
+    "conf": 0.5575103867241552,
+    "ok": false,
+    "ms": 318.53246688842773
+   },
+   {
+    "type": "route",
+    "gold": "clarify",
+    "pred": "tool",
+    "conf": 0.3048525942473351,
+    "ok": false,
+    "ms": 69.24295425415039
+   },
+   {
+    "type": "toolChoice",
+    "gold": "find_event",
+    "pred": "create_event",
+    "conf": 0.4540457765129219,
+    "ok": false,
+    "ms": 653.444766998291
+   },
+   {
+    "type": "contactPick",
+    "gold": "c2",
+    "pred": "c2",
+    "conf": 0.9717925859294393,
+    "ok": true,
+    "ms": 371.8547821044922
+   },
+   {
+    "type": "eventPick",
+    "gold": "e0",
+    "pred": "e0",
+    "conf": 0.6080380457717961,
+    "ok": true,
+    "ms": 593.2719707489014
+   }
+  ]
+ },
+ "dev/v1": {
+  "n": 120,
+  "acc": 0.5833333333333334,
+  "coverage": 0.1,
+  "acc_on_covered": 1.0,
+  "route_preds": {
+   "tool": 5,
+   "answer_local": 5
+  },
+  "per_type_acc": {
+   "answerability": 0.7,
+   "confirmBeforeAct": 0.3,
+   "contactPick": 0.91,
+   "eventPick": 0.91,
+   "memoryConflict": 0.89,
+   "notificationTriage": 0.6,
+   "nudgeNow": 0.6,
+   "rememberOrNot": 0.62,
+   "route": 0.6,
+   "sensitivity": 0.3,
+   "timing": 0.2,
+   "toolChoice": 0.36
+  },
+  "median_ms": 543.7443256378174,
+  "rows": [
+   {
+    "type": "toolChoice",
+    "gold": "send_message",
+    "pred": "create_event",
+    "conf": 0.6016859163329706,
+    "ok": false,
+    "ms": 437.21604347229004
+   },
+   {
+    "type": "contactPick",
+    "gold": "c1",
+    "pred": "c1",
+    "conf": 0.6569216944387818,
+    "ok": true,
+    "ms": 494.32969093322754
+   },
+   {
+    "type": "eventPick",
+    "gold": "e2",
+    "pred": "e2",
+    "conf": 0.840701106714528,
+    "ok": true,
+    "ms": 432.0094585418701
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "remember_fact",
+    "conf": 0.5050513248884844,
+    "ok": true,
+    "ms": 531.4908027648926
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "ignore_new",
+    "pred": "ignore_new",
+    "conf": 0.42394334918332893,
+    "ok": true,
+    "ms": 518.3544158935547
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "interrupt",
+    "conf": 0.741609576964847,
+    "ok": true,
+    "ms": 437.7303123474121
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "act",
+    "conf": 0.73642320403917,
+    "ok": false,
+    "ms": 659.116268157959
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "skip",
+    "pred": "nudge",
+    "conf": 0.5100754502063602,
+    "ok": false,
+    "ms": 763.9503479003906
+   },
+   {
+    "type": "timing",
+    "gold": "recurring",
+    "pred": "at_time",
+    "conf": 0.6863510976436804,
+    "ok": false,
+    "ms": 363.89660835266113
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "sensitive",
+    "conf": 0.5809924891175652,
+    "ok": false,
+    "ms": 391.39699935913086
+   },
+   {
+    "type": "answerability",
+    "gold": "yes",
+    "pred": "yes",
+    "conf": 0.5974698209393724,
+    "ok": true,
+    "ms": 683.2492351531982
+   },
+   {
+    "type": "route",
+    "gold": "escalate_cloud",
+    "pred": "tool",
+    "conf": 0.3684437013770334,
+    "ok": false,
+    "ms": 827.9435634613037
+   },
+   {
+    "type": "toolChoice",
+    "gold": "create_reminder",
+    "pred": "create_event",
+    "conf": 0.43016267339093056,
+    "ok": false,
+    "ms": 647.709846496582
+   },
+   {
+    "type": "contactPick",
+    "gold": "ask",
+    "pred": "c0",
+    "conf": 0.4780023590781315,
+    "ok": false,
+    "ms": 632.8709125518799
+   },
+   {
+    "type": "eventPick",
+    "gold": "e0",
+    "pred": "e0",
+    "conf": 0.3444793684093817,
+    "ok": true,
+    "ms": 598.6802577972412
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "no",
+    "conf": 0.40418199653694786,
+    "ok": false,
+    "ms": 818.4647560119629
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "ignore_new",
+    "pred": "ignore_new",
+    "conf": 0.4207117399613374,
+    "ok": true,
+    "ms": 626.3961791992188
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "interrupt",
+    "conf": 0.809720685370563,
+    "ok": true,
+    "ms": 335.36720275878906
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "act",
+    "conf": 0.6650737197737365,
+    "ok": false,
+    "ms": 419.7258949279785
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "nudge",
+    "conf": 0.6814917295478298,
+    "ok": true,
+    "ms": 499.37963485717773
+   },
+   {
+    "type": "timing",
+    "gold": "on_arrival",
+    "pred": "now",
+    "conf": 0.3787479018517624,
+    "ok": false,
+    "ms": 350.19898414611816
+   },
+   {
+    "type": "sensitivity",
+    "gold": "sensitive",
+    "pred": "sensitive",
+    "conf": 0.6998613409226819,
+    "ok": true,
+    "ms": 384.7064971923828
+   },
+   {
+    "type": "answerability",
+    "gold": "no",
+    "pred": "no",
+    "conf": 0.5455037241661302,
+    "ok": true,
+    "ms": 439.35537338256836
+   },
+   {
+    "type": "route",
+    "gold": "answer_local",
+    "pred": "answer_local",
+    "conf": 0.5259391447936865,
+    "ok": true,
+    "ms": 506.55460357666016
+   },
+   {
+    "type": "toolChoice",
+    "gold": "find_event",
+    "pred": "create_event",
+    "conf": 0.5809074720205905,
+    "ok": false,
+    "ms": 515.4907703399658
+   },
+   {
+    "type": "contactPick",
+    "gold": "c2",
+    "pred": "c2",
+    "conf": 0.8344740668613904,
+    "ok": true,
+    "ms": 431.3652515411377
+   },
+   {
+    "type": "eventPick",
+    "gold": "e1",
+    "pred": "e1",
+    "conf": 0.6132447157988403,
+    "ok": true,
+    "ms": 535.1283550262451
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "remember_fact",
+    "conf": 0.4822428158083044,
+    "ok": true,
+    "ms": 642.0779228210449
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "update",
+    "conf": 0.3891970023828858,
+    "ok": true,
+    "ms": 678.9700984954834
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "interrupt",
+    "conf": 0.814658726712923,
+    "ok": true,
+    "ms": 437.5622272491455
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "act",
+    "pred": "act",
+    "conf": 0.764809612407366,
+    "ok": true,
+    "ms": 325.61349868774414
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "skip",
+    "pred": "nudge",
+    "conf": 0.5538668065917445,
+    "ok": false,
+    "ms": 526.3376235961914
+   },
+   {
+    "type": "timing",
+    "gold": "on_arrival",
+    "pred": "at_time",
+    "conf": 0.33821565545278276,
+    "ok": false,
+    "ms": 501.7967224121094
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "sensitive",
+    "conf": 0.5546377269731001,
+    "ok": false,
+    "ms": 695.8136558532715
+   },
+   {
+    "type": "answerability",
+    "gold": "no",
+    "pred": "no",
+    "conf": 0.554713594475525,
+    "ok": true,
+    "ms": 666.0723686218262
+   },
+   {
+    "type": "route",
+    "gold": "answer_local",
+    "pred": "answer_local",
+    "conf": 0.3866886970493835,
+    "ok": true,
+    "ms": 1014.2440795898438
+   },
+   {
+    "type": "toolChoice",
+    "gold": "lookup_contact",
+    "pred": "lookup_contact",
+    "conf": 0.46928874904472034,
+    "ok": true,
+    "ms": 809.9684715270996
+   },
+   {
+    "type": "contactPick",
+    "gold": "c1",
+    "pred": "c1",
+    "conf": 0.6585088949185978,
+    "ok": true,
+    "ms": 482.9130172729492
+   },
+   {
+    "type": "eventPick",
+    "gold": "e1",
+    "pred": "e1",
+    "conf": 0.8432468815008398,
+    "ok": true,
+    "ms": 413.13862800598145
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_temporary",
+    "pred": "remember_fact",
+    "conf": 0.40339926933942605,
+    "ok": false,
+    "ms": 492.16365814208984
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "update",
+    "conf": 0.39309178524505456,
+    "ok": true,
+    "ms": 475.2953052520752
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "interrupt",
+    "conf": 0.8377590841966406,
+    "ok": true,
+    "ms": 346.54760360717773
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "act",
+    "conf": 0.6978691659481253,
+    "ok": false,
+    "ms": 406.8429470062256
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "skip",
+    "pred": "nudge",
+    "conf": 0.5472505418285601,
+    "ok": false,
+    "ms": 448.03714752197266
+   },
+   {
+    "type": "timing",
+    "gold": "now",
+    "pred": "now",
+    "conf": 0.42261231050137954,
+    "ok": true,
+    "ms": 343.5492515563965
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "sensitive",
+    "conf": 0.5138566765943446,
+    "ok": false,
+    "ms": 389.3556594848633
+   },
+   {
+    "type": "answerability",
+    "gold": "no",
+    "pred": "yes",
+    "conf": 0.5429835072202609,
+    "ok": false,
+    "ms": 396.3813781738281
+   },
+   {
+    "type": "route",
+    "gold": "tool",
+    "pred": "tool",
+    "conf": 0.6255473060042935,
+    "ok": true,
+    "ms": 475.8191108703613
+   },
+   {
+    "type": "toolChoice",
+    "gold": "send_message",
+    "pred": "create_event",
+    "conf": 0.532896811786411,
+    "ok": false,
+    "ms": 467.9443836212158
+   },
+   {
+    "type": "contactPick",
+    "gold": "c2",
+    "pred": "c2",
+    "conf": 0.9835716390590139,
+    "ok": true,
+    "ms": 465.76905250549316
+   },
+   {
+    "type": "eventPick",
+    "gold": "e1",
+    "pred": "e1",
+    "conf": 0.4219888309605046,
+    "ok": true,
+    "ms": 420.3004837036133
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "remember_fact",
+    "conf": 0.5335152354970104,
+    "ok": true,
+    "ms": 649.5742797851562
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "update",
+    "conf": 0.42876809892261863,
+    "ok": true,
+    "ms": 755.523681640625
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "ignore",
+    "pred": "interrupt",
+    "conf": 0.6815286308579285,
+    "ok": false,
+    "ms": 395.9774971008301
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "act",
+    "conf": 0.7502623213425984,
+    "ok": false,
+    "ms": 387.47096061706543
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "nudge",
+    "conf": 0.6452291432043953,
+    "ok": true,
+    "ms": 578.6540508270264
+   },
+   {
+    "type": "timing",
+    "gold": "on_arrival",
+    "pred": "at_time",
+    "conf": 0.5287310520795218,
+    "ok": false,
+    "ms": 653.7497043609619
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "sensitive",
+    "conf": 0.6253540848308105,
+    "ok": false,
+    "ms": 782.6287746429443
+   },
+   {
+    "type": "answerability",
+    "gold": "no",
+    "pred": "yes",
+    "conf": 0.6271773020360503,
+    "ok": false,
+    "ms": 644.9058055877686
+   },
+   {
+    "type": "route",
+    "gold": "clarify",
+    "pred": "tool",
+    "conf": 0.37864436438102195,
+    "ok": false,
+    "ms": 648.2796669006348
+   },
+   {
+    "type": "toolChoice",
+    "gold": "send_message",
+    "pred": "create_event",
+    "conf": 0.6413283512400676,
+    "ok": false,
+    "ms": 936.4519119262695
+   },
+   {
+    "type": "contactPick",
+    "gold": "c0",
+    "pred": "c0",
+    "conf": 0.7769459787272883,
+    "ok": true,
+    "ms": 423.5990047454834
+   },
+   {
+    "type": "eventPick",
+    "gold": "e2",
+    "pred": "e2",
+    "conf": 0.9400661967815958,
+    "ok": true,
+    "ms": 435.1158142089844
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "no",
+    "pred": "no",
+    "conf": 0.4042884802635543,
+    "ok": true,
+    "ms": 337.9662036895752
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "digest",
+    "pred": "interrupt",
+    "conf": 0.7172369126231464,
+    "ok": false,
+    "ms": 430.9346675872803
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "act",
+    "conf": 0.7581295996019658,
+    "ok": false,
+    "ms": 328.197717666626
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "nudge",
+    "conf": 0.6587559650890137,
+    "ok": true,
+    "ms": 822.8609561920166
+   },
+   {
+    "type": "timing",
+    "gold": "recurring",
+    "pred": "at_time",
+    "conf": 0.4482074370825973,
+    "ok": false,
+    "ms": 632.1909427642822
+   },
+   {
+    "type": "sensitivity",
+    "gold": "sensitive",
+    "pred": "sensitive",
+    "conf": 0.7625477223265305,
+    "ok": true,
+    "ms": 685.6482028961182
+   },
+   {
+    "type": "answerability",
+    "gold": "yes",
+    "pred": "yes",
+    "conf": 0.6147933730997974,
+    "ok": true,
+    "ms": 487.32829093933105
+   },
+   {
+    "type": "route",
+    "gold": "clarify",
+    "pred": "answer_local",
+    "conf": 0.3929714529962786,
+    "ok": false,
+    "ms": 573.7011432647705
+   },
+   {
+    "type": "toolChoice",
+    "gold": "lookup_contact",
+    "pred": "lookup_contact",
+    "conf": 0.5237736103824673,
+    "ok": true,
+    "ms": 444.5013999938965
+   },
+   {
+    "type": "contactPick",
+    "gold": "c1",
+    "pred": "c1",
+    "conf": 0.8492447787793972,
+    "ok": true,
+    "ms": 411.15522384643555
+   },
+   {
+    "type": "eventPick",
+    "gold": "e1",
+    "pred": "e1",
+    "conf": 0.8153703889819519,
+    "ok": true,
+    "ms": 348.21271896362305
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "remember_fact",
+    "conf": 0.6182461134830965,
+    "ok": true,
+    "ms": 580.984354019165
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "ignore_new",
+    "pred": "ignore_new",
+    "conf": 0.4558647315058887,
+    "ok": true,
+    "ms": 759.1381072998047
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "interrupt",
+    "conf": 0.7642679625564605,
+    "ok": true,
+    "ms": 851.4487743377686
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "act",
+    "conf": 0.7428646342057456,
+    "ok": false,
+    "ms": 557.6930046081543
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "skip",
+    "pred": "nudge",
+    "conf": 0.5328588131664714,
+    "ok": false,
+    "ms": 806.7259788513184
+   },
+   {
+    "type": "timing",
+    "gold": "on_arrival",
+    "pred": "now",
+    "conf": 0.34588061598205905,
+    "ok": false,
+    "ms": 668.0729389190674
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "sensitive",
+    "conf": 0.5712266637463336,
+    "ok": false,
+    "ms": 635.7393264770508
+   },
+   {
+    "type": "answerability",
+    "gold": "yes",
+    "pred": "yes",
+    "conf": 0.5003890990425486,
+    "ok": true,
+    "ms": 597.1548557281494
+   },
+   {
+    "type": "route",
+    "gold": "answer_local",
+    "pred": "answer_local",
+    "conf": 0.5787839854103487,
+    "ok": true,
+    "ms": 991.9331073760986
+   },
+   {
+    "type": "toolChoice",
+    "gold": "find_event",
+    "pred": "create_event",
+    "conf": 0.6951153676033854,
+    "ok": false,
+    "ms": 860.7058525085449
+   },
+   {
+    "type": "contactPick",
+    "gold": "c1",
+    "pred": "c1",
+    "conf": 0.8963066127168698,
+    "ok": true,
+    "ms": 646.564245223999
+   },
+   {
+    "type": "eventPick",
+    "gold": "e0",
+    "pred": "e0",
+    "conf": 0.42481301999355703,
+    "ok": true,
+    "ms": 574.4519233703613
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "no",
+    "conf": 0.3971732969785146,
+    "ok": false,
+    "ms": 597.5775718688965
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "update",
+    "conf": 0.4044287382510807,
+    "ok": true,
+    "ms": 855.1881313323975
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "ignore",
+    "pred": "interrupt",
+    "conf": 0.6169788759137466,
+    "ok": false,
+    "ms": 670.1922416687012
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "act",
+    "conf": 0.7684373718598844,
+    "ok": false,
+    "ms": 395.70116996765137
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "nudge",
+    "conf": 0.6442901777728919,
+    "ok": true,
+    "ms": 1350.2819538116455
+   },
+   {
+    "type": "timing",
+    "gold": "at_time",
+    "pred": "at_time",
+    "conf": 0.5971246021535728,
+    "ok": true,
+    "ms": 687.2732639312744
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "sensitive",
+    "conf": 0.6209933882294076,
+    "ok": false,
+    "ms": 504.0321350097656
+   },
+   {
+    "type": "answerability",
+    "gold": "yes",
+    "pred": "yes",
+    "conf": 0.6984222634666123,
+    "ok": true,
+    "ms": 419.9035167694092
+   },
+   {
+    "type": "route",
+    "gold": "tool",
+    "pred": "tool",
+    "conf": 0.5727320672587397,
+    "ok": true,
+    "ms": 711.0204696655273
+   },
+   {
+    "type": "toolChoice",
+    "gold": "create_event",
+    "pred": "create_event",
+    "conf": 0.6093564500438713,
+    "ok": true,
+    "ms": 910.5875492095947
+   },
+   {
+    "type": "contactPick",
+    "gold": "c0",
+    "pred": "c0",
+    "conf": 0.49242118502207516,
+    "ok": true,
+    "ms": 722.0828533172607
+   },
+   {
+    "type": "eventPick",
+    "gold": "e0",
+    "pred": "e0",
+    "conf": 0.3192338257529068,
+    "ok": true,
+    "ms": 435.6560707092285
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "update",
+    "conf": 0.38634745949177324,
+    "ok": true,
+    "ms": 495.77832221984863
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "digest",
+    "pred": "interrupt",
+    "conf": 0.6754664513645593,
+    "ok": false,
+    "ms": 499.0983009338379
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "act",
+    "pred": "act",
+    "conf": 0.7958090766987845,
+    "ok": true,
+    "ms": 370.3916072845459
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "nudge",
+    "conf": 0.6121822319358728,
+    "ok": true,
+    "ms": 756.7570209503174
+   },
+   {
+    "type": "timing",
+    "gold": "on_arrival",
+    "pred": "at_time",
+    "conf": 0.48278158989493214,
+    "ok": false,
+    "ms": 757.0292949676514
+   },
+   {
+    "type": "sensitivity",
+    "gold": "sensitive",
+    "pred": "sensitive",
+    "conf": 0.605030831437874,
+    "ok": true,
+    "ms": 891.8569087982178
+   },
+   {
+    "type": "answerability",
+    "gold": "no",
+    "pred": "yes",
+    "conf": 0.5660508630767143,
+    "ok": false,
+    "ms": 740.1418685913086
+   },
+   {
+    "type": "route",
+    "gold": "tool",
+    "pred": "tool",
+    "conf": 0.43165535360068785,
+    "ok": true,
+    "ms": 1035.5827808380127
+   },
+   {
+    "type": "toolChoice",
+    "gold": "lookup_contact",
+    "pred": "lookup_contact",
+    "conf": 0.501642463758827,
+    "ok": true,
+    "ms": 878.5014152526855
+   },
+   {
+    "type": "contactPick",
+    "gold": "c0",
+    "pred": "c0",
+    "conf": 0.3702098921132407,
+    "ok": true,
+    "ms": 527.5061130523682
+   },
+   {
+    "type": "eventPick",
+    "gold": "e0",
+    "pred": "ask",
+    "conf": 0.3138810613616242,
+    "ok": false,
+    "ms": 820.1463222503662
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "ignore_new",
+    "conf": 0.4229547186856074,
+    "ok": false,
+    "ms": 785.7270240783691
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "interrupt",
+    "conf": 0.782234551459331,
+    "ok": true,
+    "ms": 668.133020401001
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "act",
+    "pred": "act",
+    "conf": 0.7552564114160589,
+    "ok": true,
+    "ms": 419.7537899017334
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "nudge",
+    "conf": 0.6517965771654085,
+    "ok": true,
+    "ms": 499.8199939727783
+   },
+   {
+    "type": "timing",
+    "gold": "recurring",
+    "pred": "at_time",
+    "conf": 0.503774333513142,
+    "ok": false,
+    "ms": 426.0973930358887
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "sensitive",
+    "conf": 0.5286122998822889,
+    "ok": false,
+    "ms": 508.03089141845703
+   },
+   {
+    "type": "answerability",
+    "gold": "yes",
+    "pred": "yes",
+    "conf": 0.5331036219178198,
+    "ok": true,
+    "ms": 604.9158573150635
+   },
+   {
+    "type": "route",
+    "gold": "clarify",
+    "pred": "answer_local",
+    "conf": 0.4126513074430126,
+    "ok": false,
+    "ms": 1410.794973373413
+   },
+   {
+    "type": "toolChoice",
+    "gold": "find_event",
+    "pred": "create_event",
+    "conf": 0.7263537663587009,
+    "ok": false,
+    "ms": 1452.6658058166504
+   },
+   {
+    "type": "contactPick",
+    "gold": "c2",
+    "pred": "c2",
+    "conf": 0.9448936342198547,
+    "ok": true,
+    "ms": 411.4682674407959
+   },
+   {
+    "type": "eventPick",
+    "gold": "e0",
+    "pred": "e0",
+    "conf": 0.5063483512196393,
+    "ok": true,
+    "ms": 543.7443256378174
+   }
+  ]
+ },
+ "dev/v1+cc": {
+  "n": 120,
+  "acc": 0.5916666666666667,
+  "coverage": 0.075,
+  "acc_on_covered": 1.0,
+  "route_preds": {
+   "clarify": 6,
+   "answer_local": 2,
+   "tool": 2
+  },
+  "per_type_acc": {
+   "answerability": 0.5,
+   "confirmBeforeAct": 0.7,
+   "contactPick": 0.91,
+   "eventPick": 1.0,
+   "memoryConflict": 0.0,
+   "notificationTriage": 0.3,
+   "nudgeNow": 0.6,
+   "rememberOrNot": 0.62,
+   "route": 0.7,
+   "sensitivity": 0.6,
+   "timing": 0.6,
+   "toolChoice": 0.45
+  },
+  "median_ms": 422.4855899810791,
+  "rows": [
+   {
+    "type": "toolChoice",
+    "gold": "send_message",
+    "pred": "create_event",
+    "conf": 0.2641128505181502,
+    "ok": false,
+    "ms": 138.23747634887695
+   },
+   {
+    "type": "contactPick",
+    "gold": "c1",
+    "pred": "c1",
+    "conf": 0.5910842644556514,
+    "ok": true,
+    "ms": 462.37850189208984
+   },
+   {
+    "type": "eventPick",
+    "gold": "e2",
+    "pred": "e2",
+    "conf": 0.8627914173630402,
+    "ok": true,
+    "ms": 565.3476715087891
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "remember_fact",
+    "conf": 0.45254447642933493,
+    "ok": true,
+    "ms": 352.56409645080566
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "ignore_new",
+    "pred": "keep_both",
+    "conf": 0.39622203228291447,
+    "ok": false,
+    "ms": 85.82401275634766
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "digest",
+    "conf": 0.47886614307607206,
+    "ok": false,
+    "ms": 141.58391952514648
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "confirm",
+    "conf": 0.6054671465126575,
+    "ok": true,
+    "ms": 438.40479850769043
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "skip",
+    "pred": "nudge",
+    "conf": 0.3742653116668181,
+    "ok": false,
+    "ms": 135.59770584106445
+   },
+   {
+    "type": "timing",
+    "gold": "recurring",
+    "pred": "recurring",
+    "conf": 0.445982517044079,
+    "ok": true,
+    "ms": 422.4855899810791
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "ok",
+    "conf": 0.6172177850578643,
+    "ok": true,
+    "ms": 457.6075077056885
+   },
+   {
+    "type": "answerability",
+    "gold": "yes",
+    "pred": "yes",
+    "conf": 0.58227562959827,
+    "ok": true,
+    "ms": 408.1535339355469
+   },
+   {
+    "type": "route",
+    "gold": "escalate_cloud",
+    "pred": "clarify",
+    "conf": 0.34860694712339674,
+    "ok": false,
+    "ms": 108.20436477661133
+   },
+   {
+    "type": "toolChoice",
+    "gold": "create_reminder",
+    "pred": "create_reminder",
+    "conf": 0.22119668527974437,
+    "ok": true,
+    "ms": 80.13486862182617
+   },
+   {
+    "type": "contactPick",
+    "gold": "ask",
+    "pred": "c0",
+    "conf": 0.5690944839583815,
+    "ok": false,
+    "ms": 667.5822734832764
+   },
+   {
+    "type": "eventPick",
+    "gold": "e0",
+    "pred": "e0",
+    "conf": 0.4020889199288431,
+    "ok": true,
+    "ms": 680.4752349853516
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "remember_temporary",
+    "conf": 0.3645583206085106,
+    "ok": false,
+    "ms": 446.11620903015137
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "ignore_new",
+    "pred": "keep_both",
+    "conf": 0.39266662056081925,
+    "ok": false,
+    "ms": 111.12523078918457
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "digest",
+    "conf": 0.45998054611991757,
+    "ok": false,
+    "ms": 527.442455291748
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "confirm",
+    "conf": 0.6826577966128405,
+    "ok": true,
+    "ms": 1486.2394332885742
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "nudge",
+    "conf": 0.5335412693060179,
+    "ok": true,
+    "ms": 635.8950138092041
+   },
+   {
+    "type": "timing",
+    "gold": "on_arrival",
+    "pred": "now",
+    "conf": 0.36852289470320965,
+    "ok": false,
+    "ms": 471.05956077575684
+   },
+   {
+    "type": "sensitivity",
+    "gold": "sensitive",
+    "pred": "ok",
+    "conf": 0.5322382998972117,
+    "ok": false,
+    "ms": 351.52244567871094
+   },
+   {
+    "type": "answerability",
+    "gold": "no",
+    "pred": "no",
+    "conf": 0.568784190118007,
+    "ok": true,
+    "ms": 589.3733501434326
+   },
+   {
+    "type": "route",
+    "gold": "answer_local",
+    "pred": "answer_local",
+    "conf": 0.2892725272494901,
+    "ok": true,
+    "ms": 131.17694854736328
+   },
+   {
+    "type": "toolChoice",
+    "gold": "find_event",
+    "pred": "create_event",
+    "conf": 0.21377927671370683,
+    "ok": false,
+    "ms": 130.67245483398438
+   },
+   {
+    "type": "contactPick",
+    "gold": "c2",
+    "pred": "c2",
+    "conf": 0.9236578260496315,
+    "ok": true,
+    "ms": 393.2478427886963
+   },
+   {
+    "type": "eventPick",
+    "gold": "e1",
+    "pred": "e1",
+    "conf": 0.593360907137349,
+    "ok": true,
+    "ms": 355.698823928833
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "remember_fact",
+    "conf": 0.41063780739261035,
+    "ok": true,
+    "ms": 505.86962699890137
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "keep_both",
+    "conf": 0.47739095028389283,
+    "ok": false,
+    "ms": 136.74378395080566
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "digest",
+    "conf": 0.49416235398760533,
+    "ok": false,
+    "ms": 747.8394508361816
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "act",
+    "pred": "confirm",
+    "conf": 0.5930627522727181,
+    "ok": false,
+    "ms": 127.85983085632324
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "skip",
+    "pred": "nudge",
+    "conf": 0.39960824854128424,
+    "ok": false,
+    "ms": 133.0265998840332
+   },
+   {
+    "type": "timing",
+    "gold": "on_arrival",
+    "pred": "on_arrival",
+    "conf": 0.3378083065388164,
+    "ok": true,
+    "ms": 651.9918441772461
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "ok",
+    "conf": 0.6578607234073263,
+    "ok": true,
+    "ms": 760.6465816497803
+   },
+   {
+    "type": "answerability",
+    "gold": "no",
+    "pred": "no",
+    "conf": 0.5732330545781229,
+    "ok": true,
+    "ms": 759.8490715026855
+   },
+   {
+    "type": "route",
+    "gold": "answer_local",
+    "pred": "clarify",
+    "conf": 0.3320919956740249,
+    "ok": false,
+    "ms": 391.86882972717285
+   },
+   {
+    "type": "toolChoice",
+    "gold": "lookup_contact",
+    "pred": "lookup_contact",
+    "conf": 0.6744724525250189,
+    "ok": true,
+    "ms": 188.10582160949707
+   },
+   {
+    "type": "contactPick",
+    "gold": "c1",
+    "pred": "c1",
+    "conf": 0.649692947063559,
+    "ok": true,
+    "ms": 659.6837043762207
+   },
+   {
+    "type": "eventPick",
+    "gold": "e1",
+    "pred": "e1",
+    "conf": 0.8670126033151013,
+    "ok": true,
+    "ms": 330.8422565460205
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_temporary",
+    "pred": "remember_temporary",
+    "conf": 0.41777231894343747,
+    "ok": true,
+    "ms": 136.6274356842041
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "keep_both",
+    "conf": 0.4499742264628276,
+    "ok": false,
+    "ms": 144.14715766906738
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "digest",
+    "conf": 0.4358744005080147,
+    "ok": false,
+    "ms": 127.40540504455566
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "confirm",
+    "conf": 0.6134796467761641,
+    "ok": true,
+    "ms": 479.9191951751709
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "skip",
+    "pred": "nudge",
+    "conf": 0.35423216654936707,
+    "ok": false,
+    "ms": 864.1407489776611
+   },
+   {
+    "type": "timing",
+    "gold": "now",
+    "pred": "now",
+    "conf": 0.402380267762148,
+    "ok": true,
+    "ms": 557.6901435852051
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "ok",
+    "conf": 0.6599492235855204,
+    "ok": true,
+    "ms": 330.0127983093262
+   },
+   {
+    "type": "answerability",
+    "gold": "no",
+    "pred": "yes",
+    "conf": 0.513990376472698,
+    "ok": false,
+    "ms": 358.6583137512207
+   },
+   {
+    "type": "route",
+    "gold": "tool",
+    "pred": "tool",
+    "conf": 0.45867414139029444,
+    "ok": true,
+    "ms": 141.62683486938477
+   },
+   {
+    "type": "toolChoice",
+    "gold": "send_message",
+    "pred": "create_event",
+    "conf": 0.20475037555243872,
+    "ok": false,
+    "ms": 179.5194149017334
+   },
+   {
+    "type": "contactPick",
+    "gold": "c2",
+    "pred": "c2",
+    "conf": 0.9894024732199316,
+    "ok": true,
+    "ms": 594.7954654693604
+   },
+   {
+    "type": "eventPick",
+    "gold": "e1",
+    "pred": "e1",
+    "conf": 0.455465032800767,
+    "ok": true,
+    "ms": 369.1062927246094
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "remember_fact",
+    "conf": 0.4520720661116184,
+    "ok": true,
+    "ms": 499.65357780456543
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "keep_both",
+    "conf": 0.4278678772246811,
+    "ok": false,
+    "ms": 600.1265048980713
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "ignore",
+    "pred": "digest",
+    "conf": 0.4926437664243771,
+    "ok": false,
+    "ms": 365.25917053222656
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "confirm",
+    "conf": 0.608313917150358,
+    "ok": true,
+    "ms": 90.01731872558594
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "nudge",
+    "conf": 0.47986484162273296,
+    "ok": true,
+    "ms": 735.6500625610352
+   },
+   {
+    "type": "timing",
+    "gold": "on_arrival",
+    "pred": "on_arrival",
+    "conf": 0.26972628350465583,
+    "ok": true,
+    "ms": 154.84094619750977
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "ok",
+    "conf": 0.563739429562881,
+    "ok": true,
+    "ms": 155.35736083984375
+   },
+   {
+    "type": "answerability",
+    "gold": "no",
+    "pred": "yes",
+    "conf": 0.5911667968115807,
+    "ok": false,
+    "ms": 704.4694423675537
+   },
+   {
+    "type": "route",
+    "gold": "clarify",
+    "pred": "clarify",
+    "conf": 0.3237522584866952,
+    "ok": true,
+    "ms": 205.8098316192627
+   },
+   {
+    "type": "toolChoice",
+    "gold": "send_message",
+    "pred": "create_event",
+    "conf": 0.32787742501222344,
+    "ok": false,
+    "ms": 661.6001129150391
+   },
+   {
+    "type": "contactPick",
+    "gold": "c0",
+    "pred": "c0",
+    "conf": 0.820477351207049,
+    "ok": true,
+    "ms": 383.3506107330322
+   },
+   {
+    "type": "eventPick",
+    "gold": "e2",
+    "pred": "e2",
+    "conf": 0.946375570047172,
+    "ok": true,
+    "ms": 698.9679336547852
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "no",
+    "pred": "remember_fact",
+    "conf": 0.3820688417355358,
+    "ok": false,
+    "ms": 578.0003070831299
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "digest",
+    "pred": "digest",
+    "conf": 0.5212618825894524,
+    "ok": true,
+    "ms": 720.839262008667
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "confirm",
+    "conf": 0.6971272702605955,
+    "ok": true,
+    "ms": 575.7622718811035
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "nudge",
+    "conf": 0.4989272742555241,
+    "ok": true,
+    "ms": 473.15502166748047
+   },
+   {
+    "type": "timing",
+    "gold": "recurring",
+    "pred": "now",
+    "conf": 0.2925322399397622,
+    "ok": false,
+    "ms": 678.7452697753906
+   },
+   {
+    "type": "sensitivity",
+    "gold": "sensitive",
+    "pred": "ok",
+    "conf": 0.5444000439592971,
+    "ok": false,
+    "ms": 675.4491329193115
+   },
+   {
+    "type": "answerability",
+    "gold": "yes",
+    "pred": "yes",
+    "conf": 0.6146644802021104,
+    "ok": true,
+    "ms": 736.621618270874
+   },
+   {
+    "type": "route",
+    "gold": "clarify",
+    "pred": "clarify",
+    "conf": 0.3506980648617983,
+    "ok": true,
+    "ms": 135.28108596801758
+   },
+   {
+    "type": "toolChoice",
+    "gold": "lookup_contact",
+    "pred": "lookup_contact",
+    "conf": 0.7213135196071312,
+    "ok": true,
+    "ms": 130.62500953674316
+   },
+   {
+    "type": "contactPick",
+    "gold": "c1",
+    "pred": "c1",
+    "conf": 0.8260239990444705,
+    "ok": true,
+    "ms": 694.3366527557373
+   },
+   {
+    "type": "eventPick",
+    "gold": "e1",
+    "pred": "e1",
+    "conf": 0.7974685178670511,
+    "ok": true,
+    "ms": 662.949800491333
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "remember_fact",
+    "conf": 0.527213131687031,
+    "ok": true,
+    "ms": 178.30657958984375
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "ignore_new",
+    "pred": "keep_both",
+    "conf": 0.4114038362052753,
+    "ok": false,
+    "ms": 829.7109603881836
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "digest",
+    "conf": 0.4114443188379984,
+    "ok": false,
+    "ms": 785.9747409820557
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "confirm",
+    "conf": 0.6487434462756703,
+    "ok": true,
+    "ms": 714.8966789245605
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "skip",
+    "pred": "nudge",
+    "conf": 0.39585641225411045,
+    "ok": false,
+    "ms": 174.50737953186035
+   },
+   {
+    "type": "timing",
+    "gold": "on_arrival",
+    "pred": "recurring",
+    "conf": 0.4167885437968038,
+    "ok": false,
+    "ms": 779.038667678833
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "sensitive",
+    "conf": 0.700896166059905,
+    "ok": false,
+    "ms": 465.0280475616455
+   },
+   {
+    "type": "answerability",
+    "gold": "yes",
+    "pred": "no",
+    "conf": 0.5995022490718596,
+    "ok": false,
+    "ms": 675.330400466919
+   },
+   {
+    "type": "route",
+    "gold": "answer_local",
+    "pred": "answer_local",
+    "conf": 0.2870795196494466,
+    "ok": true,
+    "ms": 152.71830558776855
+   },
+   {
+    "type": "toolChoice",
+    "gold": "find_event",
+    "pred": "create_event",
+    "conf": 0.37231337415671495,
+    "ok": false,
+    "ms": 87.42117881774902
+   },
+   {
+    "type": "contactPick",
+    "gold": "c1",
+    "pred": "c1",
+    "conf": 0.880411408870206,
+    "ok": true,
+    "ms": 484.4975471496582
+   },
+   {
+    "type": "eventPick",
+    "gold": "e0",
+    "pred": "e0",
+    "conf": 0.5029673143933716,
+    "ok": true,
+    "ms": 591.4022922515869
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "remember_temporary",
+    "conf": 0.36378748700546454,
+    "ok": false,
+    "ms": 159.20543670654297
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "keep_both",
+    "conf": 0.4657321852721129,
+    "ok": false,
+    "ms": 152.34994888305664
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "ignore",
+    "pred": "ignore",
+    "conf": 0.4301562490272249,
+    "ok": true,
+    "ms": 487.8273010253906
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "confirm",
+    "conf": 0.5962675891233874,
+    "ok": true,
+    "ms": 616.2827014923096
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "nudge",
+    "conf": 0.47095228234396047,
+    "ok": true,
+    "ms": 1627.6352405548096
+   },
+   {
+    "type": "timing",
+    "gold": "at_time",
+    "pred": "at_time",
+    "conf": 0.35486134934559665,
+    "ok": true,
+    "ms": 403.4547805786133
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "ok",
+    "conf": 0.513374254989654,
+    "ok": true,
+    "ms": 446.4843273162842
+   },
+   {
+    "type": "answerability",
+    "gold": "yes",
+    "pred": "yes",
+    "conf": 0.6506969019187323,
+    "ok": true,
+    "ms": 496.9744682312012
+   },
+   {
+    "type": "route",
+    "gold": "tool",
+    "pred": "tool",
+    "conf": 0.4132352327207519,
+    "ok": true,
+    "ms": 74.53083992004395
+   },
+   {
+    "type": "toolChoice",
+    "gold": "create_event",
+    "pred": "create_event",
+    "conf": 0.2980894941511448,
+    "ok": true,
+    "ms": 71.5341567993164
+   },
+   {
+    "type": "contactPick",
+    "gold": "c0",
+    "pred": "c0",
+    "conf": 0.6015874113806841,
+    "ok": true,
+    "ms": 420.3155040740967
+   },
+   {
+    "type": "eventPick",
+    "gold": "e0",
+    "pred": "e0",
+    "conf": 0.36568964931703835,
+    "ok": true,
+    "ms": 479.7215461730957
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "keep_both",
+    "conf": 0.46130655124110015,
+    "ok": false,
+    "ms": 92.1773910522461
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "digest",
+    "pred": "digest",
+    "conf": 0.477705531902283,
+    "ok": true,
+    "ms": 89.63131904602051
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "act",
+    "pred": "confirm",
+    "conf": 0.5566262200624622,
+    "ok": false,
+    "ms": 478.4657955169678
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "nudge",
+    "conf": 0.4666218678212196,
+    "ok": true,
+    "ms": 538.6245250701904
+   },
+   {
+    "type": "timing",
+    "gold": "on_arrival",
+    "pred": "recurring",
+    "conf": 0.29075674145346886,
+    "ok": false,
+    "ms": 652.5392532348633
+   },
+   {
+    "type": "sensitivity",
+    "gold": "sensitive",
+    "pred": "ok",
+    "conf": 0.5481782456847646,
+    "ok": false,
+    "ms": 425.5361557006836
+   },
+   {
+    "type": "answerability",
+    "gold": "no",
+    "pred": "yes",
+    "conf": 0.5201119748379233,
+    "ok": false,
+    "ms": 338.6094570159912
+   },
+   {
+    "type": "route",
+    "gold": "tool",
+    "pred": "clarify",
+    "conf": 0.3121840269409358,
+    "ok": false,
+    "ms": 69.66757774353027
+   },
+   {
+    "type": "toolChoice",
+    "gold": "lookup_contact",
+    "pred": "lookup_contact",
+    "conf": 0.7112378461263197,
+    "ok": true,
+    "ms": 133.24475288391113
+   },
+   {
+    "type": "contactPick",
+    "gold": "c0",
+    "pred": "c0",
+    "conf": 0.5314544496396327,
+    "ok": true,
+    "ms": 283.83803367614746
+   },
+   {
+    "type": "eventPick",
+    "gold": "e0",
+    "pred": "e0",
+    "conf": 0.32309206070572954,
+    "ok": true,
+    "ms": 364.16006088256836
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "keep_both",
+    "conf": 0.41345824985135027,
+    "ok": false,
+    "ms": 76.9190788269043
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "digest",
+    "conf": 0.5053538288036404,
+    "ok": false,
+    "ms": 403.4280776977539
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "act",
+    "pred": "confirm",
+    "conf": 0.6248375843573035,
+    "ok": false,
+    "ms": 386.11412048339844
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "nudge",
+    "conf": 0.4779368062739173,
+    "ok": true,
+    "ms": 644.8326110839844
+   },
+   {
+    "type": "timing",
+    "gold": "recurring",
+    "pred": "recurring",
+    "conf": 0.45088074672214085,
+    "ok": true,
+    "ms": 556.9148063659668
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "ok",
+    "conf": 0.6882673492658152,
+    "ok": true,
+    "ms": 381.8068504333496
+   },
+   {
+    "type": "answerability",
+    "gold": "yes",
+    "pred": "no",
+    "conf": 0.5090967449604474,
+    "ok": false,
+    "ms": 134.73010063171387
+   },
+   {
+    "type": "route",
+    "gold": "clarify",
+    "pred": "clarify",
+    "conf": 0.3768261012820093,
+    "ok": true,
+    "ms": 136.3074779510498
+   },
+   {
+    "type": "toolChoice",
+    "gold": "find_event",
+    "pred": "create_event",
+    "conf": 0.4010872158453917,
+    "ok": false,
+    "ms": 131.80780410766602
+   },
+   {
+    "type": "contactPick",
+    "gold": "c2",
+    "pred": "c2",
+    "conf": 0.972291657603599,
+    "ok": true,
+    "ms": 559.7960948944092
+   },
+   {
+    "type": "eventPick",
+    "gold": "e0",
+    "pred": "e0",
+    "conf": 0.5857818868986135,
+    "ok": true,
+    "ms": 737.8382682800293
+   }
+  ]
+ },
+ "dev/v2": {
+  "n": 120,
+  "acc": 0.6583333333333333,
+  "coverage": 0.125,
+  "acc_on_covered": 1.0,
+  "route_preds": {
+   "tool": 6,
+   "answer_local": 4
+  },
+  "per_type_acc": {
+   "answerability": 0.8,
+   "confirmBeforeAct": 1.0,
+   "contactPick": 0.91,
+   "eventPick": 0.82,
+   "memoryConflict": 0.0,
+   "notificationTriage": 0.5,
+   "nudgeNow": 0.6,
+   "rememberOrNot": 0.75,
+   "route": 0.6,
+   "sensitivity": 0.8,
+   "timing": 0.2,
+   "toolChoice": 0.82
+  },
+  "median_ms": 621.812105178833,
+  "rows": [
+   {
+    "type": "toolChoice",
+    "gold": "send_message",
+    "pred": "send_message",
+    "conf": 0.8652247209890668,
+    "ok": true,
+    "ms": 4352.915048599243
+   },
+   {
+    "type": "contactPick",
+    "gold": "c1",
+    "pred": "c1",
+    "conf": 0.7792105374417266,
+    "ok": true,
+    "ms": 1355.4744720458984
+   },
+   {
+    "type": "eventPick",
+    "gold": "e2",
+    "pred": "e2",
+    "conf": 0.7429733293871384,
+    "ok": true,
+    "ms": 1144.8438167572021
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "remember_temporary",
+    "conf": 0.42262070890946224,
+    "ok": false,
+    "ms": 2915.879964828491
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "ignore_new",
+    "pred": "keep_both",
+    "conf": 0.37496140313507537,
+    "ok": false,
+    "ms": 2927.9725551605225
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "digest",
+    "conf": 0.5044163783064849,
+    "ok": false,
+    "ms": 2350.8856296539307
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "confirm",
+    "conf": 0.6725976255488079,
+    "ok": true,
+    "ms": 1167.5317287445068
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "skip",
+    "pred": "nudge",
+    "conf": 0.5042870999848155,
+    "ok": false,
+    "ms": 1326.646327972412
+   },
+   {
+    "type": "timing",
+    "gold": "recurring",
+    "pred": "at_time",
+    "conf": 0.6146818780046502,
+    "ok": false,
+    "ms": 1463.0885124206543
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "ok",
+    "conf": 0.572399007441587,
+    "ok": true,
+    "ms": 1348.4067916870117
+   },
+   {
+    "type": "answerability",
+    "gold": "yes",
+    "pred": "yes",
+    "conf": 0.5974032765614338,
+    "ok": true,
+    "ms": 1103.5535335540771
+   },
+   {
+    "type": "route",
+    "gold": "escalate_cloud",
+    "pred": "tool",
+    "conf": 0.30526373013490243,
+    "ok": false,
+    "ms": 3643.798828125
+   },
+   {
+    "type": "toolChoice",
+    "gold": "create_reminder",
+    "pred": "create_reminder",
+    "conf": 0.392678619427251,
+    "ok": true,
+    "ms": 806.1864376068115
+   },
+   {
+    "type": "contactPick",
+    "gold": "ask",
+    "pred": "c2",
+    "conf": 0.46518017529771827,
+    "ok": false,
+    "ms": 545.9182262420654
+   },
+   {
+    "type": "eventPick",
+    "gold": "e0",
+    "pred": "e0",
+    "conf": 0.42616551242564804,
+    "ok": true,
+    "ms": 626.9474029541016
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "remember_fact",
+    "conf": 0.3834044906936003,
+    "ok": true,
+    "ms": 841.5660858154297
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "ignore_new",
+    "pred": "keep_both",
+    "conf": 0.43311032157308854,
+    "ok": false,
+    "ms": 732.2840690612793
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "digest",
+    "conf": 0.502486503044254,
+    "ok": false,
+    "ms": 836.6231918334961
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "confirm",
+    "conf": 0.6902977705780265,
+    "ok": true,
+    "ms": 798.529863357544
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "nudge",
+    "conf": 0.5909427166735481,
+    "ok": true,
+    "ms": 757.1961879730225
+   },
+   {
+    "type": "timing",
+    "gold": "on_arrival",
+    "pred": "now",
+    "conf": 0.5474590698520113,
+    "ok": false,
+    "ms": 918.0634021759033
+   },
+   {
+    "type": "sensitivity",
+    "gold": "sensitive",
+    "pred": "ok",
+    "conf": 0.5433929797934759,
+    "ok": false,
+    "ms": 580.0864696502686
+   },
+   {
+    "type": "answerability",
+    "gold": "no",
+    "pred": "no",
+    "conf": 0.5262147062805071,
+    "ok": true,
+    "ms": 365.5276298522949
+   },
+   {
+    "type": "route",
+    "gold": "answer_local",
+    "pred": "answer_local",
+    "conf": 0.5477861117821585,
+    "ok": true,
+    "ms": 592.0929908752441
+   },
+   {
+    "type": "toolChoice",
+    "gold": "find_event",
+    "pred": "create_event",
+    "conf": 0.43513303396008113,
+    "ok": false,
+    "ms": 974.6663570404053
+   },
+   {
+    "type": "contactPick",
+    "gold": "c2",
+    "pred": "c2",
+    "conf": 0.9321917982654743,
+    "ok": true,
+    "ms": 510.91599464416504
+   },
+   {
+    "type": "eventPick",
+    "gold": "e1",
+    "pred": "e1",
+    "conf": 0.5844598392960003,
+    "ok": true,
+    "ms": 909.15846824646
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "remember_fact",
+    "conf": 0.5193085416961537,
+    "ok": true,
+    "ms": 976.5079021453857
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "keep_both",
+    "conf": 0.4096618505678887,
+    "ok": false,
+    "ms": 659.2042446136475
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "digest",
+    "conf": 0.4860727413100958,
+    "ok": false,
+    "ms": 722.5949764251709
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "act",
+    "pred": "act",
+    "conf": 0.5587667094300366,
+    "ok": true,
+    "ms": 774.0099430084229
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "skip",
+    "pred": "nudge",
+    "conf": 0.3934493627846984,
+    "ok": false,
+    "ms": 762.6707553863525
+   },
+   {
+    "type": "timing",
+    "gold": "on_arrival",
+    "pred": "now",
+    "conf": 0.5048402952299013,
+    "ok": false,
+    "ms": 508.79812240600586
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "ok",
+    "conf": 0.5554138395969952,
+    "ok": true,
+    "ms": 433.67815017700195
+   },
+   {
+    "type": "answerability",
+    "gold": "no",
+    "pred": "no",
+    "conf": 0.5389710815221195,
+    "ok": true,
+    "ms": 656.2671661376953
+   },
+   {
+    "type": "route",
+    "gold": "answer_local",
+    "pred": "answer_local",
+    "conf": 0.4938881370983592,
+    "ok": true,
+    "ms": 1294.0709590911865
+   },
+   {
+    "type": "toolChoice",
+    "gold": "lookup_contact",
+    "pred": "lookup_contact",
+    "conf": 0.9265313460965269,
+    "ok": true,
+    "ms": 1118.5407638549805
+   },
+   {
+    "type": "contactPick",
+    "gold": "c1",
+    "pred": "c1",
+    "conf": 0.8796089745214933,
+    "ok": true,
+    "ms": 638.2155418395996
+   },
+   {
+    "type": "eventPick",
+    "gold": "e1",
+    "pred": "e1",
+    "conf": 0.6136386605887588,
+    "ok": true,
+    "ms": 559.0858459472656
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_temporary",
+    "pred": "remember_temporary",
+    "conf": 0.5205621121180336,
+    "ok": true,
+    "ms": 547.5635528564453
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "keep_both",
+    "conf": 0.4256933212227401,
+    "ok": false,
+    "ms": 505.9823989868164
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "digest",
+    "conf": 0.5536082262392086,
+    "ok": false,
+    "ms": 389.84155654907227
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "confirm",
+    "conf": 0.608390840444911,
+    "ok": true,
+    "ms": 551.706075668335
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "skip",
+    "pred": "nudge",
+    "conf": 0.48535268693929273,
+    "ok": false,
+    "ms": 628.4592151641846
+   },
+   {
+    "type": "timing",
+    "gold": "now",
+    "pred": "now",
+    "conf": 0.8501886190196182,
+    "ok": true,
+    "ms": 416.2743091583252
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "ok",
+    "conf": 0.5752140659360565,
+    "ok": true,
+    "ms": 386.4455223083496
+   },
+   {
+    "type": "answerability",
+    "gold": "no",
+    "pred": "yes",
+    "conf": 0.5310303021467304,
+    "ok": false,
+    "ms": 499.2506504058838
+   },
+   {
+    "type": "route",
+    "gold": "tool",
+    "pred": "tool",
+    "conf": 0.8587592667733024,
+    "ok": true,
+    "ms": 1155.0884246826172
+   },
+   {
+    "type": "toolChoice",
+    "gold": "send_message",
+    "pred": "send_message",
+    "conf": 0.8954518938641537,
+    "ok": true,
+    "ms": 1346.3160991668701
+   },
+   {
+    "type": "contactPick",
+    "gold": "c2",
+    "pred": "c2",
+    "conf": 0.9710155661400622,
+    "ok": true,
+    "ms": 470.23844718933105
+   },
+   {
+    "type": "eventPick",
+    "gold": "e1",
+    "pred": "e2",
+    "conf": 0.34560723087074585,
+    "ok": false,
+    "ms": 350.48747062683105
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "remember_fact",
+    "conf": 0.5754255531301616,
+    "ok": true,
+    "ms": 512.0036602020264
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "keep_both",
+    "conf": 0.4041645493647851,
+    "ok": false,
+    "ms": 948.0564594268799
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "ignore",
+    "pred": "ignore",
+    "conf": 0.43466129546466914,
+    "ok": true,
+    "ms": 610.1799011230469
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "confirm",
+    "conf": 0.7399751323963338,
+    "ok": true,
+    "ms": 401.02291107177734
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "nudge",
+    "conf": 0.55261895022139,
+    "ok": true,
+    "ms": 517.1079635620117
+   },
+   {
+    "type": "timing",
+    "gold": "on_arrival",
+    "pred": "at_time",
+    "conf": 0.420714027456528,
+    "ok": false,
+    "ms": 460.1714611053467
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "ok",
+    "conf": 0.626445451434788,
+    "ok": true,
+    "ms": 639.2972469329834
+   },
+   {
+    "type": "answerability",
+    "gold": "no",
+    "pred": "no",
+    "conf": 0.5244912450440828,
+    "ok": true,
+    "ms": 687.8547668457031
+   },
+   {
+    "type": "route",
+    "gold": "clarify",
+    "pred": "tool",
+    "conf": 0.689043384189144,
+    "ok": false,
+    "ms": 925.2526760101318
+   },
+   {
+    "type": "toolChoice",
+    "gold": "send_message",
+    "pred": "send_message",
+    "conf": 0.8276356763389179,
+    "ok": true,
+    "ms": 622.0343112945557
+   },
+   {
+    "type": "contactPick",
+    "gold": "c0",
+    "pred": "c0",
+    "conf": 0.6546042775536823,
+    "ok": true,
+    "ms": 458.2195281982422
+   },
+   {
+    "type": "eventPick",
+    "gold": "e2",
+    "pred": "e2",
+    "conf": 0.7499722761231482,
+    "ok": true,
+    "ms": 335.32142639160156
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "no",
+    "pred": "remember_temporary",
+    "conf": 0.40434258237772286,
+    "ok": false,
+    "ms": 650.6097316741943
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "digest",
+    "pred": "digest",
+    "conf": 0.6512986819071154,
+    "ok": true,
+    "ms": 772.8703022003174
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "confirm",
+    "conf": 0.5873602922375314,
+    "ok": true,
+    "ms": 692.0928955078125
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "nudge",
+    "conf": 0.5512809426396038,
+    "ok": true,
+    "ms": 621.812105178833
+   },
+   {
+    "type": "timing",
+    "gold": "recurring",
+    "pred": "at_time",
+    "conf": 0.4636125913903123,
+    "ok": false,
+    "ms": 374.3329048156738
+   },
+   {
+    "type": "sensitivity",
+    "gold": "sensitive",
+    "pred": "sensitive",
+    "conf": 0.5965814700396883,
+    "ok": true,
+    "ms": 563.6918544769287
+   },
+   {
+    "type": "answerability",
+    "gold": "yes",
+    "pred": "yes",
+    "conf": 0.5853275837626571,
+    "ok": true,
+    "ms": 377.85863876342773
+   },
+   {
+    "type": "route",
+    "gold": "clarify",
+    "pred": "tool",
+    "conf": 0.6602382816331667,
+    "ok": false,
+    "ms": 844.3007469177246
+   },
+   {
+    "type": "toolChoice",
+    "gold": "lookup_contact",
+    "pred": "lookup_contact",
+    "conf": 0.8832099968713462,
+    "ok": true,
+    "ms": 630.1536560058594
+   },
+   {
+    "type": "contactPick",
+    "gold": "c1",
+    "pred": "c1",
+    "conf": 0.9842649220765045,
+    "ok": true,
+    "ms": 448.64916801452637
+   },
+   {
+    "type": "eventPick",
+    "gold": "e1",
+    "pred": "e1",
+    "conf": 0.469787507989107,
+    "ok": true,
+    "ms": 397.2020149230957
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "remember_fact",
+    "conf": 0.7247392832694197,
+    "ok": true,
+    "ms": 463.5200500488281
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "ignore_new",
+    "pred": "keep_both",
+    "conf": 0.398384404114402,
+    "ok": false,
+    "ms": 473.20079803466797
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "digest",
+    "conf": 0.483634361099937,
+    "ok": false,
+    "ms": 443.27521324157715
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "confirm",
+    "conf": 0.6980247855114974,
+    "ok": true,
+    "ms": 456.207275390625
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "skip",
+    "pred": "nudge",
+    "conf": 0.45823525151037325,
+    "ok": false,
+    "ms": 543.4341430664062
+   },
+   {
+    "type": "timing",
+    "gold": "on_arrival",
+    "pred": "now",
+    "conf": 0.4912074635645309,
+    "ok": false,
+    "ms": 595.7765579223633
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "ok",
+    "conf": 0.6037360407980352,
+    "ok": true,
+    "ms": 570.2393054962158
+   },
+   {
+    "type": "answerability",
+    "gold": "yes",
+    "pred": "yes",
+    "conf": 0.578750449386966,
+    "ok": true,
+    "ms": 453.60398292541504
+   },
+   {
+    "type": "route",
+    "gold": "answer_local",
+    "pred": "answer_local",
+    "conf": 0.7852283912710679,
+    "ok": true,
+    "ms": 766.6177749633789
+   },
+   {
+    "type": "toolChoice",
+    "gold": "find_event",
+    "pred": "find_event",
+    "conf": 0.41460569932398333,
+    "ok": true,
+    "ms": 1019.3111896514893
+   },
+   {
+    "type": "contactPick",
+    "gold": "c1",
+    "pred": "c1",
+    "conf": 0.9070783534001271,
+    "ok": true,
+    "ms": 610.5883121490479
+   },
+   {
+    "type": "eventPick",
+    "gold": "e0",
+    "pred": "e0",
+    "conf": 0.527288289579458,
+    "ok": true,
+    "ms": 525.3815650939941
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "remember_fact",
+    "conf": 0.4067591573154273,
+    "ok": true,
+    "ms": 713.097095489502
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "keep_both",
+    "conf": 0.4080280840240163,
+    "ok": false,
+    "ms": 941.0932064056396
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "ignore",
+    "pred": "ignore",
+    "conf": 0.5246821598281257,
+    "ok": true,
+    "ms": 400.5146026611328
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "confirm",
+    "conf": 0.6046123335889081,
+    "ok": true,
+    "ms": 411.64207458496094
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "nudge",
+    "conf": 0.5346267010191598,
+    "ok": true,
+    "ms": 750.0948905944824
+   },
+   {
+    "type": "timing",
+    "gold": "at_time",
+    "pred": "at_time",
+    "conf": 0.6565709723774437,
+    "ok": true,
+    "ms": 374.9997615814209
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "ok",
+    "conf": 0.6413073557249558,
+    "ok": true,
+    "ms": 434.91435050964355
+   },
+   {
+    "type": "answerability",
+    "gold": "yes",
+    "pred": "yes",
+    "conf": 0.7465903412035547,
+    "ok": true,
+    "ms": 490.07701873779297
+   },
+   {
+    "type": "route",
+    "gold": "tool",
+    "pred": "tool",
+    "conf": 0.8216628437742463,
+    "ok": true,
+    "ms": 753.5901069641113
+   },
+   {
+    "type": "toolChoice",
+    "gold": "create_event",
+    "pred": "create_event",
+    "conf": 0.7031123044599712,
+    "ok": true,
+    "ms": 752.9523372650146
+   },
+   {
+    "type": "contactPick",
+    "gold": "c0",
+    "pred": "c0",
+    "conf": 0.7798043060195288,
+    "ok": true,
+    "ms": 388.2575035095215
+   },
+   {
+    "type": "eventPick",
+    "gold": "e0",
+    "pred": "e2",
+    "conf": 0.34586987049915047,
+    "ok": false,
+    "ms": 933.7384700775146
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "keep_both",
+    "conf": 0.4142350793666533,
+    "ok": false,
+    "ms": 2171.860694885254
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "digest",
+    "pred": "digest",
+    "conf": 0.5658741519862158,
+    "ok": true,
+    "ms": 722.3711013793945
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "act",
+    "pred": "act",
+    "conf": 0.5688794373690849,
+    "ok": true,
+    "ms": 429.6457767486572
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "nudge",
+    "conf": 0.4664101222379157,
+    "ok": true,
+    "ms": 511.32917404174805
+   },
+   {
+    "type": "timing",
+    "gold": "on_arrival",
+    "pred": "now",
+    "conf": 0.42604958946416344,
+    "ok": false,
+    "ms": 765.9356594085693
+   },
+   {
+    "type": "sensitivity",
+    "gold": "sensitive",
+    "pred": "ok",
+    "conf": 0.5507966578787784,
+    "ok": false,
+    "ms": 393.48387718200684
+   },
+   {
+    "type": "answerability",
+    "gold": "no",
+    "pred": "yes",
+    "conf": 0.5311781236446992,
+    "ok": false,
+    "ms": 414.2322540283203
+   },
+   {
+    "type": "route",
+    "gold": "tool",
+    "pred": "tool",
+    "conf": 0.7505701963653384,
+    "ok": true,
+    "ms": 701.775074005127
+   },
+   {
+    "type": "toolChoice",
+    "gold": "lookup_contact",
+    "pred": "lookup_contact",
+    "conf": 0.8424981609785924,
+    "ok": true,
+    "ms": 522.0298767089844
+   },
+   {
+    "type": "contactPick",
+    "gold": "c0",
+    "pred": "c0",
+    "conf": 0.7932357841716249,
+    "ok": true,
+    "ms": 423.85292053222656
+   },
+   {
+    "type": "eventPick",
+    "gold": "e0",
+    "pred": "e0",
+    "conf": 0.3249572527526841,
+    "ok": true,
+    "ms": 485.87870597839355
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "keep_both",
+    "conf": 0.3891660244237115,
+    "ok": false,
+    "ms": 648.475170135498
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "interrupt",
+    "conf": 0.48974670656279345,
+    "ok": true,
+    "ms": 589.8451805114746
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "act",
+    "pred": "act",
+    "conf": 0.591849951777021,
+    "ok": true,
+    "ms": 480.96728324890137
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "nudge",
+    "conf": 0.4866810976020663,
+    "ok": true,
+    "ms": 692.1679973602295
+   },
+   {
+    "type": "timing",
+    "gold": "recurring",
+    "pred": "at_time",
+    "conf": 0.5813578035809233,
+    "ok": false,
+    "ms": 481.518030166626
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "ok",
+    "conf": 0.5544118778281446,
+    "ok": true,
+    "ms": 501.8022060394287
+   },
+   {
+    "type": "answerability",
+    "gold": "yes",
+    "pred": "yes",
+    "conf": 0.582913543031938,
+    "ok": true,
+    "ms": 421.8440055847168
+   },
+   {
+    "type": "route",
+    "gold": "clarify",
+    "pred": "answer_local",
+    "conf": 0.38416358610558177,
+    "ok": false,
+    "ms": 837.9042148590088
+   },
+   {
+    "type": "toolChoice",
+    "gold": "find_event",
+    "pred": "create_event",
+    "conf": 0.5773095298110064,
+    "ok": false,
+    "ms": 518.2332992553711
+   },
+   {
+    "type": "contactPick",
+    "gold": "c2",
+    "pred": "c2",
+    "conf": 0.9450505768969302,
+    "ok": true,
+    "ms": 491.8856620788574
+   },
+   {
+    "type": "eventPick",
+    "gold": "e0",
+    "pred": "e0",
+    "conf": 0.34084955620655877,
+    "ok": true,
+    "ms": 390.7012939453125
+   }
+  ]
+ },
+ "dev/v2+cc": {
+  "n": 120,
+  "acc": 0.7083333333333334,
+  "coverage": 0.13333333333333333,
+  "acc_on_covered": 1.0,
+  "route_preds": {
+   "escalate_cloud": 1,
+   "answer_local": 4,
+   "tool": 5
+  },
+  "per_type_acc": {
+   "answerability": 0.9,
+   "confirmBeforeAct": 1.0,
+   "contactPick": 0.91,
+   "eventPick": 0.73,
+   "memoryConflict": 0.78,
+   "notificationTriage": 0.5,
+   "nudgeNow": 0.0,
+   "rememberOrNot": 0.62,
+   "route": 0.7,
+   "sensitivity": 1.0,
+   "timing": 0.7,
+   "toolChoice": 0.64
+  },
+  "median_ms": 629.3449401855469,
+  "rows": [
+   {
+    "type": "toolChoice",
+    "gold": "send_message",
+    "pred": "send_message",
+    "conf": 0.8405059409431573,
+    "ok": true,
+    "ms": 1051.1753559112549
+   },
+   {
+    "type": "contactPick",
+    "gold": "c1",
+    "pred": "c1",
+    "conf": 0.680796824970352,
+    "ok": true,
+    "ms": 457.39221572875977
+   },
+   {
+    "type": "eventPick",
+    "gold": "e2",
+    "pred": "e2",
+    "conf": 0.7890523629332019,
+    "ok": true,
+    "ms": 496.66309356689453
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "remember_temporary",
+    "conf": 0.4685635955728776,
+    "ok": false,
+    "ms": 798.8433837890625
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "ignore_new",
+    "pred": "ignore_new",
+    "conf": 0.35403446239678305,
+    "ok": true,
+    "ms": 710.2491855621338
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "digest",
+    "conf": 0.43987118299135963,
+    "ok": false,
+    "ms": 485.9592914581299
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "confirm",
+    "conf": 0.6358588491680451,
+    "ok": true,
+    "ms": 491.8947219848633
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "skip",
+    "pred": "later",
+    "conf": 0.46615019420848025,
+    "ok": false,
+    "ms": 883.8655948638916
+   },
+   {
+    "type": "timing",
+    "gold": "recurring",
+    "pred": "at_time",
+    "conf": 0.41785023407143546,
+    "ok": false,
+    "ms": 439.849853515625
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "ok",
+    "conf": 0.533938927364394,
+    "ok": true,
+    "ms": 391.12067222595215
+   },
+   {
+    "type": "answerability",
+    "gold": "yes",
+    "pred": "yes",
+    "conf": 0.5407730049012515,
+    "ok": true,
+    "ms": 688.3902549743652
+   },
+   {
+    "type": "route",
+    "gold": "escalate_cloud",
+    "pred": "escalate_cloud",
+    "conf": 0.6420086449381989,
+    "ok": true,
+    "ms": 1198.05908203125
+   },
+   {
+    "type": "toolChoice",
+    "gold": "create_reminder",
+    "pred": "create_event",
+    "conf": 0.4737948911846749,
+    "ok": false,
+    "ms": 986.6585731506348
+   },
+   {
+    "type": "contactPick",
+    "gold": "ask",
+    "pred": "c2",
+    "conf": 0.5225691617922292,
+    "ok": false,
+    "ms": 412.7674102783203
+   },
+   {
+    "type": "eventPick",
+    "gold": "e0",
+    "pred": "e0",
+    "conf": 0.4465101871184441,
+    "ok": true,
+    "ms": 380.2452087402344
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "remember_temporary",
+    "conf": 0.3528509170159637,
+    "ok": false,
+    "ms": 520.1971530914307
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "ignore_new",
+    "pred": "keep_both",
+    "conf": 0.37333371978504404,
+    "ok": false,
+    "ms": 459.4922065734863
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "digest",
+    "conf": 0.43630777426489914,
+    "ok": false,
+    "ms": 532.1333408355713
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "confirm",
+    "conf": 0.627800831222658,
+    "ok": true,
+    "ms": 405.2894115447998
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "later",
+    "conf": 0.4966621756140174,
+    "ok": false,
+    "ms": 588.6611938476562
+   },
+   {
+    "type": "timing",
+    "gold": "on_arrival",
+    "pred": "on_arrival",
+    "conf": 0.4563440914678545,
+    "ok": true,
+    "ms": 771.7642784118652
+   },
+   {
+    "type": "sensitivity",
+    "gold": "sensitive",
+    "pred": "sensitive",
+    "conf": 0.5126133739766535,
+    "ok": true,
+    "ms": 992.5711154937744
+   },
+   {
+    "type": "answerability",
+    "gold": "no",
+    "pred": "no",
+    "conf": 0.5673609194706147,
+    "ok": true,
+    "ms": 682.6784610748291
+   },
+   {
+    "type": "route",
+    "gold": "answer_local",
+    "pred": "answer_local",
+    "conf": 0.6281537072485691,
+    "ok": true,
+    "ms": 1024.0468978881836
+   },
+   {
+    "type": "toolChoice",
+    "gold": "find_event",
+    "pred": "create_event",
+    "conf": 0.48254872025707957,
+    "ok": false,
+    "ms": 1042.2027111053467
+   },
+   {
+    "type": "contactPick",
+    "gold": "c2",
+    "pred": "c2",
+    "conf": 0.9450990407995491,
+    "ok": true,
+    "ms": 803.5483360290527
+   },
+   {
+    "type": "eventPick",
+    "gold": "e1",
+    "pred": "e1",
+    "conf": 0.5173032772259136,
+    "ok": true,
+    "ms": 717.5662517547607
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "remember_fact",
+    "conf": 0.4522504052625588,
+    "ok": true,
+    "ms": 813.4803771972656
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "update",
+    "conf": 0.3774793963150362,
+    "ok": true,
+    "ms": 566.8048858642578
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "digest",
+    "conf": 0.3845677017178339,
+    "ok": false,
+    "ms": 564.8462772369385
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "act",
+    "pred": "act",
+    "conf": 0.6317422952817902,
+    "ok": true,
+    "ms": 484.3170642852783
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "skip",
+    "pred": "later",
+    "conf": 0.5381393181691385,
+    "ok": false,
+    "ms": 511.2307071685791
+   },
+   {
+    "type": "timing",
+    "gold": "on_arrival",
+    "pred": "on_arrival",
+    "conf": 0.5331439091243573,
+    "ok": true,
+    "ms": 602.5388240814209
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "ok",
+    "conf": 0.5578843711287393,
+    "ok": true,
+    "ms": 501.70373916625977
+   },
+   {
+    "type": "answerability",
+    "gold": "no",
+    "pred": "no",
+    "conf": 0.567622045172243,
+    "ok": true,
+    "ms": 433.37249755859375
+   },
+   {
+    "type": "route",
+    "gold": "answer_local",
+    "pred": "answer_local",
+    "conf": 0.5243852712821041,
+    "ok": true,
+    "ms": 734.5790863037109
+   },
+   {
+    "type": "toolChoice",
+    "gold": "lookup_contact",
+    "pred": "lookup_contact",
+    "conf": 0.9023968247824988,
+    "ok": true,
+    "ms": 651.261568069458
+   },
+   {
+    "type": "contactPick",
+    "gold": "c1",
+    "pred": "c1",
+    "conf": 0.8378936842069779,
+    "ok": true,
+    "ms": 362.3616695404053
+   },
+   {
+    "type": "eventPick",
+    "gold": "e1",
+    "pred": "e1",
+    "conf": 0.5848622456317171,
+    "ok": true,
+    "ms": 433.46619606018066
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_temporary",
+    "pred": "remember_temporary",
+    "conf": 0.5254274758860346,
+    "ok": true,
+    "ms": 495.58091163635254
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "update",
+    "conf": 0.38528955496159295,
+    "ok": true,
+    "ms": 903.9056301116943
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "digest",
+    "conf": 0.48627346154909423,
+    "ok": false,
+    "ms": 748.2669353485107
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "confirm",
+    "conf": 0.5289756547582912,
+    "ok": true,
+    "ms": 770.0157165527344
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "skip",
+    "pred": "later",
+    "conf": 0.4841053201807792,
+    "ok": false,
+    "ms": 833.3773612976074
+   },
+   {
+    "type": "timing",
+    "gold": "now",
+    "pred": "now",
+    "conf": 0.4623493530025768,
+    "ok": true,
+    "ms": 490.3581142425537
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "ok",
+    "conf": 0.5520249615687793,
+    "ok": true,
+    "ms": 417.38271713256836
+   },
+   {
+    "type": "answerability",
+    "gold": "no",
+    "pred": "yes",
+    "conf": 0.5159136000384564,
+    "ok": false,
+    "ms": 447.47185707092285
+   },
+   {
+    "type": "route",
+    "gold": "tool",
+    "pred": "tool",
+    "conf": 0.6654511457028506,
+    "ok": true,
+    "ms": 749.2728233337402
+   },
+   {
+    "type": "toolChoice",
+    "gold": "send_message",
+    "pred": "send_message",
+    "conf": 0.8951545735114004,
+    "ok": true,
+    "ms": 1107.4302196502686
+   },
+   {
+    "type": "contactPick",
+    "gold": "c2",
+    "pred": "c2",
+    "conf": 0.9743270751848755,
+    "ok": true,
+    "ms": 528.5212993621826
+   },
+   {
+    "type": "eventPick",
+    "gold": "e1",
+    "pred": "e2",
+    "conf": 0.4427297004752996,
+    "ok": false,
+    "ms": 458.906888961792
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "remember_fact",
+    "conf": 0.5062675645300372,
+    "ok": true,
+    "ms": 953.9177417755127
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "update",
+    "conf": 0.4017938172701814,
+    "ok": true,
+    "ms": 1071.866512298584
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "ignore",
+    "pred": "ignore",
+    "conf": 0.7193002099882779,
+    "ok": true,
+    "ms": 744.0178394317627
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "confirm",
+    "conf": 0.679604774859742,
+    "ok": true,
+    "ms": 709.4855308532715
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "later",
+    "conf": 0.44701190930709167,
+    "ok": false,
+    "ms": 835.0164890289307
+   },
+   {
+    "type": "timing",
+    "gold": "on_arrival",
+    "pred": "on_arrival",
+    "conf": 0.47242230554515424,
+    "ok": true,
+    "ms": 477.68235206604004
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "ok",
+    "conf": 0.5662664552392688,
+    "ok": true,
+    "ms": 394.2375183105469
+   },
+   {
+    "type": "answerability",
+    "gold": "no",
+    "pred": "no",
+    "conf": 0.5647571007547583,
+    "ok": true,
+    "ms": 364.6514415740967
+   },
+   {
+    "type": "route",
+    "gold": "clarify",
+    "pred": "tool",
+    "conf": 0.5574110781265146,
+    "ok": false,
+    "ms": 687.5379085540771
+   },
+   {
+    "type": "toolChoice",
+    "gold": "send_message",
+    "pred": "send_message",
+    "conf": 0.836976255347887,
+    "ok": true,
+    "ms": 750.5357265472412
+   },
+   {
+    "type": "contactPick",
+    "gold": "c0",
+    "pred": "c0",
+    "conf": 0.7603328471354688,
+    "ok": true,
+    "ms": 505.99193572998047
+   },
+   {
+    "type": "eventPick",
+    "gold": "e2",
+    "pred": "e2",
+    "conf": 0.8297945228768389,
+    "ok": true,
+    "ms": 391.8023109436035
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "no",
+    "pred": "remember_temporary",
+    "conf": 0.3817130445186477,
+    "ok": false,
+    "ms": 637.1839046478271
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "digest",
+    "pred": "digest",
+    "conf": 0.5191991069928945,
+    "ok": true,
+    "ms": 549.6888160705566
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "confirm",
+    "conf": 0.5381288248942387,
+    "ok": true,
+    "ms": 858.3216667175293
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "later",
+    "conf": 0.4426187774697289,
+    "ok": false,
+    "ms": 856.3559055328369
+   },
+   {
+    "type": "timing",
+    "gold": "recurring",
+    "pred": "at_time",
+    "conf": 0.3597564513883515,
+    "ok": false,
+    "ms": 623.7108707427979
+   },
+   {
+    "type": "sensitivity",
+    "gold": "sensitive",
+    "pred": "sensitive",
+    "conf": 0.6623219963049529,
+    "ok": true,
+    "ms": 694.1323280334473
+   },
+   {
+    "type": "answerability",
+    "gold": "yes",
+    "pred": "yes",
+    "conf": 0.5480969416386272,
+    "ok": true,
+    "ms": 761.376142501831
+   },
+   {
+    "type": "route",
+    "gold": "clarify",
+    "pred": "tool",
+    "conf": 0.5079255124216006,
+    "ok": false,
+    "ms": 910.1407527923584
+   },
+   {
+    "type": "toolChoice",
+    "gold": "lookup_contact",
+    "pred": "lookup_contact",
+    "conf": 0.8560863806015091,
+    "ok": true,
+    "ms": 637.488842010498
+   },
+   {
+    "type": "contactPick",
+    "gold": "c1",
+    "pred": "c1",
+    "conf": 0.9822235560806089,
+    "ok": true,
+    "ms": 349.49493408203125
+   },
+   {
+    "type": "eventPick",
+    "gold": "e1",
+    "pred": "e1",
+    "conf": 0.4285747711990547,
+    "ok": true,
+    "ms": 423.3732223510742
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "remember_fact",
+    "conf": 0.6759215050293665,
+    "ok": true,
+    "ms": 654.8869609832764
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "ignore_new",
+    "pred": "keep_both",
+    "conf": 0.35883802429758177,
+    "ok": false,
+    "ms": 597.6669788360596
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "digest",
+    "conf": 0.42891572376166887,
+    "ok": false,
+    "ms": 694.1187381744385
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "confirm",
+    "conf": 0.6509573706439823,
+    "ok": true,
+    "ms": 476.4885902404785
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "skip",
+    "pred": "later",
+    "conf": 0.5500553530085984,
+    "ok": false,
+    "ms": 678.217887878418
+   },
+   {
+    "type": "timing",
+    "gold": "on_arrival",
+    "pred": "on_arrival",
+    "conf": 0.4040835155845154,
+    "ok": true,
+    "ms": 805.1884174346924
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "ok",
+    "conf": 0.5392856263406722,
+    "ok": true,
+    "ms": 670.9334850311279
+   },
+   {
+    "type": "answerability",
+    "gold": "yes",
+    "pred": "yes",
+    "conf": 0.5682695634052015,
+    "ok": true,
+    "ms": 632.2619915008545
+   },
+   {
+    "type": "route",
+    "gold": "answer_local",
+    "pred": "answer_local",
+    "conf": 0.8033778964269465,
+    "ok": true,
+    "ms": 748.3775615692139
+   },
+   {
+    "type": "toolChoice",
+    "gold": "find_event",
+    "pred": "create_event",
+    "conf": 0.4437526052202066,
+    "ok": false,
+    "ms": 612.0278835296631
+   },
+   {
+    "type": "contactPick",
+    "gold": "c1",
+    "pred": "c1",
+    "conf": 0.8890699655435571,
+    "ok": true,
+    "ms": 745.6552982330322
+   },
+   {
+    "type": "eventPick",
+    "gold": "e0",
+    "pred": "e0",
+    "conf": 0.5480628981607643,
+    "ok": true,
+    "ms": 397.6619243621826
+   },
+   {
+    "type": "rememberOrNot",
+    "gold": "remember_fact",
+    "pred": "remember_fact",
+    "conf": 0.3423847073794336,
+    "ok": true,
+    "ms": 483.96921157836914
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "update",
+    "conf": 0.3815397213772524,
+    "ok": true,
+    "ms": 649.2247581481934
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "ignore",
+    "pred": "ignore",
+    "conf": 0.7857740467714176,
+    "ok": true,
+    "ms": 512.8681659698486
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "confirm",
+    "pred": "confirm",
+    "conf": 0.5378913397049073,
+    "ok": true,
+    "ms": 433.1398010253906
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "later",
+    "conf": 0.4687986853658976,
+    "ok": false,
+    "ms": 747.229814529419
+   },
+   {
+    "type": "timing",
+    "gold": "at_time",
+    "pred": "at_time",
+    "conf": 0.5249213746025319,
+    "ok": true,
+    "ms": 577.7671337127686
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "ok",
+    "conf": 0.5993413805593136,
+    "ok": true,
+    "ms": 462.95785903930664
+   },
+   {
+    "type": "answerability",
+    "gold": "yes",
+    "pred": "yes",
+    "conf": 0.703321641977572,
+    "ok": true,
+    "ms": 409.1050624847412
+   },
+   {
+    "type": "route",
+    "gold": "tool",
+    "pred": "tool",
+    "conf": 0.6806547071069108,
+    "ok": true,
+    "ms": 846.7922210693359
+   },
+   {
+    "type": "toolChoice",
+    "gold": "create_event",
+    "pred": "create_event",
+    "conf": 0.7610918445837656,
+    "ok": true,
+    "ms": 979.7327518463135
+   },
+   {
+    "type": "contactPick",
+    "gold": "c0",
+    "pred": "c0",
+    "conf": 0.8416145482285626,
+    "ok": true,
+    "ms": 461.26437187194824
+   },
+   {
+    "type": "eventPick",
+    "gold": "e0",
+    "pred": "e2",
+    "conf": 0.41423232125792964,
+    "ok": false,
+    "ms": 442.1505928039551
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "update",
+    "conf": 0.3829718488772423,
+    "ok": true,
+    "ms": 602.0512580871582
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "digest",
+    "pred": "digest",
+    "conf": 0.40104414323029053,
+    "ok": true,
+    "ms": 649.3885517120361
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "act",
+    "pred": "act",
+    "conf": 0.612567461416656,
+    "ok": true,
+    "ms": 519.8578834533691
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "later",
+    "conf": 0.5267867142839755,
+    "ok": false,
+    "ms": 546.2484359741211
+   },
+   {
+    "type": "timing",
+    "gold": "on_arrival",
+    "pred": "on_arrival",
+    "conf": 0.4282372054247796,
+    "ok": true,
+    "ms": 441.7107105255127
+   },
+   {
+    "type": "sensitivity",
+    "gold": "sensitive",
+    "pred": "sensitive",
+    "conf": 0.5255777999404444,
+    "ok": true,
+    "ms": 430.8316707611084
+   },
+   {
+    "type": "answerability",
+    "gold": "no",
+    "pred": "no",
+    "conf": 0.5239639353573334,
+    "ok": true,
+    "ms": 512.3231410980225
+   },
+   {
+    "type": "route",
+    "gold": "tool",
+    "pred": "tool",
+    "conf": 0.6046373152057637,
+    "ok": true,
+    "ms": 1182.6941967010498
+   },
+   {
+    "type": "toolChoice",
+    "gold": "lookup_contact",
+    "pred": "lookup_contact",
+    "conf": 0.8423770999685176,
+    "ok": true,
+    "ms": 629.3449401855469
+   },
+   {
+    "type": "contactPick",
+    "gold": "c0",
+    "pred": "c0",
+    "conf": 0.855165290591339,
+    "ok": true,
+    "ms": 569.2329406738281
+   },
+   {
+    "type": "eventPick",
+    "gold": "e0",
+    "pred": "e2",
+    "conf": 0.3790241026840128,
+    "ok": false,
+    "ms": 357.48291015625
+   },
+   {
+    "type": "memoryConflict",
+    "gold": "update",
+    "pred": "update",
+    "conf": 0.3519097162354545,
+    "ok": true,
+    "ms": 925.1341819763184
+   },
+   {
+    "type": "notificationTriage",
+    "gold": "interrupt",
+    "pred": "interrupt",
+    "conf": 0.4010639421045805,
+    "ok": true,
+    "ms": 576.5798091888428
+   },
+   {
+    "type": "confirmBeforeAct",
+    "gold": "act",
+    "pred": "act",
+    "conf": 0.6042221692301687,
+    "ok": true,
+    "ms": 408.42199325561523
+   },
+   {
+    "type": "nudgeNow",
+    "gold": "nudge",
+    "pred": "later",
+    "conf": 0.4824053728075705,
+    "ok": false,
+    "ms": 864.6786212921143
+   },
+   {
+    "type": "timing",
+    "gold": "recurring",
+    "pred": "at_time",
+    "conf": 0.44474792373232297,
+    "ok": false,
+    "ms": 725.5330085754395
+   },
+   {
+    "type": "sensitivity",
+    "gold": "ok",
+    "pred": "ok",
+    "conf": 0.5176971385536908,
+    "ok": true,
+    "ms": 732.3634624481201
+   },
+   {
+    "type": "answerability",
+    "gold": "yes",
+    "pred": "yes",
+    "conf": 0.5258555612476451,
+    "ok": true,
+    "ms": 743.8993453979492
+   },
+   {
+    "type": "route",
+    "gold": "clarify",
+    "pred": "answer_local",
+    "conf": 0.4024329594031306,
+    "ok": false,
+    "ms": 1367.5339221954346
+   },
+   {
+    "type": "toolChoice",
+    "gold": "find_event",
+    "pred": "create_event",
+    "conf": 0.5951010359357592,
+    "ok": false,
+    "ms": 824.5604038238525
+   },
+   {
+    "type": "contactPick",
+    "gold": "c2",
+    "pred": "c2",
+    "conf": 0.9553048110336156,
+    "ok": true,
+    "ms": 558.8414669036865
+   },
+   {
+    "type": "eventPick",
+    "gold": "e0",
+    "pred": "e0",
+    "conf": 0.39956326362370187,
+    "ok": true,
+    "ms": 642.4591541290283
+   }
+  ]
+ }
+}

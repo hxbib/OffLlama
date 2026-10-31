@@ -9,6 +9,8 @@ class T(unittest.TestCase):
     def test_parity_with_swift(self):
         cfg = json.loads((ROOT / "config/option_sets.json").read_text())
         self.assertEqual(prompts.llama3(prompts.SETS["route"], "User: hello"), cfg["sample_prompt"])
+        self.assertEqual(prompts.llama3(prompts.SETS["route"], "User: hello", "zeroShot"), cfg["sample_prompt_zeroshot"])
+        self.assertEqual(prompts.llama3(prompts.get_set("contactPick", ["Sam Lee", "Sam Ortiz"]), "User: hi Sam"), cfg["sample_prompt_contact"])
         sw = {s["type"]: s for s in cfg["sets"]}
         self.assertEqual(prompts.dynamic_set("contactPick", ["Sam Lee", "Sam Ortiz"]), sw["contactPick"] | {})
         self.assertEqual(len(sw), 12)

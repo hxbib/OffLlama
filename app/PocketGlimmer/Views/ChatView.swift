@@ -75,7 +75,7 @@ struct Bubble: View {
                     if let p = item.pending {
                         HStack {
                             Button("Confirm") { Task { await model.confirm(item) } }.buttonStyle(.borderedProminent)
-                            Button("Cancel", role: .cancel) {}.buttonStyle(.bordered)
+                            Button("Cancel", role: .cancel) { model.cancel(item) }.buttonStyle(.bordered)
                         }.controlSize(.small).accessibilityHint("Runs \(p.tool)")
                     }
                     if let b = item.badge { Text(b).font(.caption2.monospaced()).foregroundStyle(.secondary).padding(.leading, 6) }

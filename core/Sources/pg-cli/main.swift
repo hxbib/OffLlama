@@ -44,7 +44,12 @@ switch cmd {
 case "e2e":
     let db = try SQLiteDB(path: arg("--db", "e2e-telemetry.sqlite"))
     let tel = try TelemetryLog(db: db)
-    let reflex = Reflex(engine: engine, profile: .init(defaultTau: Double(arg("--tau", "0.8"))!), telemetry: tel, source: "linux-e2e")
+    var prof = CalibrationProfile(defaultTau: Double(arg("--tau", "0.8"))!)
+    let calPath = arg("--calibration", "")
+    if !calPath.isEmpty { prof = try CalibrationProfile.load(from: URL(fileURLWithPath: calPath)); prof.defaultTau = Double(arg("--tau", "\(prof.defaultTau)"))! }
+    if arg("--style", "") == "zeroShot" { prof.promptStyle = .zeroShot }
+    print("prompt style: \(prof.promptStyle.rawValue), prior correction: \(prof.prior.isEmpty ? "off" : "on (\(prof.prior.count) sets)")")
+    let reflex = Reflex(engine: engine, profile: prof, telemetry: tel, source: "linux-e2e")
     var correct = 0, local = 0, localCorrect = 0
     var lat: [Double] = []
     print("type                 expected        argmax          conf   esc   ms")
@@ -69,6 +74,15 @@ case "decide":
     let d = try await Reflex(engine: engine).decide(set, context: a[3])
     print(d.argmax.id, String(format: "%.3f", d.confidence), d.escalated ? "ESCALATE" : "local", String(format: "%.0fms", d.latencyMs))
     for o in set.options { print(String(format: "  %.3f  %@", d.probabilities[o.id] ?? 0, o.id as NSString)) }
+case "priors":
+    // Contextual calibration: measure content-free letter priors with the real model and write a CalibrationProfile.
+    var prof = CalibrationProfile()
+    if arg("--style", "fewShot") == "zeroShot" { prof.promptStyle = .zeroShot }
+    let r = Reflex(engine: engine, profile: prof)
+    prof.prior = try await r.measurePriors()
+    let enc = JSONEncoder(); enc.outputFormatting = [.prettyPrinted, .sortedKeys]
+    try enc.encode(prof).write(to: URL(fileURLWithPath: arg("--out", "calibration.json")))
+    print("wrote \(prof.prior.count) priors -> \(arg("--out", "calibration.json"))")
 case "dump-sets":
     // Machine-readable option sets + one rendered prompt; training/tests/test_parity.py checks Python matches Swift.
     let sets = OptionSets.staticSets + [OptionSets.contactPick(candidates: ["Sam Lee", "Sam Ortiz"]), OptionSets.eventPick(candidates: ["Dentist", "Standup"])]
@@ -77,6 +91,9 @@ case "dump-sets":
         "sets": sets.map { ["type": $0.type.rawValue, "question": $0.question, "fallback": $0.fallbackID,
                             "options": $0.options.map { ["id": $0.id, "label": $0.label] }] },
         "sample_prompt": DecisionPrompt.llama3(set: OptionSets.route, context: "User: hello"),
+        "sample_prompt_contact": DecisionPrompt.llama3(set: OptionSets.contactPick(candidates: ["Sam Lee", "Sam Ortiz"]), context: "User: hi Sam"),
+        "sample_prompt_zeroshot": DecisionPrompt.llama3(set: OptionSets.route, context: "User: hello", style: .zeroShot),
+        "shots": DecisionPrompt.shots.map { ["type": $0.type.rawValue, "context": $0.context, "answer": $0.answerID, "candidates": $0.candidates ?? []] as [String: Any] },
     ]
     print(String(decoding: try JSONSerialization.data(withJSONObject: obj, options: [.prettyPrinted, .sortedKeys]), as: UTF8.self))
 case "telemetry":

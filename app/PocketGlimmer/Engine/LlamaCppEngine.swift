@@ -12,7 +12,8 @@ actor LlamaCppEngine: LLMEngine {
     private let vocab: OpaquePointer
     private let nBatch: Int32 = 512
     private var cached: [llama_token] = []
-    private var letterTokens: [String: llama_token] = [:]
+    private var letterTokens: [String: [llama_token]] = [:]   // " A" and "A" variants
+    private let nCtx: Int
 
     enum EngineError: Error { case load(String), context, tokenize, decode(Int32) }
 
@@ -28,7 +29,7 @@ actor LlamaCppEngine: LLMEngine {
         let cores = Int32(max(2, min(6, ProcessInfo.processInfo.activeProcessorCount - 2)))
         cp.n_threads = cores; cp.n_threads_batch = cores
         guard let c = llama_init_from_model(m, cp) else { llama_model_free(m); throw EngineError.context }
-        model = m; ctx = c; vocab = llama_model_get_vocab(m)
+        model = m; ctx = c; vocab = llama_model_get_vocab(m); nCtx = Int(contextLength)
         modelName = modelURL.deletingPathExtension().lastPathComponent
     }
 
@@ -53,6 +54,7 @@ actor LlamaCppEngine: LLMEngine {
 
     /// Prefill `tokens`, reusing the cached common prefix. Leaves logits for the last token.
     private func prefill(_ tokens: [llama_token]) throws {
+        guard tokens.count < nCtx else { throw EngineError.decode(-100) }   // prompt longer than context
         var common = zip(cached, tokens).prefix { $0 == $1 }.count
         if common == tokens.count { common -= 1 }                   // must decode >= 1 token to get logits
         let mem = llama_get_memory(ctx)
@@ -68,11 +70,12 @@ actor LlamaCppEngine: LLMEngine {
         cached = tokens
     }
 
-    private func letterToken(_ l: String) throws -> llama_token {
+    /// Single-token ids for " A" (Llama-3: 362) and "A". Variants that aren't one token are skipped.
+    private func letterTokenIDs(_ l: String) throws -> [llama_token] {
         if let t = letterTokens[l] { return t }
-        let t = try tokenize(" " + l, special: false)               // " A" is one Llama-3 token (362)
-        guard t.count == 1 else { throw EngineError.tokenize }
-        letterTokens[l] = t[0]; return t[0]
+        let ids = try [" " + l, l].compactMap { v -> llama_token? in let t = try tokenize(v, special: false); return t.count == 1 ? t[0] : nil }
+        guard !ids.isEmpty else { throw EngineError.tokenize }
+        letterTokens[l] = ids; return ids
     }
 
     func nextTokenLogits(prompt: String, candidates: [String]) async throws -> [String: Double] {
@@ -80,12 +83,10 @@ actor LlamaCppEngine: LLMEngine {
         guard let logits = llama_get_logits_ith(ctx, -1) else { throw LLMError.badResponse("no logits") }
         var out: [String: Double] = [:]
         for l in candidates {
-            let spaced = Double(logits[Int(try letterToken(l))])
-            // Also consider the bare letter token and merge (log-sum-exp), mirroring LlamaServerEngine.
-            if let bare = try? tokenize(l, special: false), bare.count == 1 {
-                let b = Double(logits[Int(bare[0])]); let m = max(spaced, b)
-                out[l] = m + log(exp(spaced - m) + exp(b - m))
-            } else { out[l] = spaced }
+            // log-sum-exp over the letter's token variants, mirroring LlamaServerEngine.
+            let v = try letterTokenIDs(l).map { Double(logits[Int($0)]) }
+            let m = v.max()!
+            out[l] = m + log(v.reduce(0) { $0 + exp($1 - m) })
         }
         return out
     }
@@ -93,6 +94,7 @@ actor LlamaCppEngine: LLMEngine {
     func generate(prompt: String, maxTokens: Int, temperature: Double) async throws -> String {
         var tokens = try tokenize(prompt)
         try prefill(tokens)
+        let budget = min(maxTokens, nCtx - tokens.count - 1)
         let chain = llama_sampler_chain_init(llama_sampler_chain_default_params())!
         defer { llama_sampler_free(chain) }
         if temperature <= 0 { llama_sampler_chain_add(chain, llama_sampler_init_greedy()) }
@@ -102,7 +104,7 @@ actor LlamaCppEngine: LLMEngine {
             llama_sampler_chain_add(chain, llama_sampler_init_dist(UInt32.random(in: 0...UInt32.max)))
         }
         var text = ""
-        for _ in 0..<maxTokens {
+        for _ in 0..<max(0, budget) {
             let t = llama_sampler_sample(chain, ctx, -1)
             if llama_vocab_is_eog(vocab, t) { break }
             text += piece(t)

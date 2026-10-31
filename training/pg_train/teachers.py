@@ -37,8 +37,9 @@ def _merge_letter_logprobs(pairs, letters):
 
 class LocalLlamaServerTeacher:
     """Stand-in teacher for dry runs. `shuffle=True` permutes option order (and maps back) to expose position bias."""
-    def __init__(self, url="http://127.0.0.1:8088", name="llama-3.2-1b-q4-local", shuffle=False, seed=0):
+    def __init__(self, url="http://127.0.0.1:8088", name="llama-3.2-1b-q4-local", shuffle=False, seed=0, style="fewShot"):
         self.url, self.name, self.shuffle, self.rng = url.rstrip("/"), name + ("-shuf" if shuffle else ""), shuffle, random.Random(seed)
+        self.style = style
         self.paid = False
 
     def label(self, s: dict, ctx: str) -> dict:
@@ -47,7 +48,7 @@ class LocalLlamaServerTeacher:
         view = dict(s, options=[s["options"][i] for i in order])
         L = prompts.letters(view)
         t0 = time.time()
-        r = _post(self.url + "/completion", {"prompt": prompts.llama3(view, ctx), "n_predict": 1, "n_probs": 40, "temperature": 0, "cache_prompt": True})
+        r = _post(self.url + "/completion", {"prompt": prompts.llama3(view, ctx, self.style), "n_predict": 1, "n_probs": 40, "temperature": 0, "cache_prompt": True})
         ms = (time.time() - t0) * 1000
         top = r["completion_probabilities"][0]["top_logprobs"]
         p_view = _normalize(_merge_letter_logprobs([(t["token"], t["logprob"]) for t in top], L), L)

@@ -57,7 +57,7 @@ final class AssistantTests: XCTestCase {
 
     func testOnlineEscalationScrubsAndRestores() async throws {
         let e = ScriptedEngine()
-        e.script(whenPromptContains: "nothing sensitive", logits: ["A": 5, "B": -5])
+        e.script(whenPromptContains: "acceptable to send this request", logits: ["A": 5, "B": -5])
         final class Box: @unchecked Sendable { var sent = "" }
         let box = Box()
         var brain = OpenAICompatibleBrain(providerName: "Meta Model API", model: "muse-spark-1.3", baseURL: URL(string: "https://example.invalid/v1/")!, apiKey: "k")

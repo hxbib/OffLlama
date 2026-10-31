@@ -16,7 +16,7 @@ def build_examples(rows, tok):
     ex = []
     for r in rows:
         s = prompts.get_set(r["type"], r.get("candidates"))
-        p_ids = tok(prompts.llama3(s, r["context"]), add_special_tokens=False)["input_ids"]
+        p_ids = tok(prompts.llama3(s, r["context"], "zeroShot"), add_special_tokens=False)["input_ids"]
         a_ids = tok(" " + r["target"], add_special_tokens=False)["input_ids"]
         assert len(a_ids) == 1, f"answer letter must be one token, got {a_ids}"
         ids = p_ids + a_ids

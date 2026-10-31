@@ -1,24 +1,26 @@
 {
-  "sample_prompt" : "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\nYou are Reflex, the fast decision module of an offline personal assistant. Answer each multiple-choice question with a single letter.<|eot_id|><|start_header_id|>user<|end_header_id|>\n\nContext:\nUser: hello\n\nQuestion: How should the assistant handle the user's request?\nA. Answer directly on the phone (simple chat, facts the assistant remembers, short rewrite)\nB. Use a phone tool (reminder, calendar, contacts, message, memory lookup)\nC. Needs hard reasoning, long writing, or world knowledge: ask the cloud brain\nD. The request is ambiguous: ask the user a short question\nAnswer with one letter.<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\nAnswer:",
+  "sample_prompt" : "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\nYou are Reflex, the fast decision module of an offline personal assistant. Answer each multiple-choice question with a single letter.<|eot_id|><|start_header_id|>user<|end_header_id|>\n\nContext:\nNetwork: online\nUser: Good night!\n\nQuestion: How should the assistant handle the user's request?\nA. Reply directly: greeting, thanks, small talk, quick arithmetic, short rewrite or translation\nB. Do a phone action: set a reminder, add\/check calendar, text someone, look up a contact, recall a saved memory\nC. Needs deep thinking or long writing: analysis, advice, planning, comparisons, essays, research\nD. Too vague to act on: says 'it\/that\/the thing' with no clear object or person\nAnswer with one letter.<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\nAnswer: A<|eot_id|><|start_header_id|>user<|end_header_id|>\n\nContext:\nNetwork: offline\nUser: Add dinner with Leo to my calendar Friday 7pm\n\nQuestion: How should the assistant handle the user's request?\nA. Reply directly: greeting, thanks, small talk, quick arithmetic, short rewrite or translation\nB. Do a phone action: set a reminder, add\/check calendar, text someone, look up a contact, recall a saved memory\nC. Needs deep thinking or long writing: analysis, advice, planning, comparisons, essays, research\nD. Too vague to act on: says 'it\/that\/the thing' with no clear object or person\nAnswer with one letter.<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\nAnswer: B<|eot_id|><|start_header_id|>user<|end_header_id|>\n\nContext:\nNetwork: online\nUser: Write a detailed business plan for a mobile coffee cart\n\nQuestion: How should the assistant handle the user's request?\nA. Reply directly: greeting, thanks, small talk, quick arithmetic, short rewrite or translation\nB. Do a phone action: set a reminder, add\/check calendar, text someone, look up a contact, recall a saved memory\nC. Needs deep thinking or long writing: analysis, advice, planning, comparisons, essays, research\nD. Too vague to act on: says 'it\/that\/the thing' with no clear object or person\nAnswer with one letter.<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\nAnswer: C<|eot_id|><|start_header_id|>user<|end_header_id|>\n\nContext:\nNetwork: online\nUser: Change that one\n\nQuestion: How should the assistant handle the user's request?\nA. Reply directly: greeting, thanks, small talk, quick arithmetic, short rewrite or translation\nB. Do a phone action: set a reminder, add\/check calendar, text someone, look up a contact, recall a saved memory\nC. Needs deep thinking or long writing: analysis, advice, planning, comparisons, essays, research\nD. Too vague to act on: says 'it\/that\/the thing' with no clear object or person\nAnswer with one letter.<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\nAnswer: D<|eot_id|><|start_header_id|>user<|end_header_id|>\n\nContext:\nUser: hello\n\nQuestion: How should the assistant handle the user's request?\nA. Reply directly: greeting, thanks, small talk, quick arithmetic, short rewrite or translation\nB. Do a phone action: set a reminder, add\/check calendar, text someone, look up a contact, recall a saved memory\nC. Needs deep thinking or long writing: analysis, advice, planning, comparisons, essays, research\nD. Too vague to act on: says 'it\/that\/the thing' with no clear object or person\nAnswer with one letter.<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\nAnswer:",
+  "sample_prompt_contact" : "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\nYou are Reflex, the fast decision module of an offline personal assistant. Answer each multiple-choice question with a single letter.<|eot_id|><|start_header_id|>user<|end_header_id|>\n\nContext:\nUser: Text my coach Ben I'm sick\n\nQuestion: Which contact does the user mean?\nA. Ben Wu (accountant)\nB. Ben Cole (neighbor)\nC. Ben Diaz (coach)\nD. Unclear: ask the user\nAnswer with one letter.<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\nAnswer: C<|eot_id|><|start_header_id|>user<|end_header_id|>\n\nContext:\nUser: Call Ben\n\nQuestion: Which contact does the user mean?\nA. Ben Wu (accountant)\nB. Ben Cole (neighbor)\nC. Unclear: ask the user\nAnswer with one letter.<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\nAnswer: C<|eot_id|><|start_header_id|>user<|end_header_id|>\n\nContext:\nUser: hi Sam\n\nQuestion: Which contact does the user mean?\nA. Sam Lee\nB. Sam Ortiz\nC. Unclear: ask the user\nAnswer with one letter.<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\nAnswer:",
+  "sample_prompt_zeroshot" : "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\nYou are Reflex, the fast decision module of an offline personal assistant. Answer each multiple-choice question with a single letter.<|eot_id|><|start_header_id|>user<|end_header_id|>\n\nContext:\nUser: hello\n\nQuestion: How should the assistant handle the user's request?\nA. Reply directly: greeting, thanks, small talk, quick arithmetic, short rewrite or translation\nB. Do a phone action: set a reminder, add\/check calendar, text someone, look up a contact, recall a saved memory\nC. Needs deep thinking or long writing: analysis, advice, planning, comparisons, essays, research\nD. Too vague to act on: says 'it\/that\/the thing' with no clear object or person\nAnswer with one letter.<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\nAnswer:",
   "sets" : [
     {
       "fallback" : "escalate_cloud",
       "options" : [
         {
           "id" : "answer_local",
-          "label" : "Answer directly on the phone (simple chat, facts the assistant remembers, short rewrite)"
+          "label" : "Reply directly: greeting, thanks, small talk, quick arithmetic, short rewrite or translation"
         },
         {
           "id" : "tool",
-          "label" : "Use a phone tool (reminder, calendar, contacts, message, memory lookup)"
+          "label" : "Do a phone action: set a reminder, add\/check calendar, text someone, look up a contact, recall a saved memory"
         },
         {
           "id" : "escalate_cloud",
-          "label" : "Needs hard reasoning, long writing, or world knowledge: ask the cloud brain"
+          "label" : "Needs deep thinking or long writing: analysis, advice, planning, comparisons, essays, research"
         },
         {
           "id" : "clarify",
-          "label" : "The request is ambiguous: ask the user a short question"
+          "label" : "Too vague to act on: says 'it\/that\/the thing' with no clear object or person"
         }
       ],
       "question" : "How should the assistant handle the user's request?",
@@ -29,27 +31,27 @@
       "options" : [
         {
           "id" : "create_reminder",
-          "label" : "Create a reminder"
+          "label" : "Create a reminder (remind me to...)"
         },
         {
           "id" : "create_event",
-          "label" : "Create a calendar event"
+          "label" : "Create a calendar event (schedule\/book\/put on calendar)"
         },
         {
           "id" : "find_event",
-          "label" : "Look up the calendar"
+          "label" : "Look up the calendar (what's on \/ when is my...)"
         },
         {
           "id" : "send_message",
-          "label" : "Send a text message to a contact"
+          "label" : "Send a text message (text\/tell\/message someone)"
         },
         {
           "id" : "lookup_contact",
-          "label" : "Look up a contact's details"
+          "label" : "Look up a contact's phone, email or address"
         },
         {
           "id" : "search_memory",
-          "label" : "Search what the assistant remembers about the user"
+          "label" : "Recall something the user told the assistant before"
         },
         {
           "id" : "none",
@@ -64,15 +66,15 @@
       "options" : [
         {
           "id" : "remember_fact",
-          "label" : "Yes: a lasting fact or preference about the user or their people"
+          "label" : "Yes, a lasting fact: allergy, diet, home, job, family, birthday, preference"
         },
         {
           "id" : "remember_temporary",
-          "label" : "Yes, but it expires soon (plan, short-term state)"
+          "label" : "Yes, but short-lived: where they parked, today's plan, something to buy soon"
         },
         {
           "id" : "no",
-          "label" : "No: nothing worth remembering"
+          "label" : "No: a question, command or chit-chat with no personal fact"
         }
       ],
       "question" : "Should the assistant save something from this message to long-term memory?",
@@ -83,15 +85,15 @@
       "options" : [
         {
           "id" : "update",
-          "label" : "The new fact replaces the old one (it changed)"
+          "label" : "The fact changed (moved, new job, new diet): replace the old one"
         },
         {
           "id" : "keep_both",
-          "label" : "Both are true; keep both"
+          "label" : "Both can be true at once (another hobby, another friend)"
         },
         {
           "id" : "ignore_new",
-          "label" : "The new statement is not a real change; keep the old one"
+          "label" : "Joke, hypothetical, or just repeating the old fact: keep the old one"
         }
       ],
       "question" : "A new fact relates to an existing memory. What should happen?",
@@ -102,15 +104,15 @@
       "options" : [
         {
           "id" : "interrupt",
-          "label" : "Urgent: tell the user now"
+          "label" : "Urgent or time-critical: family emergency, security alert, travel change"
         },
         {
           "id" : "digest",
-          "label" : "Useful but can wait for the next summary"
+          "label" : "Personal or work info that can wait an hour"
         },
         {
           "id" : "ignore",
-          "label" : "Noise: ignore"
+          "label" : "Marketing, promotions, newsletters"
         }
       ],
       "question" : "How urgent is this incoming notification for the user right now?",
@@ -121,11 +123,11 @@
       "options" : [
         {
           "id" : "act",
-          "label" : "No: low-risk and clearly requested, do it"
+          "label" : "Safe and reversible: a reminder or event the user clearly asked for"
         },
         {
           "id" : "confirm",
-          "label" : "Yes: it contacts someone, spends money, deletes, or is unclear"
+          "label" : "Risky: messages other people, deletes, spends money, or is irreversible"
         }
       ],
       "question" : "Before performing this action, does the assistant need the user's explicit confirmation?",
@@ -136,15 +138,15 @@
       "options" : [
         {
           "id" : "nudge",
-          "label" : "Yes: the memory is relevant to this moment"
+          "label" : "Yes: this place or moment matches the memory (store for shopping, person for a promise)"
         },
         {
           "id" : "later",
-          "label" : "Relevant, but a later moment is better"
+          "label" : "Related, but a better moment is coming"
         },
         {
           "id" : "skip",
-          "label" : "Not relevant"
+          "label" : "The trigger has nothing to do with the memory"
         }
       ],
       "question" : "Given the trigger and what the assistant remembers, should it nudge the user now?",
@@ -155,19 +157,19 @@
       "options" : [
         {
           "id" : "now",
-          "label" : "Right now"
+          "label" : "Right now, no time given"
         },
         {
           "id" : "at_time",
-          "label" : "At a specific date\/time"
+          "label" : "At a stated date or clock time, once"
         },
         {
           "id" : "on_arrival",
-          "label" : "When the user arrives at or leaves a place"
+          "label" : "When arriving at or leaving a place"
         },
         {
           "id" : "recurring",
-          "label" : "Repeatedly on a schedule"
+          "label" : "Repeats: every day\/week\/Monday\/month"
         }
       ],
       "question" : "When should the requested action happen?",
@@ -178,11 +180,11 @@
       "options" : [
         {
           "id" : "ok",
-          "label" : "Yes: nothing sensitive remains"
+          "label" : "Fine to send: general topics, plans, writing, public knowledge"
         },
         {
           "id" : "sensitive",
-          "label" : "No: health, money, intimate or security details; keep on device"
+          "label" : "Keep on device: health results, money\/accounts\/PINs, passwords, intimate details"
         }
       ],
       "question" : "Is it acceptable to send this request (with names and numbers masked) to a cloud model?",
@@ -193,11 +195,11 @@
       "options" : [
         {
           "id" : "yes",
-          "label" : "Yes, it is simple"
+          "label" : "Yes: greeting, translation of a word, small arithmetic, spelling"
         },
         {
           "id" : "no",
-          "label" : "No, it needs reasoning, fresh facts, or long output"
+          "label" : "No: needs reasoning, research, long or expert output"
         }
       ],
       "question" : "Can a small on-device model answer this correctly without the internet?",
@@ -239,6 +241,261 @@
         }
       ],
       "question" : "Which calendar event does the user mean?",
+      "type" : "eventPick"
+    }
+  ],
+  "shots" : [
+    {
+      "answer" : "answer_local",
+      "candidates" : [
+
+      ],
+      "context" : "Network: online\nUser: Good night!",
+      "type" : "route"
+    },
+    {
+      "answer" : "tool",
+      "candidates" : [
+
+      ],
+      "context" : "Network: offline\nUser: Add dinner with Leo to my calendar Friday 7pm",
+      "type" : "route"
+    },
+    {
+      "answer" : "escalate_cloud",
+      "candidates" : [
+
+      ],
+      "context" : "Network: online\nUser: Write a detailed business plan for a mobile coffee cart",
+      "type" : "route"
+    },
+    {
+      "answer" : "clarify",
+      "candidates" : [
+
+      ],
+      "context" : "Network: online\nUser: Change that one",
+      "type" : "route"
+    },
+    {
+      "answer" : "create_reminder",
+      "candidates" : [
+
+      ],
+      "context" : "User: Remind me to stretch in an hour",
+      "type" : "toolChoice"
+    },
+    {
+      "answer" : "send_message",
+      "candidates" : [
+
+      ],
+      "context" : "User: Message Ana that the keys are under the mat",
+      "type" : "toolChoice"
+    },
+    {
+      "answer" : "find_event",
+      "candidates" : [
+
+      ],
+      "context" : "User: When is my haircut?",
+      "type" : "toolChoice"
+    },
+    {
+      "answer" : "search_memory",
+      "candidates" : [
+
+      ],
+      "context" : "User: What did I say my locker code was?",
+      "type" : "toolChoice"
+    },
+    {
+      "answer" : "remember_fact",
+      "candidates" : [
+
+      ],
+      "context" : "User: I'm lactose intolerant, just so you know",
+      "type" : "rememberOrNot"
+    },
+    {
+      "answer" : "no",
+      "candidates" : [
+
+      ],
+      "context" : "User: Can you say that again?",
+      "type" : "rememberOrNot"
+    },
+    {
+      "answer" : "remember_temporary",
+      "candidates" : [
+
+      ],
+      "context" : "User: I parked on the 4th floor today",
+      "type" : "rememberOrNot"
+    },
+    {
+      "answer" : "update",
+      "candidates" : [
+
+      ],
+      "context" : "Existing memory: User works at Acme\nNew statement: I started a new job at Globex this week",
+      "type" : "memoryConflict"
+    },
+    {
+      "answer" : "keep_both",
+      "candidates" : [
+
+      ],
+      "context" : "Existing memory: User likes hiking\nNew statement: I also really like pottery",
+      "type" : "memoryConflict"
+    },
+    {
+      "answer" : "ignore_new",
+      "candidates" : [
+
+      ],
+      "context" : "Existing memory: User lives in Austin\nNew statement: if I were rich I'd live in Paris lol",
+      "type" : "memoryConflict"
+    },
+    {
+      "answer" : "interrupt",
+      "candidates" : [
+
+      ],
+      "context" : "Notification from Bank: 'Was this you? $900 card charge in another country'",
+      "type" : "notificationTriage"
+    },
+    {
+      "answer" : "ignore",
+      "candidates" : [
+
+      ],
+      "context" : "Notification from CoffeeCo: 'Double points Tuesday!'",
+      "type" : "notificationTriage"
+    },
+    {
+      "answer" : "digest",
+      "candidates" : [
+
+      ],
+      "context" : "Notification from Priya: 'notes from today's meeting attached'",
+      "type" : "notificationTriage"
+    },
+    {
+      "answer" : "act",
+      "candidates" : [
+
+      ],
+      "context" : "Planned action: create_reminder title=buy stamps, when=tomorrow 10am",
+      "type" : "confirmBeforeAct"
+    },
+    {
+      "answer" : "confirm",
+      "candidates" : [
+
+      ],
+      "context" : "Planned action: send_message to Boss: 'I resign'",
+      "type" : "confirmBeforeAct"
+    },
+    {
+      "answer" : "nudge",
+      "candidates" : [
+
+      ],
+      "context" : "Trigger: arrive, place: Walgreens pharmacy\nMemory: User needs to buy band-aids",
+      "type" : "nudgeNow"
+    },
+    {
+      "answer" : "skip",
+      "candidates" : [
+
+      ],
+      "context" : "Trigger: arrive, place: the gym\nMemory: User needs to buy band-aids",
+      "type" : "nudgeNow"
+    },
+    {
+      "answer" : "at_time",
+      "candidates" : [
+
+      ],
+      "context" : "User: Remind me at 3pm tomorrow to call the bank",
+      "type" : "timing"
+    },
+    {
+      "answer" : "recurring",
+      "candidates" : [
+
+      ],
+      "context" : "User: Remind me every Sunday to plan the week",
+      "type" : "timing"
+    },
+    {
+      "answer" : "on_arrival",
+      "candidates" : [
+
+      ],
+      "context" : "User: When I leave work remind me to buy bread",
+      "type" : "timing"
+    },
+    {
+      "answer" : "sensitive",
+      "candidates" : [
+
+      ],
+      "context" : "User: Explain what my cholesterol numbers mean: LDL 210",
+      "type" : "sensitivity"
+    },
+    {
+      "answer" : "ok",
+      "candidates" : [
+
+      ],
+      "context" : "User: Suggest names for a golden retriever puppy",
+      "type" : "sensitivity"
+    },
+    {
+      "answer" : "yes",
+      "candidates" : [
+
+      ],
+      "context" : "User: What's 7 times 8?",
+      "type" : "answerability"
+    },
+    {
+      "answer" : "no",
+      "candidates" : [
+
+      ],
+      "context" : "User: Analyze the pros and cons of moving to Seattle for my career",
+      "type" : "answerability"
+    },
+    {
+      "answer" : "c2",
+      "candidates" : [
+        "Ben Wu (accountant)",
+        "Ben Cole (neighbor)",
+        "Ben Diaz (coach)"
+      ],
+      "context" : "User: Text my coach Ben I'm sick",
+      "type" : "contactPick"
+    },
+    {
+      "answer" : "ask",
+      "candidates" : [
+        "Ben Wu (accountant)",
+        "Ben Cole (neighbor)"
+      ],
+      "context" : "User: Call Ben",
+      "type" : "contactPick"
+    },
+    {
+      "answer" : "e1",
+      "candidates" : [
+        "Team sync (Mon 9am)",
+        "Yoga (Thu 6pm)",
+        "Dinner with Leo (Fri 7pm)"
+      ],
+      "context" : "User: Cancel my yoga class",
       "type" : "eventPick"
     }
   ],

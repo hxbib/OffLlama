@@ -42,8 +42,8 @@ def select_tau(conf, ok, target, min_cov=0.0):
     return None
 
 
-def student_logits(url, rows):
-    st = T.LocalLlamaServerTeacher(url=url, name="student")
+def student_logits(url, rows, style="zeroShot"):
+    st = T.LocalLlamaServerTeacher(url=url, name="student", style=style)
     out = []
     for r in rows:
         s = prompts.get_set(r["type"], r.get("candidates"))
@@ -59,14 +59,15 @@ def main():
     ap.add_argument("--target-acc", type=float, default=0.95); ap.add_argument("--default-tau", type=float, default=0.8)
     ap.add_argument("--min-per-type", type=int, default=15, help="below this many held-out rows a type keeps the global T / default tau")
     ap.add_argument("--out", default="out/calibration.json")
+    ap.add_argument("--style", default="zeroShot", help="zeroShot for a distilled student, fewShot for the base model")
     a = ap.parse_args()
     rows = [json.loads(l) for l in Path(a.heldout).read_text().splitlines() if l.strip()]
-    data = student_logits(a.url, rows)
+    data = student_logits(a.url, rows, a.style)
     allS = [(l, y) for l, y, _ in data]
     T_global = fit_temperature(allS)
     by = defaultdict(list)
     for l, y, t in data: by[t].append((l, y))
-    prof = {"temperature": {}, "tau": {}, "defaultTau": a.default_tau}
+    prof = {"temperature": {}, "tau": {}, "defaultTau": a.default_tau, "prior": {}, "promptStyle": a.style}
     report = []
     for t, S in sorted(by.items()):
         Tt = fit_temperature(S) if len(S) >= a.min_per_type else T_global

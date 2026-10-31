@@ -1,0 +1,294 @@
+{
+ "scenarios": "/workspace/pocket-glimmer/training/out/scenarios.jsonl",
+ "n_in": 2000,
+ "eval_files": [
+  "eval/gold_decisions.jsonl",
+  "eval/gold_decisions_v2.jsonl"
+ ],
+ "n_eval_items": 137,
+ "method": "normalized exact (context, user utterance) + char-5gram Jaccard>=0.8 (context or utterance)",
+ "n_dropped": 56,
+ "n_kept": 1944,
+ "dropped": [
+  {
+   "id": "s0-00059",
+   "why": "exact_utterance",
+   "context": "User: Remind me to take my vitamins at 8pm"
+  },
+  {
+   "id": "s0-00064",
+   "why": "near:eval/gold_decisions.jsonl:g21:ctx=0.91:utt=0.91",
+   "context": "Notification from ShopMart: '20% off sneakers this weekend!'"
+  },
+  {
+   "id": "s0-00070",
+   "why": "exact_utterance",
+   "context": "Network: offline\nUser: Do the thing from before"
+  },
+  {
+   "id": "s0-00074",
+   "why": "exact_utterance",
+   "context": "Now: Mon 22:55\nUser location: a cafe\nUser: What time is it?"
+  },
+  {
+   "id": "s0-00082",
+   "why": "exact_utterance",
+   "context": "Now: Tue 10:05\nUser location: the gym\nNetwork: online\nUser: What's 15% of 80?"
+  },
+  {
+   "id": "s0-00117",
+   "why": "exact_utterance",
+   "context": "Now: Tue 8:30\nUser location: unknown\nUser: What's 15% of 80?"
+  },
+  {
+   "id": "s0-00130",
+   "why": "exact_context",
+   "context": "Network: online\nUser: Send it"
+  },
+  {
+   "id": "s0-00194",
+   "why": "near:eval/gold_decisions.jsonl:g19:ctx=0.84:utt=0.84",
+   "context": "Existing memory: User works at Northwind\nNew statement: lol I'd quit Northwind if I won the lottery"
+  },
+  {
+   "id": "s0-00257",
+   "why": "exact_utterance",
+   "context": "Now: Thu 6:30\nUser location: unknown\nUser: What's 15% of 80?"
+  },
+  {
+   "id": "s0-00339",
+   "why": "exact_context",
+   "context": "Network: online\nUser: Move it"
+  },
+  {
+   "id": "s0-00383",
+   "why": "exact_utterance",
+   "context": "Now: Fri 8:05\nUser location: work\nNetwork: offline\nUser: Move it"
+  },
+  {
+   "id": "s0-00505",
+   "why": "exact_utterance",
+   "context": "Now: Mon 21:05\nUser location: the gym\nNetwork: online\nUser: Do the thing from before"
+  },
+  {
+   "id": "s0-00528",
+   "why": "exact_utterance",
+   "context": "Now: Sat 20:42\nUser location: unknown\nNetwork: online\nUser: Do the thing from before"
+  },
+  {
+   "id": "s0-00590",
+   "why": "exact_context",
+   "context": "Notification from Slack: '3 new messages in #random'"
+  },
+  {
+   "id": "s0-00595",
+   "why": "exact_utterance",
+   "context": "Now: Thu 11:05\nUser location: commuting\nUser: What's 15% of 80?"
+  },
+  {
+   "id": "s0-00658",
+   "why": "exact_utterance",
+   "context": "Now: Fri 19:15\nUser location: home\nUser: What time is it?"
+  },
+  {
+   "id": "s0-00666",
+   "why": "exact_utterance",
+   "context": "Now: Fri 22:05\nUser location: commuting\nNetwork: online\nUser: Do the thing from before"
+  },
+  {
+   "id": "s0-00673",
+   "why": "exact_context",
+   "context": "Trigger: arrive, place: Trader Joe's\nMemory: User needs to buy oat milk"
+  },
+  {
+   "id": "s0-00674",
+   "why": "near:eval/gold_decisions.jsonl:g24:ctx=0.36:utt=0.95",
+   "context": "Now: Sun 21:05\nUser location: unknown\nUser: Remind me to water the plants tomorrow at 9am"
+  },
+  {
+   "id": "s0-00677",
+   "why": "exact_utterance",
+   "context": "Now: Sun 11:00\nUser location: work\nNetwork: online\nUser: What's 15% of 80?"
+  },
+  {
+   "id": "s0-00692",
+   "why": "exact_utterance",
+   "context": "Now: Thu 22:30\nUser location: work\nUser: What time is it?"
+  },
+  {
+   "id": "s0-00745",
+   "why": "exact_utterance",
+   "context": "Now: Wed 14:55\nUser location: home\nNetwork: offline\nUser: Do the thing from before"
+  },
+  {
+   "id": "s0-00768",
+   "why": "exact_utterance",
+   "context": "Now: Sat 19:30\nUser location: home\nUser: What's 15% of 80?"
+  },
+  {
+   "id": "s0-00773",
+   "why": "exact_utterance",
+   "context": "Now: Mon 23:00\nUser location: commuting\nUser: What time is it?"
+  },
+  {
+   "id": "s0-00804",
+   "why": "exact_utterance",
+   "context": "Now: Sat 8:42\nUser location: home\nNetwork: online\nUser: Move it"
+  },
+  {
+   "id": "s0-00822",
+   "why": "near:eval/gold_decisions.jsonl:g24:ctx=0.37:utt=0.95",
+   "context": "Now: Sat 10:55\nUser location: the gym\nUser: Remind me to water the plants tomorrow at 9am"
+  },
+  {
+   "id": "s0-00835",
+   "why": "exact_utterance",
+   "context": "Now: Sun 8:42\nUser location: the gym\nNetwork: offline\nUser: What's 15% of 80?"
+  },
+  {
+   "id": "s0-00890",
+   "why": "exact_context",
+   "context": "User: What's 15% of 80?"
+  },
+  {
+   "id": "s0-00923",
+   "why": "exact_utterance",
+   "context": "Now: Tue 14:30\nUser location: unknown\nNetwork: online\nUser: Send it"
+  },
+  {
+   "id": "s0-00988",
+   "why": "exact_utterance",
+   "context": "Now: Tue 12:15\nUser location: unknown\nUser: What's 15% of 80?"
+  },
+  {
+   "id": "s0-00989",
+   "why": "exact_utterance",
+   "context": "Now: Wed 9:55\nUser location: unknown\nNetwork: offline\nUser: Remind me to take my vitamins at 8pm"
+  },
+  {
+   "id": "s0-01001",
+   "why": "exact_utterance",
+   "context": "Now: Wed 7:00\nUser location: a cafe\nNetwork: offline\nUser: Do the thing from before"
+  },
+  {
+   "id": "s0-01024",
+   "why": "exact_utterance",
+   "context": "Network: offline\nUser: Send it"
+  },
+  {
+   "id": "s0-01077",
+   "why": "exact_context",
+   "context": "Trigger: arrive, place: CVS pharmacy\nMemory: User needs to buy ibuprofen"
+  },
+  {
+   "id": "s0-01090",
+   "why": "exact_utterance",
+   "context": "Now: Tue 15:15\nUser location: the gym\nUser: What's 15% of 80?"
+  },
+  {
+   "id": "s0-01147",
+   "why": "exact_utterance",
+   "context": "Now: Fri 18:05\nUser location: home\nUser: What's 15% of 80?"
+  },
+  {
+   "id": "s0-01169",
+   "why": "exact_utterance",
+   "context": "Now: Fri 7:05\nUser location: a cafe\nNetwork: online\nUser: Move it"
+  },
+  {
+   "id": "s0-01189",
+   "why": "exact_utterance",
+   "context": "Now: Mon 11:15\nUser location: commuting\nUser: What's 15% of 80?"
+  },
+  {
+   "id": "s0-01190",
+   "why": "exact_utterance",
+   "context": "Now: Sat 11:55\nUser location: work\nNetwork: online\nUser: Move it"
+  },
+  {
+   "id": "s0-01236",
+   "why": "exact_utterance",
+   "context": "Now: Wed 8:15\nUser location: home\nNetwork: online\nUser: Send it"
+  },
+  {
+   "id": "s0-01279",
+   "why": "exact_utterance",
+   "context": "Now: Thu 12:55\nUser location: home\nNetwork: online\nUser: Move it"
+  },
+  {
+   "id": "s0-01387",
+   "why": "exact_utterance",
+   "context": "Now: Tue 12:42\nUser location: a cafe\nUser: Remind me to take my vitamins at 8pm"
+  },
+  {
+   "id": "s0-01544",
+   "why": "exact_utterance",
+   "context": "Now: Thu 16:30\nUser location: home\nUser: What's Priya's email address?"
+  },
+  {
+   "id": "s0-01556",
+   "why": "exact_context",
+   "context": "User: What's Priya's email address?"
+  },
+  {
+   "id": "s0-01575",
+   "why": "exact_utterance",
+   "context": "Now: Mon 16:05\nUser location: work\nNetwork: offline\nUser: Move it"
+  },
+  {
+   "id": "s0-01587",
+   "why": "exact_utterance",
+   "context": "Now: Fri 23:42\nUser location: unknown\nNetwork: offline\nUser: Move it"
+  },
+  {
+   "id": "s0-01701",
+   "why": "exact_utterance",
+   "context": "Now: Sun 20:42\nUser location: a cafe\nNetwork: offline\nUser: Send it"
+  },
+  {
+   "id": "s0-01767",
+   "why": "exact_utterance",
+   "context": "Now: Sun 22:00\nUser location: a cafe\nNetwork: offline\nUser: Move it"
+  },
+  {
+   "id": "s0-01788",
+   "why": "exact_utterance",
+   "context": "Now: Fri 9:00\nUser location: the gym\nNetwork: offline\nUser: What's 15% of 80?"
+  },
+  {
+   "id": "s0-01799",
+   "why": "exact_utterance",
+   "context": "Now: Mon 9:00\nUser location: commuting\nUser: What's 15% of 80?"
+  },
+  {
+   "id": "s0-01809",
+   "why": "exact_utterance",
+   "context": "Now: Thu 12:00\nUser location: work\nUser: What's 15% of 80?"
+  },
+  {
+   "id": "s0-01820",
+   "why": "exact_utterance",
+   "context": "Now: Mon 16:55\nUser location: a cafe\nUser: What's 15% of 80?"
+  },
+  {
+   "id": "s0-01821",
+   "why": "exact_utterance",
+   "context": "Now: Wed 6:55\nUser location: the gym\nNetwork: online\nUser: Move it"
+  },
+  {
+   "id": "s0-01833",
+   "why": "exact_context",
+   "context": "Network: online\nUser: Do the thing from before"
+  },
+  {
+   "id": "s0-01856",
+   "why": "exact_utterance",
+   "context": "Now: Sat 20:05\nUser location: commuting\nNetwork: offline\nUser: Send it"
+  },
+  {
+   "id": "s0-01931",
+   "why": "near:eval/gold_decisions_v2.jsonl:g076:ctx=0.81:utt=0.81",
+   "context": "Trigger: arrive, place: CVS pharmacy\nMemory: User needs to buy eggs"
+  }
+ ]
+}

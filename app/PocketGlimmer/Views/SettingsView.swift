@@ -30,6 +30,11 @@ struct SettingsView: View {
                     TextField("Model", text: $byokModel).textInputAutocapitalization(.never)
                     SecureField("API key", text: $byokKey)
                 }
+                Section("About") {
+                    Text("Built with Llama").font(.callout.weight(.semibold))
+                    Text("On-device model: Llama 3.2, licensed under the Llama 3.2 Community License, Copyright © Meta Platforms, Inc. All Rights Reserved.")
+                        .font(.caption).foregroundStyle(.secondary)
+                }
                 Section { Button("Save") {
                     Keychain.set(metaKey, for: "meta_key"); Keychain.set(fwKey, for: "fireworks_key"); Keychain.set(byokKey, for: "byok_key")
                     model.reloadCloud()
