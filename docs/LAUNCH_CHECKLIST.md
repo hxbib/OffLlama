@@ -14,6 +14,9 @@ Deadline: **Nov 4, 2026, 9:00 PM ET** (Nov 5 02:00 UTC). No grace period. Target
 - [ ] **Nov 9 finals:** bring the video file (local copy) + the offline build on the iPhone (airplane mode works, memories seeded), charger, and a mirroring cable.
 - [ ] *Optional:* 30–45 s X clip tagged @MetaforDevs, using the "Active Memory that never leaves your phone" hook. **Post only with Habib's explicit yes.**
 
+- [ ] **Headline numbers = frozen held-out test split only.** After-distillation accuracy and ECE in the video, packet and README come from the frozen test split. Never quote dev-set or calibration-split figures (e.g. the 120-row dev conformal number) as headlines.
+- [ ] "Built with Llama" and "Built with Muse Spark Open" visible in README header and packet; on-device model called Llama-Reflex-1B everywhere.
+
 ## Blockers: build side
 1. [ ] [PLACEHOLDER: before→after decision accuracy, N, task set, baseline definition] (baseline done: N=36, 0.53)
 2. [ ] [PLACEHOLDER: ECE before→after + reliability chart image; calibration method; conformal assumption stated] (baseline done: ECE 0.101, `docs/img/reliability_baseline.png`)

@@ -1,10 +1,12 @@
 # Pocket Glimmer
 
+**Built with Llama · Built with Muse Spark Open**
+
 **A fully offline personal assistant for iPhone, powered by Meta models.** A small Meta model on the phone makes
 every everyday decision in milliseconds and shows how sure it is. When it isn't sure, or the question is hard, it
 escalates to a bigger Meta brain (Muse Spark, Muse Glimmer) if you're online. Then that brain teaches the small one.
 
-- **System 1 · Reflex**: Llama 3.2 1B Instruct (Q4_K_M, llama.cpp + Metal) on-device. Each decision is a typed
+- **System 1 · Reflex**: **Llama-Reflex-1B** (distilled from Llama 3.2 1B Instruct; Q4_K_M, llama.cpp + Metal) on-device. Each decision is a typed
   multiple-choice question answered in **one forward pass**: we read the logits of the option-letter tokens,
   apply a calibrated temperature softmax, and compare the top probability to a threshold τ (default 0.8).
   Below τ it takes the safe fallback (escalate / ask / confirm). 12 decision types: route, tool choice,
@@ -28,7 +30,7 @@ escalates to a bigger Meta brain (Muse Spark, Muse Glimmer) if you're online. Th
 ```mermaid
 flowchart LR
   subgraph Phone["iPhone 17 Pro · offline"]
-    U[User / Shortcuts trigger] --> R{{"Reflex (System 1)<br/>Llama 3.2 1B Q4 · llama.cpp<br/>1 forward pass → letter logits → p, τ"}}
+    U[User / Shortcuts trigger] --> R{{"Reflex (System 1)<br/>Llama-Reflex-1B Q4 · llama.cpp<br/>1 forward pass → letter logits → p, τ"}}
     R -- tool --> A[EventKit · Contacts · Shortcuts bridge]
     R -- answer_local --> L[Local answer<br/>same 1B model]
     R -- remember / conflict --> M[(SQLite memory<br/>facts · profile · expiry · embeddings)]
@@ -74,7 +76,7 @@ mostly (correctly) escalates. Distillation from Muse teachers is how coverage go
 ## Meta stack
 | Model | Role | License / access |
 |---|---|---|
-| Llama 3.2 1B Instruct (Q4_K_M) | On-device Reflex (System 1), distilled from the teachers below | Llama 3.2 Community License ("Built with Llama", see docs/LICENSING.md) |
+| Llama-Reflex-1B (from Llama 3.2 1B Instruct, Q4_K_M) | On-device Reflex (System 1), distilled from the teachers below | Llama 3.2 Community License ("Built with Llama", see docs/LICENSING.md) |
 | Muse Glimmer 30B | Teacher + local LLM-as-judge for evals | Apache-2.0 |
 | Muse Spark Open (816B-A42B) | Teacher; open weights served via Fireworks / Baseten / Modal | Muse Model License ("Built with Muse Spark Open") |
 | Muse Spark 1.3 | Cloud escalation (System 2) via Meta Model API, Standard mode only, never Contributor mode | Meta Model API terms |
