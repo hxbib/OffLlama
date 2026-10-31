@@ -71,6 +71,22 @@ That is the "before" picture: the base model is poorly calibrated and biased tow
 mostly (correctly) escalates. Distillation from Muse teachers is how coverage goes up. Phone latency will differ
 (Metal, KV-prefix reuse); measure on device, don't extrapolate from these numbers.
 
+## Meta stack
+| Model | Role | License / access |
+|---|---|---|
+| Llama 3.2 1B Instruct (Q4_K_M) | On-device Reflex (System 1), distilled from the teachers below | Llama 3.2 Community License ("Built with Llama", see docs/LICENSING.md) |
+| Muse Glimmer 30B | Teacher + local LLM-as-judge for evals | Apache-2.0 |
+| Muse Spark Open (816B-A42B) | Teacher; open weights served via Fireworks / Baseten / Modal | Muse Model License ("Built with Muse Spark Open") |
+| Muse Spark 1.3 | Cloud escalation (System 2) via Meta Model API, Standard mode only, never Contributor mode | Meta Model API terms |
+| Muse Wonder | Rare hardest cases only | Meta Model API terms |
+
+## Why not run the 30B on the phone
+Measured on this box (/workspace/gate1/RESULTS.md, llama.cpp ddf48f8, CPU):
+- Muse Glimmer is **dense, 29.6B active params**: every token reads all weights.
+- The smallest coherent quant we tested, **IQ2_M, is a 9.85 GB file** (10.69 GB peak RSS, 2.54 tok/s decode on 8 vCPU).
+- **Q1_0 (4.85 GB) is broken**: word salad even greedy, on both AVX2 and generic builds; a model trained for 1-bit (Bonsai 1.7B Q1_0) runs fine on the same build, so the loss comes from post-training 1-bit quantization.
+- A phone app has roughly 6 GB of RAM to work with (our planning figure, not measured), so Glimmer can't fit. It stays a teacher and judge, and the 1B Reflex runs on device.
+
 ## Model choice notes
 - MobileMoE-L-SFT is not supported by upstream llama.cpp (no converter/graph as of `ddf48f8`), so the phone runs
   Llama 3.2 1B. The training scripts support MobileMoE (transformers + PEFT) for when a llama.cpp port lands.
