@@ -11,3 +11,14 @@ Baseline (untrained Llama-3.2-1B-Instruct Q4_K_M, tau 0.8, 2026-10-31, Linux CPU
 It includes the original 36 (`gold_decisions.jsonl`) plus 264 new items, and none overlap the few-shot exemplars.
 Stratified seeded split (seed 20261031): `gold/gold_calibration.jsonl` has 180 rows (15/type) for tau / conformal risk control;
 `gold/gold_test.jsonl` has 120 rows (10/type) for the held-out distillation chart. Never tune on the test split.
+
+## Prompt-only debiasing (no training), frozen test split
+
+Untrained Llama-3.2-1B-Instruct Q4_K_M, CPU, 2 threads, `gold/gold_test.jsonl` (120 hand-labeled items, 10 per type, seed 20261031). Priors and τ come from the calibration split or content-free inputs only, never from test.
+
+| Variant | acc | coverage @ τ=0.8 | acc @ coverage | mean ms |
+|---|---|---|---|---|
+| v0 (original prompt) | 0.51 | 0.15 | 0.72 | 657 |
+| v2 labels + few-shot + contextual calibration | **0.74** | 0.15 | **0.89** | 1050 |
+
+v0 sent every route prediction to "clarify" on earlier sets; v2+cc removes that bias. Raw numbers: `experiments/test120_results.json`, log from `run_prompt_variants.py`.
