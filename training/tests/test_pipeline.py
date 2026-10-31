@@ -53,7 +53,8 @@ if __name__ == "__main__":
     unittest.main()
 
 
-def test_conformal_tau():
+class TConformal(unittest.TestCase):
+  def test_conformal_tau(self):
     from pg_train import conformal as K
     assert K.calibrate([0.99] * 20, [True] * 20)["tau"] is None  # too few rows to certify alpha=0.05
     conf = [0.9 + i * 1e-4 for i in range(200)] + [0.3 + i * 1e-3 for i in range(200)]
