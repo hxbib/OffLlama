@@ -13,7 +13,7 @@ m = AutoModelForCausalLM.from_pretrained(base, torch_dtype=torch.float16, trust_
 m = PeftModel.from_pretrained(m, lora).merge_and_unload()
 m.save_pretrained(out); AutoTokenizer.from_pretrained(lora).save_pretrained(out)
 PY
-python "$LLAMA/convert_hf_to_gguf.py" "$OUT" --outtype f16 --outfile "$OUT/reflex-f16.gguf"
-"$LLAMA/build/bin/llama-quantize" "$OUT/reflex-f16.gguf" "$OUT/reflex-Q4_K_M.gguf" Q4_K_M
+python "$LLAMA/convert_hf_to_gguf.py" "$OUT" --outtype f16 --outfile "$OUT/Llama-3.2-1B-PocketGlimmer-Reflex-f16.gguf"
+"$LLAMA/build/bin/llama-quantize" "$OUT/Llama-3.2-1B-PocketGlimmer-Reflex-f16.gguf" "$OUT/Llama-3.2-1B-PocketGlimmer-Reflex-Q4_K_M.gguf" Q4_K_M
 ls -lh "$OUT"/*.gguf
-echo "Copy reflex-Q4_K_M.gguf into the app (see app/README.md 'Model files')."
+echo "Copy Llama-3.2-1B-PocketGlimmer-Reflex-Q4_K_M.gguf into the app (see app/README.md 'Model files')."

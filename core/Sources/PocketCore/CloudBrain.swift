@@ -65,20 +65,25 @@ public struct OpenAICompatibleBrain: CloudBrain {
 /// Provider presets. Model ids / base URLs are configuration (check each provider's dashboard); nothing is hardcoded
 /// into the app's logic. Keys live in the iOS Keychain, never in the repo.
 public enum CloudPresets {
-    /// Meta Model API (Llama API family; OpenAI-compatible endpoint). Muse Spark 1.3 / Muse Wonder.
+    /// Meta Model API, OpenAI-compatible. Verified 2026-10-31 at dev.meta.ai/docs/quickstart + /docs/models:
+    /// base https://api.meta.ai/v1, `Authorization: Bearer $MODEL_API_KEY`. Model ids: muse-spark-1.3,
+    /// muse-spark-1.3-contributor (cheaper, content may train Meta models), muse-wonder-1.0. Glimmer / Spark Open are
+    /// NOT hosted here (open weights: self-host or partners).
+    public static let metaModels = ["muse-spark-1.3", "muse-wonder-1.0", "muse-spark-1.3-contributor"]
     public static func metaModelAPI(model: String = "muse-spark-1.3", apiKey: String,
-                                    baseURL: URL = URL(string: "https://api.llama.com/compat/v1/")!) -> OpenAICompatibleBrain {
+                                    baseURL: URL = URL(string: "https://api.meta.ai/v1/")!) -> OpenAICompatibleBrain {
         OpenAICompatibleBrain(providerName: "Meta Model API", model: model, baseURL: baseURL, apiKey: apiKey)
     }
-    /// Muse Glimmer 30B / Muse Spark Open on Fireworks.
+    /// Fireworks: "accounts/fireworks/models/muse-spark-open" (serverless) or "accounts/fireworks/models/muse-glimmer-30b"
+    /// (on-demand deployment only; serverless deprecated 2026-09-25). Verified at fireworks.ai/models, 2026-10-31.
     public static func fireworks(model: String, apiKey: String) -> OpenAICompatibleBrain {
         OpenAICompatibleBrain(providerName: "Fireworks", model: model, baseURL: URL(string: "https://api.fireworks.ai/inference/v1/")!, apiKey: apiKey)
     }
-    /// Baseten model APIs (OpenAI-compatible).
+    /// Baseten Model APIs (OpenAI-compatible). Spark Open slug "meta-models/muse-spark-open" (baseten.co/library/muse-spark-open).
     public static func baseten(model: String, apiKey: String) -> OpenAICompatibleBrain {
         OpenAICompatibleBrain(providerName: "Baseten", model: model, baseURL: URL(string: "https://inference.baseten.co/v1/")!, apiKey: apiKey)
     }
-    /// Self-deployed vLLM on Modal: pass your app's URL (…modal.run/v1/).
+    /// Self-deployed vLLM on Modal (Dedicated Endpoint): pass the printed URL + "/v1/", served model name "muse-glimmer".
     public static func modal(model: String, baseURL: URL, apiKey: String) -> OpenAICompatibleBrain {
         OpenAICompatibleBrain(providerName: "Modal", model: model, baseURL: baseURL, apiKey: apiKey)
     }

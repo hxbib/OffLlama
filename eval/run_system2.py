@@ -2,7 +2,7 @@
 (/v1/chat/completions). Auto-graded by key phrases; spot-check by hand.
 
   python3 eval/run_system2.py --base-url http://127.0.0.1:8088/v1 --model local-llama1b
-  PG_ALLOW_SPEND=1 python3 eval/run_system2.py --base-url https://api.llama.com/compat/v1 --model muse-spark-1.3 --key-env META_API_KEY"""
+  PG_ALLOW_SPEND=1 python3 eval/run_system2.py --base-url https://api.meta.ai/v1 --model muse-spark-1.3 --key-env MODEL_API_KEY"""
 import argparse, json, os, sys, urllib.request
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))

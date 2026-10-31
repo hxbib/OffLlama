@@ -97,7 +97,7 @@ final class ScrubberAndCloudTests: XCTestCase {
     func testRequestShapeAndChainFallback() async throws {
         let meta = CloudPresets.metaModelAPI(apiKey: "KEY")
         let req = try meta.makeRequest([.init(role: "user", content: "hi")], maxTokens: 5)
-        XCTAssertEqual(req.url?.absoluteString, "https://api.llama.com/compat/v1/chat/completions")
+        XCTAssertEqual(req.url?.absoluteString, "https://api.meta.ai/v1/chat/completions")
         XCTAssertEqual(req.value(forHTTPHeaderField: "Authorization"), "Bearer KEY")
         var bad = meta; bad.transport = { _ in (Data("nope".utf8), 503) }
         var good = CloudPresets.fireworks(model: "accounts/x/models/muse-glimmer-30b", apiKey: "k")

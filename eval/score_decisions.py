@@ -57,7 +57,7 @@ def main():
             print(f"{r['model']:40s} {r['accuracy']:5.2f} {r['ece']:5.2f} {r['coverage']:5.2f} {ac:>7s} {r['median_latency_ms']:6.0f}")
         return
     reg = {"local": lambda: T.LocalLlamaServerTeacher(url=a.url, name=a.name or "local"),
-           "spark-baseten": T.muse_spark_open_baseten, "glimmer-modal": T.glimmer_modal, "meta": T.meta_model_api}
+           "spark-baseten": T.muse_spark_open_baseten, "spark-fireworks": T.spark_open_fireworks, "glimmer-modal": T.glimmer_modal, "meta": T.meta_model_api}
     prof = json.loads(Path(a.calibration).read_text()) if a.calibration else None
     res = score(reg[a.model](), load_gold(), a.tau, profile=prof)
     print(json.dumps({k: v for k, v in res.items() if k != "rows"}, indent=2))

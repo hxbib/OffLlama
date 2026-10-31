@@ -37,7 +37,7 @@ class T(unittest.TestCase):
 
     def test_cost_estimator_no_network(self):
         rows = scenarios.generate(100, 0)
-        est = cost.estimate(rows, ["spark-baseten", "glimmer-modal", "local"], json.loads((ROOT / "config/pricing.json").read_text()))
+        est = cost.estimate(rows, ["spark-fireworks", "spark-baseten", "glimmer-modal", "local"], json.loads((ROOT / "config/pricing.json").read_text()))
         self.assertGreater(est["spark-baseten"]["usd"], 0); self.assertEqual(est["local"]["usd"], 0)
         self.assertGreater(est["spark-baseten"]["input_tokens"], 100 * 50)
 

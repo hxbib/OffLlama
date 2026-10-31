@@ -27,14 +27,14 @@ def merge(row: dict, labels: list[dict], teacher_tau: float = 0.6) -> dict:
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--scenarios", default="out/scenarios.jsonl")
-    ap.add_argument("--teachers", default="local,local-shuffled", help="comma list: local, local-shuffled, spark-baseten, glimmer-modal, meta")
+    ap.add_argument("--teachers", default="local,local-shuffled", help="comma list: local, local-shuffled, spark-fireworks, spark-baseten, glimmer-modal, meta")
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--heldout", type=float, default=0.2)
     ap.add_argument("--out", default="out")
     ap.add_argument("--dry-run-tag", default="", help="label rows (e.g. DRY_RUN_LOCAL_1B_TEACHER) so nobody mistakes them for real teacher data")
     a = ap.parse_args()
     reg = {"local": lambda: T.LocalLlamaServerTeacher(), "local-shuffled": lambda: T.LocalLlamaServerTeacher(shuffle=True),
-           "spark-baseten": T.muse_spark_open_baseten, "glimmer-modal": T.glimmer_modal, "meta": T.meta_model_api}
+           "spark-baseten": T.muse_spark_open_baseten, "spark-fireworks": T.spark_open_fireworks, "glimmer-modal": T.glimmer_modal, "meta": T.meta_model_api}
     ts = [reg[t]() for t in a.teachers.split(",")]
     rows = [json.loads(l) for l in Path(a.scenarios).read_text().splitlines() if l.strip()]
     if a.limit: rows = rows[: a.limit]

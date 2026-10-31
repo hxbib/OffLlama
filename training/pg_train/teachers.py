@@ -59,8 +59,12 @@ class LocalLlamaServerTeacher:
 
 
 class OpenAICompatTeacher:
-    def __init__(self, name, base_url, model, api_key_env, extra=None):
-        self.name, self.base_url, self.model, self.api_key_env, self.extra = name, base_url.rstrip("/"), model, api_key_env, extra or {}
+    """mode="logprobs": read the answer-letter token's top_logprobs (scans the output so reasoning tokens before the
+    letter are fine). mode="sample": provider returns no logprobs (Meta Model API rejects logprobs with HTTP 400;
+    Baseten ignores them for Spark Open), so draw k answers and use the empirical letter distribution."""
+    def __init__(self, name, base_url, model, api_key_env, mode="logprobs", top_logprobs=20, k=5, max_tokens=1, extra=None):
+        self.name, self.base_url, self.model, self.api_key_env = name, base_url.rstrip("/"), model, api_key_env
+        self.mode, self.top, self.k, self.max_tokens, self.extra = mode, top_logprobs, k, max_tokens, extra or {}
         self.paid = True
 
     def _check(self):
@@ -70,33 +74,68 @@ class OpenAICompatTeacher:
         if not key: raise SpendNotApproved(f"{self.name}: missing ${self.api_key_env}")
         return key
 
+    @staticmethod
+    def parse_letter(text, L):
+        import re
+        m = re.findall(r"\b([A-H])\b", text or "")
+        m = [x for x in m if x in L]
+        return m[-1] if m else None
+
+    def _call(self, key, s, ctx, logprobs):
+        body = {"model": self.model, "messages": prompts.chat_messages(s, ctx), "max_tokens": self.max_tokens, **self.extra}
+        if logprobs: body.update({"logprobs": True, "top_logprobs": self.top, "temperature": 0})
+        return _post(self.base_url + "/chat/completions", body, {"Authorization": f"Bearer {key}"})
+
     def label(self, s: dict, ctx: str) -> dict:
         key = self._check()
         L = prompts.letters(s)
-        t0 = time.time()
-        r = _post(self.base_url + "/chat/completions",
-                  {"model": self.model, "messages": prompts.chat_messages(s, ctx), "max_tokens": 1, "temperature": 0,
-                   "logprobs": True, "top_logprobs": 20, **self.extra}, {"Authorization": f"Bearer {key}"})
-        ms = (time.time() - t0) * 1000
-        ch = r["choices"][0]
-        lp = ((ch.get("logprobs") or {}).get("content") or [{}])[0].get("top_logprobs") or []
-        p = _normalize(_merge_letter_logprobs([(x["token"], x["logprob"]) for x in lp], L), L)
-        text = (ch.get("message") or {}).get("content") or ""
-        letter = max(p, key=p.get) if p else (text.strip()[:1] if text.strip()[:1] in L else None)
-        usage = r.get("usage", {})
-        return {"teacher": self.name, "letter": letter, "probs": p or None, "latency_ms": ms,
-                "tokens_in": usage.get("prompt_tokens"), "tokens_out": usage.get("completion_tokens")}
+        t0 = time.time(); tin = tout = 0
+        if self.mode == "logprobs":
+            r = self._call(key, s, ctx, True)
+            ch = r["choices"][0]; u = r.get("usage", {}); tin, tout = u.get("prompt_tokens"), u.get("completion_tokens")
+            toks = (ch.get("logprobs") or {}).get("content") or []
+            pos = [t for t in toks if t.get("token", "").strip() in L]
+            lp = pos[-1].get("top_logprobs", []) if pos else []
+            p = _normalize(_merge_letter_logprobs([(x["token"], x["logprob"]) for x in lp], L), L)
+            text = (ch.get("message") or {}).get("content") or ""
+            letter = max(p, key=p.get) if p else self.parse_letter(text, L)
+            probs = p or None
+        else:
+            votes = []
+            for _ in range(self.k):
+                r = self._call(key, s, ctx, False)
+                u = r.get("usage", {}); tin += u.get("prompt_tokens") or 0; tout += u.get("completion_tokens") or 0
+                votes.append(self.parse_letter((r["choices"][0].get("message") or {}).get("content"), L))
+            got = [v for v in votes if v]
+            probs = {l: got.count(l) / len(got) for l in L} if got else None
+            letter = max(probs, key=probs.get) if probs else None
+        return {"teacher": self.name, "letter": letter, "probs": probs, "latency_ms": (time.time() - t0) * 1000,
+                "tokens_in": tin, "tokens_out": tout, "mode": self.mode}
 
 
-def muse_spark_open_baseten(model=os.environ.get("BASETEN_MODEL", "muse-spark-open")):
-    # Baseten Model APIs, OpenAI-compatible. Confirm the model slug in your Baseten dashboard.
-    return OpenAICompatTeacher("muse-spark-open@baseten", os.environ.get("BASETEN_BASE_URL", "https://inference.baseten.co/v1"), model, "BASETEN_API_KEY")
+# Provider presets, verified against official docs on 2026-10-31 (see docs/PROVIDERS_AND_LICENSES.md).
+def spark_open_fireworks(model=os.environ.get("FIREWORKS_SPARK_MODEL", "accounts/fireworks/models/muse-spark-open")):
+    # Serverless, $1.25/$4.25 per 1M. Fireworks chat API supports logprobs (top_logprobs <= 5). Reasoning model: allow
+    # room for reasoning before the letter; the parser scans for the letter token.
+    return OpenAICompatTeacher("muse-spark-open@fireworks", "https://api.fireworks.ai/inference/v1", model, "FIREWORKS_API_KEY",
+                               mode="logprobs", top_logprobs=5, max_tokens=int(os.environ.get("PG_TEACHER_MAX_TOKENS", "512")))
 
 
-def glimmer_modal(model=os.environ.get("MODAL_MODEL", "muse-glimmer-30b")):
-    # Your own vLLM deployment on Modal (see training/modal_glimmer_vllm.py); URL looks like https://<ws>--<app>.modal.run/v1
-    return OpenAICompatTeacher("muse-glimmer-30b@modal", os.environ.get("MODAL_BASE_URL", "https://REPLACE.modal.run/v1"), model, "MODAL_API_KEY")
+def muse_spark_open_baseten(model=os.environ.get("BASETEN_MODEL", "meta-models/muse-spark-open")):
+    # Baseten docs: Spark Open accepts logprobs but returns none -> sampled votes.
+    return OpenAICompatTeacher("muse-spark-open@baseten", "https://inference.baseten.co/v1", model, "BASETEN_API_KEY",
+                               mode="sample", k=int(os.environ.get("PG_TEACHER_K", "5")), max_tokens=int(os.environ.get("PG_TEACHER_MAX_TOKENS", "512")))
+
+
+def glimmer_modal(model=os.environ.get("MODAL_MODEL", "muse-glimmer")):
+    # Your own vLLM on a Modal Dedicated Endpoint / @app.server (1x H100 80GB; Meta docs: 72 GB VRAM to serve).
+    # vLLM returns up to 20 top_logprobs. Use low reasoning strength via the system prompt per Glimmer prompting guide.
+    return OpenAICompatTeacher("muse-glimmer-30b@modal", os.environ.get("MODAL_BASE_URL", "https://REPLACE.modal.direct/v1"), model, "MODAL_API_KEY",
+                               mode="logprobs", top_logprobs=20, max_tokens=int(os.environ.get("PG_TEACHER_MAX_TOKENS", "384")))
 
 
 def meta_model_api(model=os.environ.get("META_MODEL", "muse-spark-1.3")):
-    return OpenAICompatTeacher("muse-spark@meta", os.environ.get("META_BASE_URL", "https://api.llama.com/compat/v1"), model, "META_API_KEY")
+    # https://api.meta.ai/v1, Bearer $MODEL_API_KEY. logprobs -> HTTP 400 (reasoning model) -> sampled votes.
+    return OpenAICompatTeacher("muse-spark-1.3@meta", "https://api.meta.ai/v1", model, "MODEL_API_KEY",
+                               mode="sample", k=int(os.environ.get("PG_TEACHER_K", "5")), max_tokens=int(os.environ.get("PG_TEACHER_MAX_TOKENS", "512")),
+                               extra={"reasoning_effort": "low"})
