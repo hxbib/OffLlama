@@ -1,0 +1,36 @@
+{"id":"g01","type":"route","context":"Network: offline\nUser: Remind me to take my vitamins at 8pm","gold":"tool"}
+{"id":"g02","type":"route","context":"Network: online\nUser: Text Maya that I'm on my way","gold":"tool"}
+{"id":"g03","type":"route","context":"Network: offline\nUser: Thanks, that's all for now!","gold":"answer_local"}
+{"id":"g04","type":"route","context":"Network: online\nUser: Compare the tax treatment of ISOs vs NSOs for an early-stage startup employee and recommend a strategy","gold":"escalate_cloud"}
+{"id":"g05","type":"route","context":"Network: online\nUser: Move it","gold":"clarify"}
+{"id":"g06","type":"route","context":"Network: online\nUser: What's 15% of 80?","gold":"answer_local"}
+{"id":"g07","type":"route","context":"Network: online\nUser: Write me a 500-word wedding toast for my sister, funny but heartfelt","gold":"escalate_cloud"}
+{"id":"g08","type":"toolChoice","context":"User: Remind me to buy oat milk when I get to the store","gold":"create_reminder"}
+{"id":"g09","type":"toolChoice","context":"User: What's on my calendar tomorrow morning?","gold":"find_event"}
+{"id":"g10","type":"toolChoice","context":"User: Send Sam a message saying happy birthday","gold":"send_message"}
+{"id":"g11","type":"toolChoice","context":"User: Put lunch with Omar on Thursday at 12:30","gold":"create_event"}
+{"id":"g12","type":"toolChoice","context":"User: What's Priya's email address?","gold":"lookup_contact"}
+{"id":"g13","type":"toolChoice","context":"User: What did I tell you my landlord's name was?","gold":"search_memory"}
+{"id":"g14","type":"rememberOrNot","context":"User: By the way, I'm allergic to peanuts.","gold":"remember_fact"}
+{"id":"g15","type":"rememberOrNot","context":"User: What time is it?","gold":"no"}
+{"id":"g16","type":"rememberOrNot","context":"User: I'm parked on level 3, spot C14 until 6","gold":"remember_temporary"}
+{"id":"g17","type":"memoryConflict","context":"Existing memory: User lives in Boston\nNew statement: I just moved to Brooklyn last week","gold":"update"}
+{"id":"g18","type":"memoryConflict","context":"Existing memory: User likes jazz\nNew statement: I've been getting into techno too","gold":"keep_both"}
+{"id":"g19","type":"memoryConflict","context":"Existing memory: User works at Northwind\nNew statement: haha I'd quit Northwind if I won the lottery","gold":"ignore_new"}
+{"id":"g20","type":"notificationTriage","context":"Notification from Mom: 'Call me ASAP, Dad is in the hospital'","gold":"interrupt"}
+{"id":"g21","type":"notificationTriage","context":"Notification from ShopMart: '20% off sneakers this weekend only!'","gold":"ignore"}
+{"id":"g22","type":"notificationTriage","context":"Notification from Slack: '4 new messages in #random'","gold":"digest"}
+{"id":"g23","type":"confirmBeforeAct","context":"Planned action: delete all calendar events next week","gold":"confirm"}
+{"id":"g24","type":"confirmBeforeAct","context":"User: remind me to water the plants tomorrow at 9\nPlanned action: create_reminder title=water the plants, when=tomorrow at 9","gold":"act"}
+{"id":"g25","type":"nudgeNow","context":"Trigger: arrive, place: Trader Joe's\nMemory: User needs to buy oat milk","gold":"nudge"}
+{"id":"g26","type":"nudgeNow","context":"Trigger: arrive, place: the office\nMemory: User needs to buy oat milk","gold":"skip"}
+{"id":"g27","type":"timing","context":"User: Every Monday at 9 remind me to submit my timesheet","gold":"recurring"}
+{"id":"g28","type":"timing","context":"User: When I get home remind me to call Grandma","gold":"on_arrival"}
+{"id":"g29","type":"timing","context":"User: Remind me Friday at noon to pay rent","gold":"at_time"}
+{"id":"g30","type":"sensitivity","context":"User: Summarize my HIV test results and my bank account balance","gold":"sensitive"}
+{"id":"g31","type":"sensitivity","context":"User: Plan a 3-day itinerary for Lisbon","gold":"ok"}
+{"id":"g32","type":"answerability","context":"User: Say good morning in Spanish","gold":"yes"}
+{"id":"g33","type":"answerability","context":"User: Derive the closed form of the Fibonacci sequence and prove it","gold":"no"}
+{"id":"g34","type":"contactPick","candidates":["Sam Lee (coworker)","Sam Ortiz (brother)","Samantha Diaz (dentist)"],"context":"User: Tell my brother Sam I'll be late to dinner","gold":"c1"}
+{"id":"g35","type":"contactPick","candidates":["Sam Lee (coworker)","Sam Ortiz (brother)"],"context":"User: Text Sam ok","gold":"ask"}
+{"id":"g36","type":"eventPick","candidates":["Dentist (Tue 3pm)","1:1 with Priya (Wed 10am)","Standup (daily 9:30am)"],"context":"User: Push my dentist appointment to next week","gold":"e0"}
