@@ -43,5 +43,9 @@ finite-sample guarantee (Learn-Then-Test, exact binomial, Bonferroni over a fixe
 
     python -m pg_train.conformal --results ../eval/results/<round>.json --alpha 0.05 --delta 0.1 --profile out/calibration.json
 
-If nothing certifies, `defaultTau` is set to 1.01 (escalate everything). With alpha=0.05, delta=0.1 a threshold needs at least
+Status: implemented; the bound tightens as the phone handles more. The script always reports the tightest bound the
+sample supports ("error <= X% among self-handled at confidence 1-delta") plus the self-handled rows needed for the target
+alpha (`min_rows_needed`; alpha=0.05, delta=0.1: 135 rows with 0 errors, 589 at 2.5% observed error). alpha is a
+target, not a pass/fail. Assumption: calibration rows and future decisions are exchangeable (same distribution); a new
+student or a shifted user mix needs fresh calibration rows. If nothing certifies, `defaultTau` is set to 1.01 (escalate everything). With alpha=0.05, delta=0.1 a threshold needs at least
 135 accepted held-out rows even with zero errors, so the 36-item gold set alone can never certify; use a larger held-out split.

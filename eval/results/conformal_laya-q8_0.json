@@ -1,0 +1,24 @@
+{
+ "tau": null,
+ "alpha": 0.05,
+ "delta": 0.1,
+ "n": 36,
+ "handled": 0,
+ "errors": 0,
+ "handled_share": 0.0,
+ "empirical_error": null,
+ "error_upper_bound": null,
+ "p_value": null,
+ "min_rows_needed_zero_errors": 135,
+ "model": "Laya-Q8_0",
+ "source": "../eval/results/laya-q8_0.json",
+ "tightest": {
+  "tau": 0.42,
+  "handled": 32,
+  "errors": 8,
+  "handled_share": 0.8888888888888888,
+  "error_upper_bound": 0.5347684183601827,
+  "delta": 0.1
+ },
+ "min_rows_needed_for_alpha_zero_errors": 135
+}

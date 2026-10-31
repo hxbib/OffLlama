@@ -50,4 +50,12 @@ final class ConformalTests: XCTestCase {
         XCTAssertEqual(Calibration.systemOneConfidence([0.7, 0.2, 0.1]), (0.7 - 1.0/3) / (2.0/3), accuracy: 1e-12)
         XCTAssertEqual(Calibration.systemOneBucket(optionCount: 4), "3_5")
     }
+    func testTightestBoundAndMinRows() {
+        XCTAssertEqual(ConformalRisk.minRowsNeeded(alpha: 0.05), 135)
+        XCTAssertNil(ConformalRisk.minRowsNeeded(alpha: 0.05, observedError: 0.06))
+        XCTAssertGreaterThan(ConformalRisk.minRowsNeeded(alpha: 0.05, observedError: 0.02)!, 135)
+        let b = ConformalRisk.tightestBound(confidences: Array(repeating: 0.95, count: 36), correct: Array(repeating: true, count: 36))!
+        XCTAssertEqual(b.handled, 36)
+        XCTAssertEqual(b.errorUpperBound, 1 - pow(0.1 / 99, 1.0 / 36), accuracy: 1e-6)
+    }
 }

@@ -46,6 +46,29 @@ def calibrate(conf, ok, alpha=0.05, delta=0.1, grid=GRID):
             "min_rows_needed_zero_errors": math.ceil(math.log(level) / math.log1p(-alpha))}
 
 
+def tightest_bound(conf, ok, delta=0.1, grid=GRID):
+    """Smallest Clopper-Pearson upper bound (at delta/K, simultaneous over the grid) on error among self-handled rows.
+    No target alpha needed: 'error <= X at confidence 1-delta'. Tightens as the phone handles more. Assumes exchangeability."""
+    level = delta / len(grid); best = None
+    for tau in sorted(grid):
+        idx = [i for i in range(len(conf)) if conf[i] >= tau]
+        if not idx: continue
+        e = sum(not ok[i] for i in idx); u = cp_upper(e, len(idx), level)
+        if best is None or u < best["error_upper_bound"]:
+            best = {"tau": tau, "handled": len(idx), "errors": e, "handled_share": len(idx) / len(conf), "error_upper_bound": u, "delta": delta}
+    return best
+
+
+def min_rows_needed(alpha, delta=0.1, observed_error=0.0, k=len(GRID)):
+    """Self-handled rows needed to certify alpha at the given observed error rate (None if observed >= alpha)."""
+    if observed_error >= alpha: return None
+    level = delta / k; n = 1
+    while n <= 1_000_000:
+        if binom_cdf(int(observed_error * n), n, alpha) <= level: return n
+        n += 1 if n < 1000 else 10
+    return None
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--results", required=True); ap.add_argument("--alpha", type=float, default=0.05)
@@ -54,6 +77,11 @@ def main():
     d = json.loads(Path(a.results).read_text()); rows = d["rows"]
     r = calibrate([x["conf"] for x in rows], [bool(x["ok"]) for x in rows], a.alpha, a.delta)
     r["model"] = d.get("model"); r["source"] = a.results
+    r["tightest"] = tightest_bound([x["conf"] for x in rows], [bool(x["ok"]) for x in rows], a.delta)
+    r["min_rows_needed_for_alpha_zero_errors"] = min_rows_needed(a.alpha, a.delta)
+    t = r["tightest"]
+    if t: print(f"tightest supported: error <= {t['error_upper_bound']:.1%} among self-handled at confidence {1-a.delta:.0%} "
+                f"(tau={t['tau']}, {t['handled']}/{r['n']} handled, {t['errors']} wrong)")
     print(json.dumps(r, indent=1))
     if a.out: Path(a.out).write_text(json.dumps(r, indent=1))
     if a.profile:

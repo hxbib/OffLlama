@@ -74,6 +74,42 @@ public enum ConformalRisk {
                       errorUpperBound: clopperPearsonUpper(b.e, b.h, delta: level), pValue: b.p)
     }
 
+    public struct Bound: Codable, Sendable, Equatable {
+        public let tau: Double, handled: Int, errors: Int, handledShare: Double, errorUpperBound: Double, delta: Double
+    }
+
+    /// Tightest error bound the sample supports, without a target alpha: for every grid tau the Clopper-Pearson
+    /// upper bound at delta/K (Bonferroni => all K bounds hold simultaneously w.p. >= 1 - delta), and the tau with the
+    /// smallest one. Reads as "error among self-handled <= X at confidence 1 - delta". It tightens as more rows are
+    /// handled locally. Assumes calibration and future decisions are exchangeable.
+    public static func tightestBound(confidences: [Double], correct: [Bool], delta: Double = 0.1, grid: [Double] = defaultGrid) -> Bound? {
+        let level = delta / Double(max(grid.count, 1)); let n = confidences.count
+        var best: Bound? = nil
+        for tau in grid.sorted() {
+            let idx = confidences.indices.filter { confidences[$0] >= tau }
+            guard !idx.isEmpty else { continue }
+            let e = idx.filter { !correct[$0] }.count
+            let u = clopperPearsonUpper(e, idx.count, delta: level)
+            if best == nil || u < best!.errorUpperBound {
+                best = Bound(tau: tau, handled: idx.count, errors: e, handledShare: Double(idx.count) / Double(n), errorUpperBound: u, delta: delta)
+            }
+        }
+        return best
+    }
+
+    /// Minimum self-handled rows needed to certify `alpha` if the observed error rate among them is `observedError`
+    /// (0 = no errors), at delta with K grid points.
+    public static func minRowsNeeded(alpha: Double, delta: Double = 0.1, observedError: Double = 0, k: Int = defaultGrid.count) -> Int? {
+        guard observedError < alpha else { return nil }
+        let level = delta / Double(max(k, 1))
+        var n = 1
+        while n <= 1_000_000 {
+            if binomCDF(Int((observedError * Double(n)).rounded(.down)), n, alpha) <= level { return n }
+            n += n < 1000 ? 1 : 10
+        }
+        return nil
+    }
+
     /// Minimum accepted rows for a tau to be certifiable with zero errors: (1-alpha)^n <= delta/K.
     public static func minRowsForZeroErrors(alpha: Double, delta: Double, k: Int = 1) -> Int { Int(ceil(log(delta / Double(k)) / log1p(-alpha))) }
 }

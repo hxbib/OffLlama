@@ -11,5 +11,14 @@
  "p_value": null,
  "min_rows_needed_zero_errors": 135,
  "model": "Llama-3.2-1B-Instruct-Q4_K_M (untrained)",
- "source": "../eval/results/llama32-1b-base.json"
+ "source": "../eval/results/llama32-1b-base.json",
+ "tightest": {
+  "tau": 0.33,
+  "handled": 35,
+  "errors": 16,
+  "handled_share": 0.9722222222222222,
+  "error_upper_bound": 0.7186024687989839,
+  "delta": 0.1
+ },
+ "min_rows_needed_for_alpha_zero_errors": 135
 }

@@ -1,0 +1,24 @@
+{
+ "tau": null,
+ "alpha": 0.05,
+ "delta": 0.1,
+ "n": 36,
+ "handled": 0,
+ "errors": 0,
+ "handled_share": 0.0,
+ "empirical_error": null,
+ "error_upper_bound": null,
+ "p_value": null,
+ "min_rows_needed_zero_errors": 135,
+ "model": "Julia-1-Q8_0",
+ "source": "../eval/results/julia-1-q8_0.json",
+ "tightest": {
+  "tau": 0.63,
+  "handled": 25,
+  "errors": 12,
+  "handled_share": 0.6944444444444444,
+  "error_upper_bound": 0.7791315965289287,
+  "delta": 0.1
+ },
+ "min_rows_needed_for_alpha_zero_errors": 135
+}
