@@ -1,5 +1,7 @@
 # Demo script, 3:00 (draft)
 
+Note: the percentages and ms below are placeholders for the script; say whatever the phone actually shows.
+
 Setup: iPhone 17 Pro mirrored (QuickTime). Model loaded. Memories seeded *live during rehearsal, by talking to it*
 (never by inserting rows). Telemetry chart shows days of real use. Shortcuts automations installed.
 
