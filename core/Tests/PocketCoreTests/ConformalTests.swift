@@ -44,4 +44,10 @@ final class ConformalTests: XCTestCase {
         }
         XCTAssertLessThanOrEqual(viol, Int(Double(trials) * 0.1) + 10)
     }
+    func testSystemOneConfidence() {
+        XCTAssertEqual(Calibration.systemOneConfidence([0.25, 0.25, 0.25, 0.25]), 0, accuracy: 1e-12)
+        XCTAssertEqual(Calibration.systemOneConfidence([1, 0]), 1, accuracy: 1e-12)
+        XCTAssertEqual(Calibration.systemOneConfidence([0.7, 0.2, 0.1]), (0.7 - 1.0/3) / (2.0/3), accuracy: 1e-12)
+        XCTAssertEqual(Calibration.systemOneBucket(optionCount: 4), "3_5")
+    }
 }

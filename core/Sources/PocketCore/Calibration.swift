@@ -31,6 +31,17 @@ public enum Calibration {
         return (a + b) / 2
     }
 
+    /// llama.cpp /v1/systemone (PR #29818) `confidence` for a choice question: (p_max - 1/n) / (1 - 1/n), clamped
+    /// at 0 (TypeSafe formula; 0 = uniform). The Reflex thresholds raw p_max instead; this is exposed for parity.
+    public static func systemOneConfidence(_ p: [Double]) -> Double {
+        guard p.count >= 2, let m = p.max() else { return 1 }
+        let u = 1.0 / Double(p.count)
+        return max(0, (m - u) / (1 - u))
+    }
+
+    /// systemone's temperature bucket key by option count (non-lev models): "2", "3_5", "6_10", "11".
+    public static func systemOneBucket(optionCount n: Int) -> String { n <= 2 ? "2" : n <= 5 ? "3_5" : n <= 10 ? "6_10" : "11" }
+
     /// Expected calibration error with equal-width bins.
     public static func ece(confidences: [Double], correct: [Bool], bins: Int = 10) -> Double {
         precondition(confidences.count == correct.count)
@@ -66,9 +77,24 @@ public struct CalibrationProfile: Codable, Sendable {
     public var temperature: [String: Double]
     public var tau: [String: Double]
     public var defaultTau: Double
+    /// Contextual-calibration priors: mean log p(letter | content-free input), keyed by DecisionPrompt.priorKey.
+    /// Subtracted from the letter logits before the temperature softmax. Empty = no correction.
+    public var prior: [String: [Double]]
+    public var promptStyle: PromptStyle
 
-    public init(temperature: [String: Double] = [:], tau: [String: Double] = [:], defaultTau: Double = 0.8) {
-        self.temperature = temperature; self.tau = tau; self.defaultTau = defaultTau
+    public init(temperature: [String: Double] = [:], tau: [String: Double] = [:], defaultTau: Double = 0.8,
+                prior: [String: [Double]] = [:], promptStyle: PromptStyle = .fewShot) {
+        self.temperature = temperature; self.tau = tau; self.defaultTau = defaultTau; self.prior = prior; self.promptStyle = promptStyle
+    }
+
+    enum CodingKeys: String, CodingKey { case temperature, tau, defaultTau, prior, promptStyle }
+    public init(from d: Decoder) throws {
+        let c = try d.container(keyedBy: CodingKeys.self)
+        temperature = try c.decodeIfPresent([String: Double].self, forKey: .temperature) ?? [:]
+        tau = try c.decodeIfPresent([String: Double].self, forKey: .tau) ?? [:]
+        defaultTau = try c.decodeIfPresent(Double.self, forKey: .defaultTau) ?? 0.8
+        prior = try c.decodeIfPresent([String: [Double]].self, forKey: .prior) ?? [:]
+        promptStyle = try c.decodeIfPresent(PromptStyle.self, forKey: .promptStyle) ?? .fewShot
     }
     public static let uncalibrated = CalibrationProfile()
 
