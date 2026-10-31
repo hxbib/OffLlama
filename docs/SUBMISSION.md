@@ -4,7 +4,7 @@
 > Two kinds of tags: `[TBD: ...]` = a number not measured yet. `[PLACEHOLDER: ...]` = an open item from the rubric map
 > (some are numbers, some are decisions or links). Fill each from a real run or source, or cut the sentence. Don't submit with any left.
 > Rubric source: rules summaries at madrobot.blog and reconscribe.com (Oct 2026), and the event page cerebralvalley.ai/e/meta-ai-developer-hackathon.
-> Indie lens: "creativity, technical ambition, and whether it works." The "$10k open-weights bonus" is unverified, so it isn't in this plan.
+> Indie lens: "creativity, technical ambition, and whether it works."
 
 **Pocket Glimmer.** An assistant for [PLACEHOLDER: user, e.g. "students like me"] that keeps working with no signal: a Meta Llama model, distilled from Muse Glimmer, runs entirely on iPhone and asks Meta's cloud only when it knows it's unsure.
 
