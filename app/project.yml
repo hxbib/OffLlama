@@ -1,0 +1,49 @@
+# XcodeGen spec:  brew install xcodegen && xcodegen generate && open PocketGlimmer.xcodeproj
+name: PocketGlimmer
+options:
+  bundleIdPrefix: com.habib.pocketglimmer
+  deploymentTarget: { iOS: "18.0" }
+  createIntermediateGroups: true
+packages:
+  PocketCore: { path: ../core }
+targets:
+  PocketGlimmer:
+    type: application
+    platform: iOS
+    sources:
+      - path: PocketGlimmer
+        excludes: ["Resources/Models/*.gguf"]
+      - path: PocketGlimmer/Resources/Models
+        optional: true
+        buildPhase: resources
+    dependencies:
+      - package: PocketCore
+        product: PocketCore
+      # Built from llama.cpp with ./build-xcframework.sh (see app/README.md); placed at app/Frameworks/llama.xcframework
+      - framework: Frameworks/llama.xcframework
+        embed: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.habib.pocketglimmer
+        MARKETING_VERSION: "0.1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        SWIFT_VERSION: "5.10"
+        TARGETED_DEVICE_FAMILY: "1"
+        DEVELOPMENT_TEAM: ""          # set your team in Xcode > Signing
+        CODE_SIGN_STYLE: Automatic
+        ENABLE_USER_SCRIPT_SANDBOXING: NO
+        OTHER_LDFLAGS: ["-lc++"]
+    entitlements:
+      path: PocketGlimmer/Support/PocketGlimmer.entitlements
+      properties:
+        com.apple.developer.kernel.increased-memory-limit: true
+    info:
+      path: PocketGlimmer/Support/Info.plist
+      properties:
+        CFBundleDisplayName: Pocket Glimmer
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+        NSRemindersFullAccessUsageDescription: Pocket Glimmer creates and reads reminders you ask for, on this iPhone.
+        NSCalendarsFullAccessUsageDescription: Pocket Glimmer creates and looks up events you ask for, on this iPhone.
+        NSContactsUsageDescription: Pocket Glimmer finds the right person when you say a name. Contacts never leave the phone.
+        NSUserNotificationsUsageDescription: Proactive nudges based on what you've told Pocket Glimmer.

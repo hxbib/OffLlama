@@ -10,3 +10,4 @@ eval/out/
 *.safetensors
 .env
 .DS_Store
+app/Frameworks/
