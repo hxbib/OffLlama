@@ -50,6 +50,8 @@ public struct MemoryFact: Sendable, Equatable, Identifiable {
     public var updatedAt: Date
     public var expiresAt: Date?
     public var supersededBy: Int64?
+    /// Where the fact came from (CURATOR-style provenance, arXiv 2606.25115): user_stated, model_extracted, user_correction, cloud, import.
+    public var provenance: String = MemoryProvenance.userStated
     public var isActive: Bool { supersededBy == nil }
 }
 
@@ -57,8 +59,11 @@ public struct MemoryFact: Sendable, Equatable, Identifiable {
 public struct ExtractedFact: Sendable, Equatable {
     public var subject: String, attribute: String, value: String, text: String
     public var ttl: TimeInterval?
-    public init(subject: String, attribute: String, value: String, text: String, ttl: TimeInterval? = nil) {
+    public var provenance: String
+    public init(subject: String, attribute: String, value: String, text: String, ttl: TimeInterval? = nil,
+                provenance: String = MemoryProvenance.userStated) {
         self.subject = subject.lowercased(); self.attribute = attribute; self.value = value; self.text = text; self.ttl = ttl
+        self.provenance = provenance
     }
 }
 
@@ -66,22 +71,47 @@ public struct ExtractedFact: Sendable, Equatable {
 /// unless a resolver says otherwise.
 public let singleValuedAttributes: Set<String> = ["lives_in", "works_at", "birthday", "job", "partner", "phone", "diet", "gym_time", "name"]
 
+public enum MemoryProvenance {
+    public static let userStated = "user_stated", modelExtracted = "model_extracted", userCorrection = "user_correction",
+                      cloud = "cloud", imported = "import"
+    /// Eviction protection order (higher = kept longer). Unknown provenance is treated as least trusted.
+    public static func trust(_ p: String) -> Int {
+        switch p { case userCorrection: return 4; case userStated: return 3; case modelExtracted: return 2; case cloud: return 1; default: return 0 }
+    }
+}
+
+/// A user correction of a Reflex decision, stored as a retrievable experience row and fed back into the Reflex prompt.
+public struct DecisionCorrection: Sendable, Equatable {
+    public var id: Int64, decisionType: String, context: String, wrongID: String, correctID: String, createdAt: Date
+}
+
 public enum ConflictResolution: String, Sendable { case update, keepBoth = "keep_both", ignoreNew = "ignore_new" }
 
 public final class MemoryStore: @unchecked Sendable {
     let db: SQLiteDB
     let embedder: Embedder
     let clock: () -> Date
+    /// Max active facts kept; beyond it the least-trusted, least-recently-updated rows are evicted (CURATOR budget). nil = unlimited.
+    public var budget: Int?
+    /// Max stored corrections (oldest evicted first).
+    public var correctionBudget: Int
 
-    public init(db: SQLiteDB, embedder: Embedder = HashingEmbedder(), clock: @escaping () -> Date = Date.init) throws {
-        self.db = db; self.embedder = embedder; self.clock = clock
+    public init(db: SQLiteDB, embedder: Embedder = HashingEmbedder(), clock: @escaping () -> Date = Date.init,
+                budget: Int? = nil, correctionBudget: Int = 500) throws {
+        self.db = db; self.embedder = embedder; self.clock = clock; self.budget = budget; self.correctionBudget = correctionBudget
         try db.exec("""
         CREATE TABLE IF NOT EXISTS facts(
           id INTEGER PRIMARY KEY AUTOINCREMENT, subject TEXT NOT NULL, attribute TEXT NOT NULL, value TEXT NOT NULL,
           text TEXT NOT NULL, created REAL NOT NULL, updated REAL NOT NULL, expires REAL, superseded_by INTEGER,
           embedding BLOB NOT NULL, embedder TEXT NOT NULL);
         CREATE INDEX IF NOT EXISTS facts_key ON facts(subject, attribute);
+        CREATE TABLE IF NOT EXISTS corrections(
+          id INTEGER PRIMARY KEY AUTOINCREMENT, decision_type TEXT NOT NULL, context TEXT NOT NULL, wrong_id TEXT NOT NULL,
+          correct_id TEXT NOT NULL, created REAL NOT NULL, embedding BLOB NOT NULL);
         """)
+        // Migration for pre-provenance databases.
+        let cols = try db.query("PRAGMA table_info(facts)").compactMap { $0["name"]?.text }
+        if !cols.contains("provenance") { try db.exec("ALTER TABLE facts ADD COLUMN provenance TEXT NOT NULL DEFAULT 'user_stated'") }
     }
 
     /// Store a fact, handling contradictions. `resolver` is normally Reflex's memoryConflict decision.
@@ -108,14 +138,66 @@ public final class MemoryStore: @unchecked Sendable {
         let emb = try await embedder.embed(f.text)
         let bytes = emb.withUnsafeBufferPointer { Array(UnsafeRawBufferPointer($0)) }
         let id = try db.transaction { () throws -> Int64 in
-            let id = try db.run("INSERT INTO facts(subject,attribute,value,text,created,updated,expires,superseded_by,embedding,embedder) VALUES(?,?,?,?,?,?,?,NULL,?,?)",
+            let id = try db.run("INSERT INTO facts(subject,attribute,value,text,created,updated,expires,superseded_by,embedding,embedder,provenance) VALUES(?,?,?,?,?,?,?,NULL,?,?,?)",
                 [.text(f.subject), .text(f.attribute), .text(f.value), .text(f.text), .double(now.timeIntervalSince1970),
                  .double(now.timeIntervalSince1970), f.ttl.map { .double(now.addingTimeInterval($0).timeIntervalSince1970) } ?? .null,
-                 .blob(bytes), .text(embedder.name)])
+                 .blob(bytes), .text(embedder.name), .text(f.provenance)])
             for o in toSupersede { try db.run("UPDATE facts SET superseded_by=? WHERE id=?", [.int(id), .int(o.id)]) }
             return id
         }
+        try enforceBudget(protecting: id)
         return (try fact(id: id), resolution)
+    }
+
+    /// Evict active facts over `budget`: lowest provenance trust first, then least recently updated. Returns evicted ids.
+    @discardableResult public func enforceBudget(protecting keep: Int64? = nil) throws -> [Int64] {
+        guard let budget else { return [] }
+        let act = try active()
+        guard act.count > budget else { return [] }
+        let victims = act.filter { $0.id != keep }
+            .sorted { (MemoryProvenance.trust($0.provenance), $0.updatedAt.timeIntervalSince1970) < (MemoryProvenance.trust($1.provenance), $1.updatedAt.timeIntervalSince1970) }
+            .prefix(act.count - budget).map(\.id)
+        for v in victims { try forget(id: v) }
+        return Array(victims)
+    }
+
+    // MARK: corrections (experience memory for the Reflex)
+
+    @discardableResult
+    public func recordCorrection(type: DecisionType, context: String, wrongID: String, correctID: String) async throws -> Int64 {
+        let emb = try await embedder.embed(context)
+        let bytes = emb.withUnsafeBufferPointer { Array(UnsafeRawBufferPointer($0)) }
+        let id = try db.run("INSERT INTO corrections(decision_type,context,wrong_id,correct_id,created,embedding) VALUES(?,?,?,?,?,?)",
+                            [.text(type.rawValue), .text(context), .text(wrongID), .text(correctID), .double(clock().timeIntervalSince1970), .blob(bytes)])
+        try db.run("DELETE FROM corrections WHERE id NOT IN (SELECT id FROM corrections ORDER BY id DESC LIMIT ?)", [.int(Int64(correctionBudget))])
+        return id
+    }
+
+    /// Most similar past corrections for this decision type.
+    public func corrections(for type: DecisionType, similarTo context: String, k: Int = 3, minScore: Float = 0.2) async throws -> [(correction: DecisionCorrection, score: Float)] {
+        let q = try await embedder.embed(context)
+        var out: [(DecisionCorrection, Float)] = []
+        for r in try db.query("SELECT * FROM corrections WHERE decision_type=?", [.text(type.rawValue)]) {
+            guard let b = r["embedding"]?.blob else { continue }
+            let e: [Float] = b.withUnsafeBytes { Array($0.bindMemory(to: Float.self)) }
+            let s = cosine(q, e)
+            guard s >= minScore else { continue }
+            out.append((DecisionCorrection(id: r["id"]?.int ?? 0, decisionType: r["decision_type"]?.text ?? "", context: r["context"]?.text ?? "",
+                                           wrongID: r["wrong_id"]?.text ?? "", correctID: r["correct_id"]?.text ?? "",
+                                           createdAt: Date(timeIntervalSince1970: r["created"]?.double ?? 0)), s))
+        }
+        return out.sorted { $0.1 == $1.1 ? $0.0.id > $1.0.id : $0.1 > $1.1 }.prefix(k).map { (correction: $0.0, score: $0.1) }
+    }
+
+    /// Context with retrieved corrections prepended, for `Reflex.decide(_:context:)` (test-time adaptation, no weight updates).
+    public func reflexContext(for set: OptionSet, context: String, k: Int = 3) async throws -> String {
+        let hits = try await corrections(for: set.type, similarTo: context, k: k)
+        guard !hits.isEmpty else { return context }
+        let lines = hits.map { h -> String in
+            let ctx = h.correction.context.replacingOccurrences(of: "\n", with: " ")
+            return "- \"\(ctx.prefix(160))\" -> correct: \(h.correction.correctID) (not \(h.correction.wrongID))"
+        }
+        return "Past user corrections for similar cases:\n" + lines.joined(separator: "\n") + "\n\n" + context
     }
 
     public func fact(id: Int64) throws -> MemoryFact? { try db.query("SELECT * FROM facts WHERE id=?", [.int(id)]).first.map(Self.decode) }
@@ -165,7 +247,8 @@ public final class MemoryStore: @unchecked Sendable {
         MemoryFact(id: r["id"]?.int ?? 0, subject: r["subject"]?.text ?? "", attribute: r["attribute"]?.text ?? "",
                    value: r["value"]?.text ?? "", text: r["text"]?.text ?? "",
                    createdAt: Date(timeIntervalSince1970: r["created"]?.double ?? 0), updatedAt: Date(timeIntervalSince1970: r["updated"]?.double ?? 0),
-                   expiresAt: r["expires"]?.double.map { Date(timeIntervalSince1970: $0) }, supersededBy: r["superseded_by"]?.int)
+                   expiresAt: r["expires"]?.double.map { Date(timeIntervalSince1970: $0) }, supersededBy: r["superseded_by"]?.int,
+                   provenance: r["provenance"]?.text ?? MemoryProvenance.userStated)
     }
 }
 
