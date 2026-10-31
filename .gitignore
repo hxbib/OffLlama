@@ -1,0 +1,12 @@
+.build/
+*.xcodeproj/
+DerivedData/
+__pycache__/
+*.pyc
+.venv/
+training/out/
+eval/out/
+*.gguf
+*.safetensors
+.env
+.DS_Store
