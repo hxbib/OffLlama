@@ -49,8 +49,6 @@ mostly coverable by partner credits. Output-token count is the dominant uncertai
   provided applicable open source licenses are followed"; you must own or have rights to all code, data, and assets
   (banned-projects rule); organizers get a royalty-free license to the **submission**.
 - Stage 1 pass/fail: "use Meta AI products". Rubric: "Use of Meta AI tooling" is 25%.
-- **Best Build on Meta Open Weights ($10K) needs Muse Glimmer or Muse Spark Open**, on your own hardware or partner inference,
-  verified by the infra partner. Our phone model is Llama 3.2 1B, so for this prize the pitch has to rest on Glimmer and Spark Open as cloud brains and teachers (served via Modal or Fireworks).
 
 ## License implications
 - **MobileMoE (FAIR Noncommercial Research License v1, 2026-08-21)**: use is limited to "noncommercial research uses ... not primarily
