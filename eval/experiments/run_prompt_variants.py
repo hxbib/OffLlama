@@ -82,7 +82,7 @@ def load(which):
     if which == "dev":
         rows = scenarios.generate(120, 99)
         return [{"type": r["type"], "context": r["context"], "gold": r["hint"], "candidates": r.get("candidates")} for r in rows]
-    f = {"gold36": "gold_decisions.jsonl", "gold100": "gold_decisions_v2.jsonl"}[which]
+    f = {"gold36": "gold_decisions.jsonl", "gold100": "gold/gold_all.jsonl", "cal": "gold/gold_calibration.jsonl", "test": "gold/gold_test.jsonl"}[which]
     return [json.loads(l) for l in (ROOT / "eval" / f).read_text().splitlines() if l.strip()]
 
 

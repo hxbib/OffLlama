@@ -16,7 +16,7 @@ sys.path.insert(0, str(ROOT / "training"))
 from pg_train import prompts, teachers as T, calibrate as C
 
 
-def load_gold(p=ROOT / "eval/gold_decisions_v2.jsonl"):
+def load_gold(p=ROOT / "eval/gold/gold_test.jsonl"):
     return [json.loads(l) for l in Path(p).read_text().splitlines() if l.strip()]
 
 
@@ -50,7 +50,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", default="local"); ap.add_argument("--url", default="http://127.0.0.1:8088")
     ap.add_argument("--name"); ap.add_argument("--tau", type=float, default=0.8); ap.add_argument("--calibration")
-    ap.add_argument("--out"); ap.add_argument("--compare", nargs="*"); ap.add_argument("--gold", default=str(ROOT / "eval/gold_decisions_v2.jsonl"))
+    ap.add_argument("--out"); ap.add_argument("--compare", nargs="*"); ap.add_argument("--gold", default=str(ROOT / "eval/gold/gold_test.jsonl"))
     ap.add_argument("--style", default="fewShot")
     a = ap.parse_args()
     if a.compare:

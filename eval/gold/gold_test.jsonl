@@ -1,0 +1,120 @@
+{"id": "g037", "type": "route", "context": "Network: offline\nUser: Set an alarm-style reminder to leave for the airport at 5:30am", "gold": "tool", "split": "test"}
+{"id": "g038", "type": "route", "context": "Network: online\nUser: Hi there", "gold": "answer_local", "split": "test"}
+{"id": "g039", "type": "route", "context": "Network: online\nUser: Translate 'thank you' into Japanese", "gold": "answer_local", "split": "test"}
+{"id": "g041", "type": "route", "context": "Network: online\nUser: Draft a polite email to my landlord about a broken heater, about 200 words", "gold": "escalate_cloud", "split": "test"}
+{"id": "g043", "type": "route", "context": "Network: online\nUser: Do the thing from before", "gold": "clarify", "split": "test"}
+{"id": "g044", "type": "route", "context": "Network: online\nUser: Send it", "gold": "clarify", "split": "test"}
+{"id": "g045", "type": "toolChoice", "context": "User: Book a call with Priya next Tuesday at 3", "gold": "create_event", "split": "test"}
+{"id": "g047", "type": "toolChoice", "context": "User: What's Diego's phone number?", "gold": "lookup_contact", "split": "test"}
+{"id": "g050", "type": "toolChoice", "context": "User: What was the name of the wine I liked at Lena's?", "gold": "search_memory", "split": "test"}
+{"id": "g051", "type": "toolChoice", "context": "User: Order me a pizza", "gold": "none", "split": "test"}
+{"id": "g053", "type": "rememberOrNot", "context": "User: My daughter's name is Ines", "gold": "remember_fact", "split": "test"}
+{"id": "g055", "type": "rememberOrNot", "context": "User: lol ok", "gold": "no", "split": "test"}
+{"id": "g056", "type": "rememberOrNot", "context": "User: How many ounces in a cup?", "gold": "no", "split": "test"}
+{"id": "g061", "type": "memoryConflict", "context": "Existing memory: User has a dog named Pepper\nNew statement: We also adopted a cat called Miso", "gold": "keep_both", "split": "test"}
+{"id": "g062", "type": "memoryConflict", "context": "Existing memory: User lives in Denver\nNew statement: Yep, still in Denver", "gold": "ignore_new", "split": "test"}
+{"id": "g065", "type": "notificationTriage", "context": "Notification from Uber: 'Your driver is arriving now'", "gold": "interrupt", "split": "test"}
+{"id": "g068", "type": "notificationTriage", "context": "Notification from Calendar: 'Book club moved to next Wednesday'", "gold": "digest", "split": "test"}
+{"id": "g069", "type": "notificationTriage", "context": "Notification from Tom: 'here are the photos from the weekend'", "gold": "digest", "split": "test"}
+{"id": "g071", "type": "confirmBeforeAct", "context": "Planned action: create_event title=Gym, when=Thursday 6pm", "gold": "act", "split": "test"}
+{"id": "g073", "type": "confirmBeforeAct", "context": "Planned action: create_reminder title=take medicine, when=tonight 10pm", "gold": "act", "split": "test"}
+{"id": "g075", "type": "nudgeNow", "context": "Trigger: message, from: Omar\nMemory: User promised to return Omar's drill", "gold": "nudge", "split": "test"}
+{"id": "g080", "type": "nudgeNow", "context": "Trigger: time, 8:00 AM\nMemory: Lena's birthday is today", "gold": "nudge", "split": "test"}
+{"id": "g081", "type": "timing", "context": "User: Remind me to call the vet now", "gold": "now", "split": "test"}
+{"id": "g083", "type": "timing", "context": "User: When I get to the office, remind me to print the contract", "gold": "on_arrival", "split": "test"}
+{"id": "g088", "type": "sensitivity", "context": "User: Here's my credit card number 4111 1111 1111 1111, is it expired?", "gold": "sensitive", "split": "test"}
+{"id": "g09", "type": "toolChoice", "context": "User: What's on my calendar tomorrow morning?", "gold": "find_event", "split": "test"}
+{"id": "g092", "type": "answerability", "context": "User: How do you say 'cheers' in German?", "gold": "yes", "split": "test"}
+{"id": "g096", "type": "contactPick", "candidates": ["Sam Lee (coworker)", "Sam Ortiz (brother)", "Samantha Diaz (dentist)"], "context": "User: Text my dentist I need to reschedule", "gold": "c2", "split": "test"}
+{"id": "g097", "type": "contactPick", "candidates": ["Priya Patel (manager)", "Priya Shah (college friend)"], "context": "User: Email Priya from work the slides", "gold": "c0", "split": "test"}
+{"id": "g098", "type": "contactPick", "candidates": ["Maya Chen (sister)", "Maya Brooks (yoga teacher)"], "context": "User: Call Maya", "gold": "ask", "split": "test"}
+{"id": "g099", "type": "eventPick", "candidates": ["Dentist (Tue 3pm)", "1:1 with Priya (Wed 10am)", "Standup (daily 9:30am)"], "context": "User: What time is standup tomorrow?", "gold": "e2", "split": "test"}
+{"type": "route", "context": "Network: online\nUser: Good evening!", "gold": "answer_local", "id": "g102", "split": "test"}
+{"type": "route", "context": "Network: online\nUser: Thanks a lot", "gold": "answer_local", "id": "g104", "split": "test"}
+{"type": "route", "context": "Network: offline\nUser: Remind me to feed the cat at 6", "gold": "tool", "id": "g105", "split": "test"}
+{"type": "route", "context": "Network: online\nUser: Text Noah that practice is cancelled", "gold": "tool", "id": "g106", "split": "test"}
+{"type": "toolChoice", "context": "User: What meetings do I have tomorrow?", "gold": "find_event", "id": "g116", "split": "test"}
+{"type": "toolChoice", "context": "User: When is my flight to Denver?", "gold": "find_event", "id": "g117", "split": "test"}
+{"type": "toolChoice", "context": "User: Text Omar 'on my way'", "gold": "send_message", "id": "g118", "split": "test"}
+{"type": "toolChoice", "context": "User: What's Kenji's email?", "gold": "lookup_contact", "id": "g120", "split": "test"}
+{"type": "toolChoice", "context": "User: Find Tom's home address", "gold": "lookup_contact", "id": "g121", "split": "test"}
+{"type": "rememberOrNot", "context": "User: I'm allergic to penicillin", "gold": "remember_fact", "id": "g124", "split": "test"}
+{"type": "rememberOrNot", "context": "User: I'm at my sister's until Sunday", "gold": "remember_temporary", "id": "g132", "split": "test"}
+{"type": "rememberOrNot", "context": "User: I'm out of dish soap", "gold": "remember_temporary", "id": "g134", "split": "test"}
+{"type": "rememberOrNot", "context": "User: What's the capital of Peru?", "gold": "no", "id": "g135", "split": "test"}
+{"type": "rememberOrNot", "context": "User: hmm", "gold": "no", "id": "g138", "split": "test"}
+{"type": "memoryConflict", "context": "Existing memory: User lives in Chicago\nNew statement: We moved to Seattle in September", "gold": "update", "id": "g140", "split": "test"}
+{"type": "memoryConflict", "context": "Existing memory: User works at Initech\nNew statement: I left Initech, I'm at Hooli now", "gold": "update", "id": "g141", "split": "test"}
+{"type": "memoryConflict", "context": "Existing memory: User's phone number ends in 4421\nNew statement: I got a new number, it ends in 9087", "gold": "update", "id": "g142", "split": "test"}
+{"type": "memoryConflict", "context": "Existing memory: User is allergic to peanuts\nNew statement: Turns out I'm allergic to shellfish too", "gold": "keep_both", "id": "g147", "split": "test"}
+{"id": "g15", "type": "rememberOrNot", "context": "User: What time is it?", "gold": "no", "split": "test"}
+{"type": "memoryConflict", "context": "Existing memory: User lives in Denver\nNew statement: lol if I won the lottery I'd move to Bali", "gold": "ignore_new", "id": "g151", "split": "test"}
+{"type": "memoryConflict", "context": "Existing memory: User works at Hooli\nNew statement: sometimes I dream of quitting Hooli to be a chef, ha", "gold": "ignore_new", "id": "g153", "split": "test"}
+{"type": "memoryConflict", "context": "Existing memory: Lena's birthday is March 4\nNew statement: Lena's birthday is March 4, right?", "gold": "ignore_new", "id": "g154", "split": "test"}
+{"type": "memoryConflict", "context": "Existing memory: User's partner is Alex\nNew statement: Alex is the best partner ever", "gold": "ignore_new", "id": "g155", "split": "test"}
+{"type": "notificationTriage", "context": "Notification from Mom: 'Grandpa fell, we're at the ER'", "gold": "interrupt", "id": "g156", "split": "test"}
+{"id": "g16", "type": "rememberOrNot", "context": "User: I'm parked on level 3, spot C14 until 6", "gold": "remember_temporary", "split": "test"}
+{"type": "notificationTriage", "context": "Notification from Home Alarm: 'Front door opened while armed'", "gold": "interrupt", "id": "g160", "split": "test"}
+{"type": "notificationTriage", "context": "Notification from NewsDaily: 'Top 10 stories you missed'", "gold": "ignore", "id": "g164", "split": "test"}
+{"type": "notificationTriage", "context": "Notification from ShoeShop: 'Items in your cart are waiting'", "gold": "ignore", "id": "g165", "split": "test"}
+{"type": "notificationTriage", "context": "Notification from Spotify: 'Your Discover Weekly is ready'", "gold": "ignore", "id": "g166", "split": "test"}
+{"type": "notificationTriage", "context": "Notification from GitHub: 'New comment on your pull request'", "gold": "digest", "id": "g171", "split": "test"}
+{"type": "timing", "context": "User: Remind me right now to stretch", "gold": "now", "id": "g173", "split": "test"}
+{"type": "timing", "context": "User: Remind me to text Ana immediately", "gold": "now", "id": "g174", "split": "test"}
+{"type": "timing", "context": "User: When I get to the gym remind me to grab a towel", "gold": "on_arrival", "id": "g181", "split": "test"}
+{"type": "timing", "context": "User: When I leave home remind me to take the trash", "gold": "on_arrival", "id": "g182", "split": "test"}
+{"type": "timing", "context": "User: Remind me when I get to Mom's to give her the book", "gold": "on_arrival", "id": "g183", "split": "test"}
+{"type": "timing", "context": "User: Remind me every Friday to submit my hours", "gold": "recurring", "id": "g184", "split": "test"}
+{"type": "timing", "context": "User: Remind me every morning at 7 to meditate", "gold": "recurring", "id": "g185", "split": "test"}
+{"type": "timing", "context": "User: Remind me every two weeks to water the cactus", "gold": "recurring", "id": "g186", "split": "test"}
+{"type": "nudgeNow", "context": "Trigger: arrive, place: Target\nMemory: User needs to buy batteries", "gold": "nudge", "id": "g189", "split": "test"}
+{"type": "nudgeNow", "context": "Trigger: arrive, place: Costco\nMemory: User needs to buy paper towels", "gold": "nudge", "id": "g190", "split": "test"}
+{"type": "nudgeNow", "context": "Trigger: message, from: Diego\nMemory: User owes Diego $30 for concert tickets", "gold": "nudge", "id": "g191", "split": "test"}
+{"type": "nudgeNow", "context": "Trigger: email, from: Priya\nMemory: User promised Priya feedback on her slides", "gold": "nudge", "id": "g192", "split": "test"}
+{"type": "nudgeNow", "context": "Trigger: time, 9:00 AM\nMemory: Kenji's birthday is today", "gold": "nudge", "id": "g193", "split": "test"}
+{"type": "nudgeNow", "context": "Trigger: arrive, place: the gym\nMemory: User needs to buy batteries", "gold": "skip", "id": "g196", "split": "test"}
+{"type": "nudgeNow", "context": "Trigger: charger, time: 11:45 PM\nMemory: User wants to call the bank when it opens at 9am", "gold": "later", "id": "g202", "split": "test"}
+{"type": "confirmBeforeAct", "context": "Planned action: create_reminder title=call dentist, when=Monday 9am", "gold": "act", "id": "g205", "split": "test"}
+{"type": "confirmBeforeAct", "context": "Planned action: create_reminder title=stretch, when=in 30 minutes", "gold": "act", "id": "g209", "split": "test"}
+{"type": "confirmBeforeAct", "context": "Planned action: lookup_contact contact=Kenji", "gold": "act", "id": "g211", "split": "test"}
+{"type": "confirmBeforeAct", "context": "Planned action: send_message to Priya: 'Running 5 min late'", "gold": "confirm", "id": "g213", "split": "test"}
+{"type": "confirmBeforeAct", "context": "Planned action: delete all reminders", "gold": "confirm", "id": "g216", "split": "test"}
+{"type": "confirmBeforeAct", "context": "Planned action: delete event 'Wedding' on June 14", "gold": "confirm", "id": "g217", "split": "test"}
+{"type": "confirmBeforeAct", "context": "Planned action: delete contact 'Mom'", "gold": "confirm", "id": "g219", "split": "test"}
+{"id": "g22", "type": "notificationTriage", "context": "Notification from Slack: '4 new messages in #random'", "gold": "digest", "split": "test"}
+{"type": "sensitivity", "context": "User: Plan a road trip from LA to San Francisco", "gold": "ok", "id": "g223", "split": "test"}
+{"type": "sensitivity", "context": "User: Explain how photosynthesis works", "gold": "ok", "id": "g224", "split": "test"}
+{"type": "sensitivity", "context": "User: Write a thank-you note to my neighbor", "gold": "ok", "id": "g225", "split": "test"}
+{"type": "sensitivity", "context": "User: Help me write a cover letter for a marketing job", "gold": "ok", "id": "g229", "split": "test"}
+{"type": "sensitivity", "context": "User: Give me ideas for a team offsite", "gold": "ok", "id": "g230", "split": "test"}
+{"type": "sensitivity", "context": "User: Look at my bank statement and tell me where my money goes", "gold": "sensitive", "id": "g234", "split": "test"}
+{"type": "sensitivity", "context": "User: Here's my therapist's diagnosis of my depression, explain it", "gold": "sensitive", "id": "g236", "split": "test"}
+{"id": "g24", "type": "confirmBeforeAct", "context": "User: remind me to water the plants tomorrow at 9\nPlanned action: create_reminder title=water the plants, when=tomorrow at 9", "gold": "act", "split": "test"}
+{"type": "sensitivity", "context": "User: Check my 2FA backup codes", "gold": "sensitive", "id": "g240", "split": "test"}
+{"type": "answerability", "context": "User: Hello!", "gold": "yes", "id": "g241", "split": "test"}
+{"type": "answerability", "context": "User: What's 9 plus 6?", "gold": "yes", "id": "g242", "split": "test"}
+{"type": "answerability", "context": "User: How do you spell 'necessary'?", "gold": "yes", "id": "g244", "split": "test"}
+{"type": "answerability", "context": "User: What's the opposite of 'hot'?", "gold": "yes", "id": "g247", "split": "test"}
+{"type": "answerability", "context": "User: Write a detailed 2,000-word essay on the causes of World War I", "gold": "no", "id": "g250", "split": "test"}
+{"type": "answerability", "context": "User: What's the stock price of Apple right now?", "gold": "no", "id": "g251", "split": "test"}
+{"type": "answerability", "context": "User: Prove that there are infinitely many primes, rigorously", "gold": "no", "id": "g252", "split": "test"}
+{"type": "answerability", "context": "User: Write a full business plan for a bakery", "gold": "no", "id": "g258", "split": "test"}
+{"id": "g26", "type": "nudgeNow", "context": "Trigger: arrive, place: the office\nMemory: User needs to buy oat milk", "gold": "skip", "split": "test"}
+{"type": "contactPick", "candidates": ["Sam Lee (coworker)", "Sam Ortiz (brother)", "Samantha Diaz (dentist)"], "context": "User: Call my brother", "gold": "c1", "id": "g261", "split": "test"}
+{"type": "contactPick", "candidates": ["Sam Lee (coworker)", "Sam Ortiz (brother)", "Samantha Diaz (dentist)"], "context": "User: Message Sam Ortiz happy birthday", "gold": "c1", "id": "g262", "split": "test"}
+{"type": "contactPick", "candidates": ["Sam Lee (coworker)", "Sam Ortiz (brother)", "Samantha Diaz (dentist)"], "context": "User: Text Sam Lee the address", "gold": "c0", "id": "g264", "split": "test"}
+{"type": "contactPick", "candidates": ["Priya Patel (manager)", "Priya Shah (college friend)"], "context": "User: Message my college friend Priya", "gold": "c1", "id": "g267", "split": "test"}
+{"type": "contactPick", "candidates": ["Tom Novak (landlord)", "Tom Park (cousin)", "Tom Reyes (plumber)"], "context": "User: Tell my landlord the rent is sent", "gold": "c0", "id": "g273", "split": "test"}
+{"type": "contactPick", "candidates": ["Tom Novak (landlord)", "Tom Park (cousin)", "Tom Reyes (plumber)"], "context": "User: Call my cousin", "gold": "c1", "id": "g274", "split": "test"}
+{"type": "contactPick", "candidates": ["Ana Ruiz (mom)", "Ana Kim (neighbor)"], "context": "User: Text Mom I landed", "gold": "c0", "id": "g276", "split": "test"}
+{"type": "eventPick", "candidates": ["Dentist (Tue 3pm)", "1:1 with Priya (Wed 10am)", "Standup (daily 9:30am)"], "context": "User: Move my dentist appointment to Friday", "gold": "e0", "id": "g280", "split": "test"}
+{"type": "eventPick", "candidates": ["Dentist (Tue 3pm)", "1:1 with Priya (Wed 10am)", "Standup (daily 9:30am)"], "context": "User: Skip standup tomorrow", "gold": "e2", "id": "g282", "split": "test"}
+{"type": "eventPick", "candidates": ["Flight to SFO (Fri 7am)", "Flight home (Sun 6pm)"], "context": "User: When is my flight home?", "gold": "e1", "id": "g290", "split": "test"}
+{"type": "eventPick", "candidates": ["Flight to SFO (Fri 7am)", "Flight home (Sun 6pm)"], "context": "User: When's my flight?", "gold": "ask", "id": "g292", "split": "test"}
+{"type": "eventPick", "candidates": ["Haircut (Sat 11am)", "Dentist (Tue 3pm)"], "context": "User: Move my haircut to noon", "gold": "e0", "id": "g293", "split": "test"}
+{"type": "eventPick", "candidates": ["Haircut (Sat 11am)", "Dentist (Tue 3pm)"], "context": "User: Cancel the dentist", "gold": "e1", "id": "g294", "split": "test"}
+{"type": "eventPick", "candidates": ["Yoga (Thu 6pm)", "Dinner with Leo (Fri 7pm)", "Team sync (Mon 9am)"], "context": "User: When is team sync?", "gold": "e2", "id": "g296", "split": "test"}
+{"type": "eventPick", "candidates": ["Parent-teacher meeting (Wed 4pm)", "Vet (Wed 5pm)"], "context": "User: Move the vet appointment to Thursday", "gold": "e1", "id": "g298", "split": "test"}
+{"type": "eventPick", "candidates": ["Parent-teacher meeting (Wed 4pm)", "Vet (Wed 5pm)"], "context": "User: What time is the parent-teacher meeting?", "gold": "e0", "id": "g299", "split": "test"}
+{"id": "g30", "type": "sensitivity", "context": "User: Summarize my HIV test results and my bank account balance", "gold": "sensitive", "split": "test"}
+{"id": "g33", "type": "answerability", "context": "User: Derive the closed form of the Fibonacci sequence and prove it", "gold": "no", "split": "test"}
