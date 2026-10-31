@@ -36,3 +36,12 @@ Notes
 - Remote teachers request `max_tokens=1, logprobs, top_logprobs=20`. If a provider hides logprobs, the letter is parsed
   from text and `probs=null` (merge treats it as one-hot).
 - `config/pricing.json` prices are placeholders marked `verified: false`; fill them in from the provider pages.
+
+## Conformal tau (after every distillation round)
+After scoring the new student on held-out data (`eval/score_decisions.py --out ...`), recalibrate the escalation threshold with a
+finite-sample guarantee (Learn-Then-Test, exact binomial, Bonferroni over a fixed 0.01..0.99 grid):
+
+    python -m pg_train.conformal --results ../eval/results/<round>.json --alpha 0.05 --delta 0.1 --profile out/calibration.json
+
+If nothing certifies, `defaultTau` is set to 1.01 (escalate everything). With alpha=0.05, delta=0.1 a threshold needs at least
+135 accepted held-out rows even with zero errors, so the 36-item gold set alone can never certify; use a larger held-out split.
