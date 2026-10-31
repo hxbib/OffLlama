@@ -1,0 +1,24 @@
+{
+ "tau": null,
+ "alpha": 0.05,
+ "delta": 0.1,
+ "n": 180,
+ "handled": 0,
+ "errors": 0,
+ "handled_share": 0.0,
+ "empirical_error": null,
+ "error_upper_bound": null,
+ "p_value": null,
+ "min_rows_needed_zero_errors": 135,
+ "model": "Llama-3.2-1B-Instruct-Q4_K_M (untrained)",
+ "source": "../eval/results/llama32-1b-base.calibration_split.json",
+ "tightest": {
+  "tau": 0.64,
+  "handled": 53,
+  "errors": 3,
+  "handled_share": 0.29444444444444445,
+  "error_upper_bound": 0.22400105019084576,
+  "delta": 0.1
+ },
+ "min_rows_needed_for_alpha_zero_errors": 135
+}

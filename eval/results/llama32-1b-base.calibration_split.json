@@ -1,0 +1,1812 @@
+{
+  "model": "Llama-3.2-1B-Instruct-Q4_K_M (untrained)",
+  "tau": 0.8,
+  "n": 180,
+  "accuracy": 0.6722222222222223,
+  "ece": 0.10225247062153926,
+  "coverage": 0.1111111111111111,
+  "accuracy_on_covered": 0.95,
+  "median_latency_ms": 1979.7195196151733,
+  "rows": [
+    {
+      "id": "g01",
+      "type": "route",
+      "gold": "tool",
+      "pred": "tool",
+      "conf": 0.7629204187104118,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 5487.053632736206
+    },
+    {
+      "id": "g02",
+      "type": "route",
+      "gold": "tool",
+      "pred": "tool",
+      "conf": 0.6555226702054271,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1879.6253204345703
+    },
+    {
+      "id": "g03",
+      "type": "route",
+      "gold": "answer_local",
+      "pred": "answer_local",
+      "conf": 0.406461897093645,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2214.1060829162598
+    },
+    {
+      "id": "g04",
+      "type": "route",
+      "gold": "escalate_cloud",
+      "pred": "escalate_cloud",
+      "conf": 0.831845611516354,
+      "ok": true,
+      "covered": true,
+      "latency_ms": 2163.8388633728027
+    },
+    {
+      "id": "g040",
+      "type": "route",
+      "gold": "escalate_cloud",
+      "pred": "escalate_cloud",
+      "conf": 0.4323043830183702,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 3206.7086696624756
+    },
+    {
+      "id": "g042",
+      "type": "route",
+      "gold": "tool",
+      "pred": "tool",
+      "conf": 0.6695812425100024,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2419.327735900879
+    },
+    {
+      "id": "g046",
+      "type": "toolChoice",
+      "gold": "create_reminder",
+      "pred": "create_reminder",
+      "conf": 0.619564775663001,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 5115.001201629639
+    },
+    {
+      "id": "g048",
+      "type": "toolChoice",
+      "gold": "send_message",
+      "pred": "send_message",
+      "conf": 0.8940196334421313,
+      "ok": true,
+      "covered": true,
+      "latency_ms": 2416.881561279297
+    },
+    {
+      "id": "g049",
+      "type": "toolChoice",
+      "gold": "find_event",
+      "pred": "find_event",
+      "conf": 0.7451874054639863,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2123.8934993743896
+    },
+    {
+      "id": "g05",
+      "type": "route",
+      "gold": "clarify",
+      "pred": "tool",
+      "conf": 0.4251257321168523,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 2095.9043502807617
+    },
+    {
+      "id": "g052",
+      "type": "rememberOrNot",
+      "gold": "remember_fact",
+      "pred": "remember_fact",
+      "conf": 0.5848877138437506,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2631.6211223602295
+    },
+    {
+      "id": "g054",
+      "type": "rememberOrNot",
+      "gold": "remember_temporary",
+      "pred": "remember_temporary",
+      "conf": 0.5236067331429041,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2119.6188926696777
+    },
+    {
+      "id": "g057",
+      "type": "rememberOrNot",
+      "gold": "remember_temporary",
+      "pred": "remember_temporary",
+      "conf": 0.556813600181794,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2538.550615310669
+    },
+    {
+      "id": "g058",
+      "type": "memoryConflict",
+      "gold": "update",
+      "pred": "keep_both",
+      "conf": 0.43695651762398036,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 2525.9997844696045
+    },
+    {
+      "id": "g059",
+      "type": "memoryConflict",
+      "gold": "update",
+      "pred": "keep_both",
+      "conf": 0.4525222792726046,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 2079.484462738037
+    },
+    {
+      "id": "g06",
+      "type": "route",
+      "gold": "answer_local",
+      "pred": "answer_local",
+      "conf": 0.7537482979632555,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1874.1910457611084
+    },
+    {
+      "id": "g060",
+      "type": "memoryConflict",
+      "gold": "keep_both",
+      "pred": "keep_both",
+      "conf": 0.6501131997882781,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2025.6965160369873
+    },
+    {
+      "id": "g063",
+      "type": "memoryConflict",
+      "gold": "ignore_new",
+      "pred": "ignore_new",
+      "conf": 0.3985759929694885,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2120.167016983032
+    },
+    {
+      "id": "g064",
+      "type": "notificationTriage",
+      "gold": "interrupt",
+      "pred": "digest",
+      "conf": 0.575976838419308,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 2104.051113128662
+    },
+    {
+      "id": "g066",
+      "type": "notificationTriage",
+      "gold": "ignore",
+      "pred": "digest",
+      "conf": 0.6388493619994876,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 1876.2578964233398
+    },
+    {
+      "id": "g067",
+      "type": "notificationTriage",
+      "gold": "ignore",
+      "pred": "interrupt",
+      "conf": 0.40628775066568673,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 1939.4588470458984
+    },
+    {
+      "id": "g07",
+      "type": "route",
+      "gold": "escalate_cloud",
+      "pred": "answer_local",
+      "conf": 0.3140498681442974,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 2192.1987533569336
+    },
+    {
+      "id": "g070",
+      "type": "confirmBeforeAct",
+      "gold": "confirm",
+      "pred": "act",
+      "conf": 0.6287591827190653,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 2804.1491508483887
+    },
+    {
+      "id": "g072",
+      "type": "confirmBeforeAct",
+      "gold": "confirm",
+      "pred": "confirm",
+      "conf": 0.6610007331924207,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2019.6290016174316
+    },
+    {
+      "id": "g074",
+      "type": "confirmBeforeAct",
+      "gold": "confirm",
+      "pred": "act",
+      "conf": 0.5683582747250309,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 2967.4429893493652
+    },
+    {
+      "id": "g076",
+      "type": "nudgeNow",
+      "gold": "nudge",
+      "pred": "nudge",
+      "conf": 0.6242299482070317,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2705.0328254699707
+    },
+    {
+      "id": "g077",
+      "type": "nudgeNow",
+      "gold": "skip",
+      "pred": "nudge",
+      "conf": 0.5110623218269074,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 1937.2150897979736
+    },
+    {
+      "id": "g078",
+      "type": "nudgeNow",
+      "gold": "later",
+      "pred": "skip",
+      "conf": 0.35303400526945816,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 2069.945812225342
+    },
+    {
+      "id": "g079",
+      "type": "nudgeNow",
+      "gold": "skip",
+      "pred": "skip",
+      "conf": 0.4381861384104561,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2006.042242050171
+    },
+    {
+      "id": "g08",
+      "type": "toolChoice",
+      "gold": "create_reminder",
+      "pred": "create_reminder",
+      "conf": 0.4723996221400504,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2951.6241550445557
+    },
+    {
+      "id": "g082",
+      "type": "timing",
+      "gold": "at_time",
+      "pred": "at_time",
+      "conf": 0.9196966640925583,
+      "ok": true,
+      "covered": true,
+      "latency_ms": 2849.1055965423584
+    },
+    {
+      "id": "g084",
+      "type": "timing",
+      "gold": "recurring",
+      "pred": "at_time",
+      "conf": 0.6192690669828842,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 2180.4349422454834
+    },
+    {
+      "id": "g085",
+      "type": "timing",
+      "gold": "recurring",
+      "pred": "at_time",
+      "conf": 0.8543478347981693,
+      "ok": false,
+      "covered": true,
+      "latency_ms": 2432.2328567504883
+    },
+    {
+      "id": "g086",
+      "type": "timing",
+      "gold": "at_time",
+      "pred": "now",
+      "conf": 0.6049344172194838,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 2111.5567684173584
+    },
+    {
+      "id": "g087",
+      "type": "sensitivity",
+      "gold": "ok",
+      "pred": "ok",
+      "conf": 0.7126063216120078,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2258.488416671753
+    },
+    {
+      "id": "g089",
+      "type": "sensitivity",
+      "gold": "sensitive",
+      "pred": "ok",
+      "conf": 0.5304072140254956,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 2110.978364944458
+    },
+    {
+      "id": "g090",
+      "type": "sensitivity",
+      "gold": "ok",
+      "pred": "ok",
+      "conf": 0.6202649764779563,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1946.4194774627686
+    },
+    {
+      "id": "g091",
+      "type": "sensitivity",
+      "gold": "sensitive",
+      "pred": "sensitive",
+      "conf": 0.5893688314550286,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1826.4105319976807
+    },
+    {
+      "id": "g093",
+      "type": "answerability",
+      "gold": "yes",
+      "pred": "yes",
+      "conf": 0.5580207754635749,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2045.426368713379
+    },
+    {
+      "id": "g094",
+      "type": "answerability",
+      "gold": "no",
+      "pred": "no",
+      "conf": 0.5601870901698308,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1863.2614612579346
+    },
+    {
+      "id": "g095",
+      "type": "answerability",
+      "gold": "no",
+      "pred": "yes",
+      "conf": 0.540396691755859,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 2002.9537677764893
+    },
+    {
+      "id": "g10",
+      "type": "toolChoice",
+      "gold": "send_message",
+      "pred": "send_message",
+      "conf": 0.9771280439507004,
+      "ok": true,
+      "covered": true,
+      "latency_ms": 1944.0360069274902
+    },
+    {
+      "id": "g100",
+      "type": "eventPick",
+      "gold": "e1",
+      "pred": "e1",
+      "conf": 0.5676450907353356,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1841.6790962219238
+    },
+    {
+      "id": "g101",
+      "type": "eventPick",
+      "gold": "ask",
+      "pred": "ask",
+      "conf": 0.911275425646963,
+      "ok": true,
+      "covered": true,
+      "latency_ms": 2056.0033321380615
+    },
+    {
+      "id": "g103",
+      "type": "route",
+      "gold": "answer_local",
+      "pred": "answer_local",
+      "conf": 0.7819744508488975,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2404.113531112671
+    },
+    {
+      "id": "g107",
+      "type": "route",
+      "gold": "tool",
+      "pred": "tool",
+      "conf": 0.8765276802015587,
+      "ok": true,
+      "covered": true,
+      "latency_ms": 1891.8404579162598
+    },
+    {
+      "id": "g108",
+      "type": "route",
+      "gold": "escalate_cloud",
+      "pred": "tool",
+      "conf": 0.5583377261597032,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 1865.9417629241943
+    },
+    {
+      "id": "g109",
+      "type": "route",
+      "gold": "escalate_cloud",
+      "pred": "escalate_cloud",
+      "conf": 0.7219717435480951,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1973.2155799865723
+    },
+    {
+      "id": "g11",
+      "type": "toolChoice",
+      "gold": "create_event",
+      "pred": "create_event",
+      "conf": 0.6046677230858889,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1982.969045639038
+    },
+    {
+      "id": "g110",
+      "type": "route",
+      "gold": "clarify",
+      "pred": "tool",
+      "conf": 0.39499915040324685,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 2297.0664501190186
+    },
+    {
+      "id": "g111",
+      "type": "route",
+      "gold": "clarify",
+      "pred": "tool",
+      "conf": 0.6381526278471203,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 2648.563861846924
+    },
+    {
+      "id": "g112",
+      "type": "toolChoice",
+      "gold": "create_reminder",
+      "pred": "create_reminder",
+      "conf": 0.4364769837873645,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2125.7288455963135
+    },
+    {
+      "id": "g113",
+      "type": "toolChoice",
+      "gold": "create_reminder",
+      "pred": "create_reminder",
+      "conf": 0.4186327071587522,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2287.6126766204834
+    },
+    {
+      "id": "g114",
+      "type": "toolChoice",
+      "gold": "create_event",
+      "pred": "create_event",
+      "conf": 0.9556437965440009,
+      "ok": true,
+      "covered": true,
+      "latency_ms": 2609.7195148468018
+    },
+    {
+      "id": "g115",
+      "type": "toolChoice",
+      "gold": "create_event",
+      "pred": "create_event",
+      "conf": 0.91715558241444,
+      "ok": true,
+      "covered": true,
+      "latency_ms": 1920.3202724456787
+    },
+    {
+      "id": "g119",
+      "type": "toolChoice",
+      "gold": "send_message",
+      "pred": "send_message",
+      "conf": 0.9406848827730764,
+      "ok": true,
+      "covered": true,
+      "latency_ms": 1891.8633460998535
+    },
+    {
+      "id": "g12",
+      "type": "toolChoice",
+      "gold": "lookup_contact",
+      "pred": "lookup_contact",
+      "conf": 0.9652803980893807,
+      "ok": true,
+      "covered": true,
+      "latency_ms": 2182.204484939575
+    },
+    {
+      "id": "g122",
+      "type": "toolChoice",
+      "gold": "search_memory",
+      "pred": "send_message",
+      "conf": 0.369452959340129,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 2019.4144248962402
+    },
+    {
+      "id": "g123",
+      "type": "toolChoice",
+      "gold": "none",
+      "pred": "send_message",
+      "conf": 0.4750069094365642,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 2130.12433052063
+    },
+    {
+      "id": "g125",
+      "type": "rememberOrNot",
+      "gold": "remember_fact",
+      "pred": "remember_fact",
+      "conf": 0.5116906044220786,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2103.924512863159
+    },
+    {
+      "id": "g126",
+      "type": "rememberOrNot",
+      "gold": "remember_fact",
+      "pred": "remember_fact",
+      "conf": 0.45849387188196133,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1847.6474285125732
+    },
+    {
+      "id": "g127",
+      "type": "rememberOrNot",
+      "gold": "remember_fact",
+      "pred": "remember_fact",
+      "conf": 0.4652114530232903,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2010.1509094238281
+    },
+    {
+      "id": "g128",
+      "type": "rememberOrNot",
+      "gold": "remember_fact",
+      "pred": "remember_fact",
+      "conf": 0.4430138503127384,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1934.0322017669678
+    },
+    {
+      "id": "g129",
+      "type": "rememberOrNot",
+      "gold": "remember_fact",
+      "pred": "remember_fact",
+      "conf": 0.5479570108287647,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2051.33318901062
+    },
+    {
+      "id": "g13",
+      "type": "toolChoice",
+      "gold": "search_memory",
+      "pred": "lookup_contact",
+      "conf": 0.4771758049632353,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 2118.7543869018555
+    },
+    {
+      "id": "g130",
+      "type": "rememberOrNot",
+      "gold": "remember_fact",
+      "pred": "remember_fact",
+      "conf": 0.7864391895938013,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1961.4002704620361
+    },
+    {
+      "id": "g131",
+      "type": "rememberOrNot",
+      "gold": "remember_temporary",
+      "pred": "remember_temporary",
+      "conf": 0.6333364169212788,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1839.6379947662354
+    },
+    {
+      "id": "g133",
+      "type": "rememberOrNot",
+      "gold": "remember_temporary",
+      "pred": "remember_temporary",
+      "conf": 0.4912979562980381,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1847.9712009429932
+    },
+    {
+      "id": "g136",
+      "type": "rememberOrNot",
+      "gold": "no",
+      "pred": "remember_fact",
+      "conf": 0.39603386587939593,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 1862.612009048462
+    },
+    {
+      "id": "g137",
+      "type": "rememberOrNot",
+      "gold": "no",
+      "pred": "remember_temporary",
+      "conf": 0.4027184872132291,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 1861.9177341461182
+    },
+    {
+      "id": "g139",
+      "type": "rememberOrNot",
+      "gold": "no",
+      "pred": "remember_fact",
+      "conf": 0.6354119162682106,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 1911.7095470428467
+    },
+    {
+      "id": "g14",
+      "type": "rememberOrNot",
+      "gold": "remember_fact",
+      "pred": "remember_fact",
+      "conf": 0.7632411727034206,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1858.020544052124
+    },
+    {
+      "id": "g143",
+      "type": "memoryConflict",
+      "gold": "update",
+      "pred": "update",
+      "conf": 0.3895894923798392,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2333.6119651794434
+    },
+    {
+      "id": "g144",
+      "type": "memoryConflict",
+      "gold": "update",
+      "pred": "keep_both",
+      "conf": 0.40533343115108256,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 1966.2353992462158
+    },
+    {
+      "id": "g145",
+      "type": "memoryConflict",
+      "gold": "update",
+      "pred": "keep_both",
+      "conf": 0.39345015715134635,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 1869.8124885559082
+    },
+    {
+      "id": "g146",
+      "type": "memoryConflict",
+      "gold": "keep_both",
+      "pred": "keep_both",
+      "conf": 0.6903391056271224,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1982.0356369018555
+    },
+    {
+      "id": "g148",
+      "type": "memoryConflict",
+      "gold": "keep_both",
+      "pred": "keep_both",
+      "conf": 0.7719290785516687,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1891.8702602386475
+    },
+    {
+      "id": "g149",
+      "type": "memoryConflict",
+      "gold": "keep_both",
+      "pred": "keep_both",
+      "conf": 0.5947179969224693,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1808.1066608428955
+    },
+    {
+      "id": "g150",
+      "type": "memoryConflict",
+      "gold": "keep_both",
+      "pred": "keep_both",
+      "conf": 0.6157080242047774,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2009.861946105957
+    },
+    {
+      "id": "g152",
+      "type": "memoryConflict",
+      "gold": "ignore_new",
+      "pred": "keep_both",
+      "conf": 0.40938669853673704,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 1835.8159065246582
+    },
+    {
+      "id": "g157",
+      "type": "notificationTriage",
+      "gold": "interrupt",
+      "pred": "digest",
+      "conf": 0.47689971664060216,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 1836.1303806304932
+    },
+    {
+      "id": "g158",
+      "type": "notificationTriage",
+      "gold": "interrupt",
+      "pred": "interrupt",
+      "conf": 0.6167807399121349,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2271.754264831543
+    },
+    {
+      "id": "g159",
+      "type": "notificationTriage",
+      "gold": "interrupt",
+      "pred": "digest",
+      "conf": 0.7023145937615873,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 1839.7154808044434
+    },
+    {
+      "id": "g161",
+      "type": "notificationTriage",
+      "gold": "interrupt",
+      "pred": "interrupt",
+      "conf": 0.5511123711708102,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1798.1581687927246
+    },
+    {
+      "id": "g162",
+      "type": "notificationTriage",
+      "gold": "ignore",
+      "pred": "ignore",
+      "conf": 0.5187521631318259,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2007.9138278961182
+    },
+    {
+      "id": "g163",
+      "type": "notificationTriage",
+      "gold": "ignore",
+      "pred": "digest",
+      "conf": 0.5350784090148141,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 1873.784065246582
+    },
+    {
+      "id": "g167",
+      "type": "notificationTriage",
+      "gold": "digest",
+      "pred": "digest",
+      "conf": 0.6581866510896758,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2178.396224975586
+    },
+    {
+      "id": "g168",
+      "type": "notificationTriage",
+      "gold": "digest",
+      "pred": "digest",
+      "conf": 0.6155730988220438,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1801.4121055603027
+    },
+    {
+      "id": "g169",
+      "type": "notificationTriage",
+      "gold": "digest",
+      "pred": "digest",
+      "conf": 0.5940906354573238,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2118.3273792266846
+    },
+    {
+      "id": "g17",
+      "type": "memoryConflict",
+      "gold": "update",
+      "pred": "keep_both",
+      "conf": 0.4464174773075861,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 1828.4492492675781
+    },
+    {
+      "id": "g170",
+      "type": "notificationTriage",
+      "gold": "digest",
+      "pred": "digest",
+      "conf": 0.7649547887756176,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1927.3664951324463
+    },
+    {
+      "id": "g172",
+      "type": "timing",
+      "gold": "now",
+      "pred": "now",
+      "conf": 0.9449306007679582,
+      "ok": true,
+      "covered": true,
+      "latency_ms": 1921.5216636657715
+    },
+    {
+      "id": "g175",
+      "type": "timing",
+      "gold": "now",
+      "pred": "now",
+      "conf": 0.47922192357775706,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1898.39768409729
+    },
+    {
+      "id": "g176",
+      "type": "timing",
+      "gold": "at_time",
+      "pred": "at_time",
+      "conf": 0.8309801927414344,
+      "ok": true,
+      "covered": true,
+      "latency_ms": 1817.755937576294
+    },
+    {
+      "id": "g177",
+      "type": "timing",
+      "gold": "at_time",
+      "pred": "now",
+      "conf": 0.4246297547195183,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 2011.9643211364746
+    },
+    {
+      "id": "g178",
+      "type": "timing",
+      "gold": "at_time",
+      "pred": "at_time",
+      "conf": 0.634272896873029,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2059.3724250793457
+    },
+    {
+      "id": "g179",
+      "type": "timing",
+      "gold": "at_time",
+      "pred": "now",
+      "conf": 0.5338184275970915,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 1866.29319190979
+    },
+    {
+      "id": "g18",
+      "type": "memoryConflict",
+      "gold": "keep_both",
+      "pred": "keep_both",
+      "conf": 0.598365284180161,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1937.2360706329346
+    },
+    {
+      "id": "g180",
+      "type": "timing",
+      "gold": "on_arrival",
+      "pred": "on_arrival",
+      "conf": 0.5204453459396637,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2044.5282459259033
+    },
+    {
+      "id": "g187",
+      "type": "timing",
+      "gold": "recurring",
+      "pred": "at_time",
+      "conf": 0.5957114798256365,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 2050.058603286743
+    },
+    {
+      "id": "g188",
+      "type": "nudgeNow",
+      "gold": "nudge",
+      "pred": "nudge",
+      "conf": 0.5747847446730842,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1955.906867980957
+    },
+    {
+      "id": "g19",
+      "type": "memoryConflict",
+      "gold": "ignore_new",
+      "pred": "keep_both",
+      "conf": 0.35883977791914495,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 1902.0273685455322
+    },
+    {
+      "id": "g194",
+      "type": "nudgeNow",
+      "gold": "nudge",
+      "pred": "nudge",
+      "conf": 0.4513340887284702,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1824.0153789520264
+    },
+    {
+      "id": "g195",
+      "type": "nudgeNow",
+      "gold": "skip",
+      "pred": "nudge",
+      "conf": 0.48899807893236463,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 1911.6299152374268
+    },
+    {
+      "id": "g197",
+      "type": "nudgeNow",
+      "gold": "skip",
+      "pred": "skip",
+      "conf": 0.3808525906237393,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1951.9619941711426
+    },
+    {
+      "id": "g198",
+      "type": "nudgeNow",
+      "gold": "skip",
+      "pred": "nudge",
+      "conf": 0.4075921162682697,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 1920.2945232391357
+    },
+    {
+      "id": "g199",
+      "type": "nudgeNow",
+      "gold": "skip",
+      "pred": "skip",
+      "conf": 0.5539165758973833,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2043.5116291046143
+    },
+    {
+      "id": "g20",
+      "type": "notificationTriage",
+      "gold": "interrupt",
+      "pred": "interrupt",
+      "conf": 0.9241182733084544,
+      "ok": true,
+      "covered": true,
+      "latency_ms": 1987.93625831604
+    },
+    {
+      "id": "g200",
+      "type": "nudgeNow",
+      "gold": "skip",
+      "pred": "nudge",
+      "conf": 0.5328985770063402,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 2000.7727146148682
+    },
+    {
+      "id": "g201",
+      "type": "nudgeNow",
+      "gold": "skip",
+      "pred": "nudge",
+      "conf": 0.5576729186664082,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 2035.4149341583252
+    },
+    {
+      "id": "g203",
+      "type": "nudgeNow",
+      "gold": "later",
+      "pred": "nudge",
+      "conf": 0.40231010034343334,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 2132.786750793457
+    },
+    {
+      "id": "g204",
+      "type": "nudgeNow",
+      "gold": "later",
+      "pred": "nudge",
+      "conf": 0.60061710542553,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 2071.568489074707
+    },
+    {
+      "id": "g206",
+      "type": "confirmBeforeAct",
+      "gold": "act",
+      "pred": "act",
+      "conf": 0.5247176847695658,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1895.4071998596191
+    },
+    {
+      "id": "g207",
+      "type": "confirmBeforeAct",
+      "gold": "act",
+      "pred": "act",
+      "conf": 0.6423373950475271,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1864.4447326660156
+    },
+    {
+      "id": "g208",
+      "type": "confirmBeforeAct",
+      "gold": "act",
+      "pred": "act",
+      "conf": 0.6094469728681299,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1969.264030456543
+    },
+    {
+      "id": "g21",
+      "type": "notificationTriage",
+      "gold": "ignore",
+      "pred": "ignore",
+      "conf": 0.6146575077867482,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1943.9644813537598
+    },
+    {
+      "id": "g210",
+      "type": "confirmBeforeAct",
+      "gold": "act",
+      "pred": "act",
+      "conf": 0.5686478965186179,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1901.9830226898193
+    },
+    {
+      "id": "g212",
+      "type": "confirmBeforeAct",
+      "gold": "act",
+      "pred": "act",
+      "conf": 0.6802838139022436,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2115.239143371582
+    },
+    {
+      "id": "g214",
+      "type": "confirmBeforeAct",
+      "gold": "confirm",
+      "pred": "act",
+      "conf": 0.5318871109214715,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 1881.068468093872
+    },
+    {
+      "id": "g215",
+      "type": "confirmBeforeAct",
+      "gold": "confirm",
+      "pred": "confirm",
+      "conf": 0.6525195520335739,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2207.5071334838867
+    },
+    {
+      "id": "g218",
+      "type": "confirmBeforeAct",
+      "gold": "confirm",
+      "pred": "confirm",
+      "conf": 0.6468228172478669,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1846.3685512542725
+    },
+    {
+      "id": "g220",
+      "type": "confirmBeforeAct",
+      "gold": "confirm",
+      "pred": "confirm",
+      "conf": 0.5353537085100051,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1953.4754753112793
+    },
+    {
+      "id": "g221",
+      "type": "confirmBeforeAct",
+      "gold": "confirm",
+      "pred": "confirm",
+      "conf": 0.696101557243152,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1911.6697311401367
+    },
+    {
+      "id": "g222",
+      "type": "confirmBeforeAct",
+      "gold": "confirm",
+      "pred": "confirm",
+      "conf": 0.5460219745102747,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1879.9347877502441
+    },
+    {
+      "id": "g226",
+      "type": "sensitivity",
+      "gold": "ok",
+      "pred": "ok",
+      "conf": 0.6479309477275405,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1990.0758266448975
+    },
+    {
+      "id": "g227",
+      "type": "sensitivity",
+      "gold": "ok",
+      "pred": "ok",
+      "conf": 0.7131062881866714,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2059.9334239959717
+    },
+    {
+      "id": "g228",
+      "type": "sensitivity",
+      "gold": "ok",
+      "pred": "ok",
+      "conf": 0.5662654163421867,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2032.0217609405518
+    },
+    {
+      "id": "g23",
+      "type": "confirmBeforeAct",
+      "gold": "confirm",
+      "pred": "confirm",
+      "conf": 0.6332853529302688,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1845.66068649292
+    },
+    {
+      "id": "g231",
+      "type": "sensitivity",
+      "gold": "sensitive",
+      "pred": "sensitive",
+      "conf": 0.5757508871785089,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1936.0668659210205
+    },
+    {
+      "id": "g232",
+      "type": "sensitivity",
+      "gold": "sensitive",
+      "pred": "ok",
+      "conf": 0.5139157439065131,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 1819.8397159576416
+    },
+    {
+      "id": "g233",
+      "type": "sensitivity",
+      "gold": "sensitive",
+      "pred": "sensitive",
+      "conf": 0.5373713024244254,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1898.1869220733643
+    },
+    {
+      "id": "g235",
+      "type": "sensitivity",
+      "gold": "sensitive",
+      "pred": "ok",
+      "conf": 0.5371611924643532,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 1828.6852836608887
+    },
+    {
+      "id": "g237",
+      "type": "sensitivity",
+      "gold": "sensitive",
+      "pred": "sensitive",
+      "conf": 0.5788691846999187,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1564.9192333221436
+    },
+    {
+      "id": "g238",
+      "type": "sensitivity",
+      "gold": "sensitive",
+      "pred": "sensitive",
+      "conf": 0.5738919838096506,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1770.0328826904297
+    },
+    {
+      "id": "g239",
+      "type": "sensitivity",
+      "gold": "sensitive",
+      "pred": "sensitive",
+      "conf": 0.5355079976843531,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1753.8692951202393
+    },
+    {
+      "id": "g243",
+      "type": "answerability",
+      "gold": "yes",
+      "pred": "yes",
+      "conf": 0.6848707051390367,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1966.2909507751465
+    },
+    {
+      "id": "g245",
+      "type": "answerability",
+      "gold": "yes",
+      "pred": "yes",
+      "conf": 0.5426999639428238,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1797.781229019165
+    },
+    {
+      "id": "g246",
+      "type": "answerability",
+      "gold": "yes",
+      "pred": "yes",
+      "conf": 0.6440532966710971,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2239.701271057129
+    },
+    {
+      "id": "g248",
+      "type": "answerability",
+      "gold": "yes",
+      "pred": "yes",
+      "conf": 0.5933547888148171,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1835.9129428863525
+    },
+    {
+      "id": "g249",
+      "type": "answerability",
+      "gold": "yes",
+      "pred": "yes",
+      "conf": 0.5989194121269088,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1939.9418830871582
+    },
+    {
+      "id": "g25",
+      "type": "nudgeNow",
+      "gold": "nudge",
+      "pred": "nudge",
+      "conf": 0.6839654263765172,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1929.992914199829
+    },
+    {
+      "id": "g253",
+      "type": "answerability",
+      "gold": "no",
+      "pred": "no",
+      "conf": 0.5217102475366608,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1822.2038745880127
+    },
+    {
+      "id": "g254",
+      "type": "answerability",
+      "gold": "no",
+      "pred": "yes",
+      "conf": 0.5145318250998202,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 1990.5495643615723
+    },
+    {
+      "id": "g255",
+      "type": "answerability",
+      "gold": "no",
+      "pred": "no",
+      "conf": 0.548429430984086,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1771.2934017181396
+    },
+    {
+      "id": "g256",
+      "type": "answerability",
+      "gold": "no",
+      "pred": "yes",
+      "conf": 0.5707667473729694,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 2033.6215496063232
+    },
+    {
+      "id": "g257",
+      "type": "answerability",
+      "gold": "no",
+      "pred": "no",
+      "conf": 0.5742760204724735,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2011.899709701538
+    },
+    {
+      "id": "g259",
+      "type": "answerability",
+      "gold": "no",
+      "pred": "no",
+      "conf": 0.5030088061495198,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1915.9865379333496
+    },
+    {
+      "id": "g260",
+      "type": "contactPick",
+      "gold": "c0",
+      "pred": "c0",
+      "conf": 0.7984634924398486,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2282.200574874878
+    },
+    {
+      "id": "g263",
+      "type": "contactPick",
+      "gold": "c2",
+      "pred": "c2",
+      "conf": 0.9612236951822987,
+      "ok": true,
+      "covered": true,
+      "latency_ms": 1977.6759147644043
+    },
+    {
+      "id": "g265",
+      "type": "contactPick",
+      "gold": "ask",
+      "pred": "c0",
+      "conf": 0.5814702187921876,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 1940.1919841766357
+    },
+    {
+      "id": "g266",
+      "type": "contactPick",
+      "gold": "c0",
+      "pred": "c0",
+      "conf": 0.5981671491991227,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2198.8654136657715
+    },
+    {
+      "id": "g268",
+      "type": "contactPick",
+      "gold": "ask",
+      "pred": "c1",
+      "conf": 0.42731436452641514,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 2132.929563522339
+    },
+    {
+      "id": "g269",
+      "type": "contactPick",
+      "gold": "c0",
+      "pred": "c0",
+      "conf": 0.7434815079000446,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1883.8679790496826
+    },
+    {
+      "id": "g27",
+      "type": "timing",
+      "gold": "recurring",
+      "pred": "at_time",
+      "conf": 0.7688346354518282,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 2067.7332878112793
+    },
+    {
+      "id": "g270",
+      "type": "contactPick",
+      "gold": "c1",
+      "pred": "c1",
+      "conf": 0.9633245575911048,
+      "ok": true,
+      "covered": true,
+      "latency_ms": 1930.220365524292
+    },
+    {
+      "id": "g271",
+      "type": "contactPick",
+      "gold": "c1",
+      "pred": "c1",
+      "conf": 0.4604749390158605,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1924.4747161865234
+    },
+    {
+      "id": "g272",
+      "type": "contactPick",
+      "gold": "c2",
+      "pred": "c2",
+      "conf": 0.9724305571724826,
+      "ok": true,
+      "covered": true,
+      "latency_ms": 2101.369619369507
+    },
+    {
+      "id": "g275",
+      "type": "contactPick",
+      "gold": "ask",
+      "pred": "c2",
+      "conf": 0.5178638133075687,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 1953.8800716400146
+    },
+    {
+      "id": "g277",
+      "type": "contactPick",
+      "gold": "c1",
+      "pred": "c1",
+      "conf": 0.9230152947608903,
+      "ok": true,
+      "covered": true,
+      "latency_ms": 2069.948196411133
+    },
+    {
+      "id": "g278",
+      "type": "contactPick",
+      "gold": "ask",
+      "pred": "c0",
+      "conf": 0.47028789406910376,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 1843.9671993255615
+    },
+    {
+      "id": "g279",
+      "type": "contactPick",
+      "gold": "c1",
+      "pred": "c1",
+      "conf": 0.9731485248941272,
+      "ok": true,
+      "covered": true,
+      "latency_ms": 1981.7631244659424
+    },
+    {
+      "id": "g28",
+      "type": "timing",
+      "gold": "on_arrival",
+      "pred": "at_time",
+      "conf": 0.3863221781030611,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 1938.0872249603271
+    },
+    {
+      "id": "g281",
+      "type": "eventPick",
+      "gold": "e1",
+      "pred": "e1",
+      "conf": 0.6303266390223853,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1851.9642353057861
+    },
+    {
+      "id": "g283",
+      "type": "eventPick",
+      "gold": "e1",
+      "pred": "e1",
+      "conf": 0.5613226766778203,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1933.661699295044
+    },
+    {
+      "id": "g284",
+      "type": "eventPick",
+      "gold": "e0",
+      "pred": "e1",
+      "conf": 0.3234180294262544,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 2028.2065868377686
+    },
+    {
+      "id": "g285",
+      "type": "eventPick",
+      "gold": "ask",
+      "pred": "e2",
+      "conf": 0.4975625040033623,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 1837.5587463378906
+    },
+    {
+      "id": "g286",
+      "type": "eventPick",
+      "gold": "e1",
+      "pred": "e1",
+      "conf": 0.5860286622904418,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1858.550786972046
+    },
+    {
+      "id": "g287",
+      "type": "eventPick",
+      "gold": "e0",
+      "pred": "e1",
+      "conf": 0.3502159284147911,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 2061.8155002593994
+    },
+    {
+      "id": "g288",
+      "type": "eventPick",
+      "gold": "e2",
+      "pred": "e2",
+      "conf": 0.5581050938569266,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1879.856824874878
+    },
+    {
+      "id": "g289",
+      "type": "eventPick",
+      "gold": "ask",
+      "pred": "e1",
+      "conf": 0.3954379574465652,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 1909.7628593444824
+    },
+    {
+      "id": "g29",
+      "type": "timing",
+      "gold": "at_time",
+      "pred": "at_time",
+      "conf": 0.7549636054433525,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2374.136209487915
+    },
+    {
+      "id": "g291",
+      "type": "eventPick",
+      "gold": "e0",
+      "pred": "e0",
+      "conf": 0.42235041287021885,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2271.4855670928955
+    },
+    {
+      "id": "g295",
+      "type": "eventPick",
+      "gold": "e1",
+      "pred": "e1",
+      "conf": 0.45843958865893614,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2120.2027797698975
+    },
+    {
+      "id": "g297",
+      "type": "eventPick",
+      "gold": "e0",
+      "pred": "ask",
+      "conf": 0.34466341282196344,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 1847.5825786590576
+    },
+    {
+      "id": "g300",
+      "type": "eventPick",
+      "gold": "ask",
+      "pred": "ask",
+      "conf": 0.48643226754436786,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2402.442216873169
+    },
+    {
+      "id": "g31",
+      "type": "sensitivity",
+      "gold": "ok",
+      "pred": "ok",
+      "conf": 0.6716894155377584,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2341.4440155029297
+    },
+    {
+      "id": "g32",
+      "type": "answerability",
+      "gold": "yes",
+      "pred": "yes",
+      "conf": 0.6959752505590111,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 2290.2791500091553
+    },
+    {
+      "id": "g34",
+      "type": "contactPick",
+      "gold": "c1",
+      "pred": "c1",
+      "conf": 0.9668463545927197,
+      "ok": true,
+      "covered": true,
+      "latency_ms": 2210.7458114624023
+    },
+    {
+      "id": "g35",
+      "type": "contactPick",
+      "gold": "ask",
+      "pred": "c0",
+      "conf": 0.5695733971204737,
+      "ok": false,
+      "covered": false,
+      "latency_ms": 1870.7568645477295
+    },
+    {
+      "id": "g36",
+      "type": "eventPick",
+      "gold": "e0",
+      "pred": "e0",
+      "conf": 0.365160052188808,
+      "ok": true,
+      "covered": false,
+      "latency_ms": 1332.4885368347168
+    }
+  ]
+}
