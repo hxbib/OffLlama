@@ -14,6 +14,18 @@ struct MemoryView: View {
                     ContentUnavailableView("Nothing remembered yet", systemImage: "brain",
                                            description: Text("Tell me things like “I'm allergic to peanuts”. Memories never leave this phone."))
                 }
+                if !model.corrections.isEmpty {
+                    Section("Recently corrected") {
+                        ForEach(model.corrections, id: \.new.id) { c in
+                            VStack(alignment: .leading, spacing: 4) {
+                                Label("Corrected by you", systemImage: "checkmark.circle.fill").font(.caption.weight(.semibold)).foregroundStyle(Theme.accent)
+                                Text(c.old.text).strikethrough().foregroundStyle(.secondary)
+                                Text(c.new.text)
+                                Text(c.new.updatedAt.formatted(.relative(presentation: .named))).font(.caption2).foregroundStyle(.tertiary)
+                            }
+                        }
+                    }
+                }
                 ForEach(grouped, id: \.0) { subject, facts in
                     Section(subject) {
                         ForEach(facts) { f in

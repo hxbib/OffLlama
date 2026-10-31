@@ -133,7 +133,10 @@ final class TelemetryTests: XCTestCase {
         XCTAssertEqual(s.map(\.day), ["2026-11-01", "2026-11-02"])
         XCTAssertEqual(s[0].share, 0.5); XCTAssertEqual(s[1].share, 2.0 / 3, accuracy: 1e-9)
         XCTAssertEqual(s[0].medianLatencyMs, 15); XCTAssertEqual(s[1].medianLatencyMs, 40)
-        let csv = try tel.csv().split(separator: "\n")
+        var r2 = rec(d2, false, 5); r2.model = "round2"; try tel.log(r2)
+        let byModel = try tel.shareByModel()
+        XCTAssertEqual(byModel.map(\.model), ["m", "round2"]); XCTAssertEqual(byModel[0].handledLocally, 3); XCTAssertEqual(byModel[1].total, 1)
+        let csv = try tel.csv().split(separator: "\n").dropLast()
         XCTAssertEqual(csv.count, 6); XCTAssertTrue(csv[0].hasPrefix("id,timestamp_iso,decision_type"))
     }
 }

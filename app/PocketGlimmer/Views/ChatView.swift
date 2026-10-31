@@ -61,6 +61,8 @@ struct LiveReflexStrip: View {
 struct Bubble: View {
     @Environment(AppModel.self) private var model
     let item: ChatItem
+    @State private var showDecisions = false
+    @State private var showPrivacy = false
     var body: some View {
         switch item.role {
         case .system:
@@ -78,11 +80,63 @@ struct Bubble: View {
                             Button("Cancel", role: .cancel) { model.cancel(item) }.buttonStyle(.bordered)
                         }.controlSize(.small).accessibilityHint("Runs \(p.tool)")
                     }
-                    if let b = item.badge { Text(b).font(.caption2.monospaced()).foregroundStyle(.secondary).padding(.leading, 6) }
+                    HStack(spacing: 8) {
+                        if let b = item.badge {
+                            if item.cloudPromptSent != nil {
+                                Button { showPrivacy = true } label: {
+                                    Label(b, systemImage: "lock.shield").font(.caption2.weight(.medium))
+                                }.buttonStyle(.bordered).controlSize(.mini).tint(Theme.accent)
+                            } else {
+                                Text(b).font(.caption2.monospaced()).foregroundStyle(.secondary)
+                            }
+                        }
+                        if !item.decisions.isEmpty {
+                            Button { withAnimation(.snappy) { showDecisions.toggle() } } label: {
+                                Label("\(item.decisions.count) decisions", systemImage: "bolt.fill").font(.caption2)
+                            }.buttonStyle(.borderless).foregroundStyle(.secondary)
+                        }
+                    }.padding(.leading, 6)
+                    if showDecisions {
+                        VStack(spacing: 2) { ForEach(item.decisions) { DecisionCard(row: $0, startExpanded: $0.toolCallJSON != nil) } }
+                            .padding(10).background(.background.secondary, in: RoundedRectangle(cornerRadius: 14))
+                    }
                 }
                 Spacer(minLength: 48)
             }
+            .sheet(isPresented: $showPrivacy) { PrivacySheet(sent: item.cloudPromptSent ?? "", provider: item.badge ?? "") }
         }
+    }
+}
+
+/// What actually left the phone: names, emails, numbers replaced by placeholders before the cloud call.
+struct PrivacySheet: View {
+    let sent: String, provider: String
+    @Environment(\.dismiss) private var dismiss
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 14) {
+                    Label(provider, systemImage: "arrow.up.forward.circle").font(.headline)
+                    Text("Sent after masking on device:").font(.subheadline).foregroundStyle(.secondary)
+                    Text(highlighted).font(.callout.monospaced()).textSelection(.enabled)
+                        .padding(12).frame(maxWidth: .infinity, alignment: .leading)
+                        .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 12))
+                    Text("Placeholders like [PERSON_1] are restored to real names only on this iPhone.").font(.caption).foregroundStyle(.secondary)
+                }.padding()
+            }
+            .navigationTitle("Privacy").navigationBarTitleDisplayMode(.inline)
+            .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Done") { dismiss() } } }
+        }
+        .presentationDetents([.medium, .large])
+    }
+    var highlighted: AttributedString {
+        var a = AttributedString(sent)
+        var search = a.startIndex
+        while let r = a[search...].range(of: #"\[[A-Z]+_\d+\]"#, options: .regularExpression) {
+            a[r].foregroundColor = Theme.accent; a[r].font = .callout.monospaced().weight(.semibold)
+            search = r.upperBound
+        }
+        return a
     }
 }
 

@@ -30,6 +30,8 @@ final class AssistantTests: XCTestCase {
         XCTAssertEqual(acts.performed.first?.args["title"], "call the dentist")
         XCTAssertEqual(acts.performed.first?.args["when"], "tomorrow at 9am")
         XCTAssertEqual(try tel.all().map(\.decisionType), [.rememberOrNot, .route, .toolChoice, .confirmBeforeAct])
+        XCTAssertEqual(t.action?.tool, "create_reminder")
+        XCTAssertTrue(t.action!.json.contains("\"tool\" : \"create_reminder\""), t.action!.json)
     }
 
     func testMessageDisambiguatesContactAndAlwaysConfirms() async throws {
@@ -69,6 +71,7 @@ final class AssistantTests: XCTestCase {
         let t = try await a.handle("Write a careful plan and email it to dana@example.com")
         XCTAssertEqual(t.reply, .cloud("Email dana@example.com the plan.", provider: "Meta Model API · muse-spark-1.3"))
         XCTAssertFalse(box.sent.contains("dana@example.com")); XCTAssertTrue(box.sent.contains("[EMAIL_1]"))
+        XCTAssertEqual(t.cloudPromptSent?.contains("[EMAIL_1]"), true)
     }
 
     func testRememberingThroughAssistantUsesConflictDecision() async throws {
@@ -83,6 +86,8 @@ final class AssistantTests: XCTestCase {
         XCTAssertEqual(t.reply, .local("Noted!"))
         XCTAssertEqual(try a.memory.profile()["lives_in"], ["Brooklyn"])
         XCTAssertTrue(t.decisions.contains { $0.type == .memoryConflict })
+        XCTAssertEqual(t.corrections.map { "\($0.old.value)->\($0.new.value)" }, ["Boston->Brooklyn"])
+        XCTAssertEqual(try a.memory.corrections().first?.old.value, "Boston")
     }
 }
 

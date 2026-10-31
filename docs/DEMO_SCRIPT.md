@@ -9,7 +9,7 @@ Device tags: **[iPhone]** = screen recording on the iPhone 17 Pro. **[Mac]** = M
 |---|---|---|---|
 | 0:00–0:10 | Cold open, no title. Swipe down, tap Airplane Mode ON (icon visible the whole time). Pill: "Offline · fully on device". Type: *"What did Professor Lee say the CSCI 335 project is due?"* Answer appears from memory, with Reflex strip (`route → answer_local [TBD: conf]%`). | "Airplane mode is on. It still knows." | [iPhone] + [Mac] mirror |
 | 0:10–0:25 | Same screen, light zoom on the Memory tab. Lower third: "Habib · CS student, Hunter College · Bronx". | "I'm Habib. I'm a CS student at Hunter, and I live in the Bronx. My assistant forgets everything unless I send my life to a server. This is Llama-Reflex-1B, a Meta model distilled from Glimmer and Spark Open, on your phone." | [iPhone] |
-| 0:25–0:45 | Task 1, tool call. Still offline. *"Remind me to call Mom at 7."* Decision object card expands: `type: route → tool`, confidence bar `[TBD: conf]%`, then `toolChoice → create_reminder`, grammar-constrained JSON args. Reminders app shows it. | "Every step is a typed decision with a confidence bar. The tool call is forced into valid JSON by a grammar. The reminder is real, in EventKit." | [iPhone] |
+| 0:25–0:45 | Task 1, tool call. Still offline. *"Remind me to call Mom at 7."* Decision object card expands: `type: route → tool`, confidence bar `[TBD: conf]%`, then `toolChoice → create_reminder`, structured JSON tool call. Reminders app shows it. | "Every step is a typed decision with a confidence bar. The tool is a typed choice; the call is plain JSON you can inspect. The reminder is real, in EventKit." | [iPhone] |
 | 0:45–1:05 | Task 2, memory write + correction. *"I switched my Thursday shift to Fridays."* Card: `memoryConflict → update [TBD: conf]%`. Memory tab: old row struck through, new row shown, swipe to see "corrected by you". | "It noticed this conflicts with what it knew and updated the memory. Stored in SQLite, on this phone. My corrections are training data too." | [iPhone] |
 | 1:05–1:20 | Task 3, contact pick + confirm. *"Text Sam I'm running late."* Two Sams. Card: `contactPick → Sam Ortiz [TBD: conf]%`, then a Confirm button (messages always confirm). | "Two Sams. It picks one and shows how sure it is. Sending a message always asks first." | [iPhone] (seeded contacts) |
 | 1:20–1:45 | Task 4, low-confidence handoff. Airplane Mode OFF on camera. *"Should I pay down my 6% loan or invest, given my budget?"* Confidence bar goes orange below τ: `route → escalate [TBD: conf]%`. Badge: "Meta Model API · Muse Spark 1.3 (Standard mode)". Tap info: names/numbers shown masked as `[PERSON_1]`. | "This one is hard, and the small model knows it. Below the threshold it hands off to Muse Spark 1.3. Standard mode, so my data isn't used for training, and personal details are masked before they leave." | [iPhone] (online, API approved) |
@@ -33,12 +33,12 @@ Device tags: **[iPhone]** = screen recording on the iPhone 17 Pro. **[Mac]** = M
 
 ## TODO: UI elements this script assumes (app work should match)
 Not verified in the app yet. Build or adjust these before recording, or change the script.
-- [ ] **Decision-object card**: expandable card per Reflex decision showing `type → choice`, confidence %, latency ms (0:25–1:45).
-- [ ] **Confidence bar**: horizontal bar per decision; **turns orange below τ** (low-confidence / escalate state) (1:20–1:45).
-- [ ] **Tool-call view**: the grammar-constrained JSON args shown inside the card (0:25–0:45).
-- [ ] **"Corrected by you" label** in the Memory tab, with the old row struck through and the new row shown (0:45–1:05).
-- [ ] **Confirm button** on message sends (1:05–1:20).
-- [ ] **Escalation badge**: "Meta Model API · Muse Spark 1.3 (Standard mode)", with an info view showing masked `[PERSON_1]` tokens (1:20–1:45).
-- [ ] **Offline pill**: "Offline · fully on device" / "Online" status (0:00, 2:45).
-- [ ] **Telemetry chart**: on-device share per distillation round, from logged rows only (2:08–2:20).
-- [ ] Lower-third name caption is added in editing, not in the app (0:10–0:25).
+- [x] **Decision-object card**: expandable card per Reflex decision showing `type → choice`, confidence %, latency ms (0:25–1:45).
+- [x] **Confidence bar**: horizontal bar per decision; **turns orange below τ** (low-confidence / escalate state) (1:20–1:45).
+- [x] **Tool-call view**: the tool-call JSON shown inside the card (0:25–0:45). *Honest caveat: the tool is picked by a Reflex decision, but the args are filled in by on-device heuristics/Memory, not grammar-constrained decoding. Say "structured tool call" in the voiceover, not "grammar-constrained".*
+- [x] **"Corrected by you" label** in the Memory tab, with the old row struck through and the new row shown (0:45–1:05).
+- [x] **Confirm button** on message sends (1:05–1:20).
+- [x] **Escalation badge**: "Meta Model API · Muse Spark 1.3 (Standard mode)", with an info view showing masked `[PERSON_1]` tokens (1:20–1:45).
+- [x] **Offline pill**: "Offline · fully on device" / "Online" status (0:00, 2:45).
+- [x] **Telemetry chart**: on-device share per distillation round, from logged rows only (2:08–2:20).
+- [x] (n/a in app) Lower-third name caption is added in editing, not in the app (0:10–0:25).

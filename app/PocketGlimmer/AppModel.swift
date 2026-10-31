@@ -9,13 +9,37 @@ struct ChatItem: Identifiable, Equatable {
     let id = UUID()
     let role: Role
     var text: String
-    var badge: String? = nil        // "on device · 42 ms" / "Muse Spark 1.3"
+    var badge: String? = nil        // "on device · 42 ms" / "Meta Model API · Muse Spark 1.3 (Standard mode)"
     var pending: PlannedAction? = nil
+    var decisions: [DecisionRow] = []
+    var cloudPromptSent: String? = nil   // masked text that actually left the phone
 }
 
 struct DecisionRow: Identifiable, Equatable {
     let id = UUID()
     let type: String, choice: String, confidence: Double, ms: Double, escalated: Bool, at: Date
+    var tau: Double = 0.8
+    var probabilities: [(id: String, p: Double)] = []
+    var toolCallJSON: String? = nil
+    static func == (a: DecisionRow, b: DecisionRow) -> Bool { a.id == b.id }
+
+    init(_ d: ReflexDecision, toolCallJSON: String? = nil) {
+        type = d.type.rawValue; choice = d.argmax.id; confidence = d.confidence; ms = d.latencyMs; escalated = d.escalated; at = Date()
+        tau = d.tau
+        probabilities = d.probabilities.sorted { $0.value > $1.value }.map { ($0.key, $0.value) }
+        self.toolCallJSON = toolCallJSON
+    }
+}
+
+/// "Meta Model API · muse-spark-1.3" -> "Meta Model API · Muse Spark 1.3 (Standard mode)"
+func prettyProvider(_ raw: String) -> String {
+    let parts = raw.components(separatedBy: " · ")
+    guard parts.count == 2 else { return raw }
+    let m = parts[1]
+    let names = ["muse-spark-1.3": "Muse Spark 1.3 (Standard mode)", "muse-spark-1.3-contributor": "Muse Spark 1.3 (Contributor mode)",
+                 "muse-wonder-1.0": "Muse Wonder", "accounts/fireworks/models/muse-spark-open": "Muse Spark Open",
+                 "accounts/fireworks/models/muse-glimmer-30b": "Muse Glimmer 30B", "muse-glimmer": "Muse Glimmer 30B"]
+    return "\(parts[0]) · \(names[m] ?? m)"
 }
 
 /// Single source of truth for the UI. All model work happens off the main actor inside PocketCore + the engine actor.
@@ -26,6 +50,8 @@ final class AppModel {
     var chat: [ChatItem] = []
     var decisions: [DecisionRow] = []
     var facts: [MemoryFact] = []
+    var corrections: [(old: MemoryFact, new: MemoryFact)] = []
+    var rounds: [(model: String, total: Int, handledLocally: Int)] = []
     var daily: [DailyReflexShare] = []
     var isOnline = false
     var modelState: String = "Loading model…"
@@ -87,7 +113,9 @@ final class AppModel {
 
     func refresh() {
         facts = (try? memory?.active()) ?? []
+        corrections = (try? memory?.corrections()) ?? []
         daily = (try? telemetry?.dailyShare()) ?? []
+        rounds = (try? telemetry?.shareByModel()) ?? []
     }
 
     func send(_ text: String) async {
@@ -96,19 +124,19 @@ final class AppModel {
         busy = true; defer { busy = false; refresh() }
         do {
             let turn = try await assistant.handle(text)
-            for d in turn.decisions {
-                decisions.insert(.init(type: d.type.rawValue, choice: d.argmax.id, confidence: d.confidence, ms: d.latencyMs, escalated: d.escalated, at: Date()), at: 0)
-            }
+            let rows = turn.decisions.map { DecisionRow($0, toolCallJSON: $0.type == .toolChoice ? turn.action?.json : nil) }
+            for r in rows { decisions.insert(r, at: 0) }
             let reflexMs = turn.decisions.map(\.latencyMs).reduce(0, +)
             let onDevice = String(format: "on device · %.0f ms", reflexMs)
             switch turn.reply {
-            case .local(let t): chat.append(.init(role: .assistant, text: t, badge: onDevice))
-            case .acted(let t): chat.append(.init(role: .assistant, text: t, badge: onDevice))
-            case .clarify(let t): chat.append(.init(role: .assistant, text: t, badge: onDevice))
-            case .cloud(let t, let p): chat.append(.init(role: .assistant, text: t, badge: p))
-            case .offlineFallback(let t): chat.append(.init(role: .assistant, text: t, badge: "offline · best effort on device"))
-            case .needsConfirmation(let a, let prompt): chat.append(.init(role: .assistant, text: prompt, badge: onDevice, pending: a))
+            case .local(let t): chat.append(.init(role: .assistant, text: t, badge: onDevice, decisions: rows))
+            case .acted(let t): chat.append(.init(role: .assistant, text: t, badge: onDevice, decisions: rows))
+            case .clarify(let t): chat.append(.init(role: .assistant, text: t, badge: onDevice, decisions: rows))
+            case .cloud(let t, let p): chat.append(.init(role: .assistant, text: t, badge: prettyProvider(p), decisions: rows, cloudPromptSent: turn.cloudPromptSent))
+            case .offlineFallback(let t): chat.append(.init(role: .assistant, text: t, badge: "offline · best effort on device", decisions: rows))
+            case .needsConfirmation(let a, let prompt): chat.append(.init(role: .assistant, text: prompt, badge: onDevice, pending: a, decisions: rows))
             }
+            for c in turn.corrections { chat.append(.init(role: .system, text: "Corrected: \(c.old.value) → \(c.new.value)")) }
             if !turn.remembered.isEmpty {
                 chat.append(.init(role: .system, text: "Remembered: " + turn.remembered.map(\.text).joined(separator: " · ")))
             }

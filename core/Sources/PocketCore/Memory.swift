@@ -210,6 +210,11 @@ public final class MemoryStore: @unchecked Sendable {
     public func history(subject: String, attribute: String) throws -> [MemoryFact] {
         try db.query("SELECT * FROM facts WHERE subject=? AND attribute=? ORDER BY id", [.text(subject.lowercased()), .text(attribute)]).map(Self.decode)
     }
+    /// Recent corrections: an old fact superseded by a newer one (shown as "Corrected by you" in the Memory tab).
+    public func corrections(limit: Int = 20) throws -> [(old: MemoryFact, new: MemoryFact)] {
+        let olds = try db.query("SELECT * FROM facts WHERE superseded_by IS NOT NULL ORDER BY updated DESC LIMIT ?", [.int(Int64(limit))]).map(Self.decode)
+        return try olds.compactMap { o in try fact(id: o.supersededBy!).map { (o, $0) } }
+    }
     public func forget(id: Int64) throws { try db.run("DELETE FROM facts WHERE id=?", [.int(id)]) }
     /// Physically delete expired rows.
     @discardableResult public func purgeExpired() throws -> Int {

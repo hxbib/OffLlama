@@ -66,6 +66,13 @@ public final class TelemetryLog: @unchecked Sendable {
         }
     }
 
+    /// On-device share per model version ("distillation round"), in order of first use. The app ships each round
+    /// as a new GGUF (model name), so rounds come straight from logged rows; nothing is synthesized.
+    public func shareByModel() throws -> [(model: String, total: Int, handledLocally: Int)] {
+        let rows = try db.query("SELECT model, MIN(ts) AS first, COUNT(*) AS n, SUM(CASE WHEN escalated=0 THEN 1 ELSE 0 END) AS loc FROM decisions GROUP BY model ORDER BY first")
+        return rows.map { ($0["model"]?.text ?? "", Int($0["n"]?.int ?? 0), Int($0["loc"]?.int ?? 0)) }
+    }
+
     /// CSV export (for the training loop and for the judges).
     public func csv() throws -> String {
         var s = "id,timestamp_iso,decision_type,chosen,confidence,escalated,latency_ms,model,agreed_with_teacher,source\n"

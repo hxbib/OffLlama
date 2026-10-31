@@ -29,5 +29,6 @@ struct RootView: View {
 
 enum Theme {
     static let accent = Color(red: 0.36, green: 0.42, blue: 1.0)
-    static func confidenceColor(_ c: Double, tau: Double = 0.8) -> Color { c >= tau ? .green : (c >= tau - 0.2 ? .orange : .red) }
+    /// At or above tau: handled on device (accent). Below tau: orange (escalate / ask / confirm).
+    static func confidenceColor(_ c: Double, tau: Double = 0.8) -> Color { c >= tau ? accent : .orange }
 }

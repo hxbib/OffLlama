@@ -26,6 +26,20 @@ public struct AssistantTurn: Sendable {
     public var reply: Reply
     public var decisions: [ReflexDecision]
     public var remembered: [MemoryFact]
+    /// The tool call Reflex planned (shown as JSON in the decision card), if any.
+    public var action: PlannedAction? = nil
+    /// Exactly what left the device on escalation (after scrubbing), for the privacy info view.
+    public var cloudPromptSent: String? = nil
+    public var corrections: [(old: MemoryFact, new: MemoryFact)] = []
+}
+
+extension PlannedAction {
+    /// Stable, pretty JSON for display: {"tool": ..., "arguments": {...}} with sorted keys.
+    public var json: String {
+        let obj: [String: Any] = ["tool": tool, "arguments": args]
+        guard let d = try? JSONSerialization.data(withJSONObject: obj, options: [.prettyPrinted, .sortedKeys]) else { return tool }
+        return String(decoding: d, as: UTF8.self)
+    }
 }
 
 public final class Assistant: @unchecked Sendable {
@@ -53,6 +67,7 @@ public final class Assistant: @unchecked Sendable {
 
         // Memory write path (cheap reflex; runs every turn).
         var remembered: [MemoryFact] = []
+        var corrections: [(old: MemoryFact, new: MemoryFact)] = []
         let rem = try await reflex.decide(OptionSets.rememberOrNot, context: "User: \(utterance)")
         decisions.append(rem)
         if rem.chosen.id != "no" {
@@ -63,7 +78,10 @@ public final class Assistant: @unchecked Sendable {
                     decisions.append(d)
                     return ConflictResolution(rawValue: d.chosen.id) ?? .keepBoth
                 }
-                if let fact = r.fact { remembered.append(fact) }
+                if let fact = r.fact {
+                    remembered.append(fact)
+                    if r.resolution == .update { for old in try memory.history(subject: fact.subject, attribute: fact.attribute) where old.supersededBy == fact.id { corrections.append((old, fact)) } }
+                }
             }
         }
 
@@ -72,32 +90,35 @@ public final class Assistant: @unchecked Sendable {
 
         switch route.chosen.id {
         case "tool":
-            return AssistantTurn(reply: try await toolPath(utterance, ctx: ctx, decisions: &decisions), decisions: decisions, remembered: remembered)
+            var planned: PlannedAction?
+            let reply = try await toolPath(utterance, ctx: ctx, decisions: &decisions, planned: &planned)
+            return AssistantTurn(reply: reply, decisions: decisions, remembered: remembered, action: planned, corrections: corrections)
         case "clarify":
             let q = try await reflex.engine.generate(prompt: Self.localPrompt("Ask ONE short clarifying question about: \(utterance)", mem: mem), maxTokens: 40, temperature: 0.2)
-            return AssistantTurn(reply: .clarify(q.trimmed), decisions: decisions, remembered: remembered)
+            return AssistantTurn(reply: .clarify(q.trimmed), decisions: decisions, remembered: remembered, corrections: corrections)
         case "answer_local":
             let a = try await reflex.engine.generate(prompt: Self.localPrompt(utterance, mem: mem), maxTokens: 200, temperature: 0.3)
-            return AssistantTurn(reply: .local(a.trimmed), decisions: decisions, remembered: remembered)
+            return AssistantTurn(reply: .local(a.trimmed), decisions: decisions, remembered: remembered, corrections: corrections)
         default: // escalate_cloud (chosen by the model, or fallback because confidence < tau)
             guard online, !cloud.brains.isEmpty else {
                 let a = try await reflex.engine.generate(prompt: Self.localPrompt(utterance, mem: mem), maxTokens: 200, temperature: 0.3)
-                return AssistantTurn(reply: .offlineFallback(a.trimmed), decisions: decisions, remembered: remembered)
+                return AssistantTurn(reply: .offlineFallback(a.trimmed), decisions: decisions, remembered: remembered, corrections: corrections)
             }
             let sens = try await reflex.decide(OptionSets.sensitivity, context: "User: \(utterance)")
             decisions.append(sens)
             if sens.chosen.id == "sensitive" {
                 let a = try await reflex.engine.generate(prompt: Self.localPrompt(utterance, mem: mem), maxTokens: 200, temperature: 0.3)
-                return AssistantTurn(reply: .local(a.trimmed), decisions: decisions, remembered: remembered)
+                return AssistantTurn(reply: .local(a.trimmed), decisions: decisions, remembered: remembered, corrections: corrections)
             }
             let s = scrubber.scrub(mem + utterance)
             let ans = try await cloud.complete([ChatMessage(role: "system", content: "You are the reasoning brain of a private phone assistant. Placeholders like [PERSON_1] stand for private data; keep them verbatim."),
                                                 ChatMessage(role: "user", content: s.text)])
-            return AssistantTurn(reply: .cloud(scrubber.restore(ans.text, mapping: s.mapping), provider: "\(ans.provider) · \(ans.model)"), decisions: decisions, remembered: remembered)
+            return AssistantTurn(reply: .cloud(scrubber.restore(ans.text, mapping: s.mapping), provider: "\(ans.provider) · \(ans.model)"), decisions: decisions,
+                                 remembered: remembered, cloudPromptSent: s.text, corrections: corrections)
         }
     }
 
-    func toolPath(_ utterance: String, ctx: String, decisions: inout [ReflexDecision]) async throws -> Reply {
+    func toolPath(_ utterance: String, ctx: String, decisions: inout [ReflexDecision], planned: inout PlannedAction?) async throws -> Reply {
         let tool = try await reflex.decide(OptionSets.toolChoice, context: ctx)
         decisions.append(tool)
         guard tool.chosen.id != "none" else { return .clarify("What would you like me to do?") }
@@ -123,6 +144,7 @@ public final class Assistant: @unchecked Sendable {
             }
         }
         let action = PlannedAction(tool: tool.chosen.id, args: args)
+        planned = action
         let conf = try await reflex.decide(OptionSets.confirmBeforeAct, context: "\(ctx)\nPlanned action: \(action.tool) \(args.sorted { $0.key < $1.key }.map { "\($0.key)=\($0.value)" }.joined(separator: ", "))")
         decisions.append(conf)
         if conf.chosen.id == "confirm" || action.tool == "send_message" {   // messages always confirm: hard rule
