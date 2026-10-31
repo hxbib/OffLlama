@@ -30,3 +30,15 @@ Device tags: **[iPhone]** = screen recording on the iPhone 17 Pro. **[Mac]** = M
 - [TBD: after-distillation accuracy], [TBD: after-distillation on-device share], [TBD: after-distillation ECE]
 - [TBD: decode tok/s on A19 Pro], [TBD: median decision latency ms on iPhone]
 - [TBD: conformal τ], [TBD: per-round shares], [TBD: after-distillation reliability chart]
+
+## TODO: UI elements this script assumes (app work should match)
+Not verified in the app yet. Build or adjust these before recording, or change the script.
+- [ ] **Decision-object card**: expandable card per Reflex decision showing `type → choice`, confidence %, latency ms (0:25–1:45).
+- [ ] **Confidence bar**: horizontal bar per decision; **turns orange below τ** (low-confidence / escalate state) (1:20–1:45).
+- [ ] **Tool-call view**: the grammar-constrained JSON args shown inside the card (0:25–0:45).
+- [ ] **"Corrected by you" label** in the Memory tab, with the old row struck through and the new row shown (0:45–1:05).
+- [ ] **Confirm button** on message sends (1:05–1:20).
+- [ ] **Escalation badge**: "Meta Model API · Muse Spark 1.3 (Standard mode)", with an info view showing masked `[PERSON_1]` tokens (1:20–1:45).
+- [ ] **Offline pill**: "Offline · fully on device" / "Online" status (0:00, 2:45).
+- [ ] **Telemetry chart**: on-device share per distillation round, from logged rows only (2:08–2:20).
+- [ ] Lower-third name caption is added in editing, not in the app (0:10–0:25).
