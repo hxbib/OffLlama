@@ -147,13 +147,65 @@ def generate(n: int, seed: int = 0) -> list[dict]:
     return out
 
 
+# nudgeNow v2 (Nov 1): the v1 generator above only emits "arrive at place + buy item" and never a "later" case,
+# while the frozen gold set also has message / email / time / charger triggers and "later". v2 covers all three
+# outcomes across those trigger kinds. Kept separate so v1 seeds reproduce exactly. Hints stay sanity-only;
+# labels still come from the teacher, and dedupe.py / label_local.py re-check every row against the eval files.
+STORES = {"grocery": ["Key Food", "Fairway", "Stop & Shop", "Aldi"], "pharmacy": ["Walgreens", "Duane Reade", "Rite Aid"],
+          "hardware": ["Home Depot", "Ace Hardware"], "office": ["Staples", "Office Depot"]}
+STORE_ITEMS = {"grocery": ["bananas", "rice", "yogurt", "bread"], "pharmacy": ["cough drops", "contact solution", "sunscreen"],
+               "hardware": ["light bulbs", "a drill bit", "duct tape"], "office": ["sticky notes", "a stapler", "envelopes"]}
+NONPLACE = ["the library", "the laundromat", "the subway station", "a friend's apartment", "the park", "class"]
+PROMISES = ["return {n}'s charger", "send {n} the photos from Saturday", "pay {n} back $15 for lunch", "ask {n} about the lab report"]
+STATIC = ["User prefers window seats", "User's favorite color is green", "User has a cat named Miso", "User is lactose intolerant"]
+LATER_TIME = [("time, 6:30 AM", "User wants to text {n} after their 2pm meeting ends"),
+              ("charger, time: 12:10 AM", "User wants to call the pharmacy when it opens at 8am"),
+              ("time, 7:00 AM Monday", "User wants to plan {n}'s surprise party next weekend"),
+              ("time, 10:00 PM", "User wants to email {n} first thing tomorrow morning")]
+
+
+def _nudge_v2(r):
+    n, m = r.choice(NAMES), r.choice(NAMES)
+    k = r.randrange(7)
+    if k == 0:  # store whose category matches the item
+        c = r.choice(list(STORES)); return {"type": "nudgeNow", "context": f"Trigger: arrive, place: {r.choice(STORES[c])}\nMemory: User needs to buy {r.choice(STORE_ITEMS[c])}", "hint": "nudge"}
+    if k == 1:  # store category does not sell the item, or a non-store place
+        c, d = r.sample(list(STORES), 2)
+        p = r.choice(STORES[c] + NONPLACE)
+        return {"type": "nudgeNow", "context": f"Trigger: arrive, place: {p}\nMemory: User needs to buy {r.choice(STORE_ITEMS[d])}", "hint": "skip"}
+    if k == 2:  # the person in the trigger is the person in the promise
+        ch = r.choice(["message, from", "email, from", "call, from"])
+        return {"type": "nudgeNow", "context": f"Trigger: {ch}: {n}\nMemory: User promised to {r.choice(PROMISES).format(n=n)}", "hint": "nudge"}
+    if k == 3:  # different person
+        if m == n: m = NAMES[(NAMES.index(n) + 1) % len(NAMES)]
+        ch = r.choice(["message, from", "email, from"])
+        return {"type": "nudgeNow", "context": f"Trigger: {ch}: {m}\nMemory: User promised to {r.choice(PROMISES).format(n=n)}", "hint": "skip"}
+    if k == 4:  # static preference fact, nothing to act on
+        return {"type": "nudgeNow", "context": f"Trigger: {r.choice(['time, 9:30 AM', 'charger, time: 3:00 PM', 'arrive, place: home'])}\nMemory: {r.choice(STATIC)}", "hint": "skip"}
+    if k == 5:  # related, but the memory names a later moment
+        t, mem = r.choice(LATER_TIME); return {"type": "nudgeNow", "context": f"Trigger: {t}\nMemory: {mem.format(n=n)}", "hint": "later"}
+    c = r.choice(list(STORES))  # related store, but the memory says a specific later day
+    return {"type": "nudgeNow", "context": f"Trigger: arrive, place: {r.choice(STORES[c])}\nMemory: User wants to buy {r.choice(STORE_ITEMS[c])} on {r.choice(['Saturday', 'the 15th', 'payday'])} for {n}'s visit", "hint": "later"}
+
+
+def generate_nudge_v2(n: int, seed: int = 0) -> list[dict]:
+    r = random.Random(seed); out, seen, tries = [], set(), 0
+    while len(out) < n and tries < n * 50:
+        tries += 1
+        s = _envelope(r, _nudge_v2(r))
+        if (s["type"], s["context"]) in seen: continue
+        seen.add((s["type"], s["context"])); s["id"] = f"nv2-{seed}-{len(out):05d}"; out.append(s)
+    return out
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--n", type=int, default=2000); ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--out", default="out/scenarios.jsonl")
+    ap.add_argument("--nudge-v2", action="store_true", help="emit only nudgeNow v2 scenarios")
     a = ap.parse_args()
     from pathlib import Path
     Path(a.out).parent.mkdir(parents=True, exist_ok=True)
-    rows = generate(a.n, a.seed)
+    rows = generate_nudge_v2(a.n, a.seed) if a.nudge_v2 else generate(a.n, a.seed)
     Path(a.out).write_text("".join(json.dumps(x) + "\n" for x in rows))
     print(f"wrote {len(rows)} scenarios -> {a.out}")
