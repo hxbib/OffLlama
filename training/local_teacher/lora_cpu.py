@@ -37,7 +37,7 @@ def evaluate(m, style):
         for j, (s, g) in enumerate(zip(sets, b)):
             n = len(s["options"]); k = int(torch.argmax(lg[j, LID[:n]])); hit = s["options"][k]["id"] == g["gold"]
             ok += hit; p = per.setdefault(g["type"], [0, 0]); p[0] += hit; p[1] += 1
-    return {"file": str(Path(f).relative_to(ROOT)), "style": style, "n": len(items), "acc": ok / len(items), "per_type": per}
+    return {"file": str(Path(f).resolve().relative_to(ROOT)), "style": style, "n": len(items), "acc": ok / len(items), "per_type": per}
 
 res = {"before_fewShot": evaluate(model, "fewShot"), "before_zeroShot": evaluate(model, "zeroShot")}
 print(json.dumps(res), flush=True)
