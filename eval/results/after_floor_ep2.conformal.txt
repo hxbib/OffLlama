@@ -1,0 +1,25 @@
+tightest supported: error <= 14.2% among self-handled at confidence 90% (tau=0.96, 45/180 handled, 0 wrong)
+{
+ "tau": null,
+ "alpha": 0.05,
+ "delta": 0.1,
+ "n": 180,
+ "handled": 0,
+ "errors": 0,
+ "handled_share": 0.0,
+ "empirical_error": null,
+ "error_upper_bound": null,
+ "p_value": null,
+ "min_rows_needed_zero_errors": 135,
+ "model": null,
+ "source": "../eval/results/after_floor_ep2.calibration_split.json",
+ "tightest": {
+  "tau": 0.96,
+  "handled": 45,
+  "errors": 0,
+  "handled_share": 0.25,
+  "error_upper_bound": 0.14211252153074513,
+  "delta": 0.1
+ },
+ "min_rows_needed_for_alpha_zero_errors": 135
+}
