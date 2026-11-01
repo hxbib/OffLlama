@@ -13,8 +13,8 @@ brew install xcodegen cmake
 cd pocket-glimmer/core && swift test
 
 # 2) llama.cpp -> llama.xcframework (Metal, iOS + simulator + macOS slices; ~10 min)
-git clone https://github.com/ggml-org/llama.cpp ~/src/llama.cpp
-cd ~/src/llama.cpp && ./build-xcframework.sh
+git clone https://github.com/ggml-org/llama.cpp ~/src/llama.cpp && git -C ~/src/llama.cpp checkout ddf48f8
+cd ~/src/llama.cpp && ./build-xcframework.sh ios-device ios-sim   # device + simulator slices only
 mkdir -p ~/path/to/pocket-glimmer/app/Frameworks
 cp -R build-apple/llama.xcframework ~/path/to/pocket-glimmer/app/Frameworks/
 
@@ -31,7 +31,7 @@ xcodebuild -project PocketGlimmer.xcodeproj -scheme PocketGlimmer \
 ```
 
 If Xcode complains about `import llama`: confirm `app/Frameworks/llama.xcframework` exists and is "Embed & Sign".
-The `increased-memory-limit` entitlement needs a paid developer team; remove it from project.yml for a free team (1B Q4 fits anyway).
+The `increased-memory-limit` entitlement is OFF by default (free personal teams cannot provision it; 1B Q4 fits). See ../ios/MAC_DAY_RUNBOOK.md.
 
 ## Shortcuts automations (the proactive layer)
 

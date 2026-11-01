@@ -23,7 +23,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.habib.pocketglimmer
         MARKETING_VERSION: "0.1.0"
         CURRENT_PROJECT_VERSION: "1"
-        SWIFT_VERSION: "5.10"
+        SWIFT_VERSION: "5.0"         # Xcode accepts 4.0/4.2/5.0/6.0 only; "5.10" is rejected
         TARGETED_DEVICE_FAMILY: "1"
         DEVELOPMENT_TEAM: ""          # set your team in Xcode > Signing
         CODE_SIGN_STYLE: Automatic
@@ -31,13 +31,19 @@ targets:
         OTHER_LDFLAGS: ["-lc++"]
     entitlements:
       path: PocketGlimmer/Support/PocketGlimmer.entitlements
-      properties:
-        com.apple.developer.kernel.increased-memory-limit: true
+      # Free Apple ID (personal team) cannot provision com.apple.developer.kernel.increased-memory-limit,
+      # so it is off by default; the 1B Q4_K_M fits without it. With a paid team, uncomment:
+      # properties:
+      #   com.apple.developer.kernel.increased-memory-limit: true
+      properties: {}
     info:
       path: PocketGlimmer/Support/Info.plist
       properties:
         CFBundleDisplayName: Pocket Glimmer
         UILaunchScreen: {}
+        # Lets Finder > iPhone > Files copy a .gguf into the app's Documents (AppModel.findModel looks there first)
+        UIFileSharingEnabled: true
+        LSSupportsOpeningDocumentsInPlace: true
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
         NSRemindersFullAccessUsageDescription: Pocket Glimmer creates and reads reminders you ask for, on this iPhone.
         NSCalendarsFullAccessUsageDescription: Pocket Glimmer creates and looks up events you ask for, on this iPhone.

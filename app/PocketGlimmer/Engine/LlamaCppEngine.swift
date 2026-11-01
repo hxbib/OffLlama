@@ -93,7 +93,20 @@ actor LlamaCppEngine: LLMEngine {
 
     func generate(prompt: String, maxTokens: Int, temperature: Double) async throws -> String {
         var tokens = try tokenize(prompt)
+        let nPrompt = tokens.count
+        let t0 = Date()
         try prefill(tokens)
+        let tPrefill = Date()
+        var tFirstToken: Date? = nil
+        var nGen = 0
+        defer {
+            // Mac-day measurement line: filter the Xcode console for "PGPERF". RAM: Debug navigator > Memory gauge.
+            let end = Date(), first = tFirstToken ?? end
+            let decodeS = end.timeIntervalSince(first)
+            print(String(format: "PGPERF prompt_tokens=%d prefill_ms=%.0f ttft_ms=%.0f gen_tokens=%d decode_tok_s=%.1f",
+                         nPrompt, tPrefill.timeIntervalSince(t0) * 1000, first.timeIntervalSince(t0) * 1000,
+                         nGen, (nGen > 1 && decodeS > 0) ? Double(nGen - 1) / decodeS : 0))
+        }
         let budget = min(maxTokens, nCtx - tokens.count - 1)
         let chain = llama_sampler_chain_init(llama_sampler_chain_default_params())!
         defer { llama_sampler_free(chain) }
@@ -106,7 +119,9 @@ actor LlamaCppEngine: LLMEngine {
         var text = ""
         for _ in 0..<max(0, budget) {
             let t = llama_sampler_sample(chain, ctx, -1)
+            if tFirstToken == nil { tFirstToken = Date() }
             if llama_vocab_is_eog(vocab, t) { break }
+            nGen += 1
             text += piece(t)
             tokens.append(t)
             var one = [t]
