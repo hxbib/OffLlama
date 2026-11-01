@@ -19,7 +19,7 @@ Deadline: **Nov 4, 2026, 9:00 PM ET** (Nov 5 02:00 UTC). No grace period. Target
 
 ## Blockers: build side
 1. [ ] [PLACEHOLDER: before→after decision accuracy, N, task set, baseline definition] (baseline done: N=36, 0.53)
-2. [ ] [PLACEHOLDER: ECE before→after + reliability chart image; calibration method; conformal assumption stated] (baseline done: ECE 0.101, `docs/img/reliability_baseline.png`)
+2. [ ] [PLACEHOLDER: ECE before→after + reliability chart image; calibration method; conformal assumption stated] (baseline done: ECE 0.150, `docs/img/reliability_baseline_test120_v2cc.png`)
 3. [ ] [PLACEHOLDER: on-device decode tok/s + TTFT + peak RAM on A19 Pro, Q4, stated context length]
 4. [ ] [PLACEHOLDER: % of eval tasks handled fully offline vs escalated]
 5. [ ] [PLACEHOLDER: N teacher-labeled examples actually used]

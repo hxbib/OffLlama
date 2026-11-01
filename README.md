@@ -79,7 +79,7 @@ Gate-1 lineup (`/workspace/gate1/RESULTS.md`, llama.cpp ddf48f8, llama-server -c
 
 | Model | Accuracy | Handled on device (τ=0.8) | Accuracy on handled | ECE |
 |---|---|---|---|---|
-| Llama 3.2 1B Q4_K_M, untrained + prompt debiasing (box CPU) | 0.74 | 0.15 | 0.89 | 0.101 |
+| Llama 3.2 1B Q4_K_M, untrained + prompt debiasing (box CPU) | 0.74 | 0.15 | 0.89 | 0.150 |
 | Llama-Reflex-1B (distilled) | [AFTER_ACC] | [AFTER_COVERAGE] | [AFTER_ACC_HANDLED] | [AFTER_ECE] |
 
 iPhone 17 Pro speed and memory: [PHONE_TOK_S] tok/s decode, [PHONE_TTFT_MS] ms time to first token, [PHONE_RAM_GB] GB peak (not measured yet; see `ios/MAC_DAY_RUNBOOK.md`).
