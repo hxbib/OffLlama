@@ -72,7 +72,7 @@ Every model in the system is a Meta model. Four of them carry real load:
 - Timestamps:
   - 0:00–0:10: airplane mode on, a memory question answered on the phone.
   - 0:10–0:25: who I am, the problem, "a Meta model distilled from Muse Glimmer, on your phone."
-  - 0:25–1:45: real tasks on the types the teacher scored 100% on QC (confirm-before-act, memory conflict, answerability), then one low-confidence hand-off to Spark 1.3 (two contacts named Sam).
+  - 0:25–1:45: real tasks on types the shipping model is accurate on and usually handles on-device (confirm-before-act, sensitivity, answerability; per eval/results/PER_TYPE_SHIPPING.md); memory conflict only if verified handled on-device on the real phone, then one low-confidence hand-off to Spark 1.3 (two contacts named Sam).
   - 1:45–2:20: before/after eval, speed, why 30B didn't fit, the conformal bound + reliability chart.
   - 2:20–2:45: Meta stack, open weights.
   - 2:45–3:00: close.
