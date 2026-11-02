@@ -236,3 +236,6 @@ Floor LoRA (unchanged recipe, 1,157 rows = 892 + 280 weak-type, Muse Spark Open 
 
 ## 2026-11-02 11:10 ET: general-capability drift check of ep1 (no meaningful drift)
 40 hand-written non-routing prompts, base Llama 3.2 1B Instruct vs base+ep1 SHIPPING adapter (HF bf16, box CPU, $0): mean per-token KL(base||tuned) 0.0096 nats (median 0.0036, max per-prompt 0.047), 30/40 greedy outputs identical, checkable answers 23/23 vs 23/23, routing/JSON collapse 0/40 for the tuned model. Not measured on the Q4_K_M GGUF. Source: eval/results/DRIFT_CHECK.md, eval/drift/.
+
+## 2026-11-02 11:15 ET: drift check extended to shipping Q4_K_M GGUF (clean)
+Same 40 prompts via llama.cpp ddf48f8 (box CPU, greedy, HF template token ids): shipping Q4_K_M (a5c60a88…82c2) 23/23 checkable, 0 collapse, 23/40 exact match with the bf16 tuned outputs. Local base Q4_K_M control: 22/23, 0 collapse, 21/40 match; shipping and base Q4 identical on 27/40. KL vs bf16 not computed (llama-server exposes only top-n probs). Source: eval/results/DRIFT_CHECK.md "Shipping GGUF".
