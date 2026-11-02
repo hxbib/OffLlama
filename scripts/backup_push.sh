@@ -26,5 +26,5 @@ else
 fi
 git bundle verify "$OUT" >/dev/null 2>&1 || git bundle list-heads "$OUT" >/dev/null
 echo "BUNDLE=$OUT HEAD=$(git rev-parse HEAD) COUNT=$(git rev-list --count HEAD)"
-echo "Next: CopyFromBox $OUT -> PC C:\\src\\pg.bundle, then run the PC step in scripts/BACKUP.md,"
+echo "Next: CopyFromBox $OUT -> PC (default path), then run the PC step in scripts/BACKUP.md,"
 echo "then on the box: git update-ref refs/backup/pushed HEAD"

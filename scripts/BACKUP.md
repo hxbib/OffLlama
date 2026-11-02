@@ -9,9 +9,11 @@ Stay out of `C:\pocket-glimmer-backup` and the PC GPU (used by another task).
 1. **Box Shell**: `cd /workspace/pocket-glimmer && scripts/backup_push.sh`
    (`BACKUP_AUTOCOMMIT=1 scripts/backup_push.sh` to also commit pending work first;
    .gitignore keeps weights/checkpoints/venvs/media out). If it prints `NOTHING_NEW`, stop.
-2. **CopyFromBox** (agent tool): box `/workspace/pg.bundle` -> PC `C:\src\pg.bundle` (overwrite).
+2. **CopyFromBox** (agent tool): box `/workspace/pg.bundle` to the PC with NO computer_path
+   (writes outside the PC's local-exec root such as `C:\src` are refused; it lands at `C:\Users\habib\pg.bundle`).
 3. **PC Shell** (machineId above, PowerShell):
    ```powershell
+   Move-Item -Force C:\Users\habib\pg.bundle C:\src\pg.bundle
    cd C:\src\pocket-glimmer
    git bundle verify C:\src\pg.bundle
    git fetch C:\src\pg.bundle "+refs/heads/*:refs/remotes/bundle/*"
