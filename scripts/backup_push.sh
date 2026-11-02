@@ -15,7 +15,7 @@ if [ "${BACKUP_AUTOCOMMIT:-0}" = 1 ] && [ -n "$(git status --porcelain)" ]; then
 fi
 # Incremental: exclude what the PC already has (recorded by the last successful push).
 BASE="$(git rev-parse -q --verify refs/backup/pushed 2>/dev/null || true)"
-if [ -n "$BASE" ] && [ "$(git rev-list --count "$BASE"..HEAD --all ^"$BASE")" = 0 ]; then
+if [ -n "$BASE" ] && [ "$(git rev-list --count --branches --tags ^"$BASE")" = 0 ]; then
   echo "NOTHING_NEW (all refs already in refs/backup/pushed=$BASE)"; exit 0
 fi
 rm -f "$OUT"
