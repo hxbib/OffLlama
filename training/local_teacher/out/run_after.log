@@ -1,0 +1,63 @@
+{"kept": 892, "drop_lowconf_nudgeNow": 47, "drop_lowconf_contactPick": 32, "drop_lowconf_route": 9, "drop_lowconf_rememberOrNot": 15, "drop_lowconf_eventPick": 9, "drop_lowconf_notificationTriage": 2}
+[2026-11-01 08:07:05 EST] starting CPU LoRA
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/146 [00:00<?, ?it/s]Loading weights:   1%|          | 1/146 [00:04<09:44,  4.03s/it]Loading weights:  51%|█████▏    | 75/146 [00:04<00:02, 24.89it/s]Loading weights:  68%|██████▊   | 100/146 [00:05<00:01, 26.06it/s]Loading weights:  79%|███████▉  | 115/146 [00:05<00:01, 24.69it/s]Loading weights:  86%|████████▌ | 125/146 [00:06<00:00, 25.05it/s]Loading weights:  91%|█████████ | 133/146 [00:06<00:00, 25.21it/s]Loading weights:  95%|█████████▌| 139/146 [00:06<00:00, 25.58it/s]Loading weights: 100%|██████████| 146/146 [00:06<00:00, 21.82it/s]
+Traceback (most recent call last):
+  File "/workspace/pocket-glimmer/training/local_teacher/lora_cpu.py", line 42, in <module>
+    res = {"before_fewShot": evaluate(model, "fewShot"), "before_zeroShot": evaluate(model, "zeroShot")}
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/pg-lora-venv/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 158, in no_grad
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/pocket-glimmer/training/local_teacher/lora_cpu.py", line 40, in evaluate
+    return {"file": str(Path(f).relative_to(ROOT)), "style": style, "n": len(items), "acc": ok / len(items), "per_type": per}
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/box/.local/share/uv/python/cpython-3.12.15-linux-x86_64-gnu/lib/python3.12/pathlib.py", line 682, in relative_to
+    raise ValueError(f"{str(self)!r} is not in the subpath of {str(other)!r}")
+ValueError: '../../eval/gold/gold_test.jsonl' is not in the subpath of '/workspace/pocket-glimmer'
+[2026-11-01 08:09:31 EST] lora done rc=1
+[2026-11-01 09:06:31 EST] lora gate wait MemAvail=2435MB
+[2026-11-01 09:08:31 EST] lora gate wait MemAvail=2512MB
+[2026-11-01 09:10:31 EST] lora gate wait MemAvail=2899MB
+[2026-11-01 09:31:48 EST] lora gate wait MemAvail=2349MB
+[2026-11-01 09:33:48 EST] lora gate wait MemAvail=6531MB
+[2026-11-01 09:35:48 EST] lora gate wait MemAvail=6530MB
+[2026-11-01 10:04:43 EST] lora gate wait MemAvail=2622MB
+[2026-11-01 10:06:43 EST] lora gate wait MemAvail=2650MB
+[2026-11-01 10:08:43 EST] lora gate wait MemAvail=6768MB
+[2026-11-01 11:07:09 EST] starting CPU LoRA (rerun)
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/146 [00:00<?, ?it/s]Loading weights:   1%|          | 1/146 [00:04<10:44,  4.44s/it]Loading weights:  51%|█████▏    | 75/146 [00:04<00:03, 22.37it/s]Loading weights:  65%|██████▌   | 95/146 [00:05<00:02, 23.78it/s]Loading weights:  73%|███████▎  | 107/146 [00:05<00:01, 25.14it/s]Loading weights:  79%|███████▉  | 116/146 [00:06<00:01, 25.66it/s]Loading weights:  84%|████████▍ | 123/146 [00:06<00:00, 24.48it/s]Loading weights:  88%|████████▊ | 129/146 [00:06<00:00, 25.64it/s]Loading weights:  92%|█████████▏| 135/146 [00:06<00:00, 27.24it/s]Loading weights:  96%|█████████▌| 140/146 [00:07<00:00, 25.30it/s]Loading weights: 100%|██████████| 146/146 [00:07<00:00, 20.84it/s]
+{"before_fewShot": {"file": "eval/gold/gold_test.jsonl", "style": "fewShot", "n": 120, "acc": 0.7416666666666667, "per_type": {"route": [8, 10], "toolChoice": [6, 10], "rememberOrNot": [6, 10], "memoryConflict": [10, 10], "notificationTriage": [7, 10], "confirmBeforeAct": [8, 10], "nudgeNow": [7, 10], "timing": [7, 10], "sensitivity": [10, 10], "answerability": [7, 10], "contactPick": [7, 10], "eventPick": [6, 10]}}, "before_zeroShot": {"file": "eval/gold/gold_test.jsonl", "style": "zeroShot", "n": 120, "acc": 0.5416666666666666, "per_type": {"route": [6, 10], "toolChoice": [4, 10], "rememberOrNot": [4, 10], "memoryConflict": [5, 10], "notificationTriage": [3, 10], "confirmBeforeAct": [6, 10], "nudgeNow": [7, 10], "timing": [3, 10], "sensitivity": [6, 10], "answerability": [7, 10], "contactPick": [8, 10], "eventPick": [6, 10]}}}
+step 1/112 loss 1.0922 8.7s/step eta 16min
+./rerun_lora.sh: line 7: 305015 Killed                  /workspace/pg-lora-venv/bin/python lora_cpu.py --train out/distill_train.jsonl --out out/lora-llama1b-glimmer --test ../../eval/gold/gold_test.jsonl --max-hours ${MAXH:-4}
+[2026-11-01 11:11:37 EST] lora done rc=137
+[2026-11-01 12:03:40 EST] starting CPU LoRA FLOOR (bf16, micro 2, grad-ckpt)
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/146 [00:00<?, ?it/s]Loading weights:  47%|████▋     | 69/146 [00:00<00:00, 476.19it/s]Loading weights: 100%|██████████| 146/146 [00:00<00:00, 744.30it/s]
+{"before_fewShot": {"file": "eval/gold/gold_test.jsonl", "style": "fewShot", "n": 120, "acc": 0.7333333333333333, "per_type": {"route": [7, 10], "toolChoice": [6, 10], "rememberOrNot": [7, 10], "memoryConflict": [8, 10], "notificationTriage": [7, 10], "confirmBeforeAct": [8, 10], "nudgeNow": [7, 10], "timing": [7, 10], "sensitivity": [10, 10], "answerability": [7, 10], "contactPick": [8, 10], "eventPick": [6, 10]}}, "before_zeroShot": {"file": "eval/gold/gold_test.jsonl", "style": "zeroShot", "n": 120, "acc": 0.5583333333333333, "per_type": {"route": [6, 10], "toolChoice": [4, 10], "rememberOrNot": [4, 10], "memoryConflict": [5, 10], "notificationTriage": [3, 10], "confirmBeforeAct": [6, 10], "nudgeNow": [7, 10], "timing": [3, 10], "sensitivity": [7, 10], "answerability": [7, 10], "contactPick": [9, 10], "eventPick": [6, 10]}}}
+step 1/112 loss 1.1155 4.0s/step eta 7min
+step 6/112 loss 0.9267 4.2s/step eta 7min
+step 11/112 loss 1.0235 4.2s/step eta 7min
+step 16/112 loss 0.8781 4.6s/step eta 7min
+step 21/112 loss 0.2652 4.5s/step eta 7min
+step 26/112 loss 0.2585 4.5s/step eta 6min
+step 31/112 loss 0.1815 4.4s/step eta 6min
+step 36/112 loss 0.3644 4.5s/step eta 6min
+step 41/112 loss 0.4207 4.6s/step eta 5min
+step 46/112 loss 0.3080 4.7s/step eta 5min
+step 51/112 loss 0.3299 4.7s/step eta 5min
+step 56/112 loss 0.3081 4.6s/step eta 4min
+step 61/112 loss 0.1220 4.6s/step eta 4min
+step 66/112 loss 0.3057 4.5s/step eta 3min
+step 71/112 loss 0.2304 4.5s/step eta 3min
+step 76/112 loss 0.5091 4.5s/step eta 3min
+step 81/112 loss 0.1822 4.5s/step eta 2min
+step 86/112 loss 0.1625 4.5s/step eta 2min
+step 91/112 loss 0.1109 4.4s/step eta 2min
+step 96/112 loss 0.1058 4.4s/step eta 1min
+step 101/112 loss 0.1638 4.3s/step eta 1min
+step 106/112 loss 0.1978 4.3s/step eta 0min
+step 111/112 loss 0.2710 4.3s/step eta 0min
+{"before_fewShot": {"file": "eval/gold/gold_test.jsonl", "style": "fewShot", "n": 120, "acc": 0.7333333333333333, "per_type": {"route": [7, 10], "toolChoice": [6, 10], "rememberOrNot": [7, 10], "memoryConflict": [8, 10], "notificationTriage": [7, 10], "confirmBeforeAct": [8, 10], "nudgeNow": [7, 10], "timing": [7, 10], "sensitivity": [10, 10], "answerability": [7, 10], "contactPick": [8, 10], "eventPick": [6, 10]}}, "before_zeroShot": {"file": "eval/gold/gold_test.jsonl", "style": "zeroShot", "n": 120, "acc": 0.5583333333333333, "per_type": {"route": [6, 10], "toolChoice": [4, 10], "rememberOrNot": [4, 10], "memoryConflict": [5, 10], "notificationTriage": [3, 10], "confirmBeforeAct": [6, 10], "nudgeNow": [7, 10], "timing": [3, 10], "sensitivity": [7, 10], "answerability": [7, 10], "contactPick": [9, 10], "eventPick": [6, 10]}}, "after_zeroShot": {"file": "eval/gold/gold_test.jsonl", "style": "zeroShot", "n": 120, "acc": 0.825, "per_type": {"route": [8, 10], "toolChoice": [9, 10], "rememberOrNot": [8, 10], "memoryConflict": [9, 10], "notificationTriage": [8, 10], "confirmBeforeAct": [9, 10], "nudgeNow": [3, 10], "timing": [8, 10], "sensitivity": [10, 10], "answerability": [9, 10], "contactPick": [9, 10], "eventPick": [9, 10]}}, "train_rows": 892, "steps_done": 112, "steps": 112, "train_seconds": 502.2136170864105}
+[2026-11-01 12:13:11 EST] lora floor done rc=0

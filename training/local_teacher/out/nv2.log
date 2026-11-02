@@ -1,0 +1,33 @@
+{
+ "scenarios": "out/nudge_v2_scenarios.jsonl",
+ "n_in": 300,
+ "eval_files": [
+  "eval/gold/gold_all.jsonl",
+  "eval/gold/gold_calibration.jsonl",
+  "eval/gold/gold_test.jsonl",
+  "eval/gold_decisions.jsonl"
+ ],
+ "n_eval_items": 636,
+ "method": "normalized exact (context, user utterance) + char-5gram Jaccard>=0.8 (context or utterance)",
+ "n_dropped": 0,
+ "n_kept": 300
+}
+[2026-11-01 17:06:57 EST] gate wait MemAvail=2580MB
+[2026-11-01 17:11:57 EST] gate wait MemAvail=6717MB
+[2026-11-01 18:05:56 EST] gate wait MemAvail=2932MB
+[2026-11-01 18:10:56 EST] gate wait MemAvail=2844MB
+[2026-11-01 19:08:09 EST] gate wait MemAvail=2695MB
+[2026-11-01 19:13:09 EST] gate wait MemAvail=6804MB
+[2026-11-01 19:24:23 EST] gate open; starting Glimmer
+re-dedupe vs current eval: dropped 0 more
+0 already done, 300 to go
+[19:28:28] 25 done; 385 items/h; last 8163 ms, prompt_n=157
+[19:30:56] 50 done; 472 items/h; last 5128 ms, prompt_n=146
+[19:33:11] 75 done; 522 items/h; last 5853 ms, prompt_n=159
+[19:35:26] 100 done; 552 items/h; last 4845 ms, prompt_n=157
+[19:37:35] 125 done; 576 items/h; last 4828 ms, prompt_n=159
+[19:39:58] 150 done; 584 items/h; last 5089 ms, prompt_n=144
+[19:42:13] 175 done; 595 items/h; last 4879 ms, prompt_n=162
+[19:44:29] 200 done; 603 items/h; last 6172 ms, prompt_n=156
+[19:46:46] 225 done; 608 items/h; last 6592 ms, prompt_n=155
+[19:49:18] 250 done; 606 items/h; last 9573 ms, prompt_n=161

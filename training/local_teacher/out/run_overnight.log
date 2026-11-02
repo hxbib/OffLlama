@@ -1,0 +1,129 @@
+[2026-10-31 18:42:29 EDT] gate wait: busy=y MemAvail=10496MB
+[2026-10-31 18:47:29 EDT] gate wait: busy=y MemAvail=9426MB
+[2026-10-31 18:52:29 EDT] gate wait: busy=y MemAvail=9734MB
+[2026-10-31 18:57:30 EDT] gate wait: busy=y MemAvail=11395MB
+[2026-10-31 19:02:30 EDT] gate wait: busy=y MemAvail=7194MB
+[2026-10-31 19:07:30 EDT] gate wait: busy=y MemAvail=6808MB
+[2026-10-31 19:12:30 EDT] gate open; starting Glimmer
+[2026-10-31 19:12:50 EDT] server up
+0 already done, 50 to go
+[19:14:46] 25 done; 772 items/h; last 5158 ms, prompt_n=117
+[19:16:38] 50 done; 788 items/h; last 3969 ms, prompt_n=132
+finished: 50 new in 228s (788 items/h); total 50
+{
+ "N": 50,
+ "agree": 43,
+ "overall": 0.86,
+ "per_type": {
+  "answerability": {
+   "agree": 5,
+   "n": 5,
+   "rate": 1.0
+  },
+  "confirmBeforeAct": {
+   "agree": 5,
+   "n": 5,
+   "rate": 1.0
+  },
+  "contactPick": {
+   "agree": 3,
+   "n": 4,
+   "rate": 0.75
+  },
+  "eventPick": {
+   "agree": 3,
+   "n": 4,
+   "rate": 0.75
+  },
+  "memoryConflict": {
+   "agree": 4,
+   "n": 4,
+   "rate": 1.0
+  },
+  "notificationTriage": {
+   "agree": 3,
+   "n": 4,
+   "rate": 0.75
+  },
+  "nudgeNow": {
+   "agree": 3,
+   "n": 4,
+   "rate": 0.75
+  },
+  "rememberOrNot": {
+   "agree": 2,
+   "n": 4,
+   "rate": 0.5
+  },
+  "route": {
+   "agree": 3,
+   "n": 4,
+   "rate": 0.75
+  },
+  "sensitivity": {
+   "agree": 4,
+   "n": 4,
+   "rate": 1.0
+  },
+  "timing": {
+   "agree": 4,
+   "n": 4,
+   "rate": 1.0
+  },
+  "toolChoice": {
+   "agree": 4,
+   "n": 4,
+   "rate": 1.0
+  }
+ },
+ "mean_conf_right": 0.9377355854006006,
+ "mean_conf_wrong": 0.632816700160076,
+ "mean_letter_mass": 0.9290188724329316
+}
+re-dedupe vs current eval: dropped 0 more
+0 already done, 3748 to go
+[19:18:57] 25 done; 712 items/h; last 6430 ms, prompt_n=181
+[19:24:06] 50 done; 414 items/h; last 6661 ms, prompt_n=140
+[19:26:16] 75 done; 478 items/h; last 4832 ms, prompt_n=141
+[19:28:18] 100 done; 523 items/h; last 5875 ms, prompt_n=197
+[19:30:22] 125 done; 555 items/h; last 4105 ms, prompt_n=127
+[19:37:54] 150 done; 428 items/h; last 5189 ms, prompt_n=141
+[19:40:01] 175 done; 453 items/h; last 6321 ms, prompt_n=140
+[20:08:32] 200 done; 232 items/h; last 4963 ms, prompt_n=140
+[20:10:41] 225 done; 251 items/h; last 4677 ms, prompt_n=133
+[20:12:46] 250 done; 268 items/h; last 4785 ms, prompt_n=139
+[20:14:49] 275 done; 285 items/h; last 4992 ms, prompt_n=160
+[20:16:50] 300 done; 300 items/h; last 6101 ms, prompt_n=139
+[21:11:20] 325 done; 170 items/h; last 4584 ms, prompt_n=139
+[21:13:25] 350 done; 180 items/h; last 4539 ms, prompt_n=141
+[22:11:47] 375 done; 129 items/h; last 5220 ms, prompt_n=144
+[22:14:11] 400 done; 135 items/h; last 5829 ms, prompt_n=160
+[22:16:22] 425 done; 142 items/h; last 5495 ms, prompt_n=142
+[22:18:31] 450 done; 149 items/h; last 5053 ms, prompt_n=158
+[23:05:00] 475 done; 125 items/h; last 5289 ms, prompt_n=142
+[23:07:09] 500 done; 130 items/h; last 4009 ms, prompt_n=130
+[23:09:17] 525 done; 136 items/h; last 4816 ms, prompt_n=139
+[23:11:30] 550 done; 141 items/h; last 5536 ms, prompt_n=142
+[00:10:28] 575 done; 117 items/h; last 38406 ms, prompt_n=142
+[00:12:52] 600 done; 122 items/h; last 6033 ms, prompt_n=156
+[00:15:02] 625 done; 126 items/h; last 6045 ms, prompt_n=139
+[01:09:12] 650 done; 111 items/h; last 4870 ms, prompt_n=142
+[01:11:33] 675 done; 114 items/h; last 5984 ms, prompt_n=139
+[01:44:28] 700 done; 108 items/h; last 4572 ms, prompt_n=139
+[01:46:39] 725 done; 112 items/h; last 5380 ms, prompt_n=181
+[01:48:56] 750 done; 115 items/h; last 4749 ms, prompt_n=159
+[01:51:06] 775 done; 118 items/h; last 4694 ms, prompt_n=140
+[01:07:35] 800 done; 117 items/h; last 12606 ms, prompt_n=157
+[01:10:17] 825 done; 120 items/h; last 13292 ms, prompt_n=141
+[02:05:25] 850 done; 109 items/h; last 5220 ms, prompt_n=144
+[03:08:34] 875 done; 99 items/h; last 8118 ms, prompt_n=157
+[04:05:37] 900 done; 92 items/h; last 12790 ms, prompt_n=139
+[05:07:39] 925 done; 85 items/h; last 6491 ms, prompt_n=125
+[06:07:57] 950 done; 80 items/h; last 10849 ms, prompt_n=140
+[07:04:10] 975 done; 76 items/h; last 13151 ms, prompt_n=178
+[07:31:48] 1000 done; 75 items/h; last 18689 ms, prompt_n=148
+deadline reached
+finished: 1006 new in 49620s (73 items/h); total 1006
+[2026-11-01 08:03:50 EST] labeling stopped; peak RSS:
+VmHWM:	12627156 kB
+[2026-11-01 08:03:51 EST] server stopped

@@ -29,3 +29,6 @@ Stay out of `C:\pocket-glimmer-backup` and the PC GPU (used by another task).
 
 If the incremental bundle fails to verify on the PC (missing prerequisite), delete
 `refs/backup/pushed` on the box (`git update-ref -d refs/backup/pushed`) and rerun for a full bundle.
+
+## Ledger rule
+Append a dated entry to `LEDGER.md` at every milestone (new result, model swap, release, decision) and include it in the next backup push.

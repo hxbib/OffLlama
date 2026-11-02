@@ -1,0 +1,300 @@
+{"type": "nudgeNow", "context": "Now: Mon 17:42\nUser location: home\nTrigger: message, from: Priya\nMemory: User promised to return Tom's charger", "hint": "skip", "id": "nv2-7-00000"}
+{"type": "nudgeNow", "context": "Trigger: arrive, place: Aldi\nMemory: User needs to buy bread", "hint": "nudge", "id": "nv2-7-00001"}
+{"type": "nudgeNow", "context": "Now: Sat 7:42\nUser location: a cafe\nTrigger: message, from: Fatima\nMemory: User promised to return Sam's charger", "hint": "skip", "id": "nv2-7-00002"}
+{"type": "nudgeNow", "context": "Now: Fri 9:42\nUser location: commuting\nTrigger: arrive, place: Stop & Shop\nMemory: User needs to buy a drill bit", "hint": "skip", "id": "nv2-7-00003"}
+{"type": "nudgeNow", "context": "Now: Mon 23:55\nUser location: home\nTrigger: arrive, place: class\nMemory: User needs to buy duct tape", "hint": "skip", "id": "nv2-7-00004"}
+{"type": "nudgeNow", "context": "Now: Thu 16:30\nUser location: a cafe\nTrigger: time, 9:30 AM\nMemory: User is lactose intolerant", "hint": "skip", "id": "nv2-7-00005"}
+{"type": "nudgeNow", "context": "Now: Tue 8:42\nUser location: commuting\nTrigger: message, from: Kenji\nMemory: User promised to send Kenji the photos from Saturday", "hint": "nudge", "id": "nv2-7-00006"}
+{"type": "nudgeNow", "context": "Now: Mon 9:42\nUser location: the gym\nTrigger: call, from: Fatima\nMemory: User promised to ask Fatima about the lab report", "hint": "nudge", "id": "nv2-7-00007"}
+{"type": "nudgeNow", "context": "Trigger: arrive, place: Staples\nMemory: User needs to buy sunscreen", "hint": "skip", "id": "nv2-7-00008"}
+{"type": "nudgeNow", "context": "Now: Fri 20:00\nUser location: home\nTrigger: arrive, place: Ace Hardware\nMemory: User wants to buy duct tape on the 15th for Fatima's visit", "hint": "later", "id": "nv2-7-00009"}
+{"type": "nudgeNow", "context": "Trigger: time, 6:30 AM\nMemory: User wants to text Aisha after their 2pm meeting ends", "hint": "later", "id": "nv2-7-00010"}
+{"type": "nudgeNow", "context": "Now: Thu 17:00\nUser location: the gym\nTrigger: time, 10:00 PM\nMemory: User wants to email Omar first thing tomorrow morning", "hint": "later", "id": "nv2-7-00011"}
+{"type": "nudgeNow", "context": "Trigger: time, 9:30 AM\nMemory: User is lactose intolerant", "hint": "skip", "id": "nv2-7-00012"}
+{"type": "nudgeNow", "context": "Now: Sun 21:00\nUser location: work\nTrigger: charger, time: 12:10 AM\nMemory: User wants to call the pharmacy when it opens at 8am", "hint": "later", "id": "nv2-7-00013"}
+{"type": "nudgeNow", "context": "Now: Sun 23:15\nUser location: unknown\nTrigger: charger, time: 3:00 PM\nMemory: User's favorite color is green", "hint": "skip", "id": "nv2-7-00014"}
+{"type": "nudgeNow", "context": "Now: Tue 8:05\nUser location: work\nTrigger: time, 10:00 PM\nMemory: User wants to email Lena first thing tomorrow morning", "hint": "later", "id": "nv2-7-00015"}
+{"type": "nudgeNow", "context": "Now: Mon 10:30\nUser location: a cafe\nTrigger: arrive, place: class\nMemory: User needs to buy cough drops", "hint": "skip", "id": "nv2-7-00016"}
+{"type": "nudgeNow", "context": "Now: Fri 7:30\nUser location: unknown\nTrigger: charger, time: 3:00 PM\nMemory: User's favorite color is green", "hint": "skip", "id": "nv2-7-00017"}
+{"type": "nudgeNow", "context": "Trigger: email, from: Lena\nMemory: User promised to ask Fatima about the lab report", "hint": "skip", "id": "nv2-7-00018"}
+{"type": "nudgeNow", "context": "Now: Mon 16:42\nUser location: home\nTrigger: arrive, place: Walgreens\nMemory: User needs to buy cough drops", "hint": "nudge", "id": "nv2-7-00019"}
+{"type": "nudgeNow", "context": "Now: Fri 6:00\nUser location: work\nTrigger: time, 9:30 AM\nMemory: User prefers window seats", "hint": "skip", "id": "nv2-7-00020"}
+{"type": "nudgeNow", "context": "Trigger: arrive, place: a friend's apartment\nMemory: User needs to buy contact solution", "hint": "skip", "id": "nv2-7-00021"}
+{"type": "nudgeNow", "context": "Trigger: email, from: Fatima\nMemory: User promised to pay Kenji back $15 for lunch", "hint": "skip", "id": "nv2-7-00022"}
+{"type": "nudgeNow", "context": "Now: Sat 11:42\nUser location: home\nTrigger: call, from: Sam\nMemory: User promised to pay Sam back $15 for lunch", "hint": "nudge", "id": "nv2-7-00023"}
+{"type": "nudgeNow", "context": "Now: Wed 8:55\nUser location: commuting\nTrigger: message, from: Diego\nMemory: User promised to return Diego's charger", "hint": "nudge", "id": "nv2-7-00024"}
+{"type": "nudgeNow", "context": "Now: Sun 12:05\nUser location: the gym\nTrigger: arrive, place: a friend's apartment\nMemory: User needs to buy rice", "hint": "skip", "id": "nv2-7-00025"}
+{"type": "nudgeNow", "context": "Now: Thu 14:05\nUser location: unknown\nTrigger: arrive, place: Staples\nMemory: User needs to buy cough drops", "hint": "skip", "id": "nv2-7-00026"}
+{"type": "nudgeNow", "context": "Trigger: email, from: Tom\nMemory: User promised to pay Noah back $15 for lunch", "hint": "skip", "id": "nv2-7-00027"}
+{"type": "nudgeNow", "context": "Now: Fri 6:30\nUser location: unknown\nTrigger: message, from: Diego\nMemory: User promised to pay Sam back $15 for lunch", "hint": "skip", "id": "nv2-7-00028"}
+{"type": "nudgeNow", "context": "Now: Tue 19:55\nUser location: commuting\nTrigger: arrive, place: Aldi\nMemory: User needs to buy rice", "hint": "nudge", "id": "nv2-7-00029"}
+{"type": "nudgeNow", "context": "Now: Mon 11:05\nUser location: work\nTrigger: email, from: Omar\nMemory: User promised to ask Sam about the lab report", "hint": "skip", "id": "nv2-7-00030"}
+{"type": "nudgeNow", "context": "Now: Fri 21:55\nUser location: commuting\nTrigger: charger, time: 3:00 PM\nMemory: User's favorite color is green", "hint": "skip", "id": "nv2-7-00031"}
+{"type": "nudgeNow", "context": "Trigger: time, 9:30 AM\nMemory: User prefers window seats", "hint": "skip", "id": "nv2-7-00032"}
+{"type": "nudgeNow", "context": "Now: Tue 6:15\nUser location: work\nTrigger: arrive, place: Duane Reade\nMemory: User needs to buy cough drops", "hint": "nudge", "id": "nv2-7-00033"}
+{"type": "nudgeNow", "context": "Trigger: arrive, place: the park\nMemory: User needs to buy cough drops", "hint": "skip", "id": "nv2-7-00034"}
+{"type": "nudgeNow", "context": "Now: Fri 22:00\nUser location: the gym\nTrigger: email, from: Tom\nMemory: User promised to send Omar the photos from Saturday", "hint": "skip", "id": "nv2-7-00035"}
+{"type": "nudgeNow", "context": "Now: Sat 9:42\nUser location: home\nTrigger: arrive, place: Walgreens\nMemory: User needs to buy cough drops", "hint": "nudge", "id": "nv2-7-00036"}
+{"type": "nudgeNow", "context": "Now: Mon 23:00\nUser location: work\nTrigger: arrive, place: home\nMemory: User is lactose intolerant", "hint": "skip", "id": "nv2-7-00037"}
+{"type": "nudgeNow", "context": "Now: Mon 20:15\nUser location: a cafe\nTrigger: arrive, place: Aldi\nMemory: User needs to buy bananas", "hint": "nudge", "id": "nv2-7-00038"}
+{"type": "nudgeNow", "context": "Now: Fri 21:42\nUser location: work\nTrigger: time, 9:30 AM\nMemory: User has a cat named Miso", "hint": "skip", "id": "nv2-7-00039"}
+{"type": "nudgeNow", "context": "Now: Tue 19:00\nUser location: the gym\nTrigger: call, from: Omar\nMemory: User promised to send Omar the photos from Saturday", "hint": "nudge", "id": "nv2-7-00040"}
+{"type": "nudgeNow", "context": "Now: Wed 9:05\nUser location: unknown\nTrigger: arrive, place: Duane Reade\nMemory: User needs to buy cough drops", "hint": "nudge", "id": "nv2-7-00041"}
+{"type": "nudgeNow", "context": "Now: Thu 13:55\nUser location: home\nTrigger: message, from: Zoe\nMemory: User promised to pay Zoe back $15 for lunch", "hint": "nudge", "id": "nv2-7-00042"}
+{"type": "nudgeNow", "context": "Now: Tue 17:15\nUser location: home\nTrigger: arrive, place: a friend's apartment\nMemory: User needs to buy bread", "hint": "skip", "id": "nv2-7-00043"}
+{"type": "nudgeNow", "context": "Now: Thu 16:42\nUser location: a cafe\nTrigger: arrive, place: Ace Hardware\nMemory: User needs to buy a drill bit", "hint": "nudge", "id": "nv2-7-00044"}
+{"type": "nudgeNow", "context": "Trigger: arrive, place: Fairway\nMemory: User needs to buy bananas", "hint": "nudge", "id": "nv2-7-00045"}
+{"type": "nudgeNow", "context": "Now: Sat 14:30\nUser location: work\nTrigger: arrive, place: Duane Reade\nMemory: User wants to buy cough drops on the 15th for Aisha's visit", "hint": "later", "id": "nv2-7-00046"}
+{"type": "nudgeNow", "context": "Trigger: charger, time: 3:00 PM\nMemory: User has a cat named Miso", "hint": "skip", "id": "nv2-7-00047"}
+{"type": "nudgeNow", "context": "Now: Sun 14:00\nUser location: a cafe\nTrigger: arrive, place: the subway station\nMemory: User needs to buy bananas", "hint": "skip", "id": "nv2-7-00048"}
+{"type": "nudgeNow", "context": "Trigger: message, from: Diego\nMemory: User promised to ask Diego about the lab report", "hint": "nudge", "id": "nv2-7-00049"}
+{"type": "nudgeNow", "context": "Trigger: call, from: Fatima\nMemory: User promised to send Fatima the photos from Saturday", "hint": "nudge", "id": "nv2-7-00050"}
+{"type": "nudgeNow", "context": "Now: Wed 15:42\nUser location: work\nTrigger: arrive, place: Duane Reade\nMemory: User needs to buy cough drops", "hint": "nudge", "id": "nv2-7-00051"}
+{"type": "nudgeNow", "context": "Now: Sun 6:15\nUser location: home\nTrigger: arrive, place: home\nMemory: User's favorite color is green", "hint": "skip", "id": "nv2-7-00052"}
+{"type": "nudgeNow", "context": "Now: Tue 20:00\nUser location: unknown\nTrigger: charger, time: 12:10 AM\nMemory: User wants to call the pharmacy when it opens at 8am", "hint": "later", "id": "nv2-7-00053"}
+{"type": "nudgeNow", "context": "Now: Thu 22:15\nUser location: unknown\nTrigger: time, 10:00 PM\nMemory: User wants to email Zoe first thing tomorrow morning", "hint": "later", "id": "nv2-7-00054"}
+{"type": "nudgeNow", "context": "Now: Wed 7:05\nUser location: home\nTrigger: message, from: Diego\nMemory: User promised to send Diego the photos from Saturday", "hint": "nudge", "id": "nv2-7-00055"}
+{"type": "nudgeNow", "context": "Now: Mon 8:55\nUser location: the gym\nTrigger: time, 7:00 AM Monday\nMemory: User wants to plan Sam's surprise party next weekend", "hint": "later", "id": "nv2-7-00056"}
+{"type": "nudgeNow", "context": "Now: Mon 20:05\nUser location: work\nTrigger: call, from: Fatima\nMemory: User promised to send Fatima the photos from Saturday", "hint": "nudge", "id": "nv2-7-00057"}
+{"type": "nudgeNow", "context": "Now: Fri 16:05\nUser location: home\nTrigger: arrive, place: Ace Hardware\nMemory: User needs to buy a drill bit", "hint": "nudge", "id": "nv2-7-00058"}
+{"type": "nudgeNow", "context": "Now: Mon 21:15\nUser location: a cafe\nTrigger: message, from: Aisha\nMemory: User promised to return Aisha's charger", "hint": "nudge", "id": "nv2-7-00059"}
+{"type": "nudgeNow", "context": "Trigger: arrive, place: the library\nMemory: User needs to buy sticky notes", "hint": "skip", "id": "nv2-7-00060"}
+{"type": "nudgeNow", "context": "Now: Tue 8:42\nUser location: a cafe\nTrigger: message, from: Maya\nMemory: User promised to pay Noah back $15 for lunch", "hint": "skip", "id": "nv2-7-00061"}
+{"type": "nudgeNow", "context": "Now: Sat 21:05\nUser location: commuting\nTrigger: time, 10:00 PM\nMemory: User wants to email Priya first thing tomorrow morning", "hint": "later", "id": "nv2-7-00062"}
+{"type": "nudgeNow", "context": "Trigger: charger, time: 12:10 AM\nMemory: User wants to call the pharmacy when it opens at 8am", "hint": "later", "id": "nv2-7-00063"}
+{"type": "nudgeNow", "context": "Now: Sun 22:05\nUser location: a cafe\nTrigger: time, 10:00 PM\nMemory: User wants to email Omar first thing tomorrow morning", "hint": "later", "id": "nv2-7-00064"}
+{"type": "nudgeNow", "context": "Trigger: arrive, place: Fairway\nMemory: User wants to buy bananas on Saturday for Fatima's visit", "hint": "later", "id": "nv2-7-00065"}
+{"type": "nudgeNow", "context": "Trigger: arrive, place: Office Depot\nMemory: User needs to buy envelopes", "hint": "nudge", "id": "nv2-7-00066"}
+{"type": "nudgeNow", "context": "Now: Mon 20:00\nUser location: unknown\nTrigger: arrive, place: home\nMemory: User's favorite color is green", "hint": "skip", "id": "nv2-7-00067"}
+{"type": "nudgeNow", "context": "Now: Sun 14:05\nUser location: unknown\nTrigger: arrive, place: Aldi\nMemory: User needs to buy yogurt", "hint": "nudge", "id": "nv2-7-00068"}
+{"type": "nudgeNow", "context": "Now: Thu 8:30\nUser location: unknown\nTrigger: time, 10:00 PM\nMemory: User wants to email Diego first thing tomorrow morning", "hint": "later", "id": "nv2-7-00069"}
+{"type": "nudgeNow", "context": "Trigger: arrive, place: home\nMemory: User's favorite color is green", "hint": "skip", "id": "nv2-7-00070"}
+{"type": "nudgeNow", "context": "Now: Tue 6:30\nUser location: home\nTrigger: call, from: Priya\nMemory: User promised to pay Priya back $15 for lunch", "hint": "nudge", "id": "nv2-7-00071"}
+{"type": "nudgeNow", "context": "Now: Sat 21:15\nUser location: unknown\nTrigger: time, 6:30 AM\nMemory: User wants to text Kenji after their 2pm meeting ends", "hint": "later", "id": "nv2-7-00072"}
+{"type": "nudgeNow", "context": "Now: Fri 12:15\nUser location: home\nTrigger: email, from: Aisha\nMemory: User promised to ask Fatima about the lab report", "hint": "skip", "id": "nv2-7-00073"}
+{"type": "nudgeNow", "context": "Now: Thu 14:30\nUser location: work\nTrigger: email, from: Kenji\nMemory: User promised to return Kenji's charger", "hint": "nudge", "id": "nv2-7-00074"}
+{"type": "nudgeNow", "context": "Now: Wed 17:05\nUser location: a cafe\nTrigger: time, 9:30 AM\nMemory: User's favorite color is green", "hint": "skip", "id": "nv2-7-00075"}
+{"type": "nudgeNow", "context": "Now: Thu 18:00\nUser location: work\nTrigger: message, from: Zoe\nMemory: User promised to pay Zoe back $15 for lunch", "hint": "nudge", "id": "nv2-7-00076"}
+{"type": "nudgeNow", "context": "Now: Sat 10:30\nUser location: commuting\nTrigger: time, 10:00 PM\nMemory: User wants to email Maya first thing tomorrow morning", "hint": "later", "id": "nv2-7-00077"}
+{"type": "nudgeNow", "context": "Now: Sun 18:00\nUser location: work\nTrigger: arrive, place: Home Depot\nMemory: User needs to buy a drill bit", "hint": "nudge", "id": "nv2-7-00078"}
+{"type": "nudgeNow", "context": "Now: Mon 18:30\nUser location: a cafe\nTrigger: time, 7:00 AM Monday\nMemory: User wants to plan Omar's surprise party next weekend", "hint": "later", "id": "nv2-7-00079"}
+{"type": "nudgeNow", "context": "Now: Mon 15:55\nUser location: work\nTrigger: email, from: Tom\nMemory: User promised to return Sam's charger", "hint": "skip", "id": "nv2-7-00080"}
+{"type": "nudgeNow", "context": "Now: Sun 19:00\nUser location: unknown\nTrigger: email, from: Aisha\nMemory: User promised to send Diego the photos from Saturday", "hint": "skip", "id": "nv2-7-00081"}
+{"type": "nudgeNow", "context": "Now: Fri 10:05\nUser location: the gym\nTrigger: message, from: Lena\nMemory: User promised to pay Omar back $15 for lunch", "hint": "skip", "id": "nv2-7-00082"}
+{"type": "nudgeNow", "context": "Now: Sat 14:30\nUser location: unknown\nTrigger: email, from: Lena\nMemory: User promised to pay Lena back $15 for lunch", "hint": "nudge", "id": "nv2-7-00083"}
+{"type": "nudgeNow", "context": "Now: Tue 8:05\nUser location: a cafe\nTrigger: email, from: Aisha\nMemory: User promised to return Diego's charger", "hint": "skip", "id": "nv2-7-00084"}
+{"type": "nudgeNow", "context": "Trigger: arrive, place: class\nMemory: User needs to buy contact solution", "hint": "skip", "id": "nv2-7-00085"}
+{"type": "nudgeNow", "context": "Trigger: arrive, place: Duane Reade\nMemory: User needs to buy sunscreen", "hint": "nudge", "id": "nv2-7-00086"}
+{"type": "nudgeNow", "context": "Now: Sat 19:30\nUser location: the gym\nTrigger: call, from: Diego\nMemory: User promised to send Diego the photos from Saturday", "hint": "nudge", "id": "nv2-7-00087"}
+{"type": "nudgeNow", "context": "Now: Fri 17:05\nUser location: unknown\nTrigger: arrive, place: a friend's apartment\nMemory: User needs to buy cough drops", "hint": "skip", "id": "nv2-7-00088"}
+{"type": "nudgeNow", "context": "Now: Sun 6:05\nUser location: home\nTrigger: email, from: Lena\nMemory: User promised to ask Diego about the lab report", "hint": "skip", "id": "nv2-7-00089"}
+{"type": "nudgeNow", "context": "Now: Sun 22:30\nUser location: the gym\nTrigger: arrive, place: Office Depot\nMemory: User wants to buy sticky notes on Saturday for Lena's visit", "hint": "later", "id": "nv2-7-00090"}
+{"type": "nudgeNow", "context": "Now: Sat 20:00\nUser location: a cafe\nTrigger: arrive, place: class\nMemory: User needs to buy bananas", "hint": "skip", "id": "nv2-7-00091"}
+{"type": "nudgeNow", "context": "Now: Wed 10:55\nUser location: commuting\nTrigger: arrive, place: Walgreens\nMemory: User wants to buy sunscreen on Saturday for Maya's visit", "hint": "later", "id": "nv2-7-00092"}
+{"type": "nudgeNow", "context": "Trigger: message, from: Zoe\nMemory: User promised to return Fatima's charger", "hint": "skip", "id": "nv2-7-00093"}
+{"type": "nudgeNow", "context": "Trigger: arrive, place: the laundromat\nMemory: User needs to buy sunscreen", "hint": "skip", "id": "nv2-7-00094"}
+{"type": "nudgeNow", "context": "Now: Tue 21:42\nUser location: work\nTrigger: email, from: Aisha\nMemory: User promised to pay Fatima back $15 for lunch", "hint": "skip", "id": "nv2-7-00095"}
+{"type": "nudgeNow", "context": "Trigger: arrive, place: Office Depot\nMemory: User needs to buy sticky notes", "hint": "nudge", "id": "nv2-7-00096"}
+{"type": "nudgeNow", "context": "Trigger: time, 10:00 PM\nMemory: User wants to email Kenji first thing tomorrow morning", "hint": "later", "id": "nv2-7-00097"}
+{"type": "nudgeNow", "context": "Now: Sat 16:55\nUser location: the gym\nTrigger: email, from: Zoe\nMemory: User promised to send Diego the photos from Saturday", "hint": "skip", "id": "nv2-7-00098"}
+{"type": "nudgeNow", "context": "Now: Sat 22:00\nUser location: work\nTrigger: message, from: Zoe\nMemory: User promised to return Tom's charger", "hint": "skip", "id": "nv2-7-00099"}
+{"type": "nudgeNow", "context": "Now: Wed 15:00\nUser location: a cafe\nTrigger: message, from: Kenji\nMemory: User promised to send Kenji the photos from Saturday", "hint": "nudge", "id": "nv2-7-00100"}
+{"type": "nudgeNow", "context": "Trigger: arrive, place: a friend's apartment\nMemory: User needs to buy envelopes", "hint": "skip", "id": "nv2-7-00101"}
+{"type": "nudgeNow", "context": "Trigger: message, from: Priya\nMemory: User promised to send Noah the photos from Saturday", "hint": "skip", "id": "nv2-7-00102"}
+{"type": "nudgeNow", "context": "Now: Thu 16:55\nUser location: home\nTrigger: message, from: Priya\nMemory: User promised to return Noah's charger", "hint": "skip", "id": "nv2-7-00103"}
+{"type": "nudgeNow", "context": "Now: Fri 20:00\nUser location: commuting\nTrigger: message, from: Sam\nMemory: User promised to send Sam the photos from Saturday", "hint": "nudge", "id": "nv2-7-00104"}
+{"type": "nudgeNow", "context": "Now: Mon 6:00\nUser location: commuting\nTrigger: email, from: Omar\nMemory: User promised to pay Zoe back $15 for lunch", "hint": "skip", "id": "nv2-7-00105"}
+{"type": "nudgeNow", "context": "Now: Sun 15:30\nUser location: home\nTrigger: message, from: Tom\nMemory: User promised to send Sam the photos from Saturday", "hint": "skip", "id": "nv2-7-00106"}
+{"type": "nudgeNow", "context": "Now: Thu 12:15\nUser location: commuting\nTrigger: message, from: Omar\nMemory: User promised to pay Maya back $15 for lunch", "hint": "skip", "id": "nv2-7-00107"}
+{"type": "nudgeNow", "context": "Now: Mon 18:00\nUser location: the gym\nTrigger: arrive, place: Staples\nMemory: User needs to buy envelopes", "hint": "nudge", "id": "nv2-7-00108"}
+{"type": "nudgeNow", "context": "Now: Wed 17:15\nUser location: commuting\nTrigger: message, from: Sam\nMemory: User promised to return Sam's charger", "hint": "nudge", "id": "nv2-7-00109"}
+{"type": "nudgeNow", "context": "Now: Wed 6:55\nUser location: a cafe\nTrigger: call, from: Noah\nMemory: User promised to pay Noah back $15 for lunch", "hint": "nudge", "id": "nv2-7-00110"}
+{"type": "nudgeNow", "context": "Now: Thu 18:15\nUser location: the gym\nTrigger: arrive, place: Walgreens\nMemory: User needs to buy contact solution", "hint": "nudge", "id": "nv2-7-00111"}
+{"type": "nudgeNow", "context": "Now: Sat 15:55\nUser location: work\nTrigger: message, from: Priya\nMemory: User promised to return Kenji's charger", "hint": "skip", "id": "nv2-7-00112"}
+{"type": "nudgeNow", "context": "Now: Sun 8:42\nUser location: work\nTrigger: email, from: Noah\nMemory: User promised to ask Noah about the lab report", "hint": "nudge", "id": "nv2-7-00113"}
+{"type": "nudgeNow", "context": "Now: Wed 11:30\nUser location: home\nTrigger: arrive, place: Staples\nMemory: User needs to buy bread", "hint": "skip", "id": "nv2-7-00114"}
+{"type": "nudgeNow", "context": "Trigger: time, 9:30 AM\nMemory: User's favorite color is green", "hint": "skip", "id": "nv2-7-00115"}
+{"type": "nudgeNow", "context": "Trigger: message, from: Omar\nMemory: User promised to send Kenji the photos from Saturday", "hint": "skip", "id": "nv2-7-00116"}
+{"type": "nudgeNow", "context": "Now: Sun 9:15\nUser location: commuting\nTrigger: charger, time: 12:10 AM\nMemory: User wants to call the pharmacy when it opens at 8am", "hint": "later", "id": "nv2-7-00117"}
+{"type": "nudgeNow", "context": "Now: Tue 20:05\nUser location: work\nTrigger: email, from: Aisha\nMemory: User promised to pay Aisha back $15 for lunch", "hint": "nudge", "id": "nv2-7-00118"}
+{"type": "nudgeNow", "context": "Trigger: arrive, place: the laundromat\nMemory: User needs to buy a stapler", "hint": "skip", "id": "nv2-7-00119"}
+{"type": "nudgeNow", "context": "Now: Mon 20:00\nUser location: home\nTrigger: arrive, place: home\nMemory: User's favorite color is green", "hint": "skip", "id": "nv2-7-00120"}
+{"type": "nudgeNow", "context": "Now: Tue 9:00\nUser location: work\nTrigger: arrive, place: Duane Reade\nMemory: User wants to buy contact solution on Saturday for Maya's visit", "hint": "later", "id": "nv2-7-00121"}
+{"type": "nudgeNow", "context": "Now: Wed 6:00\nUser location: unknown\nTrigger: arrive, place: the park\nMemory: User needs to buy cough drops", "hint": "skip", "id": "nv2-7-00122"}
+{"type": "nudgeNow", "context": "Trigger: charger, time: 3:00 PM\nMemory: User's favorite color is green", "hint": "skip", "id": "nv2-7-00123"}
+{"type": "nudgeNow", "context": "Now: Sat 12:00\nUser location: commuting\nTrigger: arrive, place: Duane Reade\nMemory: User needs to buy cough drops", "hint": "nudge", "id": "nv2-7-00124"}
+{"type": "nudgeNow", "context": "Trigger: message, from: Lena\nMemory: User promised to pay Lena back $15 for lunch", "hint": "nudge", "id": "nv2-7-00125"}
+{"type": "nudgeNow", "context": "Now: Sun 18:55\nUser location: a cafe\nTrigger: charger, time: 3:00 PM\nMemory: User prefers window seats", "hint": "skip", "id": "nv2-7-00126"}
+{"type": "nudgeNow", "context": "Now: Wed 19:15\nUser location: unknown\nTrigger: time, 9:30 AM\nMemory: User's favorite color is green", "hint": "skip", "id": "nv2-7-00127"}
+{"type": "nudgeNow", "context": "Now: Sun 17:55\nUser location: work\nTrigger: arrive, place: Ace Hardware\nMemory: User needs to buy a drill bit", "hint": "nudge", "id": "nv2-7-00128"}
+{"type": "nudgeNow", "context": "Now: Tue 19:00\nUser location: home\nTrigger: message, from: Omar\nMemory: User promised to return Lena's charger", "hint": "skip", "id": "nv2-7-00129"}
+{"type": "nudgeNow", "context": "Trigger: email, from: Lena\nMemory: User promised to send Lena the photos from Saturday", "hint": "nudge", "id": "nv2-7-00130"}
+{"type": "nudgeNow", "context": "Trigger: arrive, place: a friend's apartment\nMemory: User needs to buy rice", "hint": "skip", "id": "nv2-7-00131"}
+{"type": "nudgeNow", "context": "Now: Thu 16:00\nUser location: a cafe\nTrigger: message, from: Kenji\nMemory: User promised to return Kenji's charger", "hint": "nudge", "id": "nv2-7-00132"}
+{"type": "nudgeNow", "context": "Now: Fri 12:30\nUser location: work\nTrigger: arrive, place: Rite Aid\nMemory: User needs to buy cough drops", "hint": "nudge", "id": "nv2-7-00133"}
+{"type": "nudgeNow", "context": "Now: Tue 13:55\nUser location: work\nTrigger: arrive, place: Staples\nMemory: User needs to buy a stapler", "hint": "nudge", "id": "nv2-7-00134"}
+{"type": "nudgeNow", "context": "Now: Fri 15:55\nUser location: the gym\nTrigger: arrive, place: Stop & Shop\nMemory: User wants to buy bananas on the 15th for Maya's visit", "hint": "later", "id": "nv2-7-00135"}
+{"type": "nudgeNow", "context": "Now: Tue 6:00\nUser location: a cafe\nTrigger: arrive, place: a friend's apartment\nMemory: User needs to buy contact solution", "hint": "skip", "id": "nv2-7-00136"}
+{"type": "nudgeNow", "context": "Now: Thu 9:00\nUser location: work\nTrigger: arrive, place: class\nMemory: User needs to buy light bulbs", "hint": "skip", "id": "nv2-7-00137"}
+{"type": "nudgeNow", "context": "Now: Sat 7:00\nUser location: unknown\nTrigger: message, from: Tom\nMemory: User promised to ask Tom about the lab report", "hint": "nudge", "id": "nv2-7-00138"}
+{"type": "nudgeNow", "context": "Now: Fri 8:00\nUser location: a cafe\nTrigger: time, 7:00 AM Monday\nMemory: User wants to plan Priya's surprise party next weekend", "hint": "later", "id": "nv2-7-00139"}
+{"type": "nudgeNow", "context": "Now: Sun 9:05\nUser location: work\nTrigger: arrive, place: Walgreens\nMemory: User wants to buy cough drops on payday for Lena's visit", "hint": "later", "id": "nv2-7-00140"}
+{"type": "nudgeNow", "context": "Trigger: arrive, place: Rite Aid\nMemory: User wants to buy sunscreen on Saturday for Kenji's visit", "hint": "later", "id": "nv2-7-00141"}
+{"type": "nudgeNow", "context": "Now: Sun 20:05\nUser location: commuting\nTrigger: arrive, place: Home Depot\nMemory: User wants to buy a drill bit on payday for Tom's visit", "hint": "later", "id": "nv2-7-00142"}
+{"type": "nudgeNow", "context": "Now: Tue 11:30\nUser location: work\nTrigger: arrive, place: the laundromat\nMemory: User needs to buy a stapler", "hint": "skip", "id": "nv2-7-00143"}
+{"type": "nudgeNow", "context": "Now: Tue 14:00\nUser location: a cafe\nTrigger: time, 7:00 AM Monday\nMemory: User wants to plan Zoe's surprise party next weekend", "hint": "later", "id": "nv2-7-00144"}
+{"type": "nudgeNow", "context": "Now: Mon 14:42\nUser location: unknown\nTrigger: arrive, place: Ace Hardware\nMemory: User wants to buy duct tape on payday for Maya's visit", "hint": "later", "id": "nv2-7-00145"}
+{"type": "nudgeNow", "context": "Now: Wed 16:00\nUser location: the gym\nTrigger: arrive, place: Ace Hardware\nMemory: User wants to buy a drill bit on the 15th for Lena's visit", "hint": "later", "id": "nv2-7-00146"}
+{"type": "nudgeNow", "context": "Now: Fri 14:15\nUser location: unknown\nTrigger: arrive, place: home\nMemory: User prefers window seats", "hint": "skip", "id": "nv2-7-00147"}
+{"type": "nudgeNow", "context": "Now: Tue 10:15\nUser location: a cafe\nTrigger: call, from: Noah\nMemory: User promised to return Noah's charger", "hint": "nudge", "id": "nv2-7-00148"}
+{"type": "nudgeNow", "context": "Trigger: email, from: Lena\nMemory: User promised to return Zoe's charger", "hint": "skip", "id": "nv2-7-00149"}
+{"type": "nudgeNow", "context": "Trigger: time, 6:30 AM\nMemory: User wants to text Diego after their 2pm meeting ends", "hint": "later", "id": "nv2-7-00150"}
+{"type": "nudgeNow", "context": "Now: Fri 13:30\nUser location: a cafe\nTrigger: email, from: Maya\nMemory: User promised to return Maya's charger", "hint": "nudge", "id": "nv2-7-00151"}
+{"type": "nudgeNow", "context": "Trigger: arrive, place: the park\nMemory: User needs to buy sticky notes", "hint": "skip", "id": "nv2-7-00152"}
+{"type": "nudgeNow", "context": "Now: Sun 14:30\nUser location: commuting\nTrigger: arrive, place: Office Depot\nMemory: User needs to buy rice", "hint": "skip", "id": "nv2-7-00153"}
+{"type": "nudgeNow", "context": "Now: Fri 20:42\nUser location: a cafe\nTrigger: time, 7:00 AM Monday\nMemory: User wants to plan Maya's surprise party next weekend", "hint": "later", "id": "nv2-7-00154"}
+{"type": "nudgeNow", "context": "Now: Thu 11:05\nUser location: work\nTrigger: arrive, place: Walgreens\nMemory: User needs to buy bananas", "hint": "skip", "id": "nv2-7-00155"}
+{"type": "nudgeNow", "context": "Now: Fri 22:55\nUser location: unknown\nTrigger: arrive, place: Walgreens\nMemory: User needs to buy contact solution", "hint": "nudge", "id": "nv2-7-00156"}
+{"type": "nudgeNow", "context": "Now: Sat 21:55\nUser location: a cafe\nTrigger: arrive, place: the subway station\nMemory: User needs to buy bananas", "hint": "skip", "id": "nv2-7-00157"}
+{"type": "nudgeNow", "context": "Now: Tue 13:00\nUser location: commuting\nTrigger: arrive, place: Office Depot\nMemory: User wants to buy sticky notes on payday for Maya's visit", "hint": "later", "id": "nv2-7-00158"}
+{"type": "nudgeNow", "context": "Now: Wed 23:55\nUser location: the gym\nTrigger: arrive, place: Stop & Shop\nMemory: User needs to buy yogurt", "hint": "nudge", "id": "nv2-7-00159"}
+{"type": "nudgeNow", "context": "Trigger: email, from: Zoe\nMemory: User promised to send Zoe the photos from Saturday", "hint": "nudge", "id": "nv2-7-00160"}
+{"type": "nudgeNow", "context": "Now: Wed 12:30\nUser location: commuting\nTrigger: arrive, place: the laundromat\nMemory: User needs to buy rice", "hint": "skip", "id": "nv2-7-00161"}
+{"type": "nudgeNow", "context": "Now: Sat 6:00\nUser location: the gym\nTrigger: email, from: Diego\nMemory: User promised to ask Noah about the lab report", "hint": "skip", "id": "nv2-7-00162"}
+{"type": "nudgeNow", "context": "Now: Fri 8:42\nUser location: work\nTrigger: charger, time: 3:00 PM\nMemory: User's favorite color is green", "hint": "skip", "id": "nv2-7-00163"}
+{"type": "nudgeNow", "context": "Now: Tue 6:00\nUser location: home\nTrigger: arrive, place: Key Food\nMemory: User needs to buy rice", "hint": "nudge", "id": "nv2-7-00164"}
+{"type": "nudgeNow", "context": "Now: Sat 7:00\nUser location: a cafe\nTrigger: time, 6:30 AM\nMemory: User wants to text Priya after their 2pm meeting ends", "hint": "later", "id": "nv2-7-00165"}
+{"type": "nudgeNow", "context": "Now: Mon 7:00\nUser location: unknown\nTrigger: arrive, place: Aldi\nMemory: User wants to buy bananas on Saturday for Tom's visit", "hint": "later", "id": "nv2-7-00166"}
+{"type": "nudgeNow", "context": "Now: Tue 9:55\nUser location: work\nTrigger: time, 7:00 AM Monday\nMemory: User wants to plan Sam's surprise party next weekend", "hint": "later", "id": "nv2-7-00167"}
+{"type": "nudgeNow", "context": "Trigger: email, from: Aisha\nMemory: User promised to pay Aisha back $15 for lunch", "hint": "nudge", "id": "nv2-7-00168"}
+{"type": "nudgeNow", "context": "Now: Sun 15:42\nUser location: unknown\nTrigger: arrive, place: Ace Hardware\nMemory: User needs to buy duct tape", "hint": "nudge", "id": "nv2-7-00169"}
+{"type": "nudgeNow", "context": "Now: Mon 23:42\nUser location: work\nTrigger: arrive, place: Staples\nMemory: User needs to buy a stapler", "hint": "nudge", "id": "nv2-7-00170"}
+{"type": "nudgeNow", "context": "Now: Fri 12:15\nUser location: home\nTrigger: charger, time: 3:00 PM\nMemory: User's favorite color is green", "hint": "skip", "id": "nv2-7-00171"}
+{"type": "nudgeNow", "context": "Now: Sun 11:30\nUser location: a cafe\nTrigger: message, from: Tom\nMemory: User promised to ask Maya about the lab report", "hint": "skip", "id": "nv2-7-00172"}
+{"type": "nudgeNow", "context": "Now: Tue 13:30\nUser location: work\nTrigger: call, from: Tom\nMemory: User promised to send Tom the photos from Saturday", "hint": "nudge", "id": "nv2-7-00173"}
+{"type": "nudgeNow", "context": "Now: Mon 18:30\nUser location: unknown\nTrigger: arrive, place: Aldi\nMemory: User wants to buy bananas on payday for Sam's visit", "hint": "later", "id": "nv2-7-00174"}
+{"type": "nudgeNow", "context": "Now: Wed 14:30\nUser location: a cafe\nTrigger: time, 6:30 AM\nMemory: User wants to text Sam after their 2pm meeting ends", "hint": "later", "id": "nv2-7-00175"}
+{"type": "nudgeNow", "context": "Trigger: message, from: Priya\nMemory: User promised to ask Fatima about the lab report", "hint": "skip", "id": "nv2-7-00176"}
+{"type": "nudgeNow", "context": "Now: Sun 20:55\nUser location: a cafe\nTrigger: arrive, place: Stop & Shop\nMemory: User wants to buy yogurt on payday for Noah's visit", "hint": "later", "id": "nv2-7-00177"}
+{"type": "nudgeNow", "context": "Now: Wed 20:55\nUser location: unknown\nTrigger: arrive, place: the subway station\nMemory: User needs to buy sunscreen", "hint": "skip", "id": "nv2-7-00178"}
+{"type": "nudgeNow", "context": "Now: Tue 16:42\nUser location: a cafe\nTrigger: arrive, place: the library\nMemory: User needs to buy sunscreen", "hint": "skip", "id": "nv2-7-00179"}
+{"type": "nudgeNow", "context": "Now: Sat 9:05\nUser location: the gym\nTrigger: arrive, place: the subway station\nMemory: User needs to buy bananas", "hint": "skip", "id": "nv2-7-00180"}
+{"type": "nudgeNow", "context": "Now: Sat 9:15\nUser location: work\nTrigger: arrive, place: Ace Hardware\nMemory: User wants to buy a drill bit on the 15th for Priya's visit", "hint": "later", "id": "nv2-7-00181"}
+{"type": "nudgeNow", "context": "Now: Fri 15:30\nUser location: home\nTrigger: arrive, place: Aldi\nMemory: User needs to buy bread", "hint": "nudge", "id": "nv2-7-00182"}
+{"type": "nudgeNow", "context": "Trigger: arrive, place: home\nMemory: User is lactose intolerant", "hint": "skip", "id": "nv2-7-00183"}
+{"type": "nudgeNow", "context": "Now: Sat 13:55\nUser location: work\nTrigger: time, 10:00 PM\nMemory: User wants to email Diego first thing tomorrow morning", "hint": "later", "id": "nv2-7-00184"}
+{"type": "nudgeNow", "context": "Now: Sat 9:30\nUser location: work\nTrigger: email, from: Sam\nMemory: User promised to pay Zoe back $15 for lunch", "hint": "skip", "id": "nv2-7-00185"}
+{"type": "nudgeNow", "context": "Now: Thu 21:30\nUser location: home\nTrigger: charger, time: 12:10 AM\nMemory: User wants to call the pharmacy when it opens at 8am", "hint": "later", "id": "nv2-7-00186"}
+{"type": "nudgeNow", "context": "Now: Wed 6:30\nUser location: the gym\nTrigger: arrive, place: home\nMemory: User's favorite color is green", "hint": "skip", "id": "nv2-7-00187"}
+{"type": "nudgeNow", "context": "Now: Sun 12:42\nUser location: commuting\nTrigger: call, from: Sam\nMemory: User promised to send Sam the photos from Saturday", "hint": "nudge", "id": "nv2-7-00188"}
+{"type": "nudgeNow", "context": "Now: Sat 17:42\nUser location: commuting\nTrigger: message, from: Noah\nMemory: User promised to ask Sam about the lab report", "hint": "skip", "id": "nv2-7-00189"}
+{"type": "nudgeNow", "context": "Now: Sun 9:55\nUser location: a cafe\nTrigger: message, from: Omar\nMemory: User promised to send Lena the photos from Saturday", "hint": "skip", "id": "nv2-7-00190"}
+{"type": "nudgeNow", "context": "Now: Mon 8:30\nUser location: the gym\nTrigger: arrive, place: Ace Hardware\nMemory: User needs to buy a drill bit", "hint": "nudge", "id": "nv2-7-00191"}
+{"type": "nudgeNow", "context": "Now: Mon 13:15\nUser location: unknown\nTrigger: time, 7:00 AM Monday\nMemory: User wants to plan Zoe's surprise party next weekend", "hint": "later", "id": "nv2-7-00192"}
+{"type": "nudgeNow", "context": "Trigger: arrive, place: the laundromat\nMemory: User needs to buy cough drops", "hint": "skip", "id": "nv2-7-00193"}
+{"type": "nudgeNow", "context": "Now: Sat 19:30\nUser location: commuting\nTrigger: arrive, place: the laundromat\nMemory: User needs to buy light bulbs", "hint": "skip", "id": "nv2-7-00194"}
+{"type": "nudgeNow", "context": "Now: Sat 14:30\nUser location: unknown\nTrigger: arrive, place: the laundromat\nMemory: User needs to buy contact solution", "hint": "skip", "id": "nv2-7-00195"}
+{"type": "nudgeNow", "context": "Now: Wed 21:30\nUser location: the gym\nTrigger: arrive, place: Ace Hardware\nMemory: User needs to buy light bulbs", "hint": "nudge", "id": "nv2-7-00196"}
+{"type": "nudgeNow", "context": "Now: Mon 8:42\nUser location: commuting\nTrigger: arrive, place: Home Depot\nMemory: User needs to buy a drill bit", "hint": "nudge", "id": "nv2-7-00197"}
+{"type": "nudgeNow", "context": "Now: Mon 15:15\nUser location: a cafe\nTrigger: arrive, place: Home Depot\nMemory: User wants to buy duct tape on Saturday for Priya's visit", "hint": "later", "id": "nv2-7-00198"}
+{"type": "nudgeNow", "context": "Now: Tue 18:42\nUser location: work\nTrigger: arrive, place: the park\nMemory: User needs to buy yogurt", "hint": "skip", "id": "nv2-7-00199"}
+{"type": "nudgeNow", "context": "Now: Sat 12:42\nUser location: home\nTrigger: time, 9:30 AM\nMemory: User has a cat named Miso", "hint": "skip", "id": "nv2-7-00200"}
+{"type": "nudgeNow", "context": "Now: Wed 19:05\nUser location: work\nTrigger: time, 6:30 AM\nMemory: User wants to text Omar after their 2pm meeting ends", "hint": "later", "id": "nv2-7-00201"}
+{"type": "nudgeNow", "context": "Now: Tue 21:05\nUser location: the gym\nTrigger: time, 9:30 AM\nMemory: User is lactose intolerant", "hint": "skip", "id": "nv2-7-00202"}
+{"type": "nudgeNow", "context": "Now: Wed 20:55\nUser location: a cafe\nTrigger: arrive, place: home\nMemory: User prefers window seats", "hint": "skip", "id": "nv2-7-00203"}
+{"type": "nudgeNow", "context": "Now: Sat 8:05\nUser location: unknown\nTrigger: email, from: Kenji\nMemory: User promised to pay Kenji back $15 for lunch", "hint": "nudge", "id": "nv2-7-00204"}
+{"type": "nudgeNow", "context": "Trigger: time, 6:30 AM\nMemory: User wants to text Tom after their 2pm meeting ends", "hint": "later", "id": "nv2-7-00205"}
+{"type": "nudgeNow", "context": "Now: Mon 22:30\nUser location: the gym\nTrigger: time, 7:00 AM Monday\nMemory: User wants to plan Maya's surprise party next weekend", "hint": "later", "id": "nv2-7-00206"}
+{"type": "nudgeNow", "context": "Trigger: arrive, place: the library\nMemory: User needs to buy a drill bit", "hint": "skip", "id": "nv2-7-00207"}
+{"type": "nudgeNow", "context": "Now: Wed 19:15\nUser location: a cafe\nTrigger: email, from: Zoe\nMemory: User promised to send Zoe the photos from Saturday", "hint": "nudge", "id": "nv2-7-00208"}
+{"type": "nudgeNow", "context": "Now: Fri 14:42\nUser location: commuting\nTrigger: email, from: Maya\nMemory: User promised to ask Maya about the lab report", "hint": "nudge", "id": "nv2-7-00209"}
+{"type": "nudgeNow", "context": "Now: Sat 15:05\nUser location: a cafe\nTrigger: message, from: Zoe\nMemory: User promised to pay Diego back $15 for lunch", "hint": "skip", "id": "nv2-7-00210"}
+{"type": "nudgeNow", "context": "Now: Thu 15:00\nUser location: home\nTrigger: arrive, place: Aldi\nMemory: User wants to buy bread on payday for Zoe's visit", "hint": "later", "id": "nv2-7-00211"}
+{"type": "nudgeNow", "context": "Now: Fri 10:55\nUser location: unknown\nTrigger: arrive, place: Staples\nMemory: User wants to buy envelopes on payday for Maya's visit", "hint": "later", "id": "nv2-7-00212"}
+{"type": "nudgeNow", "context": "Now: Sat 20:55\nUser location: work\nTrigger: arrive, place: home\nMemory: User prefers window seats", "hint": "skip", "id": "nv2-7-00213"}
+{"type": "nudgeNow", "context": "Trigger: arrive, place: Fairway\nMemory: User needs to buy sunscreen", "hint": "skip", "id": "nv2-7-00214"}
+{"type": "nudgeNow", "context": "Now: Tue 19:00\nUser location: commuting\nTrigger: arrive, place: home\nMemory: User has a cat named Miso", "hint": "skip", "id": "nv2-7-00215"}
+{"type": "nudgeNow", "context": "Now: Fri 7:00\nUser location: the gym\nTrigger: arrive, place: home\nMemory: User prefers window seats", "hint": "skip", "id": "nv2-7-00216"}
+{"type": "nudgeNow", "context": "Trigger: email, from: Omar\nMemory: User promised to return Noah's charger", "hint": "skip", "id": "nv2-7-00217"}
+{"type": "nudgeNow", "context": "Now: Thu 23:00\nUser location: home\nTrigger: arrive, place: home\nMemory: User's favorite color is green", "hint": "skip", "id": "nv2-7-00218"}
+{"type": "nudgeNow", "context": "Trigger: arrive, place: Walgreens\nMemory: User needs to buy a drill bit", "hint": "skip", "id": "nv2-7-00219"}
+{"type": "nudgeNow", "context": "Now: Sat 11:00\nUser location: commuting\nTrigger: charger, time: 12:10 AM\nMemory: User wants to call the pharmacy when it opens at 8am", "hint": "later", "id": "nv2-7-00220"}
+{"type": "nudgeNow", "context": "Now: Mon 15:55\nUser location: a cafe\nTrigger: charger, time: 12:10 AM\nMemory: User wants to call the pharmacy when it opens at 8am", "hint": "later", "id": "nv2-7-00221"}
+{"type": "nudgeNow", "context": "Now: Mon 7:00\nUser location: unknown\nTrigger: email, from: Kenji\nMemory: User promised to return Omar's charger", "hint": "skip", "id": "nv2-7-00222"}
+{"type": "nudgeNow", "context": "Now: Tue 21:42\nUser location: home\nTrigger: arrive, place: Office Depot\nMemory: User needs to buy a stapler", "hint": "nudge", "id": "nv2-7-00223"}
+{"type": "nudgeNow", "context": "Now: Tue 10:00\nUser location: commuting\nTrigger: arrive, place: home\nMemory: User is lactose intolerant", "hint": "skip", "id": "nv2-7-00224"}
+{"type": "nudgeNow", "context": "Now: Sun 20:15\nUser location: a cafe\nTrigger: time, 10:00 PM\nMemory: User wants to email Zoe first thing tomorrow morning", "hint": "later", "id": "nv2-7-00225"}
+{"type": "nudgeNow", "context": "Now: Sat 6:05\nUser location: a cafe\nTrigger: message, from: Tom\nMemory: User promised to pay Tom back $15 for lunch", "hint": "nudge", "id": "nv2-7-00226"}
+{"type": "nudgeNow", "context": "Now: Thu 13:30\nUser location: commuting\nTrigger: message, from: Noah\nMemory: User promised to ask Aisha about the lab report", "hint": "skip", "id": "nv2-7-00227"}
+{"type": "nudgeNow", "context": "Now: Fri 7:15\nUser location: work\nTrigger: email, from: Omar\nMemory: User promised to pay Omar back $15 for lunch", "hint": "nudge", "id": "nv2-7-00228"}
+{"type": "nudgeNow", "context": "Now: Mon 23:42\nUser location: the gym\nTrigger: call, from: Noah\nMemory: User promised to ask Noah about the lab report", "hint": "nudge", "id": "nv2-7-00229"}
+{"type": "nudgeNow", "context": "Now: Thu 12:15\nUser location: a cafe\nTrigger: arrive, place: Duane Reade\nMemory: User wants to buy sunscreen on Saturday for Lena's visit", "hint": "later", "id": "nv2-7-00230"}
+{"type": "nudgeNow", "context": "Now: Tue 18:42\nUser location: a cafe\nTrigger: message, from: Lena\nMemory: User promised to pay Maya back $15 for lunch", "hint": "skip", "id": "nv2-7-00231"}
+{"type": "nudgeNow", "context": "Now: Tue 8:05\nUser location: unknown\nTrigger: email, from: Aisha\nMemory: User promised to send Aisha the photos from Saturday", "hint": "nudge", "id": "nv2-7-00232"}
+{"type": "nudgeNow", "context": "Now: Fri 10:05\nUser location: home\nTrigger: arrive, place: home\nMemory: User has a cat named Miso", "hint": "skip", "id": "nv2-7-00233"}
+{"type": "nudgeNow", "context": "Now: Fri 6:15\nUser location: commuting\nTrigger: arrive, place: Stop & Shop\nMemory: User wants to buy bread on Saturday for Kenji's visit", "hint": "later", "id": "nv2-7-00234"}
+{"type": "nudgeNow", "context": "Now: Sun 21:42\nUser location: a cafe\nTrigger: arrive, place: Key Food\nMemory: User needs to buy rice", "hint": "nudge", "id": "nv2-7-00235"}
+{"type": "nudgeNow", "context": "Now: Sun 10:15\nUser location: home\nTrigger: arrive, place: Ace Hardware\nMemory: User wants to buy light bulbs on the 15th for Diego's visit", "hint": "later", "id": "nv2-7-00236"}
+{"type": "nudgeNow", "context": "Trigger: arrive, place: Staples\nMemory: User needs to buy bananas", "hint": "skip", "id": "nv2-7-00237"}
+{"type": "nudgeNow", "context": "Now: Sat 18:00\nUser location: unknown\nTrigger: email, from: Omar\nMemory: User promised to return Tom's charger", "hint": "skip", "id": "nv2-7-00238"}
+{"type": "nudgeNow", "context": "Now: Sat 22:30\nUser location: work\nTrigger: call, from: Sam\nMemory: User promised to send Sam the photos from Saturday", "hint": "nudge", "id": "nv2-7-00239"}
+{"type": "nudgeNow", "context": "Now: Wed 17:00\nUser location: a cafe\nTrigger: message, from: Kenji\nMemory: User promised to send Kenji the photos from Saturday", "hint": "nudge", "id": "nv2-7-00240"}
+{"type": "nudgeNow", "context": "Trigger: call, from: Maya\nMemory: User promised to ask Maya about the lab report", "hint": "nudge", "id": "nv2-7-00241"}
+{"type": "nudgeNow", "context": "Now: Sun 9:30\nUser location: commuting\nTrigger: arrive, place: Fairway\nMemory: User wants to buy yogurt on payday for Priya's visit", "hint": "later", "id": "nv2-7-00242"}
+{"type": "nudgeNow", "context": "Now: Tue 20:05\nUser location: work\nTrigger: message, from: Aisha\nMemory: User promised to pay Tom back $15 for lunch", "hint": "skip", "id": "nv2-7-00243"}
+{"type": "nudgeNow", "context": "Now: Sun 13:00\nUser location: a cafe\nTrigger: message, from: Maya\nMemory: User promised to return Zoe's charger", "hint": "skip", "id": "nv2-7-00244"}
+{"type": "nudgeNow", "context": "Now: Thu 16:15\nUser location: work\nTrigger: arrive, place: the park\nMemory: User needs to buy bananas", "hint": "skip", "id": "nv2-7-00245"}
+{"type": "nudgeNow", "context": "Trigger: time, 7:00 AM Monday\nMemory: User wants to plan Kenji's surprise party next weekend", "hint": "later", "id": "nv2-7-00246"}
+{"type": "nudgeNow", "context": "Now: Tue 20:05\nUser location: commuting\nTrigger: arrive, place: Rite Aid\nMemory: User needs to buy contact solution", "hint": "nudge", "id": "nv2-7-00247"}
+{"type": "nudgeNow", "context": "Now: Tue 14:30\nUser location: home\nTrigger: arrive, place: the laundromat\nMemory: User needs to buy yogurt", "hint": "skip", "id": "nv2-7-00248"}
+{"type": "nudgeNow", "context": "Now: Mon 12:42\nUser location: the gym\nTrigger: message, from: Kenji\nMemory: User promised to send Tom the photos from Saturday", "hint": "skip", "id": "nv2-7-00249"}
+{"type": "nudgeNow", "context": "Now: Wed 13:05\nUser location: home\nTrigger: message, from: Aisha\nMemory: User promised to pay Aisha back $15 for lunch", "hint": "nudge", "id": "nv2-7-00250"}
+{"type": "nudgeNow", "context": "Now: Wed 10:55\nUser location: home\nTrigger: message, from: Aisha\nMemory: User promised to return Lena's charger", "hint": "skip", "id": "nv2-7-00251"}
+{"type": "nudgeNow", "context": "Now: Sun 22:15\nUser location: work\nTrigger: call, from: Kenji\nMemory: User promised to send Kenji the photos from Saturday", "hint": "nudge", "id": "nv2-7-00252"}
+{"type": "nudgeNow", "context": "Now: Tue 11:42\nUser location: work\nTrigger: arrive, place: Staples\nMemory: User needs to buy a stapler", "hint": "nudge", "id": "nv2-7-00253"}
+{"type": "nudgeNow", "context": "Now: Wed 11:05\nUser location: work\nTrigger: arrive, place: class\nMemory: User needs to buy envelopes", "hint": "skip", "id": "nv2-7-00254"}
+{"type": "nudgeNow", "context": "Now: Tue 6:00\nUser location: unknown\nTrigger: charger, time: 12:10 AM\nMemory: User wants to call the pharmacy when it opens at 8am", "hint": "later", "id": "nv2-7-00255"}
+{"type": "nudgeNow", "context": "Now: Sun 21:00\nUser location: home\nTrigger: message, from: Fatima\nMemory: User promised to pay Omar back $15 for lunch", "hint": "skip", "id": "nv2-7-00256"}
+{"type": "nudgeNow", "context": "Trigger: arrive, place: the library\nMemory: User needs to buy yogurt", "hint": "skip", "id": "nv2-7-00257"}
+{"type": "nudgeNow", "context": "Now: Thu 22:00\nUser location: home\nTrigger: arrive, place: home\nMemory: User prefers window seats", "hint": "skip", "id": "nv2-7-00258"}
+{"type": "nudgeNow", "context": "Now: Mon 15:00\nUser location: unknown\nTrigger: arrive, place: the park\nMemory: User needs to buy envelopes", "hint": "skip", "id": "nv2-7-00259"}
+{"type": "nudgeNow", "context": "Now: Wed 6:42\nUser location: unknown\nTrigger: arrive, place: Key Food\nMemory: User wants to buy bananas on payday for Aisha's visit", "hint": "later", "id": "nv2-7-00260"}
+{"type": "nudgeNow", "context": "Now: Fri 14:00\nUser location: home\nTrigger: arrive, place: Fairway\nMemory: User needs to buy contact solution", "hint": "skip", "id": "nv2-7-00261"}
+{"type": "nudgeNow", "context": "Now: Tue 6:55\nUser location: the gym\nTrigger: arrive, place: Rite Aid\nMemory: User needs to buy bread", "hint": "skip", "id": "nv2-7-00262"}
+{"type": "nudgeNow", "context": "Now: Mon 17:15\nUser location: the gym\nTrigger: arrive, place: home\nMemory: User prefers window seats", "hint": "skip", "id": "nv2-7-00263"}
+{"type": "nudgeNow", "context": "Now: Fri 16:30\nUser location: a cafe\nTrigger: time, 10:00 PM\nMemory: User wants to email Diego first thing tomorrow morning", "hint": "later", "id": "nv2-7-00264"}
+{"type": "nudgeNow", "context": "Now: Thu 6:15\nUser location: home\nTrigger: time, 9:30 AM\nMemory: User has a cat named Miso", "hint": "skip", "id": "nv2-7-00265"}
+{"type": "nudgeNow", "context": "Now: Mon 13:05\nUser location: the gym\nTrigger: arrive, place: Ace Hardware\nMemory: User needs to buy light bulbs", "hint": "nudge", "id": "nv2-7-00266"}
+{"type": "nudgeNow", "context": "Now: Mon 7:55\nUser location: a cafe\nTrigger: time, 6:30 AM\nMemory: User wants to text Lena after their 2pm meeting ends", "hint": "later", "id": "nv2-7-00267"}
+{"type": "nudgeNow", "context": "Now: Wed 9:42\nUser location: home\nTrigger: charger, time: 3:00 PM\nMemory: User prefers window seats", "hint": "skip", "id": "nv2-7-00268"}
+{"type": "nudgeNow", "context": "Now: Tue 9:00\nUser location: a cafe\nTrigger: arrive, place: Home Depot\nMemory: User needs to buy a drill bit", "hint": "nudge", "id": "nv2-7-00269"}
+{"type": "nudgeNow", "context": "Trigger: arrive, place: Staples\nMemory: User needs to buy a stapler", "hint": "nudge", "id": "nv2-7-00270"}
+{"type": "nudgeNow", "context": "Now: Mon 23:15\nUser location: the gym\nTrigger: email, from: Aisha\nMemory: User promised to pay Priya back $15 for lunch", "hint": "skip", "id": "nv2-7-00271"}
+{"type": "nudgeNow", "context": "Now: Sat 17:30\nUser location: a cafe\nTrigger: time, 9:30 AM\nMemory: User is lactose intolerant", "hint": "skip", "id": "nv2-7-00272"}
+{"type": "nudgeNow", "context": "Trigger: email, from: Noah\nMemory: User promised to pay Aisha back $15 for lunch", "hint": "skip", "id": "nv2-7-00273"}
+{"type": "nudgeNow", "context": "Now: Tue 13:15\nUser location: a cafe\nTrigger: arrive, place: the park\nMemory: User needs to buy light bulbs", "hint": "skip", "id": "nv2-7-00274"}
+{"type": "nudgeNow", "context": "Now: Sun 6:05\nUser location: a cafe\nTrigger: email, from: Tom\nMemory: User promised to send Tom the photos from Saturday", "hint": "nudge", "id": "nv2-7-00275"}
+{"type": "nudgeNow", "context": "Now: Sun 20:15\nUser location: unknown\nTrigger: arrive, place: Ace Hardware\nMemory: User wants to buy duct tape on Saturday for Sam's visit", "hint": "later", "id": "nv2-7-00276"}
+{"type": "nudgeNow", "context": "Now: Sat 12:42\nUser location: a cafe\nTrigger: arrive, place: the subway station\nMemory: User needs to buy envelopes", "hint": "skip", "id": "nv2-7-00277"}
+{"type": "nudgeNow", "context": "Now: Sat 10:30\nUser location: home\nTrigger: arrive, place: Office Depot\nMemory: User needs to buy envelopes", "hint": "nudge", "id": "nv2-7-00278"}
+{"type": "nudgeNow", "context": "Trigger: arrive, place: Aldi\nMemory: User wants to buy bread on payday for Maya's visit", "hint": "later", "id": "nv2-7-00279"}
+{"type": "nudgeNow", "context": "Now: Sat 20:15\nUser location: unknown\nTrigger: time, 9:30 AM\nMemory: User is lactose intolerant", "hint": "skip", "id": "nv2-7-00280"}
+{"type": "nudgeNow", "context": "Now: Mon 21:30\nUser location: the gym\nTrigger: email, from: Tom\nMemory: User promised to ask Tom about the lab report", "hint": "nudge", "id": "nv2-7-00281"}
+{"type": "nudgeNow", "context": "Now: Thu 13:00\nUser location: commuting\nTrigger: charger, time: 3:00 PM\nMemory: User's favorite color is green", "hint": "skip", "id": "nv2-7-00282"}
+{"type": "nudgeNow", "context": "Now: Mon 6:00\nUser location: commuting\nTrigger: arrive, place: Duane Reade\nMemory: User wants to buy cough drops on the 15th for Tom's visit", "hint": "later", "id": "nv2-7-00283"}
+{"type": "nudgeNow", "context": "Now: Thu 22:42\nUser location: unknown\nTrigger: call, from: Noah\nMemory: User promised to pay Noah back $15 for lunch", "hint": "nudge", "id": "nv2-7-00284"}
+{"type": "nudgeNow", "context": "Trigger: email, from: Lena\nMemory: User promised to pay Zoe back $15 for lunch", "hint": "skip", "id": "nv2-7-00285"}
+{"type": "nudgeNow", "context": "Now: Mon 19:15\nUser location: a cafe\nTrigger: message, from: Tom\nMemory: User promised to return Zoe's charger", "hint": "skip", "id": "nv2-7-00286"}
+{"type": "nudgeNow", "context": "Now: Thu 21:30\nUser location: the gym\nTrigger: arrive, place: home\nMemory: User's favorite color is green", "hint": "skip", "id": "nv2-7-00287"}
+{"type": "nudgeNow", "context": "Now: Wed 17:00\nUser location: commuting\nTrigger: call, from: Noah\nMemory: User promised to return Noah's charger", "hint": "nudge", "id": "nv2-7-00288"}
+{"type": "nudgeNow", "context": "Now: Thu 11:42\nUser location: commuting\nTrigger: arrive, place: Ace Hardware\nMemory: User needs to buy duct tape", "hint": "nudge", "id": "nv2-7-00289"}
+{"type": "nudgeNow", "context": "Now: Sat 9:15\nUser location: a cafe\nTrigger: time, 9:30 AM\nMemory: User is lactose intolerant", "hint": "skip", "id": "nv2-7-00290"}
+{"type": "nudgeNow", "context": "Now: Mon 6:15\nUser location: unknown\nTrigger: time, 6:30 AM\nMemory: User wants to text Zoe after their 2pm meeting ends", "hint": "later", "id": "nv2-7-00291"}
+{"type": "nudgeNow", "context": "Now: Sat 6:05\nUser location: work\nTrigger: arrive, place: Ace Hardware\nMemory: User needs to buy light bulbs", "hint": "nudge", "id": "nv2-7-00292"}
+{"type": "nudgeNow", "context": "Now: Thu 9:05\nUser location: work\nTrigger: charger, time: 3:00 PM\nMemory: User's favorite color is green", "hint": "skip", "id": "nv2-7-00293"}
+{"type": "nudgeNow", "context": "Now: Fri 21:30\nUser location: a cafe\nTrigger: arrive, place: Key Food\nMemory: User needs to buy bananas", "hint": "nudge", "id": "nv2-7-00294"}
+{"type": "nudgeNow", "context": "Now: Fri 16:05\nUser location: unknown\nTrigger: time, 6:30 AM\nMemory: User wants to text Lena after their 2pm meeting ends", "hint": "later", "id": "nv2-7-00295"}
+{"type": "nudgeNow", "context": "Now: Mon 8:15\nUser location: work\nTrigger: message, from: Diego\nMemory: User promised to return Diego's charger", "hint": "nudge", "id": "nv2-7-00296"}
+{"type": "nudgeNow", "context": "Now: Thu 7:30\nUser location: home\nTrigger: message, from: Noah\nMemory: User promised to return Kenji's charger", "hint": "skip", "id": "nv2-7-00297"}
+{"type": "nudgeNow", "context": "Now: Sun 20:15\nUser location: the gym\nTrigger: arrive, place: Rite Aid\nMemory: User needs to buy rice", "hint": "skip", "id": "nv2-7-00298"}
+{"type": "nudgeNow", "context": "Now: Sat 13:30\nUser location: commuting\nTrigger: message, from: Aisha\nMemory: User promised to send Noah the photos from Saturday", "hint": "skip", "id": "nv2-7-00299"}

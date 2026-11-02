@@ -97,7 +97,7 @@ def run(rows, v, cc, tau):
             base = s if g["type"] not in ("contactPick", "eventPick") else prompts.get_set(g["type"], [f"Person {i+1}" for i in range(len(s["options"]) - 1)])
             lp = [a - b for a, b in zip(lp, cf_logp(base, v))]
         p = softmax(lp); k = max(range(len(p)), key=lambda i: p[i])
-        res.append({"type": g["type"], "gold": g["gold"], "pred": ids[k], "conf": p[k], "ok": ids[k] == g["gold"], "ms": ms})
+        res.append({"type": g["type"], "gold": g["gold"], "pred": ids[k], "conf": p[k], "ok": ids[k] == g["gold"], "ms": ms, "lp": lp})
     n = len(res); cov = [r for r in res if r["conf"] >= tau]
     from collections import Counter
     return {"n": n, "acc": sum(r["ok"] for r in res) / n, "coverage": len(cov) / n,
