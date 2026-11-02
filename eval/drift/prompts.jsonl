@@ -1,0 +1,40 @@
+{"id": 0, "category": "math", "prompt": "A shop sells pencils for 3 dollars each. How many dollars do 7 pencils cost? Answer with just the number.", "answers": ["21"]}
+{"id": 1, "category": "math", "prompt": "Tom has 15 apples and gives away 6. How many apples does he have left? Answer with just the number.", "answers": ["9"]}
+{"id": 2, "category": "math", "prompt": "A train travels 60 miles per hour for 3 hours. How many miles does it travel? Answer with just the number.", "answers": ["180"]}
+{"id": 3, "category": "math", "prompt": "What is 12 multiplied by 12? Answer with just the number.", "answers": ["144"]}
+{"id": 4, "category": "math", "prompt": "Sara bought 4 boxes with 6 eggs in each box. How many eggs did she buy? Answer with just the number.", "answers": ["24"]}
+{"id": 5, "category": "math", "prompt": "If a pizza is cut into 8 slices and you eat 3, how many slices are left? Answer with just the number.", "answers": ["5"]}
+{"id": 6, "category": "math", "prompt": "What is 100 minus 37? Answer with just the number.", "answers": ["63"]}
+{"id": 7, "category": "math", "prompt": "A book costs 20 dollars and is on sale for half price. What is the sale price in dollars? Answer with just the number.", "answers": ["10"]}
+{"id": 8, "category": "math", "prompt": "There are 5 rows of chairs with 10 chairs in each row. How many chairs are there? Answer with just the number.", "answers": ["50"]}
+{"id": 9, "category": "math", "prompt": "What is 81 divided by 9? Answer with just the number.", "answers": ["9"]}
+{"id": 10, "category": "fact", "prompt": "What is the capital of France?", "answers": ["paris"]}
+{"id": 11, "category": "fact", "prompt": "How many days are in a week?", "answers": ["7", "seven"]}
+{"id": 12, "category": "fact", "prompt": "What planet is known as the Red Planet?", "answers": ["mars"]}
+{"id": 13, "category": "fact", "prompt": "What is the chemical symbol for water?", "answers": ["h2o"]}
+{"id": 14, "category": "fact", "prompt": "Who wrote the play Romeo and Juliet?", "answers": ["shakespeare"]}
+{"id": 15, "category": "fact", "prompt": "What is the largest ocean on Earth?", "answers": ["pacific"]}
+{"id": 16, "category": "fact", "prompt": "What is the freezing point of water in degrees Celsius?", "answers": ["0", "zero"]}
+{"id": 17, "category": "fact", "prompt": "What is the capital of Japan?", "answers": ["tokyo"]}
+{"id": 18, "category": "fact", "prompt": "How many legs does a spider have?", "answers": ["8", "eight"]}
+{"id": 19, "category": "fact", "prompt": "What gas do plants absorb from the air for photosynthesis?", "answers": ["carbon dioxide", "co2"]}
+{"id": 20, "category": "rewrite", "prompt": "Rewrite this sentence more formally: 'hey, can u send me the report asap?'", "answers": null}
+{"id": 21, "category": "rewrite", "prompt": "Summarize in one sentence: The meeting was moved from Tuesday to Thursday because the projector was broken, and everyone agreed Thursday afternoon worked better anyway.", "answers": null}
+{"id": 22, "category": "rewrite", "prompt": "Fix the grammar: 'She don't like going to the store on mondays.'", "answers": null}
+{"id": 23, "category": "rewrite", "prompt": "Rewrite this sentence in the passive voice: 'The cat chased the mouse.'", "answers": null}
+{"id": 24, "category": "rewrite", "prompt": "Make this sentence shorter: 'Due to the fact that it was raining outside, we made the decision to stay indoors.'", "answers": null}
+{"id": 25, "category": "rewrite", "prompt": "Translate to Spanish: 'Good morning, how are you?'", "answers": null}
+{"id": 26, "category": "rewrite", "prompt": "Summarize in one sentence: Bananas are a popular fruit. They are rich in potassium and easy to carry, which makes them a common snack for athletes.", "answers": null}
+{"id": 27, "category": "chat", "prompt": "Hi! How's your day going?", "answers": null}
+{"id": 28, "category": "chat", "prompt": "I'm feeling a bit tired today. Any tips to feel more energized?", "answers": null}
+{"id": 29, "category": "chat", "prompt": "What's a good name for a goldfish?", "answers": null}
+{"id": 30, "category": "chat", "prompt": "Tell me a short joke.", "answers": null}
+{"id": 31, "category": "chat", "prompt": "Can you recommend a relaxing weekend activity?", "answers": null}
+{"id": 32, "category": "chat", "prompt": "What do you think makes a good friend?", "answers": null}
+{"id": 33, "category": "instr", "prompt": "List three colors of the rainbow, separated by commas.", "answers": null}
+{"id": 34, "category": "instr", "prompt": "Write a haiku about autumn.", "answers": null}
+{"id": 35, "category": "instr", "prompt": "Give me exactly two tips for studying, as a numbered list.", "answers": null}
+{"id": 36, "category": "instr", "prompt": "Respond with only the word 'yes' or 'no': Is the sun a star?", "answers": ["yes"]}
+{"id": 37, "category": "instr", "prompt": "Spell the word 'apple' backwards.", "answers": ["elppa"]}
+{"id": 38, "category": "instr", "prompt": "Write one sentence describing a sunset.", "answers": null}
+{"id": 39, "category": "instr", "prompt": "Name the first three months of the year.", "answers": ["january"]}
