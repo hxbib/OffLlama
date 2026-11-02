@@ -1,0 +1,42 @@
+{
+ "raw": {
+  "synthetic": 7600,
+  "massive": 1250,
+  "clinc": 700,
+  "snips": 300
+ },
+ "self_dupes": 1349,
+ "eval_dupes_dropped": 256,
+ "eval_dupes_by_source": {
+  "synthetic": 255,
+  "clinc": 1
+ },
+ "eval_dupes_by_kind": {
+  "near": 55,
+  "exact_context": 12,
+  "exact_utterance": 189
+ },
+ "eval_dupes_by_file": {
+  "eval/gold/gold_all.jsonl": 55
+ },
+ "kept": {
+  "synthetic": 5997,
+  "massive": 1249,
+  "clinc": 699,
+  "snips": 300
+ },
+ "kept_by_type": {
+  "nudgeNow": 1719,
+  "contactPick": 813,
+  "timing": 764,
+  "answerability": 951,
+  "notificationTriage": 370,
+  "route": 1597,
+  "toolChoice": 868,
+  "eventPick": 249,
+  "confirmBeforeAct": 247,
+  "rememberOrNot": 295,
+  "memoryConflict": 173,
+  "sensitivity": 199
+ }
+}
