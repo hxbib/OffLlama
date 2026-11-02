@@ -23,7 +23,7 @@ escalates to a bigger Meta brain (Muse Spark, Muse Glimmer) if you're online. Th
 - **Real telemetry**: every Reflex decision is logged (time, type, confidence, escalated, latency, later
   agreement with the teacher). The "share handled on device" chart is built only from those rows.
 - **Distillation**: the only teacher is **Muse Glimmer 30B**, run locally (IQ2_M), which labels each question with soft
-  option-letter probabilities; low-confidence labels are dropped; LoRA r16 SFT with loss on the answer letter only; temperature scaling + τ per decision.
+  option-letter probabilities; low-confidence labels are dropped; LoRA r16 SFT with loss on the answer letter only; raw (unscaled) confidence + τ per decision; no temperature scaling in the shipping pipeline.
 
 ## Architecture
 

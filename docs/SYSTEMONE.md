@@ -7,7 +7,7 @@ Source read: https://github.com/ggml-org/llama.cpp/pull/29818 (merged 2026-10-02
 - One forward pass per question; per-option probabilities from a softmax over option scores; argmax is the answer.
 - Option-letter scoring for causal decision models (openjev: one single-token letter per option, A–Z a–z) is the same
   idea as our Reflex (letter logits → softmax).
-- Temperature scaling before the softmax.
+- No temperature scaling: confidence is the raw softmax over the label letters (verified in eval/results/QUANT_IDENTITY.md). training/temp_scale.py exists but is not in the shipping pipeline.
 
 ## Differences (we keep ours, noted deliberately)
 | | systemone | Reflex |

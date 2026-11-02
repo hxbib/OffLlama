@@ -82,7 +82,7 @@ Every model in the system is a Meta model. Four of them carry real load:
 - Architecture: [PLACEHOLDER: architecture diagram image] (Mermaid source in README).
 - Each decision is one forward pass. I read the logits of the option letters and turn them into a calibrated probability.
 - Below the threshold the Reflex takes the safe path: escalate, ask, or confirm.
-- Distillation: Muse Glimmer 30B (local IQ2_M) → [PLACEHOLDER: N teacher-labeled examples] → LoRA r16 (Unsloth), loss on the answer letter only → temperature scaling → Q4_K_M GGUF → llama.cpp Metal.
+- Distillation: Muse Glimmer 30B (local IQ2_M) → [PLACEHOLDER: N teacher-labeled examples] → LoRA r16 (Unsloth), loss on the answer letter only → Q4_K_M GGUF (confidence used raw, no temperature scaling) → llama.cpp Metal.
 - Threshold: conformal risk control. Certified so far: error among on-device decisions ≤ ~10% under exchangeability (calibration N=180: τ=0.90, 36% handled, 0 errors, bound 10.2%); 5% not certified. Final τ = [AFTER_TAU], bound [AFTER_BOUND].
 - Calibration: baseline ECE 0.150 (10 bins, frozen test split N=120, untrained 1B with prompt debiasing). After: [AFTER_ECE]. Charts: `docs/img/reliability_baseline_test120_v2cc.png`, [AFTER_RELIABILITY_CHART].
 - Headline after-distillation accuracy and ECE come **only from the frozen held-out test split** (never the dev or calibration split).
