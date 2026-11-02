@@ -1,0 +1,633 @@
+# Slide OCR (tesseract) from frames every 10 s, program portion (frames f_0190+). Consecutive near-duplicate frames collapsed.
+# Frame time = 11:27:24 ET + (n-1)*10 s. Webcam-only frames omitted (little/no text).
+
+===== 11:58:54 ET  (frames/f_0190.jpg) =====
+@ LIVE
+Meta (leet
+A\ Dy ) |f Ir
+ea eriner)
+IN PARTNERSHIP WITH
+baseten Mz Fireworks Al @® Modal
+O° Meta
+
+===== 11:59:04 ET  (frames/f_0191.jpg) =====
+© LIVE
+Meta (Clove
+Eva erdner)
+" exOFFSTARTINGIN
+TNERSHIP WITH
+baseten Mz. Fireworks Al
+@® Modal
+O° Meta
+
+===== 11:59:24 ET  (frames/f_0193.jpg) =====
+@ LIVE
+SHEE TES 1 — ®Meta
+Hackathon . mK /
+i RTNERSHIP WITH . . fe 4 ‘ oN
+S baseten Ye Fireworks Al @® Modal ih aS
+
+===== 11:59:34 ET  (frames/f_0194.jpg) =====
+@ LIVE
+Meta le eet
+eyaerinch)
+" exOFFSTARTINGIN
+00:31
+TNERSHIP WITH
+baseten Mz Fireworks Al
+@® Modal
+O90 Meta
+
+===== 11:59:44 ET  (frames/f_0195.jpg) =====
+@ LIVE
+Meta (Clloeel
+fachethon :
+00:2 1
+TNERSHIP WITH
+baseten Mz Fireworks Al
+@® Modal
+O90 Meta
+
+===== 12:01:04 ET  (frames/f_0203.jpg) =====
+Meta AV CEREBRAL VALLEY
+Ivan Porollo
+FOUNDER, CEREBRAL VALLEY
+
+===== 12:02:14 ET  (frames/f_0210.jpg) =====
+uve Ooo Meta AV CEREBRAL VALLEY
+Saurabh Baji
+ENGINEERING DIRECTOR, MODEL API, META
+
+===== 12:07:34 ET  (frames/f_0242.jpg) =====
+Live (O90) Meta AV CEREBRAL VALLEY
+| Aishwarya Goel
+GTM, BASETEN \
+
+===== 12:08:44 ET  (frames/f_0249.jpg) =====
+Meta AV CEREBRAL VALLEY
+Andrew Hinh
+DEVELOPER RELATIONS ENGINEER, MODAL
+
+===== 12:09:34 ET  (frames/f_0254.jpg) =====
+Meta AV CEREBRAL VALLEY
+Sinan Ozdemir
+HEAD OF Al DEVELOPER EDUCATION, FIREWORKS Al
+
+===== 12:10:34 ET  (frames/f_0260.jpg) =====
+AV CEREBRAL VALLEY
+EVENT OVERVIEW
+Ten days, two tracks, two themes
+2 tracks 2 themes
+indi per & Build for Your World &
+artups Push the Frontie
+Oct 26 - Nov 4
+
+===== 12:10:44 ET  (frames/f_0261.jpg) =====
+Live (9,9) Meta AV CEREBRAL VALLEY
+Ten days, two tracks, two themes
+
+===== 12:11:14 ET  (frames/f_0264.jpg) =====
+EVENT OVERVIEW
+Ten days, two tracks, two themes
+10 days 2 tracks 2 themes
+id Build for Your World &
+Push the Frontie!
+Oct 26 - Nov 4
+Meta | % cercerat vattey
+
+===== 12:11:34 ET  (frames/f_0266.jpg) =====
+LIVE
+TRACKS
+Every project enters one of two track
+TRACK 1 TRACK 2
+Indie Developer Startup
+For individual builders and students. For teams and founders building a real
+Judged on creativity, technical ambition, product. Judged on technical execution
+and whether it works. and whether it holds up in production.
+jd toward either problem st Wor h the Frontier
+Oo Meta AV CEREBRAL VALLEY
+
+===== 12:11:54 ET  (frames/f_0268.jpg) =====
+eve Ooo Meta AV CEREBRAL VALLEY
+PROBLEM STATEMENTS
+Build toward one of two themes
+Build for Your World Push the Frontier
+Bring Meta's models into your domain. Use Meta's models to tackle challenges
+Solve a problem you know firsthand, free in software, robotics, manufacturing,
+up time and mental space, and make energy, materials and beyond. Show us
+something possible that wasn't before. what becomes possible when these
+models meet the real world.
+
+===== 12:12:34 ET  (frames/f_0272.jpg) =====
+Live (O80) Meta AV CEREBRAL VALLEY
+Build it new, build it
+New work only. Build it b
+bring a product, but only r| ent coun’
+Teams of up to four. Solo builders are welcome.
+Public repos. Your GitHub rep: r ust be public.
+Demo only what you built. Judg p e to tell what your
+team created during the RL. jualifie:
+No banned projects. Anything that breaks legal, ethical or platform
+policies, or uses co a V hts to, is
+disqualified.
+
+===== 12:12:44 ET  (frames/f_0273.jpg) =====
+Live (9,9) Meta AV CEREBRAL VALLEY
+Build it new, build it
+New work only. Build it betwe 26 and No Startu
+bring a product, but only rk from the event counts.
+Teams of up to four. Solo builders are welcome.
+Public repos. Your GitHub repository must be public.
+Demo only what you built. Judg st be le to tell what your
+team created during the ‘ Jualified.
+No banned projects. aay log that breaks legal, ethical or platform
+policies, 2S CO r assets you don't hav
+disqualifi
+
+===== 12:12:54 ET  (frames/f_0274.jpg) =====
+LIVE
+Build it new, build it in the open
+New work only. Build it between Oct 26 and Nov 4. Startu
+bring a product, but only work from the event counts.
+Teams of up to four. Solo builders are welcome.
+Public repos. Your GitHub repository st be public.
+Demo only what you built. Judg st be able to tell what yo
+team created during the event, or the p Jualified.
+No banned projects. Anything that breaks legal, ethical or platform
+policies, or uses co ata or assets you don't have rights to, is
+disqualified
+ow Meta AV CEREBRAL VALLEY
+
+===== 12:13:04 ET  (frames/f_0275.jpg) =====
+Live o Meta AV CEREBRAL VALLEY
+Build it new, build it
+New work only. Build it b 26 and No’ Startu
+bring a product, but only rk from the event counts.
+Teams of up to four. Solo builders are welcome.
+Public repos. Your GitHub repository must be public.
+le to tell what your
+team created during the ‘ jualified.
+No banned projects. Anythir breaks legal, ethical or platform
+policies, or use ata or assets you don't hav
+disqualified.
+
+===== 12:13:14 ET  (frames/f_0276.jpg) =====
+LIVE
+26 and Nov 4. Startu
+bring a product, but only rk from the event counts.
+Teams of up to four. Solo builders are welcome.
+Public repos. Your GitHub repository must be public.
+Demo only what you built. Judges must be able to tell what yo
+team created during the
+No banned projects. Any! hing that breaks legal, ethical or Scletonm
+policies, or uses co r ts you don't hav hts to, is
+disqualifi j
+OY Meta
+AV CEREBRAL VALLEY
+
+===== 12:13:24 ET  (frames/f_0277.jpg) =====
+Live (9,9) Meta AV CEREBRAL VALLEY
+Build it new, build it
+New work only. Build it b 1 Oct 26 and Nov 4. Startu
+bring a product, but only rk from the event counts.
+Teams of up to four. Solo builders are welcome.
+Public repos. Your GitHub repository must be public.
+Demo only what you built. Judges must be able to tell what yo
+team created during the nt, or tr Jualified.
+No banned projects. Anything that breaks legal, ethical or platform
+policies, or uses co ata or assets you don't hav
+disqualified.
+
+===== 12:13:34 ET  (frames/f_0278.jpg) =====
+LIVE
+bring a product, but only r| n the nt coun
+Teams of up to four. Solo builders are welcome.
+Public repos. Your GitHub repository must be public.
+Demo only what you built. Judg
+team created during the nt, or tr
+No banned Projects: Anythir g that breaks legal, ethical or platform
+polici r r ts you don't have rights to, is
+disqualified.
+(0,9) Meta AV CEREBRAL VALLEY
+
+===== 12:13:54 ET  (frames/f_0280.jpg) =====
+Meta AV CEREBRAL VALLEY
+RULES: ANTI-PROJECTS
+Skip these overdone projects
+Al-generated medical advice Basic RAG apps
+Simple image analyzers Streamlit apps
+Dashboards as the main feature “Al for Education” chatbots
+Aljob application screeners Al nutrition coaches
+Personality analyzers Sports analyzers or coaches
+
+===== 12:14:34 ET  (frames/f_0284.jpg) =====
+eLive (9,9) Meta AV CEREBRAL VALLEY
+PRIZES
+$1,000,000
+in cash prizes across two tracks
+$400K $550K $50K
+Indie Developer track Startup track Bonus prizes
+
+===== 12:14:54 ET  (frames/f_0286.jpg) =====
+Live (9,8) Meta AV CEREBRAL VALLEY
+Five winners per track, $25K to $250K
+Indie Developer Startups $
+Place Place
+1st 1st
+2nd
+3rd
+4th
+Sth
+
+===== 12:15:14 ET  (frames/f_0288.jpg) =====
+Live w~ Meta AV CEREBRAL VALLEY
+BONUS PRIZES
+Five bonus prizes, $50K in total
+$20K $10K $10K $5K $5K
+Most Viral Best Build on Community Vote _Best Agentic Best Creative
+Project Meta Open - Use-Case
+WHAT IT REWARDS Weights cl e
+The demo that gets WHATIT REWARC
+How T's JuoceD
+Post your demo on X
+‘and submit the link.
+Most likes, reposts
+‘and comments by Nov a
+8 1159 PMET wins. C the model.
+eligible
+
+===== 12:15:24 ET  (frames/f_0289.jpg) =====
+Live (0,9) Meta AV CEREBRAL VALLEY
+BONUS PRIZES
+Five bonus prizes, $50K in total
+$10K $10K $5K $5K
+Best Build on Community Vote Best Agentic. Best Creative
+Meta Open
+Weights
+How T's JuoceD
+Post your demo on x
+‘and submit the link.
+Most likes, reposts
+‘and comments by Nov
+81159 PMET wins. i C s and the model.
+al usefulnes:
+
+===== 12:15:34 ET  (frames/f_0290.jpg) =====
+LIVE
+BONUS PRIZES
+Five bonus prizes, $50K in total
+$20K $10K
+Most Viral Best Build on
+Project Meta Open
+WHAT IT REWARDS Weights
+The demo that gets
+‘the most engagement
+fon X after the event.
+How T's JuoceD
+Post your demo on x
+‘and submit the link.
+Most likes, reposts
+‘and comments by Nov
+81159 PMET wins.
+$10K $5K
+Community Vote _Best Agentic.
+hackathon platfo
+e per
+Best Creative
+the model.
+w~ Meta AV CEREBRAL VALLEY
+
+===== 12:15:44 ET  (frames/f_0291.jpg) =====
+Live (0,9) Meta AV CEREBRAL VALLEY
+BONUS PRIZES
+Five bonus prizes, $50K in total
+$20K $10K $10K $5K $5K
+Most Viral Best Build on Community Vote _Best Agentic. Best Creative
+Project Meta Open
+WHAT IT REWARDS Weights
+The demo that gets
+‘the most engagement
+fon X after the event.
+How T's JuoceD
+Post your demo on X
+‘and submit the link.
+Most likes, reposts
+‘and comments by Nov a
+8 1159 PMET wins. = C s the model
+al usefulnes:
+
+===== 12:15:54 ET  (frames/f_0292.jpg) =====
+LIVE
+BONUS PRIZES
+Five bonus prizes, $50K in total
+$20K $10K
+Most Viral Best Build on
+Project Meta Open
+nari REWAROS Weights
+The demo that gos iy
+SOOM Gest projecton use
+HOW IT'S JUDGED as ol
+Post your demo on x fame j
+dnd bmi te ink.
+Most kes, reposts
+and comments by Nov
+e180 PMET wns.
+$10K
+Community Vote
+Best Agentic
+Best Creative
+Build
+The most original
+the model.
+(9,9) Meta AV CEREBRAL VALLEY
+
+===== 12:16:04 ET  (frames/f_0293.jpg) =====
+LIVE
+BONUS PRIZES
+Five bonus prizes, $50K in total
+$10K
+Best Build on
+Meta Open
+Weights
+‘and submit the link.
+Most likes, reposts
+‘and comments by Nov
+8 1159 PMET wins.
+$10K $5K
+Community Vote Best Agentic.
+hackathon platform
+e per verified
+unt.
+Best Creative
+Build
+the model.
+(0,9) Meta AV CEREBRAL VALLEY
+
+===== 12:16:14 ET  (frames/f_0294.jpg) =====
+LIVE
+Submissions close Nov 4 at 9:00 PM ET
+Oct 26 Oct 27-Nov 3 Nov 5-8 Nov 9
+Kickoff Live sessions Judging Closing
+) PM ET and office No acti ceremony
+hours M ) PM ET,
+Community
+vote winner
+Announced on
+Oo Meta AV CEREBRAL VALLEY
+
+===== 12:16:44 ET  (frames/f_0297.jpg) =====
+LIVE
+Submissions close Nov 4 at 9:00 PM ET
+Oct 26 Oct 27-Nov 3 Nov 5-8 Nov 9
+Kickoff Live sessions Judging Closing
+) PM ET and office tion ceremony
+hours
+Community
+vote winner
+Announced on
+OO Meta
+AV CEREBRAL VALLEY
+
+===== 12:17:24 ET  (frames/f_0301.jpg) =====
+olive oo Meta | & ceresrat vattey
+WHERE TO BE
+Discord is home base for the next ten days
+#announcements
+Official updates and deadlines
+#questions
+Ask the CV team, ping @CV
+#office-hours
+Ask the Meta team
+#resources
+Scan to join Docs, credit forms, recordings
+Point your phone #team-search
+camera at the code Find teammates, up to four
+#intros
+Say who you are and what you're building
+
+===== 12:17:54 ET  (frames/f_0304.jpg) =====
+Live oo Meta AV CEREBRAL VALLEY
+Live sessions with Meta and partners
+Date Session Speaker
+Tue, Oct 27 Meta Engineering Workshop P1 uraj Subramanian, Meta
+Wed, Oct 28 Meta Engineering Workshop P2 Yash Kha
+Fri, Oct 30 Fireworks Al Workshop
+PM ET unle
+
+===== 12:18:04 ET  (frames/f_0305.jpg) =====
+LIVE
+Live sessions with Meta and partners
+Date
+Tue, Oct 27
+Wed, Oct 28
+Fri, Oct 30
+Session Speaker
+Meta Engineering Workshop P1
+Meta Engineering Workshop P2 Yash Khare,
+Fireworks Al Workshop
+PM ET unle
+uraj Subramanian,
+(9,9) Meta AV CEREBRAL VALLEY
+
+===== 12:18:14 ET  (frames/f_0306.jpg) =====
+Live Oo Meta AV CEREBRAL VALLEY
+Live sessions with Meta and partners
+Date Session Speaker
+Tue, Oct 27 Meta Engineering Workshop P1 aj Subramanian,
+Wed, Oct 28 Meta Engineering Workshop P2 Yash Kha
+Fri, Oct 30 Fireworks Al Workshop
+PM ET unless noted. Eve
+
+===== 12:18:24 ET  (frames/f_0307.jpg) =====
+LIVE
+CREDITS AND PARTNER RESOURCES
+$150 in Meta Model API credits per builder
+Meta
+$150
+Meta Model API
+credits for every
+participant
+Baseten
+$100
+its plus 2M
+TPM rate limits, up
+to 2,000
+participants
+open-weights
+models, up to
+1,000 participants
+Fireworks
+Credits for select
+participants, plus
+a workshop with
+Sinan Ozdemir
+OD Meta | % ceresrat vatey
+
+===== 12:18:44 ET  (frames/f_0309.jpg) =====
+Live w~ Meta AV CEREBRAL VALLEY
+CREDITS AND PARTNER RESOURCES
+$150 in Meta Model API credits per builder
+Meta Baseten Fireworks
+$150 $100 $25
+Meta Model API credits plus 2M Me’ Credits for select
+credits for every TPM rate limits, up open-weights participants, plus
+participant to 2,000 models, up to a workshop with
+participants 1,000 participants Sinan Ozdemir
+
+===== 12:18:54 ET  (frames/f_0310.jpg) =====
+LIVE
+CREDITS AND PARTNER RESOURCES
+$150 in Meta Model API credits per builder
+Meta
+$150
+Meta Model API
+credits for every
+participant
+Baseten
+$100
+Credits plus 2M
+TPM rate limits, up
+to 2,000
+participants
+open-weights
+models, up to
+1,000 participants
+Fireworks
+Credits for select
+participants, plus
+a workshop with
+Sinan Ozdemir
+) Meta AV CEREBRAL VALLEY
+
+===== 12:19:14 ET  (frames/f_0312.jpg) =====
+LIVE
+JUDGING PROCESS
+Three stages from submission to winners
+STAGE 1 STAGE 2 STAGE 3
+Pass / fail Live final
+round
+Top 5 per track.
+Judges watch the
+demos live on Nov 9
+and rank them.
+(0,9) Meta AV CEREBRAL VALLEY
+
+===== 12:19:34 ET  (frames/f_0314.jpg) =====
+Live (0,9) Meta AV CEREBRAL VALLEY
+JUDGING PROCESS
+Three stages from submission to winners
+STAGE1 STAGE 2 STAGE 3
+Pass / fail Live final
+round
+Top 5 per track.
+Judges watch the
+demos live on Nov 9
+and rank them.
+
+===== 12:20:24 ET  (frames/f_0319.jpg) =====
+LIVE
+Impact carries the most weight at 30%
+25% 20%
+Impact Use of Meta Al Technical
+al- al tooling
+and fit c
+(9,8) Meta AV CEREBRAL VALLEY
+
+===== 12:20:34 ET  (frames/f_0320.jpg) =====
+LIVE
+Submit four things by Nov 4, 9:00 PM ET
+Submit on the CV platform every teammate
+2bralvalle 4 f /t
+inute demo video
+vat your team built during the event; judg ore from it
+A public GitHub repo
+(0,9) Meta AV CEREBRAL VALLEY
+
+===== 12:20:44 ET  (frames/f_0321.jpg) =====
+Live (9,9) Meta AV CEREBRAL VALLEY
+Submit four things by Nov 4, 9:00 PM ET
+Submit on the CV platform, with every teammate
+acke
+e from it
+
+===== 12:20:54 ET  (frames/f_0322.jpg) =====
+LIVE
+Submit four things by Nov 4, 9:00 PM ET
+every teammate
+vackathon/
+inute demo video
+ly what your team built during the event; judg from it
+A public GitHub repo
+ow Meta AV CEREBRAL VALLEY
+
+===== 12:21:04 ET  (frames/f_0323.jpg) =====
+Live (9,9) Meta AV CEREBRAL VALLEY
+Submit four things by Nov 4, 9:00 PM ET
+Submit on the CV jelettormn, with ovary, teammate
+A3-mi ute demo video
+r team built during the event; ju e from it
+
+===== 12:21:24 ET  (frames/f_0325.jpg) =====
+SGT Ooo Meta AV CEREBRAL VALLEY
+LET'S GET HACKING
+Hacking starts now
+‘WHERE TO ASK WHAT HAPPENS NEXT
+#questions for anything about the Today: credit forms and this recording
+event land in #resources
+#office-hours for the Meta team Tue, Oct 27: first live session, 12:00 PM ET
+#team-search if you still need a team Wed, Nov 4: submissions due, 9:00 PM ET
+
+===== 12:22:34 ET  (frames/f_0332.jpg) =====
+@ LIVE
+Meta Global
+A\l Developer
+Hackathon
+$1 MILLION
+IN PRIZES
+OQ Meta
+
+===== 12:26:54 ET  (frames/f_0358.jpg) =====
+LIVE
+IN I>) I\\ 1@| \ YS
+A\l| |Develo Per
+Hackathon
+$1 MILLION
+IN PRIZES
+OY Meta
+
+===== 12:27:04 ET  (frames/f_0359.jpg) =====
+@ LIVE
+Meta Global
+Al Developer
+Hackathon
+$1 MILLION
+IN PRIZES
+OY Meta
+
+==========================================================================
+VERIFIED SLIDE TEXT (read visually from full-resolution frames; tesseract above is noisy)
+==========================================================================
+[Pre-show, 11:27-12:00 ET] "Meta Global AI Developer Hackathon — KICKOFF STARTING IN mm:ss — In partnership with baseten | Fireworks AI | Modal" (countdown reached 0 at ~12:00 ET)
+[Lower thirds] Ivan Porollo — Founder, Cerebral Valley | Saurabh Baji — Engineering Director, Model API, Meta | Aishwarya Goel — GTM, Baseten | Andrew Hinh — Developer Relations Engineer, Modal | Sinan Ozdemir — Head of AI Developer Education, Fireworks AI
+[12:10:34] EVENT OVERVIEW — Ten days, two tracks, two themes: 10 days (Oct 26 – Nov 4) | 2 tracks (Indie Developer & Startups) | 2 themes (Build for Your World & Push the Frontier)
+[12:11:34] TRACKS — Every project enters one of two tracks. TRACK 1 Indie Developer: For individual builders and students. Judged on creativity, technical ambition, and whether it works. TRACK 2 Startup: For teams and founders building a real product. Judged on technical execution and whether it holds up in production. Footnote: Both tracks can build toward either problem statement: Build for Your World or Push the Frontier.
+[12:11:54] PROBLEM STATEMENTS — Build toward one of two themes. Build for Your World: Bring Meta's models into your domain. Solve a problem you know firsthand, free up time and mental space, and make something possible that wasn't before. Push the Frontier: Use Meta's models to tackle challenges in software, robotics, manufacturing, energy, materials and beyond. Show us what becomes possible when these models meet the real world.
+[12:12:54] RULES — Build it new, build it in the open. • New work only. Build it between Oct 26 and Nov 4. Startups can bring a product, but only work from the event counts. • Teams of up to four. Solo builders are welcome. • Public repos. Your GitHub repository must be public. • Demo only what you built. Judges must be able to tell what your team created during the event, or the project is disqualified. • No banned projects. Anything that breaks legal, ethical or platform policies, or uses code, data or assets you don't have rights to, is disqualified.
+[12:13:54] RULES: ANTI-PROJECTS — Skip these overdone projects: AI-generated medical advice; Basic RAG apps; Simple image analyzers; Streamlit apps; Dashboards as the main feature; "AI for Education" chatbots; AI job application screeners; AI nutrition coaches; Personality analyzers; Sports analyzers or coaches. Footnote: Not a complete list. Medical advice includes tools like AI mental health advisors and skin blemish detectors.
+[12:14:34] PRIZES — $1,000,000 in cash prizes across two tracks: $400K Indie Developer track | $550K Startup track | $50K Bonus prizes
+[12:14:54] PRIZES BY TRACK — Five winners per track, $25K to $250K. Indie Developer ($400K total): 1st $150K, 2nd $100K, 3rd $75K, 4th $50K, 5th $25K. Startups ($550K total): 1st $250K, 2nd $150K, 3rd $75K, 4th $50K, 5th $25K.
+[12:15:44] BONUS PRIZES — Five bonus prizes, $50K in total.
+  $20K Most Viral Project — Rewards: the demo that gets the most engagement on X after the event. Judged: Post your demo on X and submit the link. Most likes, reposts and comments by Nov 8 11:59 PM ET wins.
+  $10K Best Build on Meta Open Weights — Rewards: best project on Muse Glimmer or Muse Spark Open, on your own hardware or partner inference. Judged: Flagged in round one. The infra partner verifies it runs on an eligible open-weight model.
+  $10K Community Vote — Rewards: the project with the most votes in the public gallery. Winner announced Nov 16. Judged: Total votes on the hackathon platform. One vote per verified account.
+  $5K Best Agentic Use-Case — Rewards: the strongest use of AI agents to complete tasks, make decisions or run multi-step workflows. Judged: Judges score autonomy, effectiveness and practical usefulness.
+  $5K Best Creative Build — Rewards: the most original creative project built with Muse Image or Muse Wonder. Judged: Flagged in round one. Scored on originality, execution and use of the model.
+[12:16:14] TIMELINE — Submissions close Nov 4 at 9:00 PM ET. Oct 26 Kickoff 12:00 PM ET → Oct 27–Nov 3 Live sessions and office hours (on Discord) → Nov 4 Submissions due 9:00 PM ET → Nov 5–8 Judging (no action needed) → Nov 9 Closing ceremony 12:00 PM ET, live finals → Nov 16 Community vote winner announced on Discord.
+[12:17:24] WHERE TO BE — Discord is home base for the next ten days. Join the server: https://cv.inc/e/meta-ai-developer-hackathon/discord (QR code "Scan to join"). Channels: #announcements (official updates and deadlines), #questions (ask the CV team, ping @CV), #office-hours (ask the Meta team), #resources (docs, credit forms, recordings), #team-search (find teammates, up to four), #intros (say who you are and what you're building).
+[12:17:54] LIVE SESSIONS — Live sessions with Meta and partners: Tue Oct 27 Meta Engineering Workshop P1 — Suraj Subramanian, Meta; Wed Oct 28 Meta Engineering Workshop P2 — Yash Khare, Meta; Fri Oct 30 Fireworks AI Workshop — Sinan Ozdemir, Fireworks AI. Footnote: Sessions start at 12:00 PM ET unless noted. Every session is recorded and posted to #resources.
+[12:18:24] CREDITS AND PARTNER RESOURCES — $150 in Meta Model API credits per builder. Meta $150: Meta Model API credits for every participant. Baseten $100: Credits plus 2M TPM rate limits, up to 2,000 participants. Modal $100: Credits for Meta open-weights models, up to 1,000 participants. Fireworks $25: Credits for select participants, plus a workshop with Sinan Ozdemir. How to claim: request forms open in #resources at kickoff.
+[12:19:14] JUDGING PROCESS — Three stages from submission to winners. Stage 1 Pass/fail: Does the project reasonably fit a theme and use Meta AI products? Stage 2 Rubric scoring: Judges score every passing project from 0 to 10 on the rubric. Stage 3 Live final round: Top 5 per track. Judges watch the demos live on Nov 9 and rank them.
+[12:20:24] JUDGING RUBRIC — Impact carries the most weight at 30%. Impact 30%: real-world potential, who benefits, and fit with a problem statement. Use of Meta AI tooling 25%: creative use beyond a basic integration. Technical depth 20%: sound, refined engineering with real craft. Demo 25%: a working demo that holds up, and a demo video worth watching. Footnote: Same rubric in Stage 2 and the final round. Scores run 0 to 10 per criterion.
+[12:20:34] SUBMISSIONS — Submit four things by Nov 4, 9:00 PM ET: 1) Submit on the CV platform, with every teammate — cerebralvalley.ai/e/meta-ai-developer-hackathon/hackathon/submit; 2) A 3-minute demo video — Show only what your team built during the event; judges score from it. 3) A public GitHub repo — Check that it opens in a logged-out browser before you submit. 4) Before the deadline — Wednesday, Nov 4 at 9:00 PM ET. Don't wait for the last hour.
+[12:21:24] LET'S GET HACKING — Hacking starts now. Where to ask: #questions for anything about the event; #office-hours for the Meta team; #team-search if you still need a team. What happens next: Today: credit forms and this recording land in #resources; Tue Oct 27: first live session, 12:00 PM ET; Wed Nov 4: submissions due, 9:00 PM ET.
+[12:22:34–end] End card: "Meta Global AI Developer Hackathon — $1 MILLION IN PRIZES — OCT 26–NOV 4"

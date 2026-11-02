@@ -1,0 +1,252 @@
+[11:30:08 ET | +0:10:47] .
+[12:01:12 ET | +0:41:51] hack
+[12:01:42 ET | +0:42:21] please go to that discord link that you can find the details,
+[12:01:45 ET | +0:42:24] but I'll talk about all that in a little bit.
+[12:01:48 ET | +0:42:27] First off, I'd like to welcome to the stage,
+[12:01:51 ET | +0:42:30] Sara Bajie, the engineering director
+[12:01:53 ET | +0:42:32] for the Thank you, welcome.
+[12:01:59 ET | +0:42:38] Thank you, Evan.
+[12:02:01 ET | +0:42:40] Welcome, everyone, to the Meta.
+[12:02:05 ET | +0:42:44] global AI Hackathon.
+[12:02:07 ET | +0:42:46] Wherever you're joining from,
+[12:02:09 ET | +0:42:48] thank you for bringing your time,
+[12:02:10 ET | +0:42:49] your ideas, and, your energy.
+[12:02:13 ET | +0:42:52] One of the the most exciting things
+[12:02:15 ET | +0:42:54] about a global virtual Hackathon
+[12:02:17 ET | +0:42:56] is the range of
+[12:02:18 ET | +0:42:57] perspectives it brings together.
+[12:02:21 ET | +0:43:00] You're all building in different
+[12:02:22 ET | +0:43:01] communities and users with different problems in mind.
+[12:02:27 ET | +0:43:06] That gives us an incredible starting point.
+[12:02:30 ET | +0:43:09] Each of you brings knowledge of
+[12:02:32 ET | +0:43:11] something that could work better.
+[12:02:34 ET | +0:43:13] And this is an opportunity to
+[12:02:36 ET | +0:43:15] to turn that knowledge into something people can use.
+[12:02:40 ET | +0:43:19] At Meta
+[12:02:41 ET | +0:43:20] Meta Super Intelligence
+[12:02:51 ET | +0:43:30] and press the time between an idea and a working product.
+[12:02:56 ET | +0:43:35] As models improve coding and working across different kinds of media, more of
+[12:03:02 ET | +0:43:41] of the process becomes accessible to more builders.
+[12:03:08 ET | +0:43:47] This hackathon is,
+[12:03:20 ET | +0:43:59] What you build helps us which capabilities are the most useful,
+[12:03:26 ET | +0:44:05] where the tools need to improve,
+[12:03:28 ET | +0:44:07] and what developers want to do next.
+[12:03:31 ET | +0:44:10] You have several ways to get started
+[12:03:34 ET | +0:44:13] depending on what you want to build.
+[12:03:36 ET | +0:44:15] Muse Spark and Muse Wonder on the Meta Model API
+[12:03:41 ET | +0:44:20] give you reasoning capabilities for
+[12:03:44 ET | +0:44:23] applications and agents that
+[12:03:46 ET | +0:44:25] need to work through complex tasks.
+[12:03:48 ET | +0:44:27] Muse Code can help you move from an idea into
+[12:03:52 ET | +0:44:31] implementation with agents that can work across a project,
+[12:03:56 ET | +0:44:35] write and test code,
+[12:03:58 ET | +0:44:37] , and support longer engineering tasks while used here.
+[12:04:03 ET | +0:44:42] For projects involving images or speech,
+[12:04:06 ET | +0:44:45] you can explore Muse Image and Muse Voice.
+[12:04:11 ET | +0:44:50] Muse Glimmer and Muse Spark Open
+[12:04:14 ET | +0:44:53] also open up possibilities for building locally,
+[12:04:18 ET | +0:44:57] on your own hardware or through our partners,
+[12:04:21 ET | +0:45:00] Fireworks, Bayston and Modal.
+[12:04:24 ET | +0:45:03] We are helping cover the compute
+[12:04:26 ET | +0:45:05] with $150.50 in.
+[12:04:33 ET | +0:45:12] Choose the tools that fit your problem, and start building.
+[12:04:36 ET | +0:45:15] Check the email from the event to claim your credits.
+[12:05:04 ET | +0:45:43] create visual content or interact with software through speech.
+[12:05:10 ET | +0:45:49] You might build something that makes developers more effective
+[12:05:43 ET | +0:46:22] We are back in this hackathon with a million dollar cash prize pool and we are excited to recognize
+[12:06:15 ET | +0:46:54] and help other teams get past blockers.
+[12:06:18 ET | +0:46:57] As you build, keep checking the prototype
+[12:06:21 ET | +0:47:00] delivers the result you intended.
+[12:06:24 ET | +0:47:03] from the failures, those habits
+[12:06:30 ET | +0:47:09] and the connections you make
+[12:06:32 ET | +0:47:11] will keep playing long after this hackathon.
+[12:06:37 ET | +0:47:16] Many of the best ideas started at a hackathon table.
+[12:06:42 ET | +0:47:21] This week that table stretches across the world.
+[12:06:46 ET | +0:47:25] You bring the problems, the creativity, and the perspective.
+[12:06:50 ET | +0:47:29] We are here to give you the tools
+[12:06:52 ET | +0:47:31] that turn those ideas into working software.
+[12:06:55 ET | +0:47:34] We're excited excited to see what you make
+[12:06:56 ET | +0:47:35] and what you discover along the way.
+[12:06:58 ET | +0:47:37] So thank you once again for being here
+[12:07:00 ET | +0:47:39] and let's start building.
+[12:07:03 ET | +0:47:42] Amazing.
+[12:07:04 ET | +0:47:43] Thank you
+[12:07:08 ET | +0:47:47] and super inspiring.
+[12:07:10 ET | +0:47:49] Folks, next up, we have a few partners
+[12:07:13 ET | +0:47:52] from the ecosystem that I'd love to introduce as well
+[12:07:17 ET | +0:47:56] who are supporting this event.
+[12:07:20 ET | +0:47:59] First, first up, we've got Ash, Aishwarya Goel,
+[12:07:22 ET | +0:48:01] who is the GTM at Base10.
+[12:07:25 ET | +0:48:04] Please welcome Aish
+[12:07:48 ET | +0:48:27] in open evidence and many more to host some of their mission
+[12:07:53 ET | +0:48:32] critical workloads at scale with us
+[12:08:08 ET | +0:48:47] So yeah, once you're selected, expect an email from us with all
+[12:08:12 ET | +0:48:51] the details. If you have any thoughts, questions, ideas, I'll
+[12:08:16 ET | +0:48:55] be hanging out on the Discord group so feel free to reach out and yeah we are very excited to see with us and have have have fun building thank you so much Ash
+[12:08:47 ET | +0:49:26] called an infrastructure where you can do everything
+[12:08:49 ET | +0:49:28] from getting serverless GPUs to doing inference,
+[12:08:53 ET | +0:49:32] Sandbox, so we're helping out with
+[12:09:49 ET | +0:50:28] inference and training of models.
+[12:09:52 ET | +0:50:31] I myself have been training
+[12:09:54 ET | +0:50:33] when we were a little over 10 years,
+[12:09:56 ET | +0:50:35] yes, you heard me right even before
+[12:09:57 ET | +0:50:36] the transformer was even invented
+[12:09:59 ET | +0:50:38] and the people at fireworks
+[12:10:01 ET | +0:50:40] are some of the best engineers out there
+[12:10:03 ET | +0:50:42] in both the world of inference
+[12:10:05 ET | +0:50:44] and in inferencing.
+[12:10:06 ET | +0:50:45] If you have any questions around using a model,
+[12:10:09 ET | +0:50:48] benchmarking model, training a model,
+[12:10:11 ET | +0:50:50] I'll also be in the Discord answering questions
+[12:10:19 ET | +0:50:58] and I'm very excited to have you all on board.
+[12:10:22 ET | +0:51:01] Very excited to have you supporting the hackathon as well.
+[12:10:25 ET | +0:51:04] And as a reminder, please visit those discord channels
+[12:10:27 ET | +0:51:06] and post your questions there
+[12:10:29 ET | +0:51:08] and redeem those credits.
+[12:10:31 ET | +0:51:10] Folks, I am now going to get into
+[12:10:33 ET | +0:51:12] get into the logistics, some minor housekeeping rules around the hackathon itself. A lot of what
+[12:10:41 ET | +0:51:20] I'm going through here is in the event details page that is
+[12:10:46 ET | +0:51:25] located on the Cerebral Valley platform as well, and there's also
+[12:10:50 ET | +0:51:29] Discord support bots that you can add in the Discord that will have this information too.
+[12:10:56 ET | +0:51:35] So at any point in time, if you need more information, you can re-watch this video,
+[12:10:59 ET | +0:51:38] this will be recorded. There was also more information on the event details page
+[12:11:20 ET | +0:51:59] There's the indie developer track and the startups track
+[12:12:20 ET | +0:52:59] whether that's in software, robotics, manufacturing, energy, and
+[12:12:24 ET | +0:53:03] beyond, show us where you can take these metamodels to and push the
+[12:12:30 ET | +0:53:09] frontier. Some rules of the road for this event, for this hackathon, new work
+[12:12:37 ET | +0:53:16] only, folks. So when you start this hackathon, you must build and open
+[12:12:44 ET | +0:53:23] source the work that you create, and it should be distinguishable that you
+[12:12:48 ET | +0:53:27] during the hackathon.
+[12:12:50 ET | +0:53:29] If you have existing prior work
+[12:12:52 ET | +0:53:31] as well, you need to call
+[12:12:54 ET | +0:53:33] that out, because
+[12:12:56 ET | +0:53:35] and start from
+[12:12:58 ET | +0:53:37] you can use that, but in the submission
+[12:13:00 ET | +0:53:39] process, you will need to call
+[12:13:02 ET | +0:53:41] out that you started new work
+[12:13:04 ET | +0:53:43] and where that new work starts.
+[12:13:06 ET | +0:53:45] Also, for team sizes,
+[12:13:08 ET | +0:53:47] it's up to teams of four.
+[12:13:10 ET | +0:53:49] You can participate
+[12:13:12 ET | +0:53:51] as a solo builder, you can have a team of two
+[12:13:14 ET | +0:53:53] you can have a team of, but
+[12:13:16 ET | +0:53:55] But at maximum, is a team of four, and all of your teammates must be approved.
+[12:13:22 ET | +0:54:01] If your teammate wasn't approved, there's a team search channel that you can find new folks in.
+[12:13:27 ET | +0:54:06] As mentioned, please make those GitHub repositories public
+[12:13:32 ET | +0:54:11] because we will be evaluating all of them.
+[12:13:35 ET | +0:54:14] Also, as mentioned, please only demo what you build during the event.
+[12:13:41 ET | +0:54:20] And also, for your projects,
+[12:13:44 ET | +0:54:23] please avoid anything that breaks legal, ethical, or platform policies.
+[12:13:48 ET | +0:54:27] They will be disqualified.
+[12:13:50 ET | +0:54:29] So at Cerebral Valley, we host a decent amount of hackathons
+[12:13:55 ET | +0:54:34] and we see some projects that are pretty repetitive
+[12:13:58 ET | +0:54:37] to give this overview of, you know,
+[12:14:01 ET | +0:54:40] different call-outs of projects to avoid
+[12:14:03 ET | +0:54:42] because these are quite basic.
+[12:14:04 ET | +0:54:43] A lot of these are targeted towards like
+[12:14:13 ET | +0:54:52] anything that goes against, again,
+[12:14:15 ET | +0:54:54] those policies or just simple ideas.
+[12:14:18 ET | +0:54:57] The point of this hackathon is again,
+[12:14:21 ET | +0:55:00] to push the frontier or to bring something
+[12:14:24 ET | +0:55:03] in your world and essentially push these meta models
+[12:14:27 ET | +0:55:06] to the edge, and just calling it out,
+[12:14:31 ET | +0:55:10] that some of these we've seen across many hackathons.
+[12:14:33 ET | +0:55:12] So try and avoid them,
+[12:14:35 ET | +0:55:14] try and come up with something more unique.
+[12:14:39 ET | +0:55:18] For prizes, as I mentioned at the start,
+[12:14:41 ET | +0:55:20] this is a million dollar hackathon.
+[12:14:43 ET | +0:55:22] Across the two tracks, we've got $950,000 in prizes,
+[12:14:47 ET | +0:55:26] and then we've got another 50,000 in prizes
+[12:14:50 ET | +0:55:29] for bonus prizes.
+[12:14:53 ET | +0:55:32] How those are split, for the indie developer track,
+[12:14:57 ET | +0:55:36] Now in first place we've got 150k, up to fifth place, 25k, and distributed accordingly.
+[12:15:03 ET | +0:55:42] And then in startups, in the startups track, the first place gets $250,000, second place
+[12:15:09 ET | +0:55:48] gets 150, and down to fifth place for 25k.
+[12:15:14 ET | +0:55:53] Each track will have first, second, third, fourth, and fifth place.
+[12:15:20 ET | +0:55:59] We've got five other bonus prizes, so when you're submitting, please make sure to call
+[12:15:25 ET | +0:56:04] out if you're submitting to this project as well, but we've got a most viral project project.
+[12:15:30 ET | +0:56:09] This is something that's posted on accept the event in the submission form. There will be a
+[12:15:36 ET | +0:56:15] link to post to add your post there and that's how we will track whether it went viral or not.
+[12:15:43 ET | +0:56:22] Best build on meta open weights. So best project on MuseG-Glimmer or Muse-Spark open.
+[12:15:50 ET | +0:56:29] Community vote as well, after submissions, we will have a community vote function on the project gallery,
+[12:15:58 ET | +0:56:37] where you should just distribute this link, your project to your friends and they can upvote it.
+[12:16:04 ET | +0:56:43] And that's how we'll judge the community vote.
+[12:16:07 ET | +0:56:46] Then we've got the best agentic use case
+[12:16:10 ET | +0:56:49] and the best creative build as well, both for 5k.
+[12:16:15 ET | +0:56:54] For our timeline, as I mentioned, after kickoff here,
+[12:16:19 ET | +0:56:58] That's when hacking starts.
+[12:16:21 ET | +0:57:00] And then hacking is going to go up until 9pm ET on November 4th.
+[12:16:27 ET | +0:57:06] Throughout the week, we've got a few live sessions, we've got some workshops tomorrow and after tomorrow.
+[12:16:32 ET | +0:57:11] So that's Tuesday and Wednesday at noon ET.
+[12:16:37 ET | +0:57:16] We also got office hours throughout the week.
+[12:16:40 ET | +0:57:19] on each weekday we will have office hours in morning ET time where the meta team will be
+[12:16:48 ET | +0:57:27] online answering any questions in the office hours channel. Once submissions come in on November
+[12:16:55 ET | +0:57:34] 4th, November 5th through 8th will be the first round of judging where we will parse through
+[12:17:01 ET | +0:57:40] all of the projects and then on November 9th will be the closing ceremony where we will
+[12:17:08 ET | +0:57:47] present the top finalists, and judges will judge the projects live.
+[12:17:14 ET | +0:57:53] On November 16th, that's when we'll announce the community vote winner as well in the Discord.
+[12:17:23 ET | +0:58:02] We chatted about the Discord a lot. This is going to be our home base for the next 10 days.
+[12:17:29 ET | +0:58:08] So please join that link.
+[12:17:31 ET | +0:58:10] Again, that's the URL of the event, and then just add slash Discord to the end, or just use that QR code.
+[12:17:37 ET | +0:58:16] There's a few channels in there. There's a partner channels in there.
+[12:17:40 ET | +0:58:19] , there's an Office Hours channel in there too, where you can ask questions to the Meta team, my team will be moderating it as well, so I'm seeing a lot of questions come in this morning, and we will be answering all of them throughout the week.
+[12:17:54 ET | +0:58:33] Chatted a little bit about the live sessions, but on Tuesday, October 27th, we're going to have an engineering workshop for Meta, and similarly on October 28th, part two of that workshop,
+[12:18:08 ET | +0:58:47] delivered by Suraj on Tuesday and Yash on Wednesday.
+[12:18:14 ET | +0:58:53] And then on Friday,
+[12:18:15 ET | +0:58:54] we will have a workshop from Fireworks by Sina.
+[12:18:24 ET | +0:59:03] The partners touched on this a little bit,
+[12:18:26 ET | +0:59:05] but in terms of the credits being provided today,
+[12:18:29 ET | +0:59:08] we've got $150 for Meta,
+[12:18:31 ET | +0:59:10] based in a modal given 100,
+[12:18:33 ET | +0:59:12] and then Fireworks is giving $25 in credits.
+[12:18:37 ET | +0:59:16] All of those forms are in the event details page
+[12:18:41 ET | +0:59:20] on this Drupal Valley platform.
+[12:18:43 ET | +0:59:22] So again, the event link you signed up on,
+[12:18:46 ET | +0:59:25] you should now see an information icon on there
+[12:18:49 ET | +0:59:28] that you can click
+[12:18:50 ET | +0:59:29] and you will see all the details on that page.
+[12:18:53 ET | +0:59:32] That's where you will find the credit forms
+[12:18:56 ET | +0:59:35] that you can fill out.
+[12:18:57 ET | +0:59:36] And the teams will be distributing credits
+[12:19:02 ET | +0:59:41] in batches accordingly.
+[12:19:03 ET | +0:59:42] For the partner credits,
+[12:19:05 ET | +0:59:44] those are selected by the partners.
+[12:19:07 ET | +0:59:46] so up to a certain amount of participants as well.
+[12:19:13 ET | +0:59:52] For our judging process.
+[12:19:15 ET | +0:59:54] So after you submitted the project,
+[12:19:18 ET | +0:59:57] you are now November, it's November 4th,
+[12:19:22 ET | +1:00:01] it's 9 p.m. ET, you've submitted your project, now what?
+[12:19:26 ET | +1:00:05] So we have the judging happening in three stages.
+[12:19:30 ET | +1:00:09] The first stage is just going to be pass and fail,
+[12:19:32 ET | +1:00:11] basically detecting whether the project
+[12:19:35 ET | +1:00:14] reasonably fits within the theme,
+[12:19:37 ET | +1:00:16] within the use of MetAI products.
+[12:19:39 ET | +1:00:18] the judges from the meta team will be reviewing and scoring everyone that passes
+[12:19:46 ET | +1:00:25] on a scale of from 0 to 10 based on the judging rubric that's listed in the event details section.
+[12:19:53 ET | +1:00:32] That will narrow down to the top teams from each track and that top five teams will then be
+[12:20:02 ET | +1:00:41] presented on the live stage on November 9th during the final round of judging.
+[12:20:09 ET | +1:00:48] And the way that judging will work is judges will tune in, watch the three
+[12:20:13 ET | +1:00:52] minute video that you submit and essentially give feedback on it.
+[12:20:18 ET | +1:00:57] Afterwards they will rank them accordingly from first to fifth place.
+[12:20:23 ET | +1:01:02] For the judging rubric we're focused on impact first. Again the real world
+[12:20:28 ET | +1:01:07] potential, who benefits, and the problem statement, does it fit within a
+[12:20:31 ET | +1:01:10] Then we've got the use of MetaAI tooling, technical depth, and demo as well.
+[12:20:36 ET | +1:01:15] As a reminder, what to submit for this hackathon.
+[12:20:44 ET | +1:01:23] Again, the submission link is on the platform.
+[12:20:48 ET | +1:01:27] So after this kickoff, you'll see a submit project button on the event page where you signed up.
+[12:20:54 ET | +1:01:33] Make sure to review that form because that's where you will submit all the details on your project.
+[12:21:00 ET | +1:01:39] One important thing, very important thing to submit is that 3-minute demo video.
+[12:21:07 ET | +1:01:46] It is important to focus on that way our team can review it as well.
+[12:21:12 ET | +1:01:51] Also, the deadline is November 4th at 9 PM ET, so please submit it on time.
+[12:21:18 ET | +1:01:57] And please review the form early so you know what's coming and do not wait until the last hour to submit.
+[12:21:27 ET | +1:02:06] Folks, that's pretty much all of the information on the rules and logistics. For any more questions,
+[12:21:35 ET | +1:02:14] please direct your questions into the Discord. There we have a forum on the Questions channel,
+[12:21:40 ET | +1:02:19] we've got office hours for the meta team, we've got the Team Search channel if you're
+[12:21:44 ET | +1:02:23] looking for a team. Throughout the day we'll be answering all the questions, I know there's
+[12:21:49 ET | +1:02:28] a lot in the chat, so we will be going through that today and answering. And then the first
+[12:21:55 ET | +1:02:34] live session will be tomorrow at noon PM ET and then we'll have another one on Wednesday as well.
+[12:22:02 ET | +1:02:41] But other than that, that's pretty much it. I'm very excited to see what everyone builds
+[12:22:07 ET | +1:02:46] over the course of the 10 days. And as a reminder, please make sure to review
+[12:22:12 ET | +1:02:51] that submission form and please get started to think not only about the project idea,
+[12:22:16 ET | +1:02:55] but then how you will present it to the judges as well and how you build it.
+[12:22:20 ET | +1:02:59] Happy hacking folks! I'm excited to see what you can build with the meta models. Good luck!

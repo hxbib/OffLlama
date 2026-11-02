@@ -1,0 +1,16 @@
+[12:01:09 ET | +0:41:48] Hackathon, the meta and global AI
+[12:03:11 ET | +0:43:50] and improve it all within a concentrated period of building.
+[12:03:17 ET | +0:43:56] And what you build helps us learn too-
+[12:03:20 ET | +0:43:59] which capabilities are the most useful,
+[12:03:23 ET | +0:44:02] where the tools need to improve,
+[12:03:25 ET | +0:44:04] and what the developers want to do next.
+[12:03:28 ET | +0:44:07] You have several ways to get started depending on what you want to build.
+[12:03:33 ET | +0:44:12] MuseSpark and MuseWonder on the MetaModel API
+[12:03:38 ET | +0:44:17] give you reasoning capabilities for
+[12:03:41 ET | +0:44:20] applications and agents that need to work through complex tasks.
+[12:03:45 ET | +0:44:24] Muse code
+[12:03:46 ET | +0:44:25] code can help you move from an idea into implementation.
+[12:03:49 ET | +0:44:28] implementation with agents that can work across the project right and test
+[12:03:54 ET | +0:44:33] code and support longer engineering tasks while used here.
+[12:04:01 ET | +0:44:40] You bring the problems, the creativity and the perspective..
+[12:04:05 ET | +0:44:44] We are here to give you the tools that turn those ideas into-

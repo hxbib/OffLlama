@@ -1,0 +1,70 @@
+{
+ "N": 50,
+ "agree": 43,
+ "overall": 0.86,
+ "per_type": {
+  "answerability": {
+   "agree": 5,
+   "n": 5,
+   "rate": 1.0
+  },
+  "confirmBeforeAct": {
+   "agree": 5,
+   "n": 5,
+   "rate": 1.0
+  },
+  "contactPick": {
+   "agree": 3,
+   "n": 4,
+   "rate": 0.75
+  },
+  "eventPick": {
+   "agree": 3,
+   "n": 4,
+   "rate": 0.75
+  },
+  "memoryConflict": {
+   "agree": 4,
+   "n": 4,
+   "rate": 1.0
+  },
+  "notificationTriage": {
+   "agree": 3,
+   "n": 4,
+   "rate": 0.75
+  },
+  "nudgeNow": {
+   "agree": 3,
+   "n": 4,
+   "rate": 0.75
+  },
+  "rememberOrNot": {
+   "agree": 2,
+   "n": 4,
+   "rate": 0.5
+  },
+  "route": {
+   "agree": 3,
+   "n": 4,
+   "rate": 0.75
+  },
+  "sensitivity": {
+   "agree": 4,
+   "n": 4,
+   "rate": 1.0
+  },
+  "timing": {
+   "agree": 4,
+   "n": 4,
+   "rate": 1.0
+  },
+  "toolChoice": {
+   "agree": 4,
+   "n": 4,
+   "rate": 1.0
+  }
+ },
+ "mean_conf_right": 0.9377355854006006,
+ "mean_conf_wrong": 0.632816700160076,
+ "mean_letter_mass": 0.9290188724329316
+}

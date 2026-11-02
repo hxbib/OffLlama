@@ -1,0 +1,61 @@
+[12:00:29 ET | +0:41:08] Hello everyone. My name is Ivan. I'm with Cerebral Valley. We host some of the largest
+[12:00:50 ET | +0:41:29] hackathons in the world. And today we're excited to partner with Meta and bring you the Meta
+[12:00:55 ET | +0:41:34] the Meta Global AI Developer Hackathon.
+[12:00:58 ET | +0:41:37] Now folks, I don't know about you,
+[12:00:59 ET | +0:41:38] but there's not many hackathons in the world
+[12:01:02 ET | +0:41:41] that give out a million dollars in prizes.
+[12:01:06 ET | +0:41:45] So if you're here today,
+[12:01:07 ET | +0:41:46] you're one of the lucky folks
+[12:01:09 ET | +0:41:48] that got selected to participate
+[12:01:11 ET | +0:41:50] in the Million Dollar Hackathon,
+[12:01:13 ET | +0:41:52] the Meta Global AI Developer Hackathon.
+[12:01:17 ET | +0:41:56] Folks, we have a packed agenda today.
+[12:01:19 ET | +0:41:58] I wanna introduce some people from Meta
+[12:01:21 ET | +0:42:00] and then some of our partners as well,
+[12:01:24 ET | +0:42:03] who will be will be helping out with the hackathon.
+[12:01:26 ET | +0:42:05] Afterwards, we're going to get
+[12:01:28 ET | +0:42:07] into some housekeeping rules
+[12:01:30 ET | +0:42:09] and then we'll get started with the hack.
+[12:01:34 ET | +0:42:13] Also, as a reminder, for the live chat of the session,
+[12:01:37 ET | +0:42:16] please post in the Discord general chat.
+[12:01:40 ET | +0:42:19] If you're not in the Discord yet,
+[12:01:42 ET | +0:42:21] please go to that Discord link
+[12:01:43 ET | +0:42:22] that you can find the details,
+[12:01:45 ET | +0:42:24] but I'll talk about all that and all that.
+[12:01:48 ET | +0:42:27] First off, I'd like to welcome to the stage,
+[12:01:51 ET | +0:42:30] Sara Baji, the Engineering Director for the Model API at Meta.
+[12:01:56 ET | +0:42:35] Sara, welcome.
+[12:01:59 ET | +0:42:38] Thank you, Ivan.
+[12:02:01 ET | +0:42:40] Welcome, everyone, to the Global AI Hackathon.
+[12:02:07 ET | +0:42:46] Wherever you're joining from,
+[12:02:09 ET | +0:42:48] thank you for bringing your time, your ideas,
+[12:02:11 ET | +0:42:50] and your energy.
+[12:02:13 ET | +0:42:52] One of the most exciting things
+[12:02:15 ET | +0:42:54] about a global virtual hackathon
+[12:02:17 ET | +0:42:56] is the range of perspectives it brings together.
+[12:02:21 ET | +0:43:00] You're all building in different communities
+[12:02:23 ET | +0:43:02] for different users with different problems in mind.
+[12:02:27 ET | +0:43:06] That gives us an incredible starting point.
+[12:02:30 ET | +0:43:09] Each of you brings knowledge of something
+[12:02:33 ET | +0:43:12] that could work better.
+[12:02:34 ET | +0:43:13] And this is an opportunity to turn that knowledge
+[12:02:37 ET | +0:43:16] into something people can use.
+[12:02:40 ET | +0:43:19] At Meta Super Intelligence Labs,
+[12:02:43 ET | +0:43:22] we've been moving quickly to advance our models
+[12:02:51 ET | +0:43:30] is to compress the time between an idea and a working product.
+[12:02:57 ET | +0:43:36] As models improve at reasoning, coding,
+[12:03:00 ET | +0:43:39] and working across different kinds of media,
+[12:03:03 ET | +0:43:42] more of the process becomes accessible to more builders.
+[12:03:08 ET | +0:43:47] This hackathon is an opportunity to test an idea,
+[12:03:12 ET | +0:43:51] get a
+[12:03:13 ET | +0:43:52] a prototype working, learn where it breaks,
+[12:03:15 ET | +0:43:54] and improve it all within a concentrated period of building.
+[12:03:21 ET | +0:44:00] and what you build helps us learn too, which capabilities are the most useful,
+[12:03:26 ET | +0:44:05] where the tools need to improve, and what developers want to do next.
+[12:03:32 ET | +0:44:11] You have several ways to get started depending on what you want to build.
+[12:03:37 ET | +0:44:16] Muse Spark and Muse Wonder on the Meta Model API
+[12:03:42 ET | +0:44:21] give you reasoning capabilities for applications and agents
+[12:03:46 ET | +0:44:25] that need to work through complex tasks.
+[12:03:49 ET | +0:44:28] Muse code can help you move from an idea into
+[12:03:52 ET | +0:44:31] implementation with agents that can work across the project,
+[12:03:56 ET | +0:44:35] write and test code.

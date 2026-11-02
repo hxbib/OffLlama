@@ -1,0 +1,49 @@
+[12:10:58 ET | +0:51:37] You to rewatch this video, this will be recorded.
+[12:11:01 ET | +0:51:40] There's also more information on the event details page in the Discord.
+[12:11:06 ET | +0:51:45] But what are we doing here on this event?
+[12:11:10 ET | +0:51:49] So we've got 10 days of hacking, starting today,
+[12:11:13 ET | +0:51:52] after this kickoff is over, up through November 4th, 9 p.m. ET is when submissions are due.
+[12:11:20 ET | +0:51:59] There are two main tracks. There's the indie developer track and the startups track.
+[12:11:24 ET | +0:52:03] When you apply, you apply to one of those tracks.
+[12:11:27 ET | +0:52:06] there's
+[12:11:27 ET | +0:52:06] There's also two themes,
+[12:11:28 ET | +0:52:07] either build for your world or push the frontier.
+[12:11:33 ET | +0:52:12] As mentioned, on the two tracks,
+[12:11:35 ET | +0:52:14] the indie developer track is more for those individual builders,
+[12:11:38 ET | +0:52:17] those indie hackers, students,
+[12:11:40 ET | +0:52:19] judge on creativity, technical ambition,
+[12:11:42 ET | +0:52:21] and whether it works.
+[12:11:43 ET | +0:52:22] And then for the startup,
+[12:11:45 ET | +0:52:24] this is track, this is for the incorporated startups.
+[12:11:48 ET | +0:52:27] So teams with existing teams
+[12:11:51 ET | +0:52:30] and that are coming in with an incorporated startup as well.
+[12:11:57 ET | +0:52:36] Both tracks are building towards one of the two themes.
+[12:12:02 ET | +0:52:41] So the two themes are one build for your world.
+[12:12:04 ET | +0:52:43] So this is bringing meta models into your own domain,
+[12:12:08 ET | +0:52:47] solve a problem that you know firsthand,
+[12:12:10 ET | +0:52:49] that you, that, but that's keeping you up at night.
+[12:12:14 ET | +0:52:53] Or there's a other theme,
+[12:12:16 ET | +0:52:55] which is pushing the frontier.
+[12:12:17 ET | +0:52:56] And this is bringing something new to the world
+[12:12:19 ET | +0:52:58] with the meta models.
+[12:12:20 ET | +0:52:59] You know, whether that's in software, robotics,
+[12:12:23 ET | +0:53:02] manufacturing, energy, and beyond.
+[12:12:25 ET | +0:53:04] Show us where you take these metamodels to and push the frontier.
+[12:12:33 ET | +0:53:12] Some rules of the road for this event, for this hackathon.
+[12:12:37 ET | +0:53:16] New work only, folks.
+[12:12:39 ET | +0:53:18] So when you start this hackathon, you.
+[12:12:42 ET | +0:53:21] You must build and open source the work that you create.
+[12:12:46 ET | +0:53:25] And it should be distinguishable that you built this during the hackathon.
+[12:12:51 ET | +0:53:30] If you have existing prior work as well,
+[12:12:54 ET | +0:53:33] you need to call that out because.
+[12:12:56 ET | +0:53:35] And start from, you can use that,
+[12:12:59 ET | +0:53:38] but in the submission process,
+[12:13:01 ET | +0:53:40] you will need to call out that you started new work
+[12:13:04 ET | +0:53:43] and where that new work starts.
+[12:13:06 ET | +0:53:45] You can participate as a solo builder, you can have a team of two,
+[12:13:15 ET | +0:53:54] you-you can have a team of three, but at maximum is a team of four,
+[12:13:20 ET | +0:53:59] and all of your teammates must be approved.
+[12:13:23 ET | +0:54:02] If your teammate wasn't approved, there's a team search that you can find new folks in
+[12:13:28 ET | +0:54:07] As I mentioned, please make those GitHub repositories public because we will be evaluating all of them.
+[12:13:35 ET | +0:54:14] Also as mentioned, please only demo what you build during the event.
+[12:13:41 ET | +0:54:20] And also for your projects, please avoid anything that breaks legal, ethical, or platform.
