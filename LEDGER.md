@@ -207,3 +207,6 @@ From scratch (no box): clone the repo, download release `artifacts-2026-11-01` (
 
 ## 15. Release artifacts
 See section appended below after upload.
+
+## 2026-11-01 20:20 ET: nv2 retrain measured and rejected
+nudge_v2 relabel + 1-epoch floor retrain (1,030 rows) loses to ep1 on cal180: acc on handled 0.92 vs 0.96, conformal bound 10.9% vs 10.2%, nudgeNow unchanged 7/15 (test120 report: acc 0.79, ECE 0.106, nudgeNow 3/10). IQ2_M teacher labeled only 20/66 intended-"later" scenarios "later". ep1 stays shipping. Source: eval/results/AFTER_FLOOR_NV2.md.

@@ -1,0 +1,1 @@
+{"n": 120, "ece": 0.1059, "bins": 10, "png": "docs/img/reliability_after_floor_nv2_test120_v2cc.png"}

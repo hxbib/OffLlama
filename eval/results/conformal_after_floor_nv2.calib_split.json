@@ -1,0 +1,24 @@
+{
+ "tau": null,
+ "alpha": 0.05,
+ "delta": 0.1,
+ "n": 180,
+ "handled": 0,
+ "errors": 0,
+ "handled_share": 0.0,
+ "empirical_error": null,
+ "error_upper_bound": null,
+ "p_value": null,
+ "min_rows_needed_zero_errors": 135,
+ "model": null,
+ "source": "../eval/results/after_floor_nv2.calibration_split.json",
+ "tightest": {
+  "tau": 0.87,
+  "handled": 60,
+  "errors": 0,
+  "handled_share": 0.3333333333333333,
+  "error_upper_bound": 0.10859975984117456,
+  "delta": 0.1
+ },
+ "min_rows_needed_for_alpha_zero_errors": 135
+}
