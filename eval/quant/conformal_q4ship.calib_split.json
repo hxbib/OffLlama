@@ -1,0 +1,24 @@
+{
+ "tau": null,
+ "alpha": 0.05,
+ "delta": 0.1,
+ "n": 180,
+ "handled": 0,
+ "errors": 0,
+ "handled_share": 0.0,
+ "empirical_error": null,
+ "error_upper_bound": null,
+ "p_value": null,
+ "min_rows_needed_zero_errors": 135,
+ "model": null,
+ "source": "../eval/quant/q4ship.calibration_split.json",
+ "tightest": {
+  "tau": 0.91,
+  "handled": 61,
+  "errors": 0,
+  "handled_share": 0.3388888888888889,
+  "error_upper_bound": 0.10691822612998662,
+  "delta": 0.1
+ },
+ "min_rows_needed_for_alpha_zero_errors": 135
+}

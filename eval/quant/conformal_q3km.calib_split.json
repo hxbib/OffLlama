@@ -1,0 +1,24 @@
+{
+ "tau": null,
+ "alpha": 0.05,
+ "delta": 0.1,
+ "n": 180,
+ "handled": 0,
+ "errors": 0,
+ "handled_share": 0.0,
+ "empirical_error": null,
+ "error_upper_bound": null,
+ "p_value": null,
+ "min_rows_needed_zero_errors": 135,
+ "model": null,
+ "source": "../eval/quant/q3km.calibration_split.json",
+ "tightest": {
+  "tau": 0.84,
+  "handled": 62,
+  "errors": 1,
+  "handled_share": 0.34444444444444444,
+  "error_upper_bound": 0.13927125094255505,
+  "delta": 0.1
+ },
+ "min_rows_needed_for_alpha_zero_errors": 135
+}

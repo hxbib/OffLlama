@@ -1,0 +1,24 @@
+{
+ "tau": null,
+ "alpha": 0.05,
+ "delta": 0.1,
+ "n": 180,
+ "handled": 0,
+ "errors": 0,
+ "handled_share": 0.0,
+ "empirical_error": null,
+ "error_upper_bound": null,
+ "p_value": null,
+ "min_rows_needed_zero_errors": 135,
+ "model": null,
+ "source": "../eval/quant/q8.calibration_split.json",
+ "tightest": {
+  "tau": 0.94,
+  "handled": 46,
+  "errors": 0,
+  "handled_share": 0.25555555555555554,
+  "error_upper_bound": 0.13924907959593003,
+  "delta": 0.1
+ },
+ "min_rows_needed_for_alpha_zero_errors": 135
+}

@@ -1,0 +1,1 @@
+{"n": 120, "ece": 0.0541, "bins": 10, "png": "/tmp/rel_q2k.png"}

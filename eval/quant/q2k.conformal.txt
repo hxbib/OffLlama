@@ -1,0 +1,25 @@
+tightest supported: error <= 30.4% among self-handled at confidence 90% (tau=0.72, 19/180 handled, 0 wrong)
+{
+ "tau": null,
+ "alpha": 0.05,
+ "delta": 0.1,
+ "n": 180,
+ "handled": 0,
+ "errors": 0,
+ "handled_share": 0.0,
+ "empirical_error": null,
+ "error_upper_bound": null,
+ "p_value": null,
+ "min_rows_needed_zero_errors": 135,
+ "model": null,
+ "source": "../eval/quant/q2k.calibration_split.json",
+ "tightest": {
+  "tau": 0.72,
+  "handled": 19,
+  "errors": 0,
+  "handled_share": 0.10555555555555556,
+  "error_upper_bound": 0.3044393738577603,
+  "delta": 0.1
+ },
+ "min_rows_needed_for_alpha_zero_errors": 135
+}

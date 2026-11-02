@@ -239,3 +239,6 @@ Floor LoRA (unchanged recipe, 1,157 rows = 892 + 280 weak-type, Muse Spark Open 
 
 ## 2026-11-02 11:15 ET: drift check extended to shipping Q4_K_M GGUF (clean)
 Same 40 prompts via llama.cpp ddf48f8 (box CPU, greedy, HF template token ids): shipping Q4_K_M (a5c60a88…82c2) 23/23 checkable, 0 collapse, 23/40 exact match with the bf16 tuned outputs. Local base Q4_K_M control: 22/23, 0 collapse, 21/40 match; shipping and base Q4 identical on 27/40. KL vs bf16 not computed (llama-server exposes only top-n probs). Source: eval/results/DRIFT_CHECK.md "Shipping GGUF".
+
+## 2026-11-02 12:20 ET: quant identity + quant ladder (keep Q4_K_M)
+The headline numbers (test acc 0.82, ECE 0.064; cal bound 10.2% @tau 0.90) came from the shipping Q4_K_M GGUF (a5c60a88…82c2) via llama-server, not from bf16 (this pipeline has no temperature scaling). Same pipeline on cal180, graded vs gold: f16 bound 14.5%, ECE 0.031; Q8_0 (1321 MB) 13.9%, ECE 0.069; Q4_K_M rerun 10.7%, ECE 0.046 (2 test / 4 cal preds differ from Nov 1 = llama-server noise); Q3_K_M (691 MB) acc 0.72, 13.9%; Q2_K (581 MB) acc 0.66, 30.4%. IQ2_M skipped (no llama-imatrix built). Nothing beats Q4_K_M on cal, so keep shipping Q4_K_M. Source: eval/results/QUANT_IDENTITY.md, eval/quant/.
