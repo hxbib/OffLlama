@@ -25,6 +25,7 @@ else
   git bundle create "$OUT" --branches --tags
 fi
 git bundle verify "$OUT" >/dev/null 2>&1 || git bundle list-heads "$OUT" >/dev/null
+git rev-parse HEAD > "$OUT.head"
 echo "BUNDLE=$OUT HEAD=$(git rev-parse HEAD) COUNT=$(git rev-list --count HEAD)"
 echo "Next: CopyFromBox $OUT -> PC (default path), then run the PC step in scripts/BACKUP.md,"
-echo "then on the box: git update-ref refs/backup/pushed HEAD"
+echo "then on the box: git update-ref refs/backup/pushed \$(cat $OUT.head)  (NOT HEAD: other agents may have committed since)"

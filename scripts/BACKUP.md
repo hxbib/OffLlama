@@ -22,7 +22,8 @@ Stay out of `C:\pocket-glimmer-backup` and the PC GPU (used by another task).
    git ls-remote origin
    ```
    A rejected (non-fast-forward) push means history diverged: stop and report; do not force.
-4. **Box Shell**: `git update-ref refs/backup/pushed HEAD` (marks the base for the next incremental bundle).
+4. **Box Shell**: `git update-ref refs/backup/pushed $(cat /workspace/pg.bundle.head)` (the commit that was bundled,
+   not HEAD, since other agents commit to this repo; marks the base for the next incremental bundle).
 5. **Verify**: box `git rev-parse HEAD; git rev-list --count HEAD` must equal
    PC `gh api repos/hxbib/pocket-glimmer/commits/master --jq .sha` and the ls-remote master hash.
 
