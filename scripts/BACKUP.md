@@ -5,6 +5,13 @@ The box has no GitHub login. Habib's Windows PC (agent machineId `42c228be-afea-
 has `gh` logged in as `hxbib`. Never print, copy or export the token. Never force-push.
 Stay out of `C:\pocket-glimmer-backup` and the PC GPU (used by another task).
 
+## Alternate push host: Habib's Mac
+Mac machineId `e0a8db28-3d3d-4d0d-a263-412b7b7be6fd`, gh logged in as hxbib, clone `~/src/pocket-glimmer` (git-lfs installed).
+Use it when the PC is offline: CopyFromBox the bundle to the Mac (lands in `~`), then
+`cd ~/src/pocket-glimmer && git bundle verify ~/pg.bundle && git fetch ~/pg.bundle "+refs/heads/*:refs/remotes/bundle/*" && git push origin refs/remotes/bundle/master:refs/heads/master` (no force).
+If the Mac clone has commits the box lacks (e.g. LFS model commits), bundle them back (`git bundle create ~/x.bundle <box-head>..master`, CopyToBox) and merge on the box first.
+CopyFromBox: chunks of ~30 MB are reliable; 95 MB chunks failed (machine "unreachable").
+
 ## Repeat (any agent)
 1. **Box Shell**: `cd /workspace/pocket-glimmer && scripts/backup_push.sh`
    (`BACKUP_AUTOCOMMIT=1 scripts/backup_push.sh` to also commit pending work first;

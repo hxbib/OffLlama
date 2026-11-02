@@ -167,7 +167,7 @@ Ep2 vs ep1 per type: rememberOrNot 5 vs 7, memoryConflict 10 vs 9, nudgeNow 3 bo
 
 ## 11. Re-downloadable inputs (NOT in releases)
 - Muse Glimmer 30B IQ2_M teacher GGUF (9.85 GB, sha256 07c286ac…fa per /workspace/xfer/sha.txt): https://huggingface.co/NANI-Nithin/Muse-Glimmer-30B-GGUF/blob/main/Muse-Glimmer-30B-IQ2_M.gguf (official card: https://huggingface.co/meta-models/Muse-Glimmer-30B).
-- Llama 3.2 1B Instruct base (HF safetensors, sha256 1ff795ff…538f): https://huggingface.co/meta-llama/Llama-3.2-1B-Instruct (gated, Llama 3.2 license).
+- Llama 3.2 1B Instruct base (HF safetensors, sha256 1ff795ff…538f): https://huggingface.co/meta-llama/Llama-3.2-1B-Instruct (gated, Llama 3.2 license); ungated mirror used by the PC kit: https://huggingface.co/unsloth/Llama-3.2-1B-Instruct (/workspace/xfer/dl.sh).
 - Base Llama 3.2 1B/3B, 3.1 8B Q4_K_M GGUFs used in gate 1: /workspace/gate1/models (public GGUF mirrors; see gate1/dl.log).
 - llama.cpp: https://github.com/ggml-org/llama.cpp (Glimmer support since b10353; iOS pinned ddf48f8).
 
@@ -205,8 +205,28 @@ BACKUP_AUTOCOMMIT=1 scripts/backup_push.sh
 ```
 From scratch (no box): clone the repo, download release `artifacts-2026-11-01` (section 15), reassemble splits, `sha256sum -c SHA256SUMS`.
 
-## 15. Release artifacts
-See section appended below after upload.
+## 15. Release artifacts and Git LFS (2026-11-01 ~8:50 PM ET)
+Release `artifacts-2026-11-01` on hxbib/pocket-glimmer (private), created from the Mac (PC was offline): https://github.com/hxbib/pocket-glimmer/releases/tag/artifacts-2026-11-01
+| Asset | Bytes | sha256 |
+|---|---|---|
+| SHIPPING-ep1-Llama-3.2-1B-PocketGlimmer-Reflex-Q4_K_M.gguf | 807694080 | a5c60a8836aa73adeb847185aa30184cd9c33c522185f59fa9ac55a9d00782c2 |
+| lora-ep1-SHIPPING.tar (dir SHIPPING-ep1-lora-llama1b-glimmer/, adapter sha 24731bef…8e59) | 45141504 | ea86f577cb34ae7a41c7ff6157f5bea7c49dbe567fd97dd5a62ac0d37f36c03f |
+| lora-ep2-REJECTED.tar (dir lora-llama1b-glimmer-ep2/) | 45137920 | 2ae0ffb318daf71744e905b134cfc241f8aab12bdff0c29aa3c363afabbe6c68 |
+| labels-and-data.tgz (teacher labels, pool, scenarios, qc, nv2 snapshot as of ~7:55 PM) | 443222 | a2299f27c20d8ac7d5cf6037335434b2b3dc6193807a2a87ce6ba49cfb718c4f |
+| pg.tgz (Mac-day tarball of this repo) | 29271784 | dd5057cc30da8f1c80e1693e7c6c378a97258acb1f4717394ce841765f2ba36b |
+| SHA256SUMS | 460 | (checksums of the above) |
+No split files in this release (all assets < 2 GB). Verify: `gh release download artifacts-2026-11-01 -R hxbib/pocket-glimmer -D rel && cd rel && shasum -a 256 -c SHA256SUMS`.
+
+Git LFS (commit 37a952b, merged in 8c4176e): `models/SHIPPING-ep1-…Q4_K_M.gguf`, `models/lora-ep1-SHIPPING/`, `models/lora-ep2-REJECTED/` (898 MB of the 10 GiB free LFS quota; free bandwidth 10 GiB/month, per docs.github.com Git LFS billing). Fetch with `git lfs install && git lfs pull`.
+
+Not uploaded, and why:
+- Merged fp16/bf16 safetensors (2.47 GB each, ep1 and ep2): reproducible from base + adapter with training/local_teacher/export_gguf.sh; transfer limits (CopyFromBox ≤100 MiB per file, ~30 MB chunks reliable) and low free disk on PC (~7 GB) and Mac (~8 GB). Still on the box at training/local_teacher/out/lora-llama1b-glimmer*-merged/.
+- Glimmer IQ2_M teacher and base Meta weights: re-downloadable (section 11).
+- Kickoff recordings: see the dated entry below (added after upload, or pending).
+- m3u8.txt, rec_*.log and anything with the signed Vimeo URL or keys: excluded on purpose.
+- gitleaks: history and release staging scanned; only false positives in vendored sqlite3.c and Swift build records.
+
+Local copies of the shipping model: Mac `~/pocket-glimmer-models/SHIPPING-ep1-Llama-3.2-1B-PocketGlimmer-Reflex-Q4_K_M.gguf` + `~/pocket-glimmer-models/SHIPPING-ep1-lora-llama1b-glimmer/` (sha256 verified). PC copy into C:\pocket-glimmer-backup\models\ PENDING (PC offline at ~8:15 PM ET).
 
 ## 2026-11-01 20:20 ET: nv2 retrain measured and rejected
 nudge_v2 relabel + 1-epoch floor retrain (1,030 rows) loses to ep1 on cal180: acc on handled 0.92 vs 0.96, conformal bound 10.9% vs 10.2%, nudgeNow unchanged 7/15 (test120 report: acc 0.79, ECE 0.106, nudgeNow 3/10). IQ2_M teacher labeled only 20/66 intended-"later" scenarios "later". ep1 stays shipping. Source: eval/results/AFTER_FLOOR_NV2.md.
