@@ -41,3 +41,7 @@ node_modules/
 .env.*
 *.pem
 *.key
+
+# LFS-tracked shipped models (see LEDGER.md)
+!models/*.gguf
+!models/**/adapter_model.safetensors
