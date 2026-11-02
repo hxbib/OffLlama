@@ -74,6 +74,27 @@ final class AssistantTests: XCTestCase {
         XCTAssertEqual(t.cloudPromptSent?.contains("[EMAIL_1]"), true)
     }
 
+    func testSensitiveOnlineEscalationStaysOnDeviceAndFlagsWithheld() async throws {
+        let e = ScriptedEngine(); e.generated = " LDL 210 is high. "
+        e.script(whenPromptContains: "acceptable to send this request", logits: ["A": -5, "B": 5])
+        final class Box: @unchecked Sendable { var called = false }
+        let box = Box()
+        var brain = OpenAICompatibleBrain(providerName: "Meta Model API", model: "muse-spark-1.3", baseURL: URL(string: "https://example.invalid/v1/")!, apiKey: "k")
+        brain.transport = { _ in box.called = true; return (Data(#"{"choices":[{"message":{"content":"x"}}]}"#.utf8), 200) }
+        let (a, _, _) = try make(e, online: true, cloud: [brain])  // uniform route logits => escalate_cloud
+        let t = try await a.handle("Explain what my cholesterol numbers mean: LDL 210.")
+        XCTAssertEqual(t.reply, .local("LDL 210 is high."))
+        XCTAssertTrue(t.cloudWithheldForSensitivity)
+        XCTAssertNil(t.cloudPromptSent)
+        XCTAssertFalse(box.called)
+        XCTAssertEqual(t.decisions.last?.chosen.id, "sensitive")
+
+        // Offline: no cloud was available, so nothing was withheld.
+        let (off, _, _) = try make(e, online: false, cloud: [brain])
+        let t2 = try await off.handle("Explain what my cholesterol numbers mean: LDL 210.")
+        XCTAssertFalse(t2.cloudWithheldForSensitivity)
+    }
+
     func testRememberingThroughAssistantUsesConflictDecision() async throws {
         let e = ScriptedEngine()
         e.script(whenPromptContains: "long-term memory", logits: ["A": 5, "B": -3, "C": -3])

@@ -80,6 +80,15 @@ struct Bubble: View {
                             Button("Cancel", role: .cancel) { model.cancel(item) }.buttonStyle(.bordered)
                         }.controlSize(.small).accessibilityHint("Runs \(p.tool)")
                     }
+                    if item.keptOnDevice {
+                        Label("Kept on device · nothing sent", systemImage: "lock.fill")
+                            .font(.caption2.weight(.medium))
+                            .padding(.horizontal, 10).padding(.vertical, 4)
+                            .background(Theme.accent.opacity(0.12), in: Capsule())
+                            .foregroundStyle(Theme.accent)
+                            .padding(.leading, 6)
+                            .accessibilityLabel("Kept on device. Cloud was available, nothing was sent.")
+                    }
                     HStack(spacing: 8) {
                         if let b = item.badge {
                             if item.cloudPromptSent != nil {

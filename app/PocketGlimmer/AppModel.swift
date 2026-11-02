@@ -13,6 +13,7 @@ struct ChatItem: Identifiable, Equatable {
     var pending: PlannedAction? = nil
     var decisions: [DecisionRow] = []
     var cloudPromptSent: String? = nil   // masked text that actually left the phone
+    var keptOnDevice = false             // cloud was available but withheld for sensitivity
 }
 
 struct DecisionRow: Identifiable, Equatable {
@@ -129,7 +130,7 @@ final class AppModel {
             let reflexMs = turn.decisions.map(\.latencyMs).reduce(0, +)
             let onDevice = String(format: "on device · %.0f ms", reflexMs)
             switch turn.reply {
-            case .local(let t): chat.append(.init(role: .assistant, text: t, badge: onDevice, decisions: rows))
+            case .local(let t): chat.append(.init(role: .assistant, text: t, badge: onDevice, decisions: rows, keptOnDevice: turn.cloudWithheldForSensitivity))
             case .acted(let t): chat.append(.init(role: .assistant, text: t, badge: onDevice, decisions: rows))
             case .clarify(let t): chat.append(.init(role: .assistant, text: t, badge: onDevice, decisions: rows))
             case .cloud(let t, let p): chat.append(.init(role: .assistant, text: t, badge: prettyProvider(p), decisions: rows, cloudPromptSent: turn.cloudPromptSent))

@@ -31,6 +31,8 @@ public struct AssistantTurn: Sendable {
     /// Exactly what left the device on escalation (after scrubbing), for the privacy info view.
     public var cloudPromptSent: String? = nil
     public var corrections: [(old: MemoryFact, new: MemoryFact)] = []
+    /// True when a cloud brain was online and configured, but the sensitivity check kept the turn on device (nothing sent).
+    public var cloudWithheldForSensitivity = false
 }
 
 extension PlannedAction {
@@ -108,7 +110,8 @@ public final class Assistant: @unchecked Sendable {
             decisions.append(sens)
             if sens.chosen.id == "sensitive" {
                 let a = try await reflex.engine.generate(prompt: Self.localPrompt(utterance, mem: mem), maxTokens: 200, temperature: 0.3)
-                return AssistantTurn(reply: .local(a.trimmed), decisions: decisions, remembered: remembered, corrections: corrections)
+                return AssistantTurn(reply: .local(a.trimmed), decisions: decisions, remembered: remembered, corrections: corrections,
+                                     cloudWithheldForSensitivity: true)
             }
             let s = scrubber.scrub(mem + utterance)
             let ans = try await cloud.complete([ChatMessage(role: "system", content: "You are the reasoning brain of a private phone assistant. Placeholders like [PERSON_1] stand for private data; keep them verbatim."),
