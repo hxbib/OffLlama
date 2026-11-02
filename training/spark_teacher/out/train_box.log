@@ -1,0 +1,33 @@
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/146 [00:00<?, ?it/s]Loading weights:  16%|█▌        | 23/146 [00:00<00:00, 210.73it/s]Loading weights:  63%|██████▎   | 92/146 [00:00<00:00, 425.83it/s]Loading weights: 100%|██████████| 146/146 [00:00<00:00, 490.84it/s]
+{"before_fewShot": {"file": "eval/gold/gold_test.jsonl", "style": "fewShot", "n": 120, "acc": 0.6833333333333333, "per_type": {"route": [8, 10], "toolChoice": [5, 10], "rememberOrNot": [6, 10], "memoryConflict": [7, 10], "notificationTriage": [7, 10], "confirmBeforeAct": [8, 10], "nudgeNow": [4, 10], "timing": [7, 10], "sensitivity": [10, 10], "answerability": [7, 10], "contactPick": [7, 10], "eventPick": [6, 10]}}, "before_zeroShot": {"file": "eval/gold/gold_test.jsonl", "style": "zeroShot", "n": 120, "acc": 0.55, "per_type": {"route": [6, 10], "toolChoice": [4, 10], "rememberOrNot": [4, 10], "memoryConflict": [5, 10], "notificationTriage": [3, 10], "confirmBeforeAct": [6, 10], "nudgeNow": [7, 10], "timing": [3, 10], "sensitivity": [6, 10], "answerability": [7, 10], "contactPick": [9, 10], "eventPick": [6, 10]}}}
+step 1/145 loss 1.2096 3.8s/step eta 9min
+step 6/145 loss 1.4300 3.3s/step eta 8min
+step 11/145 loss 1.1081 3.3s/step eta 7min
+step 16/145 loss 0.6635 3.3s/step eta 7min
+step 21/145 loss 1.0219 3.2s/step eta 7min
+step 26/145 loss 0.2234 3.2s/step eta 6min
+step 31/145 loss 0.4616 3.2s/step eta 6min
+step 36/145 loss 0.1825 3.4s/step eta 6min
+step 41/145 loss 0.9641 3.3s/step eta 6min
+step 46/145 loss 0.6101 3.3s/step eta 5min
+step 51/145 loss 0.3566 3.3s/step eta 5min
+step 56/145 loss 1.0422 3.3s/step eta 5min
+step 61/145 loss 0.0978 3.3s/step eta 5min
+step 66/145 loss 0.5046 3.3s/step eta 4min
+step 71/145 loss 0.1076 3.3s/step eta 4min
+step 76/145 loss 0.1787 3.4s/step eta 4min
+step 81/145 loss 0.1670 3.4s/step eta 4min
+step 86/145 loss 0.2448 3.4s/step eta 3min
+step 91/145 loss 0.3284 3.4s/step eta 3min
+step 96/145 loss 0.2140 3.4s/step eta 3min
+step 101/145 loss 0.3073 3.4s/step eta 2min
+step 106/145 loss 0.1195 3.4s/step eta 2min
+step 111/145 loss 0.0298 4.4s/step eta 2min
+step 116/145 loss 0.1045 4.4s/step eta 2min
+step 121/145 loss 0.1776 4.4s/step eta 2min
+step 126/145 loss 0.3685 4.4s/step eta 1min
+step 131/145 loss 0.0396 4.4s/step eta 1min
+step 136/145 loss 0.0133 4.4s/step eta 1min
+step 141/145 loss 0.0875 4.4s/step eta 0min
+{"before_fewShot": {"file": "eval/gold/gold_test.jsonl", "style": "fewShot", "n": 120, "acc": 0.6833333333333333, "per_type": {"route": [8, 10], "toolChoice": [5, 10], "rememberOrNot": [6, 10], "memoryConflict": [7, 10], "notificationTriage": [7, 10], "confirmBeforeAct": [8, 10], "nudgeNow": [4, 10], "timing": [7, 10], "sensitivity": [10, 10], "answerability": [7, 10], "contactPick": [7, 10], "eventPick": [6, 10]}}, "before_zeroShot": {"file": "eval/gold/gold_test.jsonl", "style": "zeroShot", "n": 120, "acc": 0.55, "per_type": {"route": [6, 10], "toolChoice": [4, 10], "rememberOrNot": [4, 10], "memoryConflict": [5, 10], "notificationTriage": [3, 10], "confirmBeforeAct": [6, 10], "nudgeNow": [7, 10], "timing": [3, 10], "sensitivity": [6, 10], "answerability": [7, 10], "contactPick": [9, 10], "eventPick": [6, 10]}}, "after_zeroShot": {"file": "eval/gold/gold_test.jsonl", "style": "zeroShot", "n": 120, "acc": 0.875, "per_type": {"route": [8, 10], "toolChoice": [9, 10], "rememberOrNot": [9, 10], "memoryConflict": [9, 10], "notificationTriage": [9, 10], "confirmBeforeAct": [10, 10], "nudgeNow": [4, 10], "timing": [10, 10], "sensitivity": [10, 10], "answerability": [9, 10], "contactPick": [9, 10], "eventPick": [9, 10]}}, "train_rows": 1157, "steps_done": 145, "steps": 145, "train_seconds": 654.3629806041718}

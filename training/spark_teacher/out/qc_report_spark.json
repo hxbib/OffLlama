@@ -1,0 +1,68 @@
+{
+ "N": 50,
+ "agree": 49,
+ "overall": 0.98,
+ "per_type": {
+  "answerability": {
+   "agree": 5,
+   "n": 5,
+   "rate": 1.0
+  },
+  "confirmBeforeAct": {
+   "agree": 5,
+   "n": 5,
+   "rate": 1.0
+  },
+  "contactPick": {
+   "agree": 4,
+   "n": 4,
+   "rate": 1.0
+  },
+  "eventPick": {
+   "agree": 4,
+   "n": 4,
+   "rate": 1.0
+  },
+  "memoryConflict": {
+   "agree": 4,
+   "n": 4,
+   "rate": 1.0
+  },
+  "notificationTriage": {
+   "agree": 4,
+   "n": 4,
+   "rate": 1.0
+  },
+  "nudgeNow": {
+   "agree": 3,
+   "n": 4,
+   "rate": 0.75
+  },
+  "rememberOrNot": {
+   "agree": 4,
+   "n": 4,
+   "rate": 1.0
+  },
+  "route": {
+   "agree": 4,
+   "n": 4,
+   "rate": 1.0
+  },
+  "sensitivity": {
+   "agree": 4,
+   "n": 4,
+   "rate": 1.0
+  },
+  "timing": {
+   "agree": 4,
+   "n": 4,
+   "rate": 1.0
+  },
+  "toolChoice": {
+   "agree": 4,
+   "n": 4,
+   "rate": 1.0
+  }
+ },
+ "teacher": "muse-spark-open@baseten"
+}

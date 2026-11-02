@@ -28,3 +28,6 @@ re-dedupe vs eval: dropped 0
 finished 280 in 1657s; est $2.397; cumulative $9.86
 0 done, 180 to go
 [22:09:58] 50/180 est $0.35 (in 105984 out 50869)
+[22:47:34] 100/180 est $0.66 (in 209192 out 94346)
+[22:50:10] 150/180 est $1.01 (in 306456 out 146892)
+finished 180 in 5224s; est $1.202; cumulative $11.06

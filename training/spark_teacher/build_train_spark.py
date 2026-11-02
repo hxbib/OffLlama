@@ -2,7 +2,7 @@
 (per-type weight = Spark QC50 agreement; drop types < 0.4; on types < 1.0 drop rows with confidence < 0.7;
 letter_mass here = fraction of the K samples that parsed to a valid letter)."""
 import json, sys, collections
-Q = json.load(open("out/qc_report_spark.json"))["per_type"]; rows, stat = [], collections.Counter()
+import os; Q = json.load(open(os.environ.get("QC_REPORT", "out/qc_report_spark.json")))["per_type"]; rows, stat = [], collections.Counter()
 for f in sys.argv[1:-1]:
     for l in open(f):
         r = json.loads(l); lab = r["label"]; t = r["type"]

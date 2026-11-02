@@ -1,0 +1,115 @@
+{
+ "train_892_top1_agreement": {
+  "agree": 860,
+  "n": 892,
+  "rate": 0.964,
+  "per_type": {
+   "answerability": 1.0,
+   "confirmBeforeAct": 1.0,
+   "contactPick": 1.0,
+   "eventPick": 0.988,
+   "memoryConflict": 1.0,
+   "notificationTriage": 0.797,
+   "nudgeNow": 0.925,
+   "rememberOrNot": 0.918,
+   "route": 0.952,
+   "sensitivity": 0.963,
+   "timing": 0.988,
+   "toolChoice": 1.0
+  },
+  "mean_total_variation": 0.086
+ },
+ "extra_nudge_overlap_with_glimmer_nv2": {
+  "n": 120,
+  "agree": 98
+ },
+ "spark_vs_gold_qc50": {
+  "N": 50,
+  "agree": 49,
+  "overall": 0.98
+ },
+ "glimmer_vs_gold_qc50": 0.86,
+ "glimmer_qc50_per_type": {
+  "answerability": 1.0,
+  "confirmBeforeAct": 1.0,
+  "contactPick": 0.75,
+  "eventPick": 0.75,
+  "memoryConflict": 1.0,
+  "notificationTriage": 0.75,
+  "nudgeNow": 0.75,
+  "rememberOrNot": 0.5,
+  "route": 0.75,
+  "sensitivity": 1.0,
+  "timing": 1.0,
+  "toolChoice": 1.0
+ },
+ "spark_vs_gold_cal180": {
+  "N": 180,
+  "agree": 178,
+  "overall": 0.989,
+  "per_type": {
+   "answerability": {
+    "agree": 15,
+    "n": 15,
+    "rate": 1.0
+   },
+   "confirmBeforeAct": {
+    "agree": 15,
+    "n": 15,
+    "rate": 1.0
+   },
+   "contactPick": {
+    "agree": 15,
+    "n": 15,
+    "rate": 1.0
+   },
+   "eventPick": {
+    "agree": 15,
+    "n": 15,
+    "rate": 1.0
+   },
+   "memoryConflict": {
+    "agree": 15,
+    "n": 15,
+    "rate": 1.0
+   },
+   "notificationTriage": {
+    "agree": 15,
+    "n": 15,
+    "rate": 1.0
+   },
+   "nudgeNow": {
+    "agree": 13,
+    "n": 15,
+    "rate": 0.867
+   },
+   "rememberOrNot": {
+    "agree": 15,
+    "n": 15,
+    "rate": 1.0
+   },
+   "route": {
+    "agree": 15,
+    "n": 15,
+    "rate": 1.0
+   },
+   "sensitivity": {
+    "agree": 15,
+    "n": 15,
+    "rate": 1.0
+   },
+   "timing": {
+    "agree": 15,
+    "n": 15,
+    "rate": 1.0
+   },
+   "toolChoice": {
+    "agree": 15,
+    "n": 15,
+    "rate": 1.0
+   }
+  }
+ },
+ "parse_fail_rows": 0,
+ "mean_spark_conf_train": 0.991
+}
