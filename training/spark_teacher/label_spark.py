@@ -30,16 +30,16 @@ done = {json.loads(l)["id"] for l in open(a.out)} if os.path.exists(a.out) else 
 todo = [r for r in rows if r["id"] not in done]; print(f"{len(done)} done, {len(todo)} to go", flush=True)
 KEY = os.environ["BASETEN_API_KEY"]; lock = threading.Lock(); tot = collections.Counter()
 spend_log = ROOT / "training/spark_teacher/spend.jsonl"
-prev = sum(json.loads(l)["usd"] for l in open(spend_log)) if spend_log.exists() else 0.0
+prev = sum(json.loads(l)["usd"] for l in open(spend_log)) if spend_log.exists() else 0.0  # NOTE: rows lost to a crash are not counted; see SPARK_TEACHER.md
 
 def call(msgs):
     body = {"model": MODEL, "messages": msgs, "max_tokens": 768, "temperature": 1.0, "top_p": 1.0, "reasoning_effort": "low"}
-    for att in range(5):
+    for att in range(8):
         try:
             rq = urllib.request.Request(URL, data=json.dumps(body).encode(), headers={"Content-Type": "application/json", "Authorization": "Api-Key " + KEY})
             return json.loads(urllib.request.urlopen(rq, timeout=180).read())
         except Exception as e:
-            err = e; time.sleep(3 * (att + 1))
+            err = e; time.sleep((20 if '429' in str(e) else 3) * (att + 1))
     raise err
 
 def parse(text, L):

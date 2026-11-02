@@ -7,7 +7,7 @@ log(){ echo "[$(date '+%F %T %Z')] $*"; }
 $PY dedupe.py --scenarios out/nudge_v2_scenarios.jsonl --out $O || { log "dedupe failed"; exit 1; }
 log "starting Glimmer IQ2_M"
 for NGL in 99 36 28; do
-  LD_LIBRARY_PATH=$LL $LL/llama-server -m $B/models/Muse-Glimmer-30B-IQ2_M.gguf -c 2048 -t 8 -np 1 -ngl $NGL --port 8091 > $O/server_glimmer.log 2>&1 & SP=$!
+  LD_LIBRARY_PATH=$LL $LL/llama-server -m $B/models/Muse-Glimmer-30B-IQ2_M.gguf -c 2048 -t 8 -np 1 -ngl $NGL -lm none --port 8091 > $O/server_glimmer.log 2>&1 & SP=$!
   ok=1; until curl -sf localhost:8091/health >/dev/null; do sleep 5; kill -0 $SP 2>/dev/null || { ok=0; break; }; done
   [ $ok = 1 ] && break; log "server died at ngl=$NGL"; done
 [ $ok = 1 ] || exit 1; log "server up ngl=$NGL"

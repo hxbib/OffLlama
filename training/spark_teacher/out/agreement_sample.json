@@ -1,0 +1,23 @@
+{
+ "sample_rows": 566,
+ "parse_fail": 0,
+ "top1_agree": 549,
+ "n": 566,
+ "rate": 0.97,
+ "per_type": {
+  "answerability": "51/51",
+  "confirmBeforeAct": "54/54",
+  "contactPick": "40/40",
+  "eventPick": "52/53",
+  "memoryConflict": "50/50",
+  "notificationTriage": "41/47",
+  "nudgeNow": "21/24",
+  "rememberOrNot": "43/46",
+  "route": "37/39",
+  "sensitivity": "51/52",
+  "timing": "53/54",
+  "toolChoice": "56/56"
+ },
+ "mean_TV": 0.08,
+ "mean_spark_conf": 0.991
+}
