@@ -9,3 +9,7 @@
 - Mac, PC, iPhone all offline; simulator build result (/tmp/pg_simbuild.log on Mac) still unknown. Backup push not possible (no machine with gh online); box ahead of GitHub by cb1bed5 + this note.
 - Committed training/data_scale/build_pool.py + dedupe_report.json (pool jsonl left untracked; regenerable). Data-scale retrain still awaits Habib's yes and a GPU machine.
 - Next when Mac returns: read sim build log, fix compile errors, device build with free signing + iPhone; then demo video.
+
+## 2026-11-02 18:05 ET watchdog
+- Mac, PC, iPhone still offline (~2 h). Sim build result unknown; backup push impossible; box ahead of GitHub by cb1bed5, dd54c1a + this note.
+- Posted blocker to room: need Mac + iPhone online tonight for sim build fix and device build; demo video due Nov 3.
