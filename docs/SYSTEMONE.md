@@ -30,7 +30,7 @@ Source read: https://github.com/ggml-org/llama.cpp/pull/29818 (merged 2026-10-02
 
 Licenses are the `license` field of each HF model card (not the full license files).
 
-## Benchmark on our 36 gold decisions (eval/score_systemone.py, tau 0.8, box CPU, 2 threads)
+## Benchmark on our earlier 36 gold decisions (historical; the current eval set is the 300-item gold set: 180 calibration / 120 frozen test, eval/gold/) (eval/score_systemone.py, tau 0.8, box CPU, 2 threads)
 | model | acc | ECE | coverage@0.8 | acc on covered | median ms |
 |---|---|---|---|---|---|
 | Llama-3.2-1B-Instruct Q4_K_M, untrained (eval/results/llama32-1b-base.json) | 0.53 | 0.10 | 0.11 | 0.75 | 550 |

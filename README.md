@@ -1,6 +1,6 @@
 # Pocket Glimmer
 
-**Built with Llama · Built with Muse Spark Open**
+**Built with Llama**
 
 **A fully offline personal assistant for iPhone, powered by Meta models.** A small Meta model on the phone makes
 every everyday decision in milliseconds and shows how sure it is. When it isn't sure, or the question is hard, it
@@ -13,7 +13,7 @@ escalates to a bigger Meta brain (Muse Spark, Muse Glimmer) if you're online. Th
   contact pick, event pick, remember-or-not, memory conflict, notification triage, confirm-before-act,
   nudge-now, timing, sensitivity, answerability.
 - **System 2**: simple answers by the same on-device model; hard reasoning goes to **Muse Spark 1.3 / Muse Wonder
-  (Meta Model API)** or **Muse Glimmer 30B / Muse Spark Open** (hosted open weights). A privacy scrubber
+  (Meta Model API)** or **Muse Glimmer 30B** (open weights). A privacy scrubber
   masks names, emails, phones, addresses and card numbers before anything leaves the phone, and restores them in the answer.
 - **Memory**: on-device SQLite. Fact extraction, user profile, contradiction handling (Reflex decides
   update / keep both / ignore), expiry, embedding retrieval. Memory drives proactive nudges.
@@ -21,9 +21,9 @@ escalates to a bigger Meta brain (Muse Spark, Muse Glimmer) if you're online. Th
   pick candidate memories → Reflex decides whether to nudge now.
 - **Actions**: EventKit reminders + calendar, Contacts, messages via a Shortcuts bridge. It never taps inside other apps.
 - **Real telemetry**: every Reflex decision is logged (time, type, confidence, escalated, latency, later
-  agreement with a teacher). The "share handled on device" chart is built only from those rows.
-- **Distillation**: teachers (Muse Spark Open, Muse Glimmer) label the same questions with probabilities;
-  disagreement becomes "escalate"; LoRA r16 SFT with loss on the answer letter only; temperature scaling + τ per decision.
+  agreement with the teacher). The "share handled on device" chart is built only from those rows.
+- **Distillation**: the only teacher is **Muse Glimmer 30B**, run locally (IQ2_M), which labels each question with soft
+  option-letter probabilities; low-confidence labels are dropped; LoRA r16 SFT with loss on the answer letter only; temperature scaling + τ per decision.
 
 ## Architecture
 
@@ -38,9 +38,9 @@ flowchart LR
     R -- every decision --> T[(Telemetry<br/>conf · ms · escalated · teacher-agree)]
     R -- "escalate (p < τ or hard)" --> S[Privacy scrubber]
   end
-  S -- online only --> C["System 2 cloud brain<br/>Meta Model API: Muse Spark 1.3 / Muse Wonder<br/>Muse Glimmer 30B · Muse Spark Open (hosted)"]
+  S -- online only --> C["System 2 cloud brain<br/>Meta Model API: Muse Spark 1.3 / Muse Wonder<br/>Muse Glimmer 30B (open weights)"]
   C --> S
-  T -. logged decisions .-> D["Distillation (training/)<br/>teachers label letter + probs → disagreement→escalate<br/>LoRA r16 letter-only SFT → calibrate T, τ → GGUF Q4"]
+  T -. logged decisions .-> D["Distillation (training/)<br/>Muse Glimmer 30B (local IQ2_M) labels letter + soft probs<br/>LoRA r16 letter-only SFT → calibrate T, τ → GGUF Q4"]
   D -. new reflex-Q4_K_M.gguf .-> R
 ```
 
@@ -51,7 +51,7 @@ flowchart LR
 | `core/` | Swift Package **PocketCore**: option sets, Reflex, calibration, SQLite memory, proactive engine, cloud brains, scrubber, telemetry, `pg-cli` | builds + 30 tests pass on Linux (Swift 6.4.2) |
 | `app/` | SwiftUI iOS app + XcodeGen `project.yml` | written, never compiled yet; needs Xcode on a Mac (see `ios/MAC_DAY_RUNBOOK.md`) |
 | `training/` | stdlib-Python distillation pipeline + Unsloth SFT | 6 tests pass; free dry run with local 1B as stand-in teacher |
-| `eval/` | 36 hand-labeled gold decisions + scorer; System 2 Q&A runner | baseline measured (below) |
+| `eval/` | 300-item hand-labeled gold set (`eval/gold/gold_all.jsonl`), split into 180 calibration / 120 frozen test; scorers; System 2 Q&A runner | baseline + 1-epoch distilled adapter measured (below) |
 | `docs/DEMO_SCRIPT.md` | 3-minute demo script | draft |
 
 ```bash
@@ -83,7 +83,7 @@ Gate-1 lineup (`/workspace/gate1/RESULTS.md`, llama.cpp ddf48f8, llama-server -c
 | Llama-Reflex-1B (distilled) | [AFTER_ACC] | [AFTER_COVERAGE] | [AFTER_ACC_HANDLED] | [AFTER_ECE] |
 
 iPhone 17 Pro speed and memory: [PHONE_TOK_S] tok/s decode, [PHONE_TTFT_MS] ms time to first token, [PHONE_RAM_GB] GB peak (not measured yet; see `ios/MAC_DAY_RUNBOOK.md`).
-The conformal threshold targets ≤ 5% error among on-device decisions **only under exchangeability**: new requests must look like the calibration set. It's a statistical bound on our eval distribution, not a guarantee.
+Conformal risk control, measured on the 180-item calibration split: best τ is 0.90, handling 36% of items with 0 errors, which certifies an error bound of about 10% (upper bound 10.2%, δ=0.1) among on-device decisions. That bound holds **only under exchangeability**: new requests must look like the calibration set. It's a statistical bound on our eval distribution, not a guarantee. The 5% target is not certified (it needs ≥135 handled calibration rows with zero errors). Final: τ = [AFTER_TAU], bound [AFTER_BOUND], on-device share [AFTER_COVERAGE].
 We haven't found prior art for this exact on-phone combination, which doesn't mean none exists.
 
 ## Earlier measurements (real runs, 2026-10-31, Linux x86 CPU, not a phone)
@@ -96,15 +96,14 @@ Untrained **Llama-3.2-1B-Instruct-Q4_K_M** via llama-server (2 threads, CPU shar
 | `eval/gold_decisions` (36) | 0.53 | 0.11 | 0.75 | 550 |
 
 That is the "before" picture: the base model is poorly calibrated and biased toward one letter on `route`, so it
-mostly (correctly) escalates. Distillation from Muse teachers is how coverage goes up. Phone latency will differ
+mostly (correctly) escalates. Distillation from Muse Glimmer is how coverage goes up. Phone latency will differ
 (Metal, KV-prefix reuse); measure on device, don't extrapolate from these numbers.
 
 ## Meta stack
 | Model | Role | License / access |
 |---|---|---|
-| Llama-Reflex-1B (from Llama 3.2 1B Instruct, Q4_K_M) | On-device Reflex (System 1), distilled from the teachers below | Llama 3.2 Community License ("Built with Llama", see docs/LICENSING.md) |
-| Muse Glimmer 30B | Teacher + local LLM-as-judge for evals | Apache-2.0 |
-| Muse Spark Open (816B-A42B) | Teacher; open weights served via Fireworks / Baseten / Modal | Muse Model License ("Built with Muse Spark Open") |
+| Llama-Reflex-1B (from Llama 3.2 1B Instruct, Q4_K_M) | On-device Reflex (System 1), distilled from Muse Glimmer 30B | Llama 3.2 Community License ("Built with Llama", see docs/LICENSING.md) |
+| Muse Glimmer 30B | Sole distillation teacher (run locally, IQ2_M, soft option-letter probabilities) + local LLM-as-judge for evals | Apache-2.0 |
 | Muse Spark 1.3 | Cloud escalation (System 2) via Meta Model API, Standard mode only, never Contributor mode | Meta Model API terms |
 | Muse Wonder | Rare hardest cases only | Meta Model API terms |
 
@@ -120,8 +119,7 @@ Measured on this box (/workspace/gate1/RESULTS.md, llama.cpp ddf48f8, CPU):
   Llama 3.2 1B. The training scripts support MobileMoE (transformers + PEFT) for when a llama.cpp port lands.
   MobileMoE is under the FAIR Noncommercial Research License.
 - 1-bit Muse Glimmer (Q1_0) produced gibberish in our gate-1 test, so Glimmer is a cloud brain + teacher only.
-- Embeddings: the default `HashingEmbedder` (char trigrams) works with zero download; `Embedder` is a protocol so a
-  small embedding GGUF (e.g. EmbeddingGemma, in a supporting role) can be plugged in through llama.cpp embeddings.
+- Embeddings: the default `HashingEmbedder` (char trigrams) works with zero download; it is the default. Only Meta models are in the stack.
 
 ## Prior work
 Everything here was written during the hackathon window (Oct 26 – Nov 4, 2026). None of Habib's existing products

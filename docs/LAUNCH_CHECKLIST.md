@@ -15,7 +15,7 @@ Deadline: **Nov 4, 2026, 9:00 PM ET** (Nov 5 02:00 UTC). No grace period. Target
 - [ ] *Optional:* 30–45 s X clip tagged @MetaforDevs, using the "Active Memory that never leaves your phone" hook. **Post only with Habib's explicit yes.**
 
 - [ ] **Headline numbers = frozen held-out test split only.** After-distillation accuracy and ECE in the video, packet and README come from the frozen test split. Never quote dev-set or calibration-split figures (e.g. the 120-row dev conformal number) as headlines.
-- [ ] "Built with Llama" and "Built with Muse Spark Open" visible in README header and packet; on-device model called Llama-Reflex-1B everywhere.
+- [ ] "Built with Llama" visible in README header and packet; on-device model called Llama-Reflex-1B everywhere.
 
 ## Blockers: build side
 1. [ ] [PLACEHOLDER: before→after decision accuracy, N, task set, baseline definition] (baseline done: N=36, 0.53)
@@ -32,7 +32,7 @@ Deadline: **Nov 4, 2026, 9:00 PM ET** (Nov 5 02:00 UTC). No grace period. Target
 
 ## Blockers: Habib side (Mac, keys, approval, people)
 12. [ ] [PLACEHOLDER: airplane-mode proof clip recorded on the physical iPhone 17 Pro]
-13. [ ] [PLACEHOLDER: final license determination: does the Muse Model License allow Spark Open outputs as distillation training data? Read the license text. If unclear, use Glimmer-only labels]
+13. [x] Teacher is Muse Glimmer 30B only (Apache-2.0); Muse Spark Open was not used (≈700 GB VRAM, paid hosting).
 14. [ ] [PLACEHOLDER: confirmation that cloud calls use `muse-spark-1.3` Standard mode (keys/config)]
 15. [ ] [PLACEHOLDER: primary user + moment (must be firsthand)]
 16. [ ] [PLACEHOLDER: real-use evidence: tester quote or self-use log]

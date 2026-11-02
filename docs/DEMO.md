@@ -34,7 +34,7 @@ Setup: iPhone 17 Pro mirrored (QuickTime). Model loaded. Memories seeded *live d
 - Rule: if the curve isn't rising yet, say so. Never fake or backfill data.
 
 **2:40–3:00 · Distillation close**
-- One slide: Muse Spark Open + Muse Glimmer label the same questions with probabilities → disagreement becomes "escalate" → LoRA on the answer letter → calibrated → back on the phone.
+- One slide: Muse Glimmer 30B (run locally) labels the questions with soft option-letter probabilities → low-confidence labels dropped → LoRA on the answer letter → calibrated → back on the phone.
 - Show the before/after table from `eval/score_decisions.py --compare` (base 1B: 53% accuracy, 11% handled; distilled: real numbers once trained).
 - Close: "Big Meta models teach. A small Meta model acts. Your data stays in your pocket."
 

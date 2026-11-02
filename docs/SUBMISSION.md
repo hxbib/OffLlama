@@ -6,7 +6,7 @@
 > Rubric source: rules summaries at madrobot.blog and reconscribe.com (Oct 2026), and the event page cerebralvalley.ai/e/meta-ai-developer-hackathon.
 > Indie lens: "creativity, technical ambition, and whether it works."
 
-**Built with Llama · Built with Muse Spark Open**
+**Built with Llama**
 
 **Pocket Glimmer.** An assistant for [PLACEHOLDER: user, e.g. "students like me"] that keeps working with no signal: a Meta Llama model, distilled from Muse Glimmer, runs entirely on iPhone and asks Meta's cloud only when it knows it's unsure.
 
@@ -17,9 +17,9 @@ Social/X hook (alternate): Active Memory that never leaves your phone.
 | Category | What judges want (rules wording) | Our evidence | Packet section + video timestamp | Low-score risk → fix |
 |---|---|---|---|---|
 | **Impact 30%** | "Real-world potential: who benefits, how much it matters, whether it could become something people use, and whether it fits one of the problem statements" (themes: *Build for Your World* / *Push the Frontier*) | Theme: **Build for Your World**. User: me, Habib, CS student at Hunter, living in the Bronx. Moment: [PLACEHOLDER: user + moment, firsthand, e.g. no signal on the subway]. 3–4 daily tasks done offline (memory recall, confirm-before-act on a message + reminder, memory correction). Privacy, in Meta's own framing: Muse Wonder leads with "Active Memory" (Meta, Oct 12, 2026), and ours never leaves the phone. Proof: [PLACEHOLDER: real-use evidence: tester quote or self-use log]. Offline share: [AFTER_COVERAGE] (baseline 15% at τ=0.8, frozen test N=120) | §Impact (first). Video 0:00–0:25 and 2:45–3:00 | **Risk:** we pitch architecture and judges can't tell who it's for. → **Fix:** first 25 s of video and first paragraph name the user and the moment, no jargon; every demo task is Habib's real request; one piece of real-use evidence; a "what it would take to ship" line |
-| **Use of Meta AI Tooling 25%** | "How creatively you use Meta's AI tools, whether you go beyond a basic integration, and whether you surface capabilities people did not expect." (Unofficial repo: genuine Meta use may be a pass/fail gate) | Meta at every layer: Muse Glimmer 30B (Apache-2.0) + Muse Spark Open (Muse Model License) as teachers labeling [PLACEHOLDER: N decision examples] → Llama 3.2 1B distilled into Llama-Reflex-1B (LoRA r16, Q4_K_M GGUF) on device → low-confidence escalation to Muse Spark 1.3 (Meta Model API, Standard mode). Glimmer is also the local LLM-as-judge. Optional SAM 3.1 glimpse: [PLACEHOLDER: SAM 3.1 built yes/no]. The unexpected part: a 1B Meta model that knows when it doesn't know | §Use of Meta AI Tooling (stack table). Video 1:20–1:45 (handoff), 2:20–2:45 (stack diagram) | **Risk:** looks like a generic wrapper, or Meta parts look optional. → **Fix:** BYOK never in the video, README footnote only; Meta is the default config; say "open weights" aloud; settle [PLACEHOLDER: license determination] for Spark Open outputs as training data, else Glimmer-only labels (license check: allows distillation with attribution) |
+| **Use of Meta AI Tooling 25%** | "How creatively you use Meta's AI tools, whether you go beyond a basic integration, and whether you surface capabilities people did not expect." (Unofficial repo: genuine Meta use may be a pass/fail gate) | Meta at every layer: Muse Glimmer 30B (Apache-2.0, run locally at IQ2_M) as sole teacher labeling [PLACEHOLDER: N decision examples] → Llama 3.2 1B distilled into Llama-Reflex-1B (LoRA r16, Q4_K_M GGUF) on device → low-confidence escalation to Muse Spark 1.3 (Meta Model API, Standard mode). Glimmer is also the local LLM-as-judge. Optional SAM 3.1 glimpse: [PLACEHOLDER: SAM 3.1 built yes/no]. The unexpected part: a 1B Meta model that knows when it doesn't know | §Use of Meta AI Tooling (stack table). Video 1:20–1:45 (handoff), 2:20–2:45 (stack diagram) | **Risk:** looks like a generic wrapper, or Meta parts look optional. → **Fix:** BYOK never in the video, README footnote only; Meta is the default config; say "open weights" aloud |
 | **Demo 25%** | "Whether there is a working, impressive demo, whether the product holds up live, and the quality of your demo video." Live finals Nov 9 | Real iPhone 17 Pro footage, airplane mode visibly ON [PLACEHOLDER: airplane-mode proof clip]; 4 tasks with decision card + confidence bar + tool call; recall cold open; one handoff to Spark 1.3. Script: `docs/DEMO_SCRIPT.md` | §Demo. Whole video | **Risk:** video unviewable, or live demo breaks. → **Fix:** public upload by Nov 3, tested logged out; check audio; edit out failures; offline build at finals with video as backup; no settings/auth screens; under 3:00 |
-| **Technical depth 20%** | "Whether the engineering is sound and thoughtfully refined, and whether the project shows real craft." Indie: "technical ambition" | Baseline measured: untrained 1B, frozen test split N=120 gold decisions, with prompt debiasing: accuracy 0.74, handled 15% at τ=0.8, accuracy on handled 0.89, ECE 0.150. After: [AFTER_ACC], [AFTER_ECE]. Speed: [PHONE_TOK_S], [PHONE_TTFT_MS], [PHONE_RAM_GB]. 30B negative result: Q1_0 gibberish (5.9 GB peak); IQ2_M correct but 9.85 GB, over the ~5.5 GB budget. 3B ruled out on headroom (5.03 GB peak RSS on the box CPU). Conformal threshold, error ≤ 5% under exchangeability | §Technical Depth. Video 1:45–2:20 | **Risk:** unverifiable claims. → **Fix:** every number has N, test set, baseline; reproducible scripts (`eval/score_decisions.py`, `training/reliability.py`); held-out set unseen by teacher prompts; state conformal assumption |
+| **Technical depth 20%** | "Whether the engineering is sound and thoughtfully refined, and whether the project shows real craft." Indie: "technical ambition" | Baseline measured: untrained 1B, frozen test split N=120 gold decisions, with prompt debiasing: accuracy 0.74, handled 15% at τ=0.8, accuracy on handled 0.89, ECE 0.150. After: [AFTER_ACC], [AFTER_ECE]. Speed: [PHONE_TOK_S], [PHONE_TTFT_MS], [PHONE_RAM_GB]. 30B negative result: Q1_0 gibberish (5.9 GB peak); IQ2_M correct but 9.85 GB, over the ~5.5 GB budget. 3B ruled out on headroom (5.03 GB peak RSS on the box CPU). Conformal: certified error bound ≈10% under exchangeability (calibration N=180, τ=0.90, 36% handled, 0 errors, bound 10.2%); final [AFTER_BOUND] | §Technical Depth. Video 1:45–2:20 | **Risk:** unverifiable claims. → **Fix:** every number has N, test set, baseline; reproducible scripts (`eval/score_decisions.py`, `training/reliability.py`); held-out set unseen by teacher prompts; state conformal assumption |
 
 ### Impact strengthening checklist (our weak spot)
 - [ ] One user, one recurring moment, one sentence, no jargon. [PLACEHOLDER: user + moment]
@@ -33,7 +33,7 @@ Social/X hook (alternate): Active Memory that never leaves your phone.
 ## TL;DR
 - For: [PLACEHOLDER: user + moment]. Me first: a Hunter CS student in the Bronx.
 - Offline: reminders, calendar, contacts, memory recall and corrections, on the phone in airplane mode.
-- Meta models do all of it: Llama-Reflex-1B (from Llama 3.2 1B) on the phone, taught by Muse Glimmer and Muse Spark Open, with Muse Spark 1.3 for the hard questions.
+- Meta models do all of it: Llama-Reflex-1B (from Llama 3.2 1B) on the phone, taught by Muse Glimmer 30B, with Muse Spark 1.3 for the hard questions.
 
 ## Impact
 Theme: **Build for Your World**.
@@ -50,19 +50,17 @@ I wanted one that remembers me and keeps that memory on my phone. It also has to
 ## Use of Meta AI Tooling
 Every model in the system is a Meta model. Four of them carry real load:
 1. **Llama 3.2 1B → Llama-Reflex-1B**: the on-device decision model. Every Reflex decision, tool call and route runs on it, offline.
-2. **Muse Glimmer (Apache-2.0)**: teacher for the distillation labels, and the local LLM-as-judge for grading answers.
-3. **Muse Spark Open**: second teacher. Its license allows distillation with attribution, so it's credited as "Built with Muse Spark Open".
+2. **Muse Glimmer 30B (Apache-2.0)**: the only teacher, run locally (IQ2_M) to produce soft option-letter labels for distillation, and the local LLM-as-judge for grading answers.
 4. **Muse Spark 1.3**: cloud escalation when the Reflex isn't sure. Meta Model API, Standard mode.
 
 | Model | License / access | Role | Why this model |
 |---|---|---|---|
 | Llama-Reflex-1B (distilled from Llama 3.2 1B Instruct), Q4_K_M | Llama Community License, open weights | On-device Reflex: typed decisions, tool calls, routing (llama.cpp + Metal) | 1.99 GB peak RSS on the box CPU (not an iPhone), well under the ~5.5 GB budget; the 3B left only ~0.47 GB |
 | Muse Glimmer 30B | Apache-2.0, open weights | Teacher labels + local LLM-as-judge | Meta's on-device agentic model, too big for the phone (see Technical Depth) |
-| Muse Spark Open | Muse Model License, open weights via [PLACEHOLDER: host: Fireworks/Baseten/Modal] | Teacher | Second, larger teacher; the license allows distillation with attribution ("Built with Muse Spark Open") |
 | Muse Spark 1.3 | Meta Model API, **Standard mode** (not used for training) | Escalation when confidence is low | Strong reasoning and tool calling |
 | SAM 3.1 (optional) | Model API | Camera glimpse | [PLACEHOLDER: SAM 3.1 built yes/no] |
 
-- The teachers label the same decision questions. Where they disagree, the label becomes "escalate".
+- Muse Glimmer 30B, run locally, labels each decision question with soft option-letter probabilities. Low-confidence labels are dropped.
 - What you might not expect: a calibrated 1B Meta model that hands off to Meta's cloud only when it's unsure.
 - Contributor mode is off. Personal details are masked before anything leaves the phone.
 
@@ -73,7 +71,7 @@ Every model in the system is a Meta model. Four of them carry real load:
 - How to run it: [PLACEHOLDER: install/run path (TestFlight or build steps)]
 - Timestamps:
   - 0:00–0:10: airplane mode on, a memory question answered on the phone.
-  - 0:10–0:25: who I am, the problem, "a Meta model distilled from Glimmer and Spark Open, on your phone."
+  - 0:10–0:25: who I am, the problem, "a Meta model distilled from Muse Glimmer, on your phone."
   - 0:25–1:45: real tasks on the types the teacher scored 100% on QC (confirm-before-act, memory conflict, answerability), then one low-confidence hand-off to Spark 1.3 (two contacts named Sam).
   - 1:45–2:20: before/after eval, speed, why 30B didn't fit, the conformal bound + reliability chart.
   - 2:20–2:45: Meta stack, open weights.
@@ -84,8 +82,8 @@ Every model in the system is a Meta model. Four of them carry real load:
 - Architecture: [PLACEHOLDER: architecture diagram image] (Mermaid source in README).
 - Each decision is one forward pass. I read the logits of the option letters and turn them into a calibrated probability.
 - Below the threshold the Reflex takes the safe path: escalate, ask, or confirm.
-- Distillation: teachers → [PLACEHOLDER: N teacher-labeled examples] → LoRA r16 (Unsloth), loss on the answer letter only → temperature scaling → Q4_K_M GGUF → llama.cpp Metal.
-- Threshold: conformal risk control. Target: error among on-device decisions ≤ 5%. τ = [AFTER_TAU].
+- Distillation: Muse Glimmer 30B (local IQ2_M) → [PLACEHOLDER: N teacher-labeled examples] → LoRA r16 (Unsloth), loss on the answer letter only → temperature scaling → Q4_K_M GGUF → llama.cpp Metal.
+- Threshold: conformal risk control. Certified so far: error among on-device decisions ≤ ~10% under exchangeability (calibration N=180: τ=0.90, 36% handled, 0 errors, bound 10.2%); 5% not certified. Final τ = [AFTER_TAU], bound [AFTER_BOUND].
 - Calibration: baseline ECE 0.150 (10 bins, frozen test split N=120, untrained 1B with prompt debiasing). After: [AFTER_ECE]. Charts: `docs/img/reliability_baseline_test120_v2cc.png`, [AFTER_RELIABILITY_CHART].
 - Headline after-distillation accuracy and ECE come **only from the frozen held-out test split** (never the dev or calibration split).
 - Before/after (both rows: frozen held-out test split, N=120; 300-item gold set = 180 calibration + 120 test):
@@ -130,7 +128,7 @@ Every model in the system is a Meta model. Four of them carry real load:
 - The demo uses my own data or made-up data.
 
 ## Limitations & assumptions
-- The 5% bound assumes exchangeability: new questions have to look like the calibration set. I say "on our eval distribution," not "guaranteed." I recalibrate after each round.
+- The conformal bound (≈10% certified; 5% not certified) assumes exchangeability: new questions have to look like the calibration set. I say "on our eval distribution," not "guaranteed." I recalibrate after each round.
 - Gold set: 300 items, 180 calibration / 120 frozen test. With zero errors, the bound needs at least 135 calibration rows. For the earlier untrained baseline (before prompt debiasing), nothing certifies at α=5%, δ=0.1 on the 180-row calibration split (τ=1.01, escalate everything; tightest supported: error ≤ 22.4% at τ=0.64, 53/180 handled, 3 wrong). Applied to the test split, τ=0.64 would handle 46/120 (38%) with 38 correct.
 - Baseline numbers, and every memory (RSS) and speed figure in the lineup, come from the box's Linux x86 CPU, not an iPhone.
 - We haven't found prior art for this exact combination (letter-softmax confidence + conformal escalation on a phone). That is not the same as saying none exists.
