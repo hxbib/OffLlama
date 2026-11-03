@@ -22,3 +22,11 @@
 - Mac back online (PC, iPhone still offline). Sim build log read: only failure was missing app/Frameworks/llama.xcframework (no Swift compile errors reached yet).
 - Started on Mac: brew install cmake, clone llama.cpp at ddf48f8, ./build-xcframework.sh ios-device ios-sim (log /tmp/pg_xcfw.log). Next: copy into app/Frameworks, rerun xcodegen + sim build, then device build with iPhone + free signing.
 - Backup pushed via Mac's gh login.
+
+## 2026-11-02 20:21 ET (recorded 21:05 watchdog)
+- Unsigned iOS Simulator build PASSES on Mac with no code changes, after copying llama.xcframework (llama.cpp ddf48f8) into gitignored app/Frameworks. Log /tmp/pg_simbuild2.log; app at /tmp/pg_dd/Build/Products/Debug-iphonesimulator/PocketGlimmer.app on Mac.
+- Not launched: Mac has no iOS Simulator runtime installed (~8-10 GB download vs ~10 GB free).
+
+## 2026-11-02 21:05 ET watchdog
+- No change: Mac online, PC and iPhone offline; still no simulator runtime; 10 GB free. Mac checkout has untracked app/PocketGlimmer/Support/Info.plist (xcodegen output).
+- Next: iPhone online + Habib picks his free Apple signing team in Xcode for a device build, or free ~15 GB on the Mac to download the simulator runtime. Then record the demo video (due Nov 3).
