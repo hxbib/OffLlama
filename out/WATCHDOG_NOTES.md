@@ -30,3 +30,36 @@
 ## 2026-11-02 21:05 ET watchdog
 - No change: Mac online, PC and iPhone offline; still no simulator runtime; 10 GB free. Mac checkout has untracked app/PocketGlimmer/Support/Info.plist (xcodegen output).
 - Next: iPhone online + Habib picks his free Apple signing team in Xcode for a device build, or free ~15 GB on the Mac to download the simulator runtime. Then record the demo video (due Nov 3).
+
+## 2026-11-02 23:08 ET watchdog
+- No change: Mac online (10 GB free, no simulator runtime), PC and iPhone offline. GitHub at 613a612; no room post (last 21:05, under 3 h).
+
+## 2026-11-03 00:00 ET watchdog
+- No change: Mac online, PC and iPhone offline; no simulator runtime. GitHub at 613a612 (notes-only edits uncommitted). ~3 h since last room post, so brief status posted.
+
+## 2026-11-03 01:09 ET watchdog
+- No change: Mac online, PC and iPhone offline; no simulator runtime. GitHub at 613a612 (notes-only edits uncommitted). Last room post 00:00, so no post.
+
+## 2026-11-03 03:09 ET watchdog
+- No change: Mac online, PC and iPhone offline; no simulator runtime. GitHub at 613a612 (notes-only edits uncommitted). Quiet hours, no room post.
+
+## 2026-11-03 05:07 ET watchdog
+- Mac, PC and iPhone all offline now. GitHub at 613a612 (notes-only edits uncommitted, nothing to push). Quiet hours, no room post.
+
+## 2026-11-03 06:08 ET watchdog
+- No change: Mac, PC and iPhone all offline. GitHub at 613a612 (notes-only edits uncommitted, nothing to push). Quiet hours, no room post; next room note due ~8 AM if still blocked (demo video due today).
+
+## 2026-11-03 08:04 ET watchdog
+- No change: Mac, PC and iPhone all offline. GitHub at 613a612 (notes-only edits uncommitted, nothing to push). 8 AM blocker note sent to room (demo video due today).
+
+## 2026-11-03 09:00 ET watchdog
+- No change: Mac, PC and iPhone all offline. GitHub at 613a612 (notes-only edits uncommitted, nothing to push). No room post (8 AM blocker note already sent); next room note ~11 AM if still blocked.
+
+## 2026-11-03 10:07 ET watchdog
+- No change: Mac, PC and iPhone all offline. GitHub at 613a612 (notes-only edits uncommitted, nothing to push). No room post (last 8 AM); next room note ~11 AM if still blocked.
+
+## 2026-11-03 11:05 ET watchdog
+- No change: Mac, PC and iPhone all offline. GitHub at 613a612 (notes-only edits uncommitted, nothing to push). ~3 h since last room note (8 AM), so 11 AM blocker note requested (demo video due today, submission due Nov 4 9 PM ET).
+
+## 2026-11-03 12:07 ET watchdog
+- No change: Mac, PC and iPhone all offline. GitHub at 613a612 (notes-only edits uncommitted, nothing to push). No room post (last 11 AM); next room note ~2 PM if still blocked.
