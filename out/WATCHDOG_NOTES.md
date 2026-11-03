@@ -17,3 +17,8 @@
 ## 2026-11-02 19:04 ET watchdog
 - Mac, PC, iPhone still offline (~3 h). Sim build result unknown; backup push impossible; box ahead of GitHub by cb1bed5, dd54c1a, 86ccbce + this note.
 - Blocker already posted to room at 18:05; not reposting. Next when Mac returns: read /tmp/pg_simbuild.log, fix compile errors, device build, demo video (due Nov 3).
+
+## 2026-11-02 20:08 ET watchdog
+- Mac back online (PC, iPhone still offline). Sim build log read: only failure was missing app/Frameworks/llama.xcframework (no Swift compile errors reached yet).
+- Started on Mac: brew install cmake, clone llama.cpp at ddf48f8, ./build-xcframework.sh ios-device ios-sim (log /tmp/pg_xcfw.log). Next: copy into app/Frameworks, rerun xcodegen + sim build, then device build with iPhone + free signing.
+- Backup pushed via Mac's gh login.
