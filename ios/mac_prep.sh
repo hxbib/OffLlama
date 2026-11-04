@@ -9,14 +9,12 @@ set -uo pipefail
 
 SCRIPT_DIR=$(CDPATH='' cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 ROOT=$(CDPATH='' cd -- "$SCRIPT_DIR/.." && pwd)
-SHIPPING_MODEL_REL="models/SHIPPING-ep1-Llama-3.2-1B-PocketGlimmer-Reflex-Q4_K_M.gguf"
-SHIPPING_MODEL_BYTES=807694080
-SHIPPING_MODEL_SHA256=a5c60a8836aa73adeb847185aa30184cd9c33c522185f59fa9ac55a9d00782c2
-LLAMA_COMMIT=ddf48f8
-CALIBRATION_REL="app/PocketGlimmer/Resources/Models/calibration.json"
-SKILLS_REL="app/PocketGlimmer/Resources/Skills/builtin.json"
-ENTITLEMENTS_REL="app/PocketGlimmer/Support/PocketGlimmer.entitlements"
+[ -f "$SCRIPT_DIR/artifacts.env" ] || { printf 'error: missing %s\n' "$SCRIPT_DIR/artifacts.env" >&2; exit 2; }
+# shellcheck source=ios/artifacts.env
+. "$SCRIPT_DIR/artifacts.env"
+VALIDATOR="$SCRIPT_DIR/validate_artifacts.py"
 FRAMEWORK_REL="app/Frameworks/llama.xcframework"
+FRAMEWORK_MARKER=".pocketglimmer-provenance.json"
 
 CMD=""
 MODEL_OPT=""
@@ -26,10 +24,18 @@ DERIVED_DATA=""
 BUNDLE_MODEL=0
 ALLOW_NO_MODEL=0
 WITH_SIMULATOR=0
-NO_GENERATE=0
 REQUIRE_MODEL=0
 FAILS=0
 SKIPS=0
+INCOMPLETE=0
+STAGE_PARENT=""
+
+cleanup_stage() {
+  if [ -n "$STAGE_PARENT" ]; then
+    rm -rf "$STAGE_PARENT"
+  fi
+}
+trap cleanup_stage EXIT
 
 usage() {
   cat <<'EOF'
@@ -45,11 +51,13 @@ Commands:
   prepare            Verify resources, optionally bundle the model, check the
                      llama framework, and generate PocketGlimmer.xcodeproj.
   framework          Verify app/Frameworks/llama.xcframework, or build it from
-                     an existing llama.cpp checkout at ddf48f8 if absent.
+                     a clean llama.cpp checkout at the pinned commit if absent.
   bundle-model       Verify the shipping GGUF and copy it into the app bundle.
-  build-unsigned     Compile a generic iOS Release build with signing disabled,
-                     then validate the .app bundle. Does not sign or install.
-  check-app          Validate an already built PocketGlimmer.app:
+  build-unsigned     Compile a fresh generic iOS Release build with signing
+                     disabled, then validate the .app bundle. Does not sign or
+                     install.
+  check-app          Validate an already built PocketGlimmer.app, using the
+                     app's real lookup paths (bundle root, then Models/Skills):
                        ios/mac_prep.sh check-app --app PATH [--allow-no-model]
 
 Options:
@@ -63,17 +71,27 @@ Options:
   --allow-no-model     Permit a missing model for compile-only checks. The
                        result is reported as incomplete, not ready.
   --with-simulator     Build the simulator slice too (non-device work only).
-  --no-generate        Skip xcodegen generate in build-unsigned.
-  --require-model      Fail check-app/build-unsigned if no model is bundled.
+  --require-model      Fail check-app/build-unsigned/prepare if no model is
+                       bundled.
   -h, --help           Show this help.
+
+Exit status:
+  0  every required check ran and passed (framework provenance verified where
+     it is claimed).
+  1  a required check failed.
+  2  a required check was skipped or an artifact is structurally usable but not
+     verified (for example an xcframework without pin provenance).
 
 Examples:
   ios/mac_prep.sh preflight
   ios/mac_prep.sh bundle-model
   ios/mac_prep.sh framework --llama-src ~/src/llama.cpp
-  ios/mac_prep.sh prepare --bundle-model
+  ios/mac_prep.sh prepare --bundle-model --require-model
   ios/mac_prep.sh build-unsigned
   ios/mac_prep.sh check-app --app ios/.build/DerivedData/Build/Products/Release-iphoneos/PocketGlimmer.app
+
+Python 3 is required for the strict calibration, skills, plist, provenance, and
+Mach-O structural checks on both Linux and macOS.
 
 The script never runs brew, xcode-select, xcodebuild -downloadPlatform,
 codesign, or a device install. Missing tools and runtimes are reported with
@@ -85,6 +103,7 @@ ok()   { printf 'ok   %s\n' "$*"; }
 warn() { printf 'WARN %s\n' "$*"; }
 fail() { printf 'FAIL %s\n' "$*" >&2; FAILS=$((FAILS + 1)); }
 skip() { printf 'SKIP %s\n' "$*"; SKIPS=$((SKIPS + 1)); }
+incomplete() { printf 'INCOMPLETE %s\n' "$*"; INCOMPLETE=$((INCOMPLETE + 1)); }
 section() { printf '\n== %s\n' "$*"; }
 die() { printf 'error: %s\n' "$*" >&2; exit 2; }
 
@@ -98,13 +117,36 @@ abs_path() {
 file_size() { wc -c < "$1" | tr -d '[:space:]'; }
 
 hash_file() {
-  if command -v shasum >/dev/null 2>&1; then
-    shasum -a 256 "$1" | awk '{print $1}'
-  elif command -v sha256sum >/dev/null 2>&1; then
+  if command -v sha256sum >/dev/null 2>&1; then
     sha256sum "$1" | awk '{print $1}'
+  elif command -v shasum >/dev/null 2>&1; then
+    shasum -a 256 "$1" | awk '{print $1}'
   else
     return 127
   fi
+}
+
+run_validator() {
+  if ! command -v python3 >/dev/null 2>&1; then
+    printf 'python3 is required for strict artifact validation\n' >&2
+    return 1
+  fi
+  if [ ! -f "$VALIDATOR" ]; then
+    printf 'validator missing: %s\n' "$VALIDATOR" >&2
+    return 1
+  fi
+  python3 "$VALIDATOR" "$@"
+}
+
+validate_with() {
+  local what=$1
+  shift
+  local out
+  if ! out=$(run_validator "$@" 2>&1); then
+    fail "$what: $out"
+    return 1
+  fi
+  ok "$what: $out"
 }
 
 cmake_new_enough() {
@@ -116,17 +158,6 @@ cmake_new_enough() {
   minor=${minor%%.*}
   [ "${major:-0}" -gt 3 ] 2>/dev/null && return 0
   [ "${major:-0}" -eq 3 ] 2>/dev/null && [ "${minor:-0}" -ge 28 ] 2>/dev/null
-}
-
-json_lint() {
-  local f=$1
-  if command -v plutil >/dev/null 2>&1 && plutil -lint "$f" >/dev/null 2>&1; then
-    return 0
-  fi
-  if command -v python3 >/dev/null 2>&1 && python3 -m json.tool "$f" >/dev/null 2>&1; then
-    return 0
-  fi
-  return 1
 }
 
 plist_value() {
@@ -173,39 +204,80 @@ require_darwin() {
   ok "host macOS"
 }
 
-check_framework() {
-  local fw=$1
-  local device="$fw/ios-arm64/llama.framework/llama"
-  local header="$fw/ios-arm64/llama.framework/Headers/llama.h"
-  local modulemap="$fw/ios-arm64/llama.framework/Modules/module.modulemap"
-
-  if [ ! -d "$fw" ]; then
-    fail "missing $FRAMEWORK_REL"
-    printf '     Build it from a ddf48f8 checkout: %s framework --llama-src ~/src/llama.cpp\n' "$0"
-    printf '     Or follow ios/MAC_DAY_RUNBOOK.md section 4.\n'
+verify_macho_native() {
+  local bin=$1 label=$2 out
+  if ! command -v file >/dev/null 2>&1; then
+    fail "$label: file(1) is required to prove a Mach-O binary"
     return 1
   fi
-  if [ ! -f "$fw/Info.plist" ]; then
-    fail "$FRAMEWORK_REL has no Info.plist; the copy is incomplete"
+  if ! out=$(file -b "$bin" 2>&1); then
+    fail "$label: file(1) could not read the binary: $out"
     return 1
   fi
-  if [ ! -f "$device" ]; then
-    fail "$FRAMEWORK_REL has no device slice (ios-arm64/llama.framework/llama)"
-    printf '     Rebuild with: cd ~/src/llama.cpp && ./build-xcframework.sh ios-device\n'
+  case "$out" in
+    *Mach-O*arm64*) ;;
+    *)
+      fail "$label: file reports '$out' (need a Mach-O arm64 binary)"
+      return 1
+      ;;
+  esac
+  if ! command -v lipo >/dev/null 2>&1; then
+    fail "$label: lipo(1) is required to prove an arm64 slice"
     return 1
   fi
-  if [ ! -f "$modulemap" ]; then
-    warn "$FRAMEWORK_REL has no Modules/module.modulemap; import llama may fail"
+  if ! out=$(lipo -info "$bin" 2>&1); then
+    fail "$label: lipo -info failed: $out"
+    return 1
   fi
-  if [ -f "$header" ]; then
-    if ! grep -q 'llama_memory_seq_cp' "$header" || ! grep -q 'kv_unified' "$header"; then
-      fail "$FRAMEWORK_REL headers do not match the pinned ddf48f8 API used by LlamaCppEngine"
+  case "$out" in
+    *arm64*) ;;
+    *)
+      fail "$label: lipo reports '$out' (need arm64)"
+      return 1
+      ;;
+  esac
+  if ! command -v otool >/dev/null 2>&1; then
+    fail "$label: otool(1) is required to verify the framework install name"
+    return 1
+  fi
+  if ! out=$(otool -D "$bin" 2>&1); then
+    fail "$label: otool -D failed: $out"
+    return 1
+  fi
+  case "$out" in
+    *'@rpath/llama.framework/llama'*) ;;
+    *)
+      fail "$label: install name is not @rpath/llama.framework/llama: $out"
+      return 1
+      ;;
+  esac
+  if command -v vtool >/dev/null 2>&1; then
+    if ! out=$(vtool -show-build "$bin" 2>&1); then
+      fail "$label: vtool -show-build failed: $out"
+      return 1
+    fi
+  elif command -v xcrun >/dev/null 2>&1 && xcrun -f vtool >/dev/null 2>&1; then
+    if ! out=$(xcrun vtool -show-build "$bin" 2>&1); then
+      fail "$label: xcrun vtool -show-build failed: $out"
       return 1
     fi
   else
-    warn "$FRAMEWORK_REL has no llama.h; the pinned API cannot be checked"
+    fail "$label: vtool(1) is required to prove an iOS device build"
+    return 1
   fi
-  ok "llama.xcframework with device slice"
+  if ! printf '%s\n' "$out" | grep -qiE 'platform[[:space:]]+IOS([[:space:]]|$)'; then
+    fail "$label: vtool does not report platform IOS (not a device build): $out"
+    return 1
+  fi
+  if ! command -v nm >/dev/null 2>&1; then
+    fail "$label: nm(1) is required to verify the pinned llama symbols"
+    return 1
+  fi
+  if ! nm -g "$bin" 2>/dev/null | grep -q '_llama_model_load_from_file$'; then
+    fail "$label: exported llama_model_load_from_file symbol is missing"
+    return 1
+  fi
+  ok "$label: native arm64 iOS Mach-O, install name and pinned symbol verified"
 }
 
 check_model_file() {
@@ -259,11 +331,31 @@ check_model_source() {
 }
 
 check_bundled_models() {
+  local dir="$ROOT/app/PocketGlimmer/Resources/Models"
+  local parent="$ROOT/app/PocketGlimmer/Resources"
   local found=0 f
-  while IFS= read -r -d '' f; do
+
+  if [ -L "$parent" ]; then
+    fail "app Resources directory is a symlink: $parent"
+    return 1
+  fi
+  if [ -L "$dir" ]; then
+    fail "app model resource directory is a symlink: $dir"
+    return 1
+  fi
+  for f in "$dir"/*.gguf; do
+    if [ ! -e "$f" ] && [ ! -L "$f" ]; then
+      continue
+    fi
+    if [ -L "$f" ]; then
+      found=1
+      fail "bundled model is a symlink: $f"
+      printf '     Replace it with a regular file; the app bundle must carry the model itself.\n'
+      continue
+    fi
     found=1
     check_model_file "$f" "bundled model" || true
-  done < <(find "$ROOT/app/PocketGlimmer/Resources/Models" -type f -name '*.gguf' -print0 2>/dev/null)
+  done
 
   if [ "$found" = 0 ]; then
     if [ "$REQUIRE_MODEL" = 1 ]; then
@@ -276,152 +368,65 @@ check_bundled_models() {
 }
 
 validate_calibration() {
-  local f=$1
-  local tau prompt
-
+  local f=$1 label=${2:-calibration.json}
+  if [ -L "$f" ]; then
+    fail "$label is a symlink: $f"
+    return 1
+  fi
   if [ ! -f "$f" ]; then
-    fail "calibration.json missing: $f"
+    fail "$label missing: $f"
     return 1
   fi
-  if ! json_lint "$f"; then
-    fail "calibration.json is not valid JSON: $f"
-    return 1
-  fi
-  tau=$(plist_value "$f" defaultTau 2>/dev/null || true)
-  if [ -z "$tau" ]; then
-    tau=$(python3 - "$f" <<'PY' 2>/dev/null || true
-import json, sys
-print(json.load(open(sys.argv[1])).get("defaultTau", ""))
-PY
-)
-  fi
-  if ! awk -v t="$tau" 'BEGIN { exit !(t + 0 == 0.9) }'; then
-    fail "calibration.json defaultTau is '$tau'; the certified operating point is 0.90"
-    return 1
-  fi
-  prompt=$(plist_value "$f" promptStyle 2>/dev/null || true)
-  if [ -z "$prompt" ]; then
-    prompt=$(python3 - "$f" <<'PY' 2>/dev/null || true
-import json, sys
-print(json.load(open(sys.argv[1])).get("promptStyle", ""))
-PY
-)
-  fi
-  if [ -z "$prompt" ]; then
-    fail "calibration.json has no promptStyle"
-    return 1
-  fi
-
-  local keys=(answerability confirmBeforeAct memoryConflict notificationTriage nudgeNow
-    rememberOrNot route sensitivity timing toolChoice)
-  local n
-  for n in 2 3 4 5 6 7 8; do
-    keys+=("contactPick#$n" "eventPick#$n" "skillPick#$n")
-  done
-
-  if [ "$(uname -s)" = Darwin ] && command -v plutil >/dev/null 2>&1; then
-    local out key
-    out=$(plutil -p "$f") || { fail "calibration.json cannot be read"; return 1; }
-    for key in "${keys[@]}"; do
-      printf '%s\n' "$out" | grep -q "\"$key\" =>" || { fail "calibration.json missing prior key $key"; return 1; }
-    done
-  elif command -v python3 >/dev/null 2>&1; then
-    if ! python3 - "$f" <<'PY'
-import json, sys
-required = [
-    "answerability", "confirmBeforeAct", "memoryConflict", "notificationTriage",
-    "nudgeNow", "rememberOrNot", "route", "sensitivity", "timing", "toolChoice",
-]
-required += [f"contactPick#{n}" for n in range(2, 9)]
-required += [f"eventPick#{n}" for n in range(2, 9)]
-required += [f"skillPick#{n}" for n in range(2, 9)]
-prior = json.load(open(sys.argv[1])).get("prior")
-if not isinstance(prior, dict):
-    print("calibration.json has no prior object")
-    sys.exit(1)
-missing = [k for k in required if k not in prior]
-if missing:
-    print("calibration.json is missing prior keys: " + ", ".join(missing))
-    sys.exit(1)
-if len(prior) < 24:
-    print(f"calibration.json has only {len(prior)} prior keys; expected at least 24")
-    sys.exit(1)
-PY
-    then
-      fail "calibration.json does not carry the certified prior set"
-      return 1
-    fi
-  else
-    fail "cannot inspect calibration.json: need plutil or python3"
-    return 1
-  fi
-  ok "calibration.json: promptStyle=$prompt, defaultTau=0.90, certified priors present"
+  validate_with "$label" calibration "$f" "$CALIBRATION_SHA256"
 }
 
 validate_skills() {
-  local f=$1
+  local f=$1 label=${2:-skills registry}
+  if [ -L "$f" ]; then
+    fail "$label is a symlink: $f"
+    return 1
+  fi
   if [ ! -f "$f" ]; then
-    fail "skills registry missing: $f"
+    fail "$label missing: $f"
     return 1
   fi
-  if ! json_lint "$f"; then
-    fail "skills registry is not valid JSON: $f"
-    return 1
-  fi
-  if [ "$(uname -s)" = Darwin ] && command -v plutil >/dev/null 2>&1; then
-    local out
-    out=$(plutil -p "$f") || { fail "skills registry cannot be read"; return 1; }
-    printf '%s\n' "$out" | grep -q '"skills" =>' || { fail "skills registry has no skills array"; return 1; }
-    printf '%s\n' "$out" | grep -q '"id" =>' || { fail "skills registry has no id fields"; return 1; }
-  elif command -v python3 >/dev/null 2>&1; then
-    if ! python3 - "$f" <<'PY'
-import json, sys
-data = json.load(open(sys.argv[1]))
-skills = data.get("skills")
-if not isinstance(skills, list) or not skills:
-    print("skills registry has no non-empty 'skills' array")
-    sys.exit(1)
-if not all(isinstance(s, dict) and s.get("id") for s in skills):
-    print("skills registry has an entry without an id")
-    sys.exit(1)
-PY
-    then
-      fail "skills registry structure is wrong"
-      return 1
-    fi
-  else
-    fail "cannot inspect builtin.json: need plutil or python3"
-    return 1
-  fi
-  ok "skills registry: bundled builtin.json is valid"
+  validate_with "$label" skills "$f"
 }
 
 validate_entitlements() {
   local f=$1
+  if [ -L "$f" ]; then
+    fail "entitlements file is a symlink: $f"
+    return 1
+  fi
   if [ ! -f "$f" ]; then
     fail "entitlements file missing: $f"
     return 1
   fi
-  if command -v plutil >/dev/null 2>&1; then
-    if ! plutil -lint "$f" >/dev/null 2>&1; then
-      fail "entitlements file is not a valid plist: $f"
-      return 1
-    fi
-    if plutil -p "$f" 2>/dev/null | grep -q '=>'; then
-      fail "free-team entitlements must stay empty; found a key in $f"
-      return 1
-    fi
-  elif grep -q '<key>' "$f"; then
-    fail "free-team entitlements must stay empty; found a key in $f"
-    return 1
+  validate_with "entitlements" entitlements "$f"
+}
+
+check_source_resource_uniqueness() {
+  local name expected extra
+  name=calibration.json
+  expected="$ROOT/$CALIBRATION_REL"
+  extra=$(first_named_file "$ROOT/app/PocketGlimmer" "$name" "$expected")
+  if [ -n "$extra" ]; then
+    fail "duplicate source $name at $extra; remove the copy that is not $expected"
   fi
-  ok "entitlements: empty (free personal team compatible)"
+  name=builtin.json
+  expected="$ROOT/app/PocketGlimmer/Resources/Skills/builtin.json"
+  extra=$(first_named_file "$ROOT/app/PocketGlimmer" "$name" "$expected")
+  if [ -n "$extra" ]; then
+    fail "duplicate source $name at $extra; remove the copy that is not $expected"
+  fi
 }
 
 validate_resources() {
+  check_source_resource_uniqueness
   validate_calibration "$ROOT/$CALIBRATION_REL" || true
-  validate_skills "$ROOT/$SKILLS_REL" || true
-  validate_entitlements "$ROOT/$ENTITLEMENTS_REL" || true
+  validate_skills "$ROOT/app/PocketGlimmer/Resources/Skills/builtin.json" || true
+  validate_entitlements "$ROOT/app/PocketGlimmer/Support/PocketGlimmer.entitlements" || true
 }
 
 cmd_verify_resources() {
@@ -440,6 +445,152 @@ cmd_verify_resources() {
     return 2
   fi
   printf '\nRESOURCES PASSED: model, calibration, skills, and entitlements match the shipping set.\n'
+}
+
+check_framework_source() {
+  local fw=$1
+  local slice="$fw/ios-arm64/llama.framework"
+  local binary="$slice/llama"
+  local header="$slice/Headers/llama.h"
+  local modulemap="$slice/Modules/module.modulemap"
+  local h out
+  local -a headers=(llama.h ggml.h ggml-opt.h ggml-alloc.h ggml-backend.h
+                   ggml-metal.h ggml-cpu.h ggml-blas.h gguf.h mtmd.h mtmd-helper.h)
+
+  if [ ! -d "$fw" ]; then
+    fail "missing $FRAMEWORK_REL"
+    printf '     Build it from a clean checkout at %s: %s framework --llama-src ~/src/llama.cpp\n' "$LLAMA_COMMIT" "$0"
+    printf '     Or follow ios/MAC_DAY_RUNBOOK.md section 4.\n'
+    return 1
+  fi
+  if [ ! -f "$fw/Info.plist" ]; then
+    fail "$FRAMEWORK_REL has no Info.plist; the copy is incomplete"
+    return 1
+  fi
+  validate_with "xcframework Info.plist" xcframework-plist "$fw/Info.plist" || return 1
+  if [ ! -d "$slice" ]; then
+    fail "$FRAMEWORK_REL has no ios-arm64/llama.framework device slice"
+    printf '     Rebuild with: cd ~/src/llama.cpp && ./build-xcframework.sh ios-device\n'
+    return 1
+  fi
+  if [ ! -f "$slice/Info.plist" ]; then
+    fail "$FRAMEWORK_REL device slice has no Info.plist"
+    return 1
+  fi
+  validate_with "device slice Info.plist" slice-plist "$slice/Info.plist" || return 1
+  if [ -L "$binary" ]; then
+    fail "$FRAMEWORK_REL device binary is a symlink; keep a real built framework"
+    return 1
+  fi
+  if [ ! -f "$binary" ]; then
+    fail "$FRAMEWORK_REL has no device slice binary (ios-arm64/llama.framework/llama)"
+    printf '     Rebuild with: cd ~/src/llama.cpp && ./build-xcframework.sh ios-device\n'
+    return 1
+  fi
+  if [ ! -s "$binary" ]; then
+    fail "$FRAMEWORK_REL device binary is empty"
+    return 1
+  fi
+  if ! out=$(run_validator macho "$binary" 2>&1); then
+    fail "$FRAMEWORK_REL device binary: $out"
+    return 1
+  fi
+  if [ "$(uname -s)" = Darwin ]; then
+    verify_macho_native "$binary" "source llama.framework" || return 1
+  else
+    ok "source llama.framework device binary: $out (structural check; native arm64 proof needs macOS)"
+  fi
+
+  for h in "${headers[@]}"; do
+    if [ ! -s "$slice/Headers/$h" ]; then
+      fail "$FRAMEWORK_REL is missing or has an empty Headers/$h"
+      printf '     A source xcframework must be complete; rebuild it from the pinned commit.\n'
+      return 1
+    fi
+  done
+  if ! grep -q 'llama_memory_seq_cp' "$header" || ! grep -q 'kv_unified' "$header"; then
+    fail "$FRAMEWORK_REL headers do not match the pinned %s API used by LlamaCppEngine" "$LLAMA_COMMIT"
+    return 1
+  fi
+  if [ ! -s "$modulemap" ]; then
+    fail "$FRAMEWORK_REL has no non-empty Modules/module.modulemap"
+    return 1
+  fi
+  if ! grep -q 'framework module llama' "$modulemap" ||
+     ! grep -q 'umbrella "Headers"' "$modulemap" ||
+     ! grep -q 'link "c++"' "$modulemap" ||
+     ! grep -q 'link framework "Accelerate"' "$modulemap" ||
+     ! grep -q 'link framework "Metal"' "$modulemap" ||
+     ! grep -q 'link framework "Foundation"' "$modulemap"; then
+    fail "$FRAMEWORK_REL module map does not match the pinned llama module"
+    return 1
+  fi
+  ok "source llama.xcframework: complete device slice, headers, module map, and AvailableLibraries"
+}
+
+check_framework_provenance() {
+  local fw=$1
+  local marker="$fw/$FRAMEWORK_MARKER"
+  local out
+  if [ ! -f "$marker" ]; then
+    incomplete "$FRAMEWORK_REL has no build provenance marker; it is only a compile-time dependency, not a verified pinned artifact"
+    return 2
+  fi
+  if ! out=$(run_validator provenance "$marker" "$LLAMA_COMMIT" "$fw" 2>&1); then
+    incomplete "$FRAMEWORK_REL provenance is not usable: $out"
+    return 2
+  fi
+  ok "framework provenance: $out"
+}
+
+check_framework() {
+  local fw=$1
+  check_framework_source "$fw" || return 1
+  check_framework_provenance "$fw" || return $?
+}
+
+check_framework_embedded() {
+  local fw=$1
+  local binary="$fw/llama"
+  local out
+
+  if [ ! -d "$fw" ]; then
+    fail "built app has no embedded Frameworks/llama.framework"
+    return 1
+  fi
+  if [ ! -f "$fw/Info.plist" ]; then
+    fail "embedded llama.framework has no Info.plist"
+    return 1
+  fi
+  validate_with "embedded framework Info.plist" slice-plist "$fw/Info.plist" || return 1
+  if [ -L "$binary" ]; then
+    fail "embedded llama.framework binary is a symlink"
+    return 1
+  fi
+  if [ ! -f "$binary" ]; then
+    fail "built app has no embedded llama.framework binary"
+    return 1
+  fi
+  if [ ! -s "$binary" ]; then
+    fail "embedded llama.framework binary is empty"
+    return 1
+  fi
+  if ! out=$(run_validator macho "$binary" 2>&1); then
+    fail "embedded llama.framework binary: $out"
+    return 1
+  fi
+  if [ "$(uname -s)" = Darwin ]; then
+    verify_macho_native "$binary" "embedded llama.framework" || return 1
+  else
+    ok "embedded llama.framework: $out (structural check; native arm64 proof needs macOS)"
+  fi
+  ok "embedded llama.framework is complete (headers/module map are legitimately absent in a built app)"
+}
+
+framework_rebuild_hint() {
+  printf '     Rebuild safely without deleting an existing framework:\n'
+  printf '       mv "%s" "%s.unverified"\n' "$ROOT/$FRAMEWORK_REL" "$ROOT/$FRAMEWORK_REL"
+  printf '       %s framework --root "%s" --llama-src ~/src/llama.cpp\n' "$0" "$ROOT"
 }
 
 cmd_preflight() {
@@ -513,6 +664,11 @@ cmd_preflight() {
   else
     fail "git not found"
   fi
+  if command -v python3 >/dev/null 2>&1; then
+    ok "python3: $(python3 --version 2>&1)"
+  else
+    fail "python3 not found; strict calibration/skills/plist checks need it"
+  fi
 
   section "llama.xcframework"
   if [ -d "$fw" ]; then
@@ -532,8 +688,11 @@ cmd_preflight() {
     printf '\nPREFLIGHT FAILED: %d required check(s) failed. Nothing was changed.\n' "$FAILS"
     return 1
   fi
-  if [ "$SKIPS" -ne 0 ]; then
-    printf '\nPREFLIGHT INCOMPLETE: compile-only skips were requested; this is not install-ready.\n'
+  if [ "$SKIPS" -ne 0 ] || [ "$INCOMPLETE" -ne 0 ]; then
+    printf '\nPREFLIGHT INCOMPLETE: a required artifact is skipped or not provenance-verified; this is not install-ready.\n'
+    if [ "$INCOMPLETE" -ne 0 ]; then
+      framework_rebuild_hint
+    fi
     return 2
   fi
   printf '\nPREFLIGHT PASSED: toolchain, framework, model, calibration, skills, and entitlements are ready.\n'
@@ -541,13 +700,27 @@ cmd_preflight() {
 }
 
 bundle_model() {
-  local src destdir dest
+  local src destdir dest base tmp
   src=$(model_path)
   check_model_file "$src" "shipping model" || return 1
+  base=$(basename "$SHIPPING_MODEL_REL")
   destdir="$ROOT/app/PocketGlimmer/Resources/Models"
-  dest="$destdir/SHIPPING-ep1-Llama-3.2-1B-PocketGlimmer-Reflex-Q4_K_M.gguf"
+  dest="$destdir/$base"
+  if [ -L "$ROOT/app/PocketGlimmer/Resources" ]; then
+    fail "refusing to write through a symlinked Resources directory: $ROOT/app/PocketGlimmer/Resources"
+    return 1
+  fi
+  if [ -L "$destdir" ]; then
+    fail "refusing to write through a symlinked model directory: $destdir"
+    return 1
+  fi
   mkdir -p "$destdir" || { fail "cannot create $destdir"; return 1; }
 
+  if [ -L "$dest" ]; then
+    fail "refusing to use a symlink as the bundled model: $dest"
+    printf '     Remove or replace it with a regular file; this script never writes through a link.\n'
+    return 1
+  fi
   if [ -e "$dest" ]; then
     if [ "$src" -ef "$dest" ] 2>/dev/null; then
       ok "model already bundled at $dest"
@@ -566,10 +739,29 @@ bundle_model() {
     return 1
   fi
 
-  cp "$src" "$dest" || { fail "copy failed: $src -> $dest"; return 1; }
-  if ! check_model_file "$dest" "bundled model"; then
-    rm -f "$dest"        # only the file this run created
-    fail "removed the bad copy created by this run"
+  tmp="$destdir/.$base.tmp.$$"
+  if [ -e "$tmp" ] || [ -L "$tmp" ]; then
+    fail "temporary copy path already exists: $tmp"
+    return 1
+  fi
+  if ! cp "$src" "$tmp"; then
+    rm -f "$tmp"
+    fail "copy failed: $src -> $tmp"
+    return 1
+  fi
+  if ! check_model_file "$tmp" "staged bundled model"; then
+    rm -f "$tmp"
+    fail "removed the staged copy this run created; no destination was changed"
+    return 1
+  fi
+  if [ -e "$dest" ] || [ -L "$dest" ]; then
+    rm -f "$tmp"
+    fail "destination appeared during the copy; refusing to overwrite $dest"
+    return 1
+  fi
+  if ! mv "$tmp" "$dest"; then
+    rm -f "$tmp"
+    fail "install failed: $tmp -> $dest"
     return 1
   fi
   ok "bundled model ready: $dest"
@@ -587,15 +779,29 @@ cmd_bundle_model() {
 
 cmd_framework() {
   local fw="$ROOT/$FRAMEWORK_REL"
-  local src out log rc
+  local src out log rc stage_parent stage binhash srchash porcelain
+  local build_marker
 
   section "llama.xcframework"
-  if [ -d "$fw" ]; then
-    check_framework "$fw" || true
-    if [ "$FAILS" -eq 0 ]; then
-      printf '\nFRAMEWORK PRESENT: existing xcframework verified; it was not rebuilt.\n'
+  if [ -e "$fw" ] || [ -L "$fw" ]; then
+    if [ ! -d "$fw" ]; then
+      fail "$fw exists but is not a directory"
+      return 1
     fi
-    if [ "$FAILS" -eq 0 ]; then return 0; else return 1; fi
+    check_framework "$fw"
+    rc=$?
+    if [ "$rc" -eq 0 ]; then
+      printf '\nFRAMEWORK PRESENT: existing xcframework verified at pinned provenance; it was not rebuilt.\n'
+      return 0
+    fi
+    if [ "$rc" -eq 2 ]; then
+      printf '\nFRAMEWORK INCOMPLETE: the existing xcframework is structurally usable but has no trustworthy build provenance.\n'
+      framework_rebuild_hint
+      return 2
+    fi
+    printf '\nFRAMEWORK INVALID: the existing xcframework failed structural validation.\n'
+    framework_rebuild_hint
+    return 1
   fi
 
   if [ -z "$LLAMA_SRC" ]; then
@@ -612,14 +818,21 @@ cmd_framework() {
     fail "cannot read the git revision of $LLAMA_SRC"
     return 1
   fi
-  case "$src" in
-    "$LLAMA_COMMIT"*) ;;
-    *)
-      fail "llama.cpp checkout is at ${src:0:12}; the app is pinned to $LLAMA_COMMIT"
-      printf '     Do not build a different API. In your own checkout run: git fetch origin && git checkout %s\n' "$LLAMA_COMMIT"
-      return 1
-      ;;
-  esac
+  if [ "$src" != "$LLAMA_COMMIT" ]; then
+    fail "llama.cpp checkout is at $src; the app is pinned to $LLAMA_COMMIT"
+    printf '     Do not build a different API. In your own checkout run: git fetch origin && git checkout %s\n' "$LLAMA_COMMIT"
+    return 1
+  fi
+  if ! porcelain=$(git -C "$LLAMA_SRC" status --porcelain --untracked-files=normal 2>/dev/null); then
+    fail "cannot read the git status of $LLAMA_SRC"
+    return 1
+  fi
+  if [ -n "$porcelain" ]; then
+    fail "llama.cpp checkout is not clean; refuse to build a patched source tree"
+    printf '%s\n' "$porcelain" | head -10
+    printf '     Commit, stash, or remove the changes above. Ignored build artifacts do not block a retry.\n'
+    return 1
+  fi
   if [ ! -x "$LLAMA_SRC/build-xcframework.sh" ]; then
     fail "$LLAMA_SRC/build-xcframework.sh is missing or not executable"
     return 1
@@ -632,16 +845,19 @@ cmd_framework() {
   fi
 
   out="$LLAMA_SRC/build-apple/llama.xcframework"
+  build_marker="$ROOT/ios/.build/logs/framework-start-$(date +%Y%m%d-%H%M%S)-$$"
+  log="$ROOT/ios/.build/logs/framework-$(date +%Y%m%d-%H%M%S)-$$.log"
+  mkdir -p "$(dirname "$log")"
+  : > "$build_marker"
   printf 'Building at pinned commit %s. The llama.cpp script will rebuild its build-* directories under %s.\n' "$LLAMA_COMMIT" "$LLAMA_SRC"
   if [ "$WITH_SIMULATOR" = 1 ]; then
     set -- ios-device ios-sim
   else
     set -- ios-device
   fi
-  log="$ROOT/ios/.build/logs/framework-$(date +%Y%m%d-%H%M%S).log"
-  mkdir -p "$(dirname "$log")"
-  if ! ( cd "$LLAMA_SRC" && ./build-xcframework.sh "$@" ) >"$log" 2>&1; then
-    rc=$?
+  ( cd "$LLAMA_SRC" && ./build-xcframework.sh "$@" ) >"$log" 2>&1
+  rc=$?
+  if [ "$rc" -ne 0 ]; then
     fail "build-xcframework.sh failed (exit $rc)"
     printf '     Full log: %s\n' "$log"
     tail -30 "$log" >&2 || true
@@ -651,27 +867,65 @@ cmd_framework() {
     fail "build-xcframework.sh finished but $out is missing"
     return 1
   fi
-  if [ -e "$fw" ]; then
+  if [ -z "$(find "$out" -newer "$build_marker" -print -quit 2>/dev/null)" ]; then
+    fail "build-xcframework.sh exited 0 but $out was not refreshed (stale output)"
+    return 1
+  fi
+  if [ -e "$fw" ] || [ -L "$fw" ]; then
     fail "$fw appeared while the build was running; refusing to overwrite it"
     return 1
   fi
   mkdir -p "$(dirname "$fw")" || { fail "cannot create app/Frameworks"; return 1; }
-  if ! cp -R "$out" "$fw"; then
-    rm -rf "$fw" 2>/dev/null || true   # only the copy this run created
-    fail "copy failed: $out -> $fw"
+  stage_parent=$(mktemp -d "$ROOT/app/Frameworks/.llama.xcframework.staging.XXXXXX") || {
+    fail "cannot create a staging directory next to $fw"
+    return 1
+  }
+  STAGE_PARENT=$stage_parent
+  stage="$stage_parent/llama.xcframework"
+  if ! cp -R "$out" "$stage"; then
+    fail "copy failed: $out -> $stage"
     return 1
   fi
-  check_framework "$fw" || true
-  if [ "$FAILS" -ne 0 ]; then
-    printf '\nFRAMEWORK BUILD FAILED validation. Log: %s\n' "$log"
+  if ! check_framework_source "$stage"; then
+    printf '\nFRAMEWORK BUILD FAILED validation; no existing framework was changed. Log: %s\n' "$log"
     return 1
   fi
-  printf '\nFRAMEWORK READY: %s (log %s)\n' "$fw" "$log"
+  binhash=$(hash_file "$stage/ios-arm64/llama.framework/llama") || {
+    fail "cannot hash the staged framework binary"
+    return 1
+  }
+  srchash=$(run_validator framework-digest "$stage") || {
+    fail "cannot digest the staged framework headers/module map"
+    return 1
+  }
+  cat > "$stage/$FRAMEWORK_MARKER" <<EOF
+{
+  "commit": "$LLAMA_COMMIT",
+  "clean": true,
+  "device_binary_sha256": "$binhash",
+  "headers_sha256": "$srchash"
+}
+EOF
+  if ! check_framework_provenance "$stage"; then
+    fail "staged framework provenance did not validate; nothing was installed"
+    return 1
+  fi
+  if [ -e "$fw" ] || [ -L "$fw" ]; then
+    fail "$fw appeared before install; refusing to overwrite it"
+    return 1
+  fi
+  if ! mv "$stage" "$fw"; then
+    fail "install failed: $stage -> $fw"
+    return 1
+  fi
+  STAGE_PARENT=""
+  rmdir "$stage_parent" 2>/dev/null || true
+  printf '\nFRAMEWORK READY: %s (pinned %s, log %s)\n' "$fw" "$LLAMA_COMMIT" "$log"
 }
 
 generate_project() {
   local log
-  log="$ROOT/ios/.build/logs/xcodegen-$(date +%Y%m%d-%H%M%S).log"
+  log="$ROOT/ios/.build/logs/xcodegen-$(date +%Y%m%d-%H%M%S)-$$.log"
   mkdir -p "$(dirname "$log")"
   if ! command -v xcodegen >/dev/null 2>&1; then
     fail "xcodegen not found"
@@ -691,9 +945,120 @@ generate_project() {
   ok "generated app/PocketGlimmer.xcodeproj"
 }
 
+resolve_bundle_resource() {
+  local app=$1 sub=$2 name=$3
+  local primary="$app/$name"
+  local secondary="" have_primary=0 have_secondary=0
+
+  RESOLVED_PATH=""
+  if [ -n "$sub" ]; then
+    if [ -L "$app/$sub" ]; then
+      fail "built app subdirectory $sub is a symlink; refusing to follow it"
+      return 1
+    fi
+    secondary="$app/$sub/$name"
+  fi
+
+  if [ -L "$primary" ]; then
+    fail "built app resource is a symlink: $primary"
+    return 1
+  fi
+  if [ -e "$primary" ]; then have_primary=1; fi
+  if [ -n "$secondary" ]; then
+    if [ -L "$secondary" ]; then
+      fail "built app resource is a symlink: $secondary"
+      return 1
+    fi
+    if [ -e "$secondary" ]; then have_secondary=1; fi
+  fi
+
+  if [ "$have_primary" = 1 ] && [ "$have_secondary" = 1 ]; then
+    if cmp -s "$primary" "$secondary"; then
+      warn "identical duplicate $name at bundle root and $sub/; the app loads the root copy: $primary"
+      RESOLVED_PATH="$primary"
+    else
+      fail "conflicting duplicate $name: $primary and $secondary differ"
+      return 1
+    fi
+  elif [ "$have_primary" = 1 ]; then
+    RESOLVED_PATH="$primary"
+  elif [ "$have_secondary" = 1 ]; then
+    RESOLVED_PATH="$secondary"
+  fi
+  return 0
+}
+
+first_named_file() {
+  local dir=$1 name=$2
+  shift 2
+  local f skip arg
+  while IFS= read -r -d '' f; do
+    skip=0
+    for arg in "$@"; do
+      if [ "$f" = "$arg" ]; then
+        skip=1
+        break
+      fi
+    done
+    if [ "$skip" = 0 ]; then
+      printf '%s\n' "$f"
+      return 0
+    fi
+  done < <(find "$dir" \( -type f -o -type l \) -name "$name" -print0 2>/dev/null)
+  return 0
+}
+
+unsupported_resource_copy() {
+  local app=$1 sub=$2 name=$3
+  if [ -n "$sub" ]; then
+    first_named_file "$app" "$name" "$app/$name" "$app/$sub/$name"
+  else
+    first_named_file "$app" "$name" "$app/$name"
+  fi
+}
+
+check_bundled_app_models() {
+  local app=$1
+  local found=0 f dir nested
+  for dir in "$app" "$app/Models"; do
+    if [ -L "$dir" ]; then
+      fail "built app model directory is a symlink: $dir"
+      return 1
+    fi
+    if [ ! -d "$dir" ]; then
+      continue
+    fi
+    for f in "$dir"/*.gguf; do
+      if [ ! -e "$f" ] && [ ! -L "$f" ]; then
+        continue
+      fi
+      if [ -L "$f" ]; then
+        found=1
+        fail "bundled model is a symlink: $f"
+        printf '     Rebuild the app with a regular file; the script never follows a model link.\n'
+        continue
+      fi
+      found=1
+      check_model_file "$f" "bundled model" || true
+    done
+  done
+
+  if [ "$found" = 0 ]; then
+    nested=$(first_named_file "$app" '*.gguf')
+    if [ -n "$nested" ]; then
+      fail "built app has no .gguf where AppModel.findModel looks (bundle root or Models/)"
+      printf '     Found an unusable nested copy at %s; the app does not search there.\n' "$nested"
+    elif [ "$REQUIRE_MODEL" = 1 ]; then
+      fail "no .gguf in the built app"
+    else
+      warn "no .gguf in the built app; copy the model through Files after install (Documents/ is device-only and not checked here)"
+    fi
+  fi
+}
+
 check_app() {
   local app=$1
-  local name cal skills fw f
+  local name cal skills
 
   if [ ! -d "$app" ]; then
     fail "app bundle missing: $app"
@@ -715,46 +1080,45 @@ check_app() {
   fi
   ok "app bundle: $app (executable $name, Files sharing enabled)"
 
-  cal=$(find "$app" -type f -name calibration.json 2>/dev/null | head -1)
+  resolve_bundle_resource "$app" "Models" "calibration.json" || return 1
+  cal="$RESOLVED_PATH"
   if [ -z "$cal" ]; then
-    fail "built app has no calibration.json"
-    printf '     Check that app/PocketGlimmer/Resources/Models/calibration.json is in Copy Bundle Resources.\n'
-  else
-    validate_calibration "$cal" || true
-  fi
-
-  skills=$(find "$app" -type f -name builtin.json 2>/dev/null | head -1)
-  if [ -z "$skills" ]; then
-    fail "built app has no builtin.json skills registry"
-  else
-    validate_skills "$skills" || true
-  fi
-
-  fw=$(find "$app/Frameworks" -type f -path '*/llama.framework/llama' 2>/dev/null | head -1)
-  if [ -z "$fw" ]; then
-    fail "built app has no embedded llama.framework binary"
-  else
-    ok "embedded llama.framework"
-  fi
-
-  local found=0
-  while IFS= read -r -d '' f; do
-    found=1
-    check_model_file "$f" "bundled model" || true
-  done < <(find "$app" -type f -name '*.gguf' -print0 2>/dev/null)
-  if [ "$found" = 0 ]; then
-    if [ "$REQUIRE_MODEL" = 1 ]; then
-      fail "no .gguf in the built app"
+    local extra
+    extra=$(unsupported_resource_copy "$app" "Models" "calibration.json")
+    if [ -n "$extra" ]; then
+      fail "built app has calibration.json only at an unsupported path: $extra"
+      printf '     AppModel loads the bundle root, then Models/; XcodeGen copies Resources/Models flat.\n'
     else
-      warn "no .gguf in the built app; copy the model through Files after install"
+      fail "built app has no calibration.json (looked at bundle root and Models/)"
+      printf '     Check that app/PocketGlimmer/Resources/Models/calibration.json is in Copy Bundle Resources.\n'
     fi
+  else
+    validate_calibration "$cal" "built app calibration" || true
   fi
+
+  resolve_bundle_resource "$app" "Skills" "builtin.json" || return 1
+  skills="$RESOLVED_PATH"
+  if [ -z "$skills" ]; then
+    local extra
+    extra=$(unsupported_resource_copy "$app" "Skills" "builtin.json")
+    if [ -n "$extra" ]; then
+      fail "built app has builtin.json only at an unsupported path: $extra"
+      printf '     SkillSetup loads the bundle root, then Skills/.\n'
+    else
+      fail "built app has no builtin.json skills registry"
+    fi
+  else
+    validate_skills "$skills" "built app skills registry" || true
+  fi
+
+  check_framework_embedded "$app/Frameworks/llama.framework" || true
+  check_bundled_app_models "$app"
 
   if [ "$FAILS" -ne 0 ]; then
     printf '\nAPP BUNDLE FAILED: %d required check(s) failed.\n' "$FAILS"
     return 1
   fi
-  printf '\nAPP BUNDLE PASSED: calibration, skills, and framework are in place.\n'
+  printf '\nAPP BUNDLE PASSED: calibration, skills, and embedded framework are in place.\n'
 }
 
 cmd_check_app() {
@@ -770,26 +1134,31 @@ cmd_prepare() {
   section "Resources"
   if ! require_darwin; then return 1; fi
   check_model_source || true
-  check_bundled_models || true
-  validate_resources
-  check_framework "$ROOT/$FRAMEWORK_REL" || true
-
   if [ "$BUNDLE_MODEL" = 1 ] && [ "$FAILS" -eq 0 ]; then
     section "Bundle model"
     bundle_model || true
   fi
+  if [ "$BUNDLE_MODEL" = 0 ] || [ "$FAILS" -eq 0 ]; then
+    check_bundled_models || true
+  fi
+  validate_resources
+  check_framework "$ROOT/$FRAMEWORK_REL" || true
 
   if [ "$FAILS" -ne 0 ]; then
     printf '\nPREPARE FAILED: fix the checks above. Nothing was signed or installed.\n'
     return 1
   fi
-  if [ "$SKIPS" -ne 0 ]; then
-    printf '\nPREPARE INCOMPLETE: compile-only skips were requested.\n'
-    return 2
-  fi
 
   section "Xcode project"
   generate_project || return 1
+
+  if [ "$SKIPS" -ne 0 ] || [ "$INCOMPLETE" -ne 0 ]; then
+    printf '\nPREPARE INCOMPLETE: a required artifact is skipped or not provenance-verified; this is not install-ready.\n'
+    if [ "$INCOMPLETE" -ne 0 ]; then
+      framework_rebuild_hint
+    fi
+    return 2
+  fi
   printf '\nPREPARE PASSED. Next: %s build-unsigned\n' "$0"
 }
 
@@ -815,8 +1184,8 @@ cmd_build_unsigned() {
     fail "xcodebuild not found; install full Xcode and select it with xcode-select"
     return 1
   fi
-  if ! command -v xcodegen >/dev/null 2>&1 && [ "$NO_GENERATE" = 0 ]; then
-    fail "xcodegen not found; install it or pass --no-generate with an existing project"
+  if ! command -v xcodegen >/dev/null 2>&1; then
+    fail "xcodegen not found; install it (this command always regenerates the project)"
     return 1
   fi
   check_framework "$fw" || true
@@ -828,20 +1197,30 @@ cmd_build_unsigned() {
     return 1
   fi
 
-  if [ "$NO_GENERATE" = 0 ]; then
-    section "Xcode project"
-    generate_project || return 1
-  fi
+  section "Xcode project"
+  generate_project || return 1
 
   dd=${DERIVED_DATA:-"$ROOT/ios/.build/DerivedData"}
   dd=$(abs_path "$dd")
+  case "$dd" in
+    /|"") fail "refusing an unsafe DerivedData path: '$dd'"; return 1 ;;
+  esac
   mkdir -p "$dd"
-  log="$ROOT/ios/.build/logs/unsigned-release-$(date +%Y%m%d-%H%M%S).log"
+  app="$dd/Build/Products/Release-iphoneos/PocketGlimmer.app"
+  if [ -e "$app" ] || [ -L "$app" ]; then
+    printf 'Removing the previous build product so a stale .app cannot pass: %s\n' "$app"
+    rm -rf "$app" || { fail "cannot remove the previous build product: $app"; return 1; }
+  fi
+  if [ -e "$app" ] || [ -L "$app" ]; then
+    fail "previous build product still exists: $app"
+    return 1
+  fi
+  log="$ROOT/ios/.build/logs/unsigned-release-$(date +%Y%m%d-%H%M%S)-$$.log"
   mkdir -p "$(dirname "$log")"
 
   printf 'xcodebuild -project app/PocketGlimmer.xcodeproj -scheme PocketGlimmer -configuration Release\n'
   printf '  -destination generic/platform=iOS CODE_SIGNING_ALLOWED=NO\n'
-  if run_logged "$log" \
+  run_logged "$log" \
     xcodebuild \
       -project "$ROOT/app/PocketGlimmer.xcodeproj" \
       -scheme PocketGlimmer \
@@ -852,10 +1231,8 @@ cmd_build_unsigned() {
       CODE_SIGNING_REQUIRED=NO \
       CODE_SIGN_IDENTITY= \
       build
-  then
-    ok "xcodebuild finished"
-  else
-    rc=$?
+  rc=$?
+  if [ "$rc" -ne 0 ]; then
     fail "xcodebuild failed (exit $rc)"
     printf '     Full log: %s\n' "$log"
     tail -40 "$log" >&2 || true
@@ -863,20 +1240,32 @@ cmd_build_unsigned() {
       printf '     If the iOS platform is missing: Xcode > Settings > Components (or xcodebuild -downloadPlatform iOS, your choice).\n'
     return 1
   fi
+  ok "xcodebuild finished"
 
-  app="$dd/Build/Products/Release-iphoneos/PocketGlimmer.app"
+  if [ -L "$app" ] || [ ! -d "$app" ]; then
+    fail "xcodebuild exited 0 but did not produce a fresh app bundle at $app"
+    printf '     The previous product was removed before the build; a stale or skipped build cannot pass.\n'
+    printf '     Full log: %s\n' "$log"
+    return 1
+  fi
   section "Built app"
   check_app "$app" || {
     printf '     Build log: %s\n' "$log"
     return 1
   }
+  if [ "$SKIPS" -ne 0 ] || [ "$INCOMPLETE" -ne 0 ]; then
+    printf '\nUNSIGNED COMPILE PASSED; RELEASE INCOMPLETE: a required artifact is skipped or not provenance-verified.\n'
+    if [ "$INCOMPLETE" -ne 0 ]; then
+      printf 'The xcframework has no verified pin provenance; rebuild it before treating this as release proof.\n'
+      framework_rebuild_hint
+    fi
+    printf 'This is not signed, not installed, and not run on a device.\n'
+    printf 'App: %s\nLog: %s\n' "$app" "$log"
+    return 2
+  fi
   printf '\nUNSIGNED BUILD PASSED (compile/link and bundle resources only).\n'
   printf 'This is not signed, not installed, and not run on a device.\n'
   printf 'App: %s\nLog: %s\n' "$app" "$log"
-  if [ "$SKIPS" -ne 0 ]; then
-    printf 'INSTALL-READY INCOMPLETE: a required artifact was skipped; see SKIP lines above.\n'
-    return 2
-  fi
 }
 
 while [ $# -gt 0 ]; do
@@ -894,7 +1283,6 @@ while [ $# -gt 0 ]; do
     --bundle-model) BUNDLE_MODEL=1 ;;
     --allow-no-model) ALLOW_NO_MODEL=1 ;;
     --with-simulator) WITH_SIMULATOR=1 ;;
-    --no-generate) NO_GENERATE=1 ;;
     --require-model) REQUIRE_MODEL=1 ;;
     --) shift; break ;;
     *) die "unknown argument: $1 (see --help)" ;;

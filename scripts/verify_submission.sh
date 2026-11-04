@@ -1,12 +1,16 @@
 #!/usr/bin/env bash
 # Pre-submission verification (run from repo root). Exits non-zero on any hard failure.
-#   scripts/verify_submission.sh            # full: model, docs, secrets, Python, Swift in Docker
+#   scripts/verify_submission.sh            # full: model, calibration, docs, secrets, Python, Swift in Docker
 #   SKIP_SWIFT=1 scripts/verify_submission.sh
 # Exit 0 means every required check ran and passed, and the release visibility is PUBLIC.
 # Exit 1 means a core check failed. Exit 2 means a required check was skipped or the
 # release is incomplete (for example the repo is still PRIVATE).
 set -uo pipefail
-cd "$(dirname "$0")/.." || exit 2
+ROOT=$(CDPATH='' cd -- "$(dirname "$0")/.." && pwd) || exit 2
+cd "$ROOT" || exit 2
+[ -f "$ROOT/ios/artifacts.env" ] || { printf 'FAIL: missing %s\n' "$ROOT/ios/artifacts.env"; exit 1; }
+# shellcheck source=ios/artifacts.env
+. "$ROOT/ios/artifacts.env"
 fail=0
 skipped=0
 release_incomplete=0
@@ -15,10 +19,10 @@ bad() { printf 'FAIL: %s\n' "$*"; fail=1; }
 skip() { printf 'SKIP: %s\n' "$*"; skipped=1; }
 
 hash_file() {
-  if command -v shasum >/dev/null 2>&1; then
-    shasum -a 256 "$1" | awk '{print $1}'
-  elif command -v sha256sum >/dev/null 2>&1; then
+  if command -v sha256sum >/dev/null 2>&1; then
     sha256sum "$1" | awk '{print $1}'
+  elif command -v shasum >/dev/null 2>&1; then
+    shasum -a 256 "$1" | awk '{print $1}'
   else
     return 127
   fi
@@ -26,24 +30,34 @@ hash_file() {
 
 file_size() { wc -c < "$1" | tr -d '[:space:]'; }
 
-note "== 1. shipping GGUF sha256 (LEDGER 15)"
-want=a5c60a8836aa73adeb847185aa30184cd9c33c522185f59fa9ac55a9d00782c2
-f=models/SHIPPING-ep1-Llama-3.2-1B-PocketGlimmer-Reflex-Q4_K_M.gguf
+note "== 1. shipping model and calibration (LEDGER 15)"
+f=$SHIPPING_MODEL_REL
 if [ -s "$f" ]; then
   size=$(file_size "$f")
   if [ "$size" -lt 1000000 ]; then
     skip "shipping GGUF is an LFS pointer ($size bytes); run git lfs pull"
-  elif [ "$size" -ne 807694080 ]; then
-    bad "shipping GGUF size is $size; expected 807694080"
+  elif [ "$size" -ne "$SHIPPING_MODEL_BYTES" ]; then
+    bad "shipping GGUF size is $size; expected $SHIPPING_MODEL_BYTES"
   else
     got=$(hash_file "$f" 2>/dev/null) || got=""
     if [ -z "$got" ]; then bad "no shasum or sha256sum available"
-    elif [ "$got" = "$want" ]; then note "ok $got"
-    else bad "sha mismatch $got"
+    elif [ "$got" = "$SHIPPING_MODEL_SHA256" ]; then note "ok model $got"
+    else bad "model sha mismatch $got"
     fi
   fi
 else
   skip "shipping GGUF missing; run git lfs pull"
+fi
+
+cal=$CALIBRATION_REL
+if [ ! -f "$cal" ]; then
+  bad "calibration file missing: $cal"
+else
+  got=$(hash_file "$cal" 2>/dev/null) || got=""
+  if [ -z "$got" ]; then bad "no shasum or sha256sum available for calibration"
+  elif [ "$got" = "$CALIBRATION_SHA256" ]; then note "ok calibration $got"
+  else bad "calibration sha mismatch $got"
+  fi
 fi
 
 note "== 2. placeholders left in submission-facing docs (PHONE_* allowed only in FINAL_HOURS.md / DEMO_SCRIPT.md)"
@@ -166,5 +180,5 @@ if [ "$release_incomplete" -ne 0 ]; then
   note "CORE CHECKS PASSED; RELEASE INCOMPLETE: repository visibility is not PUBLIC"
   exit 2
 fi
-note "AUTOMATED CHECKS PASSED: model, document scans, secret scans, core tests, and repository visibility"
+note "AUTOMATED CHECKS PASSED: model, calibration, document scans, secret scans, core tests, and repository visibility"
 note "This script does not verify Xcode, a signed device build, video playback, or form submission."
