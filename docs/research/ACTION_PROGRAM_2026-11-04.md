@@ -104,3 +104,18 @@ budgets and immutable data splits. The user raised matched Spark Open labeling t
 99–100 RPM. Expansion has drained traffic and retained uncertain-call reservations;
 the parent relayed its acknowledgment so the matched owner can apply 99 RPM under
 the shared 100 RPM cap. This is an instruction and handoff, not measured throughput.
+
+## Native dictation steering
+
+The user explicitly requested easier Apple system dictation and a Vocal Shortcut
+entry point. `AskPocketGlimmerIntent` already accepts a Request string and opens
+the app. A user-created shortcut can chain Apple Dictate Text to that request.
+Surface this setup in the app, improve keyboard entry and dismissal, and keep the
+transcript editable in the ordinary composer. No private API should programmatically
+press the keyboard Dictation control. Supported-language offline behavior and locked
+invocation need phone checks. This authorizes Apple OS input facilities; it does not
+replace the Meta reasoning models or training targets.
+
+Apple references: [Vocal Shortcuts](https://support.apple.com/en-ie/guide/iphone/iph7f242ea2c/27/ios/27),
+[Dictation](https://support.apple.com/guide/iphone/dictate-text-iph2c0651d2/27/ios/27),
+and [locked shortcut invocation](https://support.apple.com/en-gb/guide/shortcuts/apd07c25bb38/9.0/ios/26).
