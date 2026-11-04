@@ -71,10 +71,12 @@ sha256 a5c60a8836aa73adeb847185aa30184cd9c33c522185f59fa9ac55a9d00782c2
 ```
 
 `./ios/mac_prep.sh bundle-model` verifies the size and hash and copies it into
-`app/PocketGlimmer/Resources/Models/`. It refuses to overwrite a different file. Without a
-bundle, the app can load a `.gguf` from its Documents folder through Finder > iPhone > Files >
-Pocket Glimmer; `AppModel.findModel()` checks Documents first and prefers `reflex` in the
-filename.
+`app/PocketGlimmer/Resources/Models/`. It refuses to overwrite a different file.
+`AppModel.findModel()` checks the bundle first, then Documents if no bundled model
+exists. Within either location it prefers a filename containing `reflex`.
+For an unbundled development build, copy the exact shipping file through
+Finder > iPhone > Files > Pocket Glimmer. Startup verifies the selected file's
+byte count and SHA-256 before loading it; another `.gguf` cannot use this calibration.
 
 `app/PocketGlimmer/Resources/Models/calibration.json` is required. It was generated from the
 shipping GGUF and sets `defaultTau` to 0.90, the shipping operating point. A missing, malformed or incompatible file stops app startup with an error. The base model

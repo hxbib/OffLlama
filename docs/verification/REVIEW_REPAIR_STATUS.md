@@ -15,7 +15,7 @@ verified by these Linux checks.
 | C3/C4/W2: calendar constraints, time extraction, recipient/attachment variants | Open. Repair parsing and conservative validation, including the common phrases reproduced by review. | Review's repro summary and scratch tests. |
 | W3: attempted provider names absent from local fallback | Open. Exact outbound text is retained on successful fallback, but failed-provider attribution is not yet represented. | `CloudBrainChain`, `ReadResult`, `AssistantTurn`, app disclosure. |
 | W5: mixed responsibilities in EffectLedger | Deferred maintainability work. A file split alone does not repair the reproduced behavior. | Keep functional repairs focused and independently reviewed. |
-| W6: stale model lookup and implementation notes | Open. Correct current operator docs without rewriting historical evidence. | App prefers bundled shipping model over Documents. |
+| W6: stale model lookup and implementation notes | Operator docs now describe bundle-first lookup and exact shipping-file validation. The Slice 1 note is marked historical and links to current evidence. | Checked against `AppModel.findModel` and `verifyShippingModel`; original test counts remain historical. |
 | Review nits | Pending individual adjudication. | Do not silently promote hypothetical findings into verified phone defects. |
 
 The full updated Swift suite executes 189 tests, with one opt-in live test skipped
@@ -29,6 +29,10 @@ Modal and $54.99 Spark-expansion caps, integrated 2,915 Glimmer labels, and reje
 of the overlapping first phone split. Those records do not establish a promoted
 candidate or completed new training run.
 
-The separate Mac packaging repair passed all 88 Linux/mock fixtures. A subsequent
-real Mac run confirms the defined llama symbol. Compilation is still blocked by
-disk space, an unbundled model, and missing provenance for the existing framework.
+The separate Mac packaging repair passed all 88 Linux/mock fixtures. After the
+user's restart, the Mac worker rebuilt the pinned framework and validated its
+provenance. Unsigned and signed Release builds passed at `4fda967` plus a local
+one-line explicit `Void` closure fix in `AppModel.loadScrubberNames`. The signed
+bundle passed exact model/calibration checks and was installed on the iPhone 17 Pro.
+The remote report and log paths are recorded in `MAC_INSTALL_CHECKPOINT_2026-11-04.md`.
+No launch, Metal inference, app-flow, or performance result has been established.

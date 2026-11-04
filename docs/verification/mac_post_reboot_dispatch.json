@@ -8,7 +8,7 @@
     "remoteChild": {
       "environmentId": "e471ef05-c8d6-49ec-b176-96ab6da0d020",
       "threadId": "mcp:launch:a37598ef467234aa01c1d1b3a7389b2499c05b48ca98064006b52b433124d3f3",
-      "label": "Habib’s MacBook Air"
+      "label": "Habib\u2019s MacBook Air"
     },
     "link": "<t3-thread://v2/e471ef05-c8d6-49ec-b176-96ab6da0d020/mcp:launch:a37598ef467234aa01c1d1b3a7389b2499c05b48ca98064006b52b433124d3f3>",
     "childRunId": null,
@@ -27,5 +27,17 @@
     "hasPendingQuestion": false,
     "pendingApproval": null,
     "waitTimedOut": false
+  },
+  "observedCompletion": {
+    "recordedAt": "2026-11-04T20:37:49.093794+00:00",
+    "status": "completed",
+    "sourceCommit": "4fda967",
+    "localPatch": "Explicit Void closure in AppModel.loadScrubberNames; exact diff applied by parent",
+    "unsignedRelease": "passed",
+    "signedRelease": "passed after user Keychain approval",
+    "bundleValidation": "passed exact shipping model, calibration, skills and rebuilt pinned framework",
+    "installation": "devicectl installed com.habib.pocketglimmer on paired iPhone 17 Pro",
+    "runtimeVerification": "not performed; Device panel discovery failed twice",
+    "evidence": "docs/verification/mac_install_transcript_extract.json"
   }
 }

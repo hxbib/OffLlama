@@ -195,10 +195,13 @@ wc -c < models/SHIPPING-ep1-Llama-3.2-1B-PocketGlimmer-Reflex-Q4_K_M.gguf
 If the file is a few hundred bytes, it is a Git LFS pointer. Run `git lfs install` and
 `git lfs pull`.
 
-Unbundled alternative: build and install without the model, then open Finder > iPhone >
-Files > Pocket Glimmer and copy the `.gguf` into the app's Documents folder. `AppModel`
-checks Documents first and prefers a filename containing `reflex`. A launch with no model
-shows "No model file"; it is not a usable demo.
+For an unbundled development build, open Finder > iPhone > Files > Pocket Glimmer
+and copy the exact shipping `.gguf` into the app's Documents folder. `AppModel`
+checks the bundle first and uses Documents only when no bundled model exists.
+Within either location it prefers a filename containing `reflex`. Startup checks
+the selected file's exact byte count and SHA-256 before loading it. A mismatched
+file stops startup; a launch with no model shows "No model file" and cannot run
+the demo. Release validation requires the bundled shipping model.
 
 Calibration is not optional and is not interchangeable with the base model:
 

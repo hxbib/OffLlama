@@ -1,0 +1,28 @@
+{
+  "recordedAt": "2026-11-04T20:37:18.464Z",
+  "sourceThread": "<t3-thread://v2/e471ef05-c8d6-49ec-b176-96ab6da0d020/mcp:launch:a37598ef467234aa01c1d1b3a7389b2499c05b48ca98064006b52b433124d3f3>",
+  "sourceCommit": "4fda967",
+  "sourcePatch": "AppModel.loadScrubberNames: let t = Task { () -> Void in",
+  "evidenceType": "Completed remote thread activity, excerpts of original shell output",
+  "redactions": "Device id and installation identifiers omitted; original logs remain on Mac",
+  "items": [
+    {
+      "position": 55,
+      "itemId": "turn-item:provider:codex:native-item:exec-a3099145-2c6d-4026-9266-7f9cba2a0a56",
+      "text": "$ /bin/zsh -lc 'tail -20 ios/.build/mac-signed-team-2026-11-04.log; DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer ./ios/mac_prep.sh check-app --app ios/.build/SignedDerivedData/Build/Products/Release-iphoneos/PocketGlimmer.app --require-model > ios/.build/mac-signed-check-2026-11-04.log 2>&1 && DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun devicectl device install app --device <device-id-omitted> ios/.build/SignedDerivedData/Build/Products/Release-iphoneos/PocketGlimmer.app > ios/.build/mac-install-2026-11-04.log 2>&1'\nRegisterExecutionPolicyException /Users/habib/src/pocket-glimmer/ios/.build/SignedDerivedData/Build/Products/Release-iphoneos/PocketGlimmer.app (in target 'PocketGlimmer' from project 'PocketGlimmer')\n    cd /Users/habib/src/pocket-glimmer/app\n    builtin-RegisterExecutionPolicyException /Users/habib/src/pocket-glimmer/ios/.build/SignedDerivedData/Build/Products/Release-iphoneos/PocketGlimmer.app\n\nValidate /Users/habib/src/pocket-glimmer/ios/.build/SignedDerivedData/Build/Products/Release-iphoneos/PocketGlimmer.app (in target 'PocketGlimmer' from project 'PocketGlimmer')\n    cd /Users/habib/src/pocket-glimmer/app\n    builtin-validationUtility /Users/habib/src/pocket-glimmer/ios/.build/SignedDerivedData/Build/Products/Release-iphoneos/PocketGlimmer.app -shallow-bundle -infoplist-subpath Info.plist\n\nTouch /Users/habib/src/pocket-glimmer/ios/.build/SignedDerivedData/Build/Products/Release-iphoneos/PocketGlimmer.app (in target 'PocketGlimmer' from project 'PocketGlimmer')\n    cd /Users/habib/src/pocket-glimmer/app\n    /usr/bin/touch -c /Users/habib/src/pocket-glimmer/ios/.build/SignedDerivedData/Build/Products/Release-iphoneos/PocketGlimmer.app\n\nPruneExplicitPrecompiledModules /Users/habib/src/pocket-glimmer/ios/.build/SignedDerivedData/SDKExplicitPrecompiledModules\n\nPruneExplicitPrecompiledModules /Users/habib/src/pocket-glimmer/ios/.build/SignedDerivedData/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules\n\nPruneExplicitPrecompiledModules /Users/habib/src/pocket-glimmer/ios/.build/SignedDerivedData/Build/Intermediates.noindex/ExplicitPrecompiledModules\n\n** BUILD SUCCEEDED **\n\n",
+      "textTruncated": false
+    },
+    {
+      "position": 56,
+      "itemId": "turn-item:provider:codex:native-item:exec-f4eeb234-2f8b-4b73-b16b-2268bef9d8a6",
+      "text": "$ /bin/zsh -lc 'tail -20 ios/.build/mac-signed-check-2026-11-04.log; tail -20 ios/.build/mac-install-2026-11-04.log'\n\n== Built app\nok   app executable: Mach-O arm64 executable\nok   app bundle: /Users/habib/src/pocket-glimmer/ios/.build/SignedDerivedData/Build/Products/Release-iphoneos/PocketGlimmer.app (executable PocketGlimmer, Files sharing enabled)\nok   built app calibration: promptStyle=fewShot, defaultTau=0.90, 31 prior sets, sha256 verified\nok   built app skills registry: 36 skills, strict schema\nok   embedded framework Info.plist: llama.framework metadata\nok   embedded llama.framework: native arm64 iOS Mach-O, install name and pinned symbol verified\nok   embedded llama.framework is complete (headers/module map are legitimately absent in a built app)\nok   bundled model: SHIPPING-ep1-Llama-3.2-1B-PocketGlimmer-Reflex-Q4_K_M.gguf (807694080 bytes, sha256 a5c60a8836aa...82c2)\n\nAPP BUNDLE PASSED: calibration, skills, embedded framework, and bundled model are in place.\n",
+      "textTruncated": false
+    },
+    {
+      "position": 57,
+      "itemId": "turn-item:provider:codex:native-item:exec-a4cc613f-3dcf-475e-905f-f8c75fd07c87",
+      "text": "$ /bin/zsh -lc 'tail -20 ios/.build/mac-install-2026-11-04.log'\nApp installed:\n• bundleID: com.habib.pocketglimmer\n• installationURL: <omitted>\n• launchServicesIdentifier: unknown\n• databaseUUID: <omitted>\n• databaseSequenceNumber: <omitted>\n• options: \n",
+      "textTruncated": false
+    }
+  ]
+}

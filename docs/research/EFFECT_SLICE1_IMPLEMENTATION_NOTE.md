@@ -1,5 +1,12 @@
 # Effect recovery — Slice 1 implementation note
 
+Historical checkpoint: the implementation and test counts below describe the
+original Slice 1 integration. Production shared reads now pass `sharedText`
+directly; the former `SharedInbox` handoff described here is no longer used.
+For current repairs, test evidence, and remaining gaps, see
+[Action review repairs](../verification/REVIEW_REPAIR_STATUS.md) and the
+[orchestrator ledger](../../ORCHESTRATOR_LEDGER.md).
+
 Status: Slice 1 integrated into the prepared `t3/635e8031` checkout at base
 `4bf72c9`. The recovery snapshot from the cancelled run (`009430f` plus
 uncommitted work) was hash-checked against its manifest, applied with

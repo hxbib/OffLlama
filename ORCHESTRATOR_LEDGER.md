@@ -32,6 +32,9 @@ licensed training-target sources. Runtime and teacher models remain Meta models.
   its artifact export, and reran the current sources. 183 Swift tests passed with
   one opt-in live test skipped. All 84 Mac preparation fixtures and 22 Python
   data/evaluation/grader tests passed. App syntax parsing passed on 18 files.
+- Run 65 added shared-read recovery/privacy repairs at `5912cd7`. The updated
+  Swift suite executes 189 tests with one skipped and zero failures. Packaging
+  fixtures increased to 88, all passing, with the symbol-pipeline fix at `571d80d`.
 - `docs/ACTION_VALIDATION.md` describes the implemented limits and remaining gaps.
   `docs/ACTION_CONTRACTS.json` exports 38 compiled contracts, including the
   unavailable app alarm. The bundled registry has 36 skills and now includes
@@ -47,8 +50,13 @@ licensed training-target sources. Runtime and teacher models remain Meta models.
   PocketCore and Meta Spark 1.3, HTTP 200. Its local decisions were scripted.
   Evidence is `docs/verification/cloud_smoke_2026-11-04.json`. It is not a fresh
   phone test or a verification of every provider, task, or multimodal path.
-- User reports the MacBook Air M4 (16GB/256GB), Xcode, iOS SDK 27.2 and Metal Toolchain 27.2 are now available, with the iPhone 17 Pro ready to connect. Current app code remains unbuilt with Xcode.
-  Signed install, phone acceptance, phone measurements, demo video, public
+- Mac unsigned and signed Release builds passed at `4fda967` plus one local
+  explicit `Void` closure fix. The pinned framework was rebuilt with validated
+  provenance; the exact shipping model/calibration and skills passed bundle checks.
+  `devicectl` installed the signed app on the iPhone 17 Pro after the user's
+  Keychain approval. The parent recovered and applied the exact compile fix. See
+  `docs/verification/MAC_INSTALL_CHECKPOINT_2026-11-04.md` for remote evidence paths.
+  Launch, Metal inference, phone acceptance, phone measurements, demo video, public
   repository visibility, and submission remain open. Submission verification
   returned incomplete because Swift was deliberately checked separately and
   GitHub remains private. It did not report an all-clear.
@@ -62,9 +70,9 @@ do not reapply it over the now-integrated implementation.
 | Work | State and next action |
 |---|---|
 | Durable action recovery and argument validation | Integrated recovery plus the resumed validator patch at `8c990e4`. Versioned contracts, editable drafts, exact contact methods, required local times, external handoff review, and request-bound shared text. Independent review of the combined patch remains required. |
-| Busy input preservation | Still open. `AppModel.send` rejects while busy. Request-bound documents fix cross-talk but do not save rejected inputs. Use `docs/research/REQUEST_INPUT_GROUNDING.md` and the accepted Muse findings for durable explicit resume, without automatic replay. |
+| Busy input preservation | Still open. Candidate A proposes a separate protected store and explicit resume; parent objections are in `docs/research/REQUEST_INPUT_DESIGN_A_REVIEW.md`. Candidate B and cross-review remain pending. No store implementation yet. |
 | Privacy and cloud reliability | Prior independent review found partner-value masking and cancellation bugs. Fixes and regression tests are in the resumed patch, with malformed-settings checks and local fallback. Fresh review pending. |
-| Mac packaging | `11c07cf` integrates `18762c3`. Empty executable, missing model, and symlinked framework false passes are repaired. 84 Linux/mock fixtures passed here; no Xcode proof. |
+| Mac packaging | 88 Linux/mock fixtures pass. The post-reboot Mac rebuilt the pinned framework, validated provenance and resources, passed unsigned/signed Release builds, and installed on iPhone. Parent applied the exact compile fix after reading the completed worker's diff. Device panel failed twice; runtime checks remain unverified. |
 | Glimmer labels | Completed and integrated at `2922acb`. Parent checked all 2,915 source IDs, rendered prompt hashes, option mappings and recomputed probability distributions, plus nine tests. Exact label hash and compressed archive are under `docs/training/evidence/glimmer-r3/`. Live Modal app listing confirms all four batch apps stopped with zero tasks. Teacher is bf16 with mutable `main` revision; keep identity distinct from IQ2_M. No student improvement follows from label completeness. |
 | Spark Open labels | Existing Muse worker remains active, observed in run 57. Existing $25 Baseten cap unchanged. The recovered status snapshot records 4,630 settled sampling calls for the 2,915-row batch, with $4.361473 recorded settled usage and $0.031885 retained for unknown calls. The 70 RPM restart is acknowledged; those counts are a snapshot, not completion. Await completion and verify the restart-safe reservation ledger, labels, quality gate, and total known/unknown spend. |
 | Phone data and benchmark | `78e0355` integrated source-group splits and protocol. Grader fixes at `74f2341` reject inexact slots, unconfirmed execution, empty traces, and duplicate effects. 22 Python checks pass. Enough labeled independent groups and actual model evaluation remain pending. |
@@ -317,3 +325,7 @@ At the latest Mac return, the patched symbol check passed on the actual framewor
 From5912cd7, fresh isolated River05 DeepSeekmax owns C3/C4/W2 calendar/time/recipient repairs. Fresh isolated River08 DeepSeekmax reviews only the shared-read fix diff. Their exact task IDs and checkouts are in docs/verification/run65_dispatches.json. Independent packaging review and both request-admission design sketches remain pending. Existing Muse training workers keep their original allocations.
 
 User reports MacBook and iPhone are back after reboot. The linked Mac answers and a fresh build/install continuation is running on the unchanged codex_13/gpt-6.1-terra high assignment. Dispatch evidence is docs/verification/mac_post_reboot_dispatch.json. It starts from4fda967, rechecks disk, rebuilds the pinned framework with provenance, and proceeds toward actual compile/install. No post-reboot disk or build result is known at dispatch. This supersedes the earlier hold for restart.
+
+Post-reboot result: the Mac recovered 8.1 GiB, rebuilt the pinned framework with provenance, passed unsigned and signed Release builds, and installed on the iPhone after Keychain approval. The parent read the completed worker's exact one-line compile diff and integrated it. Evidence is in docs/verification/MAC_INSTALL_CHECKPOINT_2026-11-04.md and mac_install_transcript_extract.json. Device panel discovery failed twice; no runtime proof exists. User manual first launch was requested. No further UI automation was attempted.
+
+Candidate A returned its separate protected-store design. The parent reviewed the full artifact and recorded objections in docs/research/REQUEST_INPUT_DESIGN_A_REVIEW.md. Candidate B and cross-review remain pending; do not treat A as chosen. Current operator model-loading docs were corrected and the older Slice1 note marked historical.

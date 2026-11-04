@@ -7,7 +7,7 @@
       "remoteChild": {
         "environmentId": "e471ef05-c8d6-49ec-b176-96ab6da0d020",
         "threadId": "mcp:launch:ac62b2466b0bf4d53a719bebd59fe60247f039860055ddc9a3aacc16f7b87a4c",
-        "label": "Habib’s MacBook Air"
+        "label": "Habib\u2019s MacBook Air"
       },
       "link": "<t3-thread://v2/e471ef05-c8d6-49ec-b176-96ab6da0d020/mcp:launch:ac62b2466b0bf4d53a719bebd59fe60247f039860055ddc9a3aacc16f7b87a4c>",
       "childRunId": null,
@@ -53,7 +53,14 @@
       "hasPendingQuestion": false,
       "pendingApproval": null,
       "waitTimedOut": false,
-      "next": "Completion wakes this thread, so end your turn. Do not wait on it or poll it."
+      "next": "Completion wakes this thread, so end your turn. Do not wait on it or poll it.",
+      "observedCompletion": {
+        "recordedAt": "2026-11-04T20:37:49.093794+00:00",
+        "status": "completed",
+        "artifact": "/tmp/pg-input-design-20261104/a/design.md",
+        "parentReview": "docs/research/REQUEST_INPUT_DESIGN_A_REVIEW.md",
+        "disposition": "not selected; candidate B and cross-review pending"
+      }
     },
     {
       "taskId": "node:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Apg-input-design-b-20261104-v1",
@@ -89,7 +96,7 @@
       "remoteChild": {
         "environmentId": "e471ef05-c8d6-49ec-b176-96ab6da0d020",
         "threadId": "mcp:launch:4b7897f02f56364c576689f9c4e4835cc05ee7bcce99030851a9a3295253fc74",
-        "label": "Habib’s MacBook Air"
+        "label": "Habib\u2019s MacBook Air"
       },
       "link": "<t3-thread://v2/e471ef05-c8d6-49ec-b176-96ab6da0d020/mcp:launch:4b7897f02f56364c576689f9c4e4835cc05ee7bcce99030851a9a3295253fc74>",
       "childRunId": null,
