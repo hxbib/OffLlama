@@ -14,7 +14,7 @@ struct ChatItem: Identifiable, Equatable {
     var badge: String? = nil        // "on device · 42 ms" / "Meta Model API · Muse Spark 1.3 (Standard mode)"
     var card: DraftCard? = nil      // projection of a durable ledger row, never the source of truth
     var decisions: [DecisionRow] = []
-    var cloudPromptSent: String? = nil   // masked text that actually left the phone
+    var cloudPromptSent: String? = nil   // screened text from a cloud request attempt
     var keptOnDevice = false             // cloud was available but withheld for sensitivity
 }
 
@@ -260,6 +260,12 @@ final class AppModel {
             }
             return reply
         } catch {
+            if let failure = error as? CloudRequestFailure {
+                let message = "The request has no verified result. A cloud request may already have been sent."
+                chat.append(.init(role: .system, text: message, badge: "outcome unverified",
+                                  cloudPromptSent: failure.cloudPromptSent))
+                return message
+            }
             let message = "Error: \(error.localizedDescription)"
             chat.append(.init(role: .system, text: message))
             return message

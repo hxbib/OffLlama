@@ -31,9 +31,10 @@ No paid provider call was made. Evidence is `cloud-read-outcomes-core-tests.txt`
 This checks syntax only. Xcode typechecking, the privacy sheet and phone behavior
 remain unverified for this follow-up.
 
-The messaging worker owns `AppModel.send`. Its immediate-error projection still
-needs to consume the new typed error after integration. That path currently loses
-the payload in the app even though the core now carries it. Attempted-provider
+The messaging worker has now completed. Parent added the immediate-error
+projection to `AppModel.send`, preserving the typed failure payload and an
+uncertainty badge. It passes syntax parsing; integration with the recovered
+messaging commit and Xcode/device checks remain required. Attempted-provider
 attribution remains open. A crash before a durable receipt can lose the exact text;
 launch recovery gives an uncertainty warning and does not invent a saved payload.
 These limitations prevent a claim that every privacy finding is closed.

@@ -103,7 +103,7 @@ The core input-store result was recovered atf327cae and awaits source review; it
 empty continuation result did not erase the first run’s implementation. Other
 results are pending. Do not poll; completion wakes the parent.
 
-- Messaging and two-turn clarification repair: Muse Spark1.3Contributor max. Owns
+- Messaging and two-turn clarification repair: Muse Spark1.3Contributor max. Completed atd99c671, recovered after a steer reported no active run. Independent review and integration are pending. Owns
   routing/message extraction, AppModel.send draft continuity and native compose/contacts
   adapters. Parent must coordinate its AppModel changes before privacy integration.
 - Owner-locked core request store: Muse Wonder1.0 max. New store/helper/tests only.
@@ -117,7 +117,7 @@ results are pending. Do not poll; completion wakes the parent.
   cannot bypass the failed Device panel for UI automation. AppModel/core action
   behavior requires a later integrated build after other owners return.
 
-The parent implemented the next cloud-read outcome follow-up; 210 core tests execute with one skip and zero failures. App syntax passes only. See `CLOUD_READ_OUTCOME_FOLLOWUP_2026-11-04.md`. Immediate send-error projection awaits messaging integration; attempted-provider attribution and device evidence remain open. Parent source review of the input store found lifecycle, transcript-cap and protection concerns recorded in `REQUEST_INPUT_PARENT_OBJECTIONS_2026-11-04.md`; independent review is required before integration.
+The parent implemented the next cloud-read outcome follow-up; 210 core tests execute with one skip and zero failures. App syntax passes only. See `CLOUD_READ_OUTCOME_FOLLOWUP_2026-11-04.md`. Immediate send-error projection is implemented and passes syntax parsing, but integration with the recovered messaging commit and device evidence remain open. Attempted-provider attribution remains open. Parent source review of the input store found lifecycle, transcript-cap and protection concerns recorded in `REQUEST_INPUT_PARENT_OBJECTIONS_2026-11-04.md`; independent review is required before integration.
 The partial Mac source diff is integrated; no new phone action test or installed
 OffLlama build is complete. See `OFFLLAMA_UI_PARTIAL_2026-11-04.md`.
 
