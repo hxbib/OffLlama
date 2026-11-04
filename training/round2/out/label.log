@@ -1,0 +1,32 @@
+hard stop at 07:20 America/New_York, 2635s from now
+selected 4745; re-dedupe vs eval dropped 0
+4 done, 4741 to go; per-type todo {'contactPick': 450, 'nudgeNow': 898, 'route': 500, 'notificationTriage': 362, 'toolChoice': 450, 'rememberOrNot': 287, 'timing': 499, 'answerability': 449, 'eventPick': 244, 'confirmBeforeAct': 241, 'sensitivity': 193, 'memoryConflict': 168}
+hard stop at 07:20 America/New_York, 2505s from now
+selected 4745; re-dedupe vs eval dropped 0
+36 done, 4709 to go; per-type todo {'contactPick': 447, 'nudgeNow': 890, 'route': 497, 'timing': 496, 'eventPick': 243, 'confirmBeforeAct': 240, 'rememberOrNot': 285, 'notificationTriage': 359, 'answerability': 446, 'toolChoice': 447, 'sensitivity': 192, 'memoryConflict': 167}
+hard stop at 07:20 America/New_York, 1902s from now
+selected 4745; re-dedupe vs eval dropped 0
+119 done, 4626 to go; per-type todo {'route': 491, 'nudgeNow': 867, 'answerability': 438, 'eventPick': 240, 'memoryConflict': 165, 'contactPick': 439, 'notificationTriage': 353, 'rememberOrNot': 280, 'toolChoice': 441, 'timing': 487, 'confirmBeforeAct': 236, 'sensitivity': 189}
+finished 93 in 203s (interrupted); est $0.351; cumulative $12.31; 429s=0 errs=0
+hard stop at 07:20 America/New_York, 1668s from now
+selected 4745; re-dedupe vs eval dropped 0
+212 done, 4533 to go; per-type todo {'contactPick': 431, 'timing': 478, 'nudgeNow': 845, 'answerability': 430, 'toolChoice': 434, 'rememberOrNot': 274, 'route': 482, 'notificationTriage': 345, 'eventPick': 235, 'sensitivity': 186, 'confirmBeforeAct': 232, 'memoryConflict': 161}
+[11:54:39] 100/4533 0.75 it/s est $0.23 429s=0 errs=0
+[11:56:58] 200/4533 0.74 it/s est $0.50 429s=0 errs=0
+finished 279 in 382s (interrupted); est $0.690; cumulative $13.00; 429s=0 errs=0
+hard stop at 07:30 America/New_York, 1863s from now
+selected 4745; re-dedupe vs eval dropped 0
+491 done, 4254 to go; per-type todo {'nudgeNow': 775, 'timing': 448, 'answerability': 403, 'contactPick': 403, 'route': 459, 'eventPick': 224, 'toolChoice': 413, 'confirmBeforeAct': 221, 'sensitivity': 177, 'notificationTriage': 323, 'rememberOrNot': 256, 'memoryConflict': 152}
+[12:01:35] 100/4254 0.70 it/s est $0.27 429s=0 errs=0
+[12:03:52] 200/4254 0.71 it/s est $0.55 429s=0 errs=0
+[12:06:12] 300/4254 0.71 it/s est $0.81 429s=0 errs=0
+[12:08:44] 400/4254 0.70 it/s est $1.12 429s=0 errs=0
+[12:11:06] 500/4254 0.70 it/s est $1.39 429s=0 errs=0
+[12:13:30] 600/4254 0.70 it/s est $1.68 429s=0 errs=0
+[12:15:51] 700/4254 0.70 it/s est $1.93 429s=0 errs=0
+[12:18:11] 800/4254 0.70 it/s est $2.24 429s=0 errs=0
+[12:20:35] 900/4254 0.70 it/s est $2.51 429s=0 errs=0
+[12:23:00] 1000/4254 0.70 it/s est $2.82 429s=0 errs=0
+[12:25:22] 1100/4254 0.70 it/s est $3.09 429s=0 errs=0
+[12:27:43] 1200/4254 0.70 it/s est $3.36 429s=0 errs=0
+finished 1299 in 1849s (hard-stop); est $3.618; cumulative $16.62; 429s=0 errs=0

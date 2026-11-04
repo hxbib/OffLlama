@@ -1,0 +1,132 @@
+{
+ "name": "V0C-gpuC",
+ "flags": [],
+ "gpu": "NVIDIA H100 80GB HBM3",
+ "train_result": {
+  "args": {
+   "base": "/vol/base",
+   "train": "/tmp/train.jsonl",
+   "out": "/tmp/lora",
+   "epochs": 1,
+   "lr": 0.0002,
+   "bsz": 8,
+   "max_hours": 1.2,
+   "test": "/tmp/cal.jsonl",
+   "dtype": "bfloat16",
+   "micro": 0,
+   "grad_ckpt": false,
+   "ce_weight": 0.5,
+   "rank": 16,
+   "label_smooth": 0.0,
+   "conf_weight": false,
+   "glimmer_weight": 1.0,
+   "entropy_bonus": 0.0,
+   "skip_before": true,
+   "threads": 8,
+   "max_steps": 0
+  },
+  "after_zeroShot": {
+   "file": "cal.jsonl",
+   "style": "zeroShot",
+   "n": 180,
+   "acc": 0.8722222222222222,
+   "mean_conf": 0.8486582969625791,
+   "per_type": {
+    "route": [
+     12,
+     15
+    ],
+    "toolChoice": [
+     14,
+     15
+    ],
+    "rememberOrNot": [
+     14,
+     15
+    ],
+    "memoryConflict": [
+     12,
+     15
+    ],
+    "notificationTriage": [
+     11,
+     15
+    ],
+    "confirmBeforeAct": [
+     12,
+     15
+    ],
+    "nudgeNow": [
+     13,
+     15
+    ],
+    "timing": [
+     15,
+     15
+    ],
+    "sensitivity": [
+     14,
+     15
+    ],
+    "answerability": [
+     12,
+     15
+    ],
+    "eventPick": [
+     13,
+     15
+    ],
+    "contactPick": [
+     15,
+     15
+    ]
+   }
+  },
+  "train_rows": 2915,
+  "steps_done": 365,
+  "steps": 365,
+  "train_seconds": 35.36171793937683
+ },
+ "train_s": 43.8,
+ "gguf_sha256": "6e715a7cbde3ae137e13424be7a538ba081db418be47c376cd27172c5dd5346d",
+ "gguf_bytes": 807694048,
+ "ok": true,
+ "total_s": 73.4,
+ "log": [
+  {
+   "cmd": "cd /repo/training/round2 && python lora_r2.py --base /vol/base --train /tmp/train.jsonl --out /tmp/lora --test /tmp/cal.jsonl --skip-before --max-hours 1.2 ",
+   "rc": 0,
+   "s": 43.6,
+   "out": "step 1/365 loss 1.6848 2.39s/step eta 14.5min\nstep 26/365 loss 1.4061 0.32s/step eta 1.8min\nstep 51/365 loss 0.4157 0.20s/step eta 1.1min\nstep 76/365 loss 0.3919 0.16s/step eta 0.8min\nstep 101/365 loss 0.3368 0.14s/step eta 0.6min\nstep 126/365 loss 0.7589 0.13s/step eta 0.5min\nstep 151/365 loss 0.2496 0.12s/step eta 0.4min\nstep 176/365 loss 0.2182 0.11s/step eta 0.3min\nstep 201/365 loss 0.3782 0.10s/step eta 0.3min\nstep 226/365 loss 0.7120 0.10s/step eta 0.2min\nstep 251/365 loss 0.2415 0.10s/step eta 0.2min\nstep 276/365 loss 0.4883 0.10s/step eta 0.1min\nstep 301/365 loss 0.2179 0.09s/step eta 0.1min\nstep 326/365 loss 0.5639 0.09s/step eta 0.1min\nstep 351/365 loss 0.8154 0.09s/step eta 0.0min\n{\"args\": {\"base\": \"/vol/base\", \"train\": \"/tmp/train.jsonl\", \"out\": \"/tmp/lora\", \"epochs\": 1, \"lr\": 0.0002, \"bsz\": 8, \"max_hours\": 1.2, \"test\": \"/tmp/cal.jsonl\", \"dtype\": \"bfloat16\", \"micro\": 0, \"grad_ckpt\": false, \"ce_weight\": 0.5, \"rank\": 16, \"label_smooth\": 0.0, \"conf_weight\": false, \"glimmer_weight\": 1.0, \"entropy_bonus\": 0.0, \"skip_before\": true, \"threads\": 8, \"max_steps\": 0}, \"after_zeroShot\": {\"file\": \"cal.jsonl\", \"style\": \"zeroShot\", \"n\": 180, \"acc\": 0.8722222222222222, \"mean_conf\": 0.8486582969625791, \"per_type\": {\"route\": [12, 15], \"toolChoice\": [14, 15], \"rememberOrNot\": [14, 15], \"memoryConflict\": [12, 15], \"notificationTriage\": [11, 15], \"confirmBeforeAct\": [12, 15], \"nudgeNow\": [13, 15], \"timing\": [15, 15], \"sensitivity\": [14, 15], \"answerability\": [12, 15], \"eventPick\": [13, 15], \"contactPick\": [15, 15]}}, \"train_rows\": 2915, \"steps_done\": 365, \"steps\": 365, \"train_seconds\": 35.36171793937683}\n",
+   "err": "\nLoading weights:   0%|          | 0/146 [00:00<?, ?it/s]\nLoading weights:  17%|\u2588\u258b        | 25/146 [00:00<00:00, 179.45it/s]\nLoading weights:  39%|\u2588\u2588\u2588\u2589      | 57/146 [00:00<00:00, 248.40it/s]\nLoading weights:  57%|\u2588\u2588\u2588\u2588\u2588\u258b    | 83/146 [00:00<00:00, 234.27it/s]\nLoading weights:  77%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u258b  | 112/146 [00:00<00:00, 250.96it/s]\nLoading weights: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 146/146 [00:00<00:00, 293.31it/s]\n"
+  },
+  {
+   "cmd": "python - <<'PY'\nimport torch\nfrom transformers import AutoModelForCausalLM, AutoTokenizer\nfrom peft import PeftModel\nm = AutoModelForCausalLM.from_pretrained('/vol/base', dtype=torch.float16)\nm = PeftModel.from_pretrained(m, '/tmp/lora').merge_and_unload()\nm.save_pretrained('/tmp/merged')\nPY\ncp /vol",
+   "rc": 0,
+   "s": 11.5,
+   "out": "",
+   "err": "\nLoading weights:   0%|          | 0/146 [00:00<?, ?it/s]\nLoading weights:   1%|          | 1/146 [00:00<00:53,  2.70it/s]\nLoading weights: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 146/146 [00:00<00:00, 314.38it/s]\n\nWriting model shards:   0%|          | 0/1 [00:00<?, ?it/s]\nWriting model shards: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 1/1 [00:01<00:00,  1.19s/it]\nWriting model shards: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 1/1 [00:01<00:00,  1.19s/it]\n"
+  },
+  {
+   "cmd": "/opt/conv/bin/python /opt/llama.cpp/convert_hf_to_gguf.py /tmp/merged --outtype f16 --outfile /tmp/f16.gguf",
+   "rc": 0,
+   "s": 8.5,
+   "out": "",
+   "err": "}\n    {{- '<|start_header_id|>user<|end_header_id|>\\n\\n' -}}\n    {{- \"Given the following functions, please respond with a JSON for a function call \" }}\n    {{- \"with its proper arguments that best answers the given prompt.\\n\\n\" }}\n    {{- 'Respond in the format {\"name\": function name, \"parameters\": dictionary of argument name and its value}.' }}\n    {{- \"Do not use variables.\\n\\n\" }}\n    {%- for t in tools %}\n        {{- t | tojson(indent=4) }}\n        {{- \"\\n\\n\" }}\n    {%- endfor %}\n    {{- first_user_message + \"<|eot_id|>\"}}\n{%- endif %}\n\n{%- for message in messages %}\n    {%- if not (message.role == 'ipython' or message.role == 'tool' or 'tool_calls' in message) %}\n        {{- '<|start_header_id|>' + message['role'] + '<|end_header_id|>\\n\\n'+ message['content'] | trim + '<|eot_id|>' }}\n    {%- elif 'tool_calls' in message %}\n        {%- if not message.tool_calls|length == 1 %}\n            {{- raise_exception(\"This model only supports single tool-calls at once!\") }}\n        {%- endif %}\n        {%- set tool_call = message.tool_calls[0].function %}\n        {{- '<|start_header_id|>assistant<|end_header_id|>\\n\\n' -}}\n        {{- '{\"name\": \"' + tool_call.name + '\", ' }}\n        {{- '\"parameters\": ' }}\n        {{- tool_call.arguments | tojson }}\n        {{- \"}\" }}\n        {{- \"<|eot_id|>\" }}\n    {%- elif message.role == \"tool\" or message.role == \"ipython\" %}\n        {{- \"<|start_header_id|>ipython<|end_header_id|>\\n\\n\" }}\n        {%- if message.content is mapping or message.content is iterable %}\n            {{- message.content | tojson }}\n        {%- else %}\n            {{- message.content }}\n        {%- endif %}\n        {{- \"<|eot_id|>\" }}\n    {%- endif %}\n{%- endfor %}\n{%- if add_generation_prompt %}\n    {{- '<|start_header_id|>assistant<|end_header_id|>\\n\\n' }}\n{%- endif %}\n\nINFO:gguf.vocab:Setting clean_spaces to True\nINFO:gguf.gguf_writer:Writing the following files:\nINFO:gguf.gguf_writer:/tmp/f16.gguf: n_tensors = 147, total_size = 2.5G\n\nWriting:   0%|          | 0.00/2.47G [00:00<?, ?byte/s]\nWriting:  21%|\u2588\u2588\u258f       | 525M/2.47G [00:00<00:01, 1.82Gbyte/s]\nWriting:  29%|\u2588\u2588\u2589       | 714M/2.47G [00:00<00:00, 1.77Gbyte/s]\nWriting:  36%|\u2588\u2588\u2588\u258c      | 888M/2.47G [00:00<00:00, 1.75Gbyte/s]\nWriting:  44%|\u2588\u2588\u2588\u2588\u258e     | 1.08G/2.47G [00:00<00:00, 1.74Gbyte/s]\nWriting:  51%|\u2588\u2588\u2588\u2588\u2588     | 1.25G/2.47G [00:00<00:00, 1.71Gbyte/s]\nWriting:  58%|\u2588\u2588\u2588\u2588\u2588\u258a    | 1.44G/2.47G [00:00<00:00, 1.42Gbyte/s]\nWriting:  65%|\u2588\u2588\u2588\u2588\u2588\u2588\u258d   | 1.60G/2.47G [00:01<00:00, 1.28Gbyte/s]\nWriting:  70%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588   | 1.73G/2.47G [00:01<00:00, 1.13Gbyte/s]\nWriting:  75%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u258d  | 1.85G/2.47G [00:01<00:00, 1.06Gbyte/s]\nWriting:  79%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2589  | 1.96G/2.47G [00:01<00:00, 1.02Gbyte/s]\nWriting:  84%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u258d | 2.09G/2.47G [00:01<00:00, 991Mbyte/s] \nWriting:  89%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2589 | 2.21G/2.47G [00:01<00:00, 992Mbyte/s]\nWriting:  98%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u258a| 2.42G/2.47G [00:01<00:00, 1.24Gbyte/s]\nWriting: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 2.47G/2.47G [00:01<00:00, 1.32Gbyte/s]\nINFO:hf-to-gguf:Model successfully exported to /tmp/f16.gguf\n"
+  },
+  {
+   "cmd": "/opt/llama.cpp/build/bin/llama-quantize /tmp/f16.gguf /vol/gguf/V0C-gpuC.gguf Q4_K_M",
+   "rc": 0,
+   "s": 7.5,
+   "out": "\nllama_quantize: quantize time =  7484.44 ms\nllama_quantize:    total time =  7484.44 ms\n",
+   "err": "ize =    0.008 MiB\n[ 129/ 147] blk.13.ffn_up.weight                 - [  2048,   8192,      1,      1], type =    f16, converting to q4_K .. size =    32.00 MiB ->     9.00 MiB\n[ 130/ 147] blk.14.attn_k.weight                 - [  2048,    512,      1,      1], type =    f16, converting to q4_K .. size =     2.00 MiB ->     0.56 MiB\n[ 131/ 147] blk.14.attn_norm.weight              - [  2048,      1,      1,      1], type =    f32, size =    0.008 MiB\n[ 132/ 147] blk.14.attn_output.weight            - [  2048,   2048,      1,      1], type =    f16, converting to q4_K .. size =     8.00 MiB ->     2.25 MiB\n[ 133/ 147] blk.14.attn_q.weight                 - [  2048,   2048,      1,      1], type =    f16, converting to q4_K .. size =     8.00 MiB ->     2.25 MiB\n[ 134/ 147] blk.14.attn_v.weight                 - [  2048,    512,      1,      1], type =    f16, converting to q6_K .. size =     2.00 MiB ->     0.82 MiB\n[ 135/ 147] blk.14.ffn_down.weight               - [  8192,   2048,      1,      1], type =    f16, converting to q6_K .. size =    32.00 MiB ->    13.12 MiB\n[ 136/ 147] blk.14.ffn_gate.weight               - [  2048,   8192,      1,      1], type =    f16, converting to q4_K .. size =    32.00 MiB ->     9.00 MiB\n[ 137/ 147] blk.14.ffn_norm.weight               - [  2048,      1,      1,      1], type =    f32, size =    0.008 MiB\n[ 138/ 147] blk.14.ffn_up.weight                 - [  2048,   8192,      1,      1], type =    f16, converting to q4_K .. size =    32.00 MiB ->     9.00 MiB\n[ 139/ 147] blk.15.attn_k.weight                 - [  2048,    512,      1,      1], type =    f16, converting to q4_K .. size =     2.00 MiB ->     0.56 MiB\n[ 140/ 147] blk.15.attn_norm.weight              - [  2048,      1,      1,      1], type =    f32, size =    0.008 MiB\n[ 141/ 147] blk.15.attn_output.weight            - [  2048,   2048,      1,      1], type =    f16, converting to q4_K .. size =     8.00 MiB ->     2.25 MiB\n[ 142/ 147] blk.15.attn_q.weight                 - [  2048,   2048,      1,      1], type =    f16, converting to q4_K .. size =     8.00 MiB ->     2.25 MiB\n[ 143/ 147] blk.15.attn_v.weight                 - [  2048,    512,      1,      1], type =    f16, converting to q6_K .. size =     2.00 MiB ->     0.82 MiB\n[ 144/ 147] blk.15.ffn_down.weight               - [  8192,   2048,      1,      1], type =    f16, converting to q6_K .. size =    32.00 MiB ->    13.12 MiB\n[ 145/ 147] blk.15.ffn_gate.weight               - [  2048,   8192,      1,      1], type =    f16, converting to q4_K .. size =    32.00 MiB ->     9.00 MiB\n[ 146/ 147] blk.15.ffn_norm.weight               - [  2048,      1,      1,      1], type =    f32, size =    0.008 MiB\n[ 147/ 147] blk.15.ffn_up.weight                 - [  2048,   8192,      1,      1], type =    f16, converting to q4_K .. size =    32.00 MiB ->     9.00 MiB\nllama_model_quantize_impl: model size  =  2357.26 MiB (16.00 BPW)\nllama_model_quantize_impl: quant size  =   762.81 MiB (5.18 BPW)\n"
+  },
+  {
+   "cmd": "rm -rf /vol/lora/V0C-gpuC && mkdir -p /vol/lora && cp -r /tmp/lora /vol/lora/V0C-gpuC",
+   "rc": 0,
+   "s": 0.1,
+   "out": "",
+   "err": ""
+  }
+ ]
+}

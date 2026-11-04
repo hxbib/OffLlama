@@ -1,0 +1,103 @@
+{
+ "out": "training/round2/out/r2a_snap0720.jsonl",
+ "alpha": 0.5,
+ "min_top_share": 0.6,
+ "stats": {
+  "dropped_dedupe_vs_eval": 0,
+  "rows": 2520,
+  "src_glimmer": 892,
+  "src_spark_nov1_extra": 273,
+  "src_spark_r2": 1355
+ },
+ "per_type_final": {
+  "toolChoice": 128,
+  "contactPick": 263,
+  "eventPick": 104,
+  "rememberOrNot": 144,
+  "memoryConflict": 137,
+  "notificationTriage": 152,
+  "confirmBeforeAct": 104,
+  "timing": 306,
+  "sensitivity": 98,
+  "answerability": 275,
+  "route": 101,
+  "nudgeNow": 708
+ },
+ "per_type": {
+  "answerability": {
+   "glimmer_kept": 77,
+   "spark_r2_in": 200,
+   "spark_r2_kept": 198,
+   "spark_r2_drop_top<0.6": 2
+  },
+  "confirmBeforeAct": {
+   "glimmer_kept": 84,
+   "spark_r2_in": 20,
+   "spark_r2_kept": 20
+  },
+  "contactPick": {
+   "glimmer_kept": 61,
+   "spark_r2_in": 202,
+   "spark_r2_kept": 202
+  },
+  "eventPick": {
+   "glimmer_kept": 84,
+   "spark_r2_in": 20,
+   "spark_r2_kept": 20
+  },
+  "memoryConflict": {
+   "glimmer_kept": 81,
+   "spark_nov1_extra_in": 40,
+   "spark_nov1_extra_kept": 40,
+   "spark_r2_in": 16,
+   "spark_r2_kept": 16
+  },
+  "notificationTriage": {
+   "glimmer_kept": 74,
+   "spark_nov1_extra_in": 40,
+   "spark_nov1_extra_kept": 39,
+   "spark_nov1_extra_drop_top<0.6": 1,
+   "spark_r2_in": 39,
+   "spark_r2_kept": 39
+  },
+  "nudgeNow": {
+   "glimmer_kept": 40,
+   "spark_nov1_extra_in": 160,
+   "spark_nov1_extra_kept": 154,
+   "spark_nov1_extra_drop_top<0.6": 6,
+   "spark_r2_in": 536,
+   "spark_r2_kept": 514,
+   "spark_r2_drop_top<0.6": 20,
+   "spark_r2_drop_fewvotes": 2
+  },
+  "rememberOrNot": {
+   "glimmer_kept": 73,
+   "spark_nov1_extra_in": 40,
+   "spark_nov1_extra_kept": 40,
+   "spark_r2_in": 31,
+   "spark_r2_kept": 31
+  },
+  "route": {
+   "glimmer_kept": 63,
+   "spark_r2_in": 41,
+   "spark_r2_kept": 38,
+   "spark_r2_drop_top<0.6": 3
+  },
+  "sensitivity": {
+   "glimmer_kept": 82,
+   "spark_r2_in": 16,
+   "spark_r2_kept": 16
+  },
+  "timing": {
+   "glimmer_kept": 82,
+   "spark_r2_in": 224,
+   "spark_r2_kept": 224
+  },
+  "toolChoice": {
+   "glimmer_kept": 91,
+   "spark_r2_in": 37,
+   "spark_r2_kept": 37
+  }
+ },
+ "dedupe_dropped": []
+}

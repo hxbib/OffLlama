@@ -1,0 +1,136 @@
+{
+ "name": "V4-gpu",
+ "flags": [
+  "--lr",
+  "1e-4",
+  "--conf-weight"
+ ],
+ "gpu": "NVIDIA H100 80GB HBM3",
+ "train_result": {
+  "args": {
+   "base": "/vol/base",
+   "train": "/tmp/train.jsonl",
+   "out": "/tmp/lora",
+   "epochs": 1,
+   "lr": 0.0001,
+   "bsz": 8,
+   "max_hours": 1.2,
+   "test": "/tmp/cal.jsonl",
+   "dtype": "bfloat16",
+   "micro": 0,
+   "grad_ckpt": false,
+   "ce_weight": 0.5,
+   "rank": 16,
+   "label_smooth": 0.0,
+   "conf_weight": true,
+   "glimmer_weight": 1.0,
+   "entropy_bonus": 0.0,
+   "skip_before": true,
+   "threads": 8,
+   "max_steps": 0
+  },
+  "after_zeroShot": {
+   "file": "cal.jsonl",
+   "style": "zeroShot",
+   "n": 180,
+   "acc": 0.9111111111111111,
+   "mean_conf": 0.7688640579581261,
+   "per_type": {
+    "route": [
+     12,
+     15
+    ],
+    "toolChoice": [
+     15,
+     15
+    ],
+    "rememberOrNot": [
+     15,
+     15
+    ],
+    "memoryConflict": [
+     15,
+     15
+    ],
+    "notificationTriage": [
+     10,
+     15
+    ],
+    "confirmBeforeAct": [
+     15,
+     15
+    ],
+    "nudgeNow": [
+     12,
+     15
+    ],
+    "timing": [
+     15,
+     15
+    ],
+    "sensitivity": [
+     15,
+     15
+    ],
+    "answerability": [
+     12,
+     15
+    ],
+    "eventPick": [
+     14,
+     15
+    ],
+    "contactPick": [
+     14,
+     15
+    ]
+   }
+  },
+  "train_rows": 2915,
+  "steps_done": 365,
+  "steps": 365,
+  "train_seconds": 37.62818717956543
+ },
+ "train_s": 60.6,
+ "gguf_sha256": "873eedc2f67f549163ba821a9374ef91d250c1591d6249f454ee11524278de26",
+ "gguf_bytes": 807694048,
+ "ok": true,
+ "total_s": 94.6,
+ "log": [
+  {
+   "cmd": "cd /repo/training/round2 && python lora_r2.py --base /vol/base --train /tmp/train.jsonl --out /tmp/lora --test /tmp/cal.jsonl --skip-before --max-hours 1.2 --lr 1e-4 --conf-weight",
+   "rc": 0,
+   "s": 60.4,
+   "out": "step 1/365 loss 1.6922 3.20s/step eta 19.4min\nstep 26/365 loss 1.2701 0.40s/step eta 2.3min\nstep 51/365 loss 1.1087 0.25s/step eta 1.3min\nstep 76/365 loss 0.8713 0.20s/step eta 0.9min\nstep 101/365 loss 0.8454 0.17s/step eta 0.7min\nstep 126/365 loss 0.7488 0.15s/step eta 0.6min\nstep 151/365 loss 0.7178 0.14s/step eta 0.5min\nstep 176/365 loss 0.6868 0.13s/step eta 0.4min\nstep 201/365 loss 0.9337 0.12s/step eta 0.3min\nstep 226/365 loss 0.8435 0.11s/step eta 0.3min\nstep 251/365 loss 0.5352 0.11s/step eta 0.2min\nstep 276/365 loss 1.2134 0.10s/step eta 0.2min\nstep 301/365 loss 0.7324 0.10s/step eta 0.1min\nstep 326/365 loss 0.7053 0.10s/step eta 0.1min\nstep 351/365 loss 1.0513 0.10s/step eta 0.0min\n{\"args\": {\"base\": \"/vol/base\", \"train\": \"/tmp/train.jsonl\", \"out\": \"/tmp/lora\", \"epochs\": 1, \"lr\": 0.0001, \"bsz\": 8, \"max_hours\": 1.2, \"test\": \"/tmp/cal.jsonl\", \"dtype\": \"bfloat16\", \"micro\": 0, \"grad_ckpt\": false, \"ce_weight\": 0.5, \"rank\": 16, \"label_smooth\": 0.0, \"conf_weight\": true, \"glimmer_weight\": 1.0, \"entropy_bonus\": 0.0, \"skip_before\": true, \"threads\": 8, \"max_steps\": 0}, \"after_zeroShot\": {\"file\": \"cal.jsonl\", \"style\": \"zeroShot\", \"n\": 180, \"acc\": 0.9111111111111111, \"mean_conf\": 0.7688640579581261, \"per_type\": {\"route\": [12, 15], \"toolChoice\": [15, 15], \"rememberOrNot\": [15, 15], \"memoryConflict\": [15, 15], \"notificationTriage\": [10, 15], \"confirmBeforeAct\": [15, 15], \"nudgeNow\": [12, 15], \"timing\": [15, 15], \"sensitivity\": [15, 15], \"answerability\": [12, 15], \"eventPick\": [14, 15], \"contactPick\": [14, 15]}}, \"train_rows\": 2915, \"steps_done\": 365, \"steps\": 365, \"train_seconds\": 37.62818717956543}\n",
+   "err": "\nLoading weights:   0%|          | 0/146 [00:00<?, ?it/s]\nLoading weights:  12%|\u2588\u258f        | 18/146 [00:00<00:00, 174.45it/s]\nLoading weights:  25%|\u2588\u2588\u258d       | 36/146 [00:00<00:00, 162.04it/s]\nLoading weights:  51%|\u2588\u2588\u2588\u2588\u2588     | 74/146 [00:00<00:00, 252.36it/s]\nLoading weights:  68%|\u2588\u2588\u2588\u2588\u2588\u2588\u258a   | 100/146 [00:00<00:00, 181.42it/s]\nLoading weights: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 146/146 [00:00<00:00, 259.76it/s]\n"
+  },
+  {
+   "cmd": "python - <<'PY'\nimport torch\nfrom transformers import AutoModelForCausalLM, AutoTokenizer\nfrom peft import PeftModel\nm = AutoModelForCausalLM.from_pretrained('/vol/base', dtype=torch.float16)\nm = PeftModel.from_pretrained(m, '/tmp/lora').merge_and_unload()\nm.save_pretrained('/tmp/merged')\nPY\ncp /vol",
+   "rc": 0,
+   "s": 12.2,
+   "out": "",
+   "err": "\nLoading weights:   0%|          | 0/146 [00:00<?, ?it/s]\nLoading weights:   1%|          | 1/146 [00:00<01:30,  1.60it/s]\nLoading weights:  95%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u258d| 138/146 [00:00<00:00, 255.24it/s]\nLoading weights: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 146/146 [00:00<00:00, 200.03it/s]\n\nWriting model shards:   0%|          | 0/1 [00:00<?, ?it/s]\nWriting model shards: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 1/1 [00:01<00:00,  1.18s/it]\nWriting model shards: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 1/1 [00:01<00:00,  1.18s/it]\n"
+  },
+  {
+   "cmd": "/opt/conv/bin/python /opt/llama.cpp/convert_hf_to_gguf.py /tmp/merged --outtype f16 --outfile /tmp/f16.gguf",
+   "rc": 0,
+   "s": 12.0,
+   "out": "",
+   "err": "e %}\n        {{- raise_exception(\"Cannot put tools in the first user message when there's no first user message!\") }}\n{%- endif %}\n    {{- '<|start_header_id|>user<|end_header_id|>\\n\\n' -}}\n    {{- \"Given the following functions, please respond with a JSON for a function call \" }}\n    {{- \"with its proper arguments that best answers the given prompt.\\n\\n\" }}\n    {{- 'Respond in the format {\"name\": function name, \"parameters\": dictionary of argument name and its value}.' }}\n    {{- \"Do not use variables.\\n\\n\" }}\n    {%- for t in tools %}\n        {{- t | tojson(indent=4) }}\n        {{- \"\\n\\n\" }}\n    {%- endfor %}\n    {{- first_user_message + \"<|eot_id|>\"}}\n{%- endif %}\n\n{%- for message in messages %}\n    {%- if not (message.role == 'ipython' or message.role == 'tool' or 'tool_calls' in message) %}\n        {{- '<|start_header_id|>' + message['role'] + '<|end_header_id|>\\n\\n'+ message['content'] | trim + '<|eot_id|>' }}\n    {%- elif 'tool_calls' in message %}\n        {%- if not message.tool_calls|length == 1 %}\n            {{- raise_exception(\"This model only supports single tool-calls at once!\") }}\n        {%- endif %}\n        {%- set tool_call = message.tool_calls[0].function %}\n        {{- '<|start_header_id|>assistant<|end_header_id|>\\n\\n' -}}\n        {{- '{\"name\": \"' + tool_call.name + '\", ' }}\n        {{- '\"parameters\": ' }}\n        {{- tool_call.arguments | tojson }}\n        {{- \"}\" }}\n        {{- \"<|eot_id|>\" }}\n    {%- elif message.role == \"tool\" or message.role == \"ipython\" %}\n        {{- \"<|start_header_id|>ipython<|end_header_id|>\\n\\n\" }}\n        {%- if message.content is mapping or message.content is iterable %}\n            {{- message.content | tojson }}\n        {%- else %}\n            {{- message.content }}\n        {%- endif %}\n        {{- \"<|eot_id|>\" }}\n    {%- endif %}\n{%- endfor %}\n{%- if add_generation_prompt %}\n    {{- '<|start_header_id|>assistant<|end_header_id|>\\n\\n' }}\n{%- endif %}\n\nINFO:gguf.vocab:Setting clean_spaces to True\nINFO:gguf.gguf_writer:Writing the following files:\nINFO:gguf.gguf_writer:/tmp/f16.gguf: n_tensors = 147, total_size = 2.5G\n\nWriting:   0%|          | 0.00/2.47G [00:00<?, ?byte/s]\nWriting:  21%|\u2588\u2588\u258f       | 525M/2.47G [00:00<00:01, 1.79Gbyte/s]\nWriting:  29%|\u2588\u2588\u2589       | 714M/2.47G [00:00<00:01, 1.75Gbyte/s]\nWriting:  36%|\u2588\u2588\u2588\u258c      | 888M/2.47G [00:00<00:00, 1.73Gbyte/s]\nWriting:  44%|\u2588\u2588\u2588\u2588\u258e     | 1.08G/2.47G [00:00<00:00, 1.72Gbyte/s]\nWriting:  51%|\u2588\u2588\u2588\u2588\u2588     | 1.25G/2.47G [00:00<00:00, 1.72Gbyte/s]\nWriting:  58%|\u2588\u2588\u2588\u2588\u2588\u258a    | 1.44G/2.47G [00:00<00:00, 1.74Gbyte/s]\nWriting:  65%|\u2588\u2588\u2588\u2588\u2588\u2588\u258c   | 1.62G/2.47G [00:00<00:00, 1.74Gbyte/s]\nWriting:  73%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u258e  | 1.81G/2.47G [00:01<00:00, 1.75Gbyte/s]\nWriting:  82%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u258f | 2.02G/2.47G [00:01<00:00, 1.80Gbyte/s]\nWriting:  90%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588 | 2.23G/2.47G [00:01<00:00, 1.86Gbyte/s]\nWriting:  99%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2589| 2.45G/2.47G [00:01<00:00, 1.92Gbyte/s]\nWriting: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 2.47G/2.47G [00:01<00:00, 1.80Gbyte/s]\nINFO:hf-to-gguf:Model successfully exported to /tmp/f16.gguf\n"
+  },
+  {
+   "cmd": "/opt/llama.cpp/build/bin/llama-quantize /tmp/f16.gguf /vol/gguf/V4-gpu.gguf Q4_K_M",
+   "rc": 0,
+   "s": 7.7,
+   "out": "\nllama_quantize: quantize time =  7709.97 ms\nllama_quantize:    total time =  7709.97 ms\n",
+   "err": "ize =    0.008 MiB\n[ 129/ 147] blk.13.ffn_up.weight                 - [  2048,   8192,      1,      1], type =    f16, converting to q4_K .. size =    32.00 MiB ->     9.00 MiB\n[ 130/ 147] blk.14.attn_k.weight                 - [  2048,    512,      1,      1], type =    f16, converting to q4_K .. size =     2.00 MiB ->     0.56 MiB\n[ 131/ 147] blk.14.attn_norm.weight              - [  2048,      1,      1,      1], type =    f32, size =    0.008 MiB\n[ 132/ 147] blk.14.attn_output.weight            - [  2048,   2048,      1,      1], type =    f16, converting to q4_K .. size =     8.00 MiB ->     2.25 MiB\n[ 133/ 147] blk.14.attn_q.weight                 - [  2048,   2048,      1,      1], type =    f16, converting to q4_K .. size =     8.00 MiB ->     2.25 MiB\n[ 134/ 147] blk.14.attn_v.weight                 - [  2048,    512,      1,      1], type =    f16, converting to q6_K .. size =     2.00 MiB ->     0.82 MiB\n[ 135/ 147] blk.14.ffn_down.weight               - [  8192,   2048,      1,      1], type =    f16, converting to q6_K .. size =    32.00 MiB ->    13.12 MiB\n[ 136/ 147] blk.14.ffn_gate.weight               - [  2048,   8192,      1,      1], type =    f16, converting to q4_K .. size =    32.00 MiB ->     9.00 MiB\n[ 137/ 147] blk.14.ffn_norm.weight               - [  2048,      1,      1,      1], type =    f32, size =    0.008 MiB\n[ 138/ 147] blk.14.ffn_up.weight                 - [  2048,   8192,      1,      1], type =    f16, converting to q4_K .. size =    32.00 MiB ->     9.00 MiB\n[ 139/ 147] blk.15.attn_k.weight                 - [  2048,    512,      1,      1], type =    f16, converting to q4_K .. size =     2.00 MiB ->     0.56 MiB\n[ 140/ 147] blk.15.attn_norm.weight              - [  2048,      1,      1,      1], type =    f32, size =    0.008 MiB\n[ 141/ 147] blk.15.attn_output.weight            - [  2048,   2048,      1,      1], type =    f16, converting to q4_K .. size =     8.00 MiB ->     2.25 MiB\n[ 142/ 147] blk.15.attn_q.weight                 - [  2048,   2048,      1,      1], type =    f16, converting to q4_K .. size =     8.00 MiB ->     2.25 MiB\n[ 143/ 147] blk.15.attn_v.weight                 - [  2048,    512,      1,      1], type =    f16, converting to q6_K .. size =     2.00 MiB ->     0.82 MiB\n[ 144/ 147] blk.15.ffn_down.weight               - [  8192,   2048,      1,      1], type =    f16, converting to q6_K .. size =    32.00 MiB ->    13.12 MiB\n[ 145/ 147] blk.15.ffn_gate.weight               - [  2048,   8192,      1,      1], type =    f16, converting to q4_K .. size =    32.00 MiB ->     9.00 MiB\n[ 146/ 147] blk.15.ffn_norm.weight               - [  2048,      1,      1,      1], type =    f32, size =    0.008 MiB\n[ 147/ 147] blk.15.ffn_up.weight                 - [  2048,   8192,      1,      1], type =    f16, converting to q4_K .. size =    32.00 MiB ->     9.00 MiB\nllama_model_quantize_impl: model size  =  2357.26 MiB (16.00 BPW)\nllama_model_quantize_impl: quant size  =   762.81 MiB (5.18 BPW)\n"
+  },
+  {
+   "cmd": "rm -rf /vol/lora/V4-gpu && mkdir -p /vol/lora && cp -r /tmp/lora /vol/lora/V4-gpu",
+   "rc": 0,
+   "s": 0.1,
+   "out": "",
+   "err": ""
+  }
+ ]
+}

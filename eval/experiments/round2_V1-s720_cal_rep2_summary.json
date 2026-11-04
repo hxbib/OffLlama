@@ -1,0 +1,37 @@
+{
+ "n": 180,
+ "acc": 0.8,
+ "correct": 144,
+ "handled_at_0.8": 0.2111111111111111,
+ "handled_n_at_0.8": 38,
+ "acc_on_handled_at_0.8": 1.0,
+ "ece_10bin": 0.17760691319861116,
+ "ltt_tightest": {
+  "tau": 0.67,
+  "handled": 85,
+  "errors": 1,
+  "handled_share": 0.4722222222222222,
+  "error_upper_bound": 0.10340150114732101,
+  "delta": 0.1
+ },
+ "ltt_alpha05": {
+  "tau": null,
+  "alpha": 0.05,
+  "delta": 0.1,
+  "n": 180,
+  "handled": 0,
+  "errors": 0,
+  "handled_share": 0.0,
+  "empirical_error": null,
+  "error_upper_bound": null,
+  "p_value": null,
+  "min_rows_needed_zero_errors": 135
+ },
+ "nudgeNow_correct": 10,
+ "median_ms": 230.81326484680176,
+ "p90_ms": 381.4280033111572,
+ "eval_seconds": 61.9,
+ "gguf": "/tmp/gencode/round2/V1-s720.gguf",
+ "set": "cal",
+ "rep": 2
+}

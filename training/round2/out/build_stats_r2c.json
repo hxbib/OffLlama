@@ -1,0 +1,116 @@
+{
+ "out": "training/round2/out/r2c_train.jsonl",
+ "alpha": 0.1,
+ "min_top_share": 0.6,
+ "stats": {
+  "dropped_dedupe_vs_eval": 0,
+  "rows": 2915,
+  "src_glimmer": 892,
+  "src_spark_nov1_extra": 273,
+  "src_spark_r2": 1750
+ },
+ "per_type_final": {
+  "toolChoice": 128,
+  "contactPick": 333,
+  "eventPick": 104,
+  "rememberOrNot": 144,
+  "memoryConflict": 137,
+  "notificationTriage": 152,
+  "confirmBeforeAct": 104,
+  "timing": 384,
+  "sensitivity": 98,
+  "answerability": 344,
+  "route": 101,
+  "nudgeNow": 886
+ },
+ "per_type": {
+  "answerability": {
+   "glimmer_kept": 77,
+   "spark_r2_in": 270,
+   "spark_r2_kept": 267,
+   "spark_r2_imputed_to_k8": 233,
+   "spark_r2_drop_top<0.6": 3
+  },
+  "confirmBeforeAct": {
+   "glimmer_kept": 84,
+   "spark_r2_in": 20,
+   "spark_r2_kept": 20,
+   "spark_r2_imputed_to_k8": 15
+  },
+  "contactPick": {
+   "glimmer_kept": 61,
+   "spark_r2_in": 272,
+   "spark_r2_kept": 272,
+   "spark_r2_imputed_to_k8": 260
+  },
+  "eventPick": {
+   "glimmer_kept": 84,
+   "spark_r2_in": 20,
+   "spark_r2_kept": 20,
+   "spark_r2_imputed_to_k8": 15
+  },
+  "memoryConflict": {
+   "glimmer_kept": 81,
+   "spark_nov1_extra_in": 40,
+   "spark_nov1_extra_kept": 40,
+   "spark_r2_in": 16,
+   "spark_r2_kept": 16,
+   "spark_r2_imputed_to_k8": 13
+  },
+  "notificationTriage": {
+   "glimmer_kept": 74,
+   "spark_nov1_extra_in": 40,
+   "spark_nov1_extra_kept": 39,
+   "spark_nov1_extra_drop_top<0.6": 1,
+   "spark_r2_in": 39,
+   "spark_r2_kept": 39,
+   "spark_r2_imputed_to_k8": 29
+  },
+  "nudgeNow": {
+   "glimmer_kept": 40,
+   "spark_nov1_extra_in": 160,
+   "spark_nov1_extra_kept": 154,
+   "spark_nov1_extra_drop_top<0.6": 6,
+   "spark_r2_in": 726,
+   "spark_r2_kept": 692,
+   "spark_r2_drop_top<0.6": 32,
+   "spark_r2_imputed_to_k8": 586,
+   "spark_r2_drop_fewvotes": 2
+  },
+  "rememberOrNot": {
+   "glimmer_kept": 73,
+   "spark_nov1_extra_in": 40,
+   "spark_nov1_extra_kept": 40,
+   "spark_r2_in": 31,
+   "spark_r2_kept": 31,
+   "spark_r2_imputed_to_k8": 23
+  },
+  "route": {
+   "glimmer_kept": 63,
+   "spark_r2_in": 41,
+   "spark_r2_kept": 38,
+   "spark_r2_drop_top<0.6": 3,
+   "spark_r2_imputed_to_k8": 28
+  },
+  "sensitivity": {
+   "glimmer_kept": 82,
+   "spark_r2_in": 16,
+   "spark_r2_kept": 16,
+   "spark_r2_imputed_to_k8": 12
+  },
+  "timing": {
+   "glimmer_kept": 82,
+   "spark_r2_in": 302,
+   "spark_r2_kept": 302,
+   "spark_r2_imputed_to_k8": 288
+  },
+  "toolChoice": {
+   "glimmer_kept": 91,
+   "spark_r2_in": 37,
+   "spark_r2_kept": 37,
+   "spark_r2_imputed_to_k8": 28
+  }
+ },
+ "dedupe_dropped": [],
+ "impute_k": 8
+}

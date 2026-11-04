@@ -1,0 +1,175 @@
+{
+ "rows": [
+  {
+   "name": "SHIP",
+   "rep": 1,
+   "acc": 0.7944444444444444,
+   "handled_at_0.8": 0.48333333333333334,
+   "acc_on_handled_at_0.8": 0.9655172413793104,
+   "ece_10bin": 0.040396723197301136,
+   "ltt": {
+    "tau": 0.9,
+    "handled": 63,
+    "errors": 0,
+    "handled_share": 0.35,
+    "error_upper_bound": 0.10370652453011428,
+    "delta": 0.1
+   },
+   "best35": {
+    "tau": 0.9,
+    "handled": 63,
+    "errors": 0,
+    "error_upper_bound": 0.10370652453011428
+   },
+   "alpha05": {
+    "tau": null,
+    "alpha": 0.05,
+    "delta": 0.1,
+    "n": 180,
+    "handled": 0,
+    "errors": 0,
+    "handled_share": 0.0,
+    "empirical_error": null,
+    "error_upper_bound": null,
+    "p_value": null,
+    "min_rows_needed_zero_errors": 135
+   },
+   "gate": {
+    "a": false,
+    "a_strict": false,
+    "b": true,
+    "c": true
+   }
+  },
+  {
+   "name": "SHIP",
+   "rep": 2,
+   "acc": 0.7944444444444444,
+   "handled_at_0.8": 0.48333333333333334,
+   "acc_on_handled_at_0.8": 0.9655172413793104,
+   "ece_10bin": 0.040396723197301136,
+   "ltt": {
+    "tau": 0.9,
+    "handled": 63,
+    "errors": 0,
+    "handled_share": 0.35,
+    "error_upper_bound": 0.10370652453011428,
+    "delta": 0.1
+   },
+   "best35": {
+    "tau": 0.9,
+    "handled": 63,
+    "errors": 0,
+    "error_upper_bound": 0.10370652453011428
+   },
+   "alpha05": {
+    "tau": null,
+    "alpha": 0.05,
+    "delta": 0.1,
+    "n": 180,
+    "handled": 0,
+    "errors": 0,
+    "handled_share": 0.0,
+    "empirical_error": null,
+    "error_upper_bound": null,
+    "p_value": null,
+    "min_rows_needed_zero_errors": 135
+   },
+   "gate": {
+    "a": false,
+    "a_strict": false,
+    "b": true,
+    "c": true
+   }
+  },
+  {
+   "name": "V1-s720",
+   "rep": 1,
+   "acc": 0.8,
+   "handled_at_0.8": 0.2111111111111111,
+   "acc_on_handled_at_0.8": 1.0,
+   "ece_10bin": 0.17760691319861116,
+   "ltt": {
+    "tau": 0.67,
+    "handled": 85,
+    "errors": 1,
+    "handled_share": 0.4722222222222222,
+    "error_upper_bound": 0.10340150114732101,
+    "delta": 0.1
+   },
+   "best35": {
+    "tau": 0.67,
+    "handled": 85,
+    "errors": 1,
+    "error_upper_bound": 0.10340150114732101
+   },
+   "alpha05": {
+    "tau": null,
+    "alpha": 0.05,
+    "delta": 0.1,
+    "n": 180,
+    "handled": 0,
+    "errors": 0,
+    "handled_share": 0.0,
+    "empirical_error": null,
+    "error_upper_bound": null,
+    "p_value": null,
+    "min_rows_needed_zero_errors": 135
+   },
+   "gate": {
+    "a": true,
+    "a_strict": false,
+    "b": true,
+    "c": false
+   }
+  },
+  {
+   "name": "V1-s720",
+   "rep": 2,
+   "acc": 0.8,
+   "handled_at_0.8": 0.2111111111111111,
+   "acc_on_handled_at_0.8": 1.0,
+   "ece_10bin": 0.17760691319861116,
+   "ltt": {
+    "tau": 0.67,
+    "handled": 85,
+    "errors": 1,
+    "handled_share": 0.4722222222222222,
+    "error_upper_bound": 0.10340150114732101,
+    "delta": 0.1
+   },
+   "best35": {
+    "tau": 0.67,
+    "handled": 85,
+    "errors": 1,
+    "error_upper_bound": 0.10340150114732101
+   },
+   "alpha05": {
+    "tau": null,
+    "alpha": 0.05,
+    "delta": 0.1,
+    "n": 180,
+    "handled": 0,
+    "errors": 0,
+    "handled_share": 0.0,
+    "empirical_error": null,
+    "error_upper_bound": null,
+    "p_value": null,
+    "min_rows_needed_zero_errors": 135
+   },
+   "gate": {
+    "a": true,
+    "a_strict": false,
+    "b": true,
+    "c": false
+   }
+  }
+ ],
+ "verdict": {
+  "V1-s720": {
+   "reps": 2,
+   "pass_all_reps": false,
+   "pass_loose_any": false
+  }
+ }
+}

@@ -1,0 +1,146 @@
+{
+ "per_type": {
+  "answerability": {
+   "n": 270,
+   "k_5": 37,
+   "src_clinc": 87,
+   "src_synthetic": 112,
+   "hint_n": 112,
+   "hint_agree": 112,
+   "src_massive": 71,
+   "k_3": 5,
+   "k_2": 228,
+   "hint_agree_rate": 1.0
+  },
+  "confirmBeforeAct": {
+   "n": 20,
+   "k_5": 5,
+   "src_synthetic": 20,
+   "hint_n": 20,
+   "hint_agree": 20,
+   "k_3": 4,
+   "k_2": 11,
+   "hint_agree_rate": 1.0
+  },
+  "contactPick": {
+   "n": 272,
+   "k_5": 12,
+   "src_synthetic": 272,
+   "hint_n": 272,
+   "hint_agree": 270,
+   "k_3": 8,
+   "k_2": 252,
+   "hint_agree_rate": 0.993
+  },
+  "eventPick": {
+   "n": 20,
+   "k_5": 5,
+   "src_synthetic": 20,
+   "hint_n": 20,
+   "hint_agree": 18,
+   "k_3": 4,
+   "k_2": 11,
+   "hint_agree_rate": 0.9
+  },
+  "memoryConflict": {
+   "n": 16,
+   "k_5": 3,
+   "src_synthetic": 16,
+   "hint_n": 16,
+   "hint_agree": 16,
+   "k_3": 4,
+   "k_2": 9,
+   "hint_agree_rate": 1.0
+  },
+  "notificationTriage": {
+   "n": 39,
+   "k_5": 10,
+   "src_synthetic": 39,
+   "hint_n": 39,
+   "hint_agree": 34,
+   "k_3": 7,
+   "k_2": 22,
+   "hint_agree_rate": 0.872
+  },
+  "nudgeNow": {
+   "n": 726,
+   "k_5": 140,
+   "src_synthetic": 726,
+   "hint_n": 726,
+   "hint_agree": 611,
+   "k_3": 18,
+   "k_2": 568,
+   "hint_agree_rate": 0.842
+  },
+  "rememberOrNot": {
+   "n": 31,
+   "k_5": 8,
+   "src_synthetic": 31,
+   "hint_n": 31,
+   "hint_agree": 31,
+   "k_3": 5,
+   "k_2": 18,
+   "hint_agree_rate": 1.0
+  },
+  "route": {
+   "n": 41,
+   "k_5": 13,
+   "src_massive": 14,
+   "src_snips": 8,
+   "src_clinc": 14,
+   "k_3": 8,
+   "src_synthetic": 5,
+   "hint_n": 5,
+   "hint_agree": 5,
+   "k_2": 20,
+   "hint_agree_rate": 1.0
+  },
+  "sensitivity": {
+   "n": 16,
+   "k_5": 4,
+   "src_synthetic": 16,
+   "hint_n": 16,
+   "hint_agree": 16,
+   "k_3": 3,
+   "k_2": 9,
+   "hint_agree_rate": 1.0
+  },
+  "timing": {
+   "n": 302,
+   "k_5": 14,
+   "src_synthetic": 302,
+   "hint_n": 302,
+   "hint_agree": 302,
+   "k_3": 9,
+   "k_2": 279,
+   "hint_agree_rate": 1.0
+  },
+  "toolChoice": {
+   "n": 37,
+   "k_5": 9,
+   "src_synthetic": 14,
+   "hint_n": 14,
+   "hint_agree": 14,
+   "src_massive": 23,
+   "k_3": 7,
+   "k_2": 21,
+   "hint_agree_rate": 1.0
+  }
+ },
+ "total": {
+  "n": 1790,
+  "k_5": 260,
+  "src_synthetic": 1573,
+  "hint_n": 1573,
+  "hint_agree": 1449,
+  "k_3": 82,
+  "k_2": 1448,
+  "src_clinc": 101,
+  "src_massive": 108,
+  "src_snips": 8
+ },
+ "hint_agree_rate": 0.921,
+ "calls": 4442,
+ "mean_k": 2.482,
+ "note": "hint = the synthetic generator's intended answer (pool.jsonl), a weak sanity check, not gold; cal180 was NOT relabeled (Nov 1 Spark cal labels: 0.989 vs gold)"
+}
