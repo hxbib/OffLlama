@@ -283,6 +283,19 @@ final class AppModel {
             case .finished(let effect), .ignoredTerminal(let effect):
                 chat[i].card = nil
                 chat[i].text = effect.summary
+                chat[i].cloudPromptSent = effect.cloudPromptSent
+                if effect.cloudPromptSent != nil {
+                    chat[i].badge = "cloud request attempted"
+                    chat[i].keptOnDevice = false
+                }
+                if case .ambiguous = effect.phase {
+                    chat[i].badge = "outcome unverified"
+                    chat[i].keptOnDevice = false
+                }
+                if case .claimed = effect.phase {
+                    chat[i].badge = "outcome unverified"
+                    chat[i].keptOnDevice = false
+                }
             case .read(let read):
                 chat[i].card = nil
                 chat[i].text = read.text
@@ -293,7 +306,16 @@ final class AppModel {
                 chat[i].keptOnDevice = read.withheldForSensitivity
             }
         } catch {
-            chat.append(.init(role: .system, text: "Couldn't verify completion: \(error). The request may already have been sent or acted on. Check the destination before starting a new request."))
+            chat[i].badge = "outcome unverified"
+            chat[i].keptOnDevice = false
+            chat[i].cloudPromptSent = (error as? CloudRequestFailure)?.cloudPromptSent ?? chat[i].cloudPromptSent
+            if let recovery = try? assistant.recoverEffects() {
+                chat[i].card = recovery.showAgain.first { $0.attemptID == card.attemptID }
+                if let unresolved = recovery.unresolved.first(where: { $0.attemptID == card.attemptID }) {
+                    chat[i].text = unresolved.summary
+                }
+            }
+            chat.append(.init(role: .system, text: "Couldn't verify completion. The request may already have been sent or acted on. Check the destination before starting a new request."))
         }
     }
 
@@ -308,7 +330,11 @@ final class AppModel {
             chat[i].card = updated
             chat[i].text = updated.title
         } catch {
-            chat.append(.init(role: .system, text: "Couldn't update that card: \(error). Nothing was changed."))
+            if let recovery = try? assistant.recoverEffects() {
+                chat[i].card = recovery.showAgain.first { $0.attemptID == card.attemptID }
+                if let updated = chat[i].card { chat[i].text = updated.title }
+            }
+            chat.append(.init(role: .system, text: "Couldn't verify the saved edit. It may already have been saved. Review the card before confirming."))
         }
     }
 

@@ -219,17 +219,21 @@ public final class Assistant: @unchecked Sendable {
                                          remembered: remembered, cloudPromptSent: turn.sentText, corrections: corrections)
                 } catch {
                     if CloudBrainChain.isCancellation(error) { throw error }
-                    let can = try await reflex.decide(OptionSets.answerability, context: "\(mem)User: \(utterance)")
-                    decisions.append(can)
-                    let text: String
-                    if can.chosen.id == "yes" {
-                        text = "Cloud unavailable. On-device answer: " + (try await reflex.engine.generate(
-                            prompt: Self.localPrompt(utterance, mem: lmem), maxTokens: 200, temperature: 0.3)).trimmed
-                    } else {
-                        text = "The cloud providers could not answer, and I'm not confident enough to answer on device. Please try again later."
+                    do {
+                        let can = try await reflex.decide(OptionSets.answerability, context: "\(mem)User: \(utterance)")
+                        decisions.append(can)
+                        let text: String
+                        if can.chosen.id == "yes" {
+                            text = "Cloud unavailable. On-device answer: " + (try await reflex.engine.generate(
+                                prompt: Self.localPrompt(utterance, mem: lmem), maxTokens: 200, temperature: 0.3)).trimmed
+                        } else {
+                            text = "The cloud providers could not answer, and I'm not confident enough to answer on device. Please try again later."
+                        }
+                        return AssistantTurn(reply: .offlineFallback(text), decisions: decisions, remembered: remembered,
+                                             cloudPromptSent: turn.sentText, corrections: corrections)
+                    } catch {
+                        throw CloudRequestFailure(sentText: turn.sentText, causedBy: error)
                     }
-                    return AssistantTurn(reply: .offlineFallback(text), decisions: decisions, remembered: remembered,
-                                         cloudPromptSent: turn.sentText, corrections: corrections)
                 }
             case .withheld:
                 // The early sensitivity card may have said ok; nothing was sent and the badge stays truthful.

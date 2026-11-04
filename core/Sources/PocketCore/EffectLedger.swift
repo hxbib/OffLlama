@@ -415,8 +415,10 @@ public struct EffectResult: Sendable, Equatable {
     public var attemptID: AttemptID
     public var phase: AttemptPhase
     public var summary: String
-    public init(attemptID: AttemptID, phase: AttemptPhase, summary: String) {
+    public var cloudPromptSent: String?
+    public init(attemptID: AttemptID, phase: AttemptPhase, summary: String, cloudPromptSent: String? = nil) {
         self.attemptID = attemptID; self.phase = phase; self.summary = summary
+        self.cloudPromptSent = cloudPromptSent
     }
 }
 
@@ -913,7 +915,10 @@ public final class EffectLedger: @unchecked Sendable {
             case .claimed:
                 unresolved.append(UnresolvedAttempt(attemptID: record.attemptID, capabilityID: record.capabilityID,
                                                     summary: Self.unresolvedSummary(record)))
-            case .settled, .ambiguous:
+            case .ambiguous:
+                unresolved.append(UnresolvedAttempt(attemptID: record.attemptID, capabilityID: record.capabilityID,
+                                                    summary: Self.summary(for: record.phase, contract: Self.contract(for: record), action: record.action)))
+            case .settled:
                 continue
             }
         }
@@ -1152,8 +1157,10 @@ public final class EffectLedger: @unchecked Sendable {
         case .mailSend:
             return "An email may already be in Mail. This attempt will not open the sheet again."
         case .urlTemplate, .shortcut:
-            return "This handoff was accepted. It may have partly run, and this attempt will not open it again."
-        case .emailDigest, .documentAnalysis, .htmlVisualization, .cloudReason, .deviceStatus, .calendarQuery, .memoryRecall, .contactLookup:
+            return "This handoff has no verified result. It may have partly run, and this attempt will not open it again."
+        case .emailDigest, .documentAnalysis, .cloudReason:
+            return "A read was interrupted. A cloud request may already have been sent. This attempt will not run again."
+        case .htmlVisualization, .deviceStatus, .calendarQuery, .memoryRecall, .contactLookup:
             return "A read was interrupted. It will not run again."
         case .autoreplyMemory, .notWired:
             return "This attempt started and has no recorded result. It will not run again."
@@ -1161,8 +1168,12 @@ public final class EffectLedger: @unchecked Sendable {
     }
 
     static func result(for record: AttemptRecord, contract: CapabilityContract?) -> EffectResult {
-        EffectResult(attemptID: record.attemptID, phase: record.phase,
-                     summary: summary(for: record.phase, contract: contract, action: record.action))
+        let payload: String?
+        if case .settled(.read(let receipt)) = record.phase { payload = receipt.cloudPromptSent }
+        else { payload = nil }
+        return EffectResult(attemptID: record.attemptID, phase: record.phase,
+                            summary: summary(for: record.phase, contract: contract, action: record.action),
+                            cloudPromptSent: payload)
     }
 
     static func summary(for phase: AttemptPhase, contract: CapabilityContract?, action: BoundAction) -> String {
@@ -1615,16 +1626,26 @@ public struct EffectSession: Sendable {
         let claim = try ledger.claim(attemptID: attemptID, expectedRevision: expectedRevision ?? record.revision, action: record.action)
         switch claim {
         case .claimed(_, let claimed):
+            var cloudPromptSent: String?
             do {
                 let result = try await read(claimed.action)
+                cloudPromptSent = result.cloudPromptSent
                 try ledger.record(attemptID: attemptID, phase: .settled(.read(result.receipt)))
                 return .read(result)
             } catch {
+                let readError = error
+                cloudPromptSent = cloudPromptSent ?? (readError as? CloudRequestFailure)?.cloudPromptSent
                 let phase = AttemptPhase.ambiguous(.claimedWithoutReceipt)
-                try ledger.record(attemptID: attemptID, phase: phase)
-                if CloudBrainChain.isCancellation(error) { throw error }
+                do {
+                    try ledger.record(attemptID: attemptID, phase: phase)
+                } catch {
+                    if let cloudPromptSent { throw CloudRequestFailure(sentText: cloudPromptSent, causedBy: readError) }
+                    throw error
+                }
+                if CloudBrainChain.isCancellation(readError) { throw readError }
                 return .finished(EffectResult(attemptID: attemptID, phase: phase,
-                                              summary: EffectLedger.summary(for: phase, contract: contract, action: claimed.action)))
+                                              summary: EffectLedger.summary(for: phase, contract: contract, action: claimed.action),
+                                              cloudPromptSent: cloudPromptSent))
             }
         case .mismatch(let current):
             return .staged(EffectLedger.card(for: current, contract: contract, duplicate: nil, now: ledger.now()))

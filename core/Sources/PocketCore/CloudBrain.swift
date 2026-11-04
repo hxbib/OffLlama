@@ -122,5 +122,6 @@ public struct CloudBrainChain: Sendable {
 
     static func isCancellation(_ error: Error) -> Bool {
         Task.isCancelled || error is CancellationError || (error as? URLError)?.code == .cancelled
+            || (error as? CloudRequestFailure)?.wasCancelled == true
     }
 }

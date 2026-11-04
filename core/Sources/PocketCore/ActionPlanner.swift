@@ -300,11 +300,15 @@ extension Assistant {
                                       cloudPromptSent: turn.sentText, decisions: decisions)
                 } catch {
                     if CloudBrainChain.isCancellation(error) { throw error }
-                    var result = try await localReason(instruction, text: text, limit: localLimit,
-                                                       note: "cloud unavailable", decisions: decisions)
-                    result.cloudPromptSent = turn.sentText
-                    result.withheldForSensitivity = false
-                    return result
+                    do {
+                        var result = try await localReason(instruction, text: text, limit: localLimit,
+                                                           note: "cloud unavailable", decisions: decisions)
+                        result.cloudPromptSent = turn.sentText
+                        result.withheldForSensitivity = false
+                        return result
+                    } catch {
+                        throw CloudRequestFailure(sentText: turn.sentText, causedBy: error)
+                    }
                 }
             case .withheld(let reason):
                 return try await localReason(instruction, text: text, limit: localLimit,

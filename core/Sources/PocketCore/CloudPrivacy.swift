@@ -1,5 +1,20 @@
 import Foundation
 
+public struct CloudRequestFailure: Error, Sendable, LocalizedError, CustomStringConvertible {
+    public let cloudPromptSent: String
+    public let wasCancelled: Bool
+
+    init(sentText: String, causedBy error: Error) {
+        cloudPromptSent = sentText
+        wasCancelled = CloudBrainChain.isCancellation(error)
+    }
+
+    public var description: String {
+        "The cloud request has no verified result. It may already have reached a provider."
+    }
+    public var errorDescription: String? { description }
+}
+
 /// Why a cloud-bound text was not prepared. Every case is a fail-closed outcome: `Assistant` answers locally
 /// and nothing is transmitted.
 enum CloudWithholdReason: Sendable, Equatable {
@@ -55,7 +70,12 @@ struct PreparedCloudTurn: Sendable {
 
     func send(on chain: CloudBrainChain, maxTokens: Int = 800) async throws -> CloudAnswer {
         try Task.checkCancellation()
-        return try await chain.complete(messages, maxTokens: maxTokens)
+        guard !chain.brains.isEmpty else { throw CloudError.notConfigured }
+        do {
+            return try await chain.complete(messages, maxTokens: maxTokens)
+        } catch {
+            throw CloudRequestFailure(sentText: sentText, causedBy: error)
+        }
     }
 
     func restore(_ answer: String) -> String {
