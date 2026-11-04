@@ -140,7 +140,12 @@ final class EffectRecoveryTests: XCTestCase {
         let result = try await session.evaluate(requestID: UserRequestID(),
                                                 capability: .compiled(CapabilityCatalog.current(id: "calendar_create")!),
                                                 raw: raw, modelAskedConfirm: false, explicitDraft: false)
-        guard case .finished(let effect) = result else { return XCTFail("\(result)") }
+        // Calendar creation always reviews its fixed one-hour/no-invitation/no-location contract first.
+        guard case .staged(let card) = result else { return XCTFail("\(result)") }
+        XCTAssertTrue(card.canConfirm)
+        XCTAssertEqual(effects.performCount, 0)
+        let done = try await session.confirm(attemptID: card.attemptID, edits: [], expectedRevision: card.revision)
+        guard case .finished(let effect) = done else { return XCTFail("\(done)") }
         guard case .settled(.committed(.eventKitItem(let id, let title, let instant))) = effect.phase else {
             return XCTFail("\(effect.phase)")
         }

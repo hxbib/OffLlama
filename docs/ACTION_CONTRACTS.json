@@ -549,7 +549,7 @@
   {
     "argumentRules" : {
       "title" : "Required. Literal text; no inferred output bindings, no silent truncation. Maximum 2000 characters.",
-      "when" : "Required. Exact time; ambiguous AM/PM, unhandled zones, invalid/past instants require correction. Local writes bind a Date and device timezone once; Shortcuts receive the reviewed phrase. Maximum 2000 characters."
+      "when" : "Required. Exact time; ambiguous AM/PM, named zones/cities, ranges, multiple times, and explicit past instants require correction. Local reminder/calendar writes bind a Date and device timezone once; Shortcut handoffs receive the reviewed phrase and decide the next occurrence. Maximum 2000 characters."
     },
     "capability" : {
       "arguments" : [
@@ -587,7 +587,7 @@
       "id" : "reminder_create",
       "reviewSentence" : "Saves a reminder with this title and exact time in Reminders.",
       "title" : "Create a reminder",
-      "version" : 2
+      "version" : 3
     },
     "decisions" : [
       "unsupported",
@@ -605,12 +605,12 @@
     "prerequisites" : [
       "EventKit write access; read access required to verify the saved identifier/title/time/attempt token."
     ],
-    "successEvidence" : "Matching EventKit read-back; save without read-back stays unverified. Calendar events last one hour."
+    "successEvidence" : "Matching EventKit read-back; save without read-back stays unverified. Calendar events last one hour and have no invitations or location."
   },
   {
     "argumentRules" : {
       "title" : "Required. Literal text; no inferred output bindings, no silent truncation. Maximum 2000 characters.",
-      "when" : "Required. Exact time; ambiguous AM/PM, unhandled zones, invalid/past instants require correction. Local writes bind a Date and device timezone once; Shortcuts receive the reviewed phrase. Maximum 2000 characters."
+      "when" : "Required. Exact time; ambiguous AM/PM, named zones/cities, ranges, multiple times, and explicit past instants require correction. Local reminder/calendar writes bind a Date and device timezone once; Shortcut handoffs receive the reviewed phrase and decide the next occurrence. Maximum 2000 characters."
     },
     "capability" : {
       "arguments" : [
@@ -631,7 +631,7 @@
         }
       },
       "confirmation" : {
-        "modelMayAct" : {
+        "always" : {
 
         }
       },
@@ -646,9 +646,9 @@
         }
       },
       "id" : "calendar_create",
-      "reviewSentence" : "Saves a one-hour event with this title and exact start time in Calendar, without invitations.",
+      "reviewSentence" : "Saves one fixed one-hour event with this title and exact start time in Calendar. It has no invitations and no location.",
       "title" : "Add a calendar event",
-      "version" : 2
+      "version" : 3
     },
     "decisions" : [
       "unsupported",
@@ -666,7 +666,7 @@
     "prerequisites" : [
       "EventKit write access; read access required to verify the saved identifier/title/time/attempt token."
     ],
-    "successEvidence" : "Matching EventKit read-back; save without read-back stays unverified. Calendar events last one hour."
+    "successEvidence" : "Matching EventKit read-back; save without read-back stays unverified. Calendar events last one hour and have no invitations or location."
   },
   {
     "argumentRules" : {
@@ -1170,7 +1170,7 @@
   {
     "argumentRules" : {
       "label" : "Optional. Literal text; no inferred output bindings, no silent truncation. Maximum 2000 characters.",
-      "time" : "Required. Exact time; ambiguous AM/PM, unhandled zones, invalid/past instants require correction. Local writes bind a Date and device timezone once; Shortcuts receive the reviewed phrase. Maximum 2000 characters."
+      "time" : "Required. Exact time; ambiguous AM/PM, named zones/cities, ranges, multiple times, and explicit past instants require correction. Local reminder/calendar writes bind a Date and device timezone once; Shortcut handoffs receive the reviewed phrase and decide the next occurrence. Maximum 2000 characters."
     },
     "capability" : {
       "arguments" : [
@@ -1209,7 +1209,7 @@
       "id" : "alarm_create",
       "reviewSentence" : "Asks the Shortcut to create a Clock alarm. This app does not own or see that alarm.",
       "title" : "Set an alarm",
-      "version" : 2
+      "version" : 3
     },
     "decisions" : [
       "unsupported",

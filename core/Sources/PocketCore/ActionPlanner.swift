@@ -373,13 +373,14 @@ public enum SkillArgs {
             ?? first(#"\b(?:that)\s+(.+)$"#, in: u, literal: true)
     }
     static func time(_ u: String) -> String? {
-        // Keep an explicit zone/city qualifier in the phrase. A Shortcut handoff receives this exact text, and the
-        // binding code must refuse to guess when it cannot honour the words the user spoke.
-        guard var t = first(#"\b((?:tomorrow|today|tonight)?\s*(?:at\s+)?\d{1,2}(?::\d{2})?\s?(?:am|pm|a\.m\.|p\.m\.)?(?:\s+(?:tomorrow|today|tonight))?(?:\s+(?:UTC|GMT|EST|EDT|CST|CDT|MST|MDT|PST|PDT|CET|CEST|BST|IST|JST|KST|AEST|AEDT|[A-Z][a-z]+ time|in [A-Z][a-z]+))?)\b"#, in: u)
-            ?? first(#"\b(tomorrow|today|tonight|next \w+|on \w+day)\b"#, in: u) else { return nil }
-        if t.lowercased().hasPrefix("at ") { t = String(t.dropFirst(3)) }
-        if t.range(of: #"^\d{1,2}$"#, options: .regularExpression) != nil { t += ":00" }
-        return t
+        // Keep the complete time expression, including a day qualifier, a second clock time/range, or a
+        // zone/city word. `InstantParser` refuses what this app cannot honour; extraction never trims a
+        // qualifier away and lets the remaining prefix look supported.
+        guard var t = TimePhrase.capture(in: u) else { return nil }
+        for prefix in ["at ", "by "] where t.lowercased().hasPrefix(prefix) {
+            t = String(t.dropFirst(prefix.count))
+        }
+        return t.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     public static func extract(_ skill: Skill, utterance u: String) -> [String: String] {

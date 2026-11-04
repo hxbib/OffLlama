@@ -103,7 +103,7 @@ final class SkillsTests: XCTestCase {
         XCTAssertEqual(ig["contact"], "sam"); XCTAssertEqual(ig["body"], "congrats")
         let x = SkillArgs.extract(reg.skill(id: "x_dm")!, utterance: "message @sam_k on twitter: gg tonight")
         XCTAssertEqual(x["contact"], "sam_k"); XCTAssertEqual(x["body"], "gg tonight")
-        XCTAssertEqual(SkillArgs.extract(reg.skill(id: "alarm_create")!, utterance: "wake me at 6")["time"], "6:00")
+        XCTAssertEqual(SkillArgs.extract(reg.skill(id: "alarm_create")!, utterance: "wake me at 6")["time"], "6")
         XCTAssertEqual(SkillArgs.extract(reg.skill(id: "alarm_create")!, utterance: "set an alarm for 7:30am tomorrow")["time"], "7:30am tomorrow")
         XCTAssertEqual(SkillArgs.extract(reg.skill(id: "timer_start")!, utterance: "set a timer for 10 minutes")["duration"], "10 minutes")
         XCTAssertEqual(SkillArgs.extract(reg.skill(id: "email_digest")!, utterance: "summarize my last 5 emails")["n"], "5")

@@ -21,6 +21,17 @@ public enum ActionValidation {
         var out = args.keys.sorted().filter { !allowed.contains($0) }.map {
             ArgumentIssue($0, .unsupported, "This action does not support \($0). Restate the request using the supported fields; nothing was done.")
         }
+        if ["imessage_send", "email_compose", "whatsapp_send", "instagram_dm", "x_dm"].contains(contract.id),
+           let body = args["body"],
+           body.range(of: #"^\s*[,;+/&]\s*(?:@|[A-Za-z])"#, options: .regularExpression) != nil {
+            out.append(ArgumentIssue("body", .unsupported,
+                "This body starts like a second recipient. This action supports one recipient and text only; restate it with one recipient."))
+        }
+        if contract.id == "calendar_create", let title = args["title"],
+           calendarOptionsIssue("Schedule \(title)") != nil {
+            out.append(ArgumentIssue("event_options", .unsupported,
+                "This action creates one fixed one-hour event with no invitations or location. Set the duration, attendees, or location in Calendar, or request a simple one-hour event."))
+        }
         for spec in contract.arguments {
             if let issue = issue(spec: spec, value: args[spec.name], capabilityID: contract.id) { out.append(issue) }
         }
@@ -54,6 +65,10 @@ public enum ActionValidation {
             guard trimmed.range(of: #"^[0-9]+$"#, options: .regularExpression) != nil,
                   let n = Int(trimmed), (1...100).contains(n) else {
                 return invalid("Use a whole number from 1 to 100 for \(spec.name).")
+            }
+        case .datetime:
+            if let rejection = InstantParser.rejection(trimmed) {
+                return invalid(rejection.question)
             }
         default: break
         }
@@ -108,19 +123,134 @@ public enum ActionValidation {
                 return ArgumentIssue("trigger", .unsupported, "This action needs a single exact time. All-day and location triggers must be set in the destination app.")
             }
         }
-        if capabilityID == "calendar_create", has(#"\b(for\s+\d+\s*(?:hours?|minutes?)|until|ending|ends? at|invite|attendees?)\b|\bfrom\s+\d.*\bto\s+\d"#) {
-            return ArgumentIssue("event_options", .unsupported, "This action creates a one-hour event without invitations. Set the duration or attendees in Calendar, or request a one-hour event.")
-        }
-        if ["imessage_send", "email_compose", "whatsapp_send", "instagram_dm", "x_dm"].contains(capabilityID) {
-            // Only inspect the command prefix; quoted/saying message content is not an instruction.
-            let prefix = utterance.components(separatedBy: CharacterSet(charactersIn: "\"“:")).first ?? utterance
-            let command = prefix.components(separatedBy: " saying ").first ?? prefix
-            if command.range(of: #"\b(?:attach|attachment|cc|bcc|schedule|scheduled)\b|\b(?:text|message|email|mail|dm)\s+\w+\s+(?:and|&)\s+\w+"#,
-                             options: [.regularExpression, .caseInsensitive]) != nil {
-                return ArgumentIssue("message_options", .unsupported, "This action supports one recipient and text only, sent from the compose screen. Add attachments, other recipients, or scheduling in the destination app.")
+        if ["reminder_create", "calendar_create", "alarm_create"].contains(capabilityID) {
+            let field = capabilityID == "alarm_create" ? "time" : "when"
+            let months = #"(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)"#
+            if has(months + #"\s+\d{1,2}(?:st|nd|rd|th)?(?:,?\s*\d{4})?\s+(?:at|by)\s+\d{1,2}"#)
+                || has(#"\bon\s+"# + months + #"\s+\d{1,2}"#) {
+                return ArgumentIssue(field, .unsupported,
+                    "Explicit calendar dates are not supported by this action. Use tomorrow, today, a weekday, or set the date in the destination app.")
             }
         }
+        if capabilityID == "calendar_create", let issue = calendarOptionsIssue(utterance) {
+            return issue
+        }
+        // Validate the time expression from the source utterance, before extraction can keep only part of it.
+        // A day-only phrase is left to the normal missing/invalid-time card; qualifiers, ranges, multiple
+        // instants, named zones and explicit past times must correct before any card exists.
+        if ["reminder_create", "calendar_create", "alarm_create"].contains(capabilityID),
+           let phrase = TimePhrase.capture(in: utterance),
+           let rejection = InstantParser.rejection(phrase),
+           rejection.requiresPlanningCorrection {
+            let field = capabilityID == "alarm_create" ? "time" : "when"
+            return ArgumentIssue(field, .unsupported, rejection.question)
+        }
+        if ["imessage_send", "email_compose", "whatsapp_send", "instagram_dm", "x_dm"].contains(capabilityID) {
+            if let issue = messageOptionsIssue(utterance) { return issue }
+        }
         return nil
+    }
+
+    /// Calendar creation is a fixed one-hour event with no invitations or location. Every common way of
+    /// asking for a different duration, an attendee, or a place must correct instead of becoming a title.
+    private static func calendarOptionsIssue(_ utterance: String) -> ArgumentIssue? {
+        let leadingDuration = [
+            #"\b(?:a|an)\s+\d+(?:\.\d+)?\s*[-\s]\s*(?:hours?|hrs?|minutes?|mins?)(?:\s+\w+)?\s+(?:meeting|event|block|session|call|lunch|dinner|appointment|slot|workshop|class|interview|review)\b"#,
+            #"\b\d+(?:\.\d+)?\s*[-\s]\s*(?:hours?|hrs?|minutes?|mins?)(?:\s+\w+)?\s+(?:meeting|event|block|session|call|lunch|dinner|appointment|slot|workshop|class|interview|review)\b"#,
+        ]
+        let wholeDuration = [
+            #"\bfor\s+\d+(?:\.\d+)?\s*(?:hours?|hrs?|minutes?|mins?)\b"#,
+            #"\bfor\s+(?:one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|an?|half\s+an?)\s+(?:hours?|hrs?|minutes?|mins?)\b"#,
+        ]
+        let ranges = [
+            #"\bfrom\s+\d{1,2}(?::\d{2})?\s*(?:a\.?m\.?|p\.?m\.?)?\s*(?:-|–|—|to|until|through|till)\s*(?:at\s+)?\d{1,2}"#,
+            #"\bbetween\s+\d{1,2}(?::\d{2})?\s*(?:a\.?m\.?|p\.?m\.?)?\s+and\s+\d{1,2}"#,
+            #"\b\d{1,2}:\d{2}\s*(?:a\.?m\.?|p\.?m\.?)?\s*(?:-|–|—|to|until|through|till)\s*(?:at\s+)?\d{1,2}"#,
+            #"\b\d{1,2}\s*(?:a\.?m\.?|p\.?m\.?)\s*(?:-|–|—|to|until|through|till)\s*(?:at\s+)?\d{1,2}"#,
+            #"\b\d{1,2}\s*(?:-|–|—|to|until|through|till)\s*(?:at\s+)?\d{1,2}\s*(?:a\.?m\.?|p\.?m\.?)"#,
+        ]
+        let options = [
+            #"\bwith\b"#,
+            #"\b(?:invite|invites|invited|inviting|attendees?|guests?)\b"#,
+            #"\b(?:at|in)\s+the\s+(?!(?:morning|afternoon|evening|night)\b)[A-Za-z]"#,
+            #"\b(?:at|in)\s+(?:my|our)\s+[A-Za-z]"#,
+            #"\b(?:at|in)\s+(?:home|work)\b"#,
+            #"\bat\s+\d+\s+(?!(?:\d|a\.?m|p\.?m|am|pm|noon|midnight|today|tomorrow|tonight|o'?clock|time|minutes?|hours?)\b)[A-Za-z]"#,
+            #"(?-i:\b(?:at|in)\s+(?!(?:Noon|Midnight|Today|Tomorrow|Tonight|AM|PM)\b)[A-Z][a-z]+)"#,
+        ]
+        func matches(_ pattern: String, in text: String) -> Bool {
+            text.range(of: pattern, options: [.regularExpression, .caseInsensitive]) != nil
+        }
+        // A non-"for" duration belongs to the event description before the time. Words after the time
+        // ("about the 90-minute review") are subject matter, not a request for a longer event.
+        let head = TimePhrase.range(in: utterance).map { String(utterance[..<$0.lowerBound]) } ?? utterance
+        let found = wholeDuration.contains { matches($0, in: utterance) }
+            || leadingDuration.contains { matches($0, in: head) }
+            || ranges.contains { matches($0, in: utterance) }
+            || options.contains { matches($0, in: utterance) }
+        guard found else { return nil }
+        return ArgumentIssue("event_options", .unsupported,
+            "This action creates one fixed one-hour event with no invitations or location. Set the duration, attendees, or location in Calendar, or request a simple one-hour event.")
+    }
+
+    /// Message sends take one recipient and text only. Inspect the command prefix, stopping at a quote,
+    /// colon, or body phrase, so a quoted body that mentions an attachment is not treated as instruction.
+    private static func messageOptionsIssue(_ utterance: String) -> ArgumentIssue? {
+        let ns = utterance as NSString
+        let bodyStart = try! NSRegularExpression(
+            pattern: #"\b(?:saying|that says|to say|with the message|that)\b|["“”:]"#,
+            options: [.caseInsensitive])
+        let command: String
+        if let m = bodyStart.firstMatch(in: utterance, range: NSRange(location: 0, length: ns.length)) {
+            command = ns.substring(to: m.range.location)
+        } else {
+            command = utterance
+        }
+        let person = #"(?:@[A-Za-z0-9_.]+|[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}|[A-Za-z][A-Za-z0-9_.'-]*(?:\s+[A-Za-z][A-Za-z0-9_.'-]*)?)"#
+        let list = person + #"\s*(?:,|;|\+|/|&|\band\b)\s*(?!(?:about|subject|body|message|saying|that|re|fwd|attached|attachment|cc|bcc|copy|schedule|today|tomorrow|tonight|at|on|in)\b)"# + person
+        let recipientList = #"\b(?:email|e-mail|mail|text|message|dm|direct message|whatsapp)\s+(?:a\s+(?:dm|message|text)\s+to\s+)?(?:to\s+)?"# + list
+        let sendList = #"\bsend\s+(?:an?\s+(?:text|message|email|e-mail|dm)\s+to\s+)?(?:to\s+)?"# + list
+        let messageOptions = [
+            recipientList,
+            sendList,
+            #"\battach(?:es|ed|ing|ment|ments)?\b"#,
+            #"\b(?:cc|bcc)(?:'?d|'?ing)?\b"#,
+            #"\bcopy(?:ing)?\b"#,
+            #"\bschedul(?:e|ed|ing)\s+(?:this|the\s+(?:email|message|send)|it)\b"#,
+        ]
+        guard messageOptions.contains(where: { command.range(of: $0, options: [.regularExpression, .caseInsensitive]) != nil })
+        else { return nil }
+        return ArgumentIssue("message_options", .unsupported,
+            "This action supports one recipient and text only, sent from the compose screen. Add attachments, other recipients, or scheduling in the destination app.")
+    }
+}
+
+/// Captures one complete time expression, including the day qualifier, every clock time or range the user
+/// spoke, and a named zone or city. Resolution stays with `InstantParser`; this only keeps the original
+/// words together so validation can refuse an unsupported phrase instead of silently keeping a prefix.
+enum TimePhrase {
+    private static let day = #"(?:(?:the\s+)?day\s+after\s+tomorrow|(?:the\s+)?day\s+before\s+yesterday|tomorrow|today|tonight|yesterday|(?:next|this|last|on)\s+(?:monday|tuesday|wednesday|thursday|friday|saturday|sunday|week|month|year|night)|(?:monday|tuesday|wednesday|thursday|friday|saturday|sunday)|(?:earlier\s+(?:today|this\s+(?:morning|afternoon|evening))|\d+\s+(?:minutes?|mins?|hours?|hrs?|days?|weeks?|months?|years?)\s+ago))\b"#
+    private static let qualifier = #"(?:(?:around|about|approximately|roughly|nearly|maybe|perhaps)\s+)?"#
+    private static let clock = qualifier + #"(?:\d{1,2}:\d{2}\s*(?:a\.?m\.?|p\.?m\.?)?|\d{1,2}\s*(?:a\.?m\.?|p\.?m\.?)|(?:at|by)\s+\d{1,2}(?::\d{2})?\s*(?:a\.?m\.?|p\.?m\.?)?|(?:at|by)\s+(?:noon|midnight)|noon|midnight)"#
+    private static let tail = #"(?:\s*(?:,|and|or|&|-|–|—|to|until|through|till)\s*"# + clock + #")*"#
+    private static let zone = #"(?:\s+(?:UTC[+-]\d{1,2}(?::?\d{2})?|(?:UTC|GMT|EST|EDT|CST|CDT|MST|MDT|PST|PDT|AKST|AKDT|HST|CET|CEST|BST|IST|JST|KST|AEST|AEDT|NZST|NZDT|ET|PT|CT|MT)\b(?:\s+time)?|(?-i:[A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,2}\s+(?i:time))|(?i:in\s+(?:Berlin|London|Paris|Tokyo|Sydney|Toronto|Chicago|Denver|Boston|Seattle|New\s+York|Los\s+Angeles|San\s+Francisco|Hong\s+Kong|Singapore|Dubai|Moscow)\b(?:\s+time)?)|(?:Eastern|Central|Mountain|Pacific|Alaska|Hawaii|Berlin|London|Paris|Tokyo|Sydney|Toronto|Chicago|Denver|Boston|Seattle|New\s+York|Los\s+Angeles|San\s+Francisco|Hong\s+Kong|Singapore|Dubai|Moscow)\b(?:\s+time)?|(?-i:in\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)|(?-i:[A-Z][a-z]+)))?"#
+    private static let pattern = #"\b("# + day + #"\s*,?\s*(?:(?:morning|afternoon|evening|night)\s*)?"# + clock + tail + zone
+        + #"|"# + clock + tail + #"(?:,?\s+"# + day + #")?"# + zone
+        + #"|\bin\s+\d+\s+(?:minutes?|mins?|hours?|hrs?|days?)\b"#
+        + #"|"# + day + #")"#
+    private static let regex = try! NSRegularExpression(pattern: pattern, options: [.caseInsensitive])
+
+    static func range(in utterance: String) -> Range<String.Index>? {
+        let ns = utterance as NSString
+        guard let m = regex.firstMatch(in: utterance, range: NSRange(location: 0, length: ns.length)),
+              m.numberOfRanges > 1,
+              let r = Range(m.range(at: 1), in: utterance) else { return nil }
+        return String(utterance[r]).trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : r
+    }
+
+    static func capture(in utterance: String) -> String? {
+        guard let r = range(in: utterance) else { return nil }
+        return String(utterance[r]).trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }
 
@@ -140,7 +270,7 @@ public struct ActionContractDescription: Codable, Sendable {
                 switch arg.kind {
                 case .contact: rule = "Unique accessible contact identifier and exact labelled destination; ambiguous/missing/stale contacts require selection."
                 case .handle: rule = c.id == "x_dm" ? "Exact handle: 1–15 ASCII letters, digits, underscore." : "Exact handle: 1–30 ASCII letters, digits, underscore or dot; starts with letter/digit/underscore."
-                case .datetime: rule = "Exact time; ambiguous AM/PM, unhandled zones, invalid/past instants require correction. Local writes bind a Date and device timezone once; Shortcuts receive the reviewed phrase."
+                case .datetime: rule = "Exact time; ambiguous AM/PM, named zones/cities, ranges, multiple times, and explicit past instants require correction. Local reminder/calendar writes bind a Date and device timezone once; Shortcut handoffs receive the reviewed phrase and decide the next occurrence."
                 case .duration: rule = "Positive finite duration, explicit seconds/minutes/hours, total <=86400 seconds. Compound units allowed."
                 case .number: rule = "Integer in 1...100. Email count describes the request, not verified access to an inbox."
                 case .url: rule = "Absolute http(s) URL with host, no whitespace or credentials."
@@ -154,7 +284,7 @@ public struct ActionContractDescription: Codable, Sendable {
             switch c.executor {
             case .reminderCreate, .eventCreate:
                 prerequisites.append("EventKit write access; read access required to verify the saved identifier/title/time/attempt token.")
-                evidence = "Matching EventKit read-back; save without read-back stays unverified. Calendar events last one hour."
+                evidence = "Matching EventKit read-back; save without read-back stays unverified. Calendar events last one hour and have no invitations or location."
             case .messageSend: evidence = "Messages accepted, cancelled, or failed; accepted does not prove delivery."
                 prerequisites.append("Messages compose available and no conflicting sheet.")
             case .mailSend: evidence = "Mail queued, draft saved, cancelled, or failed; queued does not prove delivery."

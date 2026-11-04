@@ -400,9 +400,9 @@ public enum ArgumentExtractor {
             return String(s[r]).trimmed
         }
         func first(_ p: String, ci: Bool = true) -> String? { first(p, in: u, ci: ci) }
-        // Keep an explicit zone/city qualifier in the phrase. The binder then refuses to guess rather than
-        // silently dropping "Berlin time" before the instant is frozen.
-        let when = first(#"\b((?:tomorrow|today|tonight|next \w+|on \w+day|at \d{1,2}(?::\d{2})?\s?(?:am|pm)?|in \d+ (?:minutes?|hours?|days?))(?:\s(?:at|by) \d{1,2}(?::\d{2})?\s?(?:am|pm)?)?(?:\s+(?:UTC|GMT|EST|EDT|CST|CDT|MST|MDT|PST|PDT|CET|CEST|BST|IST|JST|KST|AEST|AEDT|[A-Z][a-z]+ time|in [A-Z][a-z]+))?)"#)
+        // The full time expression is kept together; InstantParser refuses a range, a second instant, a named
+        // zone or an explicit past time instead of letting extraction keep only a supported-looking prefix.
+        let when = SkillArgs.time(u)
         switch tool {
         case "send_email":
             let contactPattern = #"(?i:email|e-mail|mail)\s+(?:to\s+)?([A-Z][a-z]+(?: [A-Z][a-z]+)?)"#
@@ -440,10 +440,10 @@ public enum ArgumentExtractor {
         case "lookup_contact":
             a["contact"] = first(#"([A-Z][a-z]+(?: [A-Z][a-z]+)?)'s"#, ci: false) ?? first(#"(?i:call|for|of)\s+([A-Z][a-z]+)"#, ci: false)
         case "create_reminder":
-            a["title"] = first(#"remind me (?:to\s+)?(.+?)(?:\s+(?:tomorrow|today|tonight|at|in|on|next|when)\b|$)"#) ?? u
+            a["title"] = first(#"remind me (?:to\s+)?(.+?)(?:\s+(?:(?:the\s+)?day\s+after\s+tomorrow|tomorrow|today|tonight|at|in|on|next|when)\b|$)"#) ?? u
             if let w = when { a["when"] = w }
         case "create_event":
-            a["title"] = first(#"(?:schedule|book|add|create)\s+(?:an? )?(.+?)(?:\s+(?:tomorrow|today|at|on|next|with)\b|$)"#) ?? u
+            a["title"] = first(#"(?:schedule|book|add|create)\s+(?:an? )?(.+?)(?:\s+(?:(?:the\s+)?day\s+after\s+tomorrow|tomorrow|today|at|on|next|with)\b|$)"#) ?? u
             if let w = when { a["when"] = w }
         case "find_event":
             a["query"] = first(#"(?:when is|when's|what time is|find)\s+(?:my\s+)?(.+?)\??$"#) ?? u

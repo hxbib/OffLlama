@@ -513,13 +513,14 @@ public enum CapabilityCatalog {
           [ArgSpec("trigger", .text), ArgSpec("reply", .text, required: true)],
           review: "Saves this auto-reply rule to memory. It does not send a message."),
 
-        // Local writes. A confident, fully parsed, user-spoken time may act without a card.
+        // Local writes. A confident, fully parsed, user-spoken time may act without a card; calendar creation
+        // always reviews its fixed one-hour/no-invitation/no-location contract first.
         c("reminder_create", "Create a reminder", .localWrite, .modelMayAct, .reminderCreate,
           [ArgSpec("title", .text, required: true), ArgSpec("when", .datetime, required: true)],
-          review: "Saves a reminder with this title and exact time in Reminders."),
-        c("calendar_create", "Add a calendar event", .localWrite, .modelMayAct, .eventCreate,
+          review: "Saves a reminder with this title and exact time in Reminders.", version: 3),
+        c("calendar_create", "Add a calendar event", .localWrite, .always, .eventCreate,
           [ArgSpec("title", .text, required: true), ArgSpec("when", .datetime, required: true)],
-          review: "Saves a one-hour event with this title and exact start time in Calendar, without invitations."),
+          review: "Saves one fixed one-hour event with this title and exact start time in Calendar. It has no invitations and no location.", version: 3),
 
         // URL and Shortcut handoffs. Opening is the whole observable outcome.
         c("maps_directions", "Directions in Maps", .externalHandoff, .modelMayAct, .urlTemplate("maps://?daddr={place}"),
@@ -553,7 +554,7 @@ public enum CapabilityCatalog {
         c("alarm_create", "Set an alarm", .externalHandoff, .modelMayAct,
           .shortcut(name: "PG Create Alarm", input: "{time}|{label}"),
           [ArgSpec("time", .datetime, required: true), ArgSpec("label", .text)],
-          review: "Asks the Shortcut to create a Clock alarm. This app does not own or see that alarm."),
+          review: "Asks the Shortcut to create a Clock alarm. This app does not own or see that alarm.", version: 3),
         c("timer_start", "Start a timer", .externalHandoff, .modelMayAct,
           .shortcut(name: "PG Start Timer", input: "{duration}"), [ArgSpec("duration", .duration, required: true)],
           review: "Asks the Shortcut to start a Clock timer. This app does not see the timer."),
@@ -602,8 +603,8 @@ public enum CapabilityCatalog {
 
     private static func c(_ id: String, _ title: String, _ effect: EffectClass, _ floor: ConfirmationFloor,
                           _ executor: ExecutorKey, _ args: [ArgSpec] = [], availability: Availability = .ready,
-                          methodKind: ContactMethodKind? = nil, review: String) -> CapabilityContract {
-        CapabilityContract(id: id, version: 2, title: title, effect: effect, confirmation: effect == .externalHandoff ? .always : floor,
+                          methodKind: ContactMethodKind? = nil, review: String, version: Int = 2) -> CapabilityContract {
+        CapabilityContract(id: id, version: version, title: title, effect: effect, confirmation: effect == .externalHandoff ? .always : floor,
                            reviewSentence: review, availability: availability, arguments: args,
                            executor: executor, methodKind: methodKind)
     }
@@ -1094,21 +1095,24 @@ public final class EffectLedger: @unchecked Sendable {
                         guard case .instant(let date) = value else {
                             return Readiness(ready: false, pause: .needsTime, notice: "Choose the exact time before confirming.")
                         }
+                        if let phrase = action.timePhrase, phrase.count > ActionValidation.textLimit {
+                            return Readiness(ready: false, pause: .needsTime, notice: "Shorten the time description to \(ActionValidation.textLimit) characters, or choose an exact time.")
+                        }
                         if !date.timeIntervalSince1970.isFinite || date.timeIntervalSince(now) < -60 {
                             return Readiness(ready: false, pause: .needsTime, notice: "That time has passed. Choose a new exact time; the saved phrase is not reapplied.")
                         }
                     } else {
                         let present: Bool
                         switch value {
-                        case .instant: present = true
+                        case .instant(let date): present = date.timeIntervalSince1970.isFinite && date.timeIntervalSince(now) >= -60
                         case .text(let phrase):
-                            if case .parsed = InstantParser.parse(phrase, dateResolver: { _ in now.addingTimeInterval(3600) }) {
-                                present = ActionValidation.issue(spec: spec, value: phrase, capabilityID: contract.id) == nil
-                            } else { present = false }
+                            // A Shortcut receives this phrase. Validate the whole phrase here; no fake resolver
+                            // may turn an explicit past time into a future one for the readiness check.
+                            present = ActionValidation.issue(spec: spec, value: phrase, capabilityID: contract.id) == nil
                         default: present = false
                         }
                         if spec.required && !present {
-                            return Readiness(ready: false, pause: .needsTime, notice: "Choose the exact time before confirming.")
+                            return Readiness(ready: false, pause: .needsTime, notice: "Choose one exact future time before confirming.")
                         }
                     }
                 } else if spec.required || localWrite {
@@ -1340,7 +1344,8 @@ extension Disposition {
             case .eventKitItem(let id, let title, let instant):
                 let verb = contract?.executor == .eventCreate ? "Event" : "Reminder"
                 let when = instant.map { InstantText.full($0, timeZoneID: action.timeZoneID ?? TimeZone.current.identifier) } ?? "no resolved time"
-                return "\(verb) “\(title)” saved for \(when). Identifier: \(id)."
+                let limitations = contract?.id == "calendar_create" ? " It lasts one hour, has no invitations, and has no location." : ""
+                return "\(verb) “\(title)” saved for \(when). Identifier: \(id).\(limitations)"
             case .memoryFact:
                 return "Saved the auto-reply rule to memory. Nothing was sent."
             }
@@ -1747,25 +1752,35 @@ public struct EffectSession: Sendable {
                 case .reminderCreate, .eventCreate: localWrite = true
                 default: localWrite = false
                 }
-                switch effects.resolveInstant(rawValue) {
-                case .parsed(let date):
-                    if localWrite {
+                if let issue = ActionValidation.issue(spec: spec, value: rawValue, capabilityID: contract.id) {
+                    // The phrase itself cannot be honoured. Keep the user's words visible on a handoff card;
+                    // a local write keeps an empty time field so it cannot be confirmed as a guessed instant.
+                    pause = pause ?? .needsTime
+                    notice = notice.isEmpty ? issue.question : notice
+                    if !localWrite { args[spec.name] = .text(rawValue) }
+                } else {
+                    switch effects.resolveInstant(rawValue) {
+                    case .parsed(let date):
                         if date.timeIntervalSince(now) < -60 {
                             pause = pause ?? .needsTime
                             notice = notice.isEmpty ? "That time has passed. Choose a new exact time; the phrase is not reapplied." : notice
-                        } else {
+                            // Do not store a handoff phrase that resolved in the past: readiness can only
+                            // re-check its syntax, so keeping it would clear the pause at confirmation.
+                        } else if localWrite {
                             args[spec.name] = .instant(date)
+                        } else {
+                            // URL/Shortcut handoffs receive the user's exact phrase; the app does not pretend to execute a Date.
+                            args[spec.name] = .text(rawValue)
                         }
-                    } else {
-                        // URL/Shortcut handoffs receive the user's exact phrase; the app does not pretend to execute a Date.
-                        args[spec.name] = .text(rawValue)
+                    case .missing:
+                        pause = pause ?? .needsTime
+                        notice = notice.isEmpty ? "Choose the exact time before confirming." : notice
+                        if !localWrite { args[spec.name] = .text(rawValue) }
+                    case .unparsed:
+                        pause = pause ?? .needsTime
+                        notice = notice.isEmpty ? "I could not resolve that time safely, including any timezone words. Choose the exact time." : notice
+                        if !localWrite { args[spec.name] = .text(rawValue) }
                     }
-                case .missing:
-                    pause = pause ?? .needsTime
-                    notice = notice.isEmpty ? "Choose the exact time before confirming." : notice
-                case .unparsed:
-                    pause = pause ?? .needsTime
-                    notice = notice.isEmpty ? "I could not resolve that time safely, including any timezone words. Choose the exact time." : notice
                 }
             case .url:
                 if let url = URL(string: rawValue), let scheme = url.scheme?.lowercased(),
@@ -1953,12 +1968,86 @@ public enum AutoreplyMemory {
 
 // MARK: - Instant parsing (core, shared by the app adapter and tests)
 
+public enum InstantRejection: Sendable, Equatable {
+    case empty
+    case noExactTime
+    case zone
+    case ambiguous
+    case multipleTimes
+    case past
+    case invalidClock
+
+    var question: String {
+        switch self {
+        case .empty:
+            return "Choose one exact time."
+        case .noExactTime:
+            return "Choose one exact time, not just a day or a vague part of the day."
+        case .zone:
+            return "This app cannot honour an explicit timezone or city time. Choose a time in the device timezone, or set the zone in the destination app."
+        case .ambiguous:
+            return "Use one exact time without approximations such as “around”, “sometime” or “or”."
+        case .multipleTimes:
+            return "Use one exact time. Ranges and multiple times are not supported by this action."
+        case .past:
+            return "That time has passed. Choose a future time."
+        case .invalidClock:
+            return "Use a valid time with AM/PM, or a 24-hour time such as 18:30."
+        }
+    }
+
+    /// A day-only phrase is left to the normal missing-time card. These reasons mean the phrase itself
+    /// cannot be honoured, so planning should correct before it builds a one-field action.
+    var requiresPlanningCorrection: Bool {
+        switch self {
+        case .zone, .ambiguous, .multipleTimes, .past, .invalidClock: return true
+        case .empty, .noExactTime: return false
+        }
+    }
+}
+
 public enum InstantParser {
     static let zoneHints = try! NSRegularExpression(pattern:
-        #"\b(?:UTC|GMT|EST|EDT|CST|CDT|MST|MDT|PST|PDT|AKST|AKDT|HST|CET|CEST|BST|IST|JST|KST|AEST|AEDT|NZST|NZDT)\b|UTC[+-]\d{1,2}(?::?\d{2})?|\b[A-Z][a-z]+\s+time\b|\bin\s+[A-Z][a-z]+\b"#)
+        #"\b(?:(?i:UTC|GMT|EST|EDT|CST|CDT|MST|MDT|PST|PDT|AKST|AKDT|HST|CET|CEST|BST|IST|JST|KST|AEST|AEDT|NZST|NZDT|ET|PT|CT|MT)\b|UTC[+-]\d{1,2}(?::?\d{2})?|(?i:Eastern|Central|Mountain|Pacific|Alaska|Hawaii|Berlin|London|Paris|Tokyo|Sydney|Toronto|Chicago|Denver|Boston|Seattle|New\s+York|Los\s+Angeles|San\s+Francisco|Hong\s+Kong|Singapore|Dubai|Moscow)\b|\b[A-Z][a-z]+\s+time\b|\bin\s+[A-Z][a-z]+\b|\b(?:at|by)\s+\d{1,2}(?::\d{2})?\s*(?:a\.?m\.?|p\.?m\.?)\s+(?!(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|Today|Tomorrow|Tonight)\b)[A-Z][a-z]+\b)"#)
     static let timeToken = try! NSRegularExpression(pattern:
-        #"(?:\b\d{1,2}:\d{2}\b|\b(?:at|by)\s+\d{1,2}(?::\d{2})?|\b\d{1,2}(?::\d{2})?\s*(?:a\.?m\.?|p\.?m\.?)\b|\bin\s+\d+\s+(?:minutes?|mins?|hours?|hrs?|days?)|\b(?:noon|midnight|tonight)\b)"#,
+        #"(?:\b\d{1,2}:\d{2}\b|\b(?:at|by)\s+\d{1,2}(?::\d{2})?|\b\d{1,2}(?::\d{2})?\s*(?:a\.?m\.?|p\.?m\.?)\b|\bin\s+\d+\s+(?:minutes?|mins?|hours?|hrs?|days?)|\b(?:noon|midnight)\b|\btonight\s+(?:at\s+)?\d{1,2}(?::\d{2})?\s*(?:a\.?m\.?|p\.?m\.?)?\b)"#,
         options: [.caseInsensitive])
+    static let ambiguousHints = try! NSRegularExpression(pattern:
+        #"\b(?:or|ish|around|about|approximately|roughly|nearly|maybe|perhaps|sometime)\b|\b(?:\d{4}-\d{2}-\d{2}T\S+|[A-Za-z_]+/[A-Za-z_]+)\b"#,
+        options: [.caseInsensitive])
+    static let pastHints = try! NSRegularExpression(pattern:
+        #"\b(?:yesterday|earlier|last\s+(?:night|week|month|year|monday|tuesday|wednesday|thursday|friday|saturday|sunday)|\d+\s+(?:minutes?|mins?|hours?|hrs?|days?|weeks?|months?|years?)\s+ago)\b"#,
+        options: [.caseInsensitive])
+    static let clockPattern = try! NSRegularExpression(pattern:
+        #"\b(?:at\s+|by\s+)?(\d{1,2})(?::(\d{2}))?\s*(a\.?m\.?|p\.?m\.?)?\b"#,
+        options: [.caseInsensitive])
+
+    /// Structural refusal shared by the parser, argument validation, readiness and planning. It never
+    /// resolves a date: a caller with a detector still receives an explicit refusal here first.
+    static func rejection(_ phrase: String) -> InstantRejection? {
+        let p = phrase.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !p.isEmpty else { return .empty }
+        let ns = p as NSString
+        let full = NSRange(location: 0, length: ns.length)
+        if zoneHints.firstMatch(in: p, range: full) != nil { return .zone }
+        guard timeToken.firstMatch(in: p, range: full) != nil else { return .noExactTime }
+        if ambiguousHints.firstMatch(in: p, range: full) != nil { return .ambiguous }
+        if pastHints.firstMatch(in: p, range: full) != nil { return .past }
+        var clocks = 0
+        for m in clockPattern.matches(in: p, range: full) {
+            // Relative quantities are durations, not clock hours.
+            let tail = ns.substring(from: m.range.location + m.range.length)
+            if tail.range(of: #"^\s*(minutes?|mins?|hours?|hrs?|days?)\b"#, options: [.regularExpression, .caseInsensitive]) != nil { continue }
+            let hour = Int(ns.substring(with: m.range(at: 1))) ?? -1
+            let minute = m.range(at: 2).location == NSNotFound ? 0 : Int(ns.substring(with: m.range(at: 2))) ?? -1
+            let meridiem = m.range(at: 3).location != NSNotFound
+            if !(0...59).contains(minute) || (meridiem ? !(1...12).contains(hour) : !(0...23).contains(hour)) { return .invalidClock }
+            if !meridiem && (1...12).contains(hour) { return .invalidClock }
+            clocks += 1
+        }
+        if clocks > 1 { return .multipleTimes }
+        return nil
+    }
 
     /// Foundation date detection is iOS-only (`NSDataDetector` is absent from corelibs on Linux), so the app
     /// supplies the detector through `dateResolver`. The zone/time-token guard lives here so both the app and
@@ -1968,30 +2057,7 @@ public enum InstantParser {
         _ = now; _ = timeZone
         let p = phrase.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !p.isEmpty else { return .missing }
-        let ns = p as NSString
-        if zoneHints.firstMatch(in: p, range: NSRange(location: 0, length: ns.length)) != nil {
-            // The detector resolves in the device zone and cannot honour an explicit zone or city-time hint.
-            // Staging a correction is safer than silently ignoring the words the user spoke.
-            return .unparsed(p)
-        }
-        guard timeToken.firstMatch(in: p, range: NSRange(location: 0, length: ns.length)) != nil else {
-            return .unparsed(p)
-        }
-        if p.range(of: #"\b(?:or|ish|around|sometime|tonight)\b|\b(?:\d{4}-\d{2}-\d{2}T\S+|[A-Za-z_]+/[A-Za-z_]+)\b"#,
-                   options: [.regularExpression, .caseInsensitive]) != nil { return .unparsed(p) }
-        if let clock = try? NSRegularExpression(pattern: #"\b(?:at\s+|by\s+)?(\d{1,2})(?::(\d{2}))?\s*(a\.?m\.?|p\.?m\.?)?\b"#, options: .caseInsensitive) {
-            let matches = clock.matches(in: p, range: NSRange(p.startIndex..., in: p))
-            for m in matches {
-                // Relative quantities are durations, not clock hours.
-                let tail = ns.substring(from: m.range.location + m.range.length)
-                if tail.range(of: #"^\s*(minutes?|mins?|hours?|hrs?|days?)\b"#, options: [.regularExpression, .caseInsensitive]) != nil { continue }
-                let hour = Int(ns.substring(with: m.range(at: 1))) ?? -1
-                let minute = m.range(at: 2).location == NSNotFound ? 0 : Int(ns.substring(with: m.range(at: 2))) ?? -1
-                let meridiem = m.range(at: 3).location != NSNotFound
-                if !(0...59).contains(minute) || (meridiem ? !(1...12).contains(hour) : !(0...23).contains(hour)) { return .unparsed(p) }
-                if !meridiem && (1...12).contains(hour) { return .unparsed(p) }
-            }
-        }
+        if rejection(p) != nil { return .unparsed(p) }
         guard let date = dateResolver(p), date.timeIntervalSince1970.isFinite else { return .unparsed(p) }
         return .parsed(date)
     }
