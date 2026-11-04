@@ -44,7 +44,7 @@ targets:
       properties:
         CFBundleDisplayName: OffLlama
         UILaunchScreen: {}
-        # Lets Finder > iPhone > Files copy a .gguf into the app's Documents (AppModel.findModel looks there first)
+        # Finder can copy a shipping .gguf into Documents when the bundled model is absent.
         UIFileSharingEnabled: true
         LSSupportsOpeningDocumentsInPlace: true
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]

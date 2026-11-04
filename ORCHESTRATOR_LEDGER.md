@@ -94,7 +94,8 @@ or training-target model substitutions. The Mac build/device role remains GPT6.1
 
 Five fresh owners were dispatched from `cc839e4`; task IDs, links and user-selected
 settings are in `docs/verification/offllama_action_dispatches_2026-11-04.json`.
-All are pending results. Do not poll; completion wakes the parent.
+Mac v1 returned a partial result, integrated at7b4f6b9; its remaining UI/build
+scope needs a fresh owner. Other results are pending. Do not poll; completion wakes the parent.
 
 - Messaging and two-turn clarification repair: Muse Spark1.3Contributor max. Owns
   routing/message extraction, AppModel.send draft continuity and native compose/contacts
@@ -111,7 +112,8 @@ All are pending results. Do not poll; completion wakes the parent.
   behavior requires a later integrated build after other owners return.
 
 The parent still owns shared-read/privacy follow-up findings and final integration.
-No delegated repair or new phone action test is complete at this dispatch checkpoint.
+The partial Mac source diff is integrated; no new phone action test or installed
+OffLlama build is complete. See `OFFLLAMA_UI_PARTIAL_2026-11-04.md`.
 
 ## Active work and ownership
 

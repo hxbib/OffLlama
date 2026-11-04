@@ -98,7 +98,7 @@ enum QuickSkill: String, AppEnum {
 
 struct RunSkillIntent: AppIntent {
     static let title: LocalizedStringResource = "OffLlama Action"
-    static let description = IntentDescription("Run a OffLlama phone action. Anything that messages someone still asks you to confirm.")
+    static let description = IntentDescription("Run an OffLlama phone action. Anything that messages someone still asks you to confirm.")
     static let openAppWhenRun = true
     @Parameter(title: "Action") var action: QuickSkill
     @Parameter(title: "Details") var details: String?

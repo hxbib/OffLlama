@@ -1,6 +1,6 @@
 {
   "sourceCommit": "cc839e4",
-  "state": "dispatched; results pending",
+  "state": "Mac v1 partial result integrated; other results pending",
   "macRequestedOptions": {
     "reasoningEffort": "high"
   },
@@ -137,7 +137,7 @@
         "remoteChild": {
           "environmentId": "e471ef05-c8d6-49ec-b176-96ab6da0d020",
           "threadId": "mcp:launch:c7d92ba15da18345ce39c832f0e29cab1b0e6342c28c7738c5d24cc17457b12a",
-          "label": "Habib’s MacBook Air"
+          "label": "Habib\u2019s MacBook Air"
         },
         "link": "<t3-thread://v2/e471ef05-c8d6-49ec-b176-96ab6da0d020/mcp:launch:c7d92ba15da18345ce39c832f0e29cab1b0e6342c28c7738c5d24cc17457b12a>",
         "childRunId": null,
@@ -156,6 +156,12 @@
         "hasPendingQuestion": false,
         "pendingApproval": null,
         "waitTimedOut": false
+      },
+      "observedCompletion": {
+        "sourceCommit": "4d912de",
+        "integratedCommit": "7b4f6b9",
+        "result": "partial; unsigned Release reported pass; no signed install",
+        "remaining": "See OFFLLAMA_UI_PARTIAL_2026-11-04.md"
       }
     }
   ]
