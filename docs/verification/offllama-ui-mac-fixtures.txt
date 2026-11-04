@@ -1,0 +1,90 @@
+ok   mac_prep.sh syntax
+ok   validator syntax
+ok   --help exits 0
+ok   --help lists build-unsigned
+ok   --help has no --no-generate
+ok   real repo resources verify
+ok   preflight refuses a non-macOS host (exit 1)
+ok   build-unsigned refuses a non-macOS host (exit 1)
+ok   compile-only resource check is incomplete (exit 2)
+ok   verify-resources rejects a schema-invalid source calibration (exit 1)
+ok   check-app reports a model-less app incomplete by default (exit 2)
+ok   check-app --allow-no-model is compile-only and incomplete (exit 2)
+ok   check-app --require-model fails a model-less app (exit 1)
+ok   check-app accepts a complete model-bearing unsigned fixture
+ok   check-app accepts an exported symbol in a large symbol table
+ok   check-app rejects a missing model-load symbol (exit 1)
+ok   check-app rejects an undefined model-load symbol (exit 1)
+ok   check-app rejects failed nm even when output contains the symbol (exit 1)
+ok   check-app rejects a zero-byte executable (exit 1)
+ok   check-app on macOS rejects a non-Mach-O executable (exit 1)
+ok   verify-resources rejects a symlinked source model (exit 1)
+ok   verify-resources rejects a duplicate source calibration (exit 1)
+ok   check-app rejects string defaultTau (exit 1)
+ok   check-app rejects an invalid promptStyle (exit 1)
+ok   check-app rejects non-numeric prior values (exit 1)
+ok   check-app rejects a missing prior set (exit 1)
+ok   check-app rejects a wrong prior length (exit 1)
+ok   check-app rejects a non-object prior (exit 1)
+ok   check-app rejects a temperature other than 1 (exit 1)
+ok   check-app rejects per-type tau other than 0.90 (exit 1)
+ok   check-app rejects an unknown prior set (exit 1)
+ok   check-app rejects a duplicate JSON key (exit 1)
+ok   check-app rejects a non-finite JSON value (exit 1)
+ok   check-app rejects a byte-different calibration (exit 1)
+ok   check-app rejects conflicting root/Models calibration copies (exit 1)
+ok   check-app rejects calibration only at an unsupported path (exit 1)
+ok   check-app rejects skills only at an unsupported path (exit 1)
+ok   check-app rejects a model only at an unsupported path (exit 1)
+ok   check-app rejects a bundled model symlink (exit 1)
+ok   check-app rejects an empty embedded framework binary (exit 1)
+ok   check-app rejects a symlinked embedded llama.framework directory (exit 1)
+ok   check-app rejects a symlinked Frameworks directory (exit 1)
+ok   bundle-model rejects a wrong file (exit 1)
+ok   bundle-model does not create or overwrite a destination on failure
+ok   bundle-model rejects a symlinked destination (exit 1)
+ok   bundle-model rejects a dangling destination symlink (exit 1)
+ok   bundle-model never writes through a dangling symlink
+ok   bundle-model refuses to overwrite a different file (exit 1)
+ok   bundle-model leaves a different existing file untouched
+ok   bundle-model rejects a symlinked model directory (exit 1)
+ok   bundle-model never writes through a symlinked destination directory
+ok   framework verifies a complete device xcframework with pinned provenance
+ok   framework rejects a simulator-platform device binary (exit 1)
+ok   framework rejects a symlinked xcframework directory (exit 1)
+ok   framework rejects a symlinked app/Frameworks directory (exit 1)
+ok   framework rejects a symlinked device-slice llama.framework (exit 1)
+ok   framework reports unmarked provenance as incomplete (exit 2)
+ok   framework reports modified headers as incomplete provenance (exit 2)
+ok   framework rejects an empty device binary (exit 1)
+ok   framework rejects a missing module map (exit 1)
+ok   framework rejects an empty module map (exit 1)
+ok   framework rejects a missing llama.h (exit 1)
+ok   framework rejects an empty AvailableLibraries plist (exit 1)
+ok   framework rejects a non-arm64 binary (exit 1)
+ok   framework reports the real build exit code (exit 1)
+ok   framework rejects a stale build output after an exit-0 build (exit 1)
+ok   stale framework output was not installed
+ok   framework build validation failure removes the staged copy (exit 1)
+ok   failed framework validation leaves no destination
+ok   framework retry runs the build again after a validation failure (exit 1)
+ok   failed framework build is retryable without manual cleanup (2 runs)
+ok   framework build stages, validates, and installs a fresh xcframework
+ok   framework build writes the pin provenance marker
+ok   second framework run verifies the installed xcframework
+ok   second framework run did not rebuild
+ok   framework rejects a dirty pinned checkout (exit 1)
+ok   framework rejects untracked source in a pinned checkout (exit 1)
+ok   framework rejects a short SHA instead of the exact pinned commit (exit 1)
+ok   framework rejects a non-pinned llama.cpp checkout (exit 1)
+ok   prepare --bundle-model --require-model bundles before enforcing the model
+ok   prepare installed a regular verified model file
+ok   check-app accepts the verified model at the bundle root
+ok   build-unsigned rejects xcodebuild exit 0 with no fresh app (exit 1)
+ok   build-unsigned removed the stale app before the build
+ok   build-unsigned reports the real xcodebuild exit code (exit 1)
+ok   build-unsigned reports a model-less fresh app as release-incomplete (exit 2)
+ok   build-unsigned accepts a freshly produced valid app with the verified model (mock Xcode)
+ok   build-unsigned rejects removed --no-generate (exit 2)
+
+SELFTEST: 88 passed, 0 failed

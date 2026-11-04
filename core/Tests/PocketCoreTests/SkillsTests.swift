@@ -384,7 +384,8 @@ final class SkillsTests: XCTestCase {
         XCTAssertEqual(card.fields.first { $0.name == "n" }?.value, "5")
         let first = try await a.confirmEffect(card.attemptID, edits: [], expectedRevision: card.revision)
         guard case .read(let honest) = first else { return XCTFail("\(first)") }
-        XCTAssertTrue(honest.text.contains("Share → Pocket Glimmer"), honest.text)     // no shared mail yet: honest limit
+        XCTAssertTrue(honest.text.contains("share the email text"), honest.text)
+        XCTAssertTrue(honest.text.contains("OffLlama: handle text"), honest.text)
         XCTAssertEqual(effects.performCount, 0)
 
         let shared = "From: Dana\nSubject: slides\nPlease send the slides by Friday."

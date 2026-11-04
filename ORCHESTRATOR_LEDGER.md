@@ -1,3 +1,9 @@
+Current checkpoint (2026-11-04, after Sonnet UI completion). OffLlama source 7857cd68 was signed and installed on the iPhone by the user-selected Gmail Claude Sonnet 5.5 High worker. Source and report are integrated in parent master. Manual offline, keyboard and chart checks are pending. Parent aligned cloud-route construction with Settings validation, updated the changed project-generator fixtures, and verified 235 core tests (one skip, zero failures) plus 88 Linux/mock packaging checks. This does not establish messaging or multi-step phone behavior.
+
+Spark matched and phone expansion labeling are complete and paid traffic stopped. Parent verified matched committed spend $15.07910475/$25 and expansion $8.939794/$54.99, including retained UNKNOWN reserves. Expansion exports 5,518 trainer rows. The existing phone trainer has artifact hashes and must validate its frozen v2 split before ingestion under the unchanged total $100 Modal cap. No candidate promotion or model-quality improvement is claimed yet.
+
+Independent reviews found duplicate-claim recovery ordering, transcript cap and file-protection defects in the unintegrated input store. Messaging review reproduced generated-chat fallthrough, channel selection from body text and other follow-up defects. Parent is fixing these before integrating callers or declaring phone readiness. Reports and executable repros are under /tmp/offllama-{input-store,messaging}-review-20261104. Older entries below retain their historical evidence boundaries.
+
 # Orchestrator handoff ledger
 
 Updated during the 2026-11-04 runtime and action continuation. Parent T3 thread `4311f30f-96dc-4e78-9f19-860e3bbea796`.

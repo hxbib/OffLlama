@@ -1,0 +1,29 @@
+{
+  "checked_at": "2026-11-04T22:09:52.967536+00:00",
+  "source_status": "/tmp/pocket-glimmer-training-scale/spark-phone-v1/status.json",
+  "source_ledger": "/tmp/pocket-glimmer-training-scale/spark-phone-v1/state/state.sqlite3",
+  "paid_traffic_stopped": true,
+  "reserved_inflight_calls": 0,
+  "states": [
+    {
+      "state": "SETTLED",
+      "calls": 2083,
+      "actual_usd": 8.72394,
+      "reserved_usd": 25.211949750000002
+    },
+    {
+      "state": "UNKNOWN",
+      "calls": 20,
+      "actual_usd": null,
+      "reserved_usd": 0.215854
+    }
+  ],
+  "committed_usd": 8.939794,
+  "cap_usd": 54.99,
+  "trainer_rows": {
+    "v2": 3173,
+    "generated": 2345,
+    "total": 5518
+  },
+  "note": "Parent completion checkpoint. Original status uses paid_traffic_stoppe<U+200B>d and retains historical pause fields. Original evidence is unchanged. No student accuracy or promotion claim."
+}

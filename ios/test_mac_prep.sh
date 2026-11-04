@@ -228,7 +228,8 @@ make_root() {
   local root=$1
   mkdir -p "$root/app/PocketGlimmer/Resources/Models" \
            "$root/app/PocketGlimmer/Resources/Skills" \
-           "$root/app/PocketGlimmer/Support" "$root/models"
+           "$root/app/PocketGlimmer/Support" "$root/models" "$root/scripts"
+  cp "$REPO/scripts/generate-offllama-project.sh" "$root/scripts/"
   cp "$REPO/app/project.yml" "$root/app/project.yml"
   cp "$REPO/app/PocketGlimmer/Resources/Models/calibration.json" "$root/app/PocketGlimmer/Resources/Models/"
   cp "$REPO/app/PocketGlimmer/Resources/Skills/builtin.json" "$root/app/PocketGlimmer/Resources/Skills/"
@@ -310,6 +311,9 @@ SH
 cat > "$MOCKBIN/xcodegen" <<'SH'
 #!/bin/sh
 mkdir -p PocketGlimmer.xcodeproj
+printf 'INFOPLIST_FILE = ../ios/.build/generated/Info.plist;\n' > PocketGlimmer.xcodeproj/project.pbxproj
+mkdir -p ../ios/.build/generated
+printf '<plist><dict/></plist>\n' > ../ios/.build/generated/Info.plist
 SH
 cat > "$MOCKBIN/git" <<'SH'
 #!/bin/sh

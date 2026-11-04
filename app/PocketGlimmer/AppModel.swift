@@ -408,12 +408,15 @@ enum CloudSettings {
         var b: [CloudBrain] = []
         let d = UserDefaults.standard
         let metaModel = (d.string(forKey: "meta_model") ?? "muse-spark-1.3").trimmingCharacters(in: .whitespacesAndNewlines)
-        if let k = Keychain.get("meta_key"), !k.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty, !metaModel.isEmpty {
+        if let k = Keychain.get("meta_key"),
+           CloudSettingsCheck.meta(model: metaModel, keySaved: !k.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty).isEnabled {
             b.append(CloudPresets.metaModelAPI(model: metaModel, apiKey: k))
         }
-        if let k = Keychain.get("byok_key"), let u = d.string(forKey: "byok_url").flatMap(URL.init(string:)) {
+        let customURL = (d.string(forKey: "byok_url") ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        if let k = Keychain.get("byok_key"), let u = URL(string: customURL) {
             let model = (d.string(forKey: "byok_model") ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-            if OpenAICompatibleBrain.validConfiguration(model: model, baseURL: u, apiKey: k) {
+            if CloudSettingsCheck.custom(baseURL: customURL, model: model,
+                                         keySaved: !k.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty).isEnabled {
                 b.append(CloudPresets.custom(name: "Custom", model: model, baseURL: u, apiKey: k))
             }
         }

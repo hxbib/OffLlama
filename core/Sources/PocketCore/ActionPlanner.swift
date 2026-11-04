@@ -233,7 +233,7 @@ extension Assistant {
         case "email_digest":
             let shared = sharedText
             guard let shared else {
-                return ReadResult(text: "iOS lets no app read your Mail. Select the emails in Mail → Share → Pocket Glimmer (Shortcut “PG Share Emails”), and I'll summarize them here, on device.")
+                return ReadResult(text: "OffLlama needs you to share the email text. Use a Share Sheet shortcut with the “OffLlama: handle text” action, then I can summarize it here.")
             }
             return try await reason("Summarize these emails in 3 short bullets: who wants what, and any deadline.", text: shared)
         case "analyze_document":
