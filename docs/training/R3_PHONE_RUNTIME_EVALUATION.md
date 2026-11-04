@@ -104,6 +104,17 @@ repair belongs to the application investigation. It is a root-cause
 candidate, not proof about private phone turns, and no threshold change
 by guess follows from it.
 
+With-memory condition (paired, first 200 dev rows, 3-fact block
+prepended exactly as the shipping context builds it). This subset is
+skillPick-heavy, so its bare accuracy sits below the full-dev number.
+Only the paired comparison is meaningful. C3 held accuracy (0.755 bare,
+0.755 with memory, 8 of 200 predictions flipped, mean confidence 0.765
+to 0.749). C8 degraded (0.695 to 0.670, 9 flips, mean confidence 0.579
+to 0.499, ECE 0.132 to 0.175). On this bounded probe the Glimmer-trained
+candidate is more robust to the memory-block shift than the Spark one.
+The shipping model probe from the application investigation showed the
+same shift at larger magnitude. Synthetic probe, not device evidence.
+
 Shipping incumbent through this harness. Scoring was started and stopped
 to protect the candidate deadline (137/728 calfit zeroShot rows, 37/702
 dev fewShot rows retained as partial artifacts). No shipping number is
