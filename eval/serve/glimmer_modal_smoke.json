@@ -1,0 +1,39 @@
+{
+  "host": "<app>.modal.run",
+  "server": "vLLM 0.33.0 on Modal H100",
+  "model": "muse-glimmer (meta-models/Muse-Glimmer-30B bf16)",
+  "models": [
+    "muse-glimmer"
+  ],
+  "placeholder_test": {
+    "prompt": "Known about the user:\n- [PERSON_1] is the user's landlord\nNetwork: online\nUser: Draft a two-sentence polite message to [PERSON_1] asking when the bathroom leak will be fixed.",
+    "answer": "Hi [PERSON_1], I hope you're well. Could you please let me know when the bathroom leak is expected to be fixed?",
+    "placeholder_survived": true,
+    "seconds": 2.67,
+    "usage": {
+      "prompt_tokens": 103,
+      "total_tokens": 225,
+      "completion_tokens": 122,
+      "prompt_tokens_details": null,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    }
+  },
+  "reasoning_test": {
+    "answer": "A 6% student loan is a guaranteed 6% after-tax return if you pay it down early, because you eliminate that interest cost.\n\nAn index fund is expected to return more than 6% long-term, historically ~8-10% nominal for broad US stock market before inflation and taxes, but it's not guaranteed and is volatile in the short to medium term.\n\nThe tradeoff comes down to risk tolerance and liquidity:\n\n* **Pay down the loan if:** you value certainty and reduced risk, you have high-interest debt, you are risk-averse, or the loan has penalties for early payoff. It also improves cash flow immediately.\n* **Inv",
+    "seconds": 6.43,
+    "usage": {
+      "prompt_tokens": 87,
+      "total_tokens": 387,
+      "completion_tokens": 300,
+      "prompt_tokens_details": null,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    }
+  },
+  "warm_tok_s": 46.7,
+  "auth_without_token": "HTTP 303 during cold start (Modal long-request redirect); warm re-check: /v1/models 401, /invocations 401, /health 200",
+  "pg_cli_cloud_probe": "[Modal \u00b7 muse-glimmer] 2854 ms | Hi [PERSON_1], could we please move our 1:1 to Thursday?"
+}

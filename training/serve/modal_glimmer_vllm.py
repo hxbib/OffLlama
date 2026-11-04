@@ -28,8 +28,10 @@ app = modal.App(APP_NAME)
 weights = modal.Volume.from_name("pg-glimmer-weights", create_if_missing=True)
 vllm_cache = modal.Volume.from_name("pg-glimmer-vllm-cache", create_if_missing=True)
 
+# CUDA *devel* base: vLLM JIT-compiles a kernel for this architecture at engine start and needs nvcc
+# ("Could not find nvcc and default cuda_home='/usr/local/cuda' doesn't exist" on debian_slim, 2026-11-04 13:19 UTC).
 image = (
-    modal.Image.debian_slim(python_version="3.12")
+    modal.Image.from_registry("nvidia/cuda:12.8.1-devel-ubuntu24.04", add_python="3.12")
     .uv_pip_install(f"vllm=={VLLM_VERSION}", "huggingface_hub[hf_xet]")
     .env({"HF_XET_HIGH_PERFORMANCE": "1", "VLLM_USE_V1": "1"})
     .add_local_file(__file__.rsplit("/", 1)[0] + "/pg_auth.py", "/root/pg_auth.py")

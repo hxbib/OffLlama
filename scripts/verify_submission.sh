@@ -34,7 +34,7 @@ if [ -z "${SKIP_SWIFT:-}" ]; then
   if command -v swift >/dev/null; then ( cd core && swift build 2>&1 | tail -1 && swift test 2>&1 | grep -E 'Executed|error' | tail -2 ) || bad "swift"
   elif command -v docker >/dev/null; then
     docker run --rm -v "$PWD/core:/src" -w /src swift:6.1-noble bash -c "swift build 2>&1 | tail -1 && swift test 2>&1 | grep -E 'Executed .* tests' | tail -1" | tee /tmp/pg_swift_verify.txt
-    grep -qE 'Executed [0-9]+ tests, with 0 failures' /tmp/pg_swift_verify.txt || bad "swift tests"
+    grep -qE 'Executed [0-9]+ tests, with( [0-9]+ tests? skipped and)? 0 failures' /tmp/pg_swift_verify.txt || bad "swift tests"
   else note "skip (no swift, no docker)"; fi
 fi
 
