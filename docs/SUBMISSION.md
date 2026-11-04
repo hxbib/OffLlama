@@ -1,99 +1,181 @@
-# Pocket Glimmer: submission packet (skeleton)
+# Pocket Glimmer: submission packet
 
-> **Note for Habib:** this is a draft. Do the final read and rewrite it in your own words before submitting.
-> Tags: `[AFTER_*]` = trained-model number from the frozen test split, not measured yet. `[PHONE_*]` = iPhone measurement, not taken yet. `[TBD: ...]` = other number not measured yet. `[PLACEHOLDER: ...]` = an open item from the rubric map
-> (some are numbers, some are decisions or links). Fill each from a real run or source, or cut the sentence. Don't submit with any left.
-> Rubric source: rules summaries at madrobot.blog and reconscribe.com (Oct 2026), and the event page cerebralvalley.ai/e/meta-ai-developer-hackathon.
-> Indie lens: "creativity, technical ambition, and whether it works."
+**Built with Llama** · Indie Developer track · Theme: **Build for Your World** · Solo: Habib (GitHub `hxbib`)
 
-**Built with Llama**
+**A 1B Meta model on an iPhone that knows when it doesn't know.** Pocket Glimmer is an assistant that keeps working
+with no signal. Llama-Reflex-1B, a Llama 3.2 1B distilled from Muse Glimmer 30B, makes every everyday decision on
+the phone in one forward pass. When it isn't sure, it asks me, confirms, or hands the question to Muse Spark 1.3,
+with my personal details masked first.
 
-**Pocket Glimmer.** An assistant for [PLACEHOLDER: user, e.g. "students like me"] that keeps working with no signal: a Meta Llama model, distilled from Muse Glimmer, runs entirely on iPhone and asks Meta's cloud only when it knows it's unsure.
+Hook: memory that stays on your phone. The cloud only ever sees masked text, and only when the model is unsure.
 
-Social/X hook (alternate): Active Memory that never leaves your phone.
+## The three numbers (and one bound)
+Frozen held-out test split: 120 hand-labeled decisions, 10 per type, never used for selection (one item = 0.83 pts;
+95% CI on 0.82 is about ±7 pts).
 
-## Rubric map (internal; delete before submitting)
+| | Untrained Llama 3.2 1B | **Llama-Reflex-1B (shipping)** |
+|---|---|---|
+| Accuracy | 74% | **82%** (98/120) |
+| Decisions kept on the phone (at τ=0.8, test N=120) | 15% | **51%** (61/120), 92% correct (56/61) |
+| Calibration error (ECE, 10 bins, raw letter softmax) | 0.150 | **0.064** |
 
-| Category | What judges want (rules wording) | Our evidence | Packet section + video timestamp | Low-score risk → fix |
-|---|---|---|---|---|
-| **Impact 30%** | "Real-world potential: who benefits, how much it matters, whether it could become something people use, and whether it fits one of the problem statements" (themes: *Build for Your World* / *Push the Frontier*) | Theme: **Build for Your World**. User: me, Habib, CS student at Hunter, living in the Bronx. Moment: [PLACEHOLDER: user + moment, firsthand, e.g. no signal on the subway]. 3–4 daily tasks done offline (memory recall, confirm-before-act on a message + reminder, memory correction). Privacy, in Meta's own framing: Muse Wonder leads with "Active Memory" (Meta, Oct 12, 2026), and ours never leaves the phone. Proof: [PLACEHOLDER: real-use evidence: tester quote or self-use log]. Offline share: [AFTER_COVERAGE] (baseline 15% at τ=0.8, frozen test N=120) | §Impact (first). Video 0:00–0:25 and 2:45–3:00 | **Risk:** we pitch architecture and judges can't tell who it's for. → **Fix:** first 25 s of video and first paragraph name the user and the moment, no jargon; every demo task is Habib's real request; one piece of real-use evidence; a "what it would take to ship" line |
-| **Use of Meta AI Tooling 25%** | "How creatively you use Meta's AI tools, whether you go beyond a basic integration, and whether you surface capabilities people did not expect." (Unofficial repo: genuine Meta use may be a pass/fail gate) | Meta at every layer: Muse Glimmer 30B (Apache-2.0, run locally at IQ2_M) as sole teacher labeling [PLACEHOLDER: N decision examples] → Llama 3.2 1B distilled into Llama-Reflex-1B (LoRA r16, Q4_K_M GGUF) on device → low-confidence escalation to Muse Spark 1.3 (Meta Model API, Standard mode). Glimmer is also the local LLM-as-judge. Optional SAM 3.1 glimpse: [PLACEHOLDER: SAM 3.1 built yes/no]. The unexpected part: a 1B Meta model that knows when it doesn't know | §Use of Meta AI Tooling (stack table). Video 1:20–1:45 (handoff), 2:20–2:45 (stack diagram) | **Risk:** looks like a generic wrapper, or Meta parts look optional. → **Fix:** BYOK never in the video, README footnote only; Meta is the default config; say "open weights" aloud |
-| **Demo 25%** | "Whether there is a working, impressive demo, whether the product holds up live, and the quality of your demo video." Live finals Nov 9 | Real iPhone 17 Pro footage, airplane mode visibly ON [PLACEHOLDER: airplane-mode proof clip]; 4 tasks with decision card + confidence bar + tool call; recall cold open; one handoff to Spark 1.3. Script: `docs/DEMO_SCRIPT.md` | §Demo. Whole video | **Risk:** video unviewable, or live demo breaks. → **Fix:** public upload by Nov 3, tested logged out; check audio; edit out failures; offline build at finals with video as backup; no settings/auth screens; under 3:00 |
-| **Technical depth 20%** | "Whether the engineering is sound and thoughtfully refined, and whether the project shows real craft." Indie: "technical ambition" | Baseline measured: untrained 1B, frozen test split N=120 gold decisions, with prompt debiasing: accuracy 0.74, handled 15% at τ=0.8, accuracy on handled 0.89, ECE 0.150. After: [AFTER_ACC], [AFTER_ECE]. Speed: [PHONE_TOK_S], [PHONE_TTFT_MS], [PHONE_RAM_GB]. 30B negative result: Q1_0 gibberish (5.9 GB peak); IQ2_M correct but 9.85 GB, over the ~5.5 GB budget. 3B ruled out on headroom (5.03 GB peak RSS on the box CPU). Conformal: certified error bound ≈10% under exchangeability (calibration N=180, τ=0.90, 36% handled, 0 errors, bound 10.2%); final [AFTER_BOUND] | §Technical Depth. Video 1:45–2:20 | **Risk:** unverifiable claims. → **Fix:** every number has N, test set, baseline; reproducible scripts (`eval/score_decisions.py`, `training/reliability.py`); held-out set unseen by teacher prompts; state conformal assumption |
-
-### Impact strengthening checklist (our weak spot)
-- [ ] One user, one recurring moment, one sentence, no jargon. [PLACEHOLDER: user + moment]
-- [ ] Real-use evidence: [PLACEHOLDER: ≥1 tester quote or N-day self-use log with tasks handled offline vs escalated]
-- [ ] Benefit, measured only: [PLACEHOLDER: % of tasks handled fully offline, from eval or usage log]
-- [ ] "Could people use it": [PLACEHOLDER: GGUF MB + app MB], $0 per-user server cost offline, works with no signal.
-- [x] Theme name "Build for Your World" used verbatim (see Impact).
+**Certified:** at the shipped threshold τ=0.90, error among on-device decisions is **≤10.2%** (calibration split
+N=180: 64/180 = 36% handled, 0 errors; Learn-Then-Test, δ=0.1), **assuming new requests are exchangeable with the
+calibration set**. That is a statistical statement about our eval distribution, not a guarantee.
 
 ---
 
-## TL;DR
-- For: [PLACEHOLDER: user + moment]. Me first: a Hunter CS student in the Bronx.
-- Offline: reminders, calendar, contacts, memory recall and corrections, on the phone in airplane mode.
-- Meta models do all of it: Llama-Reflex-1B (from Llama 3.2 1B) on the phone, taught by Muse Glimmer 30B, with Muse Spark 1.3 for the hard questions.
-
 ## Impact
-Theme: **Build for Your World**.
+**Problem statement fit: Build for Your World.** "Solve a problem you know firsthand."
 
-I'm a CS student at Hunter, and I live in the Bronx. The assistants I can use either forget me or send my life to a server.
-I wanted one that remembers me and keeps that memory on my phone. It also has to work in the subway with no signal.
-- Who it's for: students and anyone who can't pay for cloud AI, or doesn't want their data there.
-- The moment: [PLACEHOLDER: user + moment].
-- What it does today: reminders, calendar, contacts, memory recall, all offline.
-- How much stays on the phone: [AFTER_COVERAGE] (baseline: 15% at τ=0.8, frozen test split N=120).
-- Real use: [PLACEHOLDER: real-use evidence].
-- What it would take to ship: [PLACEHOLDER: GGUF MB + app MB]. No server cost per user for the offline path.
+**The user and the moment.** Me. I'm Habib, a CS student at Hunter College, and I live in the Bronx. Every day I ride
+the subway underground with no signal, and that's when I think of things I need to do: text my mom when I'll be home,
+set a reminder, check when a meeting is. The assistants I can use either stop working down
+there or forget me, and the ones that remember me keep that memory on a server.
+
+**What Pocket Glimmer does in that moment, in airplane mode:** reminders and calendar (EventKit), contacts, messages
+(always confirmed first), memory recall and corrections. Each step is a typed decision the phone makes itself. When it
+isn't sure, it doesn't guess: it asks ("Which Sam?"), confirms, or waits until it's online and hands the question to
+Muse Spark 1.3.
+
+**How much stays on the phone (measured, not projected):**
+- At the certified threshold τ=0.90: 36% of decisions on the calibration split (64/180, 0 errors), 37% on the frozen
+  test split (44/120, 41 correct).
+- At τ=0.8 on the frozen test split: 51% (61/120), up from 15% for the untrained model.
+- Everything else takes a safe path: ask, confirm, keep both memories, skip a nudge, or escalate. Offline, the escalated
+  questions get a best-effort local answer that is labeled as such.
+
+**Privacy, concretely.** Memory is SQLite on the phone. The cloud is used only on escalation and only when online.
+A `sensitivity` decision can veto the cloud and answer on the phone ("Kept on device · nothing sent"). On escalation,
+the request, the memory snippets retrieved for it and a short profile (health, money and credential facts removed) are
+masked (names, emails, phones, addresses, card numbers) before they leave, and the app shows the exact text that was sent.
+
+**Who else it's for.** Students and anyone who rides underground, can't pay for cloud AI, or doesn't want their life on
+a server.
+
+**What it would take to ship.** The model is an 808 MB file (807,694,080 bytes, 770 MiB). There's no per-user server cost for the
+on-device path; the cloud is pay-per-use only when the phone escalates. It builds from source with a free Apple ID (the Simulator build compiled on Nov 2;
+device install per the runbook, see Demo). Next: a TestFlight build, a bigger calibration set from real use, and a second distillation round from the
+phone's own escalation log (the loop is built: `training/loop/`).
 
 ## Use of Meta AI Tooling
-Every model in the system is a Meta model. Four of them carry real load:
-1. **Llama 3.2 1B → Llama-Reflex-1B**: the on-device decision model. Every Reflex decision, tool call and route runs on it, offline.
-2. **Muse Glimmer 30B (Apache-2.0)**: the only teacher, run locally (IQ2_M) to produce soft option-letter labels for distillation, and the local LLM-as-judge for grading answers.
-4. **Muse Spark 1.3**: cloud escalation when the Reflex isn't sure. Meta Model API, Standard mode.
+Every model in the system is a Meta model. Four of them have distinct, measured jobs:
+
+1. **Llama 3.2 1B Instruct → Llama-Reflex-1B (the student, on the phone).** Every Reflex decision, tool call and
+   route runs on it, offline, through llama.cpp + Metal. It answers each decision in one forward pass by reading the
+   option-letter logits. LoRA r16, merged, Q4_K_M (808 MB). Named "Llama-…" and shipped with "Built with Llama" per
+   the Llama 3.2 license.
+2. **Muse Glimmer 30B (the teacher, run locally).** IQ2_M on my own machine through llama-server, no API. For each of
+   892 decision scenarios it returns probabilities over the answer letters. Those soft labels train the student
+   (loss = KL(teacher ‖ student over the letter tokens) + 0.5 × CE). Low-confidence labels were dropped (1,006 → 892).
+   Its labels were checked against my hand labels before training (43/50 on a QC sample). The closed loop
+   (`training/loop/`) also uses it as the grader of the phone's escalated decisions: its verdicts fill the
+   "teacher-agree" column of the phone's telemetry. That part is built with a self-test script, not yet run on real phone data.
+3. **Muse Spark 1.3 (cloud escalation).** Meta Model API in **Standard mode** (`muse-spark-1.3`, the default model id in
+   `core/Sources/PocketCore/CloudBrain.swift:73` and in Settings; the UI badge reads "Muse Spark 1.3 (Standard mode)").
+   Contributor mode is never used. It is never a teacher: the API returns no logprobs, and its terms don't allow it.
+4. **Muse Spark Open 816B (an evaluated and rejected teacher).** I relabeled the training set with Spark Open on
+   Baseten (k=8 votes, $11.06 for that first run) and retrained. Its labels matched my hand-written gold labels better than Glimmer's
+   (178/180 on the calibration split), but the student it taught was **overconfident**: accuracy on handled 0.90 vs
+   0.96 and a looser certified bound (13.7% vs 10.2%). A stronger teacher didn't make a better-calibrated student,
+   so the Glimmer student ships (`eval/results/SPARK_TEACHER.md`).
+
+**Lineage.** Meta pre-trained Glimmer itself on Muse Spark's outputs with logit distillation (Glimmer tech report,
+arXiv 2610.24628). So the chain is **Spark → Glimmer → Llama-Reflex-1B**: we take the same move one step further,
+down to a phone.
+
+**What you might not expect.** A 1B Meta model that reports how sure it is, with a stated error rate on the decisions
+it keeps, and that uses Meta's cloud only for the questions it can't answer. Glimmer is Meta's "on-device agentic
+model", but it targets a 24–32 GB computer. This project puts its everyday judgment on a phone.
 
 | Model | License / access | Role | Why this model |
 |---|---|---|---|
-| Llama-Reflex-1B (distilled from Llama 3.2 1B Instruct), Q4_K_M | Llama Community License, open weights | On-device Reflex: typed decisions, tool calls, routing (llama.cpp + Metal) | 1.99 GB peak RSS on the box CPU (not an iPhone), well under the ~5.5 GB budget; the 3B left only ~0.47 GB |
-| Muse Glimmer 30B | Apache-2.0, open weights | Teacher labels + local LLM-as-judge | Meta's on-device agentic model, too big for the phone (see Technical Depth) |
-| Muse Spark 1.3 | Meta Model API, **Standard mode** (not used for training) | Escalation when confidence is low | Strong reasoning and tool calling |
-| SAM 3.1 (optional) | Model API | Camera glimpse | [PLACEHOLDER: SAM 3.1 built yes/no] |
+| Llama-Reflex-1B (from Llama 3.2 1B Instruct), Q4_K_M | Llama 3.2 Community License, open weights | On-device Reflex: typed decisions, tool calls, routing (llama.cpp + Metal) | 1.99 GB peak RSS on the box CPU (not an iPhone), well under the ~5.5 GB budget; the 3B left only ~0.47 GB |
+| Muse Glimmer 30B | Apache-2.0, open weights | Soft-label teacher (local IQ2_M) | Meta's agentic model, too big for the phone (see Technical Depth) |
+| Muse Spark 1.3 | Meta Model API, **Standard mode** | Escalation when confidence < τ | Strong reasoning and tool calling |
+| Muse Spark Open | Muse Model License, via Baseten | Teacher candidate, rejected on cal180 | A much larger Meta open model (816B-A42B): a fair test of "bigger teacher" |
 
-- Muse Glimmer 30B, run locally, labels each decision question with soft option-letter probabilities. Low-confidence labels are dropped.
-- What you might not expect: a calibrated 1B Meta model that hands off to Meta's cloud only when it's unsure.
-- Contributor mode is off. Personal details are masked before anything leaves the phone.
+SAM 3.1: not built.
 
+## Agentic angle (Best Agentic Use-Case)
+Each request is a chain of typed on-device decisions, and every link can stop safely: **route → toolChoice →
+contactPick / eventPick → confirmBeforeAct → act** (EventKit, Contacts, Messages/Mail compose). Messages always ask for
+confirmation. When contactPick is unsure (two "Sam"s) the phone asks instead of guessing. Hard requests escalate to
+Muse Spark 1.3 with personal details masked, and a `sensitivity` decision can keep a request on the phone.
+**Proactive:** iOS Shortcuts triggers (time, arrive, email, message, charger) → App Intent → rules pick candidate
+memories → a `nudgeNow` decision chooses whether to interrupt. **Memory writes are decisions too:** `rememberOrNot` and
+`memoryConflict` (update / keep both / ignore), with provenance and user corrections as retrievable memories.
+**Skills:** a skill registry extends the chain to open-world phone actions through a dynamic `skillPick` decision under
+the same τ rule (docs/SKILLS.md).
 
 ## Demo
-- Video (3:00): [PLACEHOLDER: public YouTube URL]
-- Airplane-mode proof: [PLACEHOLDER: airplane-mode proof clip]
-- How to run it: [PLACEHOLDER: install/run path (TestFlight or build steps)]
+- Video (3:00): see the CV submission form (public YouTube link).
+- How to run it: build from source on a Mac with Xcode. `app/project.yml` + XcodeGen, llama.cpp xcframework pinned at
+  ddf48f8, free Apple ID signing, then copy the shipping GGUF into the app through Finder's Files sharing. Exact steps:
+  `ios/MAC_DAY_RUNBOOK.md`. The model is in Git LFS (`models/`) and in release `artifacts-2026-11-01`.
+- No phone? The same Swift decision code runs against llama-server: `swift run pg-cli e2e` (18 decisions). On the
+  shipping GGUF (box CPU, τ=0.9, bundled priors) it got 16/18 right at argmax, kept 10/18 on device, and all 10 kept
+  were correct; every miss escalated (`eval/results/E2E_SWIFT_SHIPPING.md`).
 - Timestamps:
-  - 0:00–0:10: airplane mode on, a memory question answered on the phone.
-  - 0:10–0:25: who I am, the problem, "a Meta model distilled from Muse Glimmer, on your phone."
-  - 0:25–1:45: real tasks on types the shipping model is accurate on and usually handles on-device (confirm-before-act, sensitivity, answerability; per eval/results/PER_TYPE_SHIPPING.md); memory conflict only if verified handled on-device on the real phone, then one low-confidence hand-off to Spark 1.3 (two contacts named Sam).
-  - 1:45–2:20: before/after eval, speed, why 30B didn't fit, the conformal bound + reliability chart.
-  - 2:20–2:45: Meta stack, open weights.
+  - 0:00–0:10: airplane mode on, a reminder set from a typed decision chain.
+  - 0:10–0:25: who I am and the subway moment.
+  - 0:25–1:45: real tasks offline and online: a message with structured confirmation, a money question kept on
+    device by the sensitivity decision, an event pick, the two-Sams contact pick that asks instead of guessing, and
+    one hand-off to Muse Spark 1.3 with masked names.
+  - 1:45–2:20: before/after numbers, the risk–coverage curve, the certified bound and its assumption.
+  - 2:20–2:45: the Meta stack and lineage.
   - 2:45–3:00: close.
 - Script: `docs/DEMO_SCRIPT.md`.
 
 ## Technical Depth
-- Architecture: [PLACEHOLDER: architecture diagram image] (Mermaid source in README).
-- Each decision is one forward pass. I read the logits of the option letters and turn them into a calibrated probability.
-- Below the threshold the Reflex takes the safe path: escalate, ask, or confirm.
-- Distillation: Muse Glimmer 30B (local IQ2_M) → [PLACEHOLDER: N teacher-labeled examples] → LoRA r16 (Unsloth), loss on the answer letter only → Q4_K_M GGUF (confidence used raw, no temperature scaling) → llama.cpp Metal.
-- Threshold: conformal risk control. Certified so far: error among on-device decisions ≤ ~10% under exchangeability (calibration N=180: τ=0.90, 36% handled, 0 errors, bound 10.2%); 5% not certified. Final τ = [AFTER_TAU], bound [AFTER_BOUND].
-- Calibration: baseline ECE 0.150 (10 bins, frozen test split N=120, untrained 1B with prompt debiasing). After: [AFTER_ECE]. Charts: `docs/img/reliability_baseline_test120_v2cc.png`, [AFTER_RELIABILITY_CHART].
-- Headline after-distillation accuracy and ECE come **only from the frozen held-out test split** (never the dev or calibration split).
-- Before/after (both rows: frozen held-out test split, N=120; 300-item gold set = 180 calibration + 120 test):
+![Architecture](img/architecture.png)
+
+- **One forward pass per decision.** Each decision is a multiple-choice question (12 types). The phone reads the logits
+  of the option-letter tokens, subtracts a content-free prior (contextual calibration, Zhao et al. 2021), takes the
+  softmax, and compares the top probability to τ. Nothing is generated. **No temperature scaling**: the confidence is
+  the raw softmax. The priors were measured on the shipping GGUF and ship in the app bundle (`calibration.json`).
+- **Safe fallbacks.** Below τ every decision type takes its safe option: escalate, ask, confirm, keep both, skip.
+  Messages also always confirm by rule, whatever the confidence.
+- **Distillation.** Muse Glimmer 30B (local IQ2_M) → 892 Glimmer-labeled examples → LoRA r16, 1 epoch, loss only at the
+  answer letter → merge → Q4_K_M GGUF → llama.cpp Metal. Trained on CPU (bf16, 112 steps, 502 s).
+  A round-2 sweep (Spark Open labels, Modal H100) was run on Nov 4 under the same cal180 gate; see eval/results/ROUND2.md for the outcome.
+- **Threshold: selective prediction with a certificate.** The reject option goes back to Chow (1970); Geifman &
+  El-Yaniv (2017) frame it as risk vs coverage. We pick τ with Learn-Then-Test (Angelopoulos, Bates et al. 2021):
+  exact binomial (Clopper–Pearson) p-values, Bonferroni over a fixed 99-point grid, α 0.05, δ 0.1, on the 180-item
+  calibration split. Tightest supported bound: **τ=0.90, 64/180 handled, 0 errors, error ≤10.2%**, under
+  exchangeability. 5% is not certified (it needs ≥135 handled rows with 0 errors). The bound re-ran at 10.4% on Nov 4
+  with a newer llama.cpp (`eval/results/REPRO_NOV4.md`). The app ships τ=0.90 as `defaultTau` in its bundled
+  `calibration.json`. The core falls back to 0.8 if no calibration file is loaded.
+- **Not one lucky threshold.** Risk–coverage on the frozen test split: the shipping curve is below the untrained one at
+  essentially every coverage level. AURC 0.148 → **0.085**. At τ=0.9 it keeps 37% with 6.8% selective risk, at τ=0.8
+  51% with 8.2% (`eval/results/RISK_COVERAGE.md`).
+
+  ![Risk–coverage, frozen test120](img/risk_coverage_test120.png)
+
+- **Calibration.** ECE 0.150 → **0.064** on the frozen test split, from distillation alone. Charts:
+  `docs/img/reliability_baseline_test120_v2cc.png` (before), `docs/img/reliability_after_floor_test120_v2cc.png` (after).
+- **Off-distribution.** On 2,000 CLINC150 out-of-scope prompts, the shipping model keeps an out-of-scope request on
+  device with confidence ≥ τ only 0.25% of the time at τ=0.90 (5/2000), 7.3% at τ=0.8 (`eval/results/OOS_STRESS.md`;
+  no gold labels, so no conformal claim).
+- **Protocol.** Headline numbers come only from the frozen test split. Every choice (epochs, teacher, quant, prompt,
+  τ) was made on the calibration split. Augmented data never touches either split.
+- **Before/after** (both rows: frozen held-out test split, N=120; 300-item gold set = 180 calibration + 120 test):
 
 | Model | Accuracy | Handled on device (τ=0.8) | Accuracy on handled | ECE |
 |---|---|---|---|---|
 | Llama 3.2 1B Q4_K_M, untrained + prompt debiasing (measured, Linux CPU) | 0.74 | 0.15 | 0.89 | 0.150 |
-| Llama-Reflex-1B (distilled) | [AFTER_ACC] | [AFTER_COVERAGE] | [AFTER_ACC_HANDLED] | [AFTER_ECE] |
+| Llama-Reflex-1B (distilled) | 82% (98/120) | 51% at τ=0.8 (61/120) | 92% (56/61) | 0.064 |
+| Llama-Reflex-1B at the certified τ=0.90 (report only) | 82% (98/120) | 37% at τ=0.90 (44/120) | 93% (41/44) | 0.064 |
 
-- **On-device model: locked to Llama 3.2 1B (Q4_K_M), distilled into Llama-Reflex-1B.** The 3B is clearly more accurate, but its measured peak (5.03 GB RSS) leaves only ~0.47 GB under the ~5.5 GB budget before app and runtime overhead. Gate-1 lineup (`/workspace/gate1/RESULTS.md`, llama.cpp ddf48f8, llama-server -c 4096 -t 8). **All RSS and tok/s columns were measured on the box's CPU (8 vCPU x86 AVX2), not on an iPhone:**
+- Per type (`eval/results/PER_TYPE_TAU090.md`): at τ=0.90, contactPick and eventPick stay on device 8/10, route and
+  toolChoice 6/10, sensitivity 5/10. nudgeNow is weak (3/10 accurate) and never clears τ, so it always takes its safe
+  fallback. confirmBeforeAct is 10/10 accurate but clears τ=0.90 only 2/10.
+- **Phone speed:** measured on the iPhone only (Release build, airplane mode, PGPERF log lines). Not claimed until measured.
+
+### Why a 1B on the phone
+The 3B is clearly more accurate, but its measured peak (5.03 GB RSS) leaves only ~0.47 GB under the ~5.5 GB budget
+before app and runtime overhead. Gate-1 lineup (llama.cpp ddf48f8, llama-server -c 4096 -t 8). **All RSS and tok/s
+columns were measured on the box's CPU (8 vCPU x86 AVX2), not on an iPhone:**
 
 | Model | Status | Q&A (15) | Grammar tool calls: valid / correct tool (decision) / tool+args (15) | Raw tool calls: valid / tool / tool+args (10) | Peak RSS (box) | Decode tok/s (box) | Prompt tok/s (box) |
 |---|---|---|---|---|---|---|---|
@@ -103,7 +185,7 @@ Every model in the system is a Meta model. Four of them carry real load:
 | Llama 3.1 8B Instruct Q2_K | **partial / not shippable on-device**, stopped at 19 of 40 items | 12/15 (partial) | 4/4 / 4/4 / 2/4 (partial, only 4 of 15 ran) | not run (missing) | 6.14 GB (partial run) | 13.14 (partial) | 106.0 (partial) |
 | Muse Glimmer 30B IQ2_M [teacher reference] | complete | 11/11 | 15/15 / 14/15 / 14/15 | 10/10 / 9/10 / 9/10 | 9.65 GB | 2.56 | 36.6 |
 
-- Why Llama for the Reflex. I tested three small untrained models on the same 36 gold items (`docs/SYSTEMONE.md`):
+Why Llama for the Reflex: three small untrained models on the same 36 gold items (`docs/SYSTEMONE.md`):
 
 | Model (untrained) | Accuracy | ECE | Coverage @ τ=0.8 | Accuracy on covered | Median ms |
 |---|---|---|---|---|---|
@@ -111,36 +193,84 @@ Every model in the system is a Meta model. Four of them carry real load:
 | Laya Q8_0 | 0.69 | 0.21 | 0.25 | 0.78 | 402 |
 | Julia-1 Q8_0 | 0.44 | 0.38 | 0.56 | 0.45 | 84 |
 
-  I chose Llama because it's distillable with our LoRA pipeline (Laya is BERT-style). Latency here is the box HTTP round trip, not the phone.
-- Speed on the iPhone 17 Pro (A19 Pro, Q4, context [PHONE_CTX]): [PHONE_TOK_S], [PHONE_TTFT_MS], [PHONE_DECISION_MS], [PHONE_RAM_GB].
-- Why not Glimmer 30B on the phone: it's dense (29.6B). The smallest working file (IQ2_M) is 9.85 GB, over the ~5.5 GB budget. The 1-bit Q1_0 file (5.9 GB peak) gives gibberish. I checked it isn't a llama.cpp bug: a model trained for 1-bit runs fine on the same build. So I switched to distillation.
-- Telemetry: every Reflex decision is logged on the phone. On-device share per distillation round: [AFTER_ROUND_SHARES].
+I chose Llama because it's distillable with our LoRA pipeline (Laya is BERT-style). Latency here is the box HTTP round
+trip, not the phone.
+
+Why not Glimmer 30B on the phone: it's dense (29.6B). The smallest working file (IQ2_M) is 9.85 GB, over the ~5.5 GB
+budget. The 1-bit Q1_0 file gives gibberish. I checked it isn't a llama.cpp bug: a model trained for 1-bit runs fine on
+the same build. So I switched to distillation.
+
+### Negative results we're proud of
+Each was measured, selected against on the calibration split, and kept in the repo:
+- **Glimmer Q1_0 on the phone:** gibberish (post-training 1-bit quantization breaks it). IQ2_M works but is 9.85 GB.
+- **Llama 3.2 3B:** more accurate, but ~0.47 GB of headroom. Not worth the risk on a phone.
+- **2 epochs instead of 1:** more confident, not more correct. Accuracy on handled 0.96 → 0.90, bound 10.2% → 14.2%
+  (`eval/results/AFTER_FLOOR_EP2.md`).
+- **nudgeNow relabel retrain (nv2):** bound 10.9%, nudgeNow unchanged (`eval/results/AFTER_FLOOR_NV2.md`).
+- **Muse Spark Open teacher:** better labels, worse student. Bound 13.7% (`eval/results/SPARK_TEACHER.md`).
+- **Quant ladder:** f16 14.5%, Q8_0 13.9%, Q3_K_M 13.9%, Q2_K 30.4%. All lose to the shipping Q4_K_M on the certified
+  bound (`eval/results/QUANT_IDENTITY.md`).
+- **Option-order permutation averaging:** better bound on cal180 but worse ECE, and the one test120 report didn't
+  confirm it. Not shipped (`eval/results/PERM_AVG.md`).
+- **Drift check (a negative we wanted):** the LoRA didn't damage general ability. Mean KL 0.0096 nats, 23/23
+  checkable answers, 0 collapse into routing text, also on the shipping Q4_K_M (`eval/results/DRIFT_CHECK.md`).
 
 ## What I built during the event vs what I used
-- New, Oct 26 – Nov 4, 2026: [PLACEHOLDER: dated new-work list from commit history]. Highlights: Swift PocketCore (Reflex, calibration, conformal, SQLite memory, scrubber, telemetry), the SwiftUI app, the distillation pipeline, the 36-item gold set, the gate-1 Glimmer test. No earlier products or templates reused.
-- Used: llama.cpp (MIT), Unsloth (Apache-2.0), SQLite (public domain), matplotlib. Model weights keep their own licenses.
-- Commit history: [PLACEHOLDER: public repo URL]/commits
+Everything was written during the event. Commit history (`https://github.com/hxbib/pocket-glimmer/commits/master`):
+- **Oct 31 (27 commits):** Swift PocketCore (option sets, Reflex, calibration, conformal LTT, SQLite memory with
+  provenance, scrubber, telemetry) and its tests; `pg-cli`; the SwiftUI iOS app (decision cards, confidence bars,
+  escalation badge, privacy sheet, telemetry chart); the 300-item hand-labeled gold set with labeling rules; the local
+  Glimmer teacher; the untrained baseline.
+- **Nov 1 (26 commits):** iOS compile-readiness and Mac runbook; on-device model locked to 1B; the distillation run
+  (892 labels, LoRA, Q4_K_M) and its eval; the ep2 and nv2 experiments; the sensitivity "Kept on device" badge; Git LFS
+  models and the release.
+- **Nov 2 (21 commits, most of them hourly status notes):** drift check; quant identity + quant ladder; removal of temperature-scaling claims; the
+  Option A/B threshold proposal; Mac Simulator build passing.
+- **Nov 3 (1 commit):** handoff notes and the CLINC stress set.
+- **Nov 4:** risk–coverage analysis, Swift e2e on the shipping GGUF, bundled calibration priors, reproduction, OOS
+  stress test, permutation averaging, the closed-loop distillation scripts, related work, and these docs.
+
+No earlier products or templates were reused. Used: llama.cpp (MIT), SQLite (public domain), PyTorch, Transformers,
+PEFT, Unsloth (optional GPU path), matplotlib. Model weights keep their own licenses.
 
 ## Privacy & data handling
 - On the phone by default. Memory is SQLite on the device.
-- The cloud is used only on escalation, through Muse Spark 1.3 in Standard mode. Contributor mode is never on. [PLACEHOLDER: confirmation that cloud calls use muse-spark-1.3 Standard mode]
-- Names, emails, phones, addresses and card numbers are masked before anything leaves.
+- The cloud is used only on escalation, only when online, through Muse Spark 1.3 in **Standard mode** (`muse-spark-1.3`,
+  `core/Sources/PocketCore/CloudBrain.swift:73`). Contributor mode is never on.
+- A `sensitivity` decision can keep a request on the phone even when the cloud is available.
+- Names (from Contacts and memory), emails, phones, addresses and card numbers are masked before anything leaves, and
+  restored in the answer. What leaves is the masked request plus masked relevant memory and a short masked profile with
+  health, money and credential facts removed. The app shows the exact text that was sent.
+- Keys live in the iOS Keychain. Without a key, everything stays on the phone.
 - The demo uses my own data or made-up data.
 
 ## Limitations & assumptions
-- The conformal bound (≈10% certified; 5% not certified) assumes exchangeability: new questions have to look like the calibration set. I say "on our eval distribution," not "guaranteed." I recalibrate after each round.
-- Gold set: 300 items, 180 calibration / 120 frozen test. With zero errors, the bound needs at least 135 calibration rows. For the earlier untrained baseline (before prompt debiasing), nothing certifies at α=5%, δ=0.1 on the 180-row calibration split (τ=1.01, escalate everything; tightest supported: error ≤ 22.4% at τ=0.64, 53/180 handled, 3 wrong). Applied to the test split, τ=0.64 would handle 46/120 (38%) with 38 correct.
-- Baseline numbers, and every memory (RSS) and speed figure in the lineup, come from the box's Linux x86 CPU, not an iPhone.
-- We haven't found prior art for this exact combination (letter-softmax confidence + conformal escalation on a phone). That is not the same as saying none exists.
+- The conformal bound (≤10.2% at τ=0.90; 5% not certified) assumes exchangeability: new questions have to look like the
+  calibration set. Real phone traffic will drift, so τ needs recalibration after each round. I say "on our eval
+  distribution," not "guaranteed."
+- Gold set: 300 items written by one person (180 calibration / 120 frozen test). The ±7-point CI is real, and per-type
+  numbers (n=10) are noisy. With zero errors, a 5% bound needs at least 135 handled calibration rows.
+- The untrained baseline and every memory (RSS) and speed figure in the lineup come from the box's Linux x86 CPU, not an iPhone.
+- Tool arguments are filled by on-device heuristics and memory, not grammar-constrained decoding.
+- The scrubber is regex- and contact-based and will miss some identifiers.
+- **Prior art:** certified routing thresholds are not new. Uddin & Bauer (ACL 2026 SRW) set one with Clopper–Pearson
+  for cloud model pairs, and Conformal Cascade (arXiv 2607.25018) and CR² (arXiv 2605.12001) are related. We haven't
+  found prior art for the whole combination: the distilled student's own letter-logit confidence as the score, an
+  LTT-certified threshold, the student running offline on a phone and executing the decisions it keeps, and a privacy
+  veto on escalation. That is not the same as saying none exists. Survey: `docs/research/RELATED_WORK.md`.
 - Nothing here guarantees a result; the numbers are what we measured on our eval sets.
-- The 5–8 tok/s phone figure for 30B in my notes was an estimate from memory bandwidth. Nothing ran on a phone.
-- Anything tagged [TBD] or [PLACEHOLDER] isn't measured or settled yet.
+- The 5–8 tok/s phone figure for 30B in my early notes was an estimate from memory bandwidth. Nothing ran on a phone.
 
 ## Team + what's next
-- Team: [PLACEHOLDER: team names for submission]
-- Next 30 days: more distillation rounds, on-device eval, a bigger calibration set.
+- Team: Habib (solo), Hunter College CS student. GitHub: hxbib.
+- Bonus prizes flagged: Best Agentic Use-Case; Community Vote.
+- Next 30 days: TestFlight, a bigger calibration set from real use, a second distillation round from the phone's own
+  escalation log (`training/loop/`), and on-device evaluation.
 
 ## Links
-- Repo: [PLACEHOLDER: public repo URL]
-- Video: [PLACEHOLDER: public YouTube URL]
-- Short clip (optional): [TBD: X clip URL]
+- Repo: https://github.com/hxbib/pocket-glimmer
+- Video: public YouTube link in the CV submission form.
+- Model: `models/SHIPPING-ep1-Llama-3.2-1B-PocketGlimmer-Reflex-Q4_K_M.gguf` (Git LFS) and release `artifacts-2026-11-01`.
+
+---
+*Final read by Habib before submit.*
