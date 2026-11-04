@@ -53,12 +53,26 @@ signal, exactly as the prior report warned.
 
 ## Spark candidate (PG-C8-SPARKFULL-V4-s0, GGUF fbda8cdd0fe471d6…ca92d8)
 
-C8 section pending final dev scoring at first commit. Its training
-targets were verified directly. Soft targets are alpha-0.5 smoothed k=3
-vote frequencies (file SHA-256 a4b150b5…b010 for v2 rows, 8ab4a204…94b5
-for generated rows). The top target mass caps near 0.50. That trains
-confidence down by construction, so a raw-ECE comparison against
-Glimmer-probability targets confounds target scale with model quality.
+Complete coverage on calfit (728) and dev (702). Its training targets
+were verified directly. Soft targets are alpha-0.5 smoothed k=3 vote
+frequencies (file SHA-256 a4b150b5…b010 for v2 rows, 8ab4a204…94b5 for
+generated rows). The top target mass caps near 0.50. That trains
+confidence down by construction, so raw ECE confounded target scale
+with model quality. The premise fails for Spark too.
+
+| C8 dev readout (n=702) | Acc | ECE | NLL | Mean conf |
+|---|---|---|---|---|
+| Raw zeroShot | 0.8575 | 0.2169 | 0.6776 | 0.6407 |
+| Temperature only (calfit T 0.565) | 0.8575 | 0.0488 | 0.5379 | not printed |
+| Priors only | 0.8519 | 0.1985 | 0.8254 | not printed |
+| Temperature + priors | 0.8519 | 0.0649 | 0.8445 | 0.8463 |
+
+Spark did not destroy calibration. It trained confidence down. One
+calfit-fitted temperature recovers most of the gap at unchanged accuracy.
+Its calfit tau (0.966) handles only 118/702 dev rows (0.168 share) at
+0.898 handled accuracy, so C8 still fails handled-share and
+handled-accuracy readings. C3 remains the stronger candidate. Neither
+qualifies without the frozen report gate.
 
 ## App-facing fixtures (deterministic developer gold, 9 fixtures)
 
