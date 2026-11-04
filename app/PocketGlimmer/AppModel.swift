@@ -96,8 +96,6 @@ final class AppModel {
 
     @ObservationIgnored private var bootTask: Task<Void, Never>?
     @ObservationIgnored private var scrubberNamesTask: Task<Void, Never>?
-    @ObservationIgnored private var scrubberNamesTaskID = 0
-    @ObservationIgnored private var scrubberNamesCache: (authorized: Bool, names: [String])?
 
     /// Single-flight: the app's `.task` and an App Intent (Ask / Trigger) can both call boot() during launch; without this
     /// both pass the `assistant == nil` check across the model-load await and load two copies of the GGUF.
@@ -120,11 +118,11 @@ final class AppModel {
             guard let url = Self.findModel() else { modelState = "No model file. Add a .gguf (see README)."; return }
             // XcodeGen adds Resources/Models as a group, so calibration.json is copied flat to the bundle root; the
             // subdirectory lookup covers a folder-reference setup. A missing/broken file stops boot: the uncalibrated
-            // fallback has no priors and tau 0.8, so it would silently change the certified tau 0.90 operating point.
+            // fallback has no priors and tau 0.8, so it would silently change the shipping tau 0.90 operating point.
             guard let calURL = Bundle.main.url(forResource: "calibration", withExtension: "json")
                     ?? Bundle.main.url(forResource: "calibration", withExtension: "json", subdirectory: "Models") else {
                 throw NSError(domain: "PocketGlimmer.Calibration", code: 1, userInfo: [
-                    NSLocalizedDescriptionKey: "calibration.json is missing from the app bundle. Refusing to run on the uncertified tau 0.8 fallback; reinstall the app or add the bundled calibration file."])
+                    NSLocalizedDescriptionKey: "The bundled calibration file is missing. Reinstall the app with its model resources."])
             }
             let profile = try CalibrationProfile.load(from: calURL)
             let dynamicPriorsPresent = (2...8).allSatisfy { n in
@@ -132,11 +130,13 @@ final class AppModel {
             }
             guard profile.defaultTau == 0.90,
                   profile.promptStyle == .fewShot,
+                  profile.tau.values.allSatisfy({ $0 == 0.90 }),
+                  profile.prior.values.allSatisfy({ $0.allSatisfy(\.isFinite) }),
                   OptionSets.staticSets.allSatisfy({ profile.prior[DecisionPrompt.priorKey($0)]?.count == $0.activeLetters.count }),
                   dynamicPriorsPresent,
                   profile.temperature.values.allSatisfy({ $0 == 1 }) else {
                 throw NSError(domain: "PocketGlimmer.Calibration", code: 2, userInfo: [
-                    NSLocalizedDescriptionKey: "calibration.json is not the certified profile (tau 0.90, fewShot, priors, no temperature scaling). Refusing to start at a different operating point."])
+                    NSLocalizedDescriptionKey: "The bundled calibration file does not match the shipping settings. Reinstall the app with its model resources."])
             }
             let engine = try await Task.detached(priority: .userInitiated) { try LlamaCppEngine(modelURL: url) }.value
             let reflex = Reflex(engine: engine, profile: profile, telemetry: tel, source: "device")
@@ -170,33 +170,18 @@ final class AppModel {
         }.value
     }
 
-    private static var contactsAuthorized: Bool {
-        let st = CNContactStore.authorizationStatus(for: .contacts)
-        return st == .authorized || st == .limited
-    }
+    func refreshScrubberNames() async { await loadScrubberNames() }
 
-    /// Call after the onboarding grant so a first-session contact name is masked before any text leaves the phone.
-    func refreshScrubberNames() async { await loadScrubberNames(reload: true) }
-
-    /// One Contacts read per authorization state, serialized by `scrubberNamesTask`: concurrent sends share the read,
-    /// and a grant made in iOS Settings is picked up by the next send because the cache records authorization.
-    private func loadScrubberNames(reload: Bool = false) async {
-        let authorized = Self.contactsAuthorized
-        if !reload, scrubberNamesCache?.authorized == authorized { return }
-        if let t = scrubberNamesTask { await t.value }
-        let authorizedNow = Self.contactsAuthorized
-        if scrubberNamesCache?.authorized == authorizedNow { return }
+    // Read again before each request: limited-access selections and contact names can change without a new grant.
+    private func loadScrubberNames() async {
+        if let t = scrubberNamesTask { await t.value; return }
         guard assistant != nil else { return }
         let t = Task {
-            let names = await Self.contactNames()
-            self.assistant?.scrubber.knownNames = names
-            self.scrubberNamesCache = (authorizedNow, names)
+            self.assistant?.scrubber.knownNames = await Self.contactNames()
         }
-        scrubberNamesTaskID += 1
-        let id = scrubberNamesTaskID
         scrubberNamesTask = t
         await t.value
-        if scrubberNamesTaskID == id { scrubberNamesTask = nil }
+        scrubberNamesTask = nil
     }
 
     func reloadCloud() { assistant?.cloud = CloudSettings.chain() }
@@ -210,8 +195,12 @@ final class AppModel {
         rounds = (try? telemetry?.shareByModel()) ?? []
     }
 
-    func send(_ text: String) async {
-        guard !busy, let assistant, !text.trimmingCharacters(in: .whitespaces).isEmpty else { return }
+    @discardableResult
+    func send(_ text: String, sharedText: String? = nil, source: String = "share") async -> String {
+        guard !busy else { return "I'm working on another request. Please try again shortly." }
+        guard let assistant else { return modelState }
+        guard !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return "No request was provided." }
+        if let sharedText { SharedInbox.shared.put(sharedText, source: source) }
         chat.append(.init(role: .user, text: text))
         busy = true; defer { busy = false; refresh() }
         await loadScrubberNames()
@@ -229,11 +218,17 @@ final class AppModel {
             case .offlineFallback(let t): chat.append(.init(role: .assistant, text: t, badge: "offline · best effort on device", decisions: rows))
             case .needsConfirmation(let a, let prompt): chat.append(.init(role: .assistant, text: prompt, badge: onDevice, pending: a, decisions: rows))
             }
+            let reply = chat.last?.text ?? ""
             for c in turn.corrections { chat.append(.init(role: .system, text: "Corrected: \(c.old.value) → \(c.new.value)")) }
             if !turn.remembered.isEmpty {
                 chat.append(.init(role: .system, text: "Remembered: " + turn.remembered.map(\.text).joined(separator: " · ")))
             }
-        } catch { chat.append(.init(role: .system, text: "Error: \(error.localizedDescription)")) }
+            return reply
+        } catch {
+            let message = "Error: \(error.localizedDescription)"
+            chat.append(.init(role: .system, text: message))
+            return message
+        }
     }
 
     func confirm(_ item: ChatItem) async {

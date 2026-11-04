@@ -63,11 +63,9 @@ struct HandleTextIntent: AppIntent {
         }
         guard !body.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return .result(value: "Nothing was shared.") }
         await SkillSetup.ensureInstalled()
-        SharedInbox.shared.put(body, source: source)
         let ask = Self.utterance(for: instruction, source: source)
-        await AppModel.shared.send(ask)
-        let last = AppModel.shared.chat.last { $0.role == .assistant }?.text ?? ""
-        return .result(value: last)
+        let reply = await AppModel.shared.send(ask, sharedText: body, source: source)
+        return .result(value: reply)
     }
 
     /// Steers the request toward the skill that reads the shared text (email_digest / summarize_text / html_viz).
@@ -107,10 +105,10 @@ struct RunSkillIntent: AppIntent {
     @Parameter(title: "Details") var details: String?
 
     @MainActor
-    func perform() async throws -> some IntentResult {
+    func perform() async throws -> some IntentResult & ReturnsValue<String> {
         await SkillSetup.ensureInstalled()
-        await AppModel.shared.send([action.utterance, details ?? ""].filter { !$0.isEmpty }.joined(separator: " "))
-        return .result()
+        let reply = await AppModel.shared.send([action.utterance, details ?? ""].filter { !$0.isEmpty }.joined(separator: " "))
+        return .result(value: reply)
     }
 }
 

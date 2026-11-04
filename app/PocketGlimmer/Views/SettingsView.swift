@@ -55,7 +55,7 @@ struct SettingsView: View {
                 Section { Button("Save") {
                     Keychain.set(metaKey, for: "meta_key"); Keychain.set(byokKey, for: "byok_key")
                     model.reloadCloud()
-                } } footer: { Text("Keys are stored in the iOS Keychain on this device only. Without keys, everything stays on device.") }
+                } } footer: { Text("Keys are stored in the iOS Keychain on this device only. Without keys, built-in cloud inference is unavailable. Links and Shortcuts can still open other apps.") }
             }
             .navigationTitle("Settings")
         }

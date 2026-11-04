@@ -26,8 +26,9 @@ final class IOSSkillRunner: SkillRunner, @unchecked Sendable {
             // The hand-off is all the app can confirm: Shortcuts may still report a missing Shortcut. If Shortcuts
             // itself cannot open, offer the TV app search page as a fallback.
             guard skill.id == "appletv_play", result.hasPrefix("Couldn't open Shortcuts") else { return result }
-            let q = text.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? text
-            if let u = URL(string: "https://tv.apple.com/search?term=\(q)"), await ComposeSheets.open(u) {
+            var search = URLComponents(string: "https://tv.apple.com/search")!
+            search.queryItems = [URLQueryItem(name: "term", value: text)]
+            if let u = search.url, await ComposeSheets.open(u) {
                 return "Opened TV app search for “\(text)” · pick the latest episode"
             }
             return result

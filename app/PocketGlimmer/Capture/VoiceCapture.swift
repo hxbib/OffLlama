@@ -99,16 +99,20 @@ struct MicButton: View {
     private func note(_ text: String) { model.chat.append(.init(role: .system, text: text)) }
 
     private func begin() async {
+        guard !model.busy else { return }
+        guard !UserDefaults.standard.bool(forKey: "voice_stays_on_device") else { note("Voice upload is off in Settings. Type your request to keep it on this iPhone."); return }
         guard model.isOnline else { note(MultimodalGate.offlineMessage); return }
         guard Keychain.get("meta_key") != nil else { note("Voice needs a Meta Model API key (Settings). Nothing was recorded."); return }
         guard await recorder.requestPermission() else { note("Microphone access is off (Settings > Privacy > Microphone)."); return }
-        guard pressing else { return }          // released while the permission prompt was up
+        guard pressing, !model.busy else { return }          // released while the permission prompt was up
         recorder.start()
     }
 
     private func finish() async {
         guard let wav = recorder.stop() else { return }
         guard wav.count > 44 + 16_000 else { note("Hold the mic while you speak."); return }   // < 0.5 s
+        guard !model.busy else { note("Another request is in progress. The recording was not sent."); return }
+        guard !UserDefaults.standard.bool(forKey: "voice_stays_on_device") else { note("Voice upload is off. The recording was not sent."); return }
         guard let assistant = model.assistant else { return }
         let gate = MultimodalGate(assistant: assistant, metaAPIKey: Keychain.get("meta_key"))
         gate.voiceStaysOnDevice = UserDefaults.standard.bool(forKey: "voice_stays_on_device")

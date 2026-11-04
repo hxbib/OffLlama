@@ -38,10 +38,10 @@ struct AskPocketGlimmerIntent: AppIntent {
     @Parameter(title: "Request") var request: String
 
     @MainActor
-    func perform() async throws -> some IntentResult {
+    func perform() async throws -> some IntentResult & ReturnsValue<String> {
         await AppModel.shared.boot()
-        await AppModel.shared.send(request)
-        return .result()
+        let reply = await AppModel.shared.send(request)
+        return .result(value: reply)
     }
 }
 

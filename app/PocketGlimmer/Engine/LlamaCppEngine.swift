@@ -65,11 +65,11 @@ actor LlamaCppEngine: LLMEngine {
 
     /// Default OFF for the submission build: prefix reuse is ~15% faster on cal180 (73.6 s vs 87.0 s on a Linux box) but
     /// shifts a few confidences near τ (median 0.007, worst 0.135, 6 crossings on cal180), so on-screen numbers would
-    /// not match the certified cal180 operating point. Settings toggle "Reuse cached prompt prefix" turns it on.
+    /// not match the reference cal180 operating point. Settings toggle "Reuse cached prompt prefix" turns it on.
     static var prefixReuseDefault: Bool { UserDefaults.standard.object(forKey: "pg_kv_prefix") as? Bool ?? false }
 
     /// `addBOS` = llama.cpp `add_special`. Decision prompts already start with "<|begin_of_text|>", and llama-server
-    /// (`/completion` with a string prompt) tokenizes with add_special=true, so every certified number (cal180, τ=0.90,
+    /// (`/completion` with a string prompt) tokenizes with add_special=true, so the saved reference numbers (cal180, τ=0.90,
     /// priors from `pg-cli priors`, the Swift e2e) was measured on <BOS><BOS>... prompts. Decisions therefore pass
     /// addBOS=true to reproduce that exact token stream: on cal180 the single-BOS stream flips 18/180 argmaxes and moves
     /// 36/180 confidences across τ=0.90 (docs/CODE_REVIEW_NOV4.md). Free-text generation keeps a single BOS.
@@ -171,7 +171,7 @@ actor LlamaCppEngine: LLMEngine {
         print(String(format: "PGPERF decision prompt_tokens=%d prefill_ms=%.0f prefix_hits=%d prefix_misses=%d prefixes=%d",
                      tokens.count, Date().timeIntervalSince(t0) * 1000, prefixHits, prefixMisses, prefixes.count))
         guard let logits = llama_get_logits_ith(ctx, -1) else { throw LLMError.badResponse("no logits") }
-        // Parity with the certified eval (llama-server `n_probs: 40`, LlamaServerEngine.topK): only token variants inside
+        // Parity with the reference eval (llama-server `n_probs: 40`, LlamaServerEngine.topK): only token variants inside
         // the top-40 of the full vocabulary count, and a letter with no variant there is omitted so Reflex applies the
         // same floor (min seen - 2) as eval/score_decisions.py. Raw logits vs server log-probs differ by one constant
         // (log Z), which the letter softmax and the relative floor cancel.

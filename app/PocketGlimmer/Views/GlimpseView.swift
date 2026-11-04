@@ -84,6 +84,7 @@ struct GlimpseView: View {
         case .both: task = .describeAndSegment(question: question, concept: c.isEmpty ? nil : c)
         }
         do {
+            await model.refreshScrubberNames()
             let r = try await gate.glimpse(imageJPEG: photo.jpeg, intent: intent, task: task, photoText: photo.photoText)
             result = r
             if case .segmented(let segs, _) = r.outcome { overlays = MaskOverlay.build(segs) }

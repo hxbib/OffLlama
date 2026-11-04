@@ -106,7 +106,11 @@ extension Assistant {
         decisions.append(pick)
         guard pick.chosen.id != "ask", let i = Int(pick.chosen.id.dropFirst()), i < cands.count else {
             if fallThrough && !ActionPlanner.isExplicitMessageRequest(utterance) { return nil }
-            return .clarify("Which action do you want: \(ActionPlanner.list(cands.prefix(3).map(\.title)))? Please restate the request with the app, recipient and message.")
+            let choices = ActionPlanner.list(cands.prefix(3).map(\.title))
+            if ActionPlanner.isExplicitMessageRequest(utterance) {
+                return .clarify("Did you mean: \(choices)? Please restate the request with the app name and recipient and message.")
+            }
+            return .clarify("Did you mean: \(choices)?")
         }
         let skill = cands[i]
         var args = SkillArgs.extract(skill, utterance: utterance)

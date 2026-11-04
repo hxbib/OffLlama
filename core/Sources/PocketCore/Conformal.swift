@@ -4,7 +4,8 @@ import Foundation
 ///
 /// Goal (Conformal Cascade, arXiv 2607.25018; CR2, arXiv 2605.12001): choose tau so that the
 /// selective risk  R(tau) = P(wrong | confidence >= tau)  is <= alpha with probability >= 1 - delta
-/// over the draw of the calibration set (exchangeable calibration/test data assumed).
+/// over an independent, identically distributed calibration sample, with the model fixed before calibration.
+/// Reusing calibration rows for model selection, as in this project, yields a nominal calculation, not that guarantee.
 ///
 /// Bound used: Learn-Then-Test (Angelopoulos, Bates, Candès, Jordan, Lei 2021, arXiv 2110.01052) with
 /// Bonferroni FWER control over a FIXED grid of K candidate taus (chosen before seeing data; default 0.01..0.99).
@@ -81,7 +82,7 @@ public enum ConformalRisk {
     /// Tightest error bound the sample supports, without a target alpha: for every grid tau the Clopper-Pearson
     /// upper bound at delta/K (Bonferroni => all K bounds hold simultaneously w.p. >= 1 - delta), and the tau with the
     /// smallest one. Reads as "error among self-handled <= X at confidence 1 - delta". It tightens as more rows are
-    /// handled locally. Assumes calibration and future decisions are exchangeable.
+    /// handled locally. Requires a fixed model and independent, identically distributed calibration/future observations.
     public static func tightestBound(confidences: [Double], correct: [Bool], delta: Double = 0.1, grid: [Double] = defaultGrid) -> Bound? {
         let level = delta / Double(max(grid.count, 1)); let n = confidences.count
         var best: Bound? = nil
