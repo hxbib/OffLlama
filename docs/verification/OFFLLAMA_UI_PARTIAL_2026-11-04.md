@@ -38,3 +38,20 @@ The remote project thread list showed the known Mac tasks completed at handoff.
 The replacement owns the existing checkout exclusively and must inspect any remaining
 build process before regenerating it. Device-panel automation remains unavailable;
 no command-line UI bypass is authorized.
+
+Second partial checkpoint `051d964` is integrated as `90bd25d`. Source inspection
+confirms Keychain replacement now updates an existing item, reports failure, and
+supports removal. Settings clears entered secrets on background/disappearance.
+The keyboard Done action also resigns draft fields. The worker reports an unsigned
+Release pass and found a local profile plus two valid identities, but did not
+establish signing eligibility. No new app was installed.
+
+Inline HTML, content-isolation fixtures, the background cover, configuration
+validation, remaining polish/voice review, exact bundle comparisons, signing and
+installation remain open. The generation script passes parent shell syntax checking;
+its real Xcode behavior still needs the replacement worker's end-to-end check.
+
+The user explicitly replaced the Mac role with Sonnet 5.5 at High effort through
+Gmail Claude. Remote capability discovery confirms `claudeAgent_2`,
+`claude-sonnet-5-5`, option `effort=high`. The completed Terra task was retired and
+confirmed terminal with no pending child work before replacement.

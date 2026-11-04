@@ -43,7 +43,8 @@ requirements are in `docs/research/ACTION_PROGRAM_2026-11-04.md`. Coding delegat
 also use Muse Spark1.3Contributor MAX, Muse Wonder1.0 MAX for hard tasks, Grok4.7 xhigh
 through Grok Build, and Qoder qfmodel (Qwen3.8-Flash). Preserve unspecified options; do not
 choose an ambiguous Qoder account without an assignment. These are coding agents, not runtime
-or training-target model substitutions. The Mac build/device role remains GPT6.1Terra high.
+or training-target model substitutions. The user has replaced the Mac UI/build role with Gmail Claude Sonnet5.5 High.
+The exact target is claudeAgent_2/claude-sonnet-5-5 with effort=high, validated on the linked Mac.
 
 ## Verified repository checkpoint
 
@@ -95,8 +96,11 @@ or training-target model substitutions. The Mac build/device role remains GPT6.1
 Five fresh owners were dispatched from `cc839e4`; task IDs, links and user-selected
 settings are in `docs/verification/offllama_action_dispatches_2026-11-04.json`.
 Mac v1 returned a partial result, integrated at7b4f6b9. Its task is stopped with
-no pending children. Fresh Mac v2 now owns the remaining UI/build scope; its dispatch
-is `docs/verification/offllama_mac_ui_v2_dispatch.json`. Other results are pending. Do not poll; completion wakes the parent.
+no pending children. Mac v2 also returned partial and is integrated at90bd25d; it is terminal with no
+pending child work. The user assigned a fresh Gmail Claude Sonnet5.5 High owner.
+The core input-store result was recovered atf327cae and awaits source review; its
+empty continuation result did not erase the first run’s implementation. Other
+results are pending. Do not poll; completion wakes the parent.
 
 - Messaging and two-turn clarification repair: Muse Spark1.3Contributor max. Owns
   routing/message extraction, AppModel.send draft continuity and native compose/contacts
@@ -106,7 +110,7 @@ is `docs/verification/offllama_mac_ui_v2_dispatch.json`. Other results are pendi
 - Multi-step candidate A: Muse Wonder1.0 max. Read-only design in its isolated checkout.
 - Multi-step candidate B: Grok Build Grok4.7 xhigh. Read-only independent design.
   Parent cross-judges completed packages against `MULTISTEP_DESIGN_RUBRIC.md` next.
-- Mac UI/build: codex13 GPT6.1Terra high, linked Mac existing checkout. Owns Views,
+- Mac UI/build: Gmail Claude Sonnet5.5 High, linked Mac existing checkout. Owns Views,
   native HTML, branding/icon packaging, native dictation setup, concealed API-key
   entry, unsigned/signed builds and installation. It must preserve user files and
   cannot bypass the failed Device panel for UI automation. AppModel/core action
