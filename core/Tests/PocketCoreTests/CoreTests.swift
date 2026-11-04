@@ -3,9 +3,10 @@ import XCTest
 
 final class OptionSetTests: XCTestCase {
     func testTwelveDecisionTypesCovered() {
-        let dyn = [OptionSets.contactPick(candidates: ["a", "b"]).type, OptionSets.eventPick(candidates: ["x"]).type]
+        let dyn = [OptionSets.contactPick(candidates: ["a", "b"]).type, OptionSets.eventPick(candidates: ["x"]).type,
+                   OptionSets.skillPick(candidates: ["s"]).type]   // skillPick: dynamic, untrained, appended last
         XCTAssertEqual(Set(OptionSets.staticSets.map(\.type) + dyn), Set(DecisionType.allCases))
-        XCTAssertEqual(DecisionType.allCases.count, 12)
+        XCTAssertEqual(DecisionType.allCases.count, 13)   // 12 trained + skillPick
     }
     func testFallbacksAreValidAndLettersMap() {
         for s in OptionSets.staticSets {

@@ -1,6 +1,8 @@
 import Foundation
 
-/// Temperature-calibrated softmax over option-letter logits.
+/// Softmax over option-letter logits plus calibration/threshold helpers. The shipped profile uses T = 1 (no temperature
+/// scaling; `temperature` is empty in calibration.json) with contextual-calibration priors; `fitTemperature` is kept for
+/// experiments only. Every helper here is mirrored 1:1 in training/pg_train/calibrate.py.
 public enum Calibration {
     public static func softmax(_ logits: [Double], temperature T: Double = 1.0) -> [Double] {
         guard !logits.isEmpty else { return [] }

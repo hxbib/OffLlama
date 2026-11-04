@@ -105,6 +105,7 @@ final class AppModel {
             if let cal = Bundle.main.url(forResource: "calibration", withExtension: "json"), let p = try? CalibrationProfile.load(from: cal) { profile = p }
             let reflex = Reflex(engine: engine, profile: profile, telemetry: tel, source: "device")
             let a = Assistant(reflex: reflex, memory: mem, actions: actions, cloud: CloudSettings.chain(), isOnline: { OnlineFlag.shared.value })
+            SkillSetup.install(on: a, memory: mem)   // open-world phone actions (docs/SKILLS.md); idempotent
             assistant = a; telemetry = tel; memory = mem
             let pe = ProactiveEngine(memory: mem, reflex: reflex)
             let acts = actions
@@ -133,7 +134,7 @@ final class AppModel {
         busy = true; defer { busy = false; refresh() }
         do {
             let turn = try await assistant.handle(text)
-            let rows = turn.decisions.map { DecisionRow($0, toolCallJSON: $0.type == .toolChoice ? turn.action?.json : nil) }
+            let rows = turn.decisions.map { DecisionRow($0, toolCallJSON: [.toolChoice, .skillPick].contains($0.type) ? turn.action?.json : nil) }
             for r in rows { decisions.insert(r, at: 0) }
             let reflexMs = turn.decisions.map(\.latencyMs).reduce(0, +)
             let onDevice = String(format: "on device · %.0f ms", reflexMs)

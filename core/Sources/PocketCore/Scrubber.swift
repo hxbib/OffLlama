@@ -39,6 +39,7 @@ public struct PrivacyScrubber: Sendable {
         return Result(text: text, mapping: map)
     }
 
+    /// Placeholders are bracketed ("[PERSON_1]" is not a substring of "[PERSON_10]"), so replacement order cannot collide.
     public func restore(_ text: String, mapping: [String: String]) -> String {
         mapping.reduce(text) { $0.replacingOccurrences(of: $1.key, with: $1.value) }
     }

@@ -4,7 +4,7 @@ import PocketCore
 // pg-cli: drive PocketCore against a real llama-server (Linux/macOS dev loop).
 //   pg-cli e2e [--url http://127.0.0.1:8088] [--db e2e.sqlite] [--tau 0.8]
 //   pg-cli decide <decisionType> "<context>"
-//   pg-cli telemetry --db e2e.sqlite      (CSV to stdout)
+//   pg-cli telemetry --db e2e.sqlite [--with-context]      (CSV to stdout; context column only with the flag)
 //   pg-cli distill-queue --db e2e.sqlite [--days 30]      (escalated decisions, JSONL to stdout)
 //   pg-cli teacher-verdicts --db e2e.sqlite --in verdicts.jsonl
 
@@ -85,6 +85,15 @@ case "priors":
     let enc = JSONEncoder(); enc.outputFormatting = [.prettyPrinted, .sortedKeys]
     try enc.encode(prof).write(to: URL(fileURLWithPath: arg("--out", "calibration.json")))
     print("wrote \(prof.prior.count) priors -> \(arg("--out", "calibration.json"))")
+case "skill-priors":
+    // Content-free priors for the dynamic skillPick sets (2...8 options), merged into an existing calibration.json.
+    let path = arg("--calibration", "calibration.json")
+    var prof = (try? CalibrationProfile.load(from: URL(fileURLWithPath: path))) ?? CalibrationProfile()
+    let r = Reflex(engine: engine, profile: prof)
+    for (k, v) in try await r.measureSkillPickPriors() { prof.prior[k] = v }
+    let enc = JSONEncoder(); enc.outputFormatting = [.prettyPrinted, .sortedKeys]
+    try enc.encode(prof).write(to: URL(fileURLWithPath: arg("--out", path)))
+    print("merged skillPick priors -> \(arg("--out", path)) (\(prof.prior.count) sets total)")
 case "dump-sets":
     // Machine-readable option sets + one rendered prompt; training/tests/test_parity.py checks Python matches Swift.
     let sets = OptionSets.staticSets + [OptionSets.contactPick(candidates: ["Sam Lee", "Sam Ortiz"]), OptionSets.eventPick(candidates: ["Dentist", "Standup"])]
@@ -99,7 +108,7 @@ case "dump-sets":
     ]
     print(String(decoding: try JSONSerialization.data(withJSONObject: obj, options: [.prettyPrinted, .sortedKeys]), as: UTF8.self))
 case "telemetry":
-    print(try TelemetryLog(db: SQLiteDB(path: arg("--db", "e2e-telemetry.sqlite"))).csv(), terminator: "")
+    print(try TelemetryLog(db: SQLiteDB(path: arg("--db", "e2e-telemetry.sqlite"))).csv(includeContext: CommandLine.arguments.contains("--with-context")), terminator: "")
 case "distill-queue":
     // JSONL of escalated decisions for the next teacher-labeling round (same schema as the app's Settings export).
     print(try TelemetryLog(db: SQLiteDB(path: arg("--db", "e2e-telemetry.sqlite"))).exportDistillationQueue(sinceDays: Int(arg("--days", "30")) ?? 30), terminator: "")

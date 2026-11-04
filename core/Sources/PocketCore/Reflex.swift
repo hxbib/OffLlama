@@ -12,7 +12,12 @@ public struct ReflexDecision: Sendable {
     public let telemetryID: Int64?
 }
 
-/// System 1. One forward pass per decision; letters' logits -> temperature softmax -> confidence vs tau.
+/// System 1. One forward pass per decision; letters' logits -> (minus content-free prior) -> softmax -> confidence vs tau.
+/// Mirrors eval/score_decisions.py exactly: same floor for letters outside the engine's top-k, same prior subtraction
+/// (softmax is shift-invariant, so subtracting from raw log-probs equals the eval's log(normalized p) - prior), first index
+/// wins argmax ties (Python `max`), and a decision is handled locally iff conf >= tau (escalates iff conf < tau).
+/// Thread-safety: `profile` and `promptFormat` are configured before first use and not mutated afterwards; telemetry
+/// writes are serialized by SQLiteDB's lock.
 public final class Reflex: @unchecked Sendable {
     public let engine: LLMEngine
     public var profile: CalibrationProfile
@@ -48,6 +53,7 @@ public final class Reflex: @unchecked Sendable {
         let chosen = escalated ? set.options.first { $0.id == set.fallbackID }! : argmax
         var probs: [String: Double] = [:]
         for (i, o) in set.options.enumerated() { probs[o.id] = p[i] }
+        // Telemetry `chosen` = argmax (what the model would do), even when escalated; `escalated` records the fallback.
         let id = try telemetry?.log(DecisionRecord(id: nil, timestamp: clock(), decisionType: set.type, chosenID: argmax.id,
                                                    confidence: conf, escalated: escalated, latencyMs: ms,
                                                    model: engine.modelName, agreedWithTeacher: nil, source: source,

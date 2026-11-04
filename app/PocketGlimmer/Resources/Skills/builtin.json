@@ -1,0 +1,1049 @@
+{
+  "skills" : [
+    {
+      "aliases" : [
+        "imessage",
+        "sms",
+        "text message",
+        "reply to a text",
+        "respond to a text",
+        "messages app"
+      ],
+      "argSchema" : [
+        {
+          "kind" : "contact",
+          "name" : "contact",
+          "required" : true
+        },
+        {
+          "kind" : "text",
+          "name" : "body",
+          "required" : false
+        }
+      ],
+      "category" : "message",
+      "confirm" : true,
+      "examples" : [
+        "text Sam I'm running late",
+        "reply to Mom's text saying on my way"
+      ],
+      "id" : "imessage_send",
+      "invocation" : {
+        "handler" : "send_message",
+        "type" : "native"
+      },
+      "note" : "Opens the system Messages compose sheet pre-filled; you tap Send.",
+      "offlineCapable" : true,
+      "title" : "Send an iMessage / text"
+    },
+    {
+      "aliases" : [
+        "instagram",
+        "insta",
+        "ig",
+        "instagram dm",
+        "instagram message",
+        "ig dm",
+        "dm on instagram"
+      ],
+      "argSchema" : [
+        {
+          "kind" : "handle",
+          "name" : "contact",
+          "required" : true
+        },
+        {
+          "kind" : "text",
+          "name" : "body",
+          "required" : false
+        }
+      ],
+      "category" : "social",
+      "clipboard" : "{body}",
+      "confirm" : true,
+      "examples" : [
+        "dm sam on instagram saying congrats",
+        "message @sam on insta"
+      ],
+      "id" : "instagram_dm",
+      "invocation" : {
+        "template" : "https://ig.me/m/{contact}",
+        "type" : "url"
+      },
+      "note" : "Instagram has no API to send DMs. ig.me opens the DM thread; the message is on your clipboard: paste and send.",
+      "offlineCapable" : false,
+      "title" : "Instagram DM"
+    },
+    {
+      "aliases" : [
+        "twitter",
+        "x dm",
+        "twitter dm",
+        "tweet dm",
+        "dm on twitter",
+        "on x",
+        "x.com"
+      ],
+      "argSchema" : [
+        {
+          "kind" : "handle",
+          "name" : "contact",
+          "required" : true
+        },
+        {
+          "kind" : "text",
+          "name" : "body",
+          "required" : false
+        }
+      ],
+      "category" : "social",
+      "clipboard" : "{body}",
+      "confirm" : true,
+      "examples" : [
+        "message @sam on twitter",
+        "dm sam on x saying gg"
+      ],
+      "id" : "x_dm",
+      "invocation" : {
+        "template" : "https://x.com/{contact}",
+        "type" : "url"
+      },
+      "note" : "X needs a numeric recipient_id to prefill a DM; we open @handle's profile (tap Message) with the text on your clipboard.",
+      "offlineCapable" : false,
+      "title" : "X (Twitter) DM"
+    },
+    {
+      "aliases" : [
+        "whatsapp",
+        "whats app",
+        "wa message"
+      ],
+      "argSchema" : [
+        {
+          "kind" : "contact",
+          "name" : "contact",
+          "required" : true
+        },
+        {
+          "kind" : "text",
+          "name" : "body",
+          "required" : false
+        }
+      ],
+      "category" : "social",
+      "confirm" : true,
+      "examples" : [
+        "whatsapp Leo that I landed",
+        "send a whatsapp to mom"
+      ],
+      "id" : "whatsapp_send",
+      "invocation" : {
+        "template" : "whatsapp://send?text={body}",
+        "type" : "url"
+      },
+      "note" : "Opens WhatsApp with the text prefilled; you pick the chat and tap Send.",
+      "offlineCapable" : false,
+      "title" : "WhatsApp message"
+    },
+    {
+      "aliases" : [
+        "auto reply",
+        "autoreply",
+        "every reel",
+        "reply to every",
+        "whenever someone",
+        "automatic reply"
+      ],
+      "argSchema" : [
+        {
+          "kind" : "text",
+          "name" : "trigger",
+          "required" : false
+        },
+        {
+          "kind" : "text",
+          "name" : "reply",
+          "required" : true
+        }
+      ],
+      "category" : "social",
+      "confirm" : true,
+      "examples" : [
+        "reply to every reel with haha nice",
+        "whenever someone sends a reel say lol"
+      ],
+      "id" : "instagram_autoreply",
+      "invocation" : {
+        "handler" : "autoreply_rule",
+        "type" : "native"
+      },
+      "note" : "iOS lets no app read or answer Instagram DMs. The rule is saved to memory and turned into a Shortcuts Automation recipe.",
+      "offlineCapable" : true,
+      "title" : "Auto-reply rule (Instagram / any app)"
+    },
+    {
+      "aliases" : [
+        "email",
+        "e-mail",
+        "mail",
+        "gmail",
+        "write an email",
+        "send an email"
+      ],
+      "argSchema" : [
+        {
+          "kind" : "contact",
+          "name" : "contact",
+          "required" : true
+        },
+        {
+          "kind" : "text",
+          "name" : "subject",
+          "required" : false
+        },
+        {
+          "kind" : "text",
+          "name" : "body",
+          "required" : false
+        }
+      ],
+      "category" : "email",
+      "confirm" : true,
+      "examples" : [
+        "email Dana the slides are ready",
+        "send an email to my professor"
+      ],
+      "id" : "email_compose",
+      "invocation" : {
+        "handler" : "send_email",
+        "type" : "native"
+      },
+      "note" : "Opens the Mail compose sheet pre-filled; you tap Send.",
+      "offlineCapable" : true,
+      "title" : "Write an email"
+    },
+    {
+      "aliases" : [
+        "summarize emails",
+        "recent emails",
+        "last emails",
+        "inbox summary",
+        "my emails",
+        "unread mail",
+        "analyze emails"
+      ],
+      "argSchema" : [
+        {
+          "kind" : "number",
+          "name" : "n",
+          "required" : false
+        }
+      ],
+      "category" : "email",
+      "confirm" : true,
+      "examples" : [
+        "summarize my last 5 emails",
+        "analyze my last few emails and tell me about them"
+      ],
+      "id" : "email_digest",
+      "invocation" : {
+        "handler" : "email_digest",
+        "type" : "native"
+      },
+      "note" : "Apps cannot read Mail. Select messages in Mail, Share → Pocket Glimmer (Shortcut “PG Share Emails”); the summary is made on device.",
+      "offlineCapable" : true,
+      "title" : "Summarize my recent emails"
+    },
+    {
+      "aliases" : [
+        "reminder",
+        "remind me",
+        "to-do",
+        "todo"
+      ],
+      "argSchema" : [
+        {
+          "kind" : "text",
+          "name" : "title",
+          "required" : true
+        },
+        {
+          "kind" : "datetime",
+          "name" : "when",
+          "required" : false
+        }
+      ],
+      "category" : "reminders",
+      "confirm" : false,
+      "examples" : [
+        "remind me to buy milk tomorrow"
+      ],
+      "id" : "reminder_create",
+      "invocation" : {
+        "handler" : "create_reminder",
+        "type" : "native"
+      },
+      "offlineCapable" : true,
+      "title" : "Create a reminder"
+    },
+    {
+      "aliases" : [
+        "calendar",
+        "event",
+        "schedule",
+        "meeting",
+        "book"
+      ],
+      "argSchema" : [
+        {
+          "kind" : "text",
+          "name" : "title",
+          "required" : true
+        },
+        {
+          "kind" : "datetime",
+          "name" : "when",
+          "required" : false
+        }
+      ],
+      "category" : "calendar",
+      "confirm" : false,
+      "examples" : [
+        "put lunch with Leo on my calendar Friday at 1pm"
+      ],
+      "id" : "calendar_create",
+      "invocation" : {
+        "handler" : "create_event",
+        "type" : "native"
+      },
+      "offlineCapable" : true,
+      "title" : "Add a calendar event"
+    },
+    {
+      "aliases" : [
+        "what's on",
+        "agenda",
+        "next meeting",
+        "free time"
+      ],
+      "argSchema" : [
+        {
+          "kind" : "query",
+          "name" : "query",
+          "required" : false
+        }
+      ],
+      "category" : "calendar",
+      "confirm" : false,
+      "examples" : [
+        "when is my dentist appointment"
+      ],
+      "id" : "calendar_find",
+      "invocation" : {
+        "handler" : "find_event",
+        "type" : "native"
+      },
+      "offlineCapable" : true,
+      "title" : "Check my calendar"
+    },
+    {
+      "aliases" : [
+        "alarm",
+        "wake me",
+        "wake up",
+        "alarm clock"
+      ],
+      "argSchema" : [
+        {
+          "kind" : "datetime",
+          "name" : "time",
+          "required" : true
+        },
+        {
+          "kind" : "text",
+          "name" : "label",
+          "required" : false
+        }
+      ],
+      "category" : "alarms",
+      "confirm" : false,
+      "examples" : [
+        "wake me at 6",
+        "set an alarm for 7:30am"
+      ],
+      "id" : "alarm_create",
+      "invocation" : {
+        "input" : "{time}|{label}",
+        "name" : "PG Create Alarm",
+        "type" : "shortcut"
+      },
+      "note" : "No public alarm URL; the Shortcut uses the built-in Clock “Create Alarm” action.",
+      "offlineCapable" : true,
+      "title" : "Set an alarm"
+    },
+    {
+      "aliases" : [
+        "timer",
+        "countdown",
+        "pomodoro"
+      ],
+      "argSchema" : [
+        {
+          "kind" : "duration",
+          "name" : "duration",
+          "required" : true
+        }
+      ],
+      "category" : "alarms",
+      "confirm" : false,
+      "examples" : [
+        "set a timer for 10 minutes",
+        "start a 25 minute pomodoro"
+      ],
+      "id" : "timer_start",
+      "invocation" : {
+        "input" : "{duration}",
+        "name" : "PG Start Timer",
+        "type" : "shortcut"
+      },
+      "note" : "Shortcut wraps the built-in Clock “Start Timer” action.",
+      "offlineCapable" : true,
+      "title" : "Start a timer"
+    },
+    {
+      "aliases" : [
+        "call",
+        "phone",
+        "ring",
+        "dial"
+      ],
+      "argSchema" : [
+        {
+          "kind" : "contact",
+          "name" : "contact",
+          "required" : true
+        }
+      ],
+      "category" : "phone",
+      "confirm" : true,
+      "examples" : [
+        "call Mom",
+        "phone the pharmacy"
+      ],
+      "id" : "call",
+      "invocation" : {
+        "template" : "tel:{phone}",
+        "type" : "url"
+      },
+      "note" : "iOS shows its own Call prompt; the number comes from Contacts on device.",
+      "offlineCapable" : true,
+      "title" : "Phone call"
+    },
+    {
+      "aliases" : [
+        "facetime",
+        "video call",
+        "video chat"
+      ],
+      "argSchema" : [
+        {
+          "kind" : "contact",
+          "name" : "contact",
+          "required" : true
+        }
+      ],
+      "category" : "phone",
+      "confirm" : true,
+      "examples" : [
+        "facetime Leo"
+      ],
+      "id" : "facetime",
+      "invocation" : {
+        "template" : "facetime:{phone}",
+        "type" : "url"
+      },
+      "offlineCapable" : false,
+      "title" : "FaceTime"
+    },
+    {
+      "aliases" : [
+        "directions",
+        "navigate",
+        "maps",
+        "how do i get to",
+        "route to"
+      ],
+      "argSchema" : [
+        {
+          "kind" : "place",
+          "name" : "place",
+          "required" : true
+        }
+      ],
+      "category" : "web",
+      "confirm" : false,
+      "examples" : [
+        "directions to Hunter College",
+        "navigate to the nearest Walgreens"
+      ],
+      "id" : "maps_directions",
+      "invocation" : {
+        "template" : "maps://?daddr={place}",
+        "type" : "url"
+      },
+      "offlineCapable" : false,
+      "title" : "Directions in Maps"
+    },
+    {
+      "aliases" : [
+        "uber",
+        "ride",
+        "taxi",
+        "cab",
+        "lyft"
+      ],
+      "argSchema" : [
+        {
+          "kind" : "place",
+          "name" : "place",
+          "required" : true
+        }
+      ],
+      "category" : "web",
+      "confirm" : true,
+      "examples" : [
+        "get me an uber to JFK"
+      ],
+      "id" : "uber_ride",
+      "invocation" : {
+        "template" : "uber://?action=setPickup&pickup=my_location&dropoff[formatted_address]={place}",
+        "type" : "url"
+      },
+      "note" : "Opens Uber with the drop-off filled; you confirm the ride (spends money) in Uber.",
+      "offlineCapable" : false,
+      "title" : "Request an Uber"
+    },
+    {
+      "aliases" : [
+        "search",
+        "google",
+        "look up online",
+        "web search",
+        "duckduckgo",
+        "safari"
+      ],
+      "argSchema" : [
+        {
+          "kind" : "query",
+          "name" : "query",
+          "required" : true
+        }
+      ],
+      "category" : "web",
+      "confirm" : false,
+      "examples" : [
+        "search the web for best ramen in the Bronx",
+        "google how tall is the Empire State Building"
+      ],
+      "id" : "web_search",
+      "invocation" : {
+        "template" : "https://duckduckgo.com/?q={query}",
+        "type" : "url"
+      },
+      "offlineCapable" : false,
+      "title" : "Search the web"
+    },
+    {
+      "aliases" : [
+        "open link",
+        "open url",
+        "website",
+        "go to"
+      ],
+      "argSchema" : [
+        {
+          "kind" : "url",
+          "name" : "url",
+          "required" : true
+        }
+      ],
+      "category" : "web",
+      "confirm" : false,
+      "examples" : [
+        "open https://hunter.cuny.edu"
+      ],
+      "id" : "open_url",
+      "invocation" : {
+        "template" : "{url}",
+        "type" : "url"
+      },
+      "offlineCapable" : false,
+      "title" : "Open a link"
+    },
+    {
+      "aliases" : [
+        "open",
+        "launch",
+        "start app",
+        "open app"
+      ],
+      "argSchema" : [
+        {
+          "kind" : "app",
+          "name" : "app",
+          "required" : true
+        }
+      ],
+      "category" : "shortcuts",
+      "confirm" : false,
+      "examples" : [
+        "open Spotify",
+        "launch the camera"
+      ],
+      "id" : "open_app",
+      "invocation" : {
+        "input" : "{app}",
+        "name" : "PG Open App",
+        "type" : "shortcut"
+      },
+      "note" : "Shortcut “PG Open App” uses the built-in Open App action with the app name as input.",
+      "offlineCapable" : true,
+      "title" : "Open an app"
+    },
+    {
+      "aliases" : [
+        "run shortcut",
+        "shortcut named",
+        "run my shortcut"
+      ],
+      "argSchema" : [
+        {
+          "kind" : "text",
+          "name" : "name",
+          "required" : true
+        },
+        {
+          "kind" : "text",
+          "name" : "text",
+          "required" : false
+        }
+      ],
+      "category" : "shortcuts",
+      "confirm" : false,
+      "examples" : [
+        "run my shortcut Morning Routine"
+      ],
+      "id" : "run_shortcut",
+      "invocation" : {
+        "template" : "shortcuts://run-shortcut?name={name}&input=text&text={text}",
+        "type" : "url"
+      },
+      "offlineCapable" : true,
+      "title" : "Run a Shortcut by name"
+    },
+    {
+      "aliases" : [
+        "create shortcut",
+        "new shortcut",
+        "make a shortcut",
+        "automation"
+      ],
+      "argSchema" : [
+
+      ],
+      "category" : "shortcuts",
+      "confirm" : false,
+      "examples" : [
+        "create a shortcut",
+        "make a new automation"
+      ],
+      "id" : "create_shortcut",
+      "invocation" : {
+        "template" : "shortcuts://create-shortcut",
+        "type" : "url"
+      },
+      "note" : "Apps cannot write Shortcuts; this opens the Shortcuts editor (and docs/SKILLS.md lists recipes).",
+      "offlineCapable" : true,
+      "title" : "Create a new Shortcut"
+    },
+    {
+      "aliases" : [
+        "music",
+        "play music",
+        "song",
+        "playlist",
+        "apple music"
+      ],
+      "argSchema" : [
+        {
+          "kind" : "query",
+          "name" : "query",
+          "required" : false
+        }
+      ],
+      "category" : "shortcuts",
+      "confirm" : false,
+      "examples" : [
+        "play some music",
+        "open apple music"
+      ],
+      "id" : "music_play",
+      "invocation" : {
+        "template" : "music://",
+        "type" : "url"
+      },
+      "offlineCapable" : true,
+      "title" : "Play music"
+    },
+    {
+      "aliases" : [
+        "spotify"
+      ],
+      "argSchema" : [
+        {
+          "kind" : "query",
+          "name" : "query",
+          "required" : false
+        }
+      ],
+      "category" : "shortcuts",
+      "confirm" : false,
+      "examples" : [
+        "play lofi on spotify"
+      ],
+      "id" : "spotify_play",
+      "invocation" : {
+        "template" : "spotify:search:{query}",
+        "type" : "url"
+      },
+      "offlineCapable" : false,
+      "title" : "Spotify"
+    },
+    {
+      "aliases" : [
+        "note",
+        "notes",
+        "jot down",
+        "write down"
+      ],
+      "argSchema" : [
+        {
+          "kind" : "text",
+          "name" : "text",
+          "required" : true
+        }
+      ],
+      "category" : "documents",
+      "confirm" : false,
+      "examples" : [
+        "make a note: wifi code is on the fridge",
+        "jot down the parking spot"
+      ],
+      "id" : "notes_create",
+      "invocation" : {
+        "input" : "{text}",
+        "name" : "PG Create Note",
+        "type" : "shortcut"
+      },
+      "note" : "Shortcut wraps Notes “Create Note”; mobilenotes:// only opens Notes.",
+      "offlineCapable" : true,
+      "title" : "Create a note"
+    },
+    {
+      "aliases" : [
+        "photos",
+        "camera roll",
+        "pictures",
+        "gallery"
+      ],
+      "argSchema" : [
+
+      ],
+      "category" : "documents",
+      "confirm" : false,
+      "examples" : [
+        "show my photos",
+        "open the camera roll"
+      ],
+      "id" : "photos_open",
+      "invocation" : {
+        "template" : "photos-redirect://",
+        "type" : "url"
+      },
+      "offlineCapable" : true,
+      "title" : "Open Photos"
+    },
+    {
+      "aliases" : [
+        "document",
+        "pdf",
+        "analyze this",
+        "summarize this file",
+        "read this file"
+      ],
+      "argSchema" : [
+        {
+          "kind" : "document",
+          "name" : "document",
+          "required" : false
+        }
+      ],
+      "category" : "documents",
+      "confirm" : false,
+      "examples" : [
+        "analyze this document",
+        "summarize this pdf"
+      ],
+      "id" : "analyze_document",
+      "invocation" : {
+        "handler" : "analyze_document",
+        "type" : "native"
+      },
+      "note" : "Document picker: PDF (PDFKit), .txt and .md. Summary on device; long files escalate to Muse Spark 1.3 only if sensitivity allows.",
+      "offlineCapable" : true,
+      "title" : "Analyze a document"
+    },
+    {
+      "aliases" : [
+        "chart",
+        "graph",
+        "plot",
+        "visualize",
+        "visualization",
+        "bar chart",
+        "html"
+      ],
+      "argSchema" : [
+        {
+          "kind" : "text",
+          "name" : "data",
+          "required" : false
+        }
+      ],
+      "category" : "documents",
+      "confirm" : false,
+      "examples" : [
+        "make a chart of these numbers: rent 1200, food 400, transit 130",
+        "visualize this data as a bar chart"
+      ],
+      "id" : "html_viz",
+      "invocation" : {
+        "handler" : "html_viz",
+        "type" : "native"
+      },
+      "note" : "Numbers in the text become an inline SVG bar chart offline, no model needed.",
+      "offlineCapable" : true,
+      "title" : "Make a chart / HTML visualization"
+    },
+    {
+      "aliases" : [
+        "translate",
+        "translation",
+        "in spanish",
+        "in french",
+        "how do you say"
+      ],
+      "argSchema" : [
+        {
+          "kind" : "text",
+          "name" : "text",
+          "required" : true
+        }
+      ],
+      "category" : "web",
+      "confirm" : false,
+      "examples" : [
+        "translate good morning to Spanish"
+      ],
+      "id" : "translate",
+      "invocation" : {
+        "kind" : "generation",
+        "type" : "cloud"
+      },
+      "note" : "Short phrases on the 1B; long text escalates when online and allowed.",
+      "offlineCapable" : true,
+      "title" : "Translate a phrase"
+    },
+    {
+      "aliases" : [
+        "summarize",
+        "tldr",
+        "summary",
+        "key points"
+      ],
+      "argSchema" : [
+        {
+          "kind" : "text",
+          "name" : "text",
+          "required" : false
+        }
+      ],
+      "category" : "documents",
+      "confirm" : false,
+      "examples" : [
+        "summarize what I just shared",
+        "tldr this"
+      ],
+      "id" : "summarize_text",
+      "invocation" : {
+        "kind" : "longContext",
+        "type" : "cloud"
+      },
+      "offlineCapable" : true,
+      "title" : "Summarize shared text"
+    },
+    {
+      "aliases" : [
+        "battery",
+        "storage",
+        "disk space",
+        "free space",
+        "charge"
+      ],
+      "argSchema" : [
+
+      ],
+      "category" : "device",
+      "confirm" : false,
+      "examples" : [
+        "how much battery do I have",
+        "how much storage is left"
+      ],
+      "id" : "device_status",
+      "invocation" : {
+        "handler" : "device_status",
+        "type" : "native"
+      },
+      "offlineCapable" : true,
+      "title" : "Battery & storage"
+    },
+    {
+      "aliases" : [
+        "flashlight",
+        "torch",
+        "light"
+      ],
+      "argSchema" : [
+
+      ],
+      "category" : "device",
+      "confirm" : false,
+      "examples" : [
+        "turn on the flashlight"
+      ],
+      "id" : "flashlight_toggle",
+      "invocation" : {
+        "input" : "",
+        "name" : "PG Toggle Flashlight",
+        "type" : "shortcut"
+      },
+      "offlineCapable" : true,
+      "title" : "Toggle flashlight"
+    },
+    {
+      "aliases" : [
+        "do not disturb",
+        "dnd",
+        "focus",
+        "silence notifications"
+      ],
+      "argSchema" : [
+
+      ],
+      "category" : "device",
+      "confirm" : false,
+      "examples" : [
+        "turn on do not disturb",
+        "focus mode on"
+      ],
+      "id" : "focus_toggle",
+      "invocation" : {
+        "input" : "",
+        "name" : "PG Toggle Focus",
+        "type" : "shortcut"
+      },
+      "offlineCapable" : true,
+      "title" : "Toggle Do Not Disturb"
+    },
+    {
+      "aliases" : [
+        "low power",
+        "battery saver",
+        "power saving"
+      ],
+      "argSchema" : [
+
+      ],
+      "category" : "device",
+      "confirm" : false,
+      "examples" : [
+        "turn on low power mode"
+      ],
+      "id" : "low_power_toggle",
+      "invocation" : {
+        "input" : "",
+        "name" : "PG Toggle Low Power",
+        "type" : "shortcut"
+      },
+      "offlineCapable" : true,
+      "title" : "Toggle Low Power Mode"
+    },
+    {
+      "aliases" : [
+        "weather",
+        "rain",
+        "forecast",
+        "temperature outside"
+      ],
+      "argSchema" : [
+        {
+          "kind" : "place",
+          "name" : "place",
+          "required" : false
+        }
+      ],
+      "category" : "web",
+      "confirm" : false,
+      "examples" : [
+        "what's the weather",
+        "will it rain tomorrow"
+      ],
+      "id" : "weather",
+      "invocation" : {
+        "input" : "{place}",
+        "name" : "PG Weather",
+        "type" : "shortcut"
+      },
+      "note" : "WeatherKit needs a paid entitlement; the Shortcut uses the built-in Get Current Weather action. Needs internet.",
+      "offlineCapable" : false,
+      "title" : "Weather"
+    },
+    {
+      "aliases" : [
+        "remember",
+        "recall",
+        "what did i say",
+        "did i tell you"
+      ],
+      "argSchema" : [
+        {
+          "kind" : "query",
+          "name" : "query",
+          "required" : false
+        }
+      ],
+      "category" : "memory",
+      "confirm" : false,
+      "examples" : [
+        "what did I say my locker code was"
+      ],
+      "id" : "memory_recall",
+      "invocation" : {
+        "handler" : "search_memory",
+        "type" : "native"
+      },
+      "offlineCapable" : true,
+      "title" : "Recall something I told you"
+    }
+  ]
+}

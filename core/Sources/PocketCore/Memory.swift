@@ -90,6 +90,11 @@ public struct DecisionCorrection: Sendable, Equatable {
 
 public enum ConflictResolution: String, Sendable { case update, keepBoth = "keep_both", ignoreNew = "ignore_new" }
 
+/// Thread-safety: every SQL statement goes through `SQLiteDB`, which serializes on one lock (and the connection is opened
+/// FULLMUTEX), so concurrent calls never race on the handle. `upsert` reads existing facts, awaits the resolver, then writes
+/// in a transaction; two concurrent upserts of the same subject+attribute could both insert. The app calls it from one
+/// turn at a time (Assistant.handle is awaited serially from the main actor) and `consolidate()` merges any duplicates.
+/// `budget`/`correctionBudget` are set at configuration time only.
 public final class MemoryStore: @unchecked Sendable {
     let db: SQLiteDB
     let embedder: Embedder
@@ -193,7 +198,7 @@ public final class MemoryStore: @unchecked Sendable {
         let victims = act.filter { $0.id != keep }
             .sorted { (MemoryProvenance.trust($0.provenance), $0.updatedAt.timeIntervalSince1970) < (MemoryProvenance.trust($1.provenance), $1.updatedAt.timeIntervalSince1970) }
             .prefix(act.count - budget).map(\.id)
-        for v in victims { try forget(id: v) }
+        try db.transaction { for v in victims { try forget(id: v) } }
         return Array(victims)
     }
 
@@ -254,9 +259,12 @@ public final class MemoryStore: @unchecked Sendable {
     public func forget(id: Int64) throws { try db.run("DELETE FROM facts WHERE id=?", [.int(id)]) }
     /// Physically delete expired rows.
     @discardableResult public func purgeExpired() throws -> Int {
-        let n = try db.query("SELECT COUNT(*) AS n FROM facts WHERE expires IS NOT NULL AND expires <= ?", [.double(clock().timeIntervalSince1970)]).first?["n"]?.int ?? 0
-        try db.run("DELETE FROM facts WHERE expires IS NOT NULL AND expires <= ?", [.double(clock().timeIntervalSince1970)])
-        return Int(n)
+        let now = clock().timeIntervalSince1970          // one cutoff for both statements, in one transaction
+        return try db.transaction {
+            let n = try db.query("SELECT COUNT(*) AS n FROM facts WHERE expires IS NOT NULL AND expires <= ?", [.double(now)]).first?["n"]?.int ?? 0
+            try db.run("DELETE FROM facts WHERE expires IS NOT NULL AND expires <= ?", [.double(now)])
+            return Int(n)
+        }
     }
 
     /// Profile = the user's current single-valued attributes plus lists of multi-valued ones.

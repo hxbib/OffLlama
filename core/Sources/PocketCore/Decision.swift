@@ -15,6 +15,7 @@ public enum DecisionType: String, Codable, CaseIterable, Sendable {
     case timing             // now / at a time / on arrival / recurring
     case sensitivity        // may this leave the device (after scrubbing)?
     case answerability      // can the small on-device model answer this itself?
+    case skillPick          // open-world: which registry skill (dynamic candidates like contactPick; untrained, no shots)
 }
 
 public struct DecisionOption: Codable, Hashable, Sendable {
@@ -134,6 +135,13 @@ public enum OptionSets {
             options: c.enumerated().map { .init("e\($0.offset)", $0.element) } + [.init("ask", "Unclear: ask the user")],
             fallbackID: "ask")
     }
+    /// Open-world actions: candidates are the top-k skills retrieved from the SkillRegistry (Skills.swift).
+    public static func skillPick(candidates: [String]) -> OptionSet {
+        let c = Array(candidates.prefix(7))
+        return OptionSet(type: .skillPick, question: "Which phone action does the user want?",
+            options: c.enumerated().map { .init("s\($0.offset)", $0.element) } + [.init("ask", "None of these: ask the user")],
+            fallbackID: "ask")
+    }
 
     public static let staticSets: [OptionSet] = [route, toolChoice, rememberOrNot, memoryConflict, notificationTriage,
                                                  confirmBeforeAct, nudgeNow, timing, sensitivity, answerability]
@@ -224,6 +232,6 @@ public enum DecisionPrompt {
     public static let contentFree = ["N/A", "", "[MASK]"]
     /// Key for per-set prior: dynamic sets depend only on option count (positional prior).
     public static func priorKey(_ set: OptionSet) -> String {
-        set.type == .contactPick || set.type == .eventPick ? "\(set.type.rawValue)#\(set.options.count)" : set.type.rawValue
+        set.type == .contactPick || set.type == .eventPick || set.type == .skillPick ? "\(set.type.rawValue)#\(set.options.count)" : set.type.rawValue
     }
 }

@@ -63,6 +63,9 @@ public final class Assistant: @unchecked Sendable {
     public var profileMaxChars = 600
     /// Char budget of the profile sent to the cloud on escalation, after scrubbing (0 = never send the profile).
     public var cloudProfileMaxChars = 400
+    /// Open-world skill registry (Skills.swift, ActionPlanner.swift). nil = today's six-tool behaviour, unchanged.
+    public var skills: SkillRegistry? = nil
+    public var skillRunner: SkillRunner? = nil   // runs `skill:` actions on the device (iOS IOSSkillRunner)
 
     public init(reflex: Reflex, memory: MemoryStore, actions: ActionExecutor, cloud: CloudBrainChain = .init([]), isOnline: @escaping () -> Bool = { false }) {
         self.reflex = reflex; self.memory = memory; self.actions = actions; self.cloud = cloud; self.isOnline = isOnline
@@ -108,6 +111,10 @@ public final class Assistant: @unchecked Sendable {
         let route = try await reflex.decide(OptionSets.route, context: ctx)
         decisions.append(route)
         let lmem = localMemory(mem)
+        var skillAction: PlannedAction?   // explicit app/feature request + confident skillPick; no registry = no-op
+        if let r = try await skillOverride(utterance, ctx: ctx, route: route, decisions: &decisions, planned: &skillAction) {
+            return AssistantTurn(reply: r, decisions: decisions, remembered: remembered, action: skillAction, corrections: corrections)
+        }
 
         switch route.chosen.id {
         case "tool":
@@ -164,6 +171,9 @@ public final class Assistant: @unchecked Sendable {
     func toolPath(_ utterance: String, ctx: String, decisions: inout [ReflexDecision], planned: inout PlannedAction?) async throws -> Reply {
         let tool = try await reflex.decide(OptionSets.toolChoice, context: ctx)
         decisions.append(tool)
+        if let reg = skills, ActionPlanner.shouldUseSkills(tool: tool, utterance: utterance, registry: reg) {   // open-world skills
+            return try await planSkill(utterance, ctx: ctx, registry: reg, decisions: &decisions, planned: &planned)
+        }
         guard tool.chosen.id != "none" else { return .clarify("What would you like me to do?") }
         var args = ArgumentExtractor.heuristic(tool: tool.chosen.id, utterance: utterance)
 
@@ -201,7 +211,7 @@ public final class Assistant: @unchecked Sendable {
         return .acted(try await actions.perform(action))
     }
 
-    public func confirm(_ a: PlannedAction) async throws -> Reply { .acted(try await actions.perform(a)) }
+    public func confirm(_ a: PlannedAction) async throws -> Reply { .acted(try await execute(a)) }   // skill: -> registry
 
     static func localPrompt(_ q: String, mem: String) -> String {
         "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\nYou are a concise, warm personal assistant running fully offline on the user's phone. \(mem)<|eot_id|><|start_header_id|>user<|end_header_id|>\n\n\(q)<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n"

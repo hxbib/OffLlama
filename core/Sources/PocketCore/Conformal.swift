@@ -111,5 +111,7 @@ public enum ConformalRisk {
     }
 
     /// Minimum accepted rows for a tau to be certifiable with zero errors: (1-alpha)^n <= delta/K.
+    /// Note: `k` defaults to 1 here (single pre-chosen tau) but to the 99-point grid in `minRowsNeeded`; pass k: 99 for
+    /// the grid-corrected number the docs quote (alpha 0.05, delta 0.1 -> 135 rows; k = 1 -> 45).
     public static func minRowsForZeroErrors(alpha: Double, delta: Double, k: Int = 1) -> Int { Int(ceil(log(delta / Double(k)) / log1p(-alpha))) }
 }

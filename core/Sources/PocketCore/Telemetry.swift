@@ -47,6 +47,7 @@ public final class TelemetryLog: @unchecked Sendable {
           confidence REAL NOT NULL, escalated INTEGER NOT NULL, latency_ms REAL NOT NULL, model TEXT NOT NULL,
           agreed_teacher INTEGER, source TEXT NOT NULL);
         CREATE INDEX IF NOT EXISTS decisions_ts ON decisions(ts);
+        CREATE INDEX IF NOT EXISTS decisions_escalated_ts ON decisions(escalated, ts);
         """)
         // Migration for pre-context databases (JSON text columns).
         let cols = try db.query("PRAGMA table_info(decisions)").compactMap { $0["name"]?.text }
@@ -133,13 +134,17 @@ public final class TelemetryLog: @unchecked Sendable {
         return rows.map { ($0["model"]?.text ?? "", Int($0["n"]?.int ?? 0), Int($0["loc"]?.int ?? 0)) }
     }
 
-    /// CSV export (for the training loop and for the judges).
-    public func csv() throws -> String {
-        var s = "id,timestamp_iso,decision_type,chosen,confidence,escalated,latency_ms,model,agreed_with_teacher,source,context,option_ids\n"
+    /// CSV export (for the training loop and for the judges). `chosen` is the model's argmax (what it would have done),
+    /// logged even when the decision escalated; `escalated` says whether the fallback was used instead.
+    /// Privacy: `context` is the user's own text (utterance + retrieved memories), so it is only included when asked
+    /// (`includeContext: true`, e.g. `pg-cli telemetry --with-context` on a dev box). The app's share-sheet CSV omits it.
+    public func csv(includeContext: Bool = false) throws -> String {
+        var s = "id,timestamp_iso,decision_type,chosen,confidence,escalated,latency_ms,model,agreed_with_teacher,source,"
+            + (includeContext ? "context," : "") + "option_ids\n"
         let iso = ISO8601DateFormatter()
         func q(_ v: String?) -> String { v.map { "\"" + $0.replacingOccurrences(of: "\"", with: "\"\"") + "\"" } ?? "" }   // RFC 4180 quoting
         for r in try all() {
-            s += "\(r.id ?? 0),\(iso.string(from: r.timestamp)),\(r.decisionType.rawValue),\(r.chosenID),\(String(format: "%.4f", r.confidence)),\(r.escalated),\(String(format: "%.1f", r.latencyMs)),\(r.model),\(r.agreedWithTeacher.map { "\($0)" } ?? ""),\(r.source),\(q(r.context)),\(q(r.optionIDs?.joined(separator: "|")))\n"
+            s += "\(r.id ?? 0),\(iso.string(from: r.timestamp)),\(r.decisionType.rawValue),\(r.chosenID),\(String(format: "%.4f", r.confidence)),\(r.escalated),\(String(format: "%.1f", r.latencyMs)),\(r.model),\(r.agreedWithTeacher.map { "\($0)" } ?? ""),\(r.source),\(includeContext ? q(r.context) + "," : "")\(q(r.optionIDs?.joined(separator: "|")))\n"
         }
         return s
     }

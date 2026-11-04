@@ -49,5 +49,9 @@ struct PocketGlimmerShortcuts: AppShortcutsProvider {
     static var appShortcuts: [AppShortcut] {
         AppShortcut(intent: AskPocketGlimmerIntent(), phrases: ["Ask \(.applicationName)"], shortTitle: "Ask", systemImageName: "sparkle")
         AppShortcut(intent: ProactiveTriggerIntent(), phrases: ["\(.applicationName) check in"], shortTitle: "Check in", systemImageName: "bolt")
+        AppShortcut(intent: HandleTextIntent(), phrases: ["Share with \(.applicationName)", "Summarize with \(.applicationName)"],
+                    shortTitle: "Handle text", systemImageName: "doc.text.magnifyingglass")
+        AppShortcut(intent: RunSkillIntent(), phrases: ["Ask \(.applicationName) to \(\.$action)", "\(.applicationName) \(\.$action)"],
+                    shortTitle: "Action", systemImageName: "wand.and.stars")
     }
 }

@@ -52,12 +52,17 @@ actor LlamaCppEngine: LLMEngine {
     /// not match the certified cal180 operating point. Settings toggle "Reuse cached prompt prefix" turns it on.
     static var prefixReuseDefault: Bool { UserDefaults.standard.object(forKey: "pg_kv_prefix") as? Bool ?? false }
 
-    private func tokenize(_ text: String, special: Bool = true) throws -> [llama_token] {
+    /// `addBOS` = llama.cpp `add_special`. Decision prompts already start with "<|begin_of_text|>", and llama-server
+    /// (`/completion` with a string prompt) tokenizes with add_special=true, so every certified number (cal180, τ=0.90,
+    /// priors from `pg-cli priors`, the Swift e2e) was measured on <BOS><BOS>... prompts. Decisions therefore pass
+    /// addBOS=true to reproduce that exact token stream: on cal180 the single-BOS stream flips 18/180 argmaxes and moves
+    /// 36/180 confidences across τ=0.90 (docs/CODE_REVIEW_NOV4.md). Free-text generation keeps a single BOS.
+    private func tokenize(_ text: String, special: Bool = true, addBOS: Bool = false) throws -> [llama_token] {
         let utf8 = Array(text.utf8CString)
         var cap = Int32(utf8.count + 16)
         var out = [llama_token](repeating: 0, count: Int(cap))
-        var n = llama_tokenize(vocab, text, Int32(utf8.count - 1), &out, cap, false, special)
-        if n < 0 { cap = -n; out = .init(repeating: 0, count: Int(cap)); n = llama_tokenize(vocab, text, Int32(utf8.count - 1), &out, cap, false, special) }
+        var n = llama_tokenize(vocab, text, Int32(utf8.count - 1), &out, cap, addBOS, special)
+        if n < 0 { cap = -n; out = .init(repeating: 0, count: Int(cap)); n = llama_tokenize(vocab, text, Int32(utf8.count - 1), &out, cap, addBOS, special) }
         guard n >= 0 else { throw EngineError.tokenize }
         return Array(out.prefix(Int(n)))
     }
@@ -102,7 +107,7 @@ actor LlamaCppEngine: LLMEngine {
     /// Prefill a decision prompt, reusing a cached per-type prefix sequence when possible. Any mismatch => plain prefill.
     private func prefillDecision(_ prompt: String, _ tokens: [llama_token]) throws {
         guard prefixReuse, let r = prompt.range(of: Self.userTurn, options: .backwards), r.lowerBound > prompt.startIndex,
-              let pt = try? tokenize(String(prompt[..<r.lowerBound])), pt.count >= 16, pt.count < tokens.count,
+              let pt = try? tokenize(String(prompt[..<r.lowerBound]), addBOS: true), pt.count >= 16, pt.count < tokens.count,
               tokens.starts(with: pt), pt.count <= prefixBudget else { return try prefill(tokens) }
         let mem = llama_get_memory(ctx)
         let L = Int32(pt.count)
@@ -145,7 +150,7 @@ actor LlamaCppEngine: LLMEngine {
 
     func nextTokenLogits(prompt: String, candidates: [String]) async throws -> [String: Double] {
         let t0 = Date()
-        let tokens = try tokenize(prompt)
+        let tokens = try tokenize(prompt, addBOS: true)     // same token stream as the llama-server eval (see tokenize)
         try prefillDecision(prompt, tokens)
         if prefixReuse {
             print(String(format: "PGPERF decision prompt_tokens=%d prefill_ms=%.0f prefix_hits=%d prefix_misses=%d prefixes=%d",
