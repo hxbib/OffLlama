@@ -50,7 +50,7 @@ struct LiveReflexStrip: View {
             Text(row.type).font(.caption.monospaced()).foregroundStyle(.secondary)
             Text(row.choice.replacingOccurrences(of: "_", with: " ")).font(.caption.weight(.semibold))
             Spacer()
-            Text(String(format: "%.0f%%", row.confidence * 100)).font(.caption.monospacedDigit().weight(.semibold)).foregroundStyle(Theme.confidenceColor(row.confidence))
+            Text(String(format: "%.0f%%", row.confidence * 100)).font(.caption.monospacedDigit().weight(.semibold)).foregroundStyle(Theme.confidenceColor(row.confidence, tau: row.tau))
             Text(String(format: "%.0f ms", row.ms)).font(.caption.monospacedDigit()).foregroundStyle(.secondary)
         }
         .padding(.horizontal, 16).padding(.vertical, 8)

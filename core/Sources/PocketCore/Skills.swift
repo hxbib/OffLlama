@@ -295,7 +295,9 @@ public final class SharedInbox: @unchecked Sendable {
         return (i.text, i.source)
     }
     public func take(maxAge: TimeInterval = 900, now: Date = Date()) -> (text: String, source: String)? {
-        let v = peek(maxAge: maxAge, now: now); lock.lock(); item = nil; lock.unlock(); return v
+        lock.lock(); defer { lock.unlock() }   // read-and-clear under one lock so two takers cannot both receive the item
+        guard let i = item, now.timeIntervalSince(i.at) <= maxAge else { item = nil; return nil }
+        item = nil; return (i.text, i.source)
     }
 }
 
