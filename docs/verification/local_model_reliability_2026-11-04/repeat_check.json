@@ -1,0 +1,686 @@
+{
+ "summary": {
+  "decisions": 30,
+  "max_abs_conf_diff": 0.03739999999999999,
+  "mean_abs_conf_diff": 0.00858999999999999,
+  "argmax_changes": 0,
+  "tau_side_changes": 0
+ },
+ "rows": [
+  {
+   "row": 0,
+   "cond": "bare",
+   "gold": "tool",
+   "facts": [],
+   "raw_letter_logprobs": {
+    "B": -0.059843115508556366,
+    "A": -3.19720458984375,
+    "D": -4.292448043823242,
+    "C": -5.880424499511719
+   },
+   "run1": {
+    "argmax": "tool",
+    "conf": 0.9394
+   },
+   "run2": {
+    "argmax": "tool",
+    "conf": 0.9351
+   }
+  },
+  {
+   "row": 0,
+   "cond": "mem4",
+   "gold": "tool",
+   "facts": [
+    "The user's birthday is March 3",
+    "The user is vegetarian",
+    "Sam is the user's brother",
+    "The user's gym is Crunch on 5th"
+   ],
+   "raw_letter_logprobs": {
+    "B": -0.14980144798755646,
+    "A": -2.3900110721588135,
+    "D": -3.420452356338501,
+    "C": -4.2985005378723145
+   },
+   "run1": {
+    "argmax": "tool",
+    "conf": 0.8293
+   },
+   "run2": {
+    "argmax": "tool",
+    "conf": 0.8347
+   }
+  },
+  {
+   "row": 1,
+   "cond": "bare",
+   "gold": "tool",
+   "facts": [],
+   "raw_letter_logprobs": {
+    "B": -0.28130337595939636,
+    "A": -1.7011547088623047,
+    "D": -3.091306686401367,
+    "C": -4.150968551635742
+   },
+   "run1": {
+    "argmax": "tool",
+    "conf": 0.7395
+   },
+   "run2": {
+    "argmax": "tool",
+    "conf": 0.7544
+   }
+  },
+  {
+   "row": 1,
+   "cond": "mem4",
+   "gold": "tool",
+   "facts": [
+    "Linda is the user's mom",
+    "The user works at Globex",
+    "Sam is the user's brother",
+    "The user likes hiking"
+   ],
+   "raw_letter_logprobs": {
+    "B": -0.436666876077652,
+    "A": -1.306175708770752,
+    "D": -2.9936585426330566,
+    "C": -3.4552292823791504
+   },
+   "run1": {
+    "argmax": "tool",
+    "conf": 0.6198
+   },
+   "run2": {
+    "argmax": "tool",
+    "conf": 0.6188
+   }
+  },
+  {
+   "row": 2,
+   "cond": "bare",
+   "gold": "answer_local",
+   "facts": [],
+   "raw_letter_logprobs": {
+    "A": -0.2739134132862091,
+    "B": -2.126643180847168,
+    "D": -2.473259925842285,
+    "C": -3.704634666442871
+   },
+   "run1": {
+    "argmax": "answer_local",
+    "conf": 0.7707
+   },
+   "run2": {
+    "argmax": "answer_local",
+    "conf": 0.7628
+   }
+  },
+  {
+   "row": 2,
+   "cond": "mem4",
+   "gold": "answer_local",
+   "facts": [
+    "The user likes hiking",
+    "Mia is the user's sister",
+    "The user's birthday is March 3",
+    "The user works at Globex"
+   ],
+   "raw_letter_logprobs": {
+    "A": -0.8966391682624817,
+    "B": -1.0561221837997437,
+    "D": -2.1040117740631104,
+    "C": -2.160778284072876
+   },
+   "run1": {
+    "argmax": "answer_local",
+    "conf": 0.3914
+   },
+   "run2": {
+    "argmax": "answer_local",
+    "conf": 0.3808
+   }
+  },
+  {
+   "row": 3,
+   "cond": "bare",
+   "gold": "escalate_cloud",
+   "facts": [],
+   "raw_letter_logprobs": {
+    "C": -0.03383764252066612,
+    "A": -4.047591686248779,
+    "D": -4.437291622161865,
+    "B": -5.652120113372803
+   },
+   "run1": {
+    "argmax": "escalate_cloud",
+    "conf": 0.9852
+   },
+   "run2": {
+    "argmax": "escalate_cloud",
+    "conf": 0.985
+   }
+  },
+  {
+   "row": 3,
+   "cond": "mem4",
+   "gold": "escalate_cloud",
+   "facts": [
+    "The user parked on level 4 today",
+    "The user likes hiking",
+    "The user lives in Austin",
+    "The user works at Globex"
+   ],
+   "raw_letter_logprobs": {
+    "C": -0.054679494351148605,
+    "A": -3.576293706893921,
+    "D": -4.049111843109131,
+    "B": -4.937192440032959
+   },
+   "run1": {
+    "argmax": "escalate_cloud",
+    "conf": 0.9743
+   },
+   "run2": {
+    "argmax": "escalate_cloud",
+    "conf": 0.9733
+   }
+  },
+  {
+   "row": 4,
+   "cond": "bare",
+   "gold": "escalate_cloud",
+   "facts": [],
+   "raw_letter_logprobs": {
+    "C": -0.10408912599086761,
+    "A": -3.1848957538604736,
+    "D": -3.404353380203247,
+    "B": -3.749892473220825
+   },
+   "run1": {
+    "argmax": "escalate_cloud",
+    "conf": 0.954
+   },
+   "run2": {
+    "argmax": "escalate_cloud",
+    "conf": 0.9506
+   }
+  },
+  {
+   "row": 4,
+   "cond": "mem4",
+   "gold": "escalate_cloud",
+   "facts": [
+    "The user's birthday is March 3",
+    "Sam is the user's brother",
+    "Mia is the user's sister",
+    "The user likes hiking"
+   ],
+   "raw_letter_logprobs": {
+    "C": -0.2013748288154602,
+    "A": -2.4979445934295654,
+    "D": -2.93670916557312,
+    "B": -3.100262403488159
+   },
+   "run1": {
+    "argmax": "escalate_cloud",
+    "conf": 0.9136
+   },
+   "run2": {
+    "argmax": "escalate_cloud",
+    "conf": 0.9062
+   }
+  },
+  {
+   "row": 5,
+   "cond": "bare",
+   "gold": "tool",
+   "facts": [],
+   "raw_letter_logprobs": {
+    "B": -0.15013371407985687,
+    "A": -2.4469189643859863,
+    "D": -3.2638325691223145,
+    "C": -4.276390552520752
+   },
+   "run1": {
+    "argmax": "tool",
+    "conf": 0.8485
+   },
+   "run2": {
+    "argmax": "tool",
+    "conf": 0.8557
+   }
+  },
+  {
+   "row": 5,
+   "cond": "mem4",
+   "gold": "tool",
+   "facts": [
+    "The user parked on level 4 today",
+    "The user's birthday is March 3",
+    "The user likes hiking",
+    "The user is vegetarian"
+   ],
+   "raw_letter_logprobs": {
+    "B": -0.4236217141151428,
+    "A": -1.9631401300430298,
+    "D": -2.2136340141296387,
+    "C": -2.381354808807373
+   },
+   "run1": {
+    "argmax": "tool",
+    "conf": 0.5877
+   },
+   "run2": {
+    "argmax": "tool",
+    "conf": 0.5934
+   }
+  },
+  {
+   "row": 9,
+   "cond": "bare",
+   "gold": "clarify",
+   "facts": [],
+   "raw_letter_logprobs": {
+    "A": -0.8061748743057251,
+    "B": -1.4163490533828735,
+    "D": -1.5036388635635376,
+    "C": -2.6427416801452637
+   },
+   "run1": {
+    "argmax": "answer_local",
+    "conf": 0.4516
+   },
+   "run2": {
+    "argmax": "answer_local",
+    "conf": 0.4517
+   }
+  },
+  {
+   "row": 9,
+   "cond": "mem4",
+   "gold": "clarify",
+   "facts": [
+    "The user is allergic to peanuts",
+    "Linda is the user's mom",
+    "The user parked on level 4 today",
+    "Sam is the user's brother"
+   ],
+   "raw_letter_logprobs": {
+    "A": -0.9160753488540649,
+    "B": -1.3223310708999634,
+    "D": -1.3774133920669556,
+    "C": -2.5747573375701904
+   },
+   "run1": {
+    "argmax": "answer_local",
+    "conf": 0.3648
+   },
+   "run2": {
+    "argmax": "answer_local",
+    "conf": 0.3651
+   }
+  },
+  {
+   "row": 10,
+   "cond": "bare",
+   "gold": "answer_local",
+   "facts": [],
+   "raw_letter_logprobs": {
+    "A": -0.14752855896949768,
+    "C": -2.6152658462524414,
+    "D": -3.3357858657836914,
+    "B": -3.61049747467041
+   },
+   "run1": {
+    "argmax": "answer_local",
+    "conf": 0.8104
+   },
+   "run2": {
+    "argmax": "answer_local",
+    "conf": 0.7945
+   }
+  },
+  {
+   "row": 10,
+   "cond": "mem4",
+   "gold": "answer_local",
+   "facts": [
+    "The user is vegetarian",
+    "Mia is the user's sister",
+    "The user works at Globex",
+    "The user likes hiking"
+   ],
+   "raw_letter_logprobs": {
+    "A": -0.5310258865356445,
+    "C": -1.4874945878982544,
+    "B": -2.32895565032959,
+    "D": -2.4495439529418945
+   },
+   "run1": {
+    "argmax": "answer_local",
+    "conf": 0.4877
+   },
+   "run2": {
+    "argmax": "answer_local",
+    "conf": 0.4947
+   }
+  },
+  {
+   "row": 11,
+   "cond": "bare",
+   "gold": "escalate_cloud",
+   "facts": [],
+   "raw_letter_logprobs": {
+    "C": -0.13174627721309662,
+    "A": -2.7495059967041016,
+    "D": -3.17431640625,
+    "B": -4.08332633972168
+   },
+   "run1": {
+    "argmax": "escalate_cloud",
+    "conf": 0.9413
+   },
+   "run2": {
+    "argmax": "escalate_cloud",
+    "conf": 0.931
+   }
+  },
+  {
+   "row": 11,
+   "cond": "mem4",
+   "gold": "escalate_cloud",
+   "facts": [
+    "The user lives in Austin",
+    "The user's dentist is Dr. Park",
+    "Linda is the user's mom",
+    "The user's birthday is March 3"
+   ],
+   "raw_letter_logprobs": {
+    "C": -0.26904433965682983,
+    "A": -2.140662670135498,
+    "D": -2.6179842948913574,
+    "B": -3.1432089805603027
+   },
+   "run1": {
+    "argmax": "escalate_cloud",
+    "conf": 0.8891
+   },
+   "run2": {
+    "argmax": "escalate_cloud",
+    "conf": 0.8841
+   }
+  },
+  {
+   "row": 14,
+   "cond": "bare",
+   "gold": "answer_local",
+   "facts": [],
+   "raw_letter_logprobs": {
+    "A": -0.11248990893363953,
+    "D": -3.119375467300415,
+    "C": -3.188516855239868,
+    "B": -3.9676992893218994
+   },
+   "run1": {
+    "argmax": "answer_local",
+    "conf": 0.8682
+   },
+   "run2": {
+    "argmax": "answer_local",
+    "conf": 0.8683
+   }
+  },
+  {
+   "row": 14,
+   "cond": "mem4",
+   "gold": "answer_local",
+   "facts": [
+    "The user likes hiking",
+    "Linda is the user's mom",
+    "The user works at Globex",
+    "The user's dentist is Dr. Park"
+   ],
+   "raw_letter_logprobs": {
+    "A": -0.3175891041755676,
+    "C": -2.125551462173462,
+    "D": -2.3986284732818604,
+    "B": -2.8257524967193604
+   },
+   "run1": {
+    "argmax": "answer_local",
+    "conf": 0.7006
+   },
+   "run2": {
+    "argmax": "answer_local",
+    "conf": 0.6632
+   }
+  },
+  {
+   "row": 15,
+   "cond": "bare",
+   "gold": "tool",
+   "facts": [],
+   "raw_letter_logprobs": {
+    "B": -0.06283994764089584,
+    "A": -3.289595127105713,
+    "D": -4.06582498550415,
+    "C": -5.1031365394592285
+   },
+   "run1": {
+    "argmax": "tool",
+    "conf": 0.9335
+   },
+   "run2": {
+    "argmax": "tool",
+    "conf": 0.9323
+   }
+  },
+  {
+   "row": 15,
+   "cond": "mem4",
+   "gold": "tool",
+   "facts": [
+    "Sam is the user's brother",
+    "The user's dentist is Dr. Park",
+    "The user parked on level 4 today",
+    "The user likes hiking"
+   ],
+   "raw_letter_logprobs": {
+    "B": -0.16661961376667023,
+    "A": -2.4953720569610596,
+    "D": -3.2002995014190674,
+    "C": -3.530024766921997
+   },
+   "run1": {
+    "argmax": "tool",
+    "conf": 0.8207
+   },
+   "run2": {
+    "argmax": "tool",
+    "conf": 0.7993
+   }
+  },
+  {
+   "row": 16,
+   "cond": "bare",
+   "gold": "escalate_cloud",
+   "facts": [],
+   "raw_letter_logprobs": {
+    "C": -0.1206887885928154,
+    "A": -3.0001156330108643,
+    "D": -3.2522079944610596,
+    "B": -3.71431303024292
+   },
+   "run1": {
+    "argmax": "escalate_cloud",
+    "conf": 0.9422
+   },
+   "run2": {
+    "argmax": "escalate_cloud",
+    "conf": 0.9477
+   }
+  },
+  {
+   "row": 16,
+   "cond": "mem4",
+   "gold": "escalate_cloud",
+   "facts": [
+    "The user lives in Austin",
+    "The user's birthday is March 3",
+    "The user likes hiking",
+    "The user's gym is Crunch on 5th"
+   ],
+   "raw_letter_logprobs": {
+    "C": -0.1872183233499527,
+    "A": -2.504133701324463,
+    "D": -2.973013401031494,
+    "B": -3.3148887157440186
+   },
+   "run1": {
+    "argmax": "escalate_cloud",
+    "conf": 0.9261
+   },
+   "run2": {
+    "argmax": "escalate_cloud",
+    "conf": 0.91
+   }
+  },
+  {
+   "row": 17,
+   "cond": "bare",
+   "gold": "escalate_cloud",
+   "facts": [],
+   "raw_letter_logprobs": {
+    "C": -0.06212311238050461,
+    "A": -3.553419828414917,
+    "D": -3.903057813644409,
+    "B": -4.530261039733887
+   },
+   "run1": {
+    "argmax": "escalate_cloud",
+    "conf": 0.9745
+   },
+   "run2": {
+    "argmax": "escalate_cloud",
+    "conf": 0.9704
+   }
+  },
+  {
+   "row": 17,
+   "cond": "mem4",
+   "gold": "escalate_cloud",
+   "facts": [
+    "The user parked on level 4 today",
+    "The user is vegetarian",
+    "The user's birthday is March 3",
+    "The user works at Globex"
+   ],
+   "raw_letter_logprobs": {
+    "C": -0.08470536768436432,
+    "A": -3.3578643798828125,
+    "D": -3.4532814025878906,
+    "B": -4.308811187744141
+   },
+   "run1": {
+    "argmax": "escalate_cloud",
+    "conf": 0.9676
+   },
+   "run2": {
+    "argmax": "escalate_cloud",
+    "conf": 0.9581
+   }
+  },
+  {
+   "row": 19,
+   "cond": "bare",
+   "gold": "clarify",
+   "facts": [],
+   "raw_letter_logprobs": {
+    "A": -0.903497040271759,
+    "B": -1.2786725759506226,
+    "D": -1.3952419757843018,
+    "C": -2.8207905292510986
+   },
+   "run1": {
+    "argmax": "answer_local",
+    "conf": 0.4149
+   },
+   "run2": {
+    "argmax": "answer_local",
+    "conf": 0.4304
+   }
+  },
+  {
+   "row": 19,
+   "cond": "mem4",
+   "gold": "clarify",
+   "facts": [
+    "Linda is the user's mom",
+    "The user lives in Austin",
+    "The user works at Globex",
+    "Sam is the user's brother"
+   ],
+   "raw_letter_logprobs": {
+    "B": -0.729300856590271,
+    "A": -1.2890924215316772,
+    "D": -2.0307228565216064,
+    "C": -2.223834276199341
+   },
+   "run1": {
+    "argmax": "tool",
+    "conf": 0.4256
+   },
+   "run2": {
+    "argmax": "tool",
+    "conf": 0.4472
+   }
+  },
+  {
+   "row": 20,
+   "cond": "bare",
+   "gold": "clarify",
+   "facts": [],
+   "raw_letter_logprobs": {
+    "A": -0.31779980659484863,
+    "B": -1.7611496448516846,
+    "D": -2.7704555988311768,
+    "C": -3.4576542377471924
+   },
+   "run1": {
+    "argmax": "answer_local",
+    "conf": 0.7271
+   },
+   "run2": {
+    "argmax": "answer_local",
+    "conf": 0.7431
+   }
+  },
+  {
+   "row": 20,
+   "cond": "mem4",
+   "gold": "clarify",
+   "facts": [
+    "Sam is the user's brother",
+    "Linda is the user's mom",
+    "The user parked on level 4 today",
+    "The user's birthday is March 3"
+   ],
+   "raw_letter_logprobs": {
+    "B": -0.44735610485076904,
+    "A": -1.4054325819015503,
+    "D": -2.66562557220459,
+    "C": -3.118556022644043
+   },
+   "run1": {
+    "argmax": "tool",
+    "conf": 0.6171
+   },
+   "run2": {
+    "argmax": "tool",
+    "conf": 0.6188
+   }
+  }
+ ]
+}
