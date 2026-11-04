@@ -30,10 +30,10 @@ final class IOSSkillRunner: SkillRunner, @unchecked Sendable {
         case "analyze_document": return await DocumentPicker.pickText() ?? ""
         case "html_viz":
             let data = args["data"] ?? ""
-            guard let r = HTMLViz.render(text: data, title: args["title"] ?? "Chart") else {
+            guard let reply = HTMLViz.reply(text: data, title: args["title"] ?? "Chart") else {
                 return "No numbers to chart. Paste them like “rent 1200, food 400”, or share a document first."
             }
-            return "Chart ready: \(r.bars) bars, drawn on device\n\n" + RichReply.fenced(r.html)
+            return reply
         default:
             return "\(skill.title) isn't available on this build · nothing done"
         }

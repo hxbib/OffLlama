@@ -305,6 +305,23 @@ public final class SharedInbox: @unchecked Sendable {
 // MARK: - Offline HTML visualization (no model needed)
 
 public enum HTMLViz {
+    public static func requestData(in utterance: String, sharedText: String? = nil) -> String? {
+        let request = SkillRegistry.norm(utterance)
+        let prefix = #"^ (?:please )?(?:(?:can|could|would) you )?(?:please )?(?:(?:make|create|draw|render|show)(?: me)? (?:an? )?(?:chart|graph|visualization)|(?:chart|graph|plot|visualize))\b"#
+        guard request.range(of: prefix, options: .regularExpression) != nil else { return nil }
+        let data: String
+        if let colon = utterance.firstIndex(of: ":") { data = String(utterance[utterance.index(after: colon)...]).trimmed }
+        else { data = utterance }
+        if !pairs(from: data).isEmpty { return data }
+        if let sharedText, !pairs(from: sharedText).isEmpty { return sharedText }
+        return nil
+    }
+
+    public static func reply(text: String, title: String = "Chart") -> String? {
+        guard let result = render(text: text, title: title) else { return nil }
+        return "Chart ready: \(result.bars) bars, drawn on device\n\n" + RichReply.fenced(result.html)
+    }
+
     /// "rent 1200, food 400; transit: 130" -> [(rent,1200),(food,400),(transit,130)]. Unlabeled numbers get #1, #2…
     public static func pairs(from text: String) -> [(label: String, value: Double)] {
         let numRe = try! NSRegularExpression(pattern: #"-?\$?\d[\d,]*(?:\.\d+)?%?"#)
@@ -313,7 +330,7 @@ public enum HTMLViz {
             let ns = seg as NSString
             guard let m = numRe.matches(in: seg, range: NSRange(location: 0, length: ns.length)).last else { continue }
             let raw = ns.substring(with: m.range).filter { $0.isNumber || $0 == "." || $0 == "-" }
-            guard let v = Double(raw) else { continue }
+            guard let v = Double(raw), v.isFinite else { continue }
             var label = ns.substring(to: m.range.location)
             if let c = label.lastIndex(where: { $0 == ":" || $0 == "=" }) {
                 let after = String(label[label.index(after: c)...])
@@ -338,8 +355,8 @@ public enum HTMLViz {
         let rowH = 28.0, labelW = 110.0, barW = 190.0, h = Double(p.count) * rowH + 8
         var rows = ""
         for (i, x) in p.enumerated() {
-            let y = Double(i) * rowH + 4, w = max(2, barW * abs(x.value) / maxV)
-            let v = x.value == x.value.rounded() ? String(Int(x.value)) : String(format: "%.2f", x.value)
+            let y = Double(i) * rowH + 4, w = max(2, (abs(x.value) / maxV) * barW)
+            let v = Int(exactly: x.value).map(String.init) ?? String(format: "%.6g", x.value)
             rows += "<text x=\"\(Int(labelW - 6))\" y=\"\(Int(y + 17))\" text-anchor=\"end\" class=\"l\">\(esc(String(x.label.prefix(16))))</text>"
             rows += "<rect x=\"\(Int(labelW))\" y=\"\(Int(y + 4))\" width=\"\(Int(w))\" height=\"18\" rx=\"4\" class=\"b\"/>"
             rows += "<text x=\"\(Int(labelW + w + 6))\" y=\"\(Int(y + 17))\" class=\"v\">\(v)</text>"

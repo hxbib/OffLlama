@@ -5,6 +5,7 @@ public enum ActionDiagPhase: String, Sendable, Codable {
 }
 
 public enum ActionDiagCode: String, Sendable, Codable {
+    case explicitChartRendered
     case explicitMessageMatch
     case explicitMessageRoutedSkill
     case explicitMessageRoutedTool

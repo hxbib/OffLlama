@@ -1,0 +1,50 @@
+[0/1] Planning build
+Building for debugging...
+[0/11] Write sources
+[1/11] Write swift-version-24593BA9C3E375BF.txt
+[3/11] Compiling PocketCoreTests ChartRequestTests.swift
+[4/11] Emitting module PocketCoreTests
+[5/12] /build/x86_64-unknown-linux-gnu/debug/PocketCorePackageDiscoveredTests.derived/all-discovered-tests.swift
+[6/13] Write sources
+[7/13] Wrapping AST for PocketCoreTests for debugging
+[9/16] Compiling PocketCorePackageDiscoveredTests all-discovered-tests.swift
+[10/16] Emitting module PocketCorePackageDiscoveredTests
+[11/16] Compiling PocketCorePackageDiscoveredTests PocketCoreTests.swift
+[12/17] /build/x86_64-unknown-linux-gnu/debug/PocketCorePackageTests.derived/runner.swift
+[13/18] Write sources
+[14/18] Wrapping AST for PocketCorePackageDiscoveredTests for debugging
+[16/20] Compiling PocketCorePackageTests runner.swift
+[17/20] Emitting module PocketCorePackageTests
+[18/20] Write Objects.LinkFileList
+[19/20] Linking PocketCorePackageTests.xctest
+Build complete! (5.21s)
+Test Suite 'Selected tests' started at 2026-11-04 22:27:42.769
+Test Suite 'ChartRequestTests' started at 2026-11-04 22:27:42.771
+Test Case 'ChartRequestTests.testChartDefinitionIsStillConversation' started at 2026-11-04 22:27:42.771
+Test Case 'ChartRequestTests.testChartDefinitionIsStillConversation' passed (0.022 seconds)
+Test Case 'ChartRequestTests.testChartInstructionInsideMessageDoesNotExecuteChart' started at 2026-11-04 22:27:42.794
+Test Case 'ChartRequestTests.testChartInstructionInsideMessageDoesNotExecuteChart' passed (0.032 seconds)
+Test Case 'ChartRequestTests.testExplicitNumericChartRendersForEveryClassifierRoute' started at 2026-11-04 22:27:42.826
+/src/Tests/PocketCoreTests/ChartRequestTests.swift:26: error: ChartRequestTests.testExplicitNumericChartRendersForEveryClassifierRoute : XCTAssertTrue failed - rent 1200 | food 400 | transit 130
+/src/Tests/PocketCoreTests/ChartRequestTests.swift:27: error: ChartRequestTests.testExplicitNumericChartRendersForEveryClassifierRoute : XCTAssertTrue failed - rent 1200 | food 400 | transit 130
+/src/Tests/PocketCoreTests/ChartRequestTests.swift:28: error: ChartRequestTests.testExplicitNumericChartRendersForEveryClassifierRoute : XCTAssertEqual failed: ("nil") is not equal to ("Optional("skill:html_viz")") - 
+/src/Tests/PocketCoreTests/ChartRequestTests.swift:30: error: ChartRequestTests.testExplicitNumericChartRendersForEveryClassifierRoute : XCTAssertTrue failed - 
+/src/Tests/PocketCoreTests/ChartRequestTests.swift:25: error: ChartRequestTests.testExplicitNumericChartRendersForEveryClassifierRoute : failed - B: clarify("Did you mean: Make a chart / HTML visualization?")
+/src/Tests/PocketCoreTests/ChartRequestTests.swift:26: error: ChartRequestTests.testExplicitNumericChartRendersForEveryClassifierRoute : XCTAssertTrue failed - rent 1200 | food 400 | transit 130
+/src/Tests/PocketCoreTests/ChartRequestTests.swift:27: error: ChartRequestTests.testExplicitNumericChartRendersForEveryClassifierRoute : XCTAssertTrue failed - rent 1200 | food 400 | transit 130
+/src/Tests/PocketCoreTests/ChartRequestTests.swift:28: error: ChartRequestTests.testExplicitNumericChartRendersForEveryClassifierRoute : XCTAssertEqual failed: ("nil") is not equal to ("Optional("skill:html_viz")") - 
+/src/Tests/PocketCoreTests/ChartRequestTests.swift:30: error: ChartRequestTests.testExplicitNumericChartRendersForEveryClassifierRoute : XCTAssertTrue failed - 
+/src/Tests/PocketCoreTests/ChartRequestTests.swift:25: error: ChartRequestTests.testExplicitNumericChartRendersForEveryClassifierRoute : failed - D: clarify("rent 1200 | food 400 | transit 130")
+Test Case 'ChartRequestTests.testExplicitNumericChartRendersForEveryClassifierRoute' failed (0.054 seconds)
+Test Case 'ChartRequestTests.testSharedChartDataBecomesInlineMarkup' started at 2026-11-04 22:27:42.880
+/src/Tests/PocketCoreTests/ChartRequestTests.swift:40: error: ChartRequestTests.testSharedChartDataBecomesInlineMarkup : XCTAssertTrue failed - 
+/src/Tests/PocketCoreTests/ChartRequestTests.swift:41: error: ChartRequestTests.testSharedChartDataBecomesInlineMarkup : XCTAssertTrue failed - 
+Test Case 'ChartRequestTests.testSharedChartDataBecomesInlineMarkup' failed (0.016 seconds)
+Test Suite 'ChartRequestTests' failed at 2026-11-04 22:27:42.896
+	 Executed 4 tests, with 12 failures (0 unexpected) in 0.125 (0.125) seconds
+Test Suite 'Selected tests' failed at 2026-11-04 22:27:42.896
+	 Executed 4 tests, with 12 failures (0 unexpected) in 0.125 (0.125) seconds
+◇ Test run started.
+↳ Testing Library Version: 6.1.3 (1d1f7e489c9c606)
+↳ Target Platform: x86_64-unknown-linux-gnu
+✔ Test run with 0 tests passed after 0.001 seconds.

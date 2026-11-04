@@ -294,7 +294,7 @@ extension Assistant {
             if let runner = skillRunner {
                 return ReadResult(text: try await runner.run(skill, args: args))
             }
-            return ReadResult(text: HTMLViz.render(text: args["data"] ?? "", title: args["title"] ?? "Chart").map { "Chart ready (\($0.bars) bars)" } ?? "No numbers to chart.")
+            return ReadResult(text: HTMLViz.reply(text: args["data"] ?? "", title: args["title"] ?? "Chart") ?? "No numbers to chart.")
         case "device_status":
             guard let runner = skillRunner else { return ReadResult(text: "Battery & storage needs the iPhone app · nothing done") }
             return ReadResult(text: try await runner.run(skill, args: args))

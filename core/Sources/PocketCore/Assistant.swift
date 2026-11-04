@@ -186,6 +186,14 @@ public final class Assistant: @unchecked Sendable {
 
         let route = try await reflex.decide(OptionSets.route, context: ctx)
         decisions.append(route)
+        if let data = HTMLViz.requestData(in: utterance, sharedText: sharedText),
+           let reply = HTMLViz.reply(text: data) {
+            ActionDiagnostics.shared.record(requestID: requestID, capability: "html_viz", phase: .routing,
+                                            code: .explicitChartRendered)
+            return AssistantTurn(reply: .local(reply), decisions: decisions, remembered: remembered,
+                                 action: PlannedAction(tool: ActionPlanner.toolPrefix + "html_viz", args: ["data": data]),
+                                 corrections: corrections)
+        }
         // No registry: an explicit message command on a non-tool route still bypasses
         // chat generation and stages or retains through the compiled message catalog.
         if skills == nil, route.chosen.id != "tool", ActionPlanner.isExplicitMessageRequest(utterance) {
