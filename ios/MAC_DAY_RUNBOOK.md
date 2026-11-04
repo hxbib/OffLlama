@@ -1,8 +1,13 @@
-# Mac and iPhone runbook: Pocket Glimmer on iOS 18+
+# Mac and iPhone runbook: Pocket Glimmer
 
 Written 2026-11-04 on Linux. No Mac was available, so nothing in this file is an Xcode or
 device result. It records what is known, the shortest trustworthy path, and the checks that
 still need a Mac and an iPhone.
+
+The requested phone target is **iOS 27.0.1**. The project's iOS 18.0 deployment target is
+a minimum build setting, not evidence that either version has passed these checks. Record
+the actual device and OS build before testing; do not update the phone merely to match a
+newer SDK.
 
 ## Known state
 
@@ -13,9 +18,10 @@ still need a Mac and an iPhone.
   current tree is unbuilt. That was a Simulator build, not a device build, and it does not
   cover today's app changes. Build the current checkout first; do not read the old source
   reference as a code error and do not revert as a shortcut.
-- Core baseline at `581fa3a`, 2026-11-04: 94 tests passed, 1 skipped. The parent commit
-  `b032746` adds two regression tests that are red until the separate fix lands. A red core
-  is not ready. Do not silently fall back to an older tree.
+- Core baseline at `581fa3a`: 94 tests executed, 1 skipped, 0 failures. The integrated
+  Nov 4 15:46 UTC run executed 108 tests with 1 skipped and 0 failures. The message and
+  Apple TV regressions were fixed. Later privacy regressions and repairs still require
+  a final run. A red core is not ready; do not fall back to an older tree.
 - Shipping model: `models/SHIPPING-ep1-Llama-3.2-1B-PocketGlimmer-Reflex-Q4_K_M.gguf`,
   807694080 bytes, sha256
   `a5c60a8836aa73adeb847185aa30184cd9c33c522185f59fa9ac55a9d00782c2`.
@@ -70,7 +76,11 @@ The script never installs these. Install them yourself.
   [Installing the command-line tools](https://developer.apple.com/documentation/xcode/installing-the-command-line-tools)
   and lists the Xcode-only tools in the
   [Xcode command-line tool reference](https://developer.apple.com/documentation/xcode/xcode-command-line-tool-reference).
-- An iOS SDK 18 or newer. If Xcode reports that the iOS platform is missing, install it in
+- An Xcode installation with an iOS SDK and device support for the connected phone.
+  Keep the iOS 18.0 deployment target while using an SDK that supports the needed APIs.
+  Check Apple's [SDK and system requirements](https://developer.apple.com/xcode/system-requirements)
+  against the Mac's OS and phone's OS before choosing an Xcode version. If Xcode reports
+  that the iOS platform is missing, install it in
   Xcode > Settings > Components. `xcodebuild -downloadPlatform iOS` is a large download and
   is your choice, not something this repo does automatically.
 - XcodeGen. XcodeGen reads `app/project.yml`.
@@ -282,15 +292,16 @@ device. The script never signs, registers a device, or opens Xcode.
    Release. Debug is much slower for llama.cpp.
 6. Press Run. If the app is refused on first open, trust the developer in Settings > General
    > VPN & Device Management. Apple documents the trust step in
-   [Install custom enterprise apps](https://support.apple.com/en-us/118254); the same trust
-   flow applies to a development-signed app.
+   [Install custom enterprise apps](https://support.apple.com/en-us/118254), which covers
+   enterprise distribution. For a development-signed build, follow the exact Xcode and
+   device prompts rather than assuming enterprise instructions apply.
 7. Grant Reminders, Calendars, Contacts, and notifications when the app asks. Microphone,
    camera, and Photos are requested only when those features are used.
 
 The free personal team has limits: the app expires after 7 days, and there is a cap on apps
 per device. Reinstall before the expiry if the demo is later. The entitlements file is
 intentionally empty. Do not add `com.apple.developer.kernel.increased-memory-limit` to work
-around a free-team signing error; the 1B Q4_K_M model fits without it.
+around a free-team signing error. Verify the model's actual memory use on this phone.
 
 Command-line build after the team is selected in Xcode (optional):
 
@@ -317,8 +328,9 @@ Do this before recording or filling any phone number into the submission.
 4. If the model was not bundled, copy it through Finder > iPhone > Files > Pocket Glimmer,
    then relaunch. Confirm the model name again.
 5. Turn on Airplane Mode, turn Wi-Fi off, and confirm the status pill reports offline. Ask a
-   local request such as "Remind me to call Mom at 7." The decision cards and the reminder
-   action must work without a network.
+   local request such as "Remind me to call Mom at 7." Record the actual route and confidence.
+   If the app proposes a reminder, verify its title and time in Reminders. If it asks for
+   clarification, record that outcome; a clarification does not prove the reminder flow.
 6. Run one skills action that does not need a third-party app, such as a battery or storage
    question. The registry comes from `builtin.json`; a missing file falls back to the Swift
    built-ins and should be visible in the built bundle check.
@@ -344,14 +356,18 @@ of the demo evidence.
 5. A Reflex decision card prints one forward pass in milliseconds. Do not quote that as
    tokens per second.
 6. Fill `[PHONE_TOK_S]`, `[PHONE_TTFT_MS]`, and `[PHONE_RAM_GB]` only from these measurements,
-   labeled "measured on iPhone 17 Pro, Release build, airplane mode". If a number was not
+   labeled with the actual device, OS, Release build, and airplane-mode setting. If a number was not
    measured, leave the placeholder out of the claim.
 
 The demo beats and the permission seeding are in `docs/DEMO_SCRIPT.md`. Rehearse every
 offline shot on the real phone and keep only the shots that clear tau. Messages always
 confirm by rule, even when the confidence is high.
 
-## 11. Phone-only tests and known limitations
+## 11. Phone acceptance and known limitations
+
+Use [DEVICE_ACCEPTANCE.md](DEVICE_ACCEPTANCE.md) to retain outcomes, failure recovery, and
+evidence for the exact installed build. Every row starts untested. An app/Shortcut handoff
+must not be counted as completion of the action inside that app.
 
 These cannot be settled on Linux or in a Simulator:
 

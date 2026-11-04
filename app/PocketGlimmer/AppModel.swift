@@ -261,7 +261,7 @@ final class AppModel {
 
     func forget(_ f: MemoryFact) { try? memory?.forget(id: f.id); refresh() }
     /// Writes escalated decisions (JSONL, schema fixed for training/round2/) into Documents, visible in Files / Finder.
-    /// Stays on this phone until the user shares the file; nothing is uploaded. Returns (file, row count).
+    /// Returns (file, row count). The app does not upload the export; device backups may include it.
     func exportDistillation() -> (url: URL, rows: Int)? {
         guard let jsonl = try? telemetry?.exportDistillationQueue(sinceDays: 30) else { return nil }
         let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]

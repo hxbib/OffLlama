@@ -6,7 +6,7 @@ Deadline: **Nov 4, 2026, 9:00 PM ET (Nov 5, 02:00 UTC)**. Target submit: **5:00 
 
 - [x] Shipping ep1 GGUF and its exact hash; τ=0.90 and bundled priors.
 - [x] Saved test120 decision results, calibration calculations, and negative training results.
-- [x] Inherited Linux baseline: 108 Swift tests, one skipped, no failures; 7 Python tests. Recheck the final integrated commit.
+- [x] Integrated Linux run on Nov 4 at 15:46 UTC: 108 Swift tests executed, one skipped, no failures; 7 Python tests. Later privacy regressions and repairs require a new final run.
 - [x] 36 built-in skills and a 27-item diagnostic skill probe. It is not a gold benchmark or a risk certificate.
 - [x] Voice, Spark vision, and SAM core integrations with saved API smoke evidence. iOS capture/display remains unverified.
 - [x] Optional self-hosted Glimmer endpoint with saved connectivity and placeholder-preservation smoke evidence. Recheck availability before a live demo.

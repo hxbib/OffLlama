@@ -45,7 +45,7 @@ struct SettingsView: View {
                     }
                     if !exportStatus.isEmpty { Text(exportStatus).font(.caption).foregroundStyle(.secondary) }
                 } header: { Text("Distillation loop") } footer: {
-                    Text("Writes the last 30 days of low-confidence (escalated) decisions as JSONL for the next teacher-labeling round. The file stays on this iPhone until you share it; nothing is uploaded.")
+                    Text("Exports recent low-confidence decisions and their request context for future model training. The app does not upload this file. Your device backup settings may include it.")
                 }
                 Section("About") {
                     Text("Built with Llama").font(.callout.weight(.semibold))
