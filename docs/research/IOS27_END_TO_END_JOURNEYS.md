@@ -168,7 +168,7 @@ Examples: "Summarize this PDF". "Summarize my last 5 emails".
 
 Supported now: Mail is not readable. `email_digest` returns the Share instructions unless `SharedInbox.take` has text. A PDF comes from `HandleTextIntent` (the app opens) or from `DocumentPicker` (PDF, plain text, UTF-8). `reason` uses the local model up to 2,500 characters and, above that, Muse Spark only when online, a key exists, and `sensitivity` is `ok`. The text is scrubbed. Contributor model ids are refused.
 
-Success evidence: the summary bubble, and for a cloud call the "what left the phone" payload. Absence of a network request is the evidence for a sensitive or offline document. An empty picker cancellation returns no summary.
+Required success evidence: the summary bubble and the outgoing payload for a cloud call. The audited `reason` path returns plain text through `execute`, so the chat does not receive the cloud-prompt record that ordinary text escalation provides. That transparency gap remains to fix. Absence of a network request is the evidence for a sensitive or offline document. An empty picker cancellation returns no summary.
 
 Handoff: Mail's share sheet and the user-built Shortcut "PG Share Emails", which must call `HandleTextIntent`. The app cannot check that the Shortcut exists.
 
@@ -370,6 +370,8 @@ Out of scope: raising the deployment target, MusicKit, and any claim about Focus
 These are user-installed workflows. They are not a new general agent and not a weight update.
 
 ### L1. A skill the user accepts
+
+Parent review: the category-based confirmation rule below is insufficient for learned JSON, which can lie about its category or replace a built-in id. Use the compiled capability policy in [LEARNED_WORKFLOWS.md](LEARNED_WORKFLOWS.md); the model cannot choose effects, permissions, confirmation requirements or native handlers.
 
 The user describes a repeated outcome. If the request is not sensitive, the app scrubs it and asks `muse-spark-1.3` in Standard mode for one skill JSON object. `SkillRegistry` decoding and the category confirm rule validate it. Invalid JSON is shown and not written. Valid JSON is written under Files › Pocket Glimmer › Skills only after Confirm, then the registry is reloaded. The new skill is retrieved like any built-in. If the invocation is a URL or a Shortcut, the card repeats the handoff limit. A message, social, or email skill confirms even if the model wrote `"confirm": false`.
 

@@ -187,7 +187,7 @@ final class ComposeSheets: NSObject, MFMessageComposeViewControllerDelegate, MFM
             let who = label.isEmpty ? "them" : label
             let text: String
             switch result {
-            case .sent: text = "Sent to \(who) via Messages"
+            case .sent: text = "Messages accepted the message to \(who) · delivery not confirmed"
             case .cancelled: text = "Cancelled · nothing sent to \(who)"
             default: text = "Messages couldn't send to \(who)"
             }
@@ -201,7 +201,7 @@ final class ComposeSheets: NSObject, MFMessageComposeViewControllerDelegate, MFM
             let who = label.isEmpty ? "them" : label
             let text: String
             switch result {
-            case .sent: text = "Email to \(who) sent via Mail"
+            case .sent: text = "Email to \(who) queued in Mail · delivery not confirmed"
             case .saved: text = "Email to \(who) saved as a draft · not sent"
             case .cancelled: text = "Cancelled · nothing sent to \(who)"
             default: text = "Mail couldn't send to \(who)"

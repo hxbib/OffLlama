@@ -26,11 +26,11 @@ Research target is **iOS 27.0.1**, not "current iOS" and not the 27.3 developer 
 
 Apple's iOS 27 download page lists hardware from iPhone 11 and iPhone SE (2nd generation) upward, including later models. [Doc](https://support.apple.com/en-au/128058). Apple Intelligence on iOS 27, including Describe a Shortcut and Use Model, is documented for iPhone 15 Pro, iPhone 15 Pro Max, and iPhone 16 and later, and is not available in every language or region. Usage limits apply. [Doc](https://support.apple.com/en-om/guide/shortcuts/tpg3vrvwmclv/10.0/ios/27), [Doc](https://support.apple.com/en-us/121115). Confirm the signed-in device, Siri language, and region on the phone. A URL about a feature is not that confirmation.
 
-The app's deployment target is iOS 18.0 (`app/project.yml`). It can install on 27.0.1. It does not require the iOS 27 SDK and does not call iOS 27-only symbols. Entitlements are empty (`app/PocketGlimmer/Support/PocketGlimmer.entitlements`). There is no increased-memory entitlement, no WeatherKit, no Family Controls, no MusicKit, no Focus status, no background mode, and no registered URL scheme.
+The app's deployment target is iOS 18.0 (`app/project.yml`), which permits targeting 27.0.1; installation still requires a successful build and signing. The audited source does not call iOS 27-only symbols. Entitlements are empty (`app/PocketGlimmer/Support/PocketGlimmer.entitlements`). There is no increased-memory entitlement, no WeatherKit, no Family Controls, no MusicKit, no Focus status, no background mode, and no registered URL scheme.
 
 ## Plain-language summary
 
-**Can finish and check, once permissions are allowed**
+**Local outcomes supported by the source and public APIs, still unverified on this phone**
 
 - Read this phone's battery level and a storage figure from Apple's APIs, and say when the battery reading is unknown.
 - Draw a bar chart from numbers the user typed or shared, inside the app.
@@ -265,14 +265,14 @@ Files: `SkillTemplate.shortcutURL`, `IOSSkillRunner.runShortcut`, `project.yml` 
 
 - Build `shortcuts://x-callback-url/run-shortcut` with percent-encoded name and text, and an `x-success`, `x-cancel`, and `x-error` on a new app scheme.
 - Register that scheme. Do not put secret data in the callback.
-- Map success plus `result` to "Shortcut finished" and show the text. Map cancel to "Stopped, nothing to undo here". Map error or a missing callback before the app is backgrounded too long to "Shortcuts did not finish".
+- Show returned text as a Shortcut report. Cancellation or an error can occur after earlier actions already ran; stop subsequent steps and say completion is unconfirmed. A missing callback is ambiguous. Do not conclude that nothing happened, or replay the Shortcut automatically.
 - Never change the status to "alarm set" or "playing" unless a later, device-proven recipe returns a specific token and the product copy still says the token came from the user's Shortcut.
 
 Acceptance, Linux-side:
 
 - The URL matches Apple's parameter names and encodes spaces.
-- A pasted success URL yields the decoded `result`.
-- A pasted error URL yields `errorMessage` and does not count as success.
+- A callback for the matching pending attempt yields the decoded `result`; unknown, expired and duplicate attempt tokens are rejected.
+- A matching error callback yields `errorMessage` and does not count as success. A custom-scheme callback is not an authenticated external-service receipt.
 - The current `shortcuts://run-shortcut` builder stays available for the case where the user has no callback scheme yet, and its copy stays "handed to".
 
 Device: install a one-action shortcut that shows the input text, run it from the app, and see the text come back. Rename it and see `x-error` or the Shortcuts error, not a success row.

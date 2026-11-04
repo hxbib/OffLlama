@@ -100,7 +100,7 @@ The iPhone guide URL `https://support.apple.com/guide/iphone/shortcuts-iph47e1c9
 
 On success, Shortcuts opens `x-success` and appends a `result` parameter with the shortcut’s textual output. Cancel opens `x-cancel` and includes no output. Error opens `x-error` and appends `errorMessage`. The app has no URL scheme, so it cannot receive those opens today. Even after one is added, `result` is text the shortcut produced. It satisfies a contract whose postcondition is “textual output arrived”. It does not satisfy “message delivered” or “playback started” unless the trusted capability says the only acceptable receipt is that text, and the user has accepted that limit on the review card.
 
-If the app is killed, or Shortcuts never calls back, the step stays ambiguous. The design below does not open the same irreversible Shortcut again.
+If the app is killed, or Shortcuts never calls back, the step stays ambiguous. Cancellation or an error may follow partial work inside the Shortcut. None of these outcomes proves that no side effect occurred. The design below does not open the same irreversible Shortcut again.
 
 ### Automations
 
@@ -135,7 +135,7 @@ Documented constraints that the planner has to respect:
 
 - The model does not execute developer-defined tools. The client does. Built-in `web_search` runs on Meta’s servers. Do not offer it. It sends the query off the phone and still cannot touch iOS.
 - `tool_choice` accepts only `"auto"`. `"required"`, `"none"`, and a named tool return HTTP 400. The model may answer with prose. The client treats prose as “no plan”, not as permission to improvise.
-- `strict: true` validates the schema shape. Meta’s own page says generated arguments are still not guaranteed to match the schema. Parse and reject on the phone.
+- The tool-calling page says `strict: true` validates the tool schema's supported subset. The structured-output page separately documents schema-constrained decoding through `response_format`. These are distinct contracts. Parse responses locally and validate capability IDs, arguments and approval requirements regardless of format guarantees.
 - Schema limits that return HTTP 400: depth 10, 5,000 properties, 120,000 characters of names and enum values, 1,000 enum values by default, no cyclic `$ref`. A proposal schema that enums the compiled capability ids stays far inside this.
 - Parallel tool calls default to on. A planner that did use tools would set `parallel_tool_calls` false and would expose only read capabilities (`calendar_find`, `lookup_contact`, `search_memory`, `device_status`). Side effects are not tools.
 - Chat Completions has no server conversation. Prefer that endpoint, which the app already calls, over Responses. If a later change uses Responses, send `store: false`. The default stores the conversation for retrieval by id.
