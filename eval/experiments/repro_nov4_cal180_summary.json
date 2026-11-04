@@ -1,0 +1,85 @@
+{
+ "source": "eval/experiments/repro_nov4_cal180_v2cc.json",
+ "key": "cal/v2+cc",
+ "ref": "/home/habib/pocket-glimmer/eval/results/after_floor.calibration_split.json",
+ "box": {
+  "n": 180,
+  "acc": 0.7944444444444444,
+  "correct": 143,
+  "handled_at_0.8": 0.48333333333333334,
+  "handled_n_at_0.8": 87,
+  "acc_on_handled_at_0.8": 0.9655172413793104,
+  "ece_10bin": 0.040396723197301136,
+  "ltt_tightest": {
+   "tau": 0.9,
+   "handled": 63,
+   "errors": 0,
+   "handled_share": 0.35,
+   "error_upper_bound": 0.10370652453011428,
+   "delta": 0.1
+  },
+  "ltt_alpha05": {
+   "tau": null,
+   "alpha": 0.05,
+   "delta": 0.1,
+   "n": 180,
+   "handled": 0,
+   "errors": 0,
+   "handled_share": 0.0,
+   "empirical_error": null,
+   "error_upper_bound": null,
+   "p_value": null,
+   "min_rows_needed_zero_errors": 135
+  },
+  "nudgeNow_correct": 8,
+  "median_ms": 177.28757858276367,
+  "p90_ms": 281.3992500305176
+ },
+ "ref_metrics": {
+  "n": 180,
+  "acc": 0.7833333333333333,
+  "correct": 141,
+  "handled_at_0.8": 0.49444444444444446,
+  "handled_n_at_0.8": 89,
+  "acc_on_handled_at_0.8": 0.9550561797752809,
+  "ece_10bin": 0.04241912945993746,
+  "ltt_tightest": {
+   "tau": 0.9,
+   "handled": 64,
+   "errors": 0,
+   "handled_share": 0.35555555555555557,
+   "error_upper_bound": 0.10217188684009713,
+   "delta": 0.1
+  },
+  "ltt_alpha05": {
+   "tau": null,
+   "alpha": 0.05,
+   "delta": 0.1,
+   "n": 180,
+   "handled": 0,
+   "errors": 0,
+   "handled_share": 0.0,
+   "empirical_error": null,
+   "error_upper_bound": null,
+   "p_value": null,
+   "min_rows_needed_zero_errors": 135
+  },
+  "nudgeNow_correct": 7,
+  "median_ms": 146.31986618041992,
+  "p90_ms": 226.37557983398438
+ },
+ "diff_vs_ref": {
+  "n_pred_changed": 5,
+  "changed_idx": [
+   14,
+   19,
+   28,
+   57,
+   67
+  ],
+  "n_ok_changed": 4,
+  "max_abs_conf_diff": 0.07152153571898978,
+  "mean_abs_conf_diff": 0.01503035983975851,
+  "gold_order_match": true
+ }
+}

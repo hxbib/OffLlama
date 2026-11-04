@@ -22,3 +22,17 @@ Untrained Llama-3.2-1B-Instruct Q4_K_M, CPU, 2 threads, `gold/gold_test.jsonl` (
 | v2 labels + few-shot + contextual calibration | **0.74** | 0.15 | **0.89** | 1050 |
 
 v0 sent every route prediction to "clarify" on earlier sets; v2+cc removes that bias. Raw numbers: `experiments/test120_results.json`, log from `run_prompt_variants.py`.
+
+## 2026-11-04: box re-checks, permutation averaging, OOS stress, latency (box CPU x86, not iPhone, $0, no training)
+New scripts:
+- `experiments/run_perm_avg.py`: option-order permutation averaging over v2+cc. It reuses `run_prompt_variants.py`, which is unchanged.
+- `experiments/run_oos_stress.py`: CLINC out-of-scope abstention with single-order v2+cc.
+- Summarizers: `experiments/summarize_repro.py`, `summarize_perm.py`, `summarize_oos.py`, `summarize_latency.py`.
+
+New reports in `results/`, all run on llama.cpp 13ec8f6 with the shipping Q4_K_M (sha256 a5c60a88…82c2). Every number cites a JSON in `experiments/`.
+- `REPRO_NOV4.md`: cal180 reproduces within llama-server noise. acc 0.794, handled@0.8 0.48, acc-on-handled 0.966, ECE 0.040, LTT bound 10.4% at τ 0.90 (63/180, 0 errors). The Nov 1 run gave 10.2% (64/180), and 5 of the 180 predictions changed.
+- `PERM_AVG.md`: does not ship. Full cyclic averaging tightens the bound to 7.8% at 47% handled but under-confidence pushes ECE up by 0.03–0.06. K=2 is borderline on cal180 and did not confirm on its single test120 run (pre-commit in `experiments/perm_test120_precommit.txt`).
+- `OOS_STRESS.md`: 2000 CLINC OOS items. Shipping false-confident rate is 7.3% at τ 0.80 and 0.25% at τ 0.90. Base is 0%, but only because it is almost never confident.
+- `LATENCY_BOX.md`: per-decision HTTP latency and prompt tokens.
+
+The test120 split was touched once in total, for perm-avg K=2, report only. All selection used cal180.

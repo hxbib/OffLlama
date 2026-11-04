@@ -1,0 +1,176 @@
+{
+ "baseline_T1": {
+  "n": 120,
+  "acc": 0.8166666666666667,
+  "handled_n_at_0.8": 61,
+  "handled_at_0.8": 0.5083333333333333,
+  "acc_on_handled_at_0.8": 0.9180327868852459,
+  "ece_10bin": 0.06377807573987698,
+  "aurc": 0.08533818066010897,
+  "ltt_tightest": {
+   "tau": 0.76,
+   "handled": 67,
+   "errors": 5,
+   "handled_share": 0.5583333333333333,
+   "error_upper_bound": 0.22523454600545034,
+   "delta": 0.1
+  },
+  "ltt_alpha05_tau": null,
+  "mean_conf": 0.7744238478461996,
+  "median_ms": 140.97213745117188,
+  "p90_ms": 191.270112991333
+ },
+ "baseline_source": "eval/results/after_floor.test.json",
+ "single_order_repeats": {},
+ "variants": {
+  "rev/order0": {
+   "n": 120,
+   "acc": 0.8,
+   "handled_n_at_0.8": 62,
+   "handled_at_0.8": 0.5166666666666667,
+   "acc_on_handled_at_0.8": 0.9193548387096774,
+   "ece_10bin": 0.04747808828975595,
+   "aurc": 0.08665748015243885,
+   "ltt_tightest": {
+    "tau": 0.85,
+    "handled": 53,
+    "errors": 3,
+    "handled_share": 0.44166666666666665,
+    "error_upper_bound": 0.22400105019084576,
+    "delta": 0.1
+   },
+   "ltt_alpha05_tau": null,
+   "mean_conf": 0.7707014545192121,
+   "median_ms": 254.6834945678711,
+   "p90_ms": 381.1020851135254,
+   "mean_k": 2.0,
+   "verdict_vs_T1": null,
+   "verdict_paired_vs_same_run_order0": null,
+   "source": "eval/experiments/perm_avg_test120_rev_ONCE.json modes.rev"
+  },
+  "rev/mean": {
+   "n": 120,
+   "acc": 0.8,
+   "handled_n_at_0.8": 56,
+   "handled_at_0.8": 0.4666666666666667,
+   "acc_on_handled_at_0.8": 0.9107142857142857,
+   "ece_10bin": 0.08687551676384041,
+   "aurc": 0.09514380307113993,
+   "ltt_tightest": {
+    "tau": 0.75,
+    "handled": 63,
+    "errors": 5,
+    "handled_share": 0.525,
+    "error_upper_bound": 0.23823033937785143,
+    "delta": 0.1
+   },
+   "ltt_alpha05_tau": null,
+   "mean_conf": 0.7382479722057789,
+   "median_ms": 446.60305976867676,
+   "p90_ms": 702.8012275695801,
+   "mean_k": 2.0,
+   "verdict_vs_T1": {
+    "bound_or_handled_better": false,
+    "ece_within_0.01": false,
+    "ece_delta_vs_base": 0.023097441023963425,
+    "wins": false
+   },
+   "verdict_paired_vs_same_run_order0": {
+    "bound_or_handled_better": false,
+    "ece_within_0.01": false,
+    "ece_delta_vs_base": 0.03939742847408446,
+    "wins": false
+   },
+   "source": "eval/experiments/perm_avg_test120_rev_ONCE.json modes.rev"
+  },
+  "rev/geo": {
+   "n": 120,
+   "acc": 0.7916666666666666,
+   "handled_n_at_0.8": 59,
+   "handled_at_0.8": 0.49166666666666664,
+   "acc_on_handled_at_0.8": 0.9152542372881356,
+   "ece_10bin": 0.0726275295806511,
+   "aurc": 0.09515243453071788,
+   "ltt_tightest": {
+    "tau": 0.75,
+    "handled": 67,
+    "errors": 5,
+    "handled_share": 0.5583333333333333,
+    "error_upper_bound": 0.22523454600545034,
+    "delta": 0.1
+   },
+   "ltt_alpha05_tau": null,
+   "mean_conf": 0.7546280106799624,
+   "median_ms": 446.60305976867676,
+   "p90_ms": 702.8012275695801,
+   "mean_k": 2.0,
+   "verdict_vs_T1": {
+    "bound_or_handled_better": false,
+    "ece_within_0.01": true,
+    "ece_delta_vs_base": 0.008849453840774124,
+    "wins": false
+   },
+   "verdict_paired_vs_same_run_order0": {
+    "bound_or_handled_better": false,
+    "ece_within_0.01": false,
+    "ece_delta_vs_base": 0.025149441290895157,
+    "wins": false
+   },
+   "source": "eval/experiments/perm_avg_test120_rev_ONCE.json modes.rev"
+  }
+ },
+ "single_order_spread": {
+  "n_runs": 1,
+  "ece_min": 0.04747808828975595,
+  "ece_max": 0.04747808828975595,
+  "bound_min": 0.22400105019084576,
+  "bound_max": 0.22400105019084576,
+  "aurc_min": 0.08665748015243885,
+  "aurc_max": 0.08665748015243885
+ },
+ "test_at_cal_selected_tau": {
+  "order0@cal_tau0.9": {
+   "handled": 45,
+   "handled_share": 0.375,
+   "errors": 3,
+   "error_rate": 0.06666666666666667
+  },
+  "order0@cal_tau0.91": {
+   "handled": 44,
+   "handled_share": 0.36666666666666664,
+   "errors": 3,
+   "error_rate": 0.06818181818181818
+  },
+  "mean@cal_tau0.8": {
+   "handled": 56,
+   "handled_share": 0.4666666666666667,
+   "errors": 5,
+   "error_rate": 0.08928571428571429
+  },
+  "mean@cal_tau0.82": {
+   "handled": 51,
+   "handled_share": 0.425,
+   "errors": 4,
+   "error_rate": 0.0784313725490196
+  },
+  "geo@cal_tau0.83": {
+   "handled": 55,
+   "handled_share": 0.4583333333333333,
+   "errors": 4,
+   "error_rate": 0.07272727272727272
+  },
+  "geo@cal_tau0.84": {
+   "handled": 55,
+   "handled_share": 0.4583333333333333,
+   "errors": 4,
+   "error_rate": 0.07272727272727272
+  },
+  "shipping_nov1_headline_rows@cal_tau0.9": {
+   "handled": 44,
+   "handled_share": 0.36666666666666664,
+   "errors": 3,
+   "error_rate": 0.06818181818181818
+  }
+ },
+ "note": "test120 reported ONCE for perm mode rev (pre-commit: perm_test120_precommit.txt). ltt_tightest on test picks tau on test itself: diagnostic only, not a certificate. test_at_cal_selected_tau applies the tau* chosen on cal180 (rep1/rep2) to test120."
+}

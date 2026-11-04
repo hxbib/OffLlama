@@ -1,0 +1,348 @@
+{
+ "ship": {
+  "full2000_summary": {
+   "route": {
+    "n": 1000,
+    "pred_dist": {
+     "tool": 452,
+     "escalate_cloud": 473,
+     "answer_local": 22,
+     "clarify": 53
+    },
+    "pred_share": {
+     "tool": 0.452,
+     "escalate_cloud": 0.473,
+     "answer_local": 0.022,
+     "clarify": 0.053
+    },
+    "tau0.8": {
+     "confident_share": 0.277,
+     "confident_pred_dist": {
+      "escalate_cloud": 188,
+      "tool": 83,
+      "clarify": 6
+     },
+     "false_confident_n": 83,
+     "false_confident_rate": 0.083
+    },
+    "tau0.9": {
+     "confident_share": 0.103,
+     "confident_pred_dist": {
+      "escalate_cloud": 96,
+      "clarify": 4,
+      "tool": 3
+     },
+     "false_confident_n": 3,
+     "false_confident_rate": 0.003
+    }
+   },
+   "answerability": {
+    "n": 1000,
+    "pred_dist": {
+     "yes": 774,
+     "no": 226
+    },
+    "pred_share": {
+     "yes": 0.774,
+     "no": 0.226
+    },
+    "tau0.8": {
+     "confident_share": 0.069,
+     "confident_pred_dist": {
+      "yes": 62,
+      "no": 7
+     },
+     "false_confident_n": 62,
+     "false_confident_rate": 0.062
+    },
+    "tau0.9": {
+     "confident_share": 0.003,
+     "confident_pred_dist": {
+      "no": 1,
+      "yes": 2
+     },
+     "false_confident_n": 2,
+     "false_confident_rate": 0.002
+    }
+   },
+   "all": {
+    "n": 2000,
+    "tau0.8": {
+     "false_confident_n": 145,
+     "false_confident_rate": 0.0725
+    },
+    "tau0.9": {
+     "false_confident_n": 5,
+     "false_confident_rate": 0.0025
+    }
+   },
+   "median_ms": 450.1919746398926,
+   "p90_ms": 716.8891429901123
+  },
+  "n300_summary": {
+   "route": {
+    "n": 300,
+    "pred_dist": {
+     "tool": 157,
+     "escalate_cloud": 117,
+     "clarify": 19,
+     "answer_local": 7
+    },
+    "pred_share": {
+     "tool": 0.5233333333333333,
+     "escalate_cloud": 0.39,
+     "clarify": 0.06333333333333334,
+     "answer_local": 0.023333333333333334
+    },
+    "tau0.8": {
+     "confident_share": 0.24333333333333335,
+     "confident_pred_dist": {
+      "escalate_cloud": 36,
+      "tool": 34,
+      "clarify": 3
+     },
+     "false_confident_n": 34,
+     "false_confident_rate": 0.11333333333333333
+    },
+    "tau0.9": {
+     "confident_share": 0.08,
+     "confident_pred_dist": {
+      "escalate_cloud": 19,
+      "clarify": 2,
+      "tool": 3
+     },
+     "false_confident_n": 3,
+     "false_confident_rate": 0.01
+    }
+   },
+   "answerability": {
+    "n": 300,
+    "pred_dist": {
+     "yes": 256,
+     "no": 44
+    },
+    "pred_share": {
+     "yes": 0.8533333333333334,
+     "no": 0.14666666666666667
+    },
+    "tau0.8": {
+     "confident_share": 0.07333333333333333,
+     "confident_pred_dist": {
+      "yes": 21,
+      "no": 1
+     },
+     "false_confident_n": 21,
+     "false_confident_rate": 0.07
+    },
+    "tau0.9": {
+     "confident_share": 0.01,
+     "confident_pred_dist": {
+      "yes": 2,
+      "no": 1
+     },
+     "false_confident_n": 2,
+     "false_confident_rate": 0.006666666666666667
+    }
+   },
+   "all": {
+    "n": 600,
+    "tau0.8": {
+     "false_confident_n": 55,
+     "false_confident_rate": 0.09166666666666666
+    },
+    "tau0.9": {
+     "false_confident_n": 5,
+     "false_confident_rate": 0.008333333333333333
+    }
+   },
+   "median_ms": 454.8659324645996,
+   "p90_ms": 843.9667224884033
+  },
+  "wall_s_full": 858.3818049430847,
+  "mean_conf": {
+   "route": 0.6642118318014049,
+   "answerability": 0.6552838675099095
+  },
+  "n300_vs_full_same_items_pred_changed": 12,
+  "n300_vs_full_same_items_max_conf_diff": 0.12116479630469301,
+  "full_false_confident_items_tau0.9": [
+   {
+    "id": "clincoos-route-691",
+    "pred": "tool",
+    "conf": 0.9013365873315422,
+    "utterance": "Call the grocery store and get their operational hours"
+   },
+   {
+    "id": "clincoos-route-728",
+    "pred": "tool",
+    "conf": 0.9225902346393045,
+    "utterance": "Can you look at when the next iphone is due out"
+   },
+   {
+    "id": "clincoos-route-765",
+    "pred": "tool",
+    "conf": 0.910111849106285,
+    "utterance": "Organize my photos by date please"
+   },
+   {
+    "id": "clincoos-answerability-222",
+    "pred": "yes",
+    "conf": 0.9259650891461999,
+    "utterance": "Remind me of the address for my workplace please"
+   },
+   {
+    "id": "clincoos-answerability-416",
+    "pred": "yes",
+    "conf": 0.9008266139737846,
+    "utterance": "Tell me what pokemon is"
+   }
+  ]
+ },
+ "base": {
+  "full2000_summary": {
+   "route": {
+    "n": 1000,
+    "pred_dist": {
+     "answer_local": 114,
+     "escalate_cloud": 399,
+     "tool": 385,
+     "clarify": 102
+    },
+    "pred_share": {
+     "answer_local": 0.114,
+     "escalate_cloud": 0.399,
+     "tool": 0.385,
+     "clarify": 0.102
+    },
+    "tau0.8": {
+     "confident_share": 0.02,
+     "confident_pred_dist": {
+      "escalate_cloud": 19,
+      "clarify": 1
+     },
+     "false_confident_n": 0,
+     "false_confident_rate": 0.0
+    },
+    "tau0.9": {
+     "confident_share": 0.003,
+     "confident_pred_dist": {
+      "escalate_cloud": 3
+     },
+     "false_confident_n": 0,
+     "false_confident_rate": 0.0
+    }
+   },
+   "answerability": {
+    "n": 1000,
+    "pred_dist": {
+     "yes": 554,
+     "no": 446
+    },
+    "pred_share": {
+     "yes": 0.554,
+     "no": 0.446
+    },
+    "tau0.8": {
+     "confident_share": 0.0,
+     "confident_pred_dist": {},
+     "false_confident_n": 0,
+     "false_confident_rate": 0.0
+    },
+    "tau0.9": {
+     "confident_share": 0.0,
+     "confident_pred_dist": {},
+     "false_confident_n": 0,
+     "false_confident_rate": 0.0
+    }
+   },
+   "all": {
+    "n": 2000,
+    "tau0.8": {
+     "false_confident_n": 0,
+     "false_confident_rate": 0.0
+    },
+    "tau0.9": {
+     "false_confident_n": 0,
+     "false_confident_rate": 0.0
+    }
+   },
+   "median_ms": 510.775089263916,
+   "p90_ms": 801.7945289611816
+  },
+  "n300_summary": {
+   "route": {
+    "n": 300,
+    "pred_dist": {
+     "answer_local": 40,
+     "escalate_cloud": 103,
+     "tool": 116,
+     "clarify": 41
+    },
+    "pred_share": {
+     "answer_local": 0.13333333333333333,
+     "escalate_cloud": 0.3433333333333333,
+     "tool": 0.38666666666666666,
+     "clarify": 0.13666666666666666
+    },
+    "tau0.8": {
+     "confident_share": 0.013333333333333334,
+     "confident_pred_dist": {
+      "escalate_cloud": 4
+     },
+     "false_confident_n": 0,
+     "false_confident_rate": 0.0
+    },
+    "tau0.9": {
+     "confident_share": 0.0,
+     "confident_pred_dist": {},
+     "false_confident_n": 0,
+     "false_confident_rate": 0.0
+    }
+   },
+   "answerability": {
+    "n": 300,
+    "pred_dist": {
+     "yes": 168,
+     "no": 132
+    },
+    "pred_share": {
+     "yes": 0.56,
+     "no": 0.44
+    },
+    "tau0.8": {
+     "confident_share": 0.0,
+     "confident_pred_dist": {},
+     "false_confident_n": 0,
+     "false_confident_rate": 0.0
+    },
+    "tau0.9": {
+     "confident_share": 0.0,
+     "confident_pred_dist": {},
+     "false_confident_n": 0,
+     "false_confident_rate": 0.0
+    }
+   },
+   "all": {
+    "n": 600,
+    "tau0.8": {
+     "false_confident_n": 0,
+     "false_confident_rate": 0.0
+    },
+    "tau0.9": {
+     "false_confident_n": 0,
+     "false_confident_rate": 0.0
+    }
+   },
+   "median_ms": 539.2904281616211,
+   "p90_ms": 765.1779651641846
+  },
+  "wall_s_full": 1009.2480146884918,
+  "mean_conf": {
+   "route": 0.4569799111445933,
+   "answerability": 0.5383668789821406
+  },
+  "n300_vs_full_same_items_pred_changed": 22,
+  "n300_vs_full_same_items_max_conf_diff": 0.06456092763940313,
+  "full_false_confident_items_tau0.9": []
+ }
+}

@@ -1,0 +1,292 @@
+{
+ "note": "box CPU (AMD EPYC-Turin, x86 AVX2/AVX-512), llama.cpp 13ec8f6 llama-server, HTTP round trip on localhost; NOT iPhone",
+ "runs": {
+  "clean_single": {
+   "source": "eval/experiments/latency_clean_t6_single_cal180.json [cal/v2+cc] rows[].ms",
+   "k": 1,
+   "ms_per_decision": {
+    "n": 180,
+    "median": 174.84009265899658,
+    "p90": 287.5974178314209,
+    "mean": 217.53680573569403,
+    "max": 1402.9030799865723
+   }
+  },
+  "loaded_T1_single": {
+   "source": "eval/experiments/repro_nov4_cal180_v2cc.json [cal/v2+cc] rows[].ms",
+   "k": 1,
+   "ms_per_decision": {
+    "n": 180,
+    "median": 177.12581157684326,
+    "p90": 281.3992500305176,
+    "mean": 217.46366818745932,
+    "max": 1422.2564697265625
+   }
+  },
+  "loaded_rep2_single": {
+   "source": "eval/experiments/repro_nov4_cal180_v2cc_rep2.json [cal/v2+cc] rows[].ms",
+   "k": 1,
+   "ms_per_decision": {
+    "n": 180,
+    "median": 329.7222852706909,
+    "p90": 511.3654136657715,
+    "mean": 363.20172150929767,
+    "max": 837.9764556884766
+   }
+  },
+  "clean_rev/order0": {
+   "source": "eval/experiments/latency_clean_t6_perm_cal180.json modes.rev.items[].timings[0]",
+   "k": 1,
+   "ms_per_decision": {
+    "n": 180,
+    "median": 201.54309272766113,
+    "p90": 291.5198802947998,
+    "mean": 211.36165195041232,
+    "max": 371.074914932251
+   },
+   "prompt_tokens": {
+    "n": 180,
+    "median": 356.0,
+    "p90": 649,
+    "mean": 385.2055555555556,
+    "max": 730
+   },
+   "uncached_prompt_tokens": {
+    "n": 180,
+    "median": 78.0,
+    "p90": 116,
+    "mean": 85.25555555555556,
+    "max": 141
+   },
+   "server_prompt_ms": {
+    "n": 180,
+    "median": 197.05450000000002,
+    "p90": 287.449,
+    "mean": 206.82289444444444,
+    "max": 367.57
+   }
+  },
+  "clean_rev/all_K": {
+   "source": "eval/experiments/latency_clean_t6_perm_cal180.json modes.rev.items[].timings (sum over permutations)",
+   "k_mean": 2,
+   "ms_per_decision": {
+    "n": 180,
+    "median": 349.51865673065186,
+    "p90": 545.1061725616455,
+    "mean": 375.4886031150818,
+    "max": 683.2144260406494
+   },
+   "prompt_tokens_per_decision": {
+    "n": 180,
+    "median": 712.0,
+    "p90": 1298,
+    "mean": 770.4111111111112,
+    "max": 1460
+   },
+   "uncached_prompt_tokens_per_decision": {
+    "n": 180,
+    "median": 132.0,
+    "p90": 212,
+    "mean": 146.29444444444445,
+    "max": 266
+   },
+   "wall_s_including_cf": 82.32776403427124
+  },
+  "clean_cycall/order0": {
+   "source": "eval/experiments/latency_clean_t6_perm_cal180.json modes.cycall.items[].timings[0]",
+   "k": 1,
+   "ms_per_decision": {
+    "n": 180,
+    "median": 189.98467922210693,
+    "p90": 313.13562393188477,
+    "mean": 210.56830750571356,
+    "max": 518.5685157775879
+   },
+   "prompt_tokens": {
+    "n": 180,
+    "median": 356.0,
+    "p90": 649,
+    "mean": 385.2055555555556,
+    "max": 730
+   },
+   "uncached_prompt_tokens": {
+    "n": 180,
+    "median": 78.0,
+    "p90": 116,
+    "mean": 85.21111111111111,
+    "max": 141
+   },
+   "server_prompt_ms": {
+    "n": 180,
+    "median": 184.9835,
+    "p90": 303.451,
+    "mean": 206.11385555555555,
+    "max": 510.826
+   }
+  },
+  "clean_cycall/all_K": {
+   "source": "eval/experiments/latency_clean_t6_perm_cal180.json modes.cycall.items[].timings (sum over permutations)",
+   "k_mean": 3.35,
+   "ms_per_decision": {
+    "n": 180,
+    "median": 509.24432277679443,
+    "p90": 1225.1951694488525,
+    "mean": 649.0741703245375,
+    "max": 3575.0880241394043
+   },
+   "prompt_tokens_per_decision": {
+    "n": 180,
+    "median": 1068.0,
+    "p90": 2896,
+    "mean": 1412.0555555555557,
+    "max": 4557
+   },
+   "uncached_prompt_tokens_per_decision": {
+    "n": 180,
+    "median": 204.5,
+    "p90": 438,
+    "mean": 243.94444444444446,
+    "max": 799
+   },
+   "wall_s_including_cf": 137.02350449562073
+  },
+  "loaded_rev_r1/order0": {
+   "source": "eval/experiments/perm_avg_cal180.json modes.rev.items[].timings[0]",
+   "k": 1,
+   "ms_per_decision": {
+    "n": 180,
+    "median": 274.77800846099854,
+    "p90": 378.1261444091797,
+    "mean": 280.9228976567586,
+    "max": 568.2559013366699
+   },
+   "prompt_tokens": {
+    "n": 180,
+    "median": 356.0,
+    "p90": 649,
+    "mean": 385.2055555555556,
+    "max": 730
+   },
+   "uncached_prompt_tokens": {
+    "n": 180,
+    "median": 78.0,
+    "p90": 116,
+    "mean": 85.25555555555556,
+    "max": 141
+   },
+   "server_prompt_ms": {
+    "n": 180,
+    "median": 269.07399999999996,
+    "p90": 374.773,
+    "mean": 275.9745833333333,
+    "max": 560.174
+   }
+  },
+  "loaded_rev_r1/all_K": {
+   "source": "eval/experiments/perm_avg_cal180.json modes.rev.items[].timings (sum over permutations)",
+   "k_mean": 2,
+   "ms_per_decision": {
+    "n": 180,
+    "median": 489.6087646484375,
+    "p90": 703.6726474761963,
+    "mean": 502.4499138196309,
+    "max": 1130.7530403137207
+   },
+   "prompt_tokens_per_decision": {
+    "n": 180,
+    "median": 712.0,
+    "p90": 1298,
+    "mean": 770.4111111111112,
+    "max": 1460
+   },
+   "uncached_prompt_tokens_per_decision": {
+    "n": 180,
+    "median": 132.0,
+    "p90": 212,
+    "mean": 146.29444444444445,
+    "max": 266
+   },
+   "wall_s_including_cf": 105.4493260383606
+  },
+  "loaded_cycall_r1/order0": {
+   "source": "eval/experiments/perm_avg_cal180.json modes.cycall.items[].timings[0]",
+   "k": 1,
+   "ms_per_decision": {
+    "n": 180,
+    "median": 336.1121416091919,
+    "p90": 535.3219509124756,
+    "mean": 364.2313533359104,
+    "max": 857.1059703826904
+   },
+   "prompt_tokens": {
+    "n": 180,
+    "median": 356.0,
+    "p90": 649,
+    "mean": 385.2055555555556,
+    "max": 730
+   },
+   "uncached_prompt_tokens": {
+    "n": 180,
+    "median": 78.0,
+    "p90": 116,
+    "mean": 85.21111111111111,
+    "max": 141
+   },
+   "server_prompt_ms": {
+    "n": 180,
+    "median": 329.773,
+    "p90": 530.705,
+    "mean": 358.61266666666666,
+    "max": 850.675
+   }
+  },
+  "loaded_cycall_r1/all_K": {
+   "source": "eval/experiments/perm_avg_cal180.json modes.cycall.items[].timings (sum over permutations)",
+   "k_mean": 3.35,
+   "ms_per_decision": {
+    "n": 180,
+    "median": 852.6593446731567,
+    "p90": 2196.072578430176,
+    "mean": 1132.5854884253608,
+    "max": 5936.415910720825
+   },
+   "prompt_tokens_per_decision": {
+    "n": 180,
+    "median": 1068.0,
+    "p90": 2896,
+    "mean": 1412.0555555555557,
+    "max": 4557
+   },
+   "uncached_prompt_tokens_per_decision": {
+    "n": 180,
+    "median": 204.5,
+    "p90": 438,
+    "mean": 243.94444444444446,
+    "max": 799
+   },
+   "wall_s_including_cf": 239.4713363647461
+  }
+ },
+ "oos_runs": {
+  "ship_full2000": {
+   "source": "eval/experiments/oos_ship_full2000.json summary.median_ms/p90_ms",
+   "median": 450.1919746398926,
+   "p90": 716.8891429901123,
+   "n": 2000,
+   "wall_s": 858.3818049430847
+  },
+  "base_full2000": {
+   "source": "eval/experiments/oos_base_full2000.json summary.median_ms/p90_ms",
+   "median": 510.775089263916,
+   "p90": 801.7945289611816,
+   "n": 2000,
+   "wall_s": 1009.2480146884918
+  }
+ },
+ "determinism_check": {
+  "clean_single_vs_T1_pred_diff": 0,
+  "clean_single_vs_T1_max_conf_diff": 0.0,
+  "clean_perm_vs_perm_rep1_max_prob_diff": 0.0,
+  "note": "A fresh llama-server given the same request sequence reproduces T1 and perm replicate 1 bit-for-bit; later passes on a warm server (rep2-rep4) differ on 7/180 preds. Run-to-run spread is prompt-cache/KV-slot state, deterministic given request history."
+ }
+}

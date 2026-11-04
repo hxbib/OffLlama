@@ -1,0 +1,8 @@
+Pre-commit written Wed Nov  4 06:22:02 AM EST 2026 BEFORE any perm-avg run on test120.
+cal180 verdict for rev/mean (K=2, original+reversed, arithmetic mean): BORDERLINE.
+ - literal rule vs T1 on replicate 1 (perm_avg_cal180_summary.json): bound 8.9% < 10.4% OK, ECE +0.012 > 0.01 FAIL -> lose by 0.002
+ - literal rule vs T1 on replicate 2 (perm_avg_cal180_rev_rep2_summary.json): bound 9.1% < 10.4% OK, ECE +0.001 OK -> win
+ - single-order ECE noise band over 6 runs: 0.040-0.056 (T1 is the low outlier)
+Decision: run test120 ONCE for perm mode 'rev' only (gives rev/mean, rev/geo and the paired identity order). Report-only.
+cycall/cyc4 lose on cal180 in both replicates (ECE +0.03..+0.06) and will NOT be run on test120.
+Whatever test120 shows: no shipping change today (model frozen, app has no perm path); no further test120 runs for any perm variant.
