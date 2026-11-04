@@ -43,6 +43,11 @@ check, but does not prove the downstream task finished. A missing permission is 
 | P16 | Kill and relaunch during confirmation, after a write, and during an external handoff | Record what survives and what is ambiguous. Current source has no durable action journal; do not mark recovery PASS until implemented and exercised | NOT RUN |
 | P17 | Large text, VoiceOver, a non-hold interaction, and supported-language input | Controls usable and labels truthful; unsupported language/gesture behavior recorded as a limitation | NOT RUN |
 | P18 | Export telemetry and the distillation file | Ordinary CSV omits request context by default; distillation export discloses its context and device-backup exposure | NOT RUN |
+| P19 | Two same-name contacts, each with multiple phone numbers/email addresses; choose the second contact and a non-first method | Composer uses exactly the reviewed contact and method; removing or editing that method before confirm pauses for review | NOT RUN |
+| P20 | While a document request runs, share two other distinct documents and complete a recording | Each input is separately retained with its own request; no overwrite, cross-request summary or automatic effect; explicit resume/discard. Requires deferred-input implementation | NOT RUN |
+| P21 | Explicit timezone, DST gap/overlap and device timezone change; inspect selected calendar | Unsupported interpretation asks for correction; draft and result show full resolved time/zone and destination calendar; inspect actual saved item and alarm | NOT RUN |
+| P22 | Correct the same memory several times, forget its active version, then relaunch | Selected fact and all predecessor revisions absent; unrelated facts survive. Telemetry/export/backup retention is separately disclosed, not represented as erased | NOT RUN |
+| P23 | Export CSV, make new decisions, then export again without restarting | Second export includes the new rows and still omits context | NOT RUN |
 
 Use synthetic contacts, documents, and events. Message cancellation can be tested without
 sending. A send test needs an explicitly approved test recipient; record the compose

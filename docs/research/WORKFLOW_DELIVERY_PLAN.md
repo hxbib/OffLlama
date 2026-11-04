@@ -89,6 +89,12 @@ API boundary also means arbitrary third-party task recovery cannot be promised.
 
 ## Current status
 
+Muse Wonder 1.0 is independently rerunning the capability investigations through the user's
+Muse Code ACP at max effort. The first reviewed additions and corrections are tracked in
+[MUSE_REVIEW_FINDINGS.md](MUSE_REVIEW_FINDINGS.md). In particular, Slice 1 must preserve the
+chosen contact method and show resolved times with their zone. Busy shared input needs a
+request-bound staging path; moving it into the global inbox before the busy guard is unsafe.
+
 - Research reports integrated and reviewed; the corrections above govern implementation.
 - Two text privacy regressions are committed and failing before repair at `a4e100f`.
 - Messages and Mail status copy now describes acceptance/queueing rather than delivery.

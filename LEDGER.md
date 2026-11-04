@@ -272,3 +272,31 @@ Habib lifted the no-spend / no-training order and asked for maximum breadth. Ten
 - **Open-weights System 2 (agents J/J2 + orchestrator, training/serve/):** Muse Glimmer 30B bf16 on Modal H100 via vLLM 0.33 (native `muse_glimmer`, no trust_remote_code), bearer-auth, scale-to-zero. First deploy failed at engine start (debian_slim image lacks nvcc); redeployed on a CUDA-devel base at 08:33; **live at 08:39** (`/health` 200). Smoke 08:40: `[PERSON_1]` placeholder survives verbatim, 46.7 tok/s warm, 2.7 s short reply; verified through the app's Swift `CloudBrain` (`pg-cli cloud-probe`, 2.8 s). docs/OPEN_WEIGHTS_SYSTEM2.md, eval/serve/.
 - **Docs/claims (agent A + orchestrator):** AFTER_FILL Option A (τ 0.90) applied; "memory never leaves your phone" removed everywhere (scrubbed memory lines accompany escalations); prior-art claim scoped to the whole on-phone combination (Uddin & Bauer ACL 2026 SRW et al. in docs/research/RELATED_WORK.md); LLM-as-judge claim removed (grading is against gold); Fireworks remains a config-only preset, off by default (LEDGER rule kept: never used).
 - Spend totals at 08:45 ET: Baseten **$16.62**; Meta Model API **< $1** (multimodal smoke); Modal **≈ $10–20** (H100 trainings + Glimmer deploy attempts; exact on dashboard). Nothing was trained on or labeled by a non-Meta model.
+# 2026-11-04 — resumed audits and Muse comparison
+
+Backed up the interrupted orchestration's committed work through `009430f` to GitHub.
+The user's four comparative investigations use Muse Wonder 1.0 / Muse Code ACP / max;
+the implementation assignments remain DeepSeek V4.1 Flash 1017 / River OpenCode / max.
+The first returned Muse journeys report, independent notes, parent decisions and the completed
+retained G/H history audit are archived under `docs/research/`.
+
+Verified and repaired four previously unfinished details: Forget now removes the fact's
+superseded predecessor chain in one atomic SQL statement; photo lexical screening recognizes
+amount-only receipts; each CSV share regenerates its file; a diagnostic telemetry write failure
+does not discard an otherwise computed decision. Removed the universal sensitive-photo claim,
+corrected the SAM whiteboard confidence range against the saved response, and corrected the
+Settings-control description.
+
+Evidence: `/tmp/pocket-glimmer-takeover/retention-photo-before.log` and
+`photo-amount-before.log` reproduce the retention/receipt failures before repair.
+`retention-photo-after.log`: 30 tests, one opt-in live test skipped, zero failures.
+`telemetry-failure-after.log`: three decision tests, zero failures. Modified ReflexView Swift
+syntax parses with Swift 6.1; no Xcode/typecheck/runtime claim. No model, prior, threshold,
+training artifact, gold evaluation file or paid inference was changed or run.
+
+Open: two existing cloud-text privacy regressions await the separate privacy implementation;
+durable effects and editable drafts are still being implemented. Muse's contact-method and
+timezone requirements were sent to that implementation. Busy inputs need request-bound staging,
+not a global-inbox reorder. Forget does not erase telemetry, exported copies or backups. Photo
+classification still uses an OCR prefix and heuristics, not pixel screening. All new phone gates
+remain NOT RUN. Other Muse reports await review; iPhone build, measurements and release are open.
