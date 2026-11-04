@@ -1,0 +1,1017 @@
+{
+  "alarm_create": {
+    "train": {
+      "rows": 88,
+      "groups": 44
+    },
+    "dev": {
+      "rows": 28,
+      "groups": 14
+    },
+    "calfit": {
+      "rows": 20,
+      "groups": 10
+    },
+    "all": {
+      "rows": 136,
+      "groups": 68
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "skillPick",
+      "timing"
+    ],
+    "dispositions": {
+      "await_confirmation": 60,
+      "clarify_missing": 28,
+      "clarify_invalid": 48
+    }
+  },
+  "alarmkit_schedule": {
+    "train": {
+      "rows": 10,
+      "groups": 5
+    },
+    "dev": {
+      "rows": 0,
+      "groups": 0
+    },
+    "calfit": {
+      "rows": 2,
+      "groups": 1
+    },
+    "all": {
+      "rows": 12,
+      "groups": 6
+    },
+    "availability": "notWired",
+    "reflex_types": [
+      "skillPick"
+    ],
+    "dispositions": {
+      "unsupported": 12
+    }
+  },
+  "analyze_document": {
+    "train": {
+      "rows": 71,
+      "groups": 48
+    },
+    "dev": {
+      "rows": 4,
+      "groups": 4
+    },
+    "calfit": {
+      "rows": 3,
+      "groups": 2
+    },
+    "all": {
+      "rows": 78,
+      "groups": 54
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "skillPick"
+    ],
+    "dispositions": {
+      "execute_once": 78
+    }
+  },
+  "appletv_play": {
+    "train": {
+      "rows": 70,
+      "groups": 46
+    },
+    "dev": {
+      "rows": 15,
+      "groups": 10
+    },
+    "calfit": {
+      "rows": 23,
+      "groups": 18
+    },
+    "all": {
+      "rows": 108,
+      "groups": 74
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "skillPick"
+    ],
+    "dispositions": {
+      "await_confirmation": 50,
+      "clarify_missing": 28,
+      "failed": 30
+    }
+  },
+  "calendar_create": {
+    "train": {
+      "rows": 257,
+      "groups": 144
+    },
+    "dev": {
+      "rows": 56,
+      "groups": 32
+    },
+    "calfit": {
+      "rows": 81,
+      "groups": 44
+    },
+    "all": {
+      "rows": 394,
+      "groups": 220
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "eventPick",
+      "skillPick",
+      "timing"
+    ],
+    "dispositions": {
+      "execute_once": 90,
+      "clarify_missing": 200,
+      "clarify_invalid": 62,
+      "permission_unavailable": 42
+    }
+  },
+  "calendar_find": {
+    "train": {
+      "rows": 21,
+      "groups": 21
+    },
+    "dev": {
+      "rows": 3,
+      "groups": 3
+    },
+    "calfit": {
+      "rows": 6,
+      "groups": 6
+    },
+    "all": {
+      "rows": 30,
+      "groups": 30
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "skillPick"
+    ],
+    "dispositions": {
+      "execute_once": 30
+    }
+  },
+  "call": {
+    "train": {
+      "rows": 116,
+      "groups": 67
+    },
+    "dev": {
+      "rows": 26,
+      "groups": 14
+    },
+    "calfit": {
+      "rows": 35,
+      "groups": 22
+    },
+    "all": {
+      "rows": 177,
+      "groups": 103
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "contactPick",
+      "skillPick",
+      "timing"
+    ],
+    "dispositions": {
+      "await_confirmation": 110,
+      "clarify_missing": 28,
+      "clarify_invalid": 23,
+      "resolve_ambiguity": 16
+    }
+  },
+  "create_shortcut": {
+    "train": {
+      "rows": 63,
+      "groups": 21
+    },
+    "dev": {
+      "rows": 9,
+      "groups": 3
+    },
+    "calfit": {
+      "rows": 18,
+      "groups": 6
+    },
+    "all": {
+      "rows": 90,
+      "groups": 30
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "skillPick"
+    ],
+    "dispositions": {
+      "await_confirmation": 90
+    }
+  },
+  "device_status": {
+    "train": {
+      "rows": 60,
+      "groups": 20
+    },
+    "dev": {
+      "rows": 21,
+      "groups": 7
+    },
+    "calfit": {
+      "rows": 9,
+      "groups": 3
+    },
+    "all": {
+      "rows": 90,
+      "groups": 30
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "skillPick"
+    ],
+    "dispositions": {
+      "execute_once": 90
+    }
+  },
+  "email_compose": {
+    "train": {
+      "rows": 133,
+      "groups": 88
+    },
+    "dev": {
+      "rows": 42,
+      "groups": 21
+    },
+    "calfit": {
+      "rows": 31,
+      "groups": 23
+    },
+    "all": {
+      "rows": 206,
+      "groups": 132
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "contactPick",
+      "skillPick"
+    ],
+    "dispositions": {
+      "await_confirmation": 90,
+      "clarify_missing": 116
+    }
+  },
+  "email_digest": {
+    "train": {
+      "rows": 113,
+      "groups": 108
+    },
+    "dev": {
+      "rows": 28,
+      "groups": 24
+    },
+    "calfit": {
+      "rows": 31,
+      "groups": 26
+    },
+    "all": {
+      "rows": 172,
+      "groups": 158
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "notificationTriage",
+      "sensitivity",
+      "skillPick"
+    ],
+    "dispositions": {
+      "await_confirmation": 144,
+      "clarify_invalid": 28
+    }
+  },
+  "facetime": {
+    "train": {
+      "rows": 88,
+      "groups": 56
+    },
+    "dev": {
+      "rows": 17,
+      "groups": 10
+    },
+    "calfit": {
+      "rows": 19,
+      "groups": 14
+    },
+    "all": {
+      "rows": 124,
+      "groups": 80
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "contactPick",
+      "skillPick"
+    ],
+    "dispositions": {
+      "await_confirmation": 80,
+      "clarify_missing": 28,
+      "resolve_ambiguity": 16
+    }
+  },
+  "flashlight_toggle": {
+    "train": {
+      "rows": 47,
+      "groups": 27
+    },
+    "dev": {
+      "rows": 17,
+      "groups": 10
+    },
+    "calfit": {
+      "rows": 6,
+      "groups": 3
+    },
+    "all": {
+      "rows": 70,
+      "groups": 40
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "skillPick"
+    ],
+    "dispositions": {
+      "await_confirmation": 60,
+      "clarify_invalid": 10
+    }
+  },
+  "focus_toggle": {
+    "train": {
+      "rows": 62,
+      "groups": 31
+    },
+    "dev": {
+      "rows": 8,
+      "groups": 4
+    },
+    "calfit": {
+      "rows": 10,
+      "groups": 5
+    },
+    "all": {
+      "rows": 80,
+      "groups": 40
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "skillPick"
+    ],
+    "dispositions": {
+      "await_confirmation": 60,
+      "clarify_invalid": 20
+    }
+  },
+  "html_viz": {
+    "train": {
+      "rows": 22,
+      "groups": 22
+    },
+    "dev": {
+      "rows": 4,
+      "groups": 4
+    },
+    "calfit": {
+      "rows": 4,
+      "groups": 4
+    },
+    "all": {
+      "rows": 30,
+      "groups": 30
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "skillPick"
+    ],
+    "dispositions": {
+      "execute_once": 30
+    }
+  },
+  "imessage_send": {
+    "train": {
+      "rows": 303,
+      "groups": 261
+    },
+    "dev": {
+      "rows": 79,
+      "groups": 63
+    },
+    "calfit": {
+      "rows": 80,
+      "groups": 64
+    },
+    "all": {
+      "rows": 462,
+      "groups": 388
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "confirmBeforeAct",
+      "contactPick",
+      "skillPick"
+    ],
+    "dispositions": {
+      "await_confirmation": 90,
+      "clarify_missing": 157,
+      "clarify_invalid": 11,
+      "permission_unavailable": 42,
+      "cancel": 54,
+      "unknown_no_replay": 54,
+      "failed": 54
+    }
+  },
+  "instagram_autoreply": {
+    "train": {
+      "rows": 43,
+      "groups": 33
+    },
+    "dev": {
+      "rows": 4,
+      "groups": 4
+    },
+    "calfit": {
+      "rows": 11,
+      "groups": 7
+    },
+    "all": {
+      "rows": 58,
+      "groups": 44
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "skillPick"
+    ],
+    "dispositions": {
+      "await_confirmation": 30,
+      "clarify_missing": 28
+    }
+  },
+  "instagram_dm": {
+    "train": {
+      "rows": 73,
+      "groups": 30
+    },
+    "dev": {
+      "rows": 52,
+      "groups": 20
+    },
+    "calfit": {
+      "rows": 21,
+      "groups": 8
+    },
+    "all": {
+      "rows": 146,
+      "groups": 58
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "skillPick"
+    ],
+    "dispositions": {
+      "await_confirmation": 90,
+      "clarify_missing": 28,
+      "clarify_invalid": 28
+    }
+  },
+  "lookup_contact": {
+    "train": {
+      "rows": 96,
+      "groups": 62
+    },
+    "dev": {
+      "rows": 17,
+      "groups": 11
+    },
+    "calfit": {
+      "rows": 11,
+      "groups": 7
+    },
+    "all": {
+      "rows": 124,
+      "groups": 80
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "contactPick",
+      "skillPick"
+    ],
+    "dispositions": {
+      "execute_once": 80,
+      "clarify_missing": 28,
+      "resolve_ambiguity": 16
+    }
+  },
+  "low_power_toggle": {
+    "train": {
+      "rows": 60,
+      "groups": 30
+    },
+    "dev": {
+      "rows": 10,
+      "groups": 5
+    },
+    "calfit": {
+      "rows": 10,
+      "groups": 5
+    },
+    "all": {
+      "rows": 80,
+      "groups": 40
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "skillPick"
+    ],
+    "dispositions": {
+      "await_confirmation": 60,
+      "clarify_invalid": 20
+    }
+  },
+  "maps_directions": {
+    "train": {
+      "rows": 107,
+      "groups": 55
+    },
+    "dev": {
+      "rows": 15,
+      "groups": 10
+    },
+    "calfit": {
+      "rows": 29,
+      "groups": 15
+    },
+    "all": {
+      "rows": 151,
+      "groups": 80
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "skillPick"
+    ],
+    "dispositions": {
+      "await_confirmation": 123,
+      "clarify_missing": 28
+    }
+  },
+  "memory_recall": {
+    "train": {
+      "rows": 45,
+      "groups": 45
+    },
+    "dev": {
+      "rows": 10,
+      "groups": 10
+    },
+    "calfit": {
+      "rows": 17,
+      "groups": 17
+    },
+    "all": {
+      "rows": 72,
+      "groups": 72
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "rememberOrNot",
+      "skillPick"
+    ],
+    "dispositions": {
+      "execute_once": 72
+    }
+  },
+  "music_play": {
+    "train": {
+      "rows": 22,
+      "groups": 22
+    },
+    "dev": {
+      "rows": 4,
+      "groups": 4
+    },
+    "calfit": {
+      "rows": 4,
+      "groups": 4
+    },
+    "all": {
+      "rows": 30,
+      "groups": 30
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "skillPick"
+    ],
+    "dispositions": {
+      "await_confirmation": 30
+    }
+  },
+  "notes_create": {
+    "train": {
+      "rows": 34,
+      "groups": 25
+    },
+    "dev": {
+      "rows": 10,
+      "groups": 7
+    },
+    "calfit": {
+      "rows": 14,
+      "groups": 12
+    },
+    "all": {
+      "rows": 58,
+      "groups": 44
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "skillPick"
+    ],
+    "dispositions": {
+      "await_confirmation": 30,
+      "clarify_missing": 28
+    }
+  },
+  "open_app": {
+    "train": {
+      "rows": 56,
+      "groups": 30
+    },
+    "dev": {
+      "rows": 8,
+      "groups": 4
+    },
+    "calfit": {
+      "rows": 18,
+      "groups": 10
+    },
+    "all": {
+      "rows": 82,
+      "groups": 44
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "skillPick"
+    ],
+    "dispositions": {
+      "await_confirmation": 54,
+      "clarify_missing": 28
+    }
+  },
+  "open_url": {
+    "train": {
+      "rows": 76,
+      "groups": 38
+    },
+    "dev": {
+      "rows": 26,
+      "groups": 13
+    },
+    "calfit": {
+      "rows": 14,
+      "groups": 7
+    },
+    "all": {
+      "rows": 116,
+      "groups": 58
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "skillPick"
+    ],
+    "dispositions": {
+      "await_confirmation": 60,
+      "clarify_missing": 28,
+      "clarify_invalid": 28
+    }
+  },
+  "photos_open": {
+    "train": {
+      "rows": 34,
+      "groups": 34
+    },
+    "dev": {
+      "rows": 7,
+      "groups": 7
+    },
+    "calfit": {
+      "rows": 13,
+      "groups": 13
+    },
+    "all": {
+      "rows": 54,
+      "groups": 54
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "skillPick"
+    ],
+    "dispositions": {
+      "resolve_ambiguity": 54
+    }
+  },
+  "reminder_create": {
+    "train": {
+      "rows": 351,
+      "groups": 288
+    },
+    "dev": {
+      "rows": 84,
+      "groups": 64
+    },
+    "calfit": {
+      "rows": 78,
+      "groups": 63
+    },
+    "all": {
+      "rows": 513,
+      "groups": 415
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "confirmBeforeAct",
+      "route",
+      "skillPick",
+      "timing",
+      "toolChoice"
+    ],
+    "dispositions": {
+      "execute_once": 60,
+      "clarify_missing": 184,
+      "clarify_invalid": 171,
+      "cancel": 54,
+      "unknown_no_replay": 44
+    }
+  },
+  "run_shortcut": {
+    "train": {
+      "rows": 39,
+      "groups": 31
+    },
+    "dev": {
+      "rows": 9,
+      "groups": 6
+    },
+    "calfit": {
+      "rows": 10,
+      "groups": 7
+    },
+    "all": {
+      "rows": 58,
+      "groups": 44
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "skillPick"
+    ],
+    "dispositions": {
+      "await_confirmation": 30,
+      "clarify_missing": 28
+    }
+  },
+  "spotify_play": {
+    "train": {
+      "rows": 44,
+      "groups": 22
+    },
+    "dev": {
+      "rows": 10,
+      "groups": 5
+    },
+    "calfit": {
+      "rows": 6,
+      "groups": 3
+    },
+    "all": {
+      "rows": 60,
+      "groups": 30
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "skillPick"
+    ],
+    "dispositions": {
+      "await_confirmation": 60
+    }
+  },
+  "summarize_text": {
+    "train": {
+      "rows": 25,
+      "groups": 25
+    },
+    "dev": {
+      "rows": 2,
+      "groups": 2
+    },
+    "calfit": {
+      "rows": 3,
+      "groups": 3
+    },
+    "all": {
+      "rows": 30,
+      "groups": 30
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "skillPick"
+    ],
+    "dispositions": {
+      "execute_once": 30
+    }
+  },
+  "timer_start": {
+    "train": {
+      "rows": 69,
+      "groups": 50
+    },
+    "dev": {
+      "rows": 26,
+      "groups": 21
+    },
+    "calfit": {
+      "rows": 19,
+      "groups": 15
+    },
+    "all": {
+      "rows": 114,
+      "groups": 86
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "skillPick"
+    ],
+    "dispositions": {
+      "await_confirmation": 30,
+      "clarify_missing": 28,
+      "clarify_invalid": 56
+    }
+  },
+  "translate": {
+    "train": {
+      "rows": 76,
+      "groups": 65
+    },
+    "dev": {
+      "rows": 14,
+      "groups": 13
+    },
+    "calfit": {
+      "rows": 13,
+      "groups": 11
+    },
+    "all": {
+      "rows": 103,
+      "groups": 89
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "answerability",
+      "skillPick"
+    ],
+    "dispositions": {
+      "execute_once": 30,
+      "clarify_missing": 73
+    }
+  },
+  "uber_ride": {
+    "train": {
+      "rows": 74,
+      "groups": 37
+    },
+    "dev": {
+      "rows": 4,
+      "groups": 2
+    },
+    "calfit": {
+      "rows": 10,
+      "groups": 5
+    },
+    "all": {
+      "rows": 88,
+      "groups": 44
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "skillPick"
+    ],
+    "dispositions": {
+      "await_confirmation": 60,
+      "clarify_missing": 28
+    }
+  },
+  "weather": {
+    "train": {
+      "rows": 38,
+      "groups": 19
+    },
+    "dev": {
+      "rows": 6,
+      "groups": 3
+    },
+    "calfit": {
+      "rows": 16,
+      "groups": 8
+    },
+    "all": {
+      "rows": 60,
+      "groups": 30
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "skillPick"
+    ],
+    "dispositions": {
+      "await_confirmation": 60
+    }
+  },
+  "web_search": {
+    "train": {
+      "rows": 75,
+      "groups": 31
+    },
+    "dev": {
+      "rows": 17,
+      "groups": 7
+    },
+    "calfit": {
+      "rows": 16,
+      "groups": 6
+    },
+    "all": {
+      "rows": 108,
+      "groups": 44
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "skillPick"
+    ],
+    "dispositions": {
+      "await_confirmation": 80,
+      "clarify_missing": 28
+    }
+  },
+  "whatsapp_send": {
+    "train": {
+      "rows": 86,
+      "groups": 55
+    },
+    "dev": {
+      "rows": 14,
+      "groups": 10
+    },
+    "calfit": {
+      "rows": 24,
+      "groups": 15
+    },
+    "all": {
+      "rows": 124,
+      "groups": 80
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "contactPick",
+      "skillPick"
+    ],
+    "dispositions": {
+      "await_confirmation": 60,
+      "clarify_missing": 64
+    }
+  },
+  "x_dm": {
+    "train": {
+      "rows": 68,
+      "groups": 34
+    },
+    "dev": {
+      "rows": 30,
+      "groups": 15
+    },
+    "calfit": {
+      "rows": 18,
+      "groups": 9
+    },
+    "all": {
+      "rows": 116,
+      "groups": 58
+    },
+    "availability": "ready",
+    "reflex_types": [
+      "skillPick"
+    ],
+    "dispositions": {
+      "await_confirmation": 60,
+      "clarify_missing": 28,
+      "clarify_invalid": 28
+    }
+  }
+}

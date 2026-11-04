@@ -1,0 +1,235 @@
+{
+  "builder": "training/round3/phone_groupfix.py",
+  "source_all": "phone_inputs_all.jsonl",
+  "source_all_sha256": "833b54d837a04cb5d56d7f72916bace3b26da73c91126d87af0592b6d517e1ba",
+  "rows": 4604,
+  "audit": {
+    "distinct_canonical": 3978,
+    "cross_split_canonical": 0,
+    "rows_in_repeated_canonical": 729
+  },
+  "split_stats": {
+    "v2_groups": 991,
+    "train_groups": 668,
+    "dev_groups": 166,
+    "calfit_groups": 157,
+    "moved_for_coverage": 8
+  },
+  "splits": {
+    "train": {
+      "file": "phone_v2_inputs_train.jsonl",
+      "rows": 3174,
+      "groups": 668,
+      "canonical": 2813,
+      "sha256": "3b544c0f4b4678e213a6507ea11dba0beee783d6e611a73a7f580d6e8a083534"
+    },
+    "dev": {
+      "file": "phone_v2_inputs_dev.jsonl",
+      "rows": 702,
+      "groups": 166,
+      "canonical": 561,
+      "sha256": "062ee507cd2ec38b21a9a83b4567697e6ecb611ed47374f09e228c9b7751964b"
+    },
+    "calfit": {
+      "file": "phone_v2_inputs_calfit.jsonl",
+      "rows": 728,
+      "groups": 157,
+      "canonical": 604,
+      "sha256": "a6a913fe497b94fcdc285972f282a3d84f3f8530a3173eb5d04229eeb1392d08"
+    }
+  },
+  "sparse_groups_by_contract": {
+    "alarm_create": {
+      "train": 3,
+      "dev": 0,
+      "calfit": 0
+    },
+    "alarmkit_schedule": {
+      "train": 1,
+      "dev": 1,
+      "calfit": 0
+    },
+    "analyze_document": {
+      "train": 1,
+      "dev": 0,
+      "calfit": 0
+    },
+    "appletv_play": {
+      "train": 4,
+      "dev": 1,
+      "calfit": 0
+    },
+    "calendar_create": {
+      "train": 64,
+      "dev": 13,
+      "calfit": 14
+    },
+    "calendar_find": {
+      "train": 1,
+      "dev": 0,
+      "calfit": 0
+    },
+    "call": {
+      "train": 42,
+      "dev": 12,
+      "calfit": 12
+    },
+    "create_shortcut": {
+      "train": 1,
+      "dev": 0,
+      "calfit": 0
+    },
+    "device_status": {
+      "train": 1,
+      "dev": 0,
+      "calfit": 0
+    },
+    "email_compose": {
+      "train": 89,
+      "dev": 22,
+      "calfit": 19
+    },
+    "email_digest": {
+      "train": 7,
+      "dev": 3,
+      "calfit": 5
+    },
+    "facetime": {
+      "train": 41,
+      "dev": 12,
+      "calfit": 11
+    },
+    "flashlight_toggle": {
+      "train": 2,
+      "dev": 0,
+      "calfit": 0
+    },
+    "focus_toggle": {
+      "train": 2,
+      "dev": 0,
+      "calfit": 0
+    },
+    "html_viz": {
+      "train": 1,
+      "dev": 0,
+      "calfit": 0
+    },
+    "imessage_send": {
+      "train": 189,
+      "dev": 49,
+      "calfit": 39
+    },
+    "instagram_autoreply": {
+      "train": 1,
+      "dev": 0,
+      "calfit": 1
+    },
+    "instagram_dm": {
+      "train": 25,
+      "dev": 8,
+      "calfit": 4
+    },
+    "lookup_contact": {
+      "train": 45,
+      "dev": 10,
+      "calfit": 10
+    },
+    "low_power_toggle": {
+      "train": 1,
+      "dev": 1,
+      "calfit": 0
+    },
+    "maps_directions": {
+      "train": 4,
+      "dev": 2,
+      "calfit": 3
+    },
+    "memory_recall": {
+      "train": 4,
+      "dev": 0,
+      "calfit": 1
+    },
+    "music_play": {
+      "train": 1,
+      "dev": 0,
+      "calfit": 0
+    },
+    "notes_create": {
+      "train": 1,
+      "dev": 0,
+      "calfit": 1
+    },
+    "open_app": {
+      "train": 2,
+      "dev": 2,
+      "calfit": 2
+    },
+    "open_url": {
+      "train": 1,
+      "dev": 0,
+      "calfit": 2
+    },
+    "photos_open": {
+      "train": 6,
+      "dev": 0,
+      "calfit": 0
+    },
+    "reminder_create": {
+      "train": 29,
+      "dev": 5,
+      "calfit": 11
+    },
+    "run_shortcut": {
+      "train": 1,
+      "dev": 1,
+      "calfit": 0
+    },
+    "spotify_play": {
+      "train": 1,
+      "dev": 0,
+      "calfit": 0
+    },
+    "summarize_text": {
+      "train": 1,
+      "dev": 0,
+      "calfit": 0
+    },
+    "timer_start": {
+      "train": 3,
+      "dev": 1,
+      "calfit": 1
+    },
+    "translate": {
+      "train": 3,
+      "dev": 0,
+      "calfit": 4
+    },
+    "uber_ride": {
+      "train": 5,
+      "dev": 2,
+      "calfit": 2
+    },
+    "weather": {
+      "train": 1,
+      "dev": 0,
+      "calfit": 0
+    },
+    "web_search": {
+      "train": 2,
+      "dev": 1,
+      "calfit": 2
+    },
+    "whatsapp_send": {
+      "train": 58,
+      "dev": 9,
+      "calfit": 11
+    },
+    "x_dm": {
+      "train": 24,
+      "dev": 11,
+      "calfit": 3
+    }
+  },
+  "sparse_note": "Contracts with 0 dev/calfit groups are NOT MEASURED on that split. No score-driven splitting was used.",
+  "v1_note": "v1 splits leak identical canonical contexts across train/dev/calfit and must not be evaluated as independent. v1 files are preserved immutable."
+}
