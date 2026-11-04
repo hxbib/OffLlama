@@ -158,6 +158,27 @@ final class TakeoverRegressionTests: XCTestCase {
         XCTAssertTrue(reply.contains("Dana"), reply)
     }
 
+    func testSharedTextScreensSensitiveContentBeyondTheOpeningExcerpt() async throws {
+        let e = ScriptedEngine()
+        e.generated = "Local summary"
+        e.script(whenPromptContains: "acceptable to send this request", logits: ["A": 5, "B": -5])
+        e.script(whenPromptContains: "PRIVATE_NOTE_6E0B", logits: ["A": -5, "B": 5])
+        final class Box: @unchecked Sendable { var calls = 0 }
+        let box = Box()
+        var brain = OpenAICompatibleBrain(providerName: "Test", model: "test-model",
+                                          baseURL: URL(string: "https://example.invalid/v1/")!, apiKey: "k")
+        brain.transport = { _ in
+            box.calls += 1
+            return (Data(#"{"choices":[{"message":{"content":"Cloud summary"}}]}"#.utf8), 200)
+        }
+        let (a, _) = try makeAssistant(e, online: true, cloud: [brain])
+        let text = String(repeating: "Project meeting notes. ", count: 160)
+            + "My marriage is ending. Please keep this private. Reference PRIVATE_NOTE_6E0B."
+        let result = try await a.reason("Summarize this document", text: text)
+        XCTAssertEqual(box.calls, 0)
+        XCTAssertTrue(result.contains("Local summary"), result)
+    }
+
     private static let noneTool: [String: Double] = ["A": 0, "B": 0, "C": 0, "D": 0, "E": 0, "F": 0, "G": 6]
     private func messageEngine(toolChoice: [String: Double]? = nil) -> ScriptedEngine {
         let e = ScriptedEngine()

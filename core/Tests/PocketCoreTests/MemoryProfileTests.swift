@@ -170,7 +170,8 @@ final class MemoryProfileTests: XCTestCase {
         XCTAssertTrue(sent.hasPrefix("Profile (as of "), sent)
         XCTAssertFalse(sent.contains("Linda"), sent); XCTAssertFalse(box.sent.contains("Linda"))
         XCTAssertTrue(sent.contains("[PERSON_1]"), sent)
-        XCTAssertFalse(sent.components(separatedBy: "Known about the user").first!.contains("peanuts"), sent)   // profile part is redacted
+        XCTAssertFalse(sent.contains("peanuts"), sent)
+        XCTAssertFalse(box.sent.contains("peanuts"), box.sent)
         XCTAssertLessThanOrEqual(sent.components(separatedBy: "\n").first!.count, 40)
     }
 }
