@@ -273,7 +273,11 @@ verify_macho_native() {
     fail "$label: nm(1) is required to verify the pinned llama symbols"
     return 1
   fi
-  if ! nm -g "$bin" 2>/dev/null | grep -E '[[:xdigit:]]+[[:space:]]+T[[:space:]]+_llama_model_load_from_file$' >/dev/null; then
+  if ! out=$(nm -g "$bin" 2>&1); then
+    fail "$label: nm -g failed; could not verify exported symbols: $out"
+    return 1
+  fi
+  if ! printf '%s\n' "$out" | grep -E '[[:xdigit:]]+[[:space:]]+T[[:space:]]+_llama_model_load_from_file$' >/dev/null; then
     fail "$label: exported llama_model_load_from_file symbol is missing"
     return 1
   fi

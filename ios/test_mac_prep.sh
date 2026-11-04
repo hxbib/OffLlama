@@ -394,7 +394,7 @@ expect_fail_with "check-app rejects a missing model-load symbol" "exported llama
 expect_fail_with "check-app rejects an undefined model-load symbol" "exported llama_model_load_from_file symbol is missing" \
   env PATH="$MOCKBIN:$PATH" FAKE_NM_UNDEFINED=1 \
   "$PREP" check-app --root "$ROOT" --app "$BASE_APP_MODEL" --require-model
-expect_fail_with "check-app rejects failed nm even when output contains the symbol" "exported llama_model_load_from_file symbol is missing" \
+expect_fail_with "check-app rejects failed nm even when output contains the symbol" "nm -g failed; could not verify exported symbols" \
   env PATH="$MOCKBIN:$PATH" FAKE_NM_RC=1 \
   "$PREP" check-app --root "$ROOT" --app "$BASE_APP_MODEL" --require-model
 
