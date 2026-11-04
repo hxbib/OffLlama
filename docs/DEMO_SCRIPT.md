@@ -17,7 +17,7 @@ per-type results at τ=0.90 (eval/results/PER_TYPE_TAU090.md, frozen test N=120,
 | route | 6/10 | 6/6 | on-device green-bar shot |
 | toolChoice | 6/10 | 5/6 | on-device green-bar shot |
 | sensitivity | 5/10 | 5/5 | "Kept on device" shot |
-| answerability | 3/10 | 3/3 | don't rely on it (the app pipeline doesn't run this decision today) |
+| answerability | 3/10 | 3/3 | runs offline when `route` escalates and there is no cloud (commit 822b49c): "no" → "I can't answer that offline" with no generation. Optional beat: *"What's my landlord's new Wi-Fi password?"* in airplane mode; keep only if the card clears τ on the phone |
 | confirmBeforeAct | 2/10 | 2/2 | **don't promise a green bar.** Messages confirm by the hard rule "messages always confirm" (`core/Sources/PocketCore/Assistant.swift`, `|| action.tool == "send_message"`), not by confidence. Say "structured confirmation" |
 | memoryConflict, nudgeNow | 0/10 | n/a | only as hand-off / safe-fallback examples |
 

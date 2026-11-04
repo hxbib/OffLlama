@@ -116,7 +116,7 @@ cd ../training && python3 -m unittest discover -s tests
 
 The phone runs **Llama 3.2 1B Instruct Q4_K_M**, distilled into Llama-Reflex-1B. The 3B is more accurate, but its measured
 peak of 5.03 GB RSS leaves only ~0.47 GB under our ~5.5 GB memory budget before app and runtime overhead, so the 1B wins on headroom.
-Gate-1 lineup (`/workspace/gate1/RESULTS.md`, llama.cpp ddf48f8, llama-server -c 4096 -t 8).
+Gate-1 lineup (Oct 31 model test on the build box, llama.cpp ddf48f8, llama-server -c 4096 -t 8; the raw RESULTS.md stayed on that box, the numbers are reproduced here and in LEDGER §1).
 **Every RSS and tok/s figure below was measured on the box's CPU (8 vCPU x86 AVX2), not on an iPhone.**
 
 | Model | Status | Q&A (15) | Grammar tool calls: valid / correct tool (decision) / tool+args (15) | Raw tool calls: valid / tool / tool+args (10) | Peak RSS (box) | Decode tok/s (box) | Prompt tok/s (box) |
@@ -211,7 +211,7 @@ Lineage: Meta pre-trained Glimmer on Muse Spark's outputs with logit distillatio
 Muse Wonder (`muse-wonder-1.0`) can be typed into Settings as the cloud model id; it isn't used by default.
 
 ## Why not run the 30B on the phone
-Measured on this box (/workspace/gate1/RESULTS.md, llama.cpp ddf48f8, CPU):
+Measured on the Oct 31 build box (gate-1 run, llama.cpp ddf48f8, CPU):
 - Muse Glimmer is **dense, 29.6B active params**: every token reads all weights.
 - The smallest coherent quant we tested, **IQ2_M, is a 9.85 GB file** (10.69 GB peak RSS, 2.54 tok/s decode on 8 vCPU).
 - **Q1_0 (4.85 GB) is broken**: word salad even greedy, on both AVX2 and generic builds; a model trained for 1-bit (Bonsai 1.7B Q1_0) runs fine on the same build, so the loss comes from post-training 1-bit quantization.
