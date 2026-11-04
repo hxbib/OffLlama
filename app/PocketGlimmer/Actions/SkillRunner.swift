@@ -23,8 +23,7 @@ final class IOSSkillRunner: SkillRunner, @unchecked Sendable {
         case .shortcut(let name, let input):
             let text = SkillTemplate.fill(input, args: args, encode: false)
             let result = await runShortcut(name: name, text: text, skill: skill)
-            // The hand-off is all the app can confirm: Shortcuts may still report a missing Shortcut. If Shortcuts
-            // itself cannot open, offer the TV app search page as a fallback.
+            // The hand-off is all the app can confirm: Shortcuts may still report a missing Shortcut.
             guard skill.id == "appletv_play", result.hasPrefix("Couldn't open Shortcuts") else { return result }
             var search = URLComponents(string: "https://tv.apple.com/search")!
             search.queryItems = [URLQueryItem(name: "term", value: text)]

@@ -63,9 +63,6 @@ actor LlamaCppEngine: LLMEngine {
 
     deinit { llama_free(ctx); llama_model_free(model) }
 
-    /// Default OFF for the submission build: prefix reuse is ~15% faster on cal180 (73.6 s vs 87.0 s on a Linux box) but
-    /// shifts a few confidences near τ (median 0.007, worst 0.135, 6 crossings on cal180), so on-screen numbers would
-    /// not match the reference cal180 operating point. Settings toggle "Reuse cached prompt prefix" turns it on.
     static var prefixReuseDefault: Bool { UserDefaults.standard.object(forKey: "pg_kv_prefix") as? Bool ?? false }
 
     /// `addBOS` = llama.cpp `add_special`. Decision prompts already start with "<|begin_of_text|>", and llama-server

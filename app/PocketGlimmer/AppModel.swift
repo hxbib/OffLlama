@@ -117,8 +117,7 @@ final class AppModel {
             _ = try? mem.consolidateIfDue()      // daily reconciliation: dedupe, supersede, purge, budget
             guard let url = Self.findModel() else { modelState = "No model file. Add a .gguf (see README)."; return }
             // XcodeGen adds Resources/Models as a group, so calibration.json is copied flat to the bundle root; the
-            // subdirectory lookup covers a folder-reference setup. A missing/broken file stops boot: the uncalibrated
-            // fallback has no priors and tau 0.8, so it would silently change the shipping tau 0.90 operating point.
+            // subdirectory lookup covers a folder-reference setup.
             guard let calURL = Bundle.main.url(forResource: "calibration", withExtension: "json")
                     ?? Bundle.main.url(forResource: "calibration", withExtension: "json", subdirectory: "Models") else {
                 throw NSError(domain: "PocketGlimmer.Calibration", code: 1, userInfo: [
@@ -278,8 +277,7 @@ final class AppModel {
     }
 }
 
-/// Cloud brains: Meta first. Keys in Keychain; model ids editable in Settings. Fireworks is not an app option: a key
-/// left on the phone is ignored. The generic BYOK entry remains an explicit user choice.
+/// Cloud brains: Meta first. Keys in Keychain; model ids editable in Settings.
 enum CloudSettings {
     static func chain() -> CloudBrainChain {
         var b: [CloudBrain] = []

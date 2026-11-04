@@ -39,8 +39,6 @@ public struct OpenAICompatibleBrain: CloudBrain {
     struct Resp: Decodable { struct C: Decodable { struct M: Decodable { let content: String? }; let message: M }; let choices: [C] }
 
     public func makeRequest(_ messages: [ChatMessage], maxTokens: Int) throws -> URLRequest {
-        // The app's promise is Standard mode for every Meta call. Enforce it in the request path, not only at the
-        // settings edge, so a direct client or a stored contributor id cannot send text under the training mode.
         try MetaAPI.requireStandardMode(model)
         var req = URLRequest(url: baseURL.appendingPathComponent("chat/completions"))
         req.httpMethod = "POST"

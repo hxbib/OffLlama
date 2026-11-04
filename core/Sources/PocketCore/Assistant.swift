@@ -91,7 +91,6 @@ public final class Assistant: @unchecked Sendable {
         return p + "\n" + mem
     }
 
-    /// Copy of the scrubber with remembered entity names merged, for any prompt that may leave the device.
     func cloudScrubber() -> PrivacyScrubber {
         var sc = scrubber
         sc.knownNames = Array(Set(sc.knownNames + ((try? memory.entityNames()) ?? [])))
