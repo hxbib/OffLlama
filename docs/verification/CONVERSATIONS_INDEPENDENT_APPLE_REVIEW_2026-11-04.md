@@ -78,3 +78,11 @@ Impact: a plausible chart request renders a wrong chart while saying "Chart read
 
 ## Artifacts
 Logs under `ios/.build/`: `review-core-full.log`, `review-probes-1.log`, `review-probes-2.log`, `review-unsigned.log`, `review-signed.log` (failed device destination), `review-signed2.log`, `review-signed2-summary.log`. Probes and their output are committed under `docs/verification/independent-review-probes-2026-11-04/`.
+
+## Update: phone reconnected (same day)
+
+`xctrace list devices` now lists Habib's iPhone (27.0.1, 00008150-000A59811180401C) as online. Result:
+- **Device panel: still unavailable.** `device_list` returns no devices. It reports `agent-device` 0.21.31 not installed (0.21.12 present, not running) and `xcrun simctl` not found because the host tool runs with the Command Line Tools developer directory. No UI automation, `devicectl`, `simctl`, `idb` or ssh workaround was used.
+- **Physical-iPhone protection/persistence test: COULD NOT RUN.** The project has no device-capable test runner. `app/Tests` holds only `HTMLIsolation/main.swift`, `app/project.yml` has no test target, and the PocketCore XCTest suite (including the attribute-readback tests) is a SwiftPM suite that runs on macOS or a simulator, not on a device. Building a new host test app and installing it on the phone was outside the "existing runner" scope, so I did not.
+- **Nothing was installed on the phone.** The signed f87567b app is built but not installed, and is stale once the pending fixes land (the conversations worker is on `feature/offllama-conversations-fixes`).
+- The only on-device storage check that exists is the Chats footer readback in the app itself. It must be read on the phone after install; the earlier simulator failure is still unexplained and is not a device result.
