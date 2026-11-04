@@ -11,6 +11,16 @@ actions, keyboard dismissal, inline HTML visuals, a polished native interface, a
 original icon, and useful diagnostics. The exact original message request was not
 provided. Common grammatical variants must be tested, not assumed equivalent.
 
+The user subsequently supplied a two-turn failure: even `text Dana` asks who and
+which app; after the user answers, the app says `Hi Dana!` in chat and does not act.
+The follow-up action context is therefore a required regression case. The exact
+second utterance is still unknown. Repairing only a keyword regex is insufficient.
+Clarification must retain a typed recipient/channel/body draft, bind a follow-up to
+that draft, and request confirmation before the native compose sheet. A new request,
+cancellation, multiple pending drafts and a stale draft need explicit disambiguation.
+Display the actual local-model decisions and distinguish deterministic draft handling
+from classifier decisions. Do not advertise scripted tests as real-model behavior.
+
 ## Grounded current shape
 
 `Assistant.handle` creates one `UserRequestID`, gathers memory and makes calibrated
