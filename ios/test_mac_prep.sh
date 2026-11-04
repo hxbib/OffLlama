@@ -293,7 +293,15 @@ printf 'platform %s\n' "${FAKE_VTOOL_PLATFORM:-IOS}"
 SH
 cat > "$MOCKBIN/nm" <<'SH'
 #!/bin/sh
-printf '0000000000000000 T _llama_model_load_from_file\n'
+if [ "${FAKE_NM_UNDEFINED:-}" = 1 ]; then
+  printf '                 U _llama_model_load_from_file\n'
+elif [ "${FAKE_NM_MISSING:-}" != 1 ]; then
+  printf '0000000000000000 T _llama_model_load_from_file\n'
+fi
+if [ "${FAKE_NM_LARGE:-}" = 1 ]; then
+  awk 'BEGIN { for (i = 0; i < 100000; i++) print "0000000000001000 T _other_symbol" }' || exit $?
+fi
+exit "${FAKE_NM_RC:-0}"
 SH
 cat > "$MOCKBIN/cmake" <<'SH'
 #!/bin/sh
@@ -375,6 +383,19 @@ expect_status_with "check-app --allow-no-model is compile-only and incomplete" 2
 expect_fail_with "check-app --require-model fails a model-less app" "no .gguf in the built app" \
   "$PREP" check-app --root "$ROOT" --app "$BASE_APP" --require-model
 expect_ok "check-app accepts a complete model-bearing unsigned fixture" \
+  "$PREP" check-app --root "$ROOT" --app "$BASE_APP_MODEL" --require-model
+
+expect_ok "check-app accepts an exported symbol in a large symbol table" \
+  env PATH="$MOCKBIN:$PATH" FAKE_NM_LARGE=1 \
+  "$PREP" check-app --root "$ROOT" --app "$BASE_APP_MODEL" --require-model
+expect_fail_with "check-app rejects a missing model-load symbol" "exported llama_model_load_from_file symbol is missing" \
+  env PATH="$MOCKBIN:$PATH" FAKE_NM_MISSING=1 \
+  "$PREP" check-app --root "$ROOT" --app "$BASE_APP_MODEL" --require-model
+expect_fail_with "check-app rejects an undefined model-load symbol" "exported llama_model_load_from_file symbol is missing" \
+  env PATH="$MOCKBIN:$PATH" FAKE_NM_UNDEFINED=1 \
+  "$PREP" check-app --root "$ROOT" --app "$BASE_APP_MODEL" --require-model
+expect_fail_with "check-app rejects failed nm even when output contains the symbol" "exported llama_model_load_from_file symbol is missing" \
+  env PATH="$MOCKBIN:$PATH" FAKE_NM_RC=1 \
   "$PREP" check-app --root "$ROOT" --app "$BASE_APP_MODEL" --require-model
 
 cp -R "$BASE_APP" "$TMP/empty-exe.app"

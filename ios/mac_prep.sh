@@ -265,7 +265,7 @@ verify_macho_native() {
     fail "$label: vtool(1) is required to prove an iOS device build"
     return 1
   fi
-  if ! printf '%s\n' "$out" | grep -qiE 'platform[[:space:]]+IOS([[:space:]]|$)'; then
+  if ! printf '%s\n' "$out" | grep -iE 'platform[[:space:]]+IOS([[:space:]]|$)' >/dev/null; then
     fail "$label: vtool does not report platform IOS (not a device build): $out"
     return 1
   fi
@@ -273,7 +273,7 @@ verify_macho_native() {
     fail "$label: nm(1) is required to verify the pinned llama symbols"
     return 1
   fi
-  if ! nm -g "$bin" 2>/dev/null | grep -q '_llama_model_load_from_file$'; then
+  if ! nm -g "$bin" 2>/dev/null | grep -E '[[:xdigit:]]+[[:space:]]+T[[:space:]]+_llama_model_load_from_file$' >/dev/null; then
     fail "$label: exported llama_model_load_from_file symbol is missing"
     return 1
   fi
