@@ -5,7 +5,7 @@ import UniformTypeIdentifiers
 import PocketCore
 
 /// Wires the open-world skill registry into the Assistant: bundled Resources/Skills/builtin.json (Swift built-ins if
-/// missing) + user skills dropped into Files › Pocket Glimmer › Skills/*.json. Adding an ability needs no retraining.
+/// missing) + user skills dropped into Files › OffLlama › Skills/*.json. Adding an ability needs no retraining.
 enum SkillSetup {
     static var userSkillsDir: URL {
         let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("Skills")
@@ -35,13 +35,13 @@ enum SkillSetup {
     }
 }
 
-/// "Pocket Glimmer: handle text". Share sheet / Shortcuts hand text (selected emails from Mail, a Safari page, a note)
+/// "OffLlama: handle text". Share sheet / Shortcuts hand text (selected emails from Mail, a Safari page, a note)
 /// or a file (PDF/txt) to the app; the assistant then runs the instruction on it, on device first.
 /// This is how "analyze my last few emails" works on iOS, where no app may read Mail: Mail › select › Share ›
-/// Shortcut “PG Share Emails” (Receive text from Share Sheet → Pocket Glimmer: handle text).
+/// Shortcut “PG Share Emails” (Receive text from Share Sheet → OffLlama: handle text).
 struct HandleTextIntent: AppIntent {
-    static let title: LocalizedStringResource = "Pocket Glimmer: handle text"
-    static let description = IntentDescription("Give Pocket Glimmer text or a document (emails, a page, a PDF) and tell it what to do with it.")
+    static let title: LocalizedStringResource = "OffLlama: handle text"
+    static let description = IntentDescription("Give OffLlama text or a document (emails, a page, a PDF) and tell it what to do with it.")
     static let openAppWhenRun = true
 
     @Parameter(title: "Text") var text: String?
@@ -97,8 +97,8 @@ enum QuickSkill: String, AppEnum {
 }
 
 struct RunSkillIntent: AppIntent {
-    static let title: LocalizedStringResource = "Pocket Glimmer Action"
-    static let description = IntentDescription("Run a Pocket Glimmer phone action. Anything that messages someone still asks you to confirm.")
+    static let title: LocalizedStringResource = "OffLlama Action"
+    static let description = IntentDescription("Run a OffLlama phone action. Anything that messages someone still asks you to confirm.")
     static let openAppWhenRun = true
     @Parameter(title: "Action") var action: QuickSkill
     @Parameter(title: "Details") var details: String?

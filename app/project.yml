@@ -29,6 +29,8 @@ targets:
         DEVELOPMENT_TEAM: ""          # set your team in Xcode > Signing
         CODE_SIGN_STYLE: Automatic
         ENABLE_USER_SCRIPT_SANDBOXING: NO
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        INFOPLIST_KEY_CFBundleDisplayName: OffLlama
         OTHER_LDFLAGS: ["-lc++"]
     entitlements:
       path: PocketGlimmer/Support/PocketGlimmer.entitlements
@@ -40,15 +42,15 @@ targets:
     info:
       path: PocketGlimmer/Support/Info.plist
       properties:
-        CFBundleDisplayName: Pocket Glimmer
+        CFBundleDisplayName: OffLlama
         UILaunchScreen: {}
         # Lets Finder > iPhone > Files copy a .gguf into the app's Documents (AppModel.findModel looks there first)
         UIFileSharingEnabled: true
         LSSupportsOpeningDocumentsInPlace: true
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
-        NSRemindersFullAccessUsageDescription: Pocket Glimmer creates and reads reminders you ask for, on this iPhone.
-        NSCalendarsFullAccessUsageDescription: Pocket Glimmer creates and looks up events you ask for, on this iPhone.
+        NSRemindersFullAccessUsageDescription: OffLlama creates and reads reminders you ask for, on this iPhone.
+        NSCalendarsFullAccessUsageDescription: OffLlama creates and looks up events you ask for, on this iPhone.
         NSMicrophoneUsageDescription: Hold the mic to talk. After you release it, the recording is sent to Muse Voice Transcribe, then deleted. You can turn voice off in Settings.
         NSCameraUsageDescription: Take a photo for a "glimpse". The sensitivity check runs on device before anything is sent to Muse Spark or SAM 3.1.
         NSPhotoLibraryUsageDescription: Pick a photo for a "glimpse". EXIF and location data are stripped before anything leaves the phone.
-        NSContactsUsageDescription: Pocket Glimmer finds contacts on this iPhone and uses known names to mask cloud text. Messages require your confirmation.
+        NSContactsUsageDescription: OffLlama finds contacts on this iPhone and uses known names to mask cloud text. Messages require your confirmation.

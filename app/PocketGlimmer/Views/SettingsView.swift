@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 struct SettingsView: View {
     @Environment(AppModel.self) private var model
@@ -6,8 +7,10 @@ struct SettingsView: View {
     @AppStorage("byok_url") private var byokURL = ""
     @AppStorage("byok_model") private var byokModel = ""
     @AppStorage("voice_stays_on_device") private var voiceStaysOnDevice = false
-    @State private var metaKey = Keychain.get("meta_key") ?? ""
-    @State private var byokKey = Keychain.get("byok_key") ?? ""
+    @State private var metaKey = ""
+    @State private var metaKeySaved = Keychain.get("meta_key") != nil
+    @State private var byokKey = ""
+    @State private var byokKeySaved = Keychain.get("byok_key") != nil
     @State private var exportStatus = ""
     @AppStorage("pg_kv_prefix") private var kvPrefix = false
 
@@ -23,7 +26,8 @@ struct SettingsView: View {
                 }
                 Section {
                     TextField("Model", text: $metaModel).textInputAutocapitalization(.never)
-                    SecureField("API key", text: $metaKey)
+                    SecureField("New API key", text: $metaKey).textInputAutocapitalization(.never).autocorrectionDisabled()
+                    Text(metaKeySaved ? "Key saved in Keychain" : "No key saved").font(.caption).foregroundStyle(.secondary)
                 } header: { Text("Meta Model API · Muse Spark / Muse Wonder") } footer: {
                     Text("Standard mode only. Contributor-mode ids are refused before any request leaves the phone.")
                 }
@@ -35,7 +39,8 @@ struct SettingsView: View {
                 DisclosureGroup("Other OpenAI-compatible endpoint") {
                     TextField("Base URL (…/v1/)", text: $byokURL).textInputAutocapitalization(.never).keyboardType(.URL)
                     TextField("Model", text: $byokModel).textInputAutocapitalization(.never)
-                    SecureField("API key", text: $byokKey)
+                    SecureField("New API key", text: $byokKey).textInputAutocapitalization(.never).autocorrectionDisabled()
+                    Text(byokKeySaved ? "Key saved in Keychain" : "No key saved").font(.caption).foregroundStyle(.secondary)
                 }
                 Section {
                     Button("Export decisions for distillation") {
@@ -47,16 +52,24 @@ struct SettingsView: View {
                 } header: { Text("Distillation loop") } footer: {
                     Text("Exports recent low-confidence decisions and their request context for future model training. The app does not upload this file. Your device backup settings may include it.")
                 }
+                Section("Apple Dictation and Vocal Shortcuts") {
+                    Text("Tap the microphone on the Apple keyboard to dictate, then review your text before sending.")
+                    Text("In Shortcuts, create a shortcut with Dictate Text followed by Ask OffLlama, passing the dictated text as Request. In Settings > Accessibility > Vocal Shortcuts, assign that shortcut the phrase Hey OffLlama. Opening the app may require unlocking your iPhone.")
+                }
                 Section("About") {
                     Text("Built with Llama").font(.callout.weight(.semibold))
                     Text("On-device model: Llama 3.2, licensed under the Llama 3.2 Community License, Copyright © Meta Platforms, Inc. All Rights Reserved.")
                         .font(.caption).foregroundStyle(.secondary)
                 }
                 Section { Button("Save") {
-                    Keychain.set(metaKey, for: "meta_key"); Keychain.set(byokKey, for: "byok_key")
+                    if !metaKey.isEmpty { Keychain.set(metaKey, for: "meta_key"); metaKey = "" }
+                    if !byokKey.isEmpty { Keychain.set(byokKey, for: "byok_key"); byokKey = "" }
+                    metaKeySaved = Keychain.get("meta_key") != nil; byokKeySaved = Keychain.get("byok_key") != nil
                     model.reloadCloud()
                 } } footer: { Text("Keys are stored in the iOS Keychain on this device only. Without keys, built-in cloud inference is unavailable. Links and Shortcuts can still open other apps.") }
             }
+            .scrollDismissesKeyboard(.interactively)
+            .toolbar { ToolbarItemGroup(placement: .keyboard) { Spacer(); Button("Done") { UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil) } } }
             .navigationTitle("Settings")
         }
     }

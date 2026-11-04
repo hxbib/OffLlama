@@ -11,8 +11,8 @@ enum TriggerKindEntity: String, AppEnum {
 }
 
 struct ProactiveTriggerIntent: AppIntent {
-    static let title: LocalizedStringResource = "Pocket Glimmer Trigger"
-    static let description = IntentDescription("Let Pocket Glimmer check its memory for something relevant to this moment.")
+    static let title: LocalizedStringResource = "OffLlama Trigger"
+    static let description = IntentDescription("Let OffLlama check its memory for something relevant to this moment.")
     static let openAppWhenRun = false
 
     @Parameter(title: "Trigger") var kind: TriggerKindEntity
@@ -33,7 +33,7 @@ struct ProactiveTriggerIntent: AppIntent {
 }
 
 struct AskPocketGlimmerIntent: AppIntent {
-    static let title: LocalizedStringResource = "Ask Pocket Glimmer"
+    static let title: LocalizedStringResource = "Ask OffLlama"
     static let openAppWhenRun = true
     @Parameter(title: "Request") var request: String
 
@@ -47,7 +47,7 @@ struct AskPocketGlimmerIntent: AppIntent {
 
 struct PocketGlimmerShortcuts: AppShortcutsProvider {
     static var appShortcuts: [AppShortcut] {
-        AppShortcut(intent: AskPocketGlimmerIntent(), phrases: ["Ask \(.applicationName)"], shortTitle: "Ask", systemImageName: "sparkle")
+        AppShortcut(intent: AskPocketGlimmerIntent(), phrases: ["Ask \(.applicationName)"], shortTitle: "Ask", systemImageName: "bubble.left.and.text.bubble.right")
         AppShortcut(intent: ProactiveTriggerIntent(), phrases: ["\(.applicationName) check in"], shortTitle: "Check in", systemImageName: "bolt")
         AppShortcut(intent: HandleTextIntent(), phrases: ["Share with \(.applicationName)", "Summarize with \(.applicationName)"],
                     shortTitle: "Handle text", systemImageName: "doc.text.magnifyingglass")

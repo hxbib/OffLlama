@@ -50,8 +50,10 @@ struct GlimpseView: View {
                 }
                 .padding()
             }
+            .scrollDismissesKeyboard(.interactively)
             .navigationTitle("Glimpse").navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItemGroup(placement: .keyboard) { Spacer(); Button("Hide keyboard") { UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil) } }
                 ToolbarItem(placement: .principal) { StatusPill() }
                 ToolbarItem(placement: .confirmationAction) { Button("Done") { dismiss() } }
             }

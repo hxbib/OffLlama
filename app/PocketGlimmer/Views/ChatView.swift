@@ -18,6 +18,7 @@ struct ChatView: View {
                         }
                         .padding()
                     }
+                    .scrollDismissesKeyboard(.interactively)
                     .onChange(of: model.chat.count) { if let l = model.chat.last { withAnimation { proxy.scrollTo(l.id, anchor: .bottom) } } }
                 }
                 if let last = model.decisions.first { LiveReflexStrip(row: last) }
@@ -29,14 +30,18 @@ struct ChatView: View {
                         .padding(.horizontal, 14).padding(.vertical, 10)
                         .background(.quaternary.opacity(0.6), in: RoundedRectangle(cornerRadius: 20))
                     Button {
+                        guard model.assistant != nil else { return }
                         let t = input; input = ""
                         Task { await model.send(t) }
                     } label: { Image(systemName: "arrow.up.circle.fill").font(.system(size: 32)) }
-                    .disabled(input.trimmingCharacters(in: .whitespaces).isEmpty || model.busy)
+                    .disabled(input.trimmingCharacters(in: .whitespaces).isEmpty || model.busy || model.assistant == nil)
                 }
                 .padding(.horizontal).padding(.vertical, 8)
             }
-            .toolbar { ToolbarItem(placement: .principal) { StatusPill() } }
+            .toolbar {
+                ToolbarItem(placement: .principal) { StatusPill() }
+                ToolbarItemGroup(placement: .keyboard) { Spacer(); Button("Done") { focused = false } }
+            }
             .navigationBarTitleDisplayMode(.inline)
         }
     }
@@ -79,7 +84,7 @@ struct Bubble: View {
                     if let card = item.card {
                         DraftCardView(item: item, card: card)
                     } else {
-                        Text(item.text).padding(12).background(.quaternary.opacity(0.6), in: RoundedRectangle(cornerRadius: 18))
+                        Text(item.text).textSelection(.enabled).padding(12).background(.quaternary.opacity(0.6), in: RoundedRectangle(cornerRadius: 18))
                     }
                     if item.keptOnDevice {
                         Label("Kept on device · nothing sent", systemImage: "lock.fill")
