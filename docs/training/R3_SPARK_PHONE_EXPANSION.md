@@ -36,9 +36,10 @@ remains only for eventPick/contactPick rows with different candidate sets
 v1 phone votes, 51 land in v2 train (remapped by `stable_prompt_id` =
 SHA-256 of reflex type + context + candidates, topped up with 2 fresh passes
 to fixed k=3); the other 21 now sit in held-out splits and are excluded from
-training exports. The remaining 3,123 v2 train contexts are labeled fresh
-(166/783 batches settled when traffic was paused for rate coordination;
-see Spend).
+training exports. The remaining 3,123 v2 train contexts were labeled fresh
+(all 3,123 with ≥2 valid draws; converter kept 3,122, 1 dropped for top vote
+share <0.6). Combined v2 export: `out/v2_trainer_rows_all.jsonl`, **3,173
+trainer rows** (3,122 + 51 remapped) of 3,174 v2 train contexts.
 
 ## Generated corpus (independent of v1)
 
@@ -64,13 +65,17 @@ Artifacts (immutable, hashed in `status.json`):
 ## Spend
 
 Durable ledger at `/tmp/pocket-glimmer-training-scale/spark-phone-v1/state/`
-(`state.sqlite3` + batch JSONL + `status.json`). At the rate-coordination
-pause (matched worker raised to 99 RPM): 1,454 SETTLED calls, **$5.8592
-billed observed**; 18 UNKNOWN (**$0.1928 reserved**, retained forever);
-2 RESERVED in flight at drain ($0.0230, retained); **committed $6.0750 of
-$54.99**. `status.json` carries `paid_traffic_paused=true` with timestamp;
-this worker resumes only after the matched worker durably hands back its
-rate lease, then at up to 99 RPM under the same cap.
+(`state.sqlite3` + batch JSONL + `status.json`). Rate coordination: traffic
+was drained (committed $6.0750 at pause) so the matched worker could run at
+99 RPM; after its durable `phase=complete` handback this worker resumed at
+99 RPM and finished. **Final: 2,083 SETTLED calls, $8.72394 billed observed;
+20 UNKNOWN, $0.215854 reserved (retained forever, never re-charged);
+committed $8.939794 of $54.99.** No RESERVED calls remain; paid traffic is
+stopped and the 99 RPM lease is handed back (`status.json` phase
+`complete_lease_handed_back`). Total usable exports: 3,173 v2 trainer rows +
+2,345 generated trainer rows = **5,518 labeled trainer rows**, plus the
+2,354-row generated input corpus with full vote records. No accuracy claim:
+no student was trained or evaluated under this allocation.
 Two defects found and fixed en route: a throttle token-log double-append
 (self-starvation) and batch-ID collisions across input sets sharing one
 ledger (fixed by input-hash namespacing; the colliding run's votes were
