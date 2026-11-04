@@ -125,6 +125,11 @@ extension Assistant {
                 if ActionPlanner.isExplicitMessageRequest(utterance) {
                     let (retained, question) = MessageDraft.retain(utterance: utterance, requestID: requestID,
                                                                    lowConfidence: true, now: now)
+                    if retained.isComplete {
+                        return try await sendMessageToolPath(utterance, ctx: ctx, requestID: requestID,
+                            sharedText: sharedText, decisions: &decisions, planned: &planned,
+                            read: &read, draft: &draft, now: now, toolEscalated: true)
+                    }
                     draft = retained
                     ActionDiagnostics.shared.record(requestID: requestID, capability: retained.channel?.capabilityID,
                                                     phase: .draft, code: .draftCreated)

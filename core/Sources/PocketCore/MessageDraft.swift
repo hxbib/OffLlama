@@ -450,6 +450,7 @@ public enum MessageFollowUp {
 /// detector so routing, channels and extraction share one definition.
 public enum MessageCommand {
     public enum LeadingVerb: Sendable, Equatable { case messagesApp, dmBare }
+    static let bodyMarkerPattern = #"\b(?:saying|that(?: says)?|to say|with the message)\b"#
 
     static let nounExclusions: Set<String> = ["of", "failed", "failure", "history", "histories",
                                               "notification", "notifications", "preview", "tone",
@@ -484,7 +485,7 @@ public enum MessageCommand {
     /// The command head: everything before a body marker, quote or colon.
     public static func head(_ utterance: String) -> String {
         let raw = utterance
-        if let r = raw.range(of: #"\b(?:saying|that says|to say|with the message)\b|["“”:]"#,
+        if let r = raw.range(of: bodyMarkerPattern + #"|["“”:]"#,
                              options: [.regularExpression, .caseInsensitive]) {
             return SkillRegistry.norm(String(raw[..<r.lowerBound]))
         }

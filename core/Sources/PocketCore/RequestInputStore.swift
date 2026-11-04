@@ -560,7 +560,8 @@ extension RequestInputStore {
                            length(payload_blob) AS blob_bytes,
                            length(CAST(camera_concept AS BLOB)) AS concept_bytes,
                            length(CAST(camera_mode AS BLOB)) AS mode_bytes,
-                           length(CAST(preview AS BLOB)) AS preview_bytes
+                           length(CAST(preview AS BLOB)) AS preview_bytes,
+                           COALESCE(length(CAST(transcript AS BLOB)), 0) AS transcript_bytes
                     FROM request_inputs WHERE state IN ('staged','interrupted') ORDER BY created ASC, request_id ASC
                     """)
                 for row in rows { result.append(try decodeSummary(row)) }
@@ -800,7 +801,8 @@ extension RequestInputStore {
             guard try optionalText(row, "interruption") == nil else { throw corrupt("interruption is malformed") }
             interruption = nil
         }
-        return RequestInputSummary(id: UserRequestID(raw: uuid), origin: origin, preview: preview, byteCount: Int(byteCount),
+        let retainedBytes = byteCount + (row["transcript_bytes"]?.int ?? 0)
+        return RequestInputSummary(id: UserRequestID(raw: uuid), origin: origin, preview: preview, byteCount: Int(retainedBytes),
                                    createdAt: Date(timeIntervalSince1970: try requiredDouble(row, "created")),
                                    expiresAt: Date(timeIntervalSince1970: try requiredDouble(row, "expires")),
                                    state: state, interruption: interruption)

@@ -2,6 +2,27 @@ import XCTest
 @testable import PocketCore
 
 final class ChartRequestTests: XCTestCase {
+    func testCompactAndUnpunctuatedListsKeepEveryLabelAndValue() async throws {
+        for input in ["rent1200,food400,transit130", "rent 1200 food 400 transit 130"] {
+            let values = HTMLViz.pairs(from: input)
+            XCTAssertEqual(values.map(\.label), ["rent", "food", "transit"])
+            XCTAssertEqual(values.map(\.value), [1200, 400, 130])
+            let (a, engine, effects) = try assistant(route: "A")
+            let turn = try await a.handle("Make a chart: " + input)
+            guard case .local(let reply) = turn.reply else { XCTFail("\(turn.reply)"); continue }
+            XCTAssertTrue(reply.contains("3 bars"), reply)
+            XCTAssertTrue(RichReply.containsMarkup(reply))
+            XCTAssertTrue(engine.generatePrompts.isEmpty)
+            XCTAssertEqual(effects.performCount, 0)
+        }
+    }
+
+    func testThousandsDecimalAndNumberedLabelsKeepTheirValues() {
+        let values = HTMLViz.pairs(from: "rent $1,200.50,food400; Q1 100, Q2 200; change -12.5%; 1,2,3")
+        XCTAssertEqual(values.map(\.label), ["rent", "food", "Q1", "Q2", "change", "#6", "#7", "#8"])
+        XCTAssertEqual(values.map(\.value), [1200.5, 400, 100, 200, -12.5, 1, 2, 3])
+    }
+
     private func assistant(route: String) throws -> (Assistant, ScriptedEngine, FakePhoneEffects) {
         let engine = ScriptedEngine()
         engine.generated = "rent 1200 | food 400 | transit 130"

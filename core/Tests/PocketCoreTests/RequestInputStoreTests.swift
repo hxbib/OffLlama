@@ -18,6 +18,16 @@ private final class ClaimResults: @unchecked Sendable {
 }
 
 final class RequestInputStoreTests: XCTestCase {
+    func testSummaryCountsRetainedAudioAndUTF8Transcript() throws {
+        let store = try makeStore(makeDirectory(), clock: TestClock())
+        defer { store.close() }
+        let saved = try store.stage(.voice(wav: Data(repeating: 1, count: 100), duration: 1), origin: .voice)
+        _ = try store.claim(saved.id)
+        try store.setTranscript(String(repeating: "é", count: 25), for: saved.id)
+        try store.interrupt(saved.id, reason: .handleFailed)
+        XCTAssertEqual(try store.summaries().first?.byteCount, 150)
+    }
+
     private func makeDirectory() -> URL {
         FileManager.default.temporaryDirectory.appendingPathComponent("pg-input-\(UUID().uuidString)", isDirectory: true)
     }

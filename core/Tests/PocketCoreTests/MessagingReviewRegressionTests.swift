@@ -2,6 +2,37 @@ import XCTest
 @testable import PocketCore
 
 final class MessagingReviewRegressionTests: XCTestCase {
+    func testCompleteMessageUsesCompiledCardWhenRegistryIsEmpty() async throws {
+        for engine in [toolEngine(), chatEngine(generated: "Hi Dana!")] {
+            let (a, effects) = try makeA(engine)
+            a.skills = SkillRegistry(skills: [])
+            wireDana(effects)
+            let turn = try await a.handle("text Dana saying hi")
+            guard case .needsConfirmation(let card) = turn.reply else { XCTFail("\(turn.reply)"); continue }
+            XCTAssertEqual(card.capabilityID, "imessage_send")
+            XCTAssertEqual(card.fields.first { $0.name == "body" }?.value, "hi")
+            XCTAssertTrue(card.canConfirm)
+            XCTAssertNil(turn.pendingDraft)
+            XCTAssertTrue(engine.generatePrompts.isEmpty)
+            XCTAssertEqual(effects.performCount, 0)
+        }
+    }
+
+    func testBareThatSeparatesMessageBodyFromChannelAndGroupDetection() async throws {
+        for body in ["email is down", "the group chat moved to 7"] {
+            for engine in [toolEngine(), chatEngine(generated: "unwanted reply")] {
+                let (a, effects) = try makeA(engine)
+                wireDana(effects)
+                let turn = try await a.handle("text Dana that " + body)
+                guard case .needsConfirmation(let card) = turn.reply else { XCTFail("\(turn.reply)"); continue }
+                XCTAssertEqual(card.capabilityID, "imessage_send")
+                XCTAssertEqual(card.fields.first { $0.name == "body" }?.value, body)
+                XCTAssertEqual(effects.performCount, 0)
+                XCTAssertTrue(engine.generatePrompts.isEmpty)
+            }
+        }
+    }
+
     let now = Date(timeIntervalSince1970: 1_800_000_000)
 
     func draft(contact: String? = nil, channel: MessageChannel? = nil, body: String? = nil,

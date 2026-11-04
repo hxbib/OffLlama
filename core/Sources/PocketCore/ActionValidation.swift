@@ -197,7 +197,7 @@ public enum ActionValidation {
     /// colon, or body phrase, so a quoted body that mentions an attachment is not treated as instruction.
     private static func messageOptionsIssue(_ utterance: String) -> ArgumentIssue? {
         let groupHead = utterance.components(separatedBy: .newlines).joined(separator: " ")
-            .replacingOccurrences(of: #"(?:\bsaying\b|\bthat says\b|\bto say\b|\bwith the message\b|:)[\s\S]*$"#,
+            .replacingOccurrences(of: "(?:" + MessageCommand.bodyMarkerPattern + #"|:)[\s\S]*$"#,
                                   with: "", options: [.regularExpression, .caseInsensitive])
             .replacingOccurrences(of: #"["“][^"”]*["”]"#, with: "", options: .regularExpression)
         if groupHead.range(of: #"\b(?:group(?:\s+(?:chats?|threads?|messages?))?|chat\s+group)\b"#,
@@ -207,7 +207,7 @@ public enum ActionValidation {
         }
         let ns = utterance as NSString
         let bodyStart = try! NSRegularExpression(
-            pattern: #"\b(?:saying|that says|to say|with the message|that)\b|["“”:]"#,
+            pattern: MessageCommand.bodyMarkerPattern + #"|["“”:]"#,
             options: [.caseInsensitive])
         let command: String
         if let m = bodyStart.firstMatch(in: utterance, range: NSRange(location: 0, length: ns.length)) {

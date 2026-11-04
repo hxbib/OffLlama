@@ -324,20 +324,29 @@ public enum HTMLViz {
 
     /// "rent 1200, food 400; transit: 130" -> [(rent,1200),(food,400),(transit,130)]. Unlabeled numbers get #1, #2…
     public static func pairs(from text: String) -> [(label: String, value: Double)] {
-        let numRe = try! NSRegularExpression(pattern: #"-?\$?\d[\d,]*(?:\.\d+)?%?"#)
+        let numRe = try! NSRegularExpression(pattern: #"-?\$?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?%?"#)
         var out: [(String, Double)] = []
-        for seg in text.components(separatedBy: CharacterSet(charactersIn: ";\n|")).flatMap({ $0.components(separatedBy: ", ") }) {
+        for seg in text.components(separatedBy: CharacterSet(charactersIn: ";\n|")) {
             let ns = seg as NSString
-            guard let m = numRe.matches(in: seg, range: NSRange(location: 0, length: ns.length)).last else { continue }
-            let raw = ns.substring(with: m.range).filter { $0.isNumber || $0 == "." || $0 == "-" }
-            guard let v = Double(raw), v.isFinite else { continue }
-            var label = ns.substring(to: m.range.location)
-            if let c = label.lastIndex(where: { $0 == ":" || $0 == "=" }) {
-                let after = String(label[label.index(after: c)...])
-                label = after.contains(where: \.isLetter) ? after : String(label[..<c])
+            let matches = numRe.matches(in: seg, range: NSRange(location: 0, length: ns.length))
+            var labelStart = 0
+            for (index, m) in matches.enumerated() {
+                var label = ns.substring(with: NSRange(location: labelStart, length: m.range.location - labelStart))
+                if index + 1 < matches.count, label.trimmed.range(of: #"(?:^|[ ,])[A-Za-z]$"#, options: .regularExpression) != nil {
+                    let gap = ns.substring(with: NSRange(location: NSMaxRange(m.range),
+                                                       length: matches[index + 1].range.location - NSMaxRange(m.range)))
+                    if !gap.isEmpty, gap.allSatisfy(\.isWhitespace) { continue }
+                }
+                labelStart = NSMaxRange(m.range)
+                let raw = ns.substring(with: m.range).filter { $0.isNumber || $0 == "." || $0 == "-" }
+                guard let v = Double(raw), v.isFinite else { continue }
+                if let c = label.lastIndex(where: { $0 == ":" || $0 == "=" }) {
+                    let after = String(label[label.index(after: c)...])
+                    label = after.contains(where: \.isLetter) ? after : String(label[..<c])
+                }
+                let words = label.split { !$0.isLetter && !$0.isNumber && $0 != "'" && $0 != "&" }.suffix(3)
+                out.append((words.joined(separator: " "), v))
             }
-            let words = label.split { !$0.isLetter && !$0.isNumber && $0 != "'" && $0 != "&" }.suffix(3)
-            out.append((words.joined(separator: " "), v))
         }
         return out.enumerated().map { ($0.element.0.isEmpty ? "#\($0.offset + 1)" : $0.element.0, $0.element.1) }
     }
