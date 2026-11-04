@@ -724,6 +724,9 @@ struct AttemptRecord: Sendable, Equatable {
     var created: Date
     var updated: Date
     var receipt: Disposition?
+    var planSize: Int? = nil
+    var planState: PlanStepState? = nil
+    var planBlock: String? = nil
 }
 
 enum ClaimOutcome: Sendable {
@@ -734,7 +737,7 @@ enum ClaimOutcome: Sendable {
 
 /// The only writer of action_attempts. No await or nested transaction is allowed inside a transaction body.
 public final class EffectLedger: @unchecked Sendable {
-    private let db: SQLiteDB
+    let db: SQLiteDB
     private let clock: () -> Date
 
     public init(db: SQLiteDB, now: @escaping () -> Date = Date.init) throws {
@@ -763,6 +766,7 @@ public final class EffectLedger: @unchecked Sendable {
         CREATE INDEX IF NOT EXISTS action_attempts_request ON action_attempts(request_id, step_index);
         CREATE INDEX IF NOT EXISTS action_attempts_title_minute ON action_attempts(normalized_title, minute_epoch);
         """)
+        try migratePlans()
     }
 
     func now() -> Date { clock() }
@@ -771,7 +775,8 @@ public final class EffectLedger: @unchecked Sendable {
 
     @discardableResult
     func insertAwaiting(requestID: UserRequestID, capabilityID: String, contractVersion: Int,
-                        action: BoundAction, pause: UserPause?, notice: String) throws -> AttemptRecord {
+                        action: BoundAction, pause: UserPause?, notice: String, stepIndex: Int = 0,
+                        planSize: Int? = nil, planState: PlanStepState? = nil) throws -> AttemptRecord {
         let id = AttemptID()
         let t = clock()
         let key = Self.duplicateKey(action)
@@ -779,22 +784,27 @@ public final class EffectLedger: @unchecked Sendable {
         let minute = key?.1
         let sql = """
         INSERT INTO action_attempts(attempt_id, request_id, step_index, capability_id, contract_version, phase,
-          pause, disposition, args_json, normalized_title, minute_epoch, draft_revision, notice, receipt_json, created, updated)
-        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+          pause, disposition, args_json, normalized_title, minute_epoch, draft_revision, notice, receipt_json, created, updated,
+          plan_size, plan_json)
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         """
-        try db.run(sql, [.text(id.raw.uuidString), .text(requestID.raw.uuidString), .int(0),
+        try db.run(sql, [.text(id.raw.uuidString), .text(requestID.raw.uuidString), .int(Int64(stepIndex)),
                          .text(capabilityID), .int(Int64(contractVersion)), .text(Self.kind(.awaitingUser(nil))),
                          Self.jsonText(pause).map(SQLValue.text) ?? .null, .null, .text(Self.jsonText(action) ?? "{}"),
                          title.map(SQLValue.text) ?? .null, minute.map { SQLValue.int(Int64($0)) } ?? .null,
-                         .int(0), .text(notice), .null, .double(t.timeIntervalSince1970), .double(t.timeIntervalSince1970)])
-        return AttemptRecord(attemptID: id, requestID: requestID, stepIndex: 0, capabilityID: capabilityID,
+                         .int(0), .text(notice), .null, .double(t.timeIntervalSince1970), .double(t.timeIntervalSince1970),
+                         planSize.map { .int(Int64($0)) } ?? .null, Self.jsonText(planState).map(SQLValue.text) ?? .null])
+        return AttemptRecord(attemptID: id, requestID: requestID, stepIndex: stepIndex, capabilityID: capabilityID,
                              contractVersion: contractVersion, phase: .awaitingUser(pause), action: action,
-                             revision: 0, notice: notice, created: t, updated: t, receipt: nil)
+                             revision: 0, notice: notice, created: t, updated: t, receipt: nil,
+                             planSize: planSize, planState: planState)
     }
 
     func load(_ attemptID: AttemptID) throws -> AttemptRecord? {
         guard let row = try db.query("SELECT * FROM action_attempts WHERE attempt_id=?", [.text(attemptID.raw.uuidString)]).first else { return nil }
-        return try Self.decode(row)
+        var record = try Self.decode(row)
+        record.planBlock = try planBlockingReason(for: record, action: record.action)
+        return record
     }
 
     // MARK: claim and edit
@@ -803,6 +813,8 @@ public final class EffectLedger: @unchecked Sendable {
     func claim(attemptID: AttemptID, expectedRevision: Int, action: BoundAction?) throws -> ClaimOutcome {
         let t = clock()
         let n: Int = try db.transaction {
+            guard let saved = try load(attemptID) else { throw EffectError.attemptNotFound }
+            guard try planBlockingReason(for: saved, action: action ?? saved.action) == nil else { return 0 }
             if let action {
                 try db.run("""
                 UPDATE action_attempts SET phase=?, pause=NULL, notice='', args_json=?, draft_revision=draft_revision+1, updated=?
@@ -831,6 +843,8 @@ public final class EffectLedger: @unchecked Sendable {
     /// Persists a draft edit without claiming. Revision CAS keeps concurrent edits from overwriting a claim.
     func updateAwaiting(attemptID: AttemptID, expectedRevision: Int, action: BoundAction,
                         pause: UserPause?, notice: String) throws -> AttemptRecord {
+        guard let saved = try load(attemptID) else { throw EffectError.attemptNotFound }
+        try validatePlanEdit(record: saved, action: action)
         let t = clock()
         try db.run("""
         UPDATE action_attempts SET args_json=?, pause=?, notice=?, draft_revision=draft_revision+1, updated=?
@@ -895,7 +909,7 @@ public final class EffectLedger: @unchecked Sendable {
         var cards: [DraftCard] = []
         var unresolved: [UnresolvedAttempt] = []
         for row in try db.query("SELECT * FROM action_attempts ORDER BY created, attempt_id") {
-            guard let record = try? Self.decode(row) else {
+            guard var record = try? Self.decode(row) else {
                 // A row that cannot be decoded is never presented as success or automatically retried.
                 if let idText = row["attempt_id"]?.text, let uuid = UUID(uuidString: idText) {
                     unresolved.append(UnresolvedAttempt(attemptID: AttemptID(raw: uuid),
@@ -904,6 +918,7 @@ public final class EffectLedger: @unchecked Sendable {
                 }
                 continue
             }
+            record.planBlock = try planBlockingReason(for: record, action: record.action)
             switch record.phase {
             case .awaitingUser:
                 guard let contract = Self.contract(for: record) else {
@@ -1042,14 +1057,14 @@ public final class EffectLedger: @unchecked Sendable {
         let pause = readiness.pause ?? pauseFromRecord(record.phase)
         // The stored notice names the specific cause found at bind time (no match,
         // ambiguity, missing access); the re-derived notice is the generic fallback.
-        let notice = record.notice.isEmpty ? readiness.notice : record.notice
+        let notice = record.planBlock ?? (record.notice.isEmpty ? readiness.notice : record.notice)
         var retryableBusy = false
         if case .sheetBusy = pause { retryableBusy = true }
         return DraftCard(attemptID: record.attemptID, requestID: record.requestID,
                          capabilityID: record.capabilityID, contractVersion: record.contractVersion,
                          revision: record.revision, title: contract.title, fields: fields, notice: notice,
                          reviewSentence: contract.reviewSentence, duplicateHint: duplicate,
-                         canConfirm: readiness.ready && (pause == nil || retryableBusy), timeZoneID: record.action.timeZoneID)
+                         canConfirm: record.planBlock == nil && readiness.ready && (pause == nil || retryableBusy), timeZoneID: record.action.timeZoneID)
     }
 
     static func pauseFromRecord(_ phase: AttemptPhase) -> UserPause? {
@@ -1278,11 +1293,28 @@ public final class EffectLedger: @unchecked Sendable {
         let created = Date(timeIntervalSince1970: row["created"]?.double ?? 0)
         let updated = Date(timeIntervalSince1970: row["updated"]?.double ?? 0)
         let receipt = row["receipt_json"]?.text.flatMap { try? JSONDecoder().decode(Disposition.self, from: Data($0.utf8)) }
+        let planSize = row["plan_size"]?.int.map(Int.init)
+        let planState: PlanStepState?
+        if let planSize {
+            guard (2...3).contains(planSize), let index = row["step_index"]?.int, (0..<Int64(planSize)).contains(index),
+                  let raw = row["plan_json"]?.text,
+                  let decoded = try? JSONDecoder().decode(PlanStepState.self, from: Data(raw.utf8)) else {
+                throw ActionPlanError.corruptPlan
+            }
+            if let dependency = decoded.dependency, !(0..<Int(index)).contains(dependency.stepIndex) {
+                throw ActionPlanError.corruptPlan
+            }
+            planState = decoded
+        } else {
+            guard row["plan_json"]?.text == nil else { throw ActionPlanError.corruptPlan }
+            planState = nil
+        }
         return AttemptRecord(attemptID: AttemptID(raw: id), requestID: UserRequestID(raw: req),
                              stepIndex: Int(row["step_index"]?.int ?? 0), capabilityID: row["capability_id"]?.text ?? action.capabilityID,
                              contractVersion: Int(row["contract_version"]?.int ?? Int64(action.contractVersion)),
                              phase: phase, action: action, revision: Int(row["draft_revision"]?.int ?? 0),
-                             notice: row["notice"]?.text ?? "", created: created, updated: updated, receipt: receipt)
+                             notice: row["notice"]?.text ?? "", created: created, updated: updated, receipt: receipt,
+                             planSize: planSize, planState: planState)
     }
 
     static func jsonText<T: Encodable>(_ value: T?) -> String? {
@@ -1531,6 +1563,9 @@ public struct EffectSession: Sendable {
         }
 
         let now = ledger.now()
+        if record.planSize != nil, expectedRevision == nil {
+            return .staged(EffectLedger.card(for: record, contract: contract, duplicate: nil, now: now))
+        }
         var action = record.action
         try await apply(edits, to: &action, contract: contract)
         await revalidateContacts(in: &action, contract: contract)
@@ -1701,13 +1736,13 @@ public struct EffectSession: Sendable {
         return EffectLedger.result(for: current, contract: contract)
     }
 
-    private struct Binding {
+    struct Binding {
         var action: BoundAction
         var pause: UserPause?
         var notice: String
     }
 
-    private func bind(raw: PlannedAction, contract: CapabilityContract, now: Date) async -> Binding {
+    func bind(raw: PlannedAction, contract: CapabilityContract, now: Date) async -> Binding {
         var args: [String: BoundArgument] = [:]
         var choices: [String: [ContactCandidate]] = [:]
         var queries: [String: String] = [:]
