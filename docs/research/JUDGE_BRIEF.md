@@ -1,0 +1,41 @@
+# Pocket Glimmer: judge brief (one page)
+
+> Draft for the submission form, written Nov 4 2026 ~6 AM ET. Every number below is in LEDGER.md §6 or eval/results/*.md (AFTER_FLOOR, PER_TYPE_TAU090, RISK_COVERAGE, SPARK_TEACHER, DRIFT_CHECK).
+> `[PHONE_*]` = not measured on the iPhone yet. Fill it from the device run, or cut the line.
+
+**1. Pitch.** A 1B Meta model on the iPhone that makes an assistant's everyday decisions offline, in one forward pass, and knows when it doesn't know. When it isn't sure, it hands the question to Muse Spark, with personal details masked first.
+
+**2. Who it's for, and the moment.** I'm Habib, a CS student at Hunter College, and I live in the Bronx. My commute is underground with no signal, and the assistants I can use either forget me or keep my life on a server. Pocket Glimmer keeps its memory of me (facts, people, corrections) in SQLite on the phone, and it keeps working in airplane mode: reminders, calendar, contacts, recall, "text Mom I'll be home by 8". Meta's Glimmer launch post makes the same point: "An agent that manages your schedule, drafts your messages, organizes your files, and learns how you work needs deep access to personal context" (Meta, Aug 10 2026). Glimmer's ~4-bit build targets a 24–32 GB machine. This project moves its everyday judgment onto a phone.
+
+**3. Four Meta models, four jobs.**
+| Model | Role | Access |
+|---|---|---|
+| **Llama 3.2 1B Instruct → Llama-Reflex-1B** | The phone model: 12 typed decisions, Q4_K_M GGUF (808 MB), llama.cpp + Metal | Llama 3.2 Community License, "Built with Llama" |
+| **Muse Glimmer 30B** | The only teacher (run locally at IQ2_M; its option-letter probabilities are the soft labels), plus local LLM-as-judge | Apache-2.0 open weights |
+| **Muse Spark 1.3** | Cloud escalation when confidence < τ, behind a privacy scrubber | Meta Model API, Standard mode only |
+| **Muse Spark Open (816B-A42B)** | Tested as a stronger teacher via Baseten. **Rejected** on cal180: its labels matched the hand-written gold labels 178/180, but the 1B it taught was overconfident (accuracy on handled 0.90 vs 0.96, bound 13.7% vs 10.2%). Spend $11.06 | Muse Model License |
+
+**4. Results.** Frozen held-out test set: 120 hand-labeled decisions, 10 per type, never used for selection. One item = 0.83 pts, and the 95% CI is about ±7 pts.
+- Accuracy **0.74 → 0.82** (98/120)
+- Decisions kept on-device at confidence ≥ 0.8: **15% → 51%** (61/120), 92% correct (56/61)
+- Calibration error (ECE, 10 bins, raw letter softmax): **0.150 → 0.064**. Distillation produced this. No temperature scaling is used.
+- **Shipping threshold τ = 0.90** (the app's default): 37% of test decisions stay on-device (44/120), 41/44 correct. Area under the risk–coverage curve 0.148 → 0.085 (eval/results/RISK_COVERAGE.md), so the gain isn't tied to one threshold.
+- **Statistical bound:** on the separate 180-item calibration split, at τ = 0.90 the phone keeps 36% of decisions (64/180) with 0 errors. Learn-Then-Test (Clopper–Pearson, δ = 0.1, Bonferroni over a fixed 99-point τ grid) bounds the error rate among on-device decisions at **≤ 10.2%**. The bound holds only if new requests are exchangeable with the calibration set. The 5% target is not certified (it needs ≥ 135 handled rows with zero errors).
+
+**5. Why this goes past a basic integration.**
+- **Soft-label distillation from Glimmer's logits.** For each of 892 scenarios, Glimmer (llama-server) returns probabilities over the answer letters. Low-confidence labels were dropped (1,006 → 892). The student's LoRA (r16, 1 epoch) is trained only at the answer-letter position, with loss = soft-target cross-entropy against the teacher's letter distribution (KL up to a constant) + 0.5 × CE on the hard label.
+- **One forward pass per decision.** Nothing is generated. The phone model reads the option-letter logits, applies a softmax, and compares the top probability to τ. Every decision type has a designated fallback option below τ (e.g. escalate, ask, confirm, keep both, skip).
+- **A statistically chosen threshold, not a hand-tuned one.** τ comes from a Learn-Then-Test bound on held-out data, so "on-device" has a stated error rate and a stated assumption.
+- **A closed loop.** The phone logs every decision (type, confidence, escalated, latency, later teacher agreement) and exports it as CSV. Those rows are the input for the next distillation round. One round has shipped so far.
+- **Negative results kept.** 2 epochs (bound 14.2%), a nudge relabel (10.9%) and the Spark Open teacher (13.7%) all lost to the shipping model on cal180. Q8_0 and f16 don't beat Q4_K_M on cal180. Glimmer 30B can't run on the phone: IQ2_M is 9.85 GB, and Q1_0 outputs gibberish. A drift check found no damage to general ability (mean KL 0.0096 nats; 23/23 checkable answers).
+
+**6. Best Agentic Use-Case.** Each request is a chain of typed decisions, and every link can stop safely: **route → toolChoice → contactPick/eventPick → confirmBeforeAct → act** (EventKit, Contacts, Shortcuts bridge). Messages always ask for confirmation. When contactPick is unsure (two "Sam"s in Contacts), the phone asks Muse Spark 1.3 instead of guessing. **Proactive:** iOS Shortcuts triggers (time, arrive, leave, email, message, charger) → App Intent → rules pick candidate memories → `nudgeNow` decides whether to interrupt. **Memory:** `rememberOrNot` and `memoryConflict` (update / keep both / ignore) run on device with provenance, and user corrections become retrievable memories. **Privacy:** when route says "escalate", a `sensitivity` decision can keep a health question on the phone ("Kept on device · nothing sent").
+
+**7. Limitations.** All quality and calibration numbers come from a 300-item hand-labeled set (180 calibration / 120 test) written by one person, so the ±7-point CI is real and per-type numbers (n=10) are noisy. The bound assumes exchangeability with that set, and real phone traffic will drift, so τ needs recalibration after each round. `nudgeNow` is weak (3/10). It never clears τ, so it always takes its safe fallback. `memoryConflict` (9/10) and `confirmBeforeAct` (10/10) are accurate but rarely clear τ = 0.90 (0/10 and 2/10), so messages are confirmed by a hard rule, not by confidence. Every latency and RAM figure so far was measured on an x86 Linux CPU, not the iPhone. Phone speed: `[PHONE_TOK_S]` tok/s, `[PHONE_TTFT_MS]` ms, `[PHONE_RAM_GB]` GB. Tool arguments are filled by on-device heuristics and memory, not grammar-constrained decoding. The scrubber is regex- and contact-based and will miss some identifiers. We haven't found prior art for this exact on-phone combination, which doesn't mean none exists.
+
+**8. X hooks (Most Viral).** Hooks 1, 2 and 5 say "iPhone". Post them only once the phone build runs; otherwise say "phone-sized model". Don't use "memory never leaves the phone": on escalation the app sends scrubbed memory context to Muse Spark (Assistant.swift, `scrubber.scrub(mem + utterance)`).
+1. A 1B Meta model on my iPhone that knows when it doesn't know. Llama 3.2 1B, distilled from Muse Glimmer 30B, makes everyday decisions offline and asks Muse Spark only when it's unsure. *(184 chars)*
+2. No signal on the subway, and my assistant still works. A distilled Llama 3.2 1B runs on my iPhone and keeps its memory of me there. The cloud only sees masked text, and only when the model is unsure. *(199)*
+3. I taught a 1B model to say "I'm not sure." After distilling from Muse Glimmer 30B: accuracy 74%→82%, decisions kept on-device 15%→51% (conf ≥0.8), calibration error 0.150→0.064 on 120 held-out decisions. *(203)*
+4. Bigger teacher, worse student. Muse Spark Open (816B) matched my hand labels better than Muse Glimmer 30B, but the 1B it taught was overconfident: error bound 13.7% vs 10.2%. I shipped the Glimmer student. *(205)*
+5. My phone model doesn't write out its decisions. It reads the answer-letter logits in one pass, then a conformal threshold picks: act, or ask Meta's cloud. Error ≤10.2% on what it keeps, if new requests resemble my calibration set. *(230)*

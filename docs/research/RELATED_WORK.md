@@ -1,0 +1,62 @@
+# Related work
+
+> Nov 4 2026. I opened every reference below (arXiv abstract page, venue page, or the primary web page) on Nov 4. Venue and year are given where the venue page confirms them. Anything I couldn't confirm is marked *unverified*.
+
+**Selective prediction.** Pocket Glimmer's escalation rule is a reject option. Chow [1] showed that thresholding the top posterior is the optimal error/reject trade-off when the posteriors are correct. Geifman & El-Yaniv [2] carried this into deep networks: sort predictions by confidence, keep the top share, and bound the risk of what is kept. Our risk–coverage numbers use their framing (AURC 0.148 → 0.085 on test120). Neither work addresses LLM decision heads or phones.
+
+**Distribution-free threshold control.** We don't hand-tune τ. RCPS [3] and Conformal Risk Control [4] calibrate a threshold so that a risk is bounded with high probability on exchangeable data. Learn-Then-Test [5] recasts threshold selection as multiple testing, which suits a non-monotone loss like "error among kept decisions". We use LTT with exact-binomial p-values and Bonferroni over a fixed 99-point grid (α 0.05, δ 0.1), and report the tightest supported bound when α isn't reached. These tools now appear in LLM routing. Conformal Cascade [6] defers when a conformal set holds more than one answer. CR² [7] calibrates an on-device "margin gate" with CRC for device-to-edge routing. Uddin & Bauer [8] are closest in mechanism: a logistic gate on text embeddings, with a threshold set by Clopper–Pearson calibration so the cheap model's failure rate among routed queries stays below α with probability 1−δ (Mixtral-8x7B vs GPT-4). SCOPE [9] adds a selective conformal guarantee to position-swapped LLM judging. Our bound is the same kind of statement as [8]'s. What differs: the score is the distilled student's own letter softmax, not a separate gate; the student runs offline on the phone and executes the decisions it keeps; and the evaluation is a 12-type phone-agent decision set.
+
+**Letter-logit readout and its biases.** Reading answer-letter probabilities in one pass makes an LLM a classifier, but the readout is biased. Zhao et al. [10] showed that few-shot LLMs carry prompt-dependent label priors and introduced *contextual calibration*: estimate the prior from a content-free input and divide it out. Our headline "v2+cc" pipeline does exactly this, with one content-free prior per option set (the app bundles priors measured on the shipping GGUF). Zheng et al. [11] showed that LLMs favour particular option IDs ("A") and proposed PriDe, which estimates that prior from a few permutations of the option order and removes it. Pezeshkpour & Hruschka [12] measured the same order sensitivity.¹ The shipping readout uses one option order; permutation averaging is on the roadmap.
+
+**Distillation.** Hinton et al. [13] distil a teacher's soft targets into a smaller student. We distil only the answer-letter distribution: KL(Glimmer letter probabilities ‖ student) + 0.5·CE on the hard label, LoRA r16, 1 epoch, 892 rows. Muse Glimmer itself was pre-trained "on Muse Spark's outputs using logit distillation" (Meta blog [14]), so our chain is Spark → Glimmer → Llama-Reflex-1B. Our Spark Open teacher run failed in an instructive way. Its labels matched our hand-written gold labels better (cal180 0.989), but its vote-share soft labels (Baseten ignores logprobs) produced an *over*-confident student with a worse bound (13.7% vs 10.2%). Teacher top-1 accuracy did not predict student calibration.
+
+**LLM routing and cascades.** FrugalGPT [15] (TMLR 2024) cascades API models behind a learned scorer to cut cost. RouteLLM [16] (ICLR 2025) trains strong/weak routers from preference data. Both route between *cloud* models to save money and give no statistical bound. OpenPhone [17] puts a 3B GUI agent on the phone and sends hard subtasks to the cloud based on a complexity estimate. In our setting escalation is also shaped by connectivity and privacy: offline by default, a sensitivity decision can veto the cloud, and a scrubber runs before any call.
+
+**On-device foundation models.** Apple's ~3B on-device model [18–20] uses 2-bit QAT, KV-cache sharing, rank-32 task adapters and constrained "guided generation", and is paired with a server model on Private Cloud Compute. That stack is first-party and closed. Pocket Glimmer runs a third-party open 1B (Q4_K_M via llama.cpp) with a single adapter, and adds a calibrated escalation rule with a stated error bound, which we did not find described in Apple's public overview [18]. Meta positions Muse Glimmer 30B (Apache-2.0) as an "on-device agentic model" [14, 21, 22], meaning a 24–32 GB Mac/PC (~4-bit, under 20 GB), not a phone. We measured that the smallest coherent quant (IQ2_M, 9.85 GB) doesn't fit our ~5.5 GB phone budget, so Glimmer serves as teacher and judge.
+
+**"System One" decision models.** A 2026 trend packages typed decisions (choice / yes-no / score) with calibrated probabilities in one pass. Examples: TypeSafe's Jev [23] (trained with "RL for Calibrated Decisions"), llama.cpp's `/v1/systemone` endpoint [24], hunch [25] (an embedding student that "graduates" from a teacher once cross-validated agreement is high enough, and keeps auditing it afterwards), Vela 3.0 [26] (a 380M encoder distilled from d3's full answer distributions, half gold and half teacher) and its Core ML port [27], and FluidUse [28] (laya decisions on Apple's Neural Engine). Jev is a comparison point only, with no affiliation. These are servers or Mac tools without a certified escalation rule (hunch's graduation is the closest analogue), and llama.cpp's README notes the probabilities "are not guaranteed to be calibrated for your data". Pocket Glimmer puts the same interface in-process (libllama) inside the iOS app, on a causal Meta LLM so soft-label distillation applies, and sets the hand-off threshold with LTT.
+
+**Personal memory.** Supermemory's founder reverse-engineered Instinct's memory [29]: git-tracked Markdown, a profile plus a one-pager, keyword lookup with aliases, and nightly reconciliation. Supermemory [30] offers profiles and automatic forgetting as a cloud API. OpenClaw [31] keeps `USER.md`/`MEMORY.md`/daily notes on the user's machine and consolidates them with a background "dreaming" pass (citing sleep-time compute [32]). Pocket Glimmer's memory is SQLite on the phone, with provenance, trust-ordered eviction, expiry and corrections as retrievable rows. The admission decisions (`rememberOrNot`) and conflict decisions (`memoryConflict`: update / keep both / ignore) are made by the same calibrated 1B, so memory writes also fall back to the safe option below τ.
+
+## What Pocket Glimmer adds relative to each line of work
+- **Selective prediction / LTT:** an applied case study. LTT certifies the error rate of an agent's *executed* on-phone decisions (≤10.2% at τ=0.90 on cal180, 36% kept, assuming exchangeability), with negative results reported. The theory is not new.
+- **Conformal cascades and routing (FrugalGPT, RouteLLM, Conformal Cascade, CR², Uddin & Bauer):** a Clopper–Pearson-certified routing threshold is not new ([8] does it for cloud model pairs). What we add: the score is the distilled student's own letter softmax, and the cheap model is an offline phone agent. Escalation also respects offline operation and a privacy veto. We haven't found prior art for this exact combination on a phone, which doesn't mean none exists.
+- **Letter-logit calibration (Zhao, Zheng):** distillation alone took raw letter-softmax ECE from 0.150 to 0.064, with no temperature scaling. Contextual calibration is kept, and PriDe-style permutation is the documented next step.
+- **Distillation (Hinton; Glimmer's own recipe):** a measured negative result. A teacher that matched our gold labels better produced a worse-calibrated student. We report selection on cal180 with a frozen test120.
+- **System One models and on-device stacks (Jev, Vela, hunch, Apple):** an open-weight, phone-resident System 1 made of Meta models. It hands off to a Meta System 2 through a statistically chosen threshold, and its telemetry is set up to feed the next distillation round.
+
+## References
+¹ Correction for internal docs: IMPROVEMENT_PLAN_NOV1.md cites arXiv:2308.11483 as Zheng et al.; that ID is Pezeshkpour & Hruschka [12]. Zheng et al. is arXiv:2309.03882 [11].
+
+1. C. K. Chow. On optimum recognition error and reject tradeoff. *IEEE Trans. Information Theory* 16(1):41–46, 1970. (Crossref)
+2. Y. Geifman, R. El-Yaniv. Selective Classification for Deep Neural Networks. *NIPS 2017*. arXiv:1705.08500.
+3. S. Bates, A. Angelopoulos, L. Lei, J. Malik, M. I. Jordan. Distribution-Free, Risk-Controlling Prediction Sets. *J. ACM* 68(6), 2021. arXiv:2101.02703.
+4. A. N. Angelopoulos, S. Bates, A. Fisch, L. Lei, T. Schuster. Conformal Risk Control. *ICLR 2024*. arXiv:2208.02814.
+5. A. N. Angelopoulos, S. Bates, E. J. Candès, M. I. Jordan, L. Lei. Learn then Test: Calibrating Predictive Algorithms to Achieve Risk Control. arXiv:2110.01052 (2021); *Annals of Applied Statistics* 19(2), 2025.
+6. Y. Dou, S. Lian, S. Li. Conformal Cascade: Distribution-Free Accuracy Guarantees for Multi-Tier LLM Inference. arXiv:2607.25018, 2026.
+7. N. Xue et al. CR²: Cost-Aware Risk-Controlled Routing for Wireless Device-Edge LLM Inference. arXiv:2605.12001, 2026.
+8. I. Uddin, A. Bauer. Conformal LLM Routing with Distribution-Free Safety Guarantees. *ACL 2026 Student Research Workshop*, pp. 791–799 (aclanthology.org/2026.acl-srw.70).
+9. S. Badshah, A. Emami, H. Sajjad. SCOPE: Selective Conformal Optimized Pairwise LLM Judging. *ICML 2026*. arXiv:2602.13110.
+10. T. Z. Zhao, E. Wallace, S. Feng, D. Klein, S. Singh. Calibrate Before Use: Improving Few-Shot Performance of Language Models. *ICML 2021*. arXiv:2102.09690.
+11. C. Zheng, H. Zhou, F. Meng, J. Zhou, M. Huang. Large Language Models Are Not Robust Multiple Choice Selectors. *ICLR 2024* (spotlight). arXiv:2309.03882.
+12. P. Pezeshkpour, E. Hruschka. Large Language Models Sensitivity to the Order of Options in Multiple-Choice Questions. arXiv:2308.11483, 2023.
+13. G. Hinton, O. Vinyals, J. Dean. Distilling the Knowledge in a Neural Network. *NIPS 2014 Deep Learning Workshop*. arXiv:1503.02531.
+14. Meta. Introducing Muse Glimmer: An Open Agentic Model That Runs on Your Device. research.meta.ai/blog/introducing-muse-glimmer-open-agentic-model, Aug 10 2026.
+15. L. Chen, M. Zaharia, J. Zou. FrugalGPT: How to Use Large Language Models While Reducing Cost and Improving Performance. *TMLR* 12/2024. arXiv:2305.05176.
+16. I. Ong, A. Almahairi, V. Wu, W.-L. Chiang, T. Wu, J. E. Gonzalez, M. W. Kadous, I. Stoica. RouteLLM: Learning to Route LLMs with Preference Data. *ICLR 2025*. arXiv:2406.18665.
+17. Y. Jiang, C. Huang. OpenPhone: Mobile Agentic Foundation Models. arXiv:2510.22009 (v3, Oct 2026).
+18. Apple. Updates to Apple's On-Device and Server Foundation Language Models. machinelearning.apple.com/research/apple-foundation-models-2025-updates, Jun 9 2025 (updated Jul 17 2025).
+19. Apple. Apple Intelligence Foundation Language Models: Tech Report 2025. arXiv:2507.13575.
+20. T. Gunter et al. Apple Intelligence Foundation Language Models. arXiv:2407.21075, 2024.
+21. Meta Superintelligence Labs. Muse Glimmer model card. huggingface.co/meta-models/Muse-Glimmer-30B (Apache-2.0).
+22. Meta. Muse Glimmer 30B: An On-Device Agentic Model. arXiv:2610.24628, Oct 2026.
+23. TypeSafe AI. Introducing System One Models & Jev. typesafe.ai/blog/introducing-system-one-models-and-jev, Sep 15 2026.
+24. ggml-org/llama.cpp PR #29818, "llama, server: add /v1/systemone API", merged Oct 2 2026.
+25. undrgrnd-labs/hunch. github.com/undrgrnd-labs/hunch (Apache-2.0 or MIT).
+26. Á. Kovács, X. Liu. Vela 3.0: name it, Vela finds it. vllm-sr.ai/blog/vela-3-0-name-it-vela-finds-it, Oct 26 2026; collection huggingface.co/collections/vllm-sr/vela-30.
+27. FluidInference. vela-3.0-coreml. huggingface.co/FluidInference/vela-3.0-coreml (Apache-2.0).
+28. FluidInference. FluidUse. github.com/FluidInference/FluidUse (Apache-2.0).
+29. Supermemory founder. "I reverse-engineered Instinct's memory. Here's exactly how it works." Post on X (local copy reviewed; original URL and date *unverified*).
+30. Supermemory documentation. supermemory.ai/docs.
+31. OpenClaw. Memory overview. docs.openclaw.ai/concepts/memory.
+32. K. Lin et al. Sleep-time Compute: Beyond Inference Scaling at Test-time. arXiv:2504.13171, 2025.
