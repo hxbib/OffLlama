@@ -94,8 +94,9 @@ or training-target model substitutions. The Mac build/device role remains GPT6.1
 
 Five fresh owners were dispatched from `cc839e4`; task IDs, links and user-selected
 settings are in `docs/verification/offllama_action_dispatches_2026-11-04.json`.
-Mac v1 returned a partial result, integrated at7b4f6b9; its remaining UI/build
-scope needs a fresh owner. Other results are pending. Do not poll; completion wakes the parent.
+Mac v1 returned a partial result, integrated at7b4f6b9. Its task is stopped with
+no pending children. Fresh Mac v2 now owns the remaining UI/build scope; its dispatch
+is `docs/verification/offllama_mac_ui_v2_dispatch.json`. Other results are pending. Do not poll; completion wakes the parent.
 
 - Messaging and two-turn clarification repair: Muse Spark1.3Contributor max. Owns
   routing/message extraction, AppModel.send draft continuity and native compose/contacts
