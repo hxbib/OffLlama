@@ -18,23 +18,20 @@ schema that the parent contract task will supply.
 import json, math, re
 from pathlib import Path
 
-# Action families supported today (executor tools + registry skills).
-# The parent contract manifest will refine this list; families with no
-# fixture coverage must be reported as NOT MEASURED, never dropped.
-EXECUTOR_TOOLS = ["send_message", "send_email", "create_reminder",
-                  "create_event", "find_event", "lookup_contact", "search_memory"]
-HANDOFF_FAMILIES = ["instagram_dm", "x_dm", "whatsapp_send", "alarm_create",
-                    "timer_start", "appletv_play", "open_app", "run_shortcut",
-                    "create_shortcut", "flashlight_toggle", "focus_toggle",
-                    "low_power_toggle", "weather", "notes_create"]
-NATIVE_FAMILIES = ["reminder_create", "calendar_create", "calendar_find",
-                   "call", "facetime", "maps_directions", "uber_ride",
-                   "web_search", "open_url", "music_play", "spotify_play",
-                   "photos_open", "analyze_document", "html_viz", "translate",
-                   "summarize_text", "device_status", "memory_recall",
-                   "email_compose", "email_digest", "imessage_send",
-                   "instagram_autoreply"]
-ALL_FAMILIES = sorted(set(EXECUTOR_TOOLS + HANDOFF_FAMILIES + NATIVE_FAMILIES))
+CONTRACT_MANIFEST = Path(__file__).resolve().parents[2] / "docs/ACTION_CONTRACTS.json"
+
+
+def action_families(manifest_path=CONTRACT_MANIFEST):
+    entries = json.loads(Path(manifest_path).read_text())
+    ids = [entry["capability"]["id"] for entry in entries]
+    if not ids or any(not isinstance(cid, str) or not cid for cid in ids) or len(set(ids)) != len(ids):
+        raise ValueError("Action contract IDs must be nonempty and unique")
+    return sorted(ids)
+
+
+# Include unavailable contracts so refusal coverage is not silently omitted.
+# Families without fixtures remain NOT MEASURED.
+ALL_FAMILIES = action_families()
 
 
 def norm_text(s):
@@ -48,8 +45,18 @@ def grade_choice(pred, gold):
     return norm_text(pred or "") == norm_text(gold)
 
 
+def typed_equal(pred, gold):
+    if type(pred) is not type(gold):
+        return False
+    if isinstance(gold, dict):
+        return pred.keys() == gold.keys() and all(typed_equal(pred[k], v) for k, v in gold.items())
+    if isinstance(gold, list):
+        return len(pred) == len(gold) and all(typed_equal(p, g) for p, g in zip(pred, gold))
+    return pred == gold
+
+
 def grade_slots(pred_args, gold_args, optional_keys=()):
-    """L2: per-slot exact match after normalization.
+    """L2: per-slot exact typed match; no normalization.
 
     Returns (all_match, per_slot dict). Timezone and contact-method
     slots are ordinary keys here; fixtures name them explicitly
@@ -61,7 +68,7 @@ def grade_slots(pred_args, gold_args, optional_keys=()):
     per = {}
     for k, gv in gold_args.items():
         pv = pred_args.get(k)
-        per[k] = pv is not None and pv == gv
+        per[k] = pv is not None and typed_equal(pv, gv)
     for k in set(pred_args) - set(gold_args) - set(optional_keys):
         per[k] = False
     return (all(per.values()) if per else True), per
@@ -125,7 +132,7 @@ def grade_outcome(fixture, trace):
     if exp == "committed":
         want = fixture.get("expected_effect") or {}
         got = effects[-1] if effects else {}
-        checks["effect_matches"] = bool(want.get("action")) and len(effects) == 1 and got == want
+        checks["effect_matches"] = bool(want.get("action")) and len(effects) == 1 and typed_equal(got, want)
         if fixture.get("allow_retry"):
             checks["recovery_after_failure"] = ("transient_failure" in statuses[:-1]
                                                  and statuses[-1] == "committed")

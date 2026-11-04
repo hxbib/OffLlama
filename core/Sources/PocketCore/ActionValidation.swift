@@ -57,7 +57,6 @@ public enum ActionValidation {
             }
         default: break
         }
-        // The installed alarm recipe splits time|label. Escaping is not implemented by that recipe.
         if capabilityID == "alarm_create", value.contains("|") {
             return invalid("Remove | from \(spec.name); the alarm Shortcut uses it to separate fields.")
         }
@@ -125,7 +124,7 @@ public enum ActionValidation {
     }
 }
 
-/// Exported from the compiled catalog: benchmark/data tools consume this instead of a parallel action list.
+/// Serializable argument rules and capabilities from the compiled action catalog.
 public struct ActionContractDescription: Codable, Sendable {
     public let capability: CapabilityContract
     public let argumentRules: [String: String]

@@ -65,9 +65,10 @@ def main():
         print(f"fixture {kind}: caught ({len(e2)} error(s))")
     g = load_mod("graders", HERE / "graders.py")
     assert g.grade_choice("a", "a") and g.wilson(0, 10)[1] > 0.2
+    subprocess.run([sys.executable, "-m", "unittest", "eval.round3.test_graders"], cwd=ROOT, check=True)
     proto = json.loads((HERE / "protocol.json").read_text())
     assert proto["primary_metric"]["threshold_fitting"].startswith("cal-fit")
-    print("OK: real manifests pass; overlap/corruption/missing-label fixtures fail; protocol frozen fields present")
+    print(f"OK: real manifests pass; overlap/corruption/missing-label fixtures fail; grader safety tests pass; {len(g.ALL_FAMILIES)} compiled action families inventoried; protocol frozen fields present")
 
 
 if __name__ == "__main__":

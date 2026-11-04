@@ -209,7 +209,9 @@
       "sourceCommit": "b41ffae",
       "statusAtDispatch": "running",
       "modalReservationUSD": 0,
-      "basetenReservationUSD": 0
+      "basetenReservationUSD": 0,
+      "stateAtResume": "adjudicated_parent_repairs_verified",
+      "report": "docs/verification/CONTRACT_COMMENT_REVIEW.md"
     },
     {
       "role": "spark_phone_expansion",
@@ -234,5 +236,5 @@
     }
   ],
   "resumedAt": "2026-11-04T19:22:07+00:00",
-  "updatedAt": "2026-11-04T19:44:57+00:00"
+  "updatedAt": "2026-11-04T19:53:21+00:00"
 }

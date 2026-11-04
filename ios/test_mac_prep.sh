@@ -120,7 +120,7 @@ PY
   cp "$TMP/macho-$cpu" "$path"
 }
 
-# A tiny arm64 Mach-O executable header (file(1) reports a Mach-O executable).
+# arm64 Mach-O header fixture; this suite mocks file(1).
 make_app_executable() {
   local path=$1
   mkdir -p "$(dirname "$path")"

@@ -6,19 +6,24 @@ import XCTest
 @testable import PocketCore
 
 final class CloudBrainTests: XCTestCase {
+    private actor CallCounter {
+        private(set) var calls = 0
+        func increment() { calls += 1 }
+    }
+
     func testCancellationNeverTriesAnotherProvider() async throws {
-        final class Counter: @unchecked Sendable { var calls = 0 }
         for error in [CancellationError() as Error, URLError(.cancelled) as Error] {
-            let counter = Counter()
+            let counter = CallCounter()
             var first = CloudPresets.metaModelAPI(model: "test", apiKey: "k")
             first.transport = { _ in throw error }
             var next = CloudPresets.metaModelAPI(model: "test", apiKey: "k")
-            next.transport = { _ in counter.calls += 1; return (Data(), 200) }
+            next.transport = { _ in await counter.increment(); return (Data(), 200) }
             do {
                 _ = try await CloudBrainChain([first, next]).complete([])
                 XCTFail("cancelled request returned")
             } catch { XCTAssertTrue(CloudBrainChain.isCancellation(error)) }
-            XCTAssertEqual(counter.calls, 0)
+            let calls = await counter.calls
+            XCTAssertEqual(calls, 0)
         }
     }
 
@@ -34,11 +39,10 @@ final class CloudBrainTests: XCTestCase {
     }
 
     func testContributorModeIsRefusedBeforeTransport() async throws {
-        final class Counter: @unchecked Sendable { var calls = 0 }
-        let counter = Counter()
+        let counter = CallCounter()
         var brain = CloudPresets.metaModelAPI(model: "muse-spark-1.3-contributor", apiKey: "k")
         brain.transport = { _ in
-            counter.calls += 1
+            await counter.increment()
             return (Data(), 200)
         }
 
@@ -48,7 +52,8 @@ final class CloudBrainTests: XCTestCase {
         } catch {
             XCTAssertEqual(error as? MultimodalError, .contributorModeRefused("muse-spark-1.3-contributor"))
         }
-        XCTAssertEqual(counter.calls, 0, "refused while building the request, before transport")
+        let calls = await counter.calls
+        XCTAssertEqual(calls, 0, "refused while building the request, before transport")
         XCTAssertThrowsError(try brain.makeRequest([ChatMessage(role: "user", content: "hello")], maxTokens: 5))
     }
 }

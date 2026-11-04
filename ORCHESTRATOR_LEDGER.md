@@ -47,7 +47,7 @@ licensed training-target sources. Runtime and teacher models remain Meta models.
   PocketCore and Meta Spark 1.3, HTTP 200. Its local decisions were scripted.
   Evidence is `docs/verification/cloud_smoke_2026-11-04.json`. It is not a fresh
   phone test or a verification of every provider, task, or multimodal path.
-- Mac unavailable per the user. Current app code remains unbuilt with Xcode.
+- User reports the MacBook Air M4 (16GB/256GB), Xcode, iOS SDK 27.2 and Metal Toolchain 27.2 are now available, with the iPhone 17 Pro ready to connect. Current app code remains unbuilt with Xcode.
   Signed install, phone acceptance, phone measurements, demo video, public
   repository visibility, and submission remain open. Submission verification
   returned incomplete because Swift was deliberately checked separately and
@@ -226,3 +226,29 @@ new immutable v2 after source grouping repairs. Spark may continue independent
 contract-grounded generation and runner work; v1-dependent training generation is
 on hold. Preserve any existing paid output by exact prompt hash for safe reuse.
 No v1 scores may support model selection or promotion.
+
+## Mac availability and 6 PM demo target
+
+User explicitly clarified the target is installation on their iPhone for the demo,
+not TestFlight/App Store distribution. Parent assumes 6 PM Eastern from the existing
+timeline; at 19:49 UTC that left about three hours. No build-time promise is made.
+The Mac is available but is NOT yet accessible from this Linux session. Device tools
+currently list only Linux/Android. Calls to t3_environment_links and
+t3_environment_link were unavailable. T3's official current remote-access docs say
+to enable Linked environments in Settings > Labs on both hosts, then link the Mac
+from curzoh-dev in Settings > Environments > Linked environments. Parent supplied
+these steps; user must complete pairing in T3, not paste credentials in chat.
+
+Once accessible, prioritize current-source Xcode build, signing, install, real Metal
+startup and core phone flows. Keep training parallel; newly trained candidates need
+validation before replacing the existing model. Mac UI/device interaction must use
+the provided device tools; connection to a desktop client alone is not proof that
+this agent can run on its Mac. Preserve model/provider assignments for any remote
+delegate; request a missing remote assignment instead of choosing a substitute.
+
+## Comment review integration
+
+Adjudication is in docs/verification/CONTRACT_COMMENT_REVIEW.md. Parent repaired
+false comments, recursive typed grader equality, the manifest-derived action inventory,
+benchmark test gating and actor-isolated test counters. Targeted validation passed.
+The independent contract/privacy review remains separate and pending.
