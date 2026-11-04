@@ -460,7 +460,7 @@ public enum BuiltinSkills {
           offline: true, ["make a chart of these numbers: rent 1200, food 400, transit 130", "visualize this data as a bar chart"],
           aliases: ["chart", "graph", "plot", "visualize", "visualization", "bar chart", "html"],
           note: "Numbers in the text become an inline SVG bar chart offline, no model needed."),
-        s("translate", "Translate a phrase", .web, .cloudReason(.generation), [ArgSpec("text", .text, required: true)], offline: true,
+        s("translate", "Translate a phrase", .web, .cloudReason(.generation), [ArgSpec("text", .text, required: true), ArgSpec("target_language", .text, required: true)], offline: true,
           ["translate good morning to Spanish"], aliases: ["translate", "translation", "in spanish", "in french", "how do you say"],
           note: "Short phrases on the 1B; long text escalates when online and allowed."),
         s("summarize_text", "Summarize shared text", .documents, .cloudReason(.longContext), [ArgSpec("text", .text)], offline: true,

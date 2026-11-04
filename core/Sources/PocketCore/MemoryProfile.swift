@@ -88,9 +88,13 @@ extension MemoryStore {
         }
     }
 
-    /// Names and aliases of non-user entities (people, places, orgs), for the privacy scrubber.
+    /// Named subjects, aliases, and person-valued profile attributes for outbound masking.
     public func entityNames() throws -> [String] {
-        let names = try active().filter { $0.subject != "user" }.flatMap { [$0.subject] + $0.aliases }
+        let names = try active().flatMap { fact -> [String] in
+            var names = fact.subject == "user" ? fact.aliases : [fact.subject] + fact.aliases
+            if ["partner", "name"].contains(fact.attribute.lowercased()) { names.append(fact.value) }
+            return names
+        }
         return Array(Set(names.filter { $0.count > 1 })).sorted()
     }
 

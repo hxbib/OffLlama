@@ -1,8 +1,38 @@
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 import XCTest
 @testable import PocketCore
 
 final class CloudBrainTests: XCTestCase {
+    func testCancellationNeverTriesAnotherProvider() async throws {
+        final class Counter: @unchecked Sendable { var calls = 0 }
+        for error in [CancellationError() as Error, URLError(.cancelled) as Error] {
+            let counter = Counter()
+            var first = CloudPresets.metaModelAPI(model: "test", apiKey: "k")
+            first.transport = { _ in throw error }
+            var next = CloudPresets.metaModelAPI(model: "test", apiKey: "k")
+            next.transport = { _ in counter.calls += 1; return (Data(), 200) }
+            do {
+                _ = try await CloudBrainChain([first, next]).complete([])
+                XCTFail("cancelled request returned")
+            } catch { XCTAssertTrue(CloudBrainChain.isCancellation(error)) }
+            XCTAssertEqual(counter.calls, 0)
+        }
+    }
+
+    func testMalformedSettingsCannotReachTransport() async throws {
+        let cases = [("", "https://example.com/v1", "k"), ("model", "relative", "k"),
+                     ("model", "file:///tmp/api", "k"), ("model", "https://example.com/v1", "  ")]
+        for (model, url, key) in cases {
+            var brain = OpenAICompatibleBrain(providerName: "test", model: model, baseURL: URL(string: url)!, apiKey: key)
+            brain.transport = { _ in XCTFail("invalid settings made a network call"); return (Data(), 200) }
+            do { _ = try await brain.complete([]); XCTFail("expected invalid configuration") }
+            catch { XCTAssertEqual(error as? CloudError, .notConfigured) }
+        }
+    }
+
     func testContributorModeIsRefusedBeforeTransport() async throws {
         final class Counter: @unchecked Sendable { var calls = 0 }
         let counter = Counter()

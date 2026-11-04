@@ -572,7 +572,7 @@ final class EffectRecoveryTests: XCTestCase {
 
     // MARK: F4 compiled schemas and tool map
 
-    func testCompiledArgumentsDropUnknownKeysAndUseCatalogKinds() async throws {
+    func testCompiledArgumentsRejectUnsupportedFields() async throws {
         let (db, ledger) = try makeLedger()
         let effects = FakePhoneEffects()
         effects.instantPhrases["tomorrow at 5pm"] = .parsed(Date().addingTimeInterval(86_400))
@@ -584,11 +584,7 @@ final class EffectRecoveryTests: XCTestCase {
             requestID: UserRequestID(), capability: .compiled(reminderContract()),
             raw: raw, modelAskedConfirm: false, explicitDraft: false)
         guard case .finished = result else { return XCTFail("\(result)") }
-        let action = effects.performed[0].action
-        XCTAssertNil(action.arguments["priority"])
-        XCTAssertNil(action.arguments["effect"])
-        XCTAssertNil(action.arguments["confirm"])
-        guard case .instant? = action.arguments["when"] else { return XCTFail("catalog kind bound the instant") }
+        XCTAssertEqual(effects.performCount, 0, "unsupported requested fields cannot be silently discarded")
         XCTAssertEqual(CapabilityCatalog.capabilityID(forTool: "send_message"), "imessage_send")
         XCTAssertEqual(CapabilityCatalog.capabilityID(forTool: "send_email"), "email_compose")
         XCTAssertEqual(CapabilityCatalog.capabilityID(forTool: "create_reminder"), "reminder_create")

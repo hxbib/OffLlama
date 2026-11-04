@@ -43,6 +43,10 @@ let url = URL(string: arg("--url", ProcessInfo.processInfo.environment["PG_LLAMA
 let engine = LlamaServerEngine(baseURL: url, modelName: arg("--model", "Llama-3.2-1B-Instruct-Q4_K_M"))
 
 switch cmd {
+case "action-contracts":
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
+    print(String(decoding: try encoder.encode(ActionContractDescription.all), as: UTF8.self))
 case "e2e":
     let db = try SQLiteDB(path: arg("--db", "e2e-telemetry.sqlite"))
     let tel = try TelemetryLog(db: db)

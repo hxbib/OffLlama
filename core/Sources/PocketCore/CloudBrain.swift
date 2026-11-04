@@ -39,6 +39,7 @@ public struct OpenAICompatibleBrain: CloudBrain {
     struct Resp: Decodable { struct C: Decodable { struct M: Decodable { let content: String? }; let message: M }; let choices: [C] }
 
     public func makeRequest(_ messages: [ChatMessage], maxTokens: Int) throws -> URLRequest {
+        guard Self.validConfiguration(model: model, baseURL: baseURL, apiKey: apiKey) else { throw CloudError.notConfigured }
         try MetaAPI.requireStandardMode(model)
         var req = URLRequest(url: baseURL.appendingPathComponent("chat/completions"))
         req.httpMethod = "POST"
@@ -50,6 +51,13 @@ public struct OpenAICompatibleBrain: CloudBrain {
             "messages": messages.map { ["role": $0.role, "content": $0.content] }] as [String: Any])
         req.timeoutInterval = 60
         return req
+    }
+
+    public static func validConfiguration(model: String, baseURL: URL, apiKey: String) -> Bool {
+        !model.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            && !apiKey.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            && ActionValidation.isWebURL(baseURL.absoluteString)
+            && baseURL.query == nil && baseURL.fragment == nil
     }
 
     public func complete(_ messages: [ChatMessage], maxTokens: Int = 800) async throws -> CloudAnswer {
@@ -101,7 +109,18 @@ public struct CloudBrainChain: Sendable {
     public func complete(_ m: [ChatMessage], maxTokens: Int = 800) async throws -> CloudAnswer {
         guard !brains.isEmpty else { throw CloudError.notConfigured }
         var last: Error = CloudError.offline
-        for b in brains { do { return try await b.complete(m, maxTokens: maxTokens) } catch { last = error } }
+        for b in brains {
+            try Task.checkCancellation()
+            do { return try await b.complete(m, maxTokens: maxTokens) }
+            catch {
+                if Self.isCancellation(error) { throw error }
+                last = error
+            }
+        }
         throw last
+    }
+
+    static func isCancellation(_ error: Error) -> Bool {
+        Task.isCancelled || error is CancellationError || (error as? URLError)?.code == .cancelled
     }
 }

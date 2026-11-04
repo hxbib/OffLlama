@@ -2,6 +2,21 @@ import XCTest
 @testable import PocketCore
 
 final class CloudPrivacyTests: XCTestCase {
+    func testPartnerProfileValueIsMaskedInTheWholeCloudPayload() async throws {
+        let memory = try emptyMemory()
+        for fact in RuleFactExtractor.extract("My wife is Linda") { try await memory.upsert(fact) }
+        XCTAssertTrue(try memory.entityNames().contains("Linda"))
+        let engine = ScriptedEngine()
+        engine.script(whenPromptContains: "acceptable to send this request", logits: ["A": 5, "B": -5])
+        let capture = Capture()
+        let assistant = try makeAssistant(engine, cloud: [capturingBrain(capture)], memory: memory)
+        _ = try await assistant.handle("Plan a weekend trip for us")
+        XCTAssertEqual(capture.calls, 1)
+        let body = try XCTUnwrap(capture.bodies.first)
+        XCTAssertFalse(body.contains("Linda"), body)
+        XCTAssertTrue(body.contains("[PERSON_"), body)
+    }
+
     private final class Capture: @unchecked Sendable {
         var bodies: [String] = []
         var calls: Int { bodies.count }

@@ -132,7 +132,7 @@ final class PocketEffects: PhoneEffects, @unchecked Sendable {
             return await performAutoreply(action)
         case .notWired:
             return EffectReport(boundary: .notStarted(.unsupportedOnThisOS))
-        case .emailDigest, .documentAnalysis, .htmlVisualization, .cloudReason, .deviceStatus, .calendarQuery, .memoryRecall:
+        case .emailDigest, .documentAnalysis, .htmlVisualization, .cloudReason, .deviceStatus, .calendarQuery, .memoryRecall, .contactLookup:
             return EffectReport(boundary: .notStarted(.bindingRejected))
         }
     }

@@ -109,7 +109,10 @@ public final class Assistant: @unchecked Sendable {
         return CloudConfiguration(chain: chain, scrubber: scrubber)
     }
 
-    public func handle(_ utterance: String, now: Date = Date()) async throws -> AssistantTurn {
+    public func handle(_ utterance: String, now: Date = Date(), sharedText: String? = nil) async throws -> AssistantTurn {
+        if let sharedText, sharedText.count > ActionValidation.sharedTextLimit {
+            throw EffectError.invalidEdit("Shared text exceeds 24,000 characters. Choose a smaller excerpt.")
+        }
         var decisions: [ReflexDecision] = []
         let requestID = UserRequestID()
         var readResult: ReadResult?
@@ -142,7 +145,7 @@ public final class Assistant: @unchecked Sendable {
         decisions.append(route)
         let lmem = localMemory(mem)
         var skillAction: PlannedAction?   // explicit app/feature request + confident skillPick; no registry = no-op
-        if let r = try await skillOverride(utterance, ctx: ctx, route: route, requestID: requestID,
+        if let r = try await skillOverride(utterance, ctx: ctx, route: route, requestID: requestID, sharedText: sharedText,
                                            decisions: &decisions, planned: &skillAction, read: &readResult) {
             return AssistantTurn(reply: r, decisions: decisions, remembered: remembered, action: skillAction,
                                  cloudPromptSent: readResult?.cloudPromptSent,
@@ -153,7 +156,7 @@ public final class Assistant: @unchecked Sendable {
         switch route.chosen.id {
         case "tool":
             var planned: PlannedAction?
-            let reply = try await toolPath(utterance, ctx: ctx, requestID: requestID, decisions: &decisions,
+            let reply = try await toolPath(utterance, ctx: ctx, requestID: requestID, sharedText: sharedText, decisions: &decisions,
                                            planned: &planned, read: &readResult)
             return AssistantTurn(reply: reply, decisions: decisions, remembered: remembered, action: planned,
                                  cloudPromptSent: readResult?.cloudPromptSent, corrections: corrections,
@@ -201,9 +204,24 @@ public final class Assistant: @unchecked Sendable {
             switch try await CloudTurnComposer.prepareReply(profile: profile, facts: facts, utterance: utterance,
                                                              scrubber: config.scrubber, reflex: reflex) {
             case .prepared(let turn):
-                let ans = try await turn.send(on: config.chain)
-                return AssistantTurn(reply: .cloud(turn.restore(ans.text), provider: "\(ans.provider) · \(ans.model)"), decisions: decisions,
-                                     remembered: remembered, cloudPromptSent: turn.sentText, corrections: corrections)
+                do {
+                    let ans = try await turn.send(on: config.chain)
+                    return AssistantTurn(reply: .cloud(turn.restore(ans.text), provider: "\(ans.provider) · \(ans.model)"), decisions: decisions,
+                                         remembered: remembered, cloudPromptSent: turn.sentText, corrections: corrections)
+                } catch {
+                    if CloudBrainChain.isCancellation(error) { throw error }
+                    let can = try await reflex.decide(OptionSets.answerability, context: "\(mem)User: \(utterance)")
+                    decisions.append(can)
+                    let text: String
+                    if can.chosen.id == "yes" {
+                        text = "Cloud unavailable. On-device answer: " + (try await reflex.engine.generate(
+                            prompt: Self.localPrompt(utterance, mem: lmem), maxTokens: 200, temperature: 0.3)).trimmed
+                    } else {
+                        text = "The cloud providers could not answer, and I'm not confident enough to answer on device. Please try again later."
+                    }
+                    return AssistantTurn(reply: .offlineFallback(text), decisions: decisions, remembered: remembered,
+                                         cloudPromptSent: turn.sentText, corrections: corrections)
+                }
             case .withheld:
                 // The early sensitivity card may have said ok; nothing was sent and the badge stays truthful.
                 let a = try await reflex.engine.generate(prompt: Self.localPrompt(utterance, mem: lmem), maxTokens: 200, temperature: 0.3)
@@ -213,7 +231,7 @@ public final class Assistant: @unchecked Sendable {
         }
     }
 
-    func toolPath(_ utterance: String, ctx: String, requestID: UserRequestID, decisions: inout [ReflexDecision],
+    func toolPath(_ utterance: String, ctx: String, requestID: UserRequestID, sharedText: String?, decisions: inout [ReflexDecision],
                   planned: inout PlannedAction?, read: inout ReadResult?) async throws -> Reply {
         let tool = try await reflex.decide(OptionSets.toolChoice, context: ctx)
         decisions.append(tool)
@@ -221,17 +239,19 @@ public final class Assistant: @unchecked Sendable {
         // BF-1: an explicit email request stays a compiled Mail handoff. toolChoice has no send_email option.
         if tool.chosen.id == "send_message", ActionPlanner.isExplicitEmailRequest(utterance),
            let reg = skills, let compose = reg.skill(id: "email_compose") {
-            return try await planSkillCore(utterance, ctx: ctx, registry: reg, requestID: requestID,
+            return try await planSkillCore(utterance, ctx: ctx, registry: reg, requestID: requestID, sharedText: sharedText,
                                            decisions: &decisions, planned: &planned, read: &read,
                                            fallThrough: false, preselected: compose,
                                            explicitDraftOverride: tool.escalated)
                 ?? .clarify("What would you like me to do?")
         }
         if let reg = skills, ActionPlanner.shouldUseSkills(tool: tool, utterance: utterance, registry: reg) {   // open-world skills
-            return try await planSkill(utterance, ctx: ctx, registry: reg, requestID: requestID,
+            return try await planSkill(utterance, ctx: ctx, registry: reg, requestID: requestID, sharedText: sharedText,
                                        decisions: &decisions, planned: &planned, read: &read)
         }
         guard tool.chosen.id != "none" else { return .clarify("What would you like me to do?") }
+        if let id = CapabilityCatalog.capabilityID(forTool: tool.chosen.id),
+           let issue = ActionValidation.requestIssue(capabilityID: id, utterance: utterance) { return .clarify(issue.question) }
         var args = ArgumentExtractor.heuristic(tool: tool.chosen.id, utterance: utterance)
 
         if tool.chosen.id == "send_message" {
@@ -306,7 +326,9 @@ public final class Assistant: @unchecked Sendable {
             let session = EffectSession(ledger: ledger, effects: effects)
             return try await session.confirmRead(attemptID: attemptID, expectedRevision: expectedRevision) { action in
                 let args = Self.stringArguments(action)
-                return try await self.execute(PlannedAction(tool: ActionPlanner.toolPrefix + action.capabilityID, args: args))
+                var publicArgs = args
+                let sharedText = publicArgs.removeValue(forKey: "_sharedText")
+                return try await self.execute(PlannedAction(tool: ActionPlanner.toolPrefix + action.capabilityID, args: publicArgs), sharedText: sharedText)
             }
         }
         return try await EffectSession(ledger: ledger, effects: effects)

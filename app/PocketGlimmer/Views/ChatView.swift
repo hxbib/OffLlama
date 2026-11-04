@@ -246,6 +246,14 @@ struct DraftCardView: View {
                     TextField(field.value, text: textBinding(field), axis: .vertical)
                         .lineLimit(field.name == "body" ? 2...6 : 1...3)
                         .textFieldStyle(.roundedBorder)
+                    if let value = textEdits[field.name], value != field.value {
+                        Button("Save edit") {
+                            Task {
+                                await model.edit(item, edits: [DraftEdit(field: field.name, value: .text(value))])
+                                textEdits[field.name] = nil
+                            }
+                        }.buttonStyle(.bordered).controlSize(.mini)
+                    }
                 }
             }
         }

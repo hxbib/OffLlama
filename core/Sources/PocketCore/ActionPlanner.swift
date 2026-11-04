@@ -88,25 +88,25 @@ public enum ActionPlanner {
 
 extension Assistant {
     /// Open-world tool path. Appends its decisions (skillPick, confirmBeforeAct) and sets `planned`.
-    public func planSkill(_ utterance: String, ctx: String, registry: SkillRegistry, requestID: UserRequestID,
+    public func planSkill(_ utterance: String, ctx: String, registry: SkillRegistry, requestID: UserRequestID, sharedText: String? = nil,
                           decisions: inout [ReflexDecision], planned: inout PlannedAction?,
                           read: inout ReadResult?) async throws -> Reply {
-        try await planSkillCore(utterance, ctx: ctx, registry: registry, requestID: requestID, decisions: &decisions,
+        try await planSkillCore(utterance, ctx: ctx, registry: registry, requestID: requestID, sharedText: sharedText, decisions: &decisions,
                                 planned: &planned, read: &read, fallThrough: false)
             ?? .clarify("What would you like me to do?")
     }
 
     /// Before the routed branch (route != tool): an explicit app/feature request gets ONE skillPick decision. Returns nil
     /// (caller continues with the trained route unchanged) unless the request is explicit AND skillPick clears tau.
-    public func skillOverride(_ utterance: String, ctx: String, route: ReflexDecision, requestID: UserRequestID,
+    public func skillOverride(_ utterance: String, ctx: String, route: ReflexDecision, requestID: UserRequestID, sharedText: String? = nil,
                               decisions: inout [ReflexDecision], planned: inout PlannedAction?,
                               read: inout ReadResult?) async throws -> Reply? {
         guard let reg = skills, route.chosen.id != "tool", ActionPlanner.isExplicitRequest(utterance) else { return nil }
-        return try await planSkillCore(utterance, ctx: ctx, registry: reg, requestID: requestID, decisions: &decisions,
+        return try await planSkillCore(utterance, ctx: ctx, registry: reg, requestID: requestID, sharedText: sharedText, decisions: &decisions,
                                        planned: &planned, read: &read, fallThrough: true)
     }
 
-    func planSkillCore(_ utterance: String, ctx: String, registry: SkillRegistry, requestID: UserRequestID,
+    func planSkillCore(_ utterance: String, ctx: String, registry: SkillRegistry, requestID: UserRequestID, sharedText: String? = nil,
                        decisions: inout [ReflexDecision], planned: inout PlannedAction?,
                        read: inout ReadResult?, fallThrough: Bool, preselected: Skill? = nil,
                        explicitDraftOverride: Bool = false) async throws -> Reply? {
@@ -145,6 +145,8 @@ extension Assistant {
             }
         }
 
+        if let issue = ActionValidation.requestIssue(capabilityID: skill.id, utterance: utterance) { return .clarify(issue.question) }
+
         // Binding knowledge for a compiled id comes from the Swift catalog, never from a merged JSON file.
         let extractedFrom = CapabilityCatalog.current(id: skill.id).flatMap { _ in
             BuiltinSkills.all.first { $0.id == skill.id }
@@ -170,10 +172,10 @@ extension Assistant {
             if needsConfirm {
                 guard let ledger, let effects else { return .clarify("Reads are unavailable on this build. Nothing was done.") }
                 let card = try EffectSession(ledger: ledger, effects: effects).stageRead(
-                    requestID: requestID, contract: contract, raw: action, sharedText: SharedInbox.shared.peek()?.text)
+                    requestID: requestID, contract: contract, raw: action, sharedText: sharedText)
                 return .needsConfirmation(card)
             }
-            let result = try await execute(action)
+            let result = try await execute(action, sharedText: sharedText)
             read = result
             decisions.append(contentsOf: result.decisions)
             return result.provider.map { Reply.cloud(result.text, provider: $0) } ?? .local(result.text)
@@ -195,7 +197,10 @@ extension Assistant {
     }
 
     /// Runs a reply-only read. Effect capabilities deliberately throw: callers must use confirmEffect/evaluate.
-    public func execute(_ a: PlannedAction) async throws -> ReadResult {
+    public func execute(_ a: PlannedAction, sharedText: String? = nil) async throws -> ReadResult {
+        if let sharedText, sharedText.count > ActionValidation.sharedTextLimit {
+            throw EffectError.invalidEdit("Shared text exceeds 24,000 characters. Choose a smaller excerpt.")
+        }
         if a.tool == "search_memory" {
             let hits = try await memory.retrieve(a.args["query"] ?? "", k: 3)
             return ReadResult(text: hits.isEmpty ? "You haven't told me that yet."
@@ -214,22 +219,25 @@ extension Assistant {
             throw EffectError.effectRequiresConfirmation(a.tool)
         }
         let id = String(a.tool.dropFirst(ActionPlanner.toolPrefix.count))
-        guard let skill = (skills ?? SkillRegistry()).skill(id: id) else { return ReadResult(text: "Unknown skill \(id) · nothing done") }
+        guard let skill = BuiltinSkills.all.first(where: { $0.id == id }) ?? (skills ?? SkillRegistry()).skill(id: id) else { return ReadResult(text: "Unknown skill \(id) · nothing done") }
         guard CapabilityCatalog.isReplyOnly(id) else { throw EffectError.effectRequiresConfirmation(id) }
-        return try await readSkill(skill, action: a)
+        if let contract = CapabilityCatalog.current(id: id), let issue = ActionValidation.issues(contract: contract, args: a.args).first {
+            return ReadResult(text: issue.question)
+        }
+        return try await readSkill(skill, action: a, sharedText: sharedText)
     }
 
-    private func readSkill(_ skill: Skill, action: PlannedAction) async throws -> ReadResult {
+    private func readSkill(_ skill: Skill, action: PlannedAction, sharedText: String?) async throws -> ReadResult {
         var args = action.args
         switch skill.id {
         case "email_digest":
-            let shared = args["_sharedText"] ?? SharedInbox.shared.take()?.text
+            let shared = sharedText
             guard let shared else {
                 return ReadResult(text: "iOS lets no app read your Mail. Select the emails in Mail → Share → Pocket Glimmer (Shortcut “PG Share Emails”), and I'll summarize them here, on device.")
             }
             return try await reason("Summarize these emails in 3 short bullets: who wants what, and any deadline.", text: shared)
         case "analyze_document":
-            var text = args["_sharedText"] ?? SharedInbox.shared.take()?.text ?? ""
+            var text = sharedText ?? ""
             if text.isEmpty {
                 guard let runner = skillRunner else { return ReadResult(text: "Documents need the iPhone app · nothing done") }
                 text = try await runner.run(skill, args: args)
@@ -238,8 +246,7 @@ extension Assistant {
             return try await reason("Summarize this document in 3 short bullets, then one line on what to do next.", text: text)
         case "html_viz":
             if (args["data"] ?? "").isEmpty || HTMLViz.pairs(from: args["data"] ?? "").isEmpty {
-                if let copied = args["_sharedText"] { args["data"] = copied }
-                else if let shared = SharedInbox.shared.peek() { args["data"] = shared.text }
+                if let sharedText { args["data"] = sharedText }
             }
             if args["title"] == nil {
                 let t = try await reflex.engine.generate(prompt: Self.localPrompt("Give a 2-5 word chart title for: \(String((args["data"] ?? "").prefix(300)))", mem: ""), maxTokens: 12, temperature: 0.2)
@@ -263,9 +270,11 @@ extension Assistant {
         default:
             switch skill.invocation {
             case .cloudReason:
-                let text = args["text"] ?? args["_sharedText"] ?? SharedInbox.shared.peek()?.text ?? ""
-                return try await reason(skill.id == "translate" ? "Translate as asked. Reply with the translation only." : "Summarize in 3 short bullets.",
-                                        text: text.isEmpty ? args.values.joined(separator: " ") : text)
+                let text = args["text"] ?? sharedText ?? ""
+                guard !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+                    return ReadResult(text: "Share or paste the text you want me to read.")
+                }
+                return try await reason(skill.id == "translate" ? "Translate into \(args["target_language"] ?? ""). Reply with the translation only." : "Summarize in 3 short bullets.", text: text)
             default:
                 guard let runner = skillRunner else { return ReadResult(text: "\(skill.title) needs the iPhone app · nothing done") }
                 return ReadResult(text: try await runner.run(skill, args: args))
@@ -285,9 +294,18 @@ extension Assistant {
                                                                scrubber: config.scrubber, reflex: reflex,
                                                                onDecision: { decisions.append($0) }) {
             case .prepared(let turn):
-                let ans = try await turn.send(on: config.chain)
-                return ReadResult(text: turn.restore(ans.text), provider: "\(ans.provider) · \(ans.model)",
-                                  cloudPromptSent: turn.sentText, decisions: decisions)
+                do {
+                    let ans = try await turn.send(on: config.chain)
+                    return ReadResult(text: turn.restore(ans.text), provider: "\(ans.provider) · \(ans.model)",
+                                      cloudPromptSent: turn.sentText, decisions: decisions)
+                } catch {
+                    if CloudBrainChain.isCancellation(error) { throw error }
+                    var result = try await localReason(instruction, text: text, limit: localLimit,
+                                                       note: "cloud unavailable", decisions: decisions)
+                    result.cloudPromptSent = turn.sentText
+                    result.withheldForSensitivity = false
+                    return result
+                }
             case .withheld(let reason):
                 return try await localReason(instruction, text: text, limit: localLimit,
                                              note: reason.localNote, decisions: decisions)
@@ -329,11 +347,12 @@ extension Reflex {
 
 /// Regex argument filling per ArgSpec (name first, then kind). Times stay raw phrases (NSDataDetector / Shortcuts parse them).
 public enum SkillArgs {
-    static func first(_ p: String, in u: String, ci: Bool = true) -> String? {
+    static func first(_ p: String, in u: String, ci: Bool = true, literal: Bool = false) -> String? {
         guard let re = try? NSRegularExpression(pattern: p, options: ci ? [.caseInsensitive] : []),
               let m = re.firstMatch(in: u, range: NSRange(u.startIndex..., in: u)), m.numberOfRanges > 1,
               let r = Range(m.range(at: 1), in: u) else { return nil }
-        let v = String(u[r]).trimmed.trimmingCharacters(in: CharacterSet(charactersIn: "\"“”'.!?"))
+        let value = String(u[r]).trimmed
+        let v = literal ? value : value.trimmingCharacters(in: CharacterSet(charactersIn: "\"“”'.!?"))
         return v.isEmpty ? nil : v
     }
     static let notNames: Set<String> = ["on", "to", "my", "me", "a", "an", "the", "him", "her", "them", "back", "every", "someone", "everyone", "this", "that", "message", "dm", "text"]
@@ -350,8 +369,8 @@ public enum SkillArgs {
         return w.count > 1 && !["On", "At", "In", "Saying", "That"].contains(w[1]) ? n : w.first
     }
     static func body(_ u: String) -> String? {
-        first(#"[\"“]([^\"”]+)[\"”]"#, in: u) ?? first(#"(?:\bsaying|\bthat says|\bto say|\bwith the message|:)\s+(.+)$"#, in: u)
-            ?? first(#"\b(?:that)\s+(.+)$"#, in: u)
+        first(#"[\"“]([^\"”]+)[\"”]"#, in: u, literal: true) ?? first(#"(?:\bsaying|\bthat says|\bto say|\bwith the message|:)\s+(.+)$"#, in: u, literal: true)
+            ?? first(#"\b(?:that)\s+(.+)$"#, in: u, literal: true)
     }
     static func time(_ u: String) -> String? {
         // Keep an explicit zone/city qualifier in the phrase. A Shortcut handoff receives this exact text, and the
@@ -371,17 +390,21 @@ public enum SkillArgs {
         for spec in skill.argSchema where (a[spec.name] ?? "").isEmpty {
             var v: String?
             switch (spec.name, spec.kind) {
+            case ("target_language", _): v = first(#"\b(?:to|into)\s+([\p{L}][\p{L} -]{0,60})[.!?]?$"#, in: u)
+            case ("text", _) where skill.id == "translate":
+                v = first(#"\btranslate\s+(.+?)\s+(?:to|into)\s+[\p{L}][\p{L} -]{0,60}[.!?]?$"#, in: u, literal: true)
+                    ?? first(#"\btranslate\s+(.+)$"#, in: u, literal: true)
             case ("reply", _): v = first(#"\b(?:with|saying|say)\s+[\"“]?(.+?)[\"”]?$"#, in: u) ?? body(u)
             case ("trigger", _): v = first(#"\b(?:every|each|whenever someone sends(?: me)?(?: an?)?)\s+([a-z]+)"#, in: u)
             case ("name", _): v = first(#"\bshortcut\s+(?:called\s+|named\s+)?(.+)$"#, in: u)
             case ("n", _): v = first(#"\b(?:last|past|recent|latest)\s+(\d+|few|couple)"#, in: u).map { $0 == "few" ? "3" : $0 == "couple" ? "2" : $0 }
             case ("subject", _): v = first(#"\bsubject\s+[\"“]?([^\"”]+)[\"”]?"#, in: u)
             case ("data", _): v = first(#":\s*(.+)$"#, in: u) ?? (HTMLViz.pairs(from: u).isEmpty ? nil : u)
-            case (_, .handle): v = person(u).map { $0.lowercased().replacingOccurrences(of: " ", with: "") }
+            case (_, .handle): v = person(u)?.lowercased()
             case (_, .contact): v = person(u).map { $0.prefix(1).uppercased() + $0.dropFirst() }
             case ("body", _): v = body(u)
             case (_, .datetime): v = time(u)
-            case (_, .duration): v = first(#"\b(\d+\s*(?:-\s*)?(?:seconds?|secs?|minutes?|mins?|hours?|hrs?))\b"#, in: u)
+            case (_, .duration): v = first(#"((?:[+-]?\d+(?:\.\d+)?\s*(?:seconds?|secs?|minutes?|mins?|hours?|hrs?)(?:\s+(?:and\s+)?)?)+)"#, in: u)
             case (_, .number): v = first(#"\b(\d+)\b"#, in: u)
             case (_, .url): v = first(#"(https?://\S+)"#, in: u)
             case (_, .place): v = first(#"\b(?:directions to|navigate to|uber to|ride to|take me to|get me to|weather in|forecast for|to|in|at)\s+(.+?)(?:\s+(?:tomorrow|today|tonight|now))?$"#, in: u)

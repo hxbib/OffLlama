@@ -106,7 +106,10 @@ final class TakeoverRegressionTests: XCTestCase {
             let utterance = "open the latest episode of Severance on Apple TV"
             XCTAssertEqual(ActionPlanner.candidates(utterance, registry: a.skills!).first?.id, "appletv_play")
             let turn = try await a.handle(utterance)
-            guard case .acted(let effect) = turn.reply else { return XCTFail("\(turn.reply)") }
+            guard case .needsConfirmation(let card) = turn.reply else { return XCTFail("\(turn.reply)") }
+            XCTAssertEqual(effects.performCount, 0)
+            let confirmed = try await a.confirmEffect(card.attemptID, edits: [], expectedRevision: card.revision)
+            guard case .finished(let effect) = confirmed else { return XCTFail("\(confirmed)") }
             XCTAssertEqual(effect.phase, .settled(.handedOff(.systemAcceptedURL)))
             XCTAssertTrue(effect.summary.contains("Shortcuts was asked"), effect.summary)
             XCTAssertEqual(effects.performCount, 1)
@@ -175,9 +178,9 @@ final class TakeoverRegressionTests: XCTestCase {
         _ = try await a.memory.upsert(ExtractedFact(subject: "Dana", attribute: "relationship", value: "sister",
                                                     text: "Dana is my sister"))
         _ = SharedInbox.shared.take()
-        SharedInbox.shared.put("Dana asked for the deck. " + String(repeating: "details ", count: 400), source: "mail")
+        let shared = "Dana asked for the deck. " + String(repeating: "details ", count: 400)
 
-        let reply = try await a.execute(PlannedAction(tool: "skill:email_digest", args: ["n": "5"]))
+        let reply = try await a.execute(PlannedAction(tool: "skill:email_digest", args: ["n": "5"]), sharedText: shared)
         XCTAssertFalse(box.sent.contains("Dana"), box.sent)
         XCTAssertTrue(box.sent.contains("[PERSON_1]"), box.sent)
         XCTAssertTrue(reply.text.contains("Dana"), reply.text)

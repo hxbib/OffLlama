@@ -196,10 +196,10 @@ final class SkillsTests: XCTestCase {
         }
         let (a, effects) = try make(e, online: true, cloud: [brain])
         _ = SharedInbox.shared.take()
-        SharedInbox.shared.put("Project notes. " + String(repeating: "The deadline is Friday. ", count: 150), source: "share")
+        let shared = "Project notes. " + String(repeating: "The deadline is Friday. ", count: 150)
         let utterance = "summarize what I just shared"
         XCTAssertEqual(ActionPlanner.candidates(utterance, registry: a.skills!).first?.id, "summarize_text")
-        let turn = try await a.handle(utterance)
+        let turn = try await a.handle(utterance, sharedText: shared)
         guard case .cloud(let reply, let provider) = turn.reply else { return XCTFail("\(turn.reply)") }
         XCTAssertEqual(reply, "Short summary")
         XCTAssertEqual(provider, "Meta Model API · muse-spark-1.3")
@@ -244,8 +244,8 @@ final class SkillsTests: XCTestCase {
         _ = try await a.memory.upsert(ExtractedFact(subject: "Dana", attribute: "relationship", value: "sister",
                                                     text: "Dana is my sister"))
         _ = SharedInbox.shared.take()
-        SharedInbox.shared.put("From: Dana\nSubject: slides\n" + String(repeating: "Please send the deck soon. ", count: 150), source: "mail")
-        let t = try await a.handle("summarize my last 5 emails")
+        let shared = "From: Dana\nSubject: slides\n" + String(repeating: "Please send the deck soon. ", count: 150)
+        let t = try await a.handle("summarize my last 5 emails", sharedText: shared)
         guard case .needsConfirmation(let card) = t.reply else { return XCTFail("\(t.reply)") }
         let result = try await a.confirmEffect(card.attemptID, edits: [], expectedRevision: card.revision)
         guard case .read(let read) = result else { return XCTFail("\(result)") }
@@ -371,7 +371,7 @@ final class SkillsTests: XCTestCase {
         XCTAssertFalse(ActionPlanner.shouldUseSkills(tool: mem, utterance: "what did I say my locker code was", registry: a.skills!))
     }
 
-    func testEmailDigestUsesSharedInboxOnDevice() async throws {
+    func testEmailDigestUsesRequestInputOnDevice() async throws {
         let e = ScriptedEngine(); e.generated = " • Dana needs slides by Fri "
         base(e, tool: Self.noneTool)
         e.script(whenPromptContains: "Which phone action", logits: ["A": 6, "B": 0, "C": 0, "D": 0, "E": 0, "F": 0, "G": 0, "H": 0])
@@ -387,8 +387,8 @@ final class SkillsTests: XCTestCase {
         XCTAssertTrue(honest.text.contains("Share → Pocket Glimmer"), honest.text)     // no shared mail yet: honest limit
         XCTAssertEqual(effects.performCount, 0)
 
-        SharedInbox.shared.put("From: Dana\nSubject: slides\nPlease send the slides by Friday.", source: "mail")
-        let t2 = try await a.handle("summarize my last 5 emails")
+        let shared = "From: Dana\nSubject: slides\nPlease send the slides by Friday."
+        let t2 = try await a.handle("summarize my last 5 emails", sharedText: shared)
         guard case .needsConfirmation(let card2) = t2.reply else { return XCTFail("\(t2.reply)") }
         let second = try await a.confirmEffect(card2.attemptID, edits: [], expectedRevision: card2.revision)
         guard case .read(let read) = second else { return XCTFail("\(second)") }

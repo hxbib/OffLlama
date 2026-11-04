@@ -882,6 +882,11 @@
           "kind" : "text",
           "name" : "text",
           "required" : true
+        },
+        {
+          "kind" : "text",
+          "name" : "target_language",
+          "required" : true
         }
       ],
       "category" : "web",

@@ -83,6 +83,7 @@ public enum ExecutorKey: Sendable, Equatable, Codable {
     case deviceStatus
     case calendarQuery
     case memoryRecall
+    case contactLookup
     case notWired
 }
 
@@ -168,6 +169,7 @@ public struct BoundAction: Sendable, Equatable, Codable {
     public var timeZoneID: String?
     public var contactQueries: [String: String]
     public var contactChoices: [String: [ContactCandidate]]
+    public var handoffContract: CapabilityContract? = nil
 
     public init(capabilityID: String, contractVersion: Int, title: String, arguments: [String: BoundArgument],
                 source: ArgumentSource, executor: ExecutorKey, timePhrase: String? = nil,
@@ -180,7 +182,7 @@ public struct BoundAction: Sendable, Equatable, Codable {
     }
 
     enum CodingKeys: String, CodingKey {
-        case capabilityID, contractVersion, title, arguments, source, executor, timePhrase, timeZoneID, contactQueries, contactChoices
+        case capabilityID, contractVersion, title, arguments, source, executor, timePhrase, timeZoneID, contactQueries, contactChoices, handoffContract
     }
     public init(from d: Decoder) throws {
         let c = try d.container(keyedBy: CodingKeys.self)
@@ -194,6 +196,7 @@ public struct BoundAction: Sendable, Equatable, Codable {
         timeZoneID = try c.decodeIfPresent(String.self, forKey: .timeZoneID)
         contactQueries = try c.decodeIfPresent([String: String].self, forKey: .contactQueries) ?? [:]
         contactChoices = try c.decodeIfPresent([String: [ContactCandidate]].self, forKey: .contactChoices) ?? [:]
+        handoffContract = try c.decodeIfPresent(CapabilityContract.self, forKey: .handoffContract)
     }
 }
 
@@ -476,7 +479,7 @@ public struct ClaimTicket: Hashable, Sendable {
 public enum CapabilityCatalog {
     public static let replyOnlyIDs: Set<String> = [
         "email_digest", "analyze_document", "translate", "summarize_text", "html_viz",
-        "device_status", "calendar_find", "memory_recall",
+        "device_status", "calendar_find", "memory_recall", "lookup_contact",
     ]
 
     public static let all: [CapabilityContract] = [
@@ -512,11 +515,11 @@ public enum CapabilityCatalog {
 
         // Local writes. A confident, fully parsed, user-spoken time may act without a card.
         c("reminder_create", "Create a reminder", .localWrite, .modelMayAct, .reminderCreate,
-          [ArgSpec("title", .text, required: true), ArgSpec("when", .datetime)],
+          [ArgSpec("title", .text, required: true), ArgSpec("when", .datetime, required: true)],
           review: "Saves a reminder with this title and exact time in Reminders."),
         c("calendar_create", "Add a calendar event", .localWrite, .modelMayAct, .eventCreate,
-          [ArgSpec("title", .text, required: true), ArgSpec("when", .datetime)],
-          review: "Saves an event with this title and exact start time in Calendar."),
+          [ArgSpec("title", .text, required: true), ArgSpec("when", .datetime, required: true)],
+          review: "Saves a one-hour event with this title and exact start time in Calendar, without invitations."),
 
         // URL and Shortcut handoffs. Opening is the whole observable outcome.
         c("maps_directions", "Directions in Maps", .externalHandoff, .modelMayAct, .urlTemplate("maps://?daddr={place}"),
@@ -580,7 +583,7 @@ public enum CapabilityCatalog {
         c("html_viz", "Make a chart / HTML visualization", .localWrite, .modelMayAct, .htmlVisualization,
           [ArgSpec("data", .text)], review: "Draws a chart on this device. Nothing is sent to another app."),
         c("translate", "Translate a phrase", .localWrite, .modelMayAct, .cloudReason,
-          [ArgSpec("text", .text, required: true)], review: "Translates this text. A long local request may use the cloud only as today's read path."),
+          [ArgSpec("text", .text, required: true), ArgSpec("target_language", .text, required: true)], review: "Translates this text into the chosen language. Long text may use the cloud after privacy checks."),
         c("summarize_text", "Summarize shared text", .localWrite, .modelMayAct, .cloudReason,
           [ArgSpec("text", .text)], review: "Summarizes this text. A long local request may use the cloud only as today's read path."),
         c("device_status", "Battery & storage", .localWrite, .modelMayAct, .deviceStatus, [],
@@ -589,6 +592,8 @@ public enum CapabilityCatalog {
           [ArgSpec("query", .query)], review: "Reads your calendar on this device."),
         c("memory_recall", "Recall something I told you", .localWrite, .modelMayAct, .memoryRecall,
           [ArgSpec("query", .query)], review: "Reads saved memories on this device."),
+        c("lookup_contact", "Look up a contact", .localWrite, .modelMayAct, .contactLookup,
+          [ArgSpec("contact", .text, required: true)], review: "Reads accessible contact matches; ambiguous matches need clarification."),
 
         // Compiled, deliberately not wired in Slice 1. Never substituted with the Clock Shortcut.
         c("alarmkit_schedule", "App alarm (not wired)", .localWrite, .modelMayAct, .notWired, [],
@@ -598,7 +603,7 @@ public enum CapabilityCatalog {
     private static func c(_ id: String, _ title: String, _ effect: EffectClass, _ floor: ConfirmationFloor,
                           _ executor: ExecutorKey, _ args: [ArgSpec] = [], availability: Availability = .ready,
                           methodKind: ContactMethodKind? = nil, review: String) -> CapabilityContract {
-        CapabilityContract(id: id, title: title, effect: effect, confirmation: floor,
+        CapabilityContract(id: id, version: 2, title: title, effect: effect, confirmation: effect == .externalHandoff ? .always : floor,
                            reviewSentence: review, availability: availability, arguments: args,
                            executor: executor, methodKind: methodKind)
     }
@@ -622,6 +627,7 @@ public enum CapabilityCatalog {
         case "create_event": return "calendar_create"
         case "find_event": return "calendar_find"
         case "search_memory": return "memory_recall"
+        case "lookup_contact": return "lookup_contact"
         default: return nil
         }
     }
@@ -939,6 +945,7 @@ public final class EffectLedger: @unchecked Sendable {
     }
 
     static func textArg(_ action: BoundAction, _ name: String) -> String? {
+        if case .url(let u)? = action.arguments[name] { return u.absoluteString }
         if case .text(let s)? = action.arguments[name] { return s }
         if case .place(let s)? = action.arguments[name] { return s }
         if case .shortcutName(let s)? = action.arguments[name] { return s }
@@ -958,25 +965,13 @@ public final class EffectLedger: @unchecked Sendable {
         // A compiled id with a missing version is stale policy. Only an id with no compiled entry at all can
         // rebuild its reviewed contract from the persisted user-handoff snapshot.
         if CapabilityCatalog.all.contains(where: { $0.id == record.capabilityID }) { return nil }
-        switch record.action.executor {
-        case .urlTemplate, .shortcut:
-            let specs: [ArgSpec] = record.action.arguments.keys.sorted().map { name in
-                let kind: ArgKind = {
-                    if case .contact = record.action.arguments[name] { return .contact }
-                    if case .contactQuery = record.action.arguments[name] { return .contact }
-                    if case .instant = record.action.arguments[name] { return .datetime }
-                    if case .place = record.action.arguments[name] { return .place }
-                    if case .url = record.action.arguments[name] { return .url }
-                    return .text
-                }()
-                return ArgSpec(name, kind)
-            }
-            return CapabilityContract(id: record.capabilityID, version: record.contractVersion,
-                                      title: record.action.title, effect: .externalHandoff,
-                                      confirmation: .always, reviewSentence: "Review this handoff before it opens.",
-                                      arguments: specs, executor: record.action.executor)
-        default:
-            return nil
+        guard let saved = record.action.handoffContract,
+              saved.id == record.capabilityID, saved.version == record.contractVersion,
+              saved.executor == record.action.executor, saved.confirmation == .always,
+              saved.effect == .externalHandoff else { return nil }
+        switch saved.executor {
+        case .urlTemplate, .shortcut: return saved
+        default: return nil
         }
     }
 
@@ -1000,6 +995,9 @@ public final class EffectLedger: @unchecked Sendable {
                                              choices: record.action.contactChoices[spec.name] ?? []))
                 } else if case .text(let s)? = record.action.arguments[spec.name], spec.kind == .handle {
                     fields.append(DraftField(name: spec.name, kind: .text, value: s))
+                } else {
+                    fields.append(DraftField(name: spec.name, kind: spec.kind == .handle ? .text : .contact,
+                                             value: "", choices: record.action.contactChoices[spec.name] ?? []))
                 }
             case .datetime:
                 if case .instant(let date)? = record.action.arguments[spec.name] {
@@ -1019,16 +1017,17 @@ public final class EffectLedger: @unchecked Sendable {
                     fields.append(DraftField(name: spec.name, kind: .text, value: url.absoluteString))
                 } else if case .text(let text)? = record.action.arguments[spec.name], !text.isEmpty {
                     fields.append(DraftField(name: spec.name, kind: .text, value: text))
+                } else {
+                    fields.append(DraftField(name: spec.name, kind: .text, value: ""))
                 }
             default:
-                if let value = textArg(record.action, spec.name), !value.isEmpty {
-                    fields.append(DraftField(name: spec.name, kind: .text, value: value))
-                }
+                fields.append(DraftField(name: spec.name, kind: .text, value: textArg(record.action, spec.name) ?? ""))
             }
         }
         // A user handoff card must show the concrete destination, never just the file's title.
         if case .urlTemplate(let template) = record.action.executor {
-            fields.insert(DraftField(name: "destination", kind: .text, value: CapabilityCatalog.hostLabel(template)), at: 0)
+            let filled = SkillTemplate.fill(template, args: Assistant.stringArguments(record.action), raw: ["url"])
+            fields.insert(DraftField(name: "destination", kind: .text, value: CapabilityCatalog.hostLabel(filled)), at: 0)
         } else if case .shortcut(let name, _) = record.action.executor {
             fields.insert(DraftField(name: "destination", kind: .text, value: "Shortcut “\(name)”"), at: 0)
         }
@@ -1053,10 +1052,18 @@ public final class EffectLedger: @unchecked Sendable {
 
     /// Derived from the stored action. It never calls Contacts and never reparses a relative phrase.
     static func readiness(_ action: BoundAction, contract: CapabilityContract, now: Date) -> Readiness {
+        guard action.capabilityID == contract.id, action.contractVersion == contract.version,
+              action.executor == contract.executor else {
+            return Readiness(ready: false, pause: .contractVersionStale, notice: "The saved action does not match this build's contract. Start a new request.")
+        }
         if action.source == .modelProposal {
             return Readiness(ready: false, pause: .needsField("proposal"), notice: "A model proposal cannot run until you choose concrete values.")
         }
         for spec in contract.arguments {
+            if spec.kind != .contact && spec.kind != .datetime,
+               let issue = ActionValidation.issue(spec: spec, value: textArg(action, spec.name), capabilityID: contract.id) {
+                return Readiness(ready: false, pause: .needsField(spec.name), notice: issue.question)
+            }
             switch spec.kind {
             case .contact:
                 guard let value = action.arguments[spec.name] else {
@@ -1087,14 +1094,17 @@ public final class EffectLedger: @unchecked Sendable {
                         guard case .instant(let date) = value else {
                             return Readiness(ready: false, pause: .needsTime, notice: "Choose the exact time before confirming.")
                         }
-                        if date.timeIntervalSince(now) < -60 {
+                        if !date.timeIntervalSince1970.isFinite || date.timeIntervalSince(now) < -60 {
                             return Readiness(ready: false, pause: .needsTime, notice: "That time has passed. Choose a new exact time; the saved phrase is not reapplied.")
                         }
                     } else {
                         let present: Bool
                         switch value {
                         case .instant: present = true
-                        case .text(let phrase): present = !phrase.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                        case .text(let phrase):
+                            if case .parsed = InstantParser.parse(phrase, dateResolver: { _ in now.addingTimeInterval(3600) }) {
+                                present = ActionValidation.issue(spec: spec, value: phrase, capabilityID: contract.id) == nil
+                            } else { present = false }
                         default: present = false
                         }
                         if spec.required && !present {
@@ -1111,7 +1121,7 @@ public final class EffectLedger: @unchecked Sendable {
                 }
                 let valid: Bool
                 switch value {
-                case .url: valid = true
+                case .url(let u): valid = ActionValidation.isWebURL(u.absoluteString)
                 case .text(let s):
                     if let u = URL(string: s), let scheme = u.scheme?.lowercased(),
                        (scheme == "http" || scheme == "https"), u.host?.isEmpty == false { valid = true } else { valid = false }
@@ -1139,7 +1149,7 @@ public final class EffectLedger: @unchecked Sendable {
             return "An email may already be in Mail. This attempt will not open the sheet again."
         case .urlTemplate, .shortcut:
             return "This handoff was accepted. It may have partly run, and this attempt will not open it again."
-        case .emailDigest, .documentAnalysis, .htmlVisualization, .cloudReason, .deviceStatus, .calendarQuery, .memoryRecall:
+        case .emailDigest, .documentAnalysis, .htmlVisualization, .cloudReason, .deviceStatus, .calendarQuery, .memoryRecall, .contactLookup:
             return "A read was interrupted. It will not run again."
         case .autoreplyMemory, .notWired:
             return "This attempt started and has no recorded result. It will not run again."
@@ -1431,8 +1441,14 @@ public struct EffectSession: Sendable {
                                           summary: "This is this app's own alarm. It is not wired in this build; nothing was scheduled."))
         }
 
+        try Task.checkCancellation()
+        if let issue = ActionValidation.issues(contract: contract, args: raw.args).first(where: { $0.code == .unsupported }) {
+            return .finished(EffectResult(attemptID: AttemptID(), phase: .settled(.failed(.unavailable)), summary: issue.question))
+        }
+
         let now = ledger.now()
         let bound = await bind(raw: raw, contract: contract, now: now)
+        try Task.checkCancellation()
         let action = bound.action
         var pause = bound.pause
         var notice = bound.notice
@@ -1496,6 +1512,7 @@ public struct EffectSession: Sendable {
         var action = record.action
         try await apply(edits, to: &action, contract: contract)
         await revalidateContacts(in: &action, contract: contract)
+        try Task.checkCancellation()
         let readiness = EffectLedger.readiness(action, contract: contract, now: now)
         let revision = expectedRevision ?? record.revision
 
@@ -1555,7 +1572,10 @@ public struct EffectSession: Sendable {
             if let v = raw.args[spec.name], !v.isEmpty { action.arguments[spec.name] = .text(v) }
         }
         if let sharedText {
-            action.arguments["_sharedText"] = .text(String(sharedText.prefix(24_000)))
+            guard sharedText.count <= ActionValidation.sharedTextLimit else {
+                throw EffectError.invalidEdit("Shared text exceeds 24,000 characters. Choose a smaller excerpt.")
+            }
+            action.arguments["_sharedText"] = .text(sharedText)
         }
         let record = try ledger.insertAwaiting(requestID: requestID, capabilityID: contract.id,
                                                contractVersion: contract.version, action: action,
@@ -1619,6 +1639,9 @@ public struct EffectSession: Sendable {
 
     private func performClaimed(record: AttemptRecord, ticket: ClaimTicket, action: BoundAction,
                                 contract: CapabilityContract) async throws -> SessionResult {
+        if Task.isCancelled {
+            return .finished(try finish(attemptID: record.attemptID, phase: .settled(.cancelled(.userCard)), contract: contract))
+        }
         let report = await effects.perform(action, ticket: ticket)
 
         // A transient sheet collision is not a terminal failure. Put the card back and keep the attempt alive.
@@ -1674,11 +1697,6 @@ public struct EffectSession: Sendable {
                         notice = notice.isEmpty ? "Fill in \(spec.name) before confirming." : notice
                     }
                 }
-                continue
-            }
-            if rawValue.hasPrefix("$") {
-                pause = pause ?? .outputBinding
-                notice = notice.isEmpty ? "This value would come from another step. Choose a concrete value." : notice
                 continue
             }
             switch spec.kind {
@@ -1756,21 +1774,16 @@ public struct EffectSession: Sendable {
             case .place:
                 args[spec.name] = .place(rawValue)
             case .text, .handle, .query, .number, .duration, .app, .document:
-                if rawValue.count > 2_000 {
-                    args[spec.name] = .text(String(rawValue.prefix(2_000)))
-                    pause = pause ?? .needsField(spec.name)
-                    notice = notice.isEmpty ? "Each text value is limited to 2,000 characters. Shorten it before confirming." : notice
-                } else {
-                    args[spec.name] = .text(rawValue)
-                }
+                args[spec.name] = .text(rawValue)
             }
         }
-        let action = BoundAction(capabilityID: contract.id, contractVersion: contract.version, title: contract.title,
+        var action = BoundAction(capabilityID: contract.id, contractVersion: contract.version, title: contract.title,
                                  arguments: args, source: .userUtterance, executor: contract.executor,
                                  timePhrase: timePhrase, timeZoneID: args.values.contains(where: {
                                      if case .instant = $0 { return true }; return false
                                  }) ? zone : nil,
                                  contactQueries: queries, contactChoices: choices)
+        if CapabilityCatalog.current(id: contract.id) == nil { action.handoffContract = contract }
         return Binding(action: action, pause: pause, notice: notice)
     }
 
@@ -1784,11 +1797,10 @@ public struct EffectSession: Sendable {
                     throw EffectError.invalidEdit("Unknown field \(edit.field).")
                 }
                 let isLocalTime = contract.executor == .reminderCreate || contract.executor == .eventCreate
-                guard spec.kind != .contact, spec.kind != .handle, !(spec.kind == .datetime && isLocalTime) else {
+                guard spec.kind != .contact, !(spec.kind == .datetime && isLocalTime) else {
                     throw EffectError.invalidEdit("\(edit.field) needs a typed edit.")
                 }
-                let capped = String(value.prefix(2_000))
-                action.arguments[edit.field] = spec.kind == .place ? .place(capped) : .text(capped)
+                action.arguments[edit.field] = spec.kind == .place ? .place(value) : .text(value)
             case .contactID(let identifier):
                 guard let spec = contract.arguments.first(where: { $0.name == edit.field }),
                       spec.kind == .contact || spec.kind == .handle else {
@@ -1838,7 +1850,7 @@ public struct EffectSession: Sendable {
                 guard let spec = contract.arguments.first(where: { $0.name == edit.field }), spec.kind == .datetime else {
                     throw EffectError.invalidEdit("Unknown time field \(edit.field).")
                 }
-                if date.timeIntervalSince(ledger.now()) < -60 {
+                if !date.timeIntervalSince1970.isFinite || date.timeIntervalSince(ledger.now()) < -60 {
                     throw EffectError.invalidEdit("Choose a time in the future.")
                 }
                 action.arguments[edit.field] = .instant(date)
@@ -1940,7 +1952,7 @@ public enum InstantParser {
     static let zoneHints = try! NSRegularExpression(pattern:
         #"\b(?:UTC|GMT|EST|EDT|CST|CDT|MST|MDT|PST|PDT|AKST|AKDT|HST|CET|CEST|BST|IST|JST|KST|AEST|AEDT|NZST|NZDT)\b|UTC[+-]\d{1,2}(?::?\d{2})?|\b[A-Z][a-z]+\s+time\b|\bin\s+[A-Z][a-z]+\b"#)
     static let timeToken = try! NSRegularExpression(pattern:
-        #"(?:\b(?:at|by)\s+\d{1,2}(?::\d{2})?|\b\d{1,2}(?::\d{2})?\s*(?:a\.?m\.?|p\.?m\.?)\b|\bin\s+\d+\s+(?:minutes?|mins?|hours?|hrs?|days?)|\b(?:noon|midnight|tonight)\b)"#,
+        #"(?:\b\d{1,2}:\d{2}\b|\b(?:at|by)\s+\d{1,2}(?::\d{2})?|\b\d{1,2}(?::\d{2})?\s*(?:a\.?m\.?|p\.?m\.?)\b|\bin\s+\d+\s+(?:minutes?|mins?|hours?|hrs?|days?)|\b(?:noon|midnight|tonight)\b)"#,
         options: [.caseInsensitive])
 
     /// Foundation date detection is iOS-only (`NSDataDetector` is absent from corelibs on Linux), so the app
@@ -1960,7 +1972,22 @@ public enum InstantParser {
         guard timeToken.firstMatch(in: p, range: NSRange(location: 0, length: ns.length)) != nil else {
             return .unparsed(p)
         }
-        guard let date = dateResolver(p) else { return .unparsed(p) }
+        if p.range(of: #"\b(?:or|ish|around|sometime|tonight)\b|\b(?:\d{4}-\d{2}-\d{2}T\S+|[A-Za-z_]+/[A-Za-z_]+)\b"#,
+                   options: [.regularExpression, .caseInsensitive]) != nil { return .unparsed(p) }
+        if let clock = try? NSRegularExpression(pattern: #"\b(?:at\s+|by\s+)?(\d{1,2})(?::(\d{2}))?\s*(a\.?m\.?|p\.?m\.?)?\b"#, options: .caseInsensitive) {
+            let matches = clock.matches(in: p, range: NSRange(p.startIndex..., in: p))
+            for m in matches {
+                // Relative quantities are durations, not clock hours.
+                let tail = ns.substring(from: m.range.location + m.range.length)
+                if tail.range(of: #"^\s*(minutes?|mins?|hours?|hrs?|days?)\b"#, options: [.regularExpression, .caseInsensitive]) != nil { continue }
+                let hour = Int(ns.substring(with: m.range(at: 1))) ?? -1
+                let minute = m.range(at: 2).location == NSNotFound ? 0 : Int(ns.substring(with: m.range(at: 2))) ?? -1
+                let meridiem = m.range(at: 3).location != NSNotFound
+                if !(0...59).contains(minute) || (meridiem ? !(1...12).contains(hour) : !(0...23).contains(hour)) { return .unparsed(p) }
+                if !meridiem && (1...12).contains(hour) { return .unparsed(p) }
+            }
+        }
+        guard let date = dateResolver(p), date.timeIntervalSince1970.isFinite else { return .unparsed(p) }
         return .parsed(date)
     }
 }

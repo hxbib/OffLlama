@@ -1,0 +1,2155 @@
+[
+  {
+    "argumentRules" : {
+      "body" : "Required. Literal text; no inferred output bindings, no silent truncation. Maximum 2000 characters.",
+      "contact" : "Required. Unique accessible contact identifier and exact labelled destination; ambiguous/missing/stale contacts require selection. Maximum 2000 characters."
+    },
+    "capability" : {
+      "arguments" : [
+        {
+          "kind" : "contact",
+          "name" : "contact",
+          "required" : true
+        },
+        {
+          "kind" : "text",
+          "name" : "body",
+          "required" : true
+        }
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "always" : {
+
+        }
+      },
+      "effect" : {
+        "personOrMoneyHandoff" : {
+
+        }
+      },
+      "executor" : {
+        "messageSend" : {
+
+        }
+      },
+      "id" : "imessage_send",
+      "methodKind" : "phone",
+      "reviewSentence" : "Opens the Messages sheet with this person and message. You tap Send.",
+      "title" : "Send an iMessage / text",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "Contacts access and a usable selected method; revalidate at confirmation.",
+      "Messages compose available and no conflicting sheet."
+    ],
+    "successEvidence" : "Messages accepted, cancelled, or failed; accepted does not prove delivery."
+  },
+  {
+    "argumentRules" : {
+      "body" : "Required. Literal text; no inferred output bindings, no silent truncation. Maximum 2000 characters.",
+      "contact" : "Required. Unique accessible contact identifier and exact labelled destination; ambiguous/missing/stale contacts require selection. Maximum 2000 characters.",
+      "subject" : "Optional. Literal text; no inferred output bindings, no silent truncation. Maximum 2000 characters."
+    },
+    "capability" : {
+      "arguments" : [
+        {
+          "kind" : "contact",
+          "name" : "contact",
+          "required" : true
+        },
+        {
+          "kind" : "text",
+          "name" : "subject",
+          "required" : false
+        },
+        {
+          "kind" : "text",
+          "name" : "body",
+          "required" : true
+        }
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "always" : {
+
+        }
+      },
+      "effect" : {
+        "personOrMoneyHandoff" : {
+
+        }
+      },
+      "executor" : {
+        "mailSend" : {
+
+        }
+      },
+      "id" : "email_compose",
+      "methodKind" : "email",
+      "reviewSentence" : "Opens the Mail sheet with this address, subject and body. You tap Send.",
+      "title" : "Write an email",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "Contacts access and a usable selected method; revalidate at confirmation.",
+      "Configured Mail compose available and no conflicting sheet."
+    ],
+    "successEvidence" : "Mail queued, draft saved, cancelled, or failed; queued does not prove delivery."
+  },
+  {
+    "argumentRules" : {
+      "body" : "Required. Literal text; no inferred output bindings, no silent truncation. Maximum 2000 characters.",
+      "contact" : "Required. Exact handle: 1–30 ASCII letters, digits, underscore or dot; starts with letter/digit/underscore. Maximum 2000 characters."
+    },
+    "capability" : {
+      "arguments" : [
+        {
+          "kind" : "handle",
+          "name" : "contact",
+          "required" : true
+        },
+        {
+          "kind" : "text",
+          "name" : "body",
+          "required" : true
+        }
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "always" : {
+
+        }
+      },
+      "effect" : {
+        "externalHandoff" : {
+
+        }
+      },
+      "executor" : {
+        "urlTemplate" : {
+          "_0" : "https://ig.me/m/{contact}"
+        }
+      },
+      "id" : "instagram_dm",
+      "reviewSentence" : "Opens the Instagram DM thread. The message text is copied to the clipboard; paste and send.",
+      "title" : "Instagram DM",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "Confirmed handoff; destination app/Shortcut must be available. Opening does not prove network, installation, playback, or downstream completion."
+    ],
+    "successEvidence" : "OS accepted or refused the URL only; never claim the external task completed."
+  },
+  {
+    "argumentRules" : {
+      "body" : "Required. Literal text; no inferred output bindings, no silent truncation. Maximum 2000 characters.",
+      "contact" : "Required. Exact handle: 1–15 ASCII letters, digits, underscore. Maximum 2000 characters."
+    },
+    "capability" : {
+      "arguments" : [
+        {
+          "kind" : "handle",
+          "name" : "contact",
+          "required" : true
+        },
+        {
+          "kind" : "text",
+          "name" : "body",
+          "required" : true
+        }
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "always" : {
+
+        }
+      },
+      "effect" : {
+        "externalHandoff" : {
+
+        }
+      },
+      "executor" : {
+        "urlTemplate" : {
+          "_0" : "https://x.com/{contact}"
+        }
+      },
+      "id" : "x_dm",
+      "reviewSentence" : "Opens this X profile. The message text is copied to the clipboard; tap Message, paste and send.",
+      "title" : "X (Twitter) DM",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "Confirmed handoff; destination app/Shortcut must be available. Opening does not prove network, installation, playback, or downstream completion."
+    ],
+    "successEvidence" : "OS accepted or refused the URL only; never claim the external task completed."
+  },
+  {
+    "argumentRules" : {
+      "body" : "Required. Literal text; no inferred output bindings, no silent truncation. Maximum 2000 characters.",
+      "contact" : "Required. Unique accessible contact identifier and exact labelled destination; ambiguous/missing/stale contacts require selection. Maximum 2000 characters."
+    },
+    "capability" : {
+      "arguments" : [
+        {
+          "kind" : "contact",
+          "name" : "contact",
+          "required" : true
+        },
+        {
+          "kind" : "text",
+          "name" : "body",
+          "required" : true
+        }
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "always" : {
+
+        }
+      },
+      "effect" : {
+        "externalHandoff" : {
+
+        }
+      },
+      "executor" : {
+        "urlTemplate" : {
+          "_0" : "whatsapp://send?text={body}"
+        }
+      },
+      "id" : "whatsapp_send",
+      "methodKind" : "phone",
+      "reviewSentence" : "Opens WhatsApp with the text filled in. You pick the chat and tap Send.",
+      "title" : "WhatsApp message",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "Contacts access and a usable selected method; revalidate at confirmation.",
+      "Confirmed handoff; destination app/Shortcut must be available. Opening does not prove network, installation, playback, or downstream completion."
+    ],
+    "successEvidence" : "OS accepted or refused the URL only; never claim the external task completed."
+  },
+  {
+    "argumentRules" : {
+      "contact" : "Required. Unique accessible contact identifier and exact labelled destination; ambiguous/missing/stale contacts require selection. Maximum 2000 characters."
+    },
+    "capability" : {
+      "arguments" : [
+        {
+          "kind" : "contact",
+          "name" : "contact",
+          "required" : true
+        }
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "always" : {
+
+        }
+      },
+      "effect" : {
+        "personOrMoneyHandoff" : {
+
+        }
+      },
+      "executor" : {
+        "urlTemplate" : {
+          "_0" : "tel:{phone}"
+        }
+      },
+      "id" : "call",
+      "methodKind" : "phone",
+      "reviewSentence" : "Asks iOS to call this exact phone number. iOS shows its own Call prompt.",
+      "title" : "Phone call",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "Contacts access and a usable selected method; revalidate at confirmation.",
+      "Confirmed handoff; destination app/Shortcut must be available. Opening does not prove network, installation, playback, or downstream completion."
+    ],
+    "successEvidence" : "OS accepted or refused the URL only; never claim the external task completed."
+  },
+  {
+    "argumentRules" : {
+      "contact" : "Required. Unique accessible contact identifier and exact labelled destination; ambiguous/missing/stale contacts require selection. Maximum 2000 characters."
+    },
+    "capability" : {
+      "arguments" : [
+        {
+          "kind" : "contact",
+          "name" : "contact",
+          "required" : true
+        }
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "always" : {
+
+        }
+      },
+      "effect" : {
+        "personOrMoneyHandoff" : {
+
+        }
+      },
+      "executor" : {
+        "urlTemplate" : {
+          "_0" : "facetime:{phone}"
+        }
+      },
+      "id" : "facetime",
+      "methodKind" : "phone",
+      "reviewSentence" : "Asks iOS to FaceTime this exact phone number.",
+      "title" : "FaceTime",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "Contacts access and a usable selected method; revalidate at confirmation.",
+      "Confirmed handoff; destination app/Shortcut must be available. Opening does not prove network, installation, playback, or downstream completion."
+    ],
+    "successEvidence" : "OS accepted or refused the URL only; never claim the external task completed."
+  },
+  {
+    "argumentRules" : {
+      "place" : "Required. Literal text; no inferred output bindings, no silent truncation. Maximum 2000 characters."
+    },
+    "capability" : {
+      "arguments" : [
+        {
+          "kind" : "place",
+          "name" : "place",
+          "required" : true
+        }
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "always" : {
+
+        }
+      },
+      "effect" : {
+        "personOrMoneyHandoff" : {
+
+        }
+      },
+      "executor" : {
+        "urlTemplate" : {
+          "_0" : "uber://?action=setPickup&pickup=my_location&dropoff[formatted_address]={place}"
+        }
+      },
+      "id" : "uber_ride",
+      "reviewSentence" : "Opens Uber with this drop-off. You confirm the ride and the charge in Uber.",
+      "title" : "Request an Uber",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "Confirmed handoff; destination app/Shortcut must be available. Opening does not prove network, installation, playback, or downstream completion."
+    ],
+    "successEvidence" : "OS accepted or refused the URL only; never claim the external task completed."
+  },
+  {
+    "argumentRules" : {
+      "reply" : "Required. Literal text; no inferred output bindings, no silent truncation. Maximum 2000 characters.",
+      "trigger" : "Optional. Literal text; no inferred output bindings, no silent truncation. Maximum 2000 characters."
+    },
+    "capability" : {
+      "arguments" : [
+        {
+          "kind" : "text",
+          "name" : "trigger",
+          "required" : false
+        },
+        {
+          "kind" : "text",
+          "name" : "reply",
+          "required" : true
+        }
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "always" : {
+
+        }
+      },
+      "effect" : {
+        "localWrite" : {
+
+        }
+      },
+      "executor" : {
+        "autoreplyMemory" : {
+
+        }
+      },
+      "id" : "instagram_autoreply",
+      "reviewSentence" : "Saves this auto-reply rule to memory. It does not send a message.",
+      "title" : "Auto-reply rule (Instagram / any app)",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+
+    ],
+    "successEvidence" : "Semantic rule saved to local memory; no background Instagram automation or message sent."
+  },
+  {
+    "argumentRules" : {
+      "title" : "Required. Literal text; no inferred output bindings, no silent truncation. Maximum 2000 characters.",
+      "when" : "Required. Exact time; ambiguous AM/PM, unhandled zones, invalid/past instants require correction. Local writes bind a Date and device timezone once; Shortcuts receive the reviewed phrase. Maximum 2000 characters."
+    },
+    "capability" : {
+      "arguments" : [
+        {
+          "kind" : "text",
+          "name" : "title",
+          "required" : true
+        },
+        {
+          "kind" : "datetime",
+          "name" : "when",
+          "required" : true
+        }
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "modelMayAct" : {
+
+        }
+      },
+      "effect" : {
+        "localWrite" : {
+
+        }
+      },
+      "executor" : {
+        "reminderCreate" : {
+
+        }
+      },
+      "id" : "reminder_create",
+      "reviewSentence" : "Saves a reminder with this title and exact time in Reminders.",
+      "title" : "Create a reminder",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "EventKit write access; read access required to verify the saved identifier/title/time/attempt token."
+    ],
+    "successEvidence" : "Matching EventKit read-back; save without read-back stays unverified. Calendar events last one hour."
+  },
+  {
+    "argumentRules" : {
+      "title" : "Required. Literal text; no inferred output bindings, no silent truncation. Maximum 2000 characters.",
+      "when" : "Required. Exact time; ambiguous AM/PM, unhandled zones, invalid/past instants require correction. Local writes bind a Date and device timezone once; Shortcuts receive the reviewed phrase. Maximum 2000 characters."
+    },
+    "capability" : {
+      "arguments" : [
+        {
+          "kind" : "text",
+          "name" : "title",
+          "required" : true
+        },
+        {
+          "kind" : "datetime",
+          "name" : "when",
+          "required" : true
+        }
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "modelMayAct" : {
+
+        }
+      },
+      "effect" : {
+        "localWrite" : {
+
+        }
+      },
+      "executor" : {
+        "eventCreate" : {
+
+        }
+      },
+      "id" : "calendar_create",
+      "reviewSentence" : "Saves a one-hour event with this title and exact start time in Calendar, without invitations.",
+      "title" : "Add a calendar event",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "EventKit write access; read access required to verify the saved identifier/title/time/attempt token."
+    ],
+    "successEvidence" : "Matching EventKit read-back; save without read-back stays unverified. Calendar events last one hour."
+  },
+  {
+    "argumentRules" : {
+      "place" : "Required. Literal text; no inferred output bindings, no silent truncation. Maximum 2000 characters."
+    },
+    "capability" : {
+      "arguments" : [
+        {
+          "kind" : "place",
+          "name" : "place",
+          "required" : true
+        }
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "always" : {
+
+        }
+      },
+      "effect" : {
+        "externalHandoff" : {
+
+        }
+      },
+      "executor" : {
+        "urlTemplate" : {
+          "_0" : "maps://?daddr={place}"
+        }
+      },
+      "id" : "maps_directions",
+      "reviewSentence" : "Opens Maps directions to this place. This app does not see the route or navigation.",
+      "title" : "Directions in Maps",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "Confirmed handoff; destination app/Shortcut must be available. Opening does not prove network, installation, playback, or downstream completion."
+    ],
+    "successEvidence" : "OS accepted or refused the URL only; never claim the external task completed."
+  },
+  {
+    "argumentRules" : {
+      "query" : "Required. Literal text; no inferred output bindings, no silent truncation. Maximum 2000 characters."
+    },
+    "capability" : {
+      "arguments" : [
+        {
+          "kind" : "query",
+          "name" : "query",
+          "required" : true
+        }
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "always" : {
+
+        }
+      },
+      "effect" : {
+        "externalHandoff" : {
+
+        }
+      },
+      "executor" : {
+        "urlTemplate" : {
+          "_0" : "https://duckduckgo.com/?q={query}"
+        }
+      },
+      "id" : "web_search",
+      "reviewSentence" : "Opens this web search in the browser. This app does not see the result page.",
+      "title" : "Search the web",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "Confirmed handoff; destination app/Shortcut must be available. Opening does not prove network, installation, playback, or downstream completion."
+    ],
+    "successEvidence" : "OS accepted or refused the URL only; never claim the external task completed."
+  },
+  {
+    "argumentRules" : {
+      "url" : "Required. Absolute http(s) URL with host, no whitespace or credentials. Maximum 2000 characters."
+    },
+    "capability" : {
+      "arguments" : [
+        {
+          "kind" : "url",
+          "name" : "url",
+          "required" : true
+        }
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "always" : {
+
+        }
+      },
+      "effect" : {
+        "externalHandoff" : {
+
+        }
+      },
+      "executor" : {
+        "urlTemplate" : {
+          "_0" : "{url}"
+        }
+      },
+      "id" : "open_url",
+      "reviewSentence" : "Opens this http or https link in the browser. This app does not see the page.",
+      "title" : "Open a link",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "Confirmed handoff; destination app/Shortcut must be available. Opening does not prove network, installation, playback, or downstream completion."
+    ],
+    "successEvidence" : "OS accepted or refused the URL only; never claim the external task completed."
+  },
+  {
+    "argumentRules" : {
+      "app" : "Required. Literal text; no inferred output bindings, no silent truncation. Maximum 2000 characters."
+    },
+    "capability" : {
+      "arguments" : [
+        {
+          "kind" : "app",
+          "name" : "app",
+          "required" : true
+        }
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "always" : {
+
+        }
+      },
+      "effect" : {
+        "externalHandoff" : {
+
+        }
+      },
+      "executor" : {
+        "shortcut" : {
+          "input" : "{app}",
+          "name" : "PG Open App"
+        }
+      },
+      "id" : "open_app",
+      "reviewSentence" : "Asks Shortcuts to open this app. This app does not see whether the app opened.",
+      "title" : "Open an app",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "Confirmed handoff; destination app/Shortcut must be available. Opening does not prove network, installation, playback, or downstream completion."
+    ],
+    "successEvidence" : "OS accepted or refused the URL only; never claim the external task completed."
+  },
+  {
+    "argumentRules" : {
+      "name" : "Required. Literal text; no inferred output bindings, no silent truncation. Maximum 2000 characters.",
+      "text" : "Optional. Literal text; no inferred output bindings, no silent truncation. Maximum 2000 characters."
+    },
+    "capability" : {
+      "arguments" : [
+        {
+          "kind" : "text",
+          "name" : "name",
+          "required" : true
+        },
+        {
+          "kind" : "text",
+          "name" : "text",
+          "required" : false
+        }
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "always" : {
+
+        }
+      },
+      "effect" : {
+        "externalHandoff" : {
+
+        }
+      },
+      "executor" : {
+        "urlTemplate" : {
+          "_0" : "shortcuts://run-shortcut?name={name}&input=text&text={text}"
+        }
+      },
+      "id" : "run_shortcut",
+      "reviewSentence" : "Asks Shortcuts to run this Shortcut. This app does not see what the Shortcut does.",
+      "title" : "Run a Shortcut by name",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "Confirmed handoff; destination app/Shortcut must be available. Opening does not prove network, installation, playback, or downstream completion."
+    ],
+    "successEvidence" : "OS accepted or refused the URL only; never claim the external task completed."
+  },
+  {
+    "argumentRules" : {
+
+    },
+    "capability" : {
+      "arguments" : [
+
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "always" : {
+
+        }
+      },
+      "effect" : {
+        "externalHandoff" : {
+
+        }
+      },
+      "executor" : {
+        "urlTemplate" : {
+          "_0" : "shortcuts://create-shortcut"
+        }
+      },
+      "id" : "create_shortcut",
+      "reviewSentence" : "Opens the Shortcuts editor. Nothing is created until you build it there.",
+      "title" : "Create a new Shortcut",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "Confirmed handoff; destination app/Shortcut must be available. Opening does not prove network, installation, playback, or downstream completion."
+    ],
+    "successEvidence" : "OS accepted or refused the URL only; never claim the external task completed."
+  },
+  {
+    "argumentRules" : {
+      "query" : "Optional. Literal text; no inferred output bindings, no silent truncation. Maximum 2000 characters."
+    },
+    "capability" : {
+      "arguments" : [
+        {
+          "kind" : "query",
+          "name" : "query",
+          "required" : false
+        }
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "always" : {
+
+        }
+      },
+      "effect" : {
+        "externalHandoff" : {
+
+        }
+      },
+      "executor" : {
+        "urlTemplate" : {
+          "_0" : "music://"
+        }
+      },
+      "id" : "music_play",
+      "reviewSentence" : "Opens Apple Music. This app does not see what plays.",
+      "title" : "Play music",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "Confirmed handoff; destination app/Shortcut must be available. Opening does not prove network, installation, playback, or downstream completion."
+    ],
+    "successEvidence" : "OS accepted or refused the URL only; never claim the external task completed."
+  },
+  {
+    "argumentRules" : {
+      "query" : "Optional. Literal text; no inferred output bindings, no silent truncation. Maximum 2000 characters."
+    },
+    "capability" : {
+      "arguments" : [
+        {
+          "kind" : "query",
+          "name" : "query",
+          "required" : false
+        }
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "always" : {
+
+        }
+      },
+      "effect" : {
+        "externalHandoff" : {
+
+        }
+      },
+      "executor" : {
+        "urlTemplate" : {
+          "_0" : "spotify:search:{query}"
+        }
+      },
+      "id" : "spotify_play",
+      "reviewSentence" : "Opens a Spotify search. This app does not see what plays.",
+      "title" : "Spotify",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "Confirmed handoff; destination app/Shortcut must be available. Opening does not prove network, installation, playback, or downstream completion."
+    ],
+    "successEvidence" : "OS accepted or refused the URL only; never claim the external task completed."
+  },
+  {
+    "argumentRules" : {
+      "show" : "Required. Literal text; no inferred output bindings, no silent truncation. Maximum 2000 characters."
+    },
+    "capability" : {
+      "arguments" : [
+        {
+          "kind" : "query",
+          "name" : "show",
+          "required" : true
+        }
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "always" : {
+
+        }
+      },
+      "effect" : {
+        "externalHandoff" : {
+
+        }
+      },
+      "executor" : {
+        "shortcut" : {
+          "input" : "{show}",
+          "name" : "PG Play on Apple TV"
+        }
+      },
+      "id" : "appletv_play",
+      "reviewSentence" : "Asks Shortcuts to play this show. This app cannot confirm playback.",
+      "title" : "Apple TV: play a show",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "Confirmed handoff; destination app/Shortcut must be available. Opening does not prove network, installation, playback, or downstream completion."
+    ],
+    "successEvidence" : "OS accepted or refused the URL only; never claim the external task completed."
+  },
+  {
+    "argumentRules" : {
+      "label" : "Optional. Literal text; no inferred output bindings, no silent truncation. Maximum 2000 characters.",
+      "time" : "Required. Exact time; ambiguous AM/PM, unhandled zones, invalid/past instants require correction. Local writes bind a Date and device timezone once; Shortcuts receive the reviewed phrase. Maximum 2000 characters."
+    },
+    "capability" : {
+      "arguments" : [
+        {
+          "kind" : "datetime",
+          "name" : "time",
+          "required" : true
+        },
+        {
+          "kind" : "text",
+          "name" : "label",
+          "required" : false
+        }
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "always" : {
+
+        }
+      },
+      "effect" : {
+        "externalHandoff" : {
+
+        }
+      },
+      "executor" : {
+        "shortcut" : {
+          "input" : "{time}|{label}",
+          "name" : "PG Create Alarm"
+        }
+      },
+      "id" : "alarm_create",
+      "reviewSentence" : "Asks the Shortcut to create a Clock alarm. This app does not own or see that alarm.",
+      "title" : "Set an alarm",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "Confirmed handoff; destination app/Shortcut must be available. Opening does not prove network, installation, playback, or downstream completion."
+    ],
+    "successEvidence" : "OS accepted or refused the URL only; never claim the external task completed."
+  },
+  {
+    "argumentRules" : {
+      "duration" : "Required. Positive finite duration, explicit seconds/minutes/hours, total <=86400 seconds. Compound units allowed. Maximum 2000 characters."
+    },
+    "capability" : {
+      "arguments" : [
+        {
+          "kind" : "duration",
+          "name" : "duration",
+          "required" : true
+        }
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "always" : {
+
+        }
+      },
+      "effect" : {
+        "externalHandoff" : {
+
+        }
+      },
+      "executor" : {
+        "shortcut" : {
+          "input" : "{duration}",
+          "name" : "PG Start Timer"
+        }
+      },
+      "id" : "timer_start",
+      "reviewSentence" : "Asks the Shortcut to start a Clock timer. This app does not see the timer.",
+      "title" : "Start a timer",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "Confirmed handoff; destination app/Shortcut must be available. Opening does not prove network, installation, playback, or downstream completion."
+    ],
+    "successEvidence" : "OS accepted or refused the URL only; never claim the external task completed."
+  },
+  {
+    "argumentRules" : {
+      "text" : "Required. Literal text; no inferred output bindings, no silent truncation. Maximum 2000 characters."
+    },
+    "capability" : {
+      "arguments" : [
+        {
+          "kind" : "text",
+          "name" : "text",
+          "required" : true
+        }
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "always" : {
+
+        }
+      },
+      "effect" : {
+        "externalHandoff" : {
+
+        }
+      },
+      "executor" : {
+        "shortcut" : {
+          "input" : "{text}",
+          "name" : "PG Create Note"
+        }
+      },
+      "id" : "notes_create",
+      "reviewSentence" : "Asks Shortcuts to create this note. This app does not see the saved note.",
+      "title" : "Create a note",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "Confirmed handoff; destination app/Shortcut must be available. Opening does not prove network, installation, playback, or downstream completion."
+    ],
+    "successEvidence" : "OS accepted or refused the URL only; never claim the external task completed."
+  },
+  {
+    "argumentRules" : {
+
+    },
+    "capability" : {
+      "arguments" : [
+
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "always" : {
+
+        }
+      },
+      "effect" : {
+        "externalHandoff" : {
+
+        }
+      },
+      "executor" : {
+        "urlTemplate" : {
+          "_0" : "photos-redirect://"
+        }
+      },
+      "id" : "photos_open",
+      "reviewSentence" : "Opens Photos. This app does not see what you do there.",
+      "title" : "Open Photos",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "Confirmed handoff; destination app/Shortcut must be available. Opening does not prove network, installation, playback, or downstream completion."
+    ],
+    "successEvidence" : "OS accepted or refused the URL only; never claim the external task completed."
+  },
+  {
+    "argumentRules" : {
+
+    },
+    "capability" : {
+      "arguments" : [
+
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "always" : {
+
+        }
+      },
+      "effect" : {
+        "externalHandoff" : {
+
+        }
+      },
+      "executor" : {
+        "shortcut" : {
+          "input" : "",
+          "name" : "PG Toggle Flashlight"
+        }
+      },
+      "id" : "flashlight_toggle",
+      "reviewSentence" : "Asks Shortcuts to toggle the flashlight. This app does not see the result.",
+      "title" : "Toggle flashlight",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "Confirmed handoff; destination app/Shortcut must be available. Opening does not prove network, installation, playback, or downstream completion."
+    ],
+    "successEvidence" : "OS accepted or refused the URL only; never claim the external task completed."
+  },
+  {
+    "argumentRules" : {
+
+    },
+    "capability" : {
+      "arguments" : [
+
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "always" : {
+
+        }
+      },
+      "effect" : {
+        "externalHandoff" : {
+
+        }
+      },
+      "executor" : {
+        "shortcut" : {
+          "input" : "",
+          "name" : "PG Toggle Focus"
+        }
+      },
+      "id" : "focus_toggle",
+      "reviewSentence" : "Asks Shortcuts to toggle Focus. This app does not see the result.",
+      "title" : "Toggle Do Not Disturb",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "Confirmed handoff; destination app/Shortcut must be available. Opening does not prove network, installation, playback, or downstream completion."
+    ],
+    "successEvidence" : "OS accepted or refused the URL only; never claim the external task completed."
+  },
+  {
+    "argumentRules" : {
+
+    },
+    "capability" : {
+      "arguments" : [
+
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "always" : {
+
+        }
+      },
+      "effect" : {
+        "externalHandoff" : {
+
+        }
+      },
+      "executor" : {
+        "shortcut" : {
+          "input" : "",
+          "name" : "PG Toggle Low Power"
+        }
+      },
+      "id" : "low_power_toggle",
+      "reviewSentence" : "Asks Shortcuts to toggle Low Power Mode. This app does not see the result.",
+      "title" : "Toggle Low Power Mode",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "Confirmed handoff; destination app/Shortcut must be available. Opening does not prove network, installation, playback, or downstream completion."
+    ],
+    "successEvidence" : "OS accepted or refused the URL only; never claim the external task completed."
+  },
+  {
+    "argumentRules" : {
+      "place" : "Optional. Literal text; no inferred output bindings, no silent truncation. Maximum 2000 characters."
+    },
+    "capability" : {
+      "arguments" : [
+        {
+          "kind" : "place",
+          "name" : "place",
+          "required" : false
+        }
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "always" : {
+
+        }
+      },
+      "effect" : {
+        "externalHandoff" : {
+
+        }
+      },
+      "executor" : {
+        "shortcut" : {
+          "input" : "{place}",
+          "name" : "PG Weather"
+        }
+      },
+      "id" : "weather",
+      "reviewSentence" : "Asks the Shortcut for weather. This app does not see the source or the reading.",
+      "title" : "Weather",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "Confirmed handoff; destination app/Shortcut must be available. Opening does not prove network, installation, playback, or downstream completion."
+    ],
+    "successEvidence" : "OS accepted or refused the URL only; never claim the external task completed."
+  },
+  {
+    "argumentRules" : {
+      "n" : "Optional. Integer in 1...100. Email count describes the request, not verified access to an inbox. Maximum 2000 characters."
+    },
+    "capability" : {
+      "arguments" : [
+        {
+          "kind" : "number",
+          "name" : "n",
+          "required" : false
+        }
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "always" : {
+
+        }
+      },
+      "effect" : {
+        "localWrite" : {
+
+        }
+      },
+      "executor" : {
+        "emailDigest" : {
+
+        }
+      },
+      "id" : "email_digest",
+      "reviewSentence" : "Reads shared email text on this device. This does not open Mail.",
+      "title" : "Summarize my recent emails",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "Request-bound input or picker where required; privacy checks for any cloud request; preserve actual provider and truncation notice."
+    ],
+    "successEvidence" : "Read result with provenance; no external effect. Calendar search is limited to the next 30 days."
+  },
+  {
+    "argumentRules" : {
+      "document" : "Optional. Literal text; no inferred output bindings, no silent truncation. Maximum 2000 characters."
+    },
+    "capability" : {
+      "arguments" : [
+        {
+          "kind" : "document",
+          "name" : "document",
+          "required" : false
+        }
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "modelMayAct" : {
+
+        }
+      },
+      "effect" : {
+        "localWrite" : {
+
+        }
+      },
+      "executor" : {
+        "documentAnalysis" : {
+
+        }
+      },
+      "id" : "analyze_document",
+      "reviewSentence" : "Reads the document you picked on this device.",
+      "title" : "Analyze a document",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "Request-bound input or picker where required; privacy checks for any cloud request; preserve actual provider and truncation notice."
+    ],
+    "successEvidence" : "Read result with provenance; no external effect. Calendar search is limited to the next 30 days."
+  },
+  {
+    "argumentRules" : {
+      "data" : "Optional. Literal text; no inferred output bindings, no silent truncation. Maximum 2000 characters."
+    },
+    "capability" : {
+      "arguments" : [
+        {
+          "kind" : "text",
+          "name" : "data",
+          "required" : false
+        }
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "modelMayAct" : {
+
+        }
+      },
+      "effect" : {
+        "localWrite" : {
+
+        }
+      },
+      "executor" : {
+        "htmlVisualization" : {
+
+        }
+      },
+      "id" : "html_viz",
+      "reviewSentence" : "Draws a chart on this device. Nothing is sent to another app.",
+      "title" : "Make a chart / HTML visualization",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "Request-bound input or picker where required; privacy checks for any cloud request; preserve actual provider and truncation notice."
+    ],
+    "successEvidence" : "Read result with provenance; no external effect. Calendar search is limited to the next 30 days."
+  },
+  {
+    "argumentRules" : {
+      "target_language" : "Required. Literal text; no inferred output bindings, no silent truncation. Maximum 2000 characters.",
+      "text" : "Required. Literal text; no inferred output bindings, no silent truncation. Maximum 2000 characters."
+    },
+    "capability" : {
+      "arguments" : [
+        {
+          "kind" : "text",
+          "name" : "text",
+          "required" : true
+        },
+        {
+          "kind" : "text",
+          "name" : "target_language",
+          "required" : true
+        }
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "modelMayAct" : {
+
+        }
+      },
+      "effect" : {
+        "localWrite" : {
+
+        }
+      },
+      "executor" : {
+        "cloudReason" : {
+
+        }
+      },
+      "id" : "translate",
+      "reviewSentence" : "Translates this text into the chosen language. Long text may use the cloud after privacy checks.",
+      "title" : "Translate a phrase",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "Request-bound input or picker where required; privacy checks for any cloud request; preserve actual provider and truncation notice."
+    ],
+    "successEvidence" : "Read result with provenance; no external effect. Calendar search is limited to the next 30 days."
+  },
+  {
+    "argumentRules" : {
+      "text" : "Optional. Literal text; no inferred output bindings, no silent truncation. Maximum 2000 characters."
+    },
+    "capability" : {
+      "arguments" : [
+        {
+          "kind" : "text",
+          "name" : "text",
+          "required" : false
+        }
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "modelMayAct" : {
+
+        }
+      },
+      "effect" : {
+        "localWrite" : {
+
+        }
+      },
+      "executor" : {
+        "cloudReason" : {
+
+        }
+      },
+      "id" : "summarize_text",
+      "reviewSentence" : "Summarizes this text. A long local request may use the cloud only as today's read path.",
+      "title" : "Summarize shared text",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "Request-bound input or picker where required; privacy checks for any cloud request; preserve actual provider and truncation notice."
+    ],
+    "successEvidence" : "Read result with provenance; no external effect. Calendar search is limited to the next 30 days."
+  },
+  {
+    "argumentRules" : {
+
+    },
+    "capability" : {
+      "arguments" : [
+
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "modelMayAct" : {
+
+        }
+      },
+      "effect" : {
+        "localWrite" : {
+
+        }
+      },
+      "executor" : {
+        "deviceStatus" : {
+
+        }
+      },
+      "id" : "device_status",
+      "reviewSentence" : "Reads battery and storage on this device.",
+      "title" : "Battery & storage",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "Request-bound input or picker where required; privacy checks for any cloud request; preserve actual provider and truncation notice."
+    ],
+    "successEvidence" : "Read result with provenance; no external effect. Calendar search is limited to the next 30 days."
+  },
+  {
+    "argumentRules" : {
+      "query" : "Optional. Literal text; no inferred output bindings, no silent truncation. Maximum 2000 characters."
+    },
+    "capability" : {
+      "arguments" : [
+        {
+          "kind" : "query",
+          "name" : "query",
+          "required" : false
+        }
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "modelMayAct" : {
+
+        }
+      },
+      "effect" : {
+        "localWrite" : {
+
+        }
+      },
+      "executor" : {
+        "calendarQuery" : {
+
+        }
+      },
+      "id" : "calendar_find",
+      "reviewSentence" : "Reads your calendar on this device.",
+      "title" : "Check my calendar",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "Request-bound input or picker where required; privacy checks for any cloud request; preserve actual provider and truncation notice."
+    ],
+    "successEvidence" : "Read result with provenance; no external effect. Calendar search is limited to the next 30 days."
+  },
+  {
+    "argumentRules" : {
+      "query" : "Optional. Literal text; no inferred output bindings, no silent truncation. Maximum 2000 characters."
+    },
+    "capability" : {
+      "arguments" : [
+        {
+          "kind" : "query",
+          "name" : "query",
+          "required" : false
+        }
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "modelMayAct" : {
+
+        }
+      },
+      "effect" : {
+        "localWrite" : {
+
+        }
+      },
+      "executor" : {
+        "memoryRecall" : {
+
+        }
+      },
+      "id" : "memory_recall",
+      "reviewSentence" : "Reads saved memories on this device.",
+      "title" : "Recall something I told you",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "Request-bound input or picker where required; privacy checks for any cloud request; preserve actual provider and truncation notice."
+    ],
+    "successEvidence" : "Read result with provenance; no external effect. Calendar search is limited to the next 30 days."
+  },
+  {
+    "argumentRules" : {
+      "contact" : "Required. Literal text; no inferred output bindings, no silent truncation. Maximum 2000 characters."
+    },
+    "capability" : {
+      "arguments" : [
+        {
+          "kind" : "text",
+          "name" : "contact",
+          "required" : true
+        }
+      ],
+      "availability" : {
+        "ready" : {
+
+        }
+      },
+      "confirmation" : {
+        "modelMayAct" : {
+
+        }
+      },
+      "effect" : {
+        "localWrite" : {
+
+        }
+      },
+      "executor" : {
+        "contactLookup" : {
+
+        }
+      },
+      "id" : "lookup_contact",
+      "reviewSentence" : "Reads accessible contact matches; ambiguous matches need clarification.",
+      "title" : "Look up a contact",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+      "Request-bound input or picker where required; privacy checks for any cloud request; preserve actual provider and truncation notice."
+    ],
+    "successEvidence" : "Read result with provenance; no external effect. Calendar search is limited to the next 30 days."
+  },
+  {
+    "argumentRules" : {
+
+    },
+    "capability" : {
+      "arguments" : [
+
+      ],
+      "availability" : {
+        "notWired" : {
+
+        }
+      },
+      "confirmation" : {
+        "modelMayAct" : {
+
+        }
+      },
+      "effect" : {
+        "localWrite" : {
+
+        }
+      },
+      "executor" : {
+        "notWired" : {
+
+        }
+      },
+      "id" : "alarmkit_schedule",
+      "reviewSentence" : "This is this app's own alarm. It is not wired in this build; nothing will be scheduled.",
+      "title" : "App alarm (not wired)",
+      "version" : 2
+    },
+    "decisions" : [
+      "unsupported",
+      "clarify_missing",
+      "clarify_invalid",
+      "resolve_ambiguity",
+      "permission_unavailable",
+      "await_confirmation",
+      "cancel",
+      "execute_once",
+      "observed_result",
+      "failed",
+      "unknown_no_replay"
+    ],
+    "prerequisites" : [
+
+    ],
+    "successEvidence" : "Unavailable; no execution or substitution."
+  }
+]

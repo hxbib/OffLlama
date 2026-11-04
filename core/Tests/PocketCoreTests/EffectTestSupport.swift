@@ -85,7 +85,7 @@ final class FakePhoneEffects: PhoneEffects, @unchecked Sendable {
             }
         case .notWired:
             return EffectReport(boundary: .notStarted(.unsupportedOnThisOS))
-        case .emailDigest, .documentAnalysis, .htmlVisualization, .cloudReason, .deviceStatus, .calendarQuery, .memoryRecall:
+        case .emailDigest, .documentAnalysis, .htmlVisualization, .cloudReason, .deviceStatus, .calendarQuery, .memoryRecall, .contactLookup:
             return EffectReport(boundary: .notStarted(.bindingRejected))
         }
     }

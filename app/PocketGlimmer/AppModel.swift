@@ -4,6 +4,7 @@ import Observation
 import Contacts
 import UserNotifications
 import PocketCore
+import CryptoKit
 
 struct ChatItem: Identifiable, Equatable {
     enum Role { case user, assistant, system }
@@ -90,8 +91,26 @@ final class AppModel {
         let inDocs = (try? FileManager.default.contentsOfDirectory(at: docs, includingPropertiesForKeys: nil))?.filter { $0.pathExtension == "gguf" } ?? []
         let bundled = (Bundle.main.urls(forResourcesWithExtension: "gguf", subdirectory: nil) ?? [])
             + (Bundle.main.urls(forResourcesWithExtension: "gguf", subdirectory: "Models") ?? [])
-        let all = inDocs + bundled
-        return all.first { $0.lastPathComponent.lowercased().contains("reflex") } ?? all.first
+        for files in [bundled, inDocs] {
+            if let selected = files.first(where: { $0.lastPathComponent.lowercased().contains("reflex") }) ?? files.first { return selected }
+        }
+        return nil
+    }
+
+    nonisolated static func verifyShippingModel(_ url: URL) throws {
+        let expectedBytes = 807694080
+        let expectedSHA = "a5c60a8836aa73adeb847185aa30184cd9c33c522185f59fa9ac55a9d00782c2"
+        let attrs = try url.resourceValues(forKeys: [.fileSizeKey, .isRegularFileKey, .isSymbolicLinkKey])
+        guard attrs.isRegularFile == true, attrs.isSymbolicLink != true, attrs.fileSize == expectedBytes else {
+            throw NSError(domain: "PocketGlimmer.Model", code: 1, userInfo: [NSLocalizedDescriptionKey: "The model does not match the shipping calibration. Install the verified shipping model."])
+        }
+        let file = try FileHandle(forReadingFrom: url)
+        defer { try? file.close() }
+        var hash = SHA256()
+        while let chunk = try file.read(upToCount: 1_048_576), !chunk.isEmpty { hash.update(data: chunk) }
+        guard hash.finalize().map({ String(format: "%02x", $0) }).joined() == expectedSHA else {
+            throw NSError(domain: "PocketGlimmer.Model", code: 2, userInfo: [NSLocalizedDescriptionKey: "Model checksum mismatch. The model was not loaded with the shipping calibration."])
+        }
     }
 
     @ObservationIgnored private var bootTask: Task<Void, Never>?
@@ -116,6 +135,8 @@ final class AppModel {
             let mem = try MemoryStore(db: db)
             _ = try? mem.consolidateIfDue()      // daily reconciliation: dedupe, supersede, purge, budget
             guard let url = Self.findModel() else { modelState = "No model file. Add a .gguf (see README)."; return }
+            modelState = "Verifying model…"
+            try await Task.detached(priority: .userInitiated) { try Self.verifyShippingModel(url) }.value
             // XcodeGen adds Resources/Models as a group, so calibration.json is copied flat to the bundle root; the
             // subdirectory lookup covers a folder-reference setup.
             guard let calURL = Bundle.main.url(forResource: "calibration", withExtension: "json")
@@ -200,18 +221,14 @@ final class AppModel {
 
     @discardableResult
     func send(_ text: String, sharedText: String? = nil, source: String = "share") async -> String {
-        // Known Slice 1 gap: this guard runs before SharedInbox.put, so a busy request loses its shared text.
-        // Moving the put here would overwrite the active request's single-slot document. The parent owns the
-        // request-bound deferred-input repair; this integration does not reorder the inbox.
         guard !busy else { return "I'm working on another request. Please try again shortly." }
         guard let assistant else { return modelState }
         guard !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return "No request was provided." }
-        if let sharedText { SharedInbox.shared.put(sharedText, source: source) }
         chat.append(.init(role: .user, text: text))
         busy = true; defer { busy = false; refresh() }
         await loadScrubberNames()
         do {
-            let turn = try await assistant.handle(text)
+            let turn = try await assistant.handle(text, sharedText: sharedText)
             let rows = turn.decisions.map { DecisionRow($0, toolCallJSON: [.toolChoice, .skillPick].contains($0.type) ? turn.action?.json : nil) }
             for r in rows { decisions.insert(r, at: 0) }
             let reflexMs = turn.decisions.map(\.latencyMs).reduce(0, +)
@@ -221,7 +238,7 @@ final class AppModel {
             case .acted(let effect): chat.append(.init(role: .assistant, text: effect.summary, badge: onDevice, decisions: rows))
             case .clarify(let t): chat.append(.init(role: .assistant, text: t, badge: onDevice, decisions: rows))
             case .cloud(let t, let p): chat.append(.init(role: .assistant, text: t, badge: prettyProvider(p), decisions: rows, cloudPromptSent: turn.cloudPromptSent))
-            case .offlineFallback(let t): chat.append(.init(role: .assistant, text: t, badge: "offline · best effort on device", decisions: rows))
+            case .offlineFallback(let t): chat.append(.init(role: .assistant, text: t, badge: "local fallback · best effort", decisions: rows, cloudPromptSent: turn.cloudPromptSent))
             case .needsConfirmation(let card): chat.append(.init(role: .assistant, text: card.title, badge: onDevice, card: card, decisions: rows))
             }
             let reply = chat.last?.text ?? ""
@@ -345,9 +362,15 @@ enum CloudSettings {
     static func chain() -> CloudBrainChain {
         var b: [CloudBrain] = []
         let d = UserDefaults.standard
-        if let k = Keychain.get("meta_key") { b.append(CloudPresets.metaModelAPI(model: d.string(forKey: "meta_model") ?? "muse-spark-1.3", apiKey: k)) }
+        let metaModel = (d.string(forKey: "meta_model") ?? "muse-spark-1.3").trimmingCharacters(in: .whitespacesAndNewlines)
+        if let k = Keychain.get("meta_key"), !k.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty, !metaModel.isEmpty {
+            b.append(CloudPresets.metaModelAPI(model: metaModel, apiKey: k))
+        }
         if let k = Keychain.get("byok_key"), let u = d.string(forKey: "byok_url").flatMap(URL.init(string:)) {
-            b.append(CloudPresets.custom(name: "Custom", model: d.string(forKey: "byok_model") ?? "", baseURL: u, apiKey: k))
+            let model = (d.string(forKey: "byok_model") ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+            if OpenAICompatibleBrain.validConfiguration(model: model, baseURL: u, apiKey: k) {
+                b.append(CloudPresets.custom(name: "Custom", model: model, baseURL: u, apiKey: k))
+            }
         }
         return CloudBrainChain(b)
     }
