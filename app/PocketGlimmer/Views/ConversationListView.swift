@@ -28,7 +28,7 @@ struct ConversationListView: View {
                         }
                     }
                 } footer: {
-                    Text("Chats are stored only on this iPhone, protected while it is locked, and left out of backups. Clearing or deleting a chat does not delete saved memories. A waiting or unverified action is tracked separately and stays findable.\n\(model.historyStorageStatus)")
+                    Text("Chats are kept only on this iPhone. Clearing or deleting a chat does not delete saved memories. A waiting or unverified action is tracked separately and stays findable.\n\(model.historyStorageStatus)")
                 }
             }
             .navigationTitle("Chats").navigationBarTitleDisplayMode(.inline)

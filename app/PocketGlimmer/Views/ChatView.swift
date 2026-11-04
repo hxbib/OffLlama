@@ -76,7 +76,9 @@ struct ChatView: View {
                     .background(.quaternary.opacity(0.6), in: RoundedRectangle(cornerRadius: 20))
                 Button {
                     guard model.assistant != nil, !model.busy else { return }
-                    let t = input; input = ""
+                    let t = input
+                    if let why = model.sendRefusal(for: t) { model.showNotice(why); return }   // keep the typed text
+                    input = ""
                     Task { await model.send(t) }
                 } label: { Image(systemName: "arrow.up.circle.fill").font(.system(size: sendSize)).frame(minWidth: 44, minHeight: 44) }
                 .accessibilityLabel("Send")

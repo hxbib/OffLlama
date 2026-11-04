@@ -79,8 +79,13 @@ final class AppModel {
     /// Honest history status shown above the composer (save failed, chat full, history set aside).
     var historyNotice: String?
     private(set) var busyConversationID: ConversationID?
-    /// The route decision of the most recent turn, for the compact strip above the composer.
-    private(set) var lastRoute: DecisionRow?
+    /// The route decision of the latest answered turn in the ACTIVE chat, for the strip above the composer.
+    var lastRoute: DecisionRow? {
+        for item in chat.reversed() where item.role == .assistant {
+            if let r = item.decisions.first(where: { $0.type == DecisionType.route.rawValue }) { return r }
+        }
+        return nil
+    }
     @ObservationIgnored private let historyStore: ConversationStore
     @ObservationIgnored private var savingEnabled = true
     var chat: [ChatItem] { items(for: book.activeID) }
@@ -301,7 +306,13 @@ final class AppModel {
         persist()
     }
 
-    private func append(_ item: ChatItem, to cid: ConversationID) {
+    private func append(_ original: ChatItem, to cid: ConversationID) {
+        var item = original
+        let limit = ConversationLimits.standard.maxMessageCharacters
+        if item.text.count > limit {
+            item.text = String(item.text.prefix(limit - 60)) + "\n… (shortened to fit chat history)"
+            noteHistory("A long message was shortened to fit chat history.")
+        }
         let stored = StoredMessage(id: item.id, role: storedRole(item.role), text: item.text, badge: item.badge,
                                    attemptID: item.attemptID?.raw, pendingAction: item.isPendingAction,
                                    keptOnDevice: item.keptOnDevice, ephemeral: item.ephemeral)
@@ -402,21 +413,23 @@ final class AppModel {
         return "A built-in rule handled this as \(chart ? "a chart request" : "a message request"); the model's route choice was “\(DecisionPresentation.choice(.route, id: route.chosen.id))”."
     }
 
+    /// Why a message would be refused before any work starts, so the caller can keep the typed text.
+    func sendRefusal(for text: String) -> String? {
+        let limits = ConversationLimits.standard
+        if text.count > limits.maxMessageCharacters { return "That message is longer than \(limits.maxMessageCharacters) characters." }
+        if !book.hasRoomForTurn(in: book.activeID) { return ConversationError.chatFull(limit: limits.maxMessagesPerConversation).description }
+        return nil
+    }
+
+    func showNotice(_ text: String) { noteHistory(text) }
+
     @discardableResult
     func send(_ text: String, sharedText: String? = nil, source: String = "share") async -> String {
         guard !busy else { return "I'm working on another request. Please try again shortly." }
         guard let assistant else { return modelState }
         guard !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return "No request was provided." }
         let cid = book.activeID                       // in-flight work is bound to this chat
-        let limits = ConversationLimits.standard
-        guard text.count <= limits.maxMessageCharacters else {
-            let m = "That message is longer than \(limits.maxMessageCharacters) characters."
-            noteHistory(m); return m
-        }
-        guard book.hasRoomForTurn(in: cid) else {
-            let m = ConversationError.chatFull(limit: limits.maxMessagesPerConversation).description
-            noteHistory(m); return m
-        }
+        if let why = sendRefusal(for: text) { noteHistory(why); return why }
         let context = ConversationContext.render(book.conversation(cid)?.messages ?? [])
         let drafts = book.conversation(cid)?.drafts ?? []
         append(.init(role: .user, text: text), to: cid)
@@ -441,7 +454,6 @@ final class AppModel {
             book.setDrafts(kept, for: cid)
             let rows = turn.decisions.map { row($0, json: [.toolChoice, .skillPick].contains($0.type) ? turn.action?.json : nil) }
             for r in rows { decisions.insert(r, at: 0) }
-            lastRoute = rows.first { $0.type == DecisionType.route.rawValue } ?? rows.last ?? lastRoute
             let elapsed = clock.now - started
             let elapsedMs = Double(elapsed.components.seconds) * 1000 + Double(elapsed.components.attoseconds) / 1e15
             let classifierMs = turn.decisions.map(\.latencyMs).reduce(0, +)
@@ -480,7 +492,7 @@ final class AppModel {
                 return message
             }
             let message = "Error: \(error.localizedDescription)"
-            append(.init(role: .system, text: message), to: cid)
+            append(.init(role: .system, text: message, ephemeral: true), to: cid)
             return message
         }
     }
@@ -610,20 +622,26 @@ final class AppModel {
             var byAttempt: [UUID: UUID] = [:]
             for c in book.conversations { for m in c.messages { if let a = m.attemptID { byAttempt[a] = m.id } } }
             var seen = Set<UUID>()
+            var unplaced = 0
+            defer { if unplaced > 0 { noteHistory("\(unplaced) waiting or unverified action\(unplaced == 1 ? "" : "s") could not be shown because every chat is full. Delete a chat and reopen the app. Nothing was run or cancelled.") } }
             for card in recovery.showAgain {
                 seen.insert(card.attemptID.raw)
                 if let mid = byAttempt[card.attemptID.raw] {
                     mutate(mid) { $0.card = card; $0.text = card.title; $0.badge = ActionStatusLabel.awaitingReview; $0.attemptID = card.attemptID }
+                } else if let target = book.chatWithRoom() {
+                    append(.init(role: .assistant, text: card.title, badge: ActionStatusLabel.awaitingReview, card: card, attemptID: card.attemptID), to: target)
                 } else {
-                    append(.init(role: .assistant, text: card.title, badge: ActionStatusLabel.awaitingReview, card: card, attemptID: card.attemptID), to: book.activeID)
+                    unplaced += 1
                 }
             }
             for open in recovery.unresolved {
                 seen.insert(open.attemptID.raw)
                 if let mid = byAttempt[open.attemptID.raw] {
                     mutate(mid) { $0.card = nil; $0.text = open.summary; $0.badge = ActionStatusLabel.unverified; $0.attemptID = open.attemptID }
+                } else if let target = book.chatWithRoom() {
+                    append(.init(role: .system, text: open.summary, badge: ActionStatusLabel.unverified, attemptID: open.attemptID, ephemeral: true), to: target)
                 } else {
-                    append(.init(role: .system, text: open.summary, badge: ActionStatusLabel.unverified, attemptID: open.attemptID, ephemeral: true), to: book.activeID)
+                    unplaced += 1
                 }
             }
             for c in book.conversations {
@@ -635,7 +653,8 @@ final class AppModel {
                 }
             }
         } catch {
-            append(.init(role: .system, text: "Couldn't read saved actions: \(error)"), to: book.activeID)
+            if let target = book.chatWithRoom() { append(.init(role: .system, text: "Couldn't read saved actions: \(error)", ephemeral: true), to: target) }
+            noteHistory("Saved actions could not be read.")
         }
         persist()
     }

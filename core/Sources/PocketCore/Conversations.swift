@@ -166,6 +166,14 @@ public struct ConversationBook: Sendable, Codable, Equatable {
         }
     }
 
+    /// A chat that can take one more message: the active chat if it has room, else a fresh chat, else any chat with
+    /// room. nil means every chat is full and no new chat is allowed.
+    public mutating func chatWithRoom(limits: ConversationLimits = .standard) -> ConversationID? {
+        if let c = conversation(activeID), c.messages.count < limits.maxMessagesPerConversation { return c.id }
+        if let id = try? newConversation(limits: limits) { return id }
+        return conversations.first { $0.messages.count < limits.maxMessagesPerConversation }?.id
+    }
+
     /// Room for a user turn plus its reply and the few system lines a turn can add.
     public func hasRoomForTurn(in id: ConversationID, limits: ConversationLimits = .standard) -> Bool {
         guard let c = conversation(id) else { return false }
@@ -228,6 +236,12 @@ public enum ConversationContext {
     public static let maxCharacters = 1_200
     public static let maxCharactersPerMessage = 300
 
+    /// Stored text is untrusted. The on-device tokenizer parses special tokens, so any `<|...|>` marker is broken up
+    /// before the text can reach a prompt; otherwise a saved reply could forge a system or assistant header.
+    public static func neutralize(_ text: String) -> String {
+        text.replacingOccurrences(of: "<|", with: "< |").replacingOccurrences(of: "|>", with: "| >")
+    }
+
     public static func render(_ messages: [StoredMessage]) -> String {
         let usable = messages.filter {
             ($0.role == .user || $0.role == .assistant) && $0.attemptID == nil && !$0.pendingAction && !$0.ephemeral
@@ -236,7 +250,7 @@ public enum ConversationContext {
         var lines: [String] = []
         var used = 0
         for m in usable.suffix(maxTurns).reversed() {
-            var t = m.text.split(whereSeparator: { $0.isNewline }).joined(separator: " ")
+            var t = neutralize(m.text).split(whereSeparator: { $0.isNewline }).joined(separator: " ")
             if t.count > maxCharactersPerMessage { t = String(t.prefix(maxCharactersPerMessage - 1)) + "…" }
             let line = (m.role == .user ? "User: " : "Assistant: ") + t
             if used + line.count + 1 > maxCharacters { break }
@@ -284,6 +298,7 @@ public enum LedgerRequestIndex {
 /// replace keeps all chats and the active selection consistent, and the 4 MiB bound keeps the write small.
 public final class ConversationStore: @unchecked Sendable {
     public static let filename = "history-v1.json"
+    /// Prefix of the renamed file. Each set-aside gets its own suffix, so a second bad file never replaces the first.
     public static let corruptFilename = "history-v1.unreadable"
     public let directory: URL
     public let limits: ConversationLimits
@@ -318,8 +333,7 @@ public final class ConversationStore: @unchecked Sendable {
     }
 
     private func setAside() throws -> LoadResult {
-        let aside = directory.appendingPathComponent(Self.corruptFilename)
-        try? FileManager.default.removeItem(at: aside)
+        let aside = directory.appendingPathComponent(Self.corruptFilename + "-" + UUID().uuidString)
         do { try FileManager.default.moveItem(at: fileURL, to: aside); try Self.protect(aside) }
         catch { throw ConversationError.storage("unreadable history could not be set aside") }
         return .unreadable
