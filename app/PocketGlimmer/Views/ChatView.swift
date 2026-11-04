@@ -77,9 +77,11 @@ struct ChatView: View {
                 Button {
                     guard model.assistant != nil, !model.busy else { return }
                     let t = input
-                    if let why = model.sendRefusal(for: t) { model.showNotice(why); return }   // keep the typed text
-                    input = ""
-                    Task { await model.send(t) }
+                    Task {
+                        await model.send(t, onAccepted: {
+                            if input == t { input = "" }
+                        })
+                    }
                 } label: { Image(systemName: "arrow.up.circle.fill").font(.system(size: sendSize)).frame(minWidth: 44, minHeight: 44) }
                 .accessibilityLabel("Send")
                 .disabled(input.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || model.busy || model.assistant == nil)

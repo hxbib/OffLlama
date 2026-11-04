@@ -413,24 +413,25 @@ final class AppModel {
         return "A built-in rule handled this as \(chart ? "a chart request" : "a message request"); the model's route choice was “\(DecisionPresentation.choice(.route, id: route.chosen.id))”."
     }
 
-    /// Why a message would be refused before any work starts, so the caller can keep the typed text.
-    func sendRefusal(for text: String) -> String? {
-        book.refusal(forUserText: text, in: book.activeID)?.description
-    }
-
-    func showNotice(_ text: String) { noteHistory(text) }
-
     @discardableResult
-    func send(_ text: String, sharedText: String? = nil, source: String = "share") async -> String {
-        guard !busy else { return "I'm working on another request. Please try again shortly." }
-        guard let assistant else { return modelState }
-        guard !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return "No request was provided." }
+    func send(_ text: String, sharedText: String? = nil, source: String = "share",
+              onAccepted: (@MainActor () -> Void)? = nil) async -> String {
+        guard !busy else {
+            let reason = "I'm working on another request. Please try again shortly."
+            noteHistory(reason); return reason
+        }
+        guard let assistant else { noteHistory(modelState); return modelState }
+        guard !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            let reason = "No request was provided."
+            noteHistory(reason); return reason
+        }
         let cid = book.activeID                       // in-flight work is bound to this chat
-        if let why = sendRefusal(for: text) { noteHistory(why); return why }
+        if let why = book.refusal(forUserText: text, in: cid)?.description { noteHistory(why); return why }
         let context = ConversationContext.render(book.conversation(cid)?.messages ?? [])
         let drafts = book.conversation(cid)?.drafts ?? []
         append(.init(role: .user, text: text), to: cid)
         busy = true; busyConversationID = cid
+        onAccepted?()
         defer { busy = false; busyConversationID = nil; refresh(); persist() }
         persist()
         await loadScrubberNames()

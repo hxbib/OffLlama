@@ -137,8 +137,7 @@ public final class Assistant: @unchecked Sendable {
         let facts = try await memoryContext(utterance)
         let mem = MemoryDisclosure.local.render(facts)
         let online = isOnline()
-        // Route sees exactly the gold/calibration row shape. Retrieved memories lowered shipped route confidence in every
-        // measured case (docs/verification/LOCAL_MODEL_RELIABILITY_2026-11-04.md); pickers still get them for aliases.
+        // Keep route input in its calibration shape. Pickers still need memories for relationship context.
         let routeCtx = "Network: \(online ? "online" : "offline")\nUser: \(utterance)"
         let ctx = mem + routeCtx
 

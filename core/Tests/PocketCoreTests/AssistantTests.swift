@@ -39,13 +39,13 @@ final class AssistantTests: XCTestCase {
         let e = ScriptedEngine()
         e.script(whenPromptContains: "long-term memory", logits: ["A": -3, "B": -3, "C": 3])
         e.script(whenPromptContains: "How should", logits: ["A": 5, "B": -3, "C": -3, "D": -3])
-        e.generated = "Try a peanut-free stir fry."
+        e.generated = "Her name is Linda."
         let (a, _, tel) = try make(e)
         for f in RuleFactExtractor.extract("My mom's name is Linda") { try await a.memory.upsert(f) }
-        let t = try await a.handle("What should I cook for my mom Linda tonight?")
+        let t = try await a.handle("What is my mom's name?")
         guard case .local = t.reply else { return XCTFail("\(t.reply)") }
         let route = try XCTUnwrap(try tel.all().first { $0.decisionType == .route })
-        XCTAssertEqual(route.context, "Network: offline\nUser: What should I cook for my mom Linda tonight?")
+        XCTAssertEqual(route.context, "Network: offline\nUser: What is my mom's name?")
         XCTAssertTrue(e.generatePrompts.last!.contains("Linda"), "local answer keeps the user's memories")
     }
 
