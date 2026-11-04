@@ -30,6 +30,13 @@ licensed training-target sources. Runtime and teacher models remain Meta models.
 
 ## Latest action scope
 
+The user explicitly selected **OffLlama** as the next build's visible app name.
+Use `design/assets/offllama-icon-source.png` and `design/README.md`. Keep bundle/data
+identity stable. Apple native dictation and Vocal Shortcut setup are authorized input
+improvements; they do not replace the Meta reasoning models. Secret API-key entry
+and demo-safe diagnostics are explicit requirements. Push checked progress regularly;
+public-release secret scanning remains a required submission gate.
+
 The user requires reliable multi-step phone actions in addition to single actions, inline HTML,
 keyboard dismissal, UI polish and a new original icon. The bounded implementation and proof
 requirements are in `docs/research/ACTION_PROGRAM_2026-11-04.md`. Coding delegates may now
