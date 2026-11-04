@@ -307,3 +307,5 @@ compare a separate request store with a journal-integrated admission boundary.
 Their output paths are `/tmp/pg-input-design-20261104/a/design.md` and
 `/tmp/pg-input-design-20261104/b/design.md`. No input-store implementation has
 started. Dispatch records are in `docs/verification/run65_dispatches.json`.
+
+A fresh Terra high Mac worker now owns build continuation from pushed15ab389, with the correctly registered Mac project `/Users/habib/src/pocket-glimmer`. It will retest the wrapper, identify concrete regenerable disk consumers, resolve available tool prerequisites, and compile when space permits. OpenCode River04 DeepSeek V4.1 Flash1017 max independently reviews the packaging fix and run65 evidence. Both task IDs are recorded in `docs/verification/run65_dispatches.json`. Their results are pending.
