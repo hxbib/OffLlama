@@ -145,18 +145,26 @@ final class AppModel {
                     NSLocalizedDescriptionKey: "The bundled calibration file is missing. Reinstall the app with its model resources."])
             }
             let profile = try CalibrationProfile.load(from: calURL)
-            let dynamicPriorsPresent = (2...8).allSatisfy { n in
-                ["contactPick", "eventPick", "skillPick"].allSatisfy { profile.prior["\($0)#\(n)"]?.count == n }
+            var failures: [String] = []
+            if profile.defaultTau != 0.90 { failures.append("defaultTau=\(String(format: "%.17g", profile.defaultTau)) bits=\(String(profile.defaultTau.bitPattern, radix: 16))") }
+            if profile.promptStyle != .fewShot { failures.append("promptStyle=\(profile.promptStyle)") }
+            for (key, value) in profile.tau where value != 0.90 { failures.append("tau[\(key)]=\(value)") }
+            for (key, values) in profile.prior where !values.allSatisfy(\.isFinite) { failures.append("nonfinite prior[\(key)]") }
+            for set in OptionSets.staticSets {
+                let key = DecisionPrompt.priorKey(set)
+                if profile.prior[key]?.count != set.activeLetters.count { failures.append("prior[\(key)] count=\(profile.prior[key]?.count.description ?? "missing") expected=\(set.activeLetters.count)") }
             }
-            guard profile.defaultTau == 0.90,
-                  profile.promptStyle == .fewShot,
-                  profile.tau.values.allSatisfy({ $0 == 0.90 }),
-                  profile.prior.values.allSatisfy({ $0.allSatisfy(\.isFinite) }),
-                  OptionSets.staticSets.allSatisfy({ profile.prior[DecisionPrompt.priorKey($0)]?.count == $0.activeLetters.count }),
-                  dynamicPriorsPresent,
-                  profile.temperature.values.allSatisfy({ $0 == 1 }) else {
+            for n in 2...8 {
+                for type in ["contactPick", "eventPick", "skillPick"] {
+                    let key = "\(type)#\(n)"
+                    if profile.prior[key]?.count != n { failures.append("prior[\(key)] count=\(profile.prior[key]?.count.description ?? "missing") expected=\(n)") }
+                }
+            }
+            for (key, value) in profile.temperature where value != 1 { failures.append("temperature[\(key)]=\(value)") }
+            if !failures.isEmpty {
+                let digest = SHA256.hash(data: try Data(contentsOf: calURL)).map { String(format: "%02x", $0) }.joined()
                 throw NSError(domain: "PocketGlimmer.Calibration", code: 2, userInfo: [
-                    NSLocalizedDescriptionKey: "The bundled calibration file does not match the shipping settings. Reinstall the app with its model resources."])
+                    NSLocalizedDescriptionKey: "Calibration mismatch (\(calURL.lastPathComponent), SHA256 \(digest)): \(failures.sorted().joined(separator: "; "))"])
             }
             let engine = try await Task.detached(priority: .userInitiated) { try LlamaCppEngine(modelURL: url) }.value
             let reflex = Reflex(engine: engine, profile: profile, telemetry: tel, source: "device")
