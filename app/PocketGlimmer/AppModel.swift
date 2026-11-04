@@ -11,7 +11,7 @@ struct ChatItem: Identifiable, Equatable {
     let role: Role
     var text: String
     var badge: String? = nil        // "on device · 42 ms" / "Meta Model API · Muse Spark 1.3 (Standard mode)"
-    var pending: PlannedAction? = nil
+    var card: DraftCard? = nil      // projection of a durable ledger row, never the source of truth
     var decisions: [DecisionRow] = []
     var cloudPromptSent: String? = nil   // masked text that actually left the phone
     var keptOnDevice = false             // cloud was available but withheld for sensitivity
@@ -139,9 +139,13 @@ final class AppModel {
             }
             let engine = try await Task.detached(priority: .userInitiated) { try LlamaCppEngine(modelURL: url) }.value
             let reflex = Reflex(engine: engine, profile: profile, telemetry: tel, source: "device")
-            let a = Assistant(reflex: reflex, memory: mem, actions: actions, cloud: CloudSettings.chain(), isOnline: { OnlineFlag.shared.value })
+            let ledger = try EffectLedger(db: db)
+            let effects = PocketEffects(events: actions.events, contacts: actions.contacts, memory: mem)
+            let a = Assistant(reflex: reflex, memory: mem, actions: actions, ledger: ledger, effects: effects,
+                              cloud: CloudSettings.chain(), isOnline: { OnlineFlag.shared.value })
             SkillSetup.install(on: a, memory: mem)   // open-world phone actions (docs/SKILLS.md); idempotent
             assistant = a; telemetry = tel; memory = mem
+            restoreEffectCards(a)
             await loadScrubberNames()
             let pe = ProactiveEngine(memory: mem, reflex: reflex)
             let acts = actions
@@ -196,6 +200,9 @@ final class AppModel {
 
     @discardableResult
     func send(_ text: String, sharedText: String? = nil, source: String = "share") async -> String {
+        // Known Slice 1 gap: this guard runs before SharedInbox.put, so a busy request loses its shared text.
+        // Moving the put here would overwrite the active request's single-slot document. The parent owns the
+        // request-bound deferred-input repair; this integration does not reorder the inbox.
         guard !busy else { return "I'm working on another request. Please try again shortly." }
         guard let assistant else { return modelState }
         guard !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return "No request was provided." }
@@ -211,11 +218,11 @@ final class AppModel {
             let onDevice = String(format: "on device · %.0f ms", reflexMs)
             switch turn.reply {
             case .local(let t): chat.append(.init(role: .assistant, text: t, badge: onDevice, decisions: rows, keptOnDevice: turn.cloudWithheldForSensitivity))
-            case .acted(let t): chat.append(.init(role: .assistant, text: t, badge: onDevice, decisions: rows))
+            case .acted(let effect): chat.append(.init(role: .assistant, text: effect.summary, badge: onDevice, decisions: rows))
             case .clarify(let t): chat.append(.init(role: .assistant, text: t, badge: onDevice, decisions: rows))
             case .cloud(let t, let p): chat.append(.init(role: .assistant, text: t, badge: prettyProvider(p), decisions: rows, cloudPromptSent: turn.cloudPromptSent))
             case .offlineFallback(let t): chat.append(.init(role: .assistant, text: t, badge: "offline · best effort on device", decisions: rows))
-            case .needsConfirmation(let a, let prompt): chat.append(.init(role: .assistant, text: prompt, badge: onDevice, pending: a, decisions: rows))
+            case .needsConfirmation(let card): chat.append(.init(role: .assistant, text: card.title, badge: onDevice, card: card, decisions: rows))
             }
             let reply = chat.last?.text ?? ""
             for c in turn.corrections { chat.append(.init(role: .system, text: "Corrected: \(c.old.value) → \(c.new.value)")) }
@@ -230,13 +237,49 @@ final class AppModel {
         }
     }
 
-    func confirm(_ item: ChatItem) async {
+    func confirm(_ item: ChatItem, edits: [DraftEdit] = []) async {
         guard !busy, let assistant,
               let i = chat.firstIndex(where: { $0.id == item.id }),
-              let a = chat[i].pending else { return }
-        chat[i].pending = nil
+              let card = chat[i].card else { return }
         busy = true; defer { busy = false; refresh() }
-        if case .acted(let t) = (try? await assistant.confirm(a)) ?? .acted("Failed") { chat.append(.init(role: .assistant, text: t)) }
+        do {
+            let result = try await assistant.confirmEffect(card.attemptID, edits: edits, expectedRevision: card.revision)
+            switch result {
+            case .staged(let updated):
+                chat[i].card = updated
+                chat[i].text = updated.title
+                if !updated.canConfirm && !updated.notice.isEmpty {
+                    chat.append(.init(role: .system, text: updated.notice))
+                }
+            case .finished(let effect), .ignoredTerminal(let effect):
+                chat[i].card = nil
+                chat[i].text = effect.summary
+            case .read(let read):
+                chat[i].card = nil
+                chat[i].text = read.text
+                chat[i].badge = read.provider.map { prettyProvider($0) } ?? "on device"
+                chat[i].decisions = read.decisions.map { DecisionRow($0) }
+                chat[i].cloudPromptSent = read.cloudPromptSent
+                chat[i].keptOnDevice = read.withheldForSensitivity
+            }
+        } catch {
+            chat.append(.init(role: .system, text: "Couldn't complete that card: \(error). Nothing was changed."))
+        }
+    }
+
+    /// Persists an edit (contact, method or exact time) without claiming. Body text is passed at Confirm.
+    func edit(_ item: ChatItem, edits: [DraftEdit]) async {
+        guard !busy, let assistant,
+              let i = chat.firstIndex(where: { $0.id == item.id }),
+              let card = chat[i].card else { return }
+        busy = true; defer { busy = false }
+        do {
+            let updated = try await assistant.editEffect(card.attemptID, edits: edits, expectedRevision: card.revision)
+            chat[i].card = updated
+            chat[i].text = updated.title
+        } catch {
+            chat.append(.init(role: .system, text: "Couldn't update that card: \(error). Nothing was changed."))
+        }
     }
 
     /// Entry point for Shortcuts automations (App Intent). Returns the nudges it posted.
@@ -253,10 +296,30 @@ final class AppModel {
         return nudges
     }
 
-    func cancel(_ item: ChatItem) {
-        guard let i = chat.firstIndex(where: { $0.id == item.id }), chat[i].pending != nil else { return }
-        chat[i].pending = nil
-        chat.append(.init(role: .system, text: "Cancelled."))
+    func cancel(_ item: ChatItem) async {
+        guard !busy, let assistant, let i = chat.firstIndex(where: { $0.id == item.id }), let card = chat[i].card else { return }
+        do {
+            let effect = try assistant.cancelEffect(card.attemptID)
+            chat[i].card = nil
+            chat[i].text = effect.summary
+        } catch {
+            chat.append(.init(role: .system, text: "Couldn't cancel that card: \(error). The card was kept."))
+        }
+    }
+
+    /// Read-only launch recovery: restore durable cards and warn about claimed rows that have no receipt.
+    private func restoreEffectCards(_ assistant: Assistant) {
+        do {
+            let recovery = try assistant.recoverEffects()
+            for card in recovery.showAgain {
+                chat.append(.init(role: .assistant, text: card.title, card: card))
+            }
+            for open in recovery.unresolved {
+                chat.append(.init(role: .system, text: open.summary))
+            }
+        } catch {
+            chat.append(.init(role: .system, text: "Couldn't read saved actions: \(error)"))
+        }
     }
 
     func forget(_ f: MemoryFact) { try? memory?.forget(id: f.id); refresh() }

@@ -1,4 +1,5 @@
 import SwiftUI
+import PocketCore
 
 struct ChatView: View {
     @Environment(AppModel.self) private var model
@@ -75,12 +76,10 @@ struct Bubble: View {
             }
         case .assistant:
             HStack { VStack(alignment: .leading, spacing: 6) {
-                    Text(item.text).padding(12).background(.quaternary.opacity(0.6), in: RoundedRectangle(cornerRadius: 18))
-                    if let p = item.pending {
-                        HStack {
-                            Button("Confirm") { Task { await model.confirm(item) } }.buttonStyle(.borderedProminent)
-                            Button("Cancel", role: .cancel) { model.cancel(item) }.buttonStyle(.bordered)
-                        }.controlSize(.small).accessibilityHint("Runs \(p.tool)")
+                    if let card = item.card {
+                        DraftCardView(item: item, card: card)
+                    } else {
+                        Text(item.text).padding(12).background(.quaternary.opacity(0.6), in: RoundedRectangle(cornerRadius: 18))
                     }
                     if item.keptOnDevice {
                         Label("Kept on device · nothing sent", systemImage: "lock.fill")
@@ -148,6 +147,140 @@ struct PrivacySheet: View {
             search = r.upperBound
         }
         return a
+    }
+}
+
+/// An editable projection of one durable ledger card. Text is gathered at Confirm; contact/method/time edits
+/// are persisted through the revision-guarded edit path as soon as they are chosen.
+struct DraftCardView: View {
+    @Environment(AppModel.self) private var model
+    let item: ChatItem
+    let card: DraftCard
+    @State private var textEdits: [String: String] = [:]
+    @State private var instantEdits: [String: Date] = [:]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(card.title).font(.headline)
+            Text(card.reviewSentence).font(.caption).foregroundStyle(.secondary)
+            ForEach(card.fields, id: \.name) { field in
+                fieldView(field)
+            }
+            if !card.notice.isEmpty {
+                Text(card.notice).font(.caption).foregroundStyle(.orange)
+            }
+            if let hint = card.duplicateHint {
+                Text(hint.note).font(.caption2).foregroundStyle(.secondary)
+            }
+            HStack {
+                Button("Confirm") { confirm() }.buttonStyle(.borderedProminent)
+                    .disabled(!card.canConfirm || model.busy)
+                Button("Cancel", role: .cancel) { Task { await model.cancel(item) } }
+                    .buttonStyle(.bordered).disabled(model.busy)
+            }.controlSize(.small)
+            .accessibilityElement(children: .contain)
+            .accessibilityHint(draftHint)
+        }
+        .padding(12)
+        .background(.background.secondary, in: RoundedRectangle(cornerRadius: 16))
+    }
+
+    @ViewBuilder private func fieldView(_ field: DraftField) -> some View {
+        switch field.kind {
+        case .contact:
+            VStack(alignment: .leading, spacing: 4) {
+                Text(field.name.replacingOccurrences(of: "_", with: " ").capitalized).font(.caption2).foregroundStyle(.secondary)
+                if !field.choices.isEmpty {
+                    Menu {
+                        ForEach(field.choices, id: \.identifier) { choice in
+                            Button {
+                                Task { await model.edit(item, edits: [DraftEdit(field: field.name, value: .contactID(choice.identifier))]) }
+                            } label: {
+                                Text(choice.detail.isEmpty ? choice.displayName : "\(choice.displayName) — \(choice.detail)")
+                            }
+                        }
+                    } label: {
+                        Label(field.value.isEmpty ? "Choose contact" : field.value, systemImage: "person.crop.circle")
+                    }
+                } else {
+                    Text(field.value.isEmpty ? "No matching contact" : field.value).font(.callout)
+                }
+            }
+        case .method:
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Destination").font(.caption2).foregroundStyle(.secondary)
+                Menu {
+                    ForEach(field.methods, id: \.self) { method in
+                        Button(method.display) {
+                            Task { await model.edit(item, edits: [DraftEdit(field: field.name, value: .contactMethod(method))]) }
+                        }
+                    }
+                } label: {
+                    Label(field.value.isEmpty ? "Choose phone or email" : field.value, systemImage: "phone")
+                }
+            }
+        case .instant:
+            VStack(alignment: .leading, spacing: 4) {
+                Text(field.value.isEmpty ? "Choose the exact date and time" : field.value)
+                    .font(.callout)
+                HStack {
+                    DatePicker("", selection: instantBinding(field), displayedComponents: [.date, .hourAndMinute])
+                        .labelsHidden()
+                    if let picked = instantEdits[field.name] {
+                        Button("Use time") {
+                            Task {
+                                await model.edit(item, edits: [DraftEdit(field: field.name, value: .instant(picked))])
+                                instantEdits[field.name] = nil
+                            }
+                        }.buttonStyle(.bordered).controlSize(.mini)
+                    }
+                }
+                Text("Timezone: \(field.timeZoneID ?? TimeZone.current.identifier)").font(.caption2).foregroundStyle(.secondary)
+            }
+        default:
+            VStack(alignment: .leading, spacing: 4) {
+                Text(field.name.replacingOccurrences(of: "_", with: " ").capitalized).font(.caption2).foregroundStyle(.secondary)
+                if field.name == "destination" {
+                    Text(field.value).font(.callout).textSelection(.enabled)
+                } else {
+                    TextField(field.value, text: textBinding(field), axis: .vertical)
+                        .lineLimit(field.name == "body" ? 2...6 : 1...3)
+                        .textFieldStyle(.roundedBorder)
+                }
+            }
+        }
+    }
+
+    private func textBinding(_ field: DraftField) -> Binding<String> {
+        Binding(get: { textEdits[field.name] ?? field.value }, set: { textEdits[field.name] = $0 })
+    }
+
+    private func instantBinding(_ field: DraftField) -> Binding<Date> {
+        Binding(get: { instantEdits[field.name] ?? field.instant ?? Date().addingTimeInterval(3600) },
+                set: { instantEdits[field.name] = $0 })
+    }
+
+    private func confirm() {
+        var edits: [DraftEdit] = []
+        for field in card.fields where field.kind == .text {
+            let value = textEdits[field.name] ?? field.value
+            if value != field.value { edits.append(DraftEdit(field: field.name, value: .text(value))) }
+        }
+        for field in card.fields where field.kind == .instant {
+            if let picked = instantEdits[field.name], picked != field.instant {
+                edits.append(DraftEdit(field: field.name, value: .instant(picked)))
+            }
+        }
+        Task { await model.confirm(item, edits: edits) }
+    }
+
+    /// VoiceOver hears a human title and the bound destination, not a raw tool id.
+    private var draftHint: String {
+        let destination = card.fields.first { $0.name == "destination" || $0.kind == .contact }?.value ?? ""
+        let methods = card.fields.filter { $0.kind == .method }.map(\.value).filter { !$0.isEmpty }
+        let whereText = ([destination] + methods).filter { !$0.isEmpty }.joined(separator: ", ")
+        return [card.title, whereText.isEmpty ? "" : "to \(whereText)", card.reviewSentence]
+            .filter { !$0.isEmpty }.joined(separator: ". ")
     }
 }
 

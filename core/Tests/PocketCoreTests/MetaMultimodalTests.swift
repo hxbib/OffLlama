@@ -24,10 +24,8 @@ final class FakeTransport: @unchecked Sendable {
 }
 
 final class MMActions: ActionExecutor, @unchecked Sendable {
-    var performed: [PlannedAction] = []
     func searchContacts(_ q: String) async throws -> [String] { [] }
     func searchEvents(_ q: String) async throws -> [String] { [] }
-    func perform(_ a: PlannedAction) async throws -> String { performed.append(a); return "Done: \(a.tool)" }
 }
 
 final class MetaMultimodalTests: XCTestCase {
@@ -55,14 +53,15 @@ final class MetaMultimodalTests: XCTestCase {
         return Data(b)
     }
 
-    func makeGate(_ e: ScriptedEngine, online: Bool, fake: FakeTransport) throws -> (MultimodalGate, TelemetryLog, MMActions) {
+    func makeGate(_ e: ScriptedEngine, online: Bool, fake: FakeTransport) throws -> (MultimodalGate, TelemetryLog, FakePhoneEffects) {
         let db = try SQLiteDB(path: ":memory:"); let tel = try TelemetryLog(db: db)
         let acts = MMActions()
+        let effects = FakePhoneEffects()
         let a = Assistant(reflex: Reflex(engine: e, telemetry: tel, source: "test"), memory: try MemoryStore(db: db), actions: acts,
-                          isOnline: { online })
+                          ledger: try EffectLedger(db: db), effects: effects, isOnline: { online })
         var t = MetaVoiceTranscriber(apiKey: "test-key"); t.transport = fake.transport
         var v = MetaVision(apiKey: "test-key"); v.transport = fake.transport
-        return (MultimodalGate(assistant: a, transcriber: t, vision: v), tel, acts)
+        return (MultimodalGate(assistant: a, transcriber: t, vision: v), tel, effects)
     }
 
     static func chatReply(_ content: String?) -> (Int, Data) {
@@ -133,10 +132,11 @@ final class MetaMultimodalTests: XCTestCase {
         e.script(whenPromptContains: "explicit confirmation", logits: ["A": 4, "B": -2])
         let fake = FakeTransport()
         fake.replies["asr/transcribe"] = (200, Data(#"{"sessionId":"s","transcript":"Remind me to call Mom at 7pm","audioDurationMs":2000,"turns":[]}"#.utf8))
-        let (gate, tel, acts) = try makeGate(e, online: true, fake: fake)
+        let (gate, tel, effects) = try makeGate(e, online: true, fake: fake)
         let v = try await gate.voiceTurn(audio: Self.wav)
-        XCTAssertEqual(v?.turn.reply, .acted("Done: create_reminder"))
-        XCTAssertEqual(acts.performed.first?.args["title"], "call Mom")
+        guard case .acted(let effect)? = v?.turn.reply else { return XCTFail("\(String(describing: v?.turn.reply))") }
+        XCTAssertTrue(effect.phase.isCommitted)
+        XCTAssertEqual(text(effects.performed.first!.action, "title"), "call Mom")
         XCTAssertEqual(try tel.all().map(\.decisionType), [.rememberOrNot, .route, .toolChoice, .confirmBeforeAct])
         XCTAssertEqual(fake.requests.count, 1, "only the transcription left the phone")
     }

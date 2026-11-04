@@ -45,6 +45,13 @@ public final class SQLiteDB: @unchecked Sendable {
         return sqlite3_last_insert_rowid(db)
     }
 
+    /// `sqlite3_changes` for the most recent INSERT/UPDATE/DELETE on this connection. The recursive lock means this is
+    /// safe to call inside `transaction`; call it immediately after the guarded statement, before another statement.
+    public func changes() -> Int {
+        lock.lock(); defer { lock.unlock() }
+        return Int(sqlite3_changes(db))
+    }
+
     public func query(_ sql: String, _ args: [SQLValue] = []) throws -> [[String: SQLValue]] {
         lock.lock(); defer { lock.unlock() }
         let st = try prepare(sql, args); defer { sqlite3_finalize(st) }

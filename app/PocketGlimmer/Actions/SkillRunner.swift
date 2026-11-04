@@ -3,90 +3,27 @@ import UIKit
 import SwiftUI
 import WebKit
 import PDFKit
-import Contacts
 import UniformTypeIdentifiers
 import PocketCore
 
-/// Runs registry skills (core/Sources/PocketCore/Skills.swift) with public iOS APIs only: URL schemes / universal links,
-/// the Shortcuts URL scheme, and a few native handlers. Nothing taps inside other apps. Every status string says
-/// exactly what happened ("opened", "copied", "handed to Shortcut"); nothing claims a message was sent.
-/// ActionExecutor tools (send_message, send_email, EventKit) never reach here: PocketCore routes them to SystemActions.
+/// Runs reply-only native reads. Effects (URL, Shortcut, EventKit, compose sheets, auto-reply memory) are
+/// executed by `PocketEffects` after a claim; this runner has no path that opens a URL, runs a Shortcut, or sends.
 final class IOSSkillRunner: SkillRunner, @unchecked Sendable {
-    let contacts = CNContactStore()
-    /// Persists auto-reply rules to memory (set by AppModel when the store exists).
-    var memory: MemoryStore?
-
     func run(_ skill: Skill, args: [String: String]) async throws -> String {
+        guard CapabilityCatalog.isReplyOnly(skill.id) else {
+            return "\(skill.title) is an effect; it must be confirmed through the effect ledger · nothing done"
+        }
         switch skill.invocation {
-        case .urlScheme(let template):
-            return await openURLSkill(skill, template: template, args: args)
-        case .shortcut(let name, let input):
-            let text = SkillTemplate.fill(input, args: args, encode: false)
-            let result = await runShortcut(name: name, text: text, skill: skill)
-            // The hand-off is all the app can confirm: Shortcuts may still report a missing Shortcut.
-            guard skill.id == "appletv_play", result.hasPrefix("Couldn't open Shortcuts") else { return result }
-            var search = URLComponents(string: "https://tv.apple.com/search")!
-            search.queryItems = [URLQueryItem(name: "term", value: text)]
-            if let u = search.url, await ComposeSheets.open(u) {
-                return "Opened TV app search for “\(text)” · pick the latest episode"
-            }
-            return result
         case .native(let handler):
             return await runNative(handler, skill: skill, args: args)
         case .cloudReason:
             return "Handled by the assistant, not the phone."   // PocketCore answers these before reaching the runner
+        default:
+            return "\(skill.title) is an effect; it must be confirmed through the effect ledger · nothing done"
         }
     }
 
-    // MARK: URL skills
-
-    private func openURLSkill(_ skill: Skill, template: String, args: [String: String]) async -> String {
-        var a = args
-        if template.contains("{phone}") {
-            let who = SystemActions.displayName(a["contact"] ?? "")
-            guard let phone = phoneNumber(for: who) else { return "No phone number for \(who) in Contacts · nothing opened" }
-            a["phone"] = phone.filter { $0.isNumber || $0 == "+" }
-        }
-        var copied = false
-        if let clip = skill.clipboard {
-            let text = SkillTemplate.fill(clip, args: a, encode: false)
-            if !text.isEmpty { await MainActor.run { UIPasteboard.general.string = text }; copied = true }
-        }
-        let filled = SkillTemplate.fill(template, args: a, raw: ["url"])
-        guard let url = URL(string: filled) else { return "Couldn't build a link for \(skill.title) · nothing opened" }
-        let opened = await ComposeSheets.open(url)
-        guard opened else {
-            return "\(skill.title): the app isn't installed or the link was refused · nothing sent" + (copied ? " (text is on your clipboard)" : "")
-        }
-        switch skill.id {
-        case "instagram_dm": return "Opened Instagram DM with @\(a["contact"] ?? "")" + (copied ? "; message copied to clipboard · paste and tap Send" : "")
-        case "x_dm": return "Opened @\(a["contact"] ?? "")'s X profile; tap Message" + (copied ? ", the text is on your clipboard · paste and send" : "")
-        case "whatsapp_send": return "Opened WhatsApp with the message filled in · pick the chat and tap Send"
-        case "call", "facetime": return "iOS is asking to \(skill.id == "call" ? "call" : "FaceTime") \(SystemActions.displayName(a["contact"] ?? ""))"
-        case "uber_ride": return "Opened Uber with the drop-off set · confirm the ride in Uber"
-        default: return "Opened \(skill.title)" + (copied ? " · text copied to clipboard" : "")
-        }
-    }
-
-    private func phoneNumber(for name: String) -> String? {
-        let keys = [CNContactPhoneNumbersKey] as [CNKeyDescriptor]
-        guard !name.isEmpty,
-              let c = (try? contacts.unifiedContacts(matching: CNContact.predicateForContacts(matchingName: name), keysToFetch: keys))?.first
-        else { return nil }
-        return c.phoneNumbers.first?.value.stringValue
-    }
-
-    // MARK: Shortcuts bridge
-
-    private func runShortcut(name: String, text: String, skill: Skill) async -> String {
-        guard let url = URL(string: SkillTemplate.shortcutURL(name: name, text: text)) else { return "Bad Shortcut name · nothing run" }
-        let opened = await ComposeSheets.open(url)
-        return opened
-            ? "Handed to Shortcut “\(name)”\(text.isEmpty ? "" : " (\(text))") · if it isn't installed, Shortcuts will say so (recipe in docs/SKILLS.md)"
-            : "Couldn't open Shortcuts · \(skill.title) not done"
-    }
-
-    // MARK: Native handlers
+    // MARK: Native read handlers
 
     private func runNative(_ handler: String, skill: Skill, args: [String: String]) async -> String {
         switch handler {
@@ -99,15 +36,6 @@ final class IOSSkillRunner: SkillRunner, @unchecked Sendable {
             }
             await HTMLSheet.present(html: r.html, title: args["title"] ?? "Chart")
             return "Chart ready: \(r.bars) bars, drawn on device"
-        case "autoreply_rule":
-            let trigger = args["trigger"] ?? "message", reply = args["reply"] ?? ""
-            let text = "Auto-reply rule: when someone sends a \(trigger), reply “\(reply)”"
-            if let memory {
-                _ = try? await memory.upsert(ExtractedFact(subject: "user", attribute: "autoreply_rule", value: "\(trigger) -> \(reply)",
-                                                           text: text, provenance: MemoryProvenance.userStated))
-            }
-            return "Saved: \(text). iOS doesn't let any app read or answer Instagram DMs, so I can't send these myself. "
-                + "Closest real option: Shortcuts → Automation → Message (iMessage only) → Send Message “\(reply)”. For Instagram, I'll remind you when you open it."
         default:
             return "\(skill.title) isn't available on this build · nothing done"
         }

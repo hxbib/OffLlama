@@ -33,53 +33,63 @@ final class TakeoverRegressionTests: XCTestCase {
     }
 
     func testDemoMessagePlansFullBodyAndWaitsForConfirmation() async throws {
-        let (a, acts) = try makeAssistant(messageEngine())
+        let (a, effects) = try makeAssistant(messageEngine())
+        let mom = candidate("Mom", id: "mom", methods: [phone("mobile", "5550100")])
+        effects.contactQueries["Mom"] = ContactLookup(access: .full, matches: [mom])
+        effects.contactIDs["mom"] = ContactLookup(access: .full, matches: [mom])
         let turn = try await a.handle("Text Mom I'll be home by 8")
-        guard case .needsConfirmation(let action, let prompt) = turn.reply else { return XCTFail("\(turn.reply)") }
-        XCTAssertEqual(action, PlannedAction(tool: "send_message", args: ["contact": "Mom", "body": "I'll be home by 8"]))
-        XCTAssertTrue(prompt.contains("I'll be home by 8"), prompt)
-        XCTAssertTrue(acts.performed.isEmpty)
-        _ = try await a.confirm(action)
-        XCTAssertEqual(acts.performed.first?.args["body"], "I'll be home by 8")
+        guard case .needsConfirmation(let card) = turn.reply else { return XCTFail("\(turn.reply)") }
+        XCTAssertEqual(card.capabilityID, "imessage_send")
+        XCTAssertEqual(card.fields.first { $0.name == "body" }?.value, "I'll be home by 8")
+        XCTAssertEqual(card.fields.first { $0.kind == .contact }?.value, "Mom — mobile ···0100")
+        XCTAssertEqual(effects.performCount, 0)
+        let done = try await a.confirmEffect(card.attemptID, edits: [], expectedRevision: card.revision)
+        guard case .finished(let effect) = done else { return XCTFail("\(done)") }
+        XCTAssertTrue(effect.phase.isSheet)
+        XCTAssertEqual(text(effects.performed.first!.action, "body"), "I'll be home by 8")
     }
 
     func testMissingMessageArgsClarifyWithoutAction() async throws {
-        let (a, acts) = try makeAssistant(messageEngine())
+        let (a, effects) = try makeAssistant(messageEngine())
         let noBody = try await a.handle("Text Mom")
         guard case .clarify(let bodyQuestion) = noBody.reply else { return XCTFail("\(noBody.reply)") }
         XCTAssertTrue(bodyQuestion.contains("say"), bodyQuestion)
         XCTAssertNil(noBody.action)
         XCTAssertFalse(noBody.decisions.contains { $0.type == .confirmBeforeAct })
-        XCTAssertTrue(acts.performed.isEmpty)
+        XCTAssertEqual(effects.performCount, 0)
 
         let noContact = try await a.handle("Text I'll be home by 8")
         guard case .clarify(let contactQuestion) = noContact.reply else { return XCTFail("\(noContact.reply)") }
         XCTAssertTrue(contactQuestion.contains("Who"), contactQuestion)
         XCTAssertNil(noContact.action)
         XCTAssertFalse(noContact.decisions.contains { $0.type == .confirmBeforeAct })
-        XCTAssertTrue(acts.performed.isEmpty)
+        XCTAssertEqual(effects.performCount, 0)
     }
 
     func testMessageSkillClarifiesMissingBodyAndKeepsFullBodyWhenGiven() async throws {
         let e = messageEngine(toolChoice: Self.noneTool)
         e.script(whenPromptContains: "Which phone action", logits: ["A": 6, "B": 0, "C": 0, "D": 0, "E": 0, "F": 0, "G": 0, "H": 0])
         let runner = RecordingSkillRunner()
-        let (a, acts) = try makeAssistant(e)
+        let (a, effects) = try makeAssistant(e)
         a.skills = SkillRegistry(); a.skillRunner = runner
+        let mom = candidate("Mom", id: "mom", methods: [phone("mobile", "5550100")])
+        effects.contactQueries["Mom"] = ContactLookup(access: .full, matches: [mom])
+        effects.contactIDs["mom"] = ContactLookup(access: .full, matches: [mom])
         let utterance = "Text Mom I'll be home by 8"
         XCTAssertEqual(ActionPlanner.candidates(utterance, registry: a.skills!).first?.id, "imessage_send")
 
         let turn = try await a.handle(utterance)
-        guard case .needsConfirmation(let action, _) = turn.reply else { return XCTFail("\(turn.reply)") }
-        XCTAssertEqual(action, PlannedAction(tool: "skill:imessage_send", args: ["contact": "Mom", "body": "I'll be home by 8"]))
-        XCTAssertTrue(runner.ran.isEmpty && acts.performed.isEmpty)
+        guard case .needsConfirmation(let card) = turn.reply else { return XCTFail("\(turn.reply)") }
+        XCTAssertEqual(card.capabilityID, "imessage_send")
+        XCTAssertEqual(card.fields.first { $0.name == "body" }?.value, "I'll be home by 8")
+        XCTAssertTrue(runner.ran.isEmpty && effects.performCount == 0)
 
         let missing = try await a.handle("Text Mom")
         guard case .clarify(let question) = missing.reply else { return XCTFail("\(missing.reply)") }
         XCTAssertTrue(question.contains("say"), question)
         XCTAssertNil(missing.action)
         XCTAssertFalse(missing.decisions.contains { $0.type == .confirmBeforeAct })
-        XCTAssertTrue(runner.ran.isEmpty && acts.performed.isEmpty)
+        XCTAssertTrue(runner.ran.isEmpty && effects.performCount == 0)
     }
 
     func testAppleTVNonToolRouteReachesRegisteredSkill() async throws {
@@ -91,13 +101,19 @@ final class TakeoverRegressionTests: XCTestCase {
             e.script(whenPromptContains: "Which phone action", logits: ["A": 6, "B": 0, "C": 0, "D": 0, "E": 0, "F": 0, "G": 0, "H": 0])
             e.script(whenPromptContains: "explicit confirmation", logits: ["A": 4, "B": -2])
             let runner = RecordingSkillRunner()
-            let (a, _) = try makeAssistant(e)
+            let (a, effects) = try makeAssistant(e)
             a.skills = SkillRegistry(); a.skillRunner = runner
             let utterance = "open the latest episode of Severance on Apple TV"
             XCTAssertEqual(ActionPlanner.candidates(utterance, registry: a.skills!).first?.id, "appletv_play")
             let turn = try await a.handle(utterance)
-            XCTAssertEqual(turn.reply, .acted("ran: appletv_play"))
-            XCTAssertEqual(runner.ran.first?.args["show"], "Severance")
+            guard case .acted(let effect) = turn.reply else { return XCTFail("\(turn.reply)") }
+            XCTAssertEqual(effect.phase, .settled(.handedOff(.systemAcceptedURL)))
+            XCTAssertTrue(effect.summary.contains("Shortcuts was asked"), effect.summary)
+            XCTAssertEqual(effects.performCount, 1)
+            guard case .shortcut(let name, _) = effects.performed.first?.action.executor else { return XCTFail() }
+            XCTAssertEqual(name, "PG Play on Apple TV")
+            XCTAssertEqual(text(effects.performed.first!.action, "show"), "Severance")
+            XCTAssertTrue(runner.ran.isEmpty)
         }
     }
 
@@ -105,31 +121,40 @@ final class TakeoverRegressionTests: XCTestCase {
         let e = messageEngine()
         e.script(whenPromptContains: "How should", logits: ["A": 0, "B": 2.4, "C": 0, "D": 0])
         e.script(whenPromptContains: "Which phone action", logits: ["A": 6, "B": 0, "C": 0, "D": 0, "E": 0, "F": 0, "G": 0, "H": 0])
-        let (a, acts) = try makeAssistant(e)
+        let (a, effects) = try makeAssistant(e)
+        let mom = candidate("Mom", id: "mom", methods: [phone("mobile", "5550100")])
+        effects.contactQueries["Mom"] = ContactLookup(access: .full, matches: [mom])
+        effects.contactIDs["mom"] = ContactLookup(access: .full, matches: [mom])
         a.reflex.profile.defaultTau = 0.90
         a.skills = SkillRegistry()
         let turn = try await a.handle("Text Mom I'll be home by 8")
         let route = try XCTUnwrap(turn.decisions.first { $0.type == .route })
         XCTAssertEqual(route.argmax.id, "tool")
         XCTAssertTrue(route.escalated)
-        guard case .needsConfirmation(let action, _) = turn.reply else { return XCTFail("\(turn.reply)") }
-        XCTAssertEqual(action, PlannedAction(tool: "skill:imessage_send", args: ["contact": "Mom", "body": "I'll be home by 8"]))
-        XCTAssertTrue(acts.performed.isEmpty)
+        guard case .needsConfirmation(let card) = turn.reply else { return XCTFail("\(turn.reply)") }
+        XCTAssertEqual(card.capabilityID, "imessage_send")
+        XCTAssertEqual(card.fields.first { $0.name == "body" }?.value, "I'll be home by 8")
+        XCTAssertEqual(effects.performCount, 0)
     }
 
-    func testUncertainMessageSkillDoesNotBypassThreshold() async throws {
+    func testUncertainMessageSkillBecomesEditableDraft() async throws {
         let e = messageEngine()
         e.script(whenPromptContains: "How should", logits: ["A": 0, "B": 2.4, "C": 0, "D": 0])
         e.script(whenPromptContains: "Which phone action", logits: ["A": 0, "B": 0, "C": 0, "D": 0, "E": 0, "F": 0, "G": 0, "H": 0])
-        let (a, acts) = try makeAssistant(e)
+        let (a, effects) = try makeAssistant(e)
+        let mom = candidate("Mom", id: "mom", methods: [phone("mobile", "5550100")])
+        effects.contactQueries["Mom"] = ContactLookup(access: .full, matches: [mom])
+        effects.contactIDs["mom"] = ContactLookup(access: .full, matches: [mom])
         a.reflex.profile.defaultTau = 0.90
         a.skills = SkillRegistry()
         let turn = try await a.handle("Text Mom I'll be home by 8")
         let pick = try XCTUnwrap(turn.decisions.first { $0.type == .skillPick })
         XCTAssertTrue(pick.escalated)
-        guard case .clarify = turn.reply else { return XCTFail("\(turn.reply)") }
-        XCTAssertNil(turn.action)
-        XCTAssertTrue(acts.performed.isEmpty)
+        // Below tau, the old path clarified. The explicit message now keeps its recipient/body as a draft card.
+        guard case .needsConfirmation(let card) = turn.reply else { return XCTFail("\(turn.reply)") }
+        XCTAssertTrue(card.notice.lowercased().contains("not confident"), card.notice)
+        XCTAssertEqual(card.fields.first { $0.name == "body" }?.value, "I'll be home by 8")
+        XCTAssertEqual(effects.performCount, 0)
         XCTAssertFalse(ActionPlanner.isExplicitRequest("Explain how text messages work"))
         XCTAssertFalse(ActionPlanner.isExplicitRequest("The text of this poem is confusing"))
     }
@@ -155,7 +180,7 @@ final class TakeoverRegressionTests: XCTestCase {
         let reply = try await a.execute(PlannedAction(tool: "skill:email_digest", args: ["n": "5"]))
         XCTAssertFalse(box.sent.contains("Dana"), box.sent)
         XCTAssertTrue(box.sent.contains("[PERSON_1]"), box.sent)
-        XCTAssertTrue(reply.contains("Dana"), reply)
+        XCTAssertTrue(reply.text.contains("Dana"), reply.text)
     }
 
     func testSharedTextScreensSensitiveContentBeyondTheOpeningExcerpt() async throws {
@@ -176,7 +201,7 @@ final class TakeoverRegressionTests: XCTestCase {
             + "My marriage is ending. Please keep this private. Reference PRIVATE_NOTE_6E0B."
         let result = try await a.reason("Summarize this document", text: text)
         XCTAssertEqual(box.calls, 0)
-        XCTAssertTrue(result.contains("Local summary"), result)
+        XCTAssertTrue(result.text.contains("Local summary"), result.text)
     }
 
     private static let noneTool: [String: Double] = ["A": 0, "B": 0, "C": 0, "D": 0, "E": 0, "F": 0, "G": 6]
@@ -189,12 +214,14 @@ final class TakeoverRegressionTests: XCTestCase {
         return e
     }
     private func makeAssistant(_ e: ScriptedEngine, online: Bool = false,
-                               cloud: [CloudBrain] = []) throws -> (Assistant, RecordingActions) {
+                               cloud: [CloudBrain] = []) throws -> (Assistant, FakePhoneEffects) {
         let db = try SQLiteDB(path: ":memory:")
         let acts = RecordingActions(); acts.contacts = ["Mom"]
+        let effects = FakePhoneEffects()
         let a = Assistant(reflex: Reflex(engine: e, telemetry: try TelemetryLog(db: db), source: "test"),
-                          memory: try MemoryStore(db: db), actions: acts, cloud: CloudBrainChain(cloud),
-                          isOnline: { online })
-        return (a, acts)
+                          memory: try MemoryStore(db: db), actions: acts,
+                          ledger: try EffectLedger(db: db), effects: effects,
+                          cloud: CloudBrainChain(cloud), isOnline: { online })
+        return (a, effects)
     }
 }

@@ -83,7 +83,8 @@ public struct Skill: Codable, Sendable, Equatable, Identifiable {
     public var category: SkillCategory
     public var invocation: SkillInvocation
     public var argSchema: [ArgSpec]
-    /// Ask before acting. Forced true for message/social/email (SkillRegistry normalizes) and for anything that spends.
+    /// Decode residue for old JSON. Forced true for message/social/email by the registry; execution reads only the
+    /// compiled capability floor, never this field.
     public var confirm: Bool
     /// True when the decision AND the hand-off work with no internet (delivery may still need a network later).
     public var offlineCapable: Bool

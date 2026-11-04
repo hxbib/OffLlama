@@ -82,20 +82,22 @@ enum CloudTurnComposer {
         facts: [MemoryFact],
         utterance: String,
         scrubber: PrivacyScrubber,
-        reflex: Reflex
+        reflex: Reflex,
+        onDecision: ((ReflexDecision) -> Void)? = nil
     ) async throws -> CloudTurnOutcome {
         var raw = ""
         if !profile.isEmpty { raw += profile + "\n" }
         raw += MemoryDisclosure.cloud.render(facts)
         raw += utterance
-        return try await prepare(raw: raw, scrubber: scrubber, reflex: reflex)
+        return try await prepare(raw: raw, scrubber: scrubber, reflex: reflex, onDecision: onDecision)
     }
 
     static func prepareDocument(
         instruction: String,
         text: String,
         scrubber: PrivacyScrubber,
-        reflex: Reflex
+        reflex: Reflex,
+        onDecision: ((ReflexDecision) -> Void)? = nil
     ) async throws -> CloudTurnOutcome {
         guard instruction.count <= maxInstructionCharacters else {
             return .withheld(.instructionTooLong(characters: instruction.count, limit: maxInstructionCharacters))
@@ -108,12 +110,13 @@ enum CloudTurnComposer {
         } else {
             raw = instruction + "\n\n" + text
         }
-        return try await prepare(raw: raw, scrubber: scrubber, reflex: reflex)
+        return try await prepare(raw: raw, scrubber: scrubber, reflex: reflex, onDecision: onDecision)
     }
 
     /// Throws only `CancellationError`. Policy/model failures are outcomes so a caller cannot fall through
     /// to an unscreened send.
-    private static func prepare(raw: String, scrubber: PrivacyScrubber, reflex: Reflex) async throws -> CloudTurnOutcome {
+    private static func prepare(raw: String, scrubber: PrivacyScrubber, reflex: Reflex,
+                                onDecision: ((ReflexDecision) -> Void)?) async throws -> CloudTurnOutcome {
         guard !raw.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             return .withheld(.emptyText)
         }
@@ -154,6 +157,7 @@ enum CloudTurnComposer {
             } catch {
                 return .withheld(.scanUnavailable)
             }
+            onDecision?(decision)
             if decision.chosen.id != "ok" || decision.escalated || !decision.confidence.isFinite
                 || decision.confidence < decision.tau {
                 return .withheld(decision.escalated ? .uncertain : .sensitive)

@@ -163,7 +163,7 @@ final class CloudPrivacyTests: XCTestCase {
         XCTAssertEqual(messages.count, 2)
         XCTAssertTrue(messages[1].content.contains("BENIGN_TAIL_MARKER"), messages[1].content)
         XCTAssertGreaterThan(messages[1].content.count, 2_500)
-        XCTAssertEqual(reply, "Cloud summary")
+        XCTAssertEqual(reply.text, "Cloud summary")
     }
 
     func testSensitiveUnicodeTailPreventsCallAndStatesLocalReadingLimit() async throws {
@@ -181,8 +181,8 @@ final class CloudPrivacyTests: XCTestCase {
 
         let result = try await assistant.reason("Summarize this document", text: text)
         XCTAssertEqual(capture.calls, 0)
-        XCTAssertTrue(result.contains("Local summary"), result)
-        XCTAssertTrue(result.contains("first 2500 characters"), result)
+        XCTAssertTrue(result.text.contains("Local summary"), result.text)
+        XCTAssertTrue(result.text.contains("first 2500 characters"), result.text)
     }
 
     func testSensitiveInstructionWithholdsCloud() async throws {
@@ -196,8 +196,8 @@ final class CloudPrivacyTests: XCTestCase {
 
         let result = try await assistant.reason("Summarize PRIVATE_NOTE_6E0B", text: text)
         XCTAssertEqual(capture.calls, 0)
-        XCTAssertTrue(result.contains("Local summary"), result)
-        XCTAssertTrue(result.contains("first 2500 characters"), result)
+        XCTAssertTrue(result.text.contains("Local summary"), result.text)
+        XCTAssertTrue(result.text.contains("first 2500 characters"), result.text)
     }
 
     func testSensitiveTextInsideTheCapPreventsCall() async throws {
@@ -212,8 +212,8 @@ final class CloudPrivacyTests: XCTestCase {
 
         let result = try await assistant.reason("Summarize this document", text: text)
         XCTAssertEqual(capture.calls, 0)
-        XCTAssertTrue(result.contains("Local summary"), result)
-        XCTAssertTrue(result.contains("first 2500 characters"), result)
+        XCTAssertTrue(result.text.contains("Local summary"), result.text)
+        XCTAssertTrue(result.text.contains("first 2500 characters"), result.text)
     }
 
     func testTextBeyondTheCapIsNotSent() async throws {
@@ -242,9 +242,9 @@ final class CloudPrivacyTests: XCTestCase {
 
         let result = try await assistant.reason("Summarize this document", text: text)
         XCTAssertEqual(capture.calls, 0)
-        XCTAssertTrue(result.contains("Local summary"), result)
-        XCTAssertTrue(result.contains("first 2500 characters"), result)
-        XCTAssertTrue(result.contains("privacy check was unsure"), result)
+        XCTAssertTrue(result.text.contains("Local summary"), result.text)
+        XCTAssertTrue(result.text.contains("first 2500 characters"), result.text)
+        XCTAssertTrue(result.text.contains("privacy check was unsure"), result.text)
     }
 
     func testScreeningModelErrorPreventsCall() async throws {
@@ -255,9 +255,9 @@ final class CloudPrivacyTests: XCTestCase {
 
         let result = try await assistant.reason("Summarize this document", text: text)
         XCTAssertEqual(capture.calls, 0)
-        XCTAssertTrue(result.contains("Local fallback"), result)
-        XCTAssertTrue(result.contains("first 2500 characters"), result)
-        XCTAssertTrue(result.contains("privacy check was unavailable"), result)
+        XCTAssertTrue(result.text.contains("Local fallback"), result.text)
+        XCTAssertTrue(result.text.contains("first 2500 characters"), result.text)
+        XCTAssertTrue(result.text.contains("privacy check was unavailable"), result.text)
     }
 
     func testNonfiniteScreeningPreventsCall() async throws {
@@ -271,7 +271,7 @@ final class CloudPrivacyTests: XCTestCase {
             let result = try await assistant.reason("Summarize this document",
                                                     text: String(repeating: "Benign notes. ", count: 300))
             XCTAssertEqual(capture.calls, 0)
-            XCTAssertTrue(result.contains("Local fallback"), result)
+            XCTAssertTrue(result.text.contains("Local fallback"), result.text)
         }
     }
 
@@ -285,9 +285,9 @@ final class CloudPrivacyTests: XCTestCase {
 
         let result = try await assistant.reason("Summarize this document", text: text)
         XCTAssertEqual(capture.calls, 0)
-        XCTAssertTrue(result.contains("Local summary"), result)
-        XCTAssertTrue(result.contains("first 2500 characters"), result)
-        XCTAssertTrue(result.contains("too large to screen completely"), result)
+        XCTAssertTrue(result.text.contains("Local summary"), result.text)
+        XCTAssertTrue(result.text.contains("first 2500 characters"), result.text)
+        XCTAssertTrue(result.text.contains("too large to screen completely"), result.text)
     }
 
     func testCancellationDuringScreeningMakesNoCloudCall() async throws {
@@ -331,7 +331,7 @@ final class CloudPrivacyTests: XCTestCase {
         let messages = try payload(try XCTUnwrap(first.bodies.first))
         XCTAssertFalse(messages[1].content.contains("Dana"), messages[1].content)
         XCTAssertTrue(messages[1].content.contains("[PERSON_1]"), messages[1].content)
-        XCTAssertEqual(reply, "Dana replied")
+        XCTAssertEqual(reply.text, "Dana replied")
     }
 
     func testScanTelemetryDoesNotStoreDocumentText() async throws {

@@ -1,10 +1,10 @@
 import Foundation
 
-/// Side effects live behind this protocol: EventKit / Contacts / Shortcuts bridge on iOS; a recorder in tests.
+/// Read-only lookups used by planning. Effects go through `PhoneEffects` and the ledger; there is deliberately no
+/// `perform` on this protocol, so no old caller can execute an effect around the claim.
 public protocol ActionExecutor: Sendable {
     func searchContacts(_ query: String) async throws -> [String]
     func searchEvents(_ query: String) async throws -> [String]
-    func perform(_ action: PlannedAction) async throws -> String
 }
 
 public struct PlannedAction: Sendable, Equatable, Codable {
@@ -16,8 +16,8 @@ public struct PlannedAction: Sendable, Equatable, Codable {
 public enum Reply: Sendable, Equatable {
     case local(String)
     case cloud(String, provider: String)
-    case acted(String)
-    case needsConfirmation(PlannedAction, prompt: String)
+    case acted(EffectResult)
+    case needsConfirmation(DraftCard)
     case clarify(String)
     case offlineFallback(String)
 }
@@ -62,6 +62,9 @@ public final class Assistant: @unchecked Sendable {
     public let reflex: Reflex
     public let memory: MemoryStore
     public let actions: ActionExecutor
+    /// One ledger, one effects adapter. Both paths (model act and confirm) use the same session.
+    public let ledger: EffectLedger?
+    public let effects: PhoneEffects?
     private let cloudSettingsLock = NSLock()
     private var configuredCloud: CloudBrainChain
     private var configuredScrubber = PrivacyScrubber()
@@ -82,8 +85,10 @@ public final class Assistant: @unchecked Sendable {
     public var skills: SkillRegistry? = nil
     public var skillRunner: SkillRunner? = nil   // runs `skill:` actions on the device (iOS IOSSkillRunner)
 
-    public init(reflex: Reflex, memory: MemoryStore, actions: ActionExecutor, cloud: CloudBrainChain = .init([]), isOnline: @escaping () -> Bool = { false }) {
-        self.reflex = reflex; self.memory = memory; self.actions = actions; self.configuredCloud = cloud; self.isOnline = isOnline
+    public init(reflex: Reflex, memory: MemoryStore, actions: ActionExecutor, ledger: EffectLedger? = nil,
+                effects: PhoneEffects? = nil, cloud: CloudBrainChain = .init([]), isOnline: @escaping () -> Bool = { false }) {
+        self.reflex = reflex; self.memory = memory; self.actions = actions; self.ledger = ledger
+        self.effects = effects; self.configuredCloud = cloud; self.isOnline = isOnline
     }
 
     func memoryContext(_ q: String) async throws -> [MemoryFact] {
@@ -106,6 +111,8 @@ public final class Assistant: @unchecked Sendable {
 
     public func handle(_ utterance: String, now: Date = Date()) async throws -> AssistantTurn {
         var decisions: [ReflexDecision] = []
+        let requestID = UserRequestID()
+        var readResult: ReadResult?
         let facts = try await memoryContext(utterance)
         let mem = MemoryDisclosure.local.render(facts)
         let online = isOnline()
@@ -135,15 +142,22 @@ public final class Assistant: @unchecked Sendable {
         decisions.append(route)
         let lmem = localMemory(mem)
         var skillAction: PlannedAction?   // explicit app/feature request + confident skillPick; no registry = no-op
-        if let r = try await skillOverride(utterance, ctx: ctx, route: route, decisions: &decisions, planned: &skillAction) {
-            return AssistantTurn(reply: r, decisions: decisions, remembered: remembered, action: skillAction, corrections: corrections)
+        if let r = try await skillOverride(utterance, ctx: ctx, route: route, requestID: requestID,
+                                           decisions: &decisions, planned: &skillAction, read: &readResult) {
+            return AssistantTurn(reply: r, decisions: decisions, remembered: remembered, action: skillAction,
+                                 cloudPromptSent: readResult?.cloudPromptSent,
+                                 corrections: corrections,
+                                 cloudWithheldForSensitivity: readResult?.withheldForSensitivity ?? false)
         }
 
         switch route.chosen.id {
         case "tool":
             var planned: PlannedAction?
-            let reply = try await toolPath(utterance, ctx: ctx, decisions: &decisions, planned: &planned)
-            return AssistantTurn(reply: reply, decisions: decisions, remembered: remembered, action: planned, corrections: corrections)
+            let reply = try await toolPath(utterance, ctx: ctx, requestID: requestID, decisions: &decisions,
+                                           planned: &planned, read: &readResult)
+            return AssistantTurn(reply: reply, decisions: decisions, remembered: remembered, action: planned,
+                                 cloudPromptSent: readResult?.cloudPromptSent, corrections: corrections,
+                                 cloudWithheldForSensitivity: readResult?.withheldForSensitivity ?? false)
         case "clarify":
             let q = try await reflex.engine.generate(prompt: Self.localPrompt("Ask ONE short clarifying question about: \(utterance)", mem: lmem), maxTokens: 40, temperature: 0.2)
             return AssistantTurn(reply: .clarify(q.trimmed), decisions: decisions, remembered: remembered, corrections: corrections)
@@ -199,11 +213,23 @@ public final class Assistant: @unchecked Sendable {
         }
     }
 
-    func toolPath(_ utterance: String, ctx: String, decisions: inout [ReflexDecision], planned: inout PlannedAction?) async throws -> Reply {
+    func toolPath(_ utterance: String, ctx: String, requestID: UserRequestID, decisions: inout [ReflexDecision],
+                  planned: inout PlannedAction?, read: inout ReadResult?) async throws -> Reply {
         let tool = try await reflex.decide(OptionSets.toolChoice, context: ctx)
         decisions.append(tool)
+
+        // BF-1: an explicit email request stays a compiled Mail handoff. toolChoice has no send_email option.
+        if tool.chosen.id == "send_message", ActionPlanner.isExplicitEmailRequest(utterance),
+           let reg = skills, let compose = reg.skill(id: "email_compose") {
+            return try await planSkillCore(utterance, ctx: ctx, registry: reg, requestID: requestID,
+                                           decisions: &decisions, planned: &planned, read: &read,
+                                           fallThrough: false, preselected: compose,
+                                           explicitDraftOverride: tool.escalated)
+                ?? .clarify("What would you like me to do?")
+        }
         if let reg = skills, ActionPlanner.shouldUseSkills(tool: tool, utterance: utterance, registry: reg) {   // open-world skills
-            return try await planSkill(utterance, ctx: ctx, registry: reg, decisions: &decisions, planned: &planned)
+            return try await planSkill(utterance, ctx: ctx, registry: reg, requestID: requestID,
+                                       decisions: &decisions, planned: &planned, read: &read)
         }
         guard tool.chosen.id != "none" else { return .clarify("What would you like me to do?") }
         var args = ArgumentExtractor.heuristic(tool: tool.chosen.id, utterance: utterance)
@@ -215,15 +241,16 @@ public final class Assistant: @unchecked Sendable {
         if tool.chosen.id == "lookup_contact", (args["contact"] ?? "").isEmpty {
             return .clarify("Who should I look up?")
         }
-        if ["send_message", "lookup_contact"].contains(tool.chosen.id), let who = args["contact"] {
+        if tool.chosen.id == "lookup_contact", let who = args["contact"] {
             let cands = try await actions.searchContacts(who)
+            guard !cands.isEmpty else { return .clarify("I couldn't find \(who) in your contacts.") }
             if cands.count > 1 {
                 let d = try await reflex.decide(OptionSets.contactPick(candidates: cands), context: ctx)
                 decisions.append(d)
                 guard d.chosen.id != "ask" else { return .clarify("Which \(who)? " + cands.joined(separator: ", ")) }
-                args["contact"] = d.chosen.label
-            } else if let only = cands.first { args["contact"] = only }
-            else { return .clarify("I couldn't find \(who) in your contacts.") }
+                return .local(d.chosen.label)
+            }
+            return .local(cands[0])
         }
         if tool.chosen.id == "find_event", let q = args["query"] {
             let cands = try await actions.searchEvents(q)
@@ -239,17 +266,91 @@ public final class Assistant: @unchecked Sendable {
         if action.tool == "search_memory" {   // fully on device: answer from MemoryStore, or say so when nothing matches
             let hits = try await memory.retrieve(args["query"] ?? utterance, k: 3)
             guard !hits.isEmpty else { return .local("You haven't told me that yet.") }
-            return .acted("From memory: " + hits.map { $0.fact.text }.joined(separator: "; "))
+            return .local("From memory: " + hits.map { $0.fact.text }.joined(separator: "; "))
+        }
+        if action.tool == "find_event" {
+            if let ev = args["event"] { return .local(ev) }
+            let hits = try await actions.searchEvents(args["query"] ?? utterance)
+            return .local(hits.first ?? "Nothing matching on your calendar in the next 30 days.")
+        }
+        guard let capID = CapabilityCatalog.capabilityID(forTool: action.tool) else {
+            return .clarify("I can't do that on this phone yet.")
         }
         let conf = try await reflex.decide(OptionSets.confirmBeforeAct, context: "\(ctx)\nPlanned action: \(action.tool) \(args.sorted { $0.key < $1.key }.map { "\($0.key)=\($0.value)" }.joined(separator: ", "))")
         decisions.append(conf)
-        if conf.chosen.id == "confirm" || action.tool == "send_message" {   // messages always confirm: hard rule
-            return .needsConfirmation(action, prompt: "\(action.tool.replacingOccurrences(of: "_", with: " ").capitalized): \(args.values.sorted().joined(separator: " · "))?")
+        guard let ledger, let effects else {
+            return .clarify("Actions are unavailable on this build. Nothing was done.")
         }
-        return .acted(try await actions.perform(action))
+        let capability = CapabilityCatalog.resolve(id: capID, skill: skills?.skill(id: capID))
+        let result = try await EffectSession(ledger: ledger, effects: effects).evaluate(
+            requestID: requestID, capability: capability, raw: action,
+            modelAskedConfirm: conf.chosen.id == "confirm", explicitDraft: tool.escalated)
+        return Self.reply(from: result, read: &read, decisions: &decisions)
     }
 
-    public func confirm(_ a: PlannedAction) async throws -> Reply { .acted(try await execute(a)) }   // skill: -> registry
+    // MARK: effect recovery and confirmation
+
+    /// Read-only launch recovery. It never performs an effect and never replays a claimed row.
+    public func recoverEffects() throws -> LaunchRecovery {
+        guard let ledger else { throw EffectError.ledgerUnavailable }
+        return try ledger.recover(now: Date())
+    }
+
+    public func confirmEffect(_ attemptID: AttemptID, edits: [DraftEdit] = [], expectedRevision: Int? = nil) async throws -> SessionResult {
+        guard let ledger, let effects else { throw EffectError.ledgerUnavailable }
+        guard let record = try ledger.load(attemptID) else {
+            return .ignoredTerminal(EffectResult(attemptID: attemptID, phase: .ambiguous(.claimedWithoutReceipt),
+                                                 summary: "This attempt no longer exists. Nothing was done."))
+        }
+        if CapabilityCatalog.isReplyOnly(record.capabilityID) {
+            let session = EffectSession(ledger: ledger, effects: effects)
+            return try await session.confirmRead(attemptID: attemptID, expectedRevision: expectedRevision) { action in
+                let args = Self.stringArguments(action)
+                return try await self.execute(PlannedAction(tool: ActionPlanner.toolPrefix + action.capabilityID, args: args))
+            }
+        }
+        return try await EffectSession(ledger: ledger, effects: effects)
+            .confirm(attemptID: attemptID, edits: edits, expectedRevision: expectedRevision)
+    }
+
+    public func editEffect(_ attemptID: AttemptID, edits: [DraftEdit], expectedRevision: Int) async throws -> DraftCard {
+        guard let ledger, let effects else { throw EffectError.ledgerUnavailable }
+        return try await EffectSession(ledger: ledger, effects: effects)
+            .edit(attemptID: attemptID, edits: edits, expectedRevision: expectedRevision)
+    }
+
+    public func cancelEffect(_ attemptID: AttemptID) throws -> EffectResult {
+        guard let ledger, let effects else { throw EffectError.ledgerUnavailable }
+        return try EffectSession(ledger: ledger, effects: effects).cancel(attemptID: attemptID)
+    }
+
+    static func stringArguments(_ action: BoundAction) -> [String: String] {
+        var out: [String: String] = [:]
+        for (name, value) in action.arguments {
+            switch value {
+            case .text(let s), .place(let s), .shortcutName(let s): out[name] = s
+            case .contact(let b): out[name] = b.displayName
+            case .contactQuery(let q): out[name] = q
+            case .instant(let d): out[name] = ISO8601DateFormatter().string(from: d)
+            case .url(let u): out[name] = u.absoluteString
+            }
+        }
+        return out
+    }
+
+    static func reply(from result: SessionResult, read: inout ReadResult?, decisions: inout [ReflexDecision]) -> Reply {
+        switch result {
+        case .staged(let card):
+            return .needsConfirmation(card)
+        case .finished(let effect), .ignoredTerminal(let effect):
+            return .acted(effect)
+        case .read(let result):
+            read = result
+            decisions.append(contentsOf: result.decisions)
+            return result.provider.map { Reply.cloud(result.text, provider: $0) } ?? .local(result.text)
+        }
+    }
+
 
     static func localPrompt(_ q: String, mem: String) -> String {
         "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\nYou are a concise, warm personal assistant running fully offline on the user's phone. \(mem)<|eot_id|><|start_header_id|>user<|end_header_id|>\n\n\(q)<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n"
@@ -268,8 +369,28 @@ public enum ArgumentExtractor {
             return String(s[r]).trimmed
         }
         func first(_ p: String, ci: Bool = true) -> String? { first(p, in: u, ci: ci) }
-        let when = first(#"\b((?:tomorrow|today|tonight|next \w+|on \w+day|at \d{1,2}(?::\d{2})?\s?(?:am|pm)?|in \d+ (?:minutes?|hours?|days?))(?:\s(?:at|by) \d{1,2}(?::\d{2})?\s?(?:am|pm)?)?)"#)
+        // Keep an explicit zone/city qualifier in the phrase. The binder then refuses to guess rather than
+        // silently dropping "Berlin time" before the instant is frozen.
+        let when = first(#"\b((?:tomorrow|today|tonight|next \w+|on \w+day|at \d{1,2}(?::\d{2})?\s?(?:am|pm)?|in \d+ (?:minutes?|hours?|days?))(?:\s(?:at|by) \d{1,2}(?::\d{2})?\s?(?:am|pm)?)?(?:\s+(?:UTC|GMT|EST|EDT|CST|CDT|MST|MDT|PST|PDT|CET|CEST|BST|IST|JST|KST|AEST|AEDT|[A-Z][a-z]+ time|in [A-Z][a-z]+))?)"#)
         switch tool {
+        case "send_email":
+            let contactPattern = #"(?i:email|e-mail|mail)\s+(?:to\s+)?([A-Z][a-z]+(?: [A-Z][a-z]+)?)"#
+            var rest: String?
+            if let re = try? NSRegularExpression(pattern: contactPattern),
+               let m = re.firstMatch(in: u, range: NSRange(u.startIndex..., in: u)),
+               let contact = Range(m.range(at: 1), in: u), let full = Range(m.range, in: u) {
+                a["contact"] = String(u[contact]).trimmed
+                rest = String(u[full.upperBound...]).trimmed
+            }
+            if let subject = first(#"(?i:\bsubject\s*:?\s*)[“"]?([^”"\n]+)[”"]?"#) {
+                a["subject"] = subject
+            }
+            var body = rest ?? ""
+            body = first(#"^(?:(?:that says|with the message|to say|saying|that)\b|:)\s*([\s\S]*)$"#, in: body) ?? body
+            if (body.first == "\"" && body.last == "\"") || (body.first == "“" && body.last == "”"), body.count >= 2 {
+                body = String(body.dropFirst().dropLast())
+            }
+            a["body"] = body.trimmed
         case "send_message":
             let contactPattern = #"(?i:text|message|tell|send)\s+(?i:a message to\s+)?([A-Z][a-z]+(?: [A-Z][a-z]+)?)"#
             var rest: String?

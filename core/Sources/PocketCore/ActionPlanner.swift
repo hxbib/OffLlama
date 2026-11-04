@@ -11,20 +11,19 @@ public protocol SkillRunner: Sendable {
 /// "none" (or is below tau, whose fallback is "none"), or the user explicitly names an app/feature the six tools do not
 /// cover ("on Instagram", "alarm"), the planner retrieves top-k registry skills and asks the SAME 1B ONE dynamic
 /// multiple-choice question (`skillPick`, built like `contactPick`): one forward pass, calibrated letter confidence,
-/// tau gate. Below tau -> clarify with the top 3 skills. Then args (regex per ArgSpec kind + the trained contactPick),
-/// the trained confirmBeforeAct, and the hard rule (skill.confirm) -> PlannedAction(tool: "skill:<id>").
+/// tau gate. Below tau -> clarify with the top 3 skills, except an explicit message keeps its parsed draft.
+/// Then args are extracted from the compiled catalog for compiled ids (never merged JSON), and the effect session
+/// decides confirmation floor, binding, claim and receipt.
 public enum ActionPlanner {
     public static let toolPrefix = "skill:"
     /// Native handlers that are ActionExecutor tools (SystemActions on iOS); everything else goes to the SkillRunner.
     public static let executorTools: Set<String> = ["send_message", "send_email", "create_reminder", "create_event",
                                                      "find_event", "lookup_contact", "search_memory"]
-    /// Native handlers whose runner returns raw text that PocketCore then summarizes (local 1B or escalation).
-    public static let textSourceHandlers: Set<String> = ["analyze_document"]
 
     /// Explicit app/feature words that a chosen trained tool cannot serve ("dm sam ON INSTAGRAM" -> toolChoice says
     /// send_message; "WAKE ME at 6" -> create_reminder). Only these tool/word pairs override; everything else keeps today's path.
     static let overridable: [String: [String]] = [
-        "send_message": ["instagram", "insta", "ig", "twitter", "x dm", "on x", "whatsapp", "whats app", "facetime", "auto reply", "autoreply", "every reel"],
+        "send_message": ["instagram", "insta", "ig", "twitter", "x dm", "on x", "whatsapp", "whats app", "facetime", "auto reply", "autoreply", "every reel", "email", "e-mail", "send email", "write an email"],
         "lookup_contact": ["facetime", "instagram", "twitter", "whatsapp"],
         "create_reminder": ["alarm", "wake me", "timer", "pomodoro", "auto reply", "autoreply", "every reel"],
         "create_event": ["alarm", "wake me", "timer"],
@@ -51,12 +50,19 @@ public enum ActionPlanner {
     public static func isExplicitRequest(_ utterance: String) -> Bool {
         let u = SkillRegistry.norm(utterance)
         if isExplicitMessageRequest(utterance) { return true }
+        if isExplicitEmailRequest(utterance) { return true }
         if u.range(of: #" (?:last|recent|latest) \d+ (?:e ?)?mails? "#, options: .regularExpression) != nil { return true }
         return explicitRequest.contains { u.contains(SkillRegistry.norm($0)) }
     }
 
     static func isExplicitMessageRequest(_ utterance: String) -> Bool {
         SkillRegistry.norm(utterance).range(of: #"^ (?:please )?(?:text|message|send (?:a )?(?:text|message) to) "#,
+                                          options: .regularExpression) != nil
+    }
+
+    /// "Email Dana …" must not enter the trained `send_message` path. The frozen toolChoice set has no send_email.
+    public static func isExplicitEmailRequest(_ utterance: String) -> Bool {
+        SkillRegistry.norm(utterance).range(of: #"^ (?:please )?(?:email|e mail|mail|send (?:an? )?email|write (?:an? )?email) "#,
                                           options: .regularExpression) != nil
     }
 
@@ -81,52 +87,71 @@ public enum ActionPlanner {
 }
 
 extension Assistant {
-    /// Open-world tool path. Appends its decisions (skillPick, contactPick, confirmBeforeAct) and sets `planned`.
-    public func planSkill(_ utterance: String, ctx: String, registry: SkillRegistry, decisions: inout [ReflexDecision],
-                          planned: inout PlannedAction?) async throws -> Reply {
-        try await planSkillCore(utterance, ctx: ctx, registry: registry, decisions: &decisions, planned: &planned, fallThrough: false)
+    /// Open-world tool path. Appends its decisions (skillPick, confirmBeforeAct) and sets `planned`.
+    public func planSkill(_ utterance: String, ctx: String, registry: SkillRegistry, requestID: UserRequestID,
+                          decisions: inout [ReflexDecision], planned: inout PlannedAction?,
+                          read: inout ReadResult?) async throws -> Reply {
+        try await planSkillCore(utterance, ctx: ctx, registry: registry, requestID: requestID, decisions: &decisions,
+                                planned: &planned, read: &read, fallThrough: false)
             ?? .clarify("What would you like me to do?")
     }
 
     /// Before the routed branch (route != tool): an explicit app/feature request gets ONE skillPick decision. Returns nil
     /// (caller continues with the trained route unchanged) unless the request is explicit AND skillPick clears tau.
-    public func skillOverride(_ utterance: String, ctx: String, route: ReflexDecision, decisions: inout [ReflexDecision],
-                              planned: inout PlannedAction?) async throws -> Reply? {
+    public func skillOverride(_ utterance: String, ctx: String, route: ReflexDecision, requestID: UserRequestID,
+                              decisions: inout [ReflexDecision], planned: inout PlannedAction?,
+                              read: inout ReadResult?) async throws -> Reply? {
         guard let reg = skills, route.chosen.id != "tool", ActionPlanner.isExplicitRequest(utterance) else { return nil }
-        return try await planSkillCore(utterance, ctx: ctx, registry: reg, decisions: &decisions, planned: &planned, fallThrough: true)
+        return try await planSkillCore(utterance, ctx: ctx, registry: reg, requestID: requestID, decisions: &decisions,
+                                       planned: &planned, read: &read, fallThrough: true)
     }
 
-    func planSkillCore(_ utterance: String, ctx: String, registry: SkillRegistry, decisions: inout [ReflexDecision],
-                       planned: inout PlannedAction?, fallThrough: Bool) async throws -> Reply? {
-        let cands = ActionPlanner.candidates(utterance, registry: registry)
-        guard !cands.isEmpty else {
-            return fallThrough ? nil : .clarify("I can't do that on this phone yet. New abilities are a JSON skill away (docs/SKILLS.md).")
-        }
-        let pick = try await reflex.decide(OptionSets.skillPick(candidates: cands.map(\.optionLabel)), context: ctx)
-        decisions.append(pick)
-        guard pick.chosen.id != "ask", let i = Int(pick.chosen.id.dropFirst()), i < cands.count else {
-            if fallThrough && !ActionPlanner.isExplicitMessageRequest(utterance) { return nil }
-            let choices = ActionPlanner.list(cands.prefix(3).map(\.title))
-            if ActionPlanner.isExplicitMessageRequest(utterance) {
-                return .clarify("Did you mean: \(choices)? Please restate the request with the app name and recipient and message.")
-            }
-            return .clarify("Did you mean: \(choices)?")
-        }
-        let skill = cands[i]
-        var args = SkillArgs.extract(skill, utterance: utterance)
+    func planSkillCore(_ utterance: String, ctx: String, registry: SkillRegistry, requestID: UserRequestID,
+                       decisions: inout [ReflexDecision], planned: inout PlannedAction?,
+                       read: inout ReadResult?, fallThrough: Bool, preselected: Skill? = nil,
+                       explicitDraftOverride: Bool = false) async throws -> Reply? {
+        var skill: Skill
+        var belowTau = explicitDraftOverride
 
-        // Contacts: the trained contactPick decision disambiguates, exactly like send_message.
-        if let spec = skill.argSchema.first(where: { $0.kind == .contact }), let who = args[spec.name] {
-            let found = try await actions.searchContacts(who)
-            if found.count > 1 {
-                let d = try await reflex.decide(OptionSets.contactPick(candidates: found), context: ctx)
-                decisions.append(d)
-                guard d.chosen.id != "ask" else { return .clarify("Which \(who)? " + found.joined(separator: ", ")) }
-                args[spec.name] = d.chosen.label
-            } else if let only = found.first { args[spec.name] = only }
-            else if spec.required { return .clarify("I couldn't find \(who) in your contacts.") }
+        // BF-1: explicit "Email …" requests always use compiled email_compose, never the frozen message tool.
+        let forced = preselected ?? (ActionPlanner.isExplicitEmailRequest(utterance) ? registry.skill(id: "email_compose") : nil)
+        if let forced {
+            skill = forced
+        } else {
+            let cands = ActionPlanner.candidates(utterance, registry: registry)
+            guard !cands.isEmpty else {
+                return fallThrough ? nil : .clarify("I can't do that on this phone yet. New abilities are a JSON skill away (docs/SKILLS.md).")
+            }
+            let pick = try await reflex.decide(OptionSets.skillPick(candidates: cands.map(\.optionLabel)), context: ctx)
+            decisions.append(pick)
+            if pick.chosen.id != "ask", let i = Int(pick.chosen.id.dropFirst()), i < cands.count {
+                skill = cands[i]
+                belowTau = pick.escalated
+            } else if ActionPlanner.isExplicitMessageRequest(utterance), let top = cands.first,
+                      top.category.reachesOtherPeople, !CapabilityCatalog.isReplyOnly(top.id),
+                      !(argsFor(top, utterance)["contact"] ?? "").isEmpty,
+                      !(argsFor(top, utterance)["body"] ?? "").isEmpty {
+                // Old behaviour clarified below tau. The contract's explicit-message draft keeps the parsed
+                // recipient/body and shows an editable card instead.
+                skill = top
+                belowTau = true
+            } else {
+                if fallThrough && !ActionPlanner.isExplicitMessageRequest(utterance) { return nil }
+                let choices = ActionPlanner.list(cands.prefix(3).map(\.title))
+                if ActionPlanner.isExplicitMessageRequest(utterance) {
+                    return .clarify("Did you mean: \(choices)? Please restate the request with the app name and recipient and message.")
+                }
+                return .clarify("Did you mean: \(choices)?")
+            }
         }
-        if let missing = skill.argSchema.first(where: { $0.required && (args[$0.name] ?? "").isEmpty }) {
+
+        // Binding knowledge for a compiled id comes from the Swift catalog, never from a merged JSON file.
+        let extractedFrom = CapabilityCatalog.current(id: skill.id).flatMap { _ in
+            BuiltinSkills.all.first { $0.id == skill.id }
+        } ?? skill
+        let args = SkillArgs.extract(extractedFrom, utterance: utterance)
+        let specs = CapabilityCatalog.current(id: skill.id)?.arguments ?? skill.argSchema
+        if let missing = specs.first(where: { $0.required && (args[$0.name] ?? "").isEmpty }) {
             return .clarify(SkillArgs.question(for: missing, skill: skill))
         }
 
@@ -134,79 +159,151 @@ extension Assistant {
         planned = action
         let conf = try await reflex.decide(OptionSets.confirmBeforeAct, context: "\(ctx)\nPlanned action: \(action.tool) \(ActionPlanner.describe(args))")
         decisions.append(conf)
-        if conf.chosen.id == "confirm" || skill.confirm {      // hard rule: anything that reaches another person confirms
-            return .needsConfirmation(action, prompt: SkillArgs.confirmPrompt(skill, args: args))
+
+        let capability = CapabilityCatalog.resolve(id: skill.id, skill: skill)
+        switch capability {
+        case .replyOnly:
+            guard let contract = CapabilityCatalog.current(id: skill.id) else {
+                return .clarify("This read is not compiled into this build. Nothing was done.")
+            }
+            let needsConfirm = contract.confirmation == .always || conf.chosen.id == "confirm"
+            if needsConfirm {
+                guard let ledger, let effects else { return .clarify("Reads are unavailable on this build. Nothing was done.") }
+                let card = try EffectSession(ledger: ledger, effects: effects).stageRead(
+                    requestID: requestID, contract: contract, raw: action, sharedText: SharedInbox.shared.peek()?.text)
+                return .needsConfirmation(card)
+            }
+            let result = try await execute(action)
+            read = result
+            decisions.append(contentsOf: result.decisions)
+            return result.provider.map { Reply.cloud(result.text, provider: $0) } ?? .local(result.text)
+        case .rejected(let rejected):
+            return .clarify(EffectSession.rejectedSummary(rejected))
+        case .compiled, .userHandoff:
+            guard let ledger, let effects else {
+                return .clarify("Actions are unavailable on this build. Nothing was done.")
+            }
+            let result = try await EffectSession(ledger: ledger, effects: effects).evaluate(
+                requestID: requestID, capability: capability, raw: action,
+                modelAskedConfirm: conf.chosen.id == "confirm", explicitDraft: belowTau)
+            return Self.reply(from: result, read: &read, decisions: &decisions)
         }
-        return .acted(try await execute(action))
     }
 
-    /// Runs a planned action: `skill:` tools via the registry (executor tools, PocketCore reasoning, or the SkillRunner);
-    /// everything else unchanged through `actions.perform`.
-    public func execute(_ a: PlannedAction) async throws -> String {
-        guard a.tool.hasPrefix(ActionPlanner.toolPrefix) else { return try await actions.perform(a) }
+    private func argsFor(_ skill: Skill, _ utterance: String) -> [String: String] {
+        SkillArgs.extract(skill, utterance: utterance)
+    }
+
+    /// Runs a reply-only read. Effect capabilities deliberately throw: callers must use confirmEffect/evaluate.
+    public func execute(_ a: PlannedAction) async throws -> ReadResult {
+        if a.tool == "search_memory" {
+            let hits = try await memory.retrieve(a.args["query"] ?? "", k: 3)
+            return ReadResult(text: hits.isEmpty ? "You haven't told me that yet."
+                                                 : "From memory: " + hits.map { $0.fact.text }.joined(separator: "; "))
+        }
+        if a.tool == "find_event" {
+            if let ev = a.args["event"] { return ReadResult(text: ev) }
+            let hits = try await actions.searchEvents(a.args["query"] ?? "")
+            return ReadResult(text: hits.first ?? "Nothing matching on your calendar in the next 30 days.")
+        }
+        if a.tool == "lookup_contact" {
+            let hits = try await actions.searchContacts(a.args["contact"] ?? "")
+            return ReadResult(text: hits.first ?? "No contact found.")
+        }
+        guard a.tool.hasPrefix(ActionPlanner.toolPrefix) else {
+            throw EffectError.effectRequiresConfirmation(a.tool)
+        }
         let id = String(a.tool.dropFirst(ActionPlanner.toolPrefix.count))
-        guard let skill = (skills ?? SkillRegistry()).skill(id: id) else { return "Unknown skill \(id) · nothing done" }
-        var args = a.args
-        switch skill.invocation {
-        case .native(let h) where ActionPlanner.executorTools.contains(h):
-            return try await actions.perform(PlannedAction(tool: h, args: args))
-        case .native("email_digest"):
-            guard let shared = SharedInbox.shared.take() else {
-                return "iOS lets no app read your Mail. Select the emails in Mail → Share → Pocket Glimmer (Shortcut “PG Share Emails”), and I'll summarize them here, on device."
+        guard let skill = (skills ?? SkillRegistry()).skill(id: id) else { return ReadResult(text: "Unknown skill \(id) · nothing done") }
+        guard CapabilityCatalog.isReplyOnly(id) else { throw EffectError.effectRequiresConfirmation(id) }
+        return try await readSkill(skill, action: a)
+    }
+
+    private func readSkill(_ skill: Skill, action: PlannedAction) async throws -> ReadResult {
+        var args = action.args
+        switch skill.id {
+        case "email_digest":
+            let shared = args["_sharedText"] ?? SharedInbox.shared.take()?.text
+            guard let shared else {
+                return ReadResult(text: "iOS lets no app read your Mail. Select the emails in Mail → Share → Pocket Glimmer (Shortcut “PG Share Emails”), and I'll summarize them here, on device.")
             }
-            return try await reason("Summarize these emails in 3 short bullets: who wants what, and any deadline.", text: shared.text)
-        case .native(let h) where ActionPlanner.textSourceHandlers.contains(h):
-            var text = SharedInbox.shared.take()?.text ?? ""             // shared from Files/Mail/Safari first
+            return try await reason("Summarize these emails in 3 short bullets: who wants what, and any deadline.", text: shared)
+        case "analyze_document":
+            var text = args["_sharedText"] ?? SharedInbox.shared.take()?.text ?? ""
             if text.isEmpty {
-                guard let runner = skillRunner else { return "Documents need the iPhone app · nothing done" }
-                text = try await runner.run(skill, args: args)          // document picker -> extracted text
+                guard let runner = skillRunner else { return ReadResult(text: "Documents need the iPhone app · nothing done") }
+                text = try await runner.run(skill, args: args)
             }
-            guard !text.isEmpty else { return "No text found in that document (PDF, .txt and .md are supported)." }
+            guard !text.isEmpty else { return ReadResult(text: "No text found in that document (PDF, .txt and .md are supported).") }
             return try await reason("Summarize this document in 3 short bullets, then one line on what to do next.", text: text)
-        case .native("html_viz"):
-            if (args["data"] ?? "").isEmpty || HTMLViz.pairs(from: args["data"] ?? "").isEmpty, let shared = SharedInbox.shared.peek() { args["data"] = shared.text }
+        case "html_viz":
+            if (args["data"] ?? "").isEmpty || HTMLViz.pairs(from: args["data"] ?? "").isEmpty {
+                if let copied = args["_sharedText"] { args["data"] = copied }
+                else if let shared = SharedInbox.shared.peek() { args["data"] = shared.text }
+            }
             if args["title"] == nil {
                 let t = try await reflex.engine.generate(prompt: Self.localPrompt("Give a 2-5 word chart title for: \(String((args["data"] ?? "").prefix(300)))", mem: ""), maxTokens: 12, temperature: 0.2)
                 let clean = t.trimmed.trimmingCharacters(in: CharacterSet(charactersIn: "\"'.“”"))
                 args["title"] = clean.isEmpty || clean.count > 60 ? "Chart" : clean
             }
-            guard let runner = skillRunner else { return HTMLViz.render(text: args["data"] ?? "", title: args["title"] ?? "Chart").map { "Chart ready (\($0.bars) bars)" } ?? "No numbers to chart." }
-            return try await runner.run(skill, args: args)
-        case .cloudReason:
-            let text = args["text"] ?? SharedInbox.shared.peek()?.text ?? ""
-            return try await reason(skill.id == "translate" ? "Translate as asked. Reply with the translation only." : "Summarize in 3 short bullets.",
-                                    text: text.isEmpty ? args.values.joined(separator: " ") : text)
+            if let runner = skillRunner {
+                return ReadResult(text: try await runner.run(skill, args: args))
+            }
+            return ReadResult(text: HTMLViz.render(text: args["data"] ?? "", title: args["title"] ?? "Chart").map { "Chart ready (\($0.bars) bars)" } ?? "No numbers to chart.")
+        case "device_status":
+            guard let runner = skillRunner else { return ReadResult(text: "Battery & storage needs the iPhone app · nothing done") }
+            return ReadResult(text: try await runner.run(skill, args: args))
+        case "calendar_find":
+            let hits = try await actions.searchEvents(args["query"] ?? "")
+            return ReadResult(text: hits.first ?? "Nothing matching on your calendar in the next 30 days.")
+        case "memory_recall":
+            let hits = try await memory.retrieve(args["query"] ?? "", k: 3)
+            return ReadResult(text: hits.isEmpty ? "You haven't told me that yet."
+                                                 : "From memory: " + hits.map { $0.fact.text }.joined(separator: "; "))
         default:
-            guard let runner = skillRunner else { return "\(skill.title) needs the iPhone app · nothing done" }
-            return try await runner.run(skill, args: args)
+            switch skill.invocation {
+            case .cloudReason:
+                let text = args["text"] ?? args["_sharedText"] ?? SharedInbox.shared.peek()?.text ?? ""
+                return try await reason(skill.id == "translate" ? "Translate as asked. Reply with the translation only." : "Summarize in 3 short bullets.",
+                                        text: text.isEmpty ? args.values.joined(separator: " ") : text)
+            default:
+                guard let runner = skillRunner else { return ReadResult(text: "\(skill.title) needs the iPhone app · nothing done") }
+                return ReadResult(text: try await runner.run(skill, args: args))
+            }
         }
     }
 
     /// Local 1B for short inputs; long inputs escalate to the cloud chain only when online, configured and the
     /// complete assembled text passes the sensitivity gate. Otherwise the 1B reads a truncated window and says so.
-    func reason(_ instruction: String, text: String, localLimit: Int = 2_500) async throws -> String {
-        if text.count > localLimit, isOnline() {
-            let config = cloudConfiguration()
-            if !config.chain.brains.isEmpty {
-                switch try await CloudTurnComposer.prepareDocument(instruction: instruction, text: text,
-                                                                   scrubber: config.scrubber, reflex: reflex) {
-                case .prepared(let turn):
-                    let ans = try await turn.send(on: config.chain)
-                    return turn.restore(ans.text)
-                case .withheld(let reason):
-                    return try await localReason(instruction, text: text, limit: localLimit, note: reason.localNote)
-                }
+    /// The result keeps provider, scrubbed payload, withheld flag and sensitivity decisions so a skill read is
+    /// never mislabelled as on-device (BF-3).
+    func reason(_ instruction: String, text: String, localLimit: Int = 2_500) async throws -> ReadResult {
+        let config = cloudConfiguration()
+        if text.count > localLimit, isOnline(), !config.chain.brains.isEmpty {
+            var decisions: [ReflexDecision] = []
+            switch try await CloudTurnComposer.prepareDocument(instruction: instruction, text: text,
+                                                               scrubber: config.scrubber, reflex: reflex,
+                                                               onDecision: { decisions.append($0) }) {
+            case .prepared(let turn):
+                let ans = try await turn.send(on: config.chain)
+                return ReadResult(text: turn.restore(ans.text), provider: "\(ans.provider) · \(ans.model)",
+                                  cloudPromptSent: turn.sentText, decisions: decisions)
+            case .withheld(let reason):
+                return try await localReason(instruction, text: text, limit: localLimit,
+                                             note: reason.localNote, decisions: decisions)
             }
         }
-        return try await localReason(instruction, text: text, limit: localLimit, note: nil)
+        return try await localReason(instruction, text: text, limit: localLimit, note: nil, decisions: [])
     }
 
-    private func localReason(_ instruction: String, text: String, limit: Int, note: String?) async throws -> String {
+    private func localReason(_ instruction: String, text: String, limit: Int, note: String?,
+                             decisions: [ReflexDecision]) async throws -> ReadResult {
         let window = String(text.prefix(limit))
         let out = try await reflex.engine.generate(prompt: Self.localPrompt(instruction + "\n\n" + window, mem: ""), maxTokens: 200, temperature: 0.3)
-        guard text.count > limit else { return out.trimmed }
+        guard text.count > limit else { return ReadResult(text: out.trimmed, decisions: decisions) }
         let why = note.map { "; \($0)" } ?? ""
-        return out.trimmed + "\n(On device: read the first \(limit) characters\(why).)"
+        return ReadResult(text: out.trimmed + "\n(On device: read the first \(limit) characters\(why).)",
+                          withheldForSensitivity: note != nil, decisions: decisions)
     }
 }
 
@@ -257,7 +354,9 @@ public enum SkillArgs {
             ?? first(#"\b(?:that)\s+(.+)$"#, in: u)
     }
     static func time(_ u: String) -> String? {
-        guard var t = first(#"\b((?:tomorrow|today|tonight)?\s*(?:at\s+)?\d{1,2}(?::\d{2})?\s?(?:am|pm|a\.m\.|p\.m\.)?(?:\s+(?:tomorrow|today|tonight))?)\b"#, in: u)
+        // Keep an explicit zone/city qualifier in the phrase. A Shortcut handoff receives this exact text, and the
+        // binding code must refuse to guess when it cannot honour the words the user spoke.
+        guard var t = first(#"\b((?:tomorrow|today|tonight)?\s*(?:at\s+)?\d{1,2}(?::\d{2})?\s?(?:am|pm|a\.m\.|p\.m\.)?(?:\s+(?:tomorrow|today|tonight))?(?:\s+(?:UTC|GMT|EST|EDT|CST|CDT|MST|MDT|PST|PDT|CET|CEST|BST|IST|JST|KST|AEST|AEDT|[A-Z][a-z]+ time|in [A-Z][a-z]+))?)\b"#, in: u)
             ?? first(#"\b(tomorrow|today|tonight|next \w+|on \w+day)\b"#, in: u) else { return nil }
         if t.lowercased().hasPrefix("at ") { t = String(t.dropFirst(3)) }
         if t.range(of: #"^\d{1,2}$"#, options: .regularExpression) != nil { t += ":00" }

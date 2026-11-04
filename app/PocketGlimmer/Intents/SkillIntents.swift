@@ -24,10 +24,9 @@ enum SkillSetup {
     /// Idempotent. Call once after the Assistant is created (AppModel.boot); the intents below also call it.
     static func install(on a: Assistant, memory: MemoryStore?) {
         guard a.skills == nil else { return }
-        let runner = IOSSkillRunner()
-        runner.memory = memory
+        _ = memory   // auto-reply effects write through PocketEffects, not the read-only runner
         a.skills = registry()
-        a.skillRunner = runner
+        a.skillRunner = IOSSkillRunner()
     }
 
     @MainActor static func ensureInstalled() async {

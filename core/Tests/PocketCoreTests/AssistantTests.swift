@@ -2,20 +2,20 @@ import XCTest
 @testable import PocketCore
 
 final class RecordingActions: ActionExecutor, @unchecked Sendable {
-    var performed: [PlannedAction] = []
     var contacts = ["Sam Lee", "Sam Ortiz"]
     func searchContacts(_ q: String) async throws -> [String] { contacts.filter { $0.lowercased().contains(q.lowercased()) } }
     func searchEvents(_ q: String) async throws -> [String] { [] }
-    func perform(_ a: PlannedAction) async throws -> String { performed.append(a); return "Done: \(a.tool)" }
 }
 
 final class AssistantTests: XCTestCase {
-    func make(_ e: ScriptedEngine, online: Bool = false, cloud: [CloudBrain] = []) throws -> (Assistant, RecordingActions, TelemetryLog) {
+    func make(_ e: ScriptedEngine, online: Bool = false, cloud: [CloudBrain] = []) throws -> (Assistant, FakePhoneEffects, TelemetryLog) {
         let db = try SQLiteDB(path: ":memory:"); let tel = try TelemetryLog(db: db)
         let acts = RecordingActions()
+        let effects = FakePhoneEffects()
         let a = Assistant(reflex: Reflex(engine: e, telemetry: tel, source: "test"), memory: try MemoryStore(db: db), actions: acts,
+                          ledger: try EffectLedger(db: db), effects: effects,
                           cloud: CloudBrainChain(cloud), isOnline: { online })
-        return (a, acts, tel)
+        return (a, effects, tel)
     }
 
     func testReminderActsWithoutConfirmation() async throws {
@@ -24,11 +24,12 @@ final class AssistantTests: XCTestCase {
         e.script(whenPromptContains: "How should", logits: ["A": -3, "B": 5, "C": -3, "D": -3])
         e.script(whenPromptContains: "Which tool", logits: ["A": 5, "B": 0, "C": 0, "D": 0, "E": 0, "F": 0, "G": 0])
         e.script(whenPromptContains: "explicit confirmation", logits: ["A": 4, "B": -2])
-        let (a, acts, tel) = try make(e)
+        let (a, effects, tel) = try make(e)
+        effects.instantPhrases["tomorrow at 9am"] = .parsed(Date().addingTimeInterval(86_400))
         let t = try await a.handle("Remind me to call the dentist tomorrow at 9am")
-        XCTAssertEqual(t.reply, .acted("Done: create_reminder"))
-        XCTAssertEqual(acts.performed.first?.args["title"], "call the dentist")
-        XCTAssertEqual(acts.performed.first?.args["when"], "tomorrow at 9am")
+        guard case .acted(let effect) = t.reply else { return XCTFail("\(t.reply)") }
+        XCTAssertTrue(effect.phase.isCommitted)
+        XCTAssertEqual(text(effects.performed.first!.action, "title"), "call the dentist")
         XCTAssertEqual(try tel.all().map(\.decisionType), [.rememberOrNot, .route, .toolChoice, .confirmBeforeAct])
         XCTAssertEqual(t.action?.tool, "create_reminder")
         XCTAssertTrue(t.action!.json.contains("\"tool\" : \"create_reminder\""), t.action!.json)
@@ -39,14 +40,26 @@ final class AssistantTests: XCTestCase {
         e.script(whenPromptContains: "long-term memory", logits: ["A": -3, "B": -3, "C": 3])
         e.script(whenPromptContains: "How should", logits: ["A": -3, "B": 5, "C": -3, "D": -3])
         e.script(whenPromptContains: "Which tool", logits: ["A": 0, "B": 0, "C": 0, "D": 6, "E": 0, "F": 0, "G": 0])
-        e.script(whenPromptContains: "Which contact", logits: ["A": -1, "B": 5, "C": -2])
         e.script(whenPromptContains: "explicit confirmation", logits: ["A": 4, "B": -2])
-        let (a, acts, _) = try make(e)
+        let (a, effects, _) = try make(e)
+        let lee = candidate("Sam Lee", id: "sam-lee", methods: [phone("mobile", "5550101")])
+        let ortiz = candidate("Sam Ortiz", id: "sam-ortiz", methods: [phone("mobile", "5550102")])
+        effects.contactQueries["Sam"] = ContactLookup(access: .full, matches: [lee, ortiz])
+        effects.contactIDs["sam-ortiz"] = ContactLookup(access: .full, matches: [ortiz])
         let t = try await a.handle("Text Sam that I'm running 10 minutes late")
-        guard case .needsConfirmation(let act, _) = t.reply else { return XCTFail("\(t.reply)") }
-        XCTAssertEqual(act.args["contact"], "Sam Ortiz"); XCTAssertEqual(act.args["body"], "I'm running 10 minutes late")
-        XCTAssertTrue(acts.performed.isEmpty)
-        _ = try await a.confirm(act); XCTAssertEqual(acts.performed.count, 1)
+        guard case .needsConfirmation(let card) = t.reply else { return XCTFail("\(t.reply)") }
+        XCTAssertFalse(card.canConfirm)
+        let body = try XCTUnwrap(card.fields.first { $0.name == "body" }?.value)
+        XCTAssertEqual(body, "I'm running 10 minutes late")
+        XCTAssertEqual(effects.performCount, 0)
+        let edited = try await a.editEffect(card.attemptID,
+                                            edits: [DraftEdit(field: "contact", value: .contactID("sam-ortiz"))],
+                                            expectedRevision: card.revision)
+        let done = try await a.confirmEffect(card.attemptID, edits: [], expectedRevision: edited.revision)
+        guard case .finished(let effect) = done else { return XCTFail("\(done)") }
+        XCTAssertTrue(effect.phase.isSheet)
+        guard case .contact(let binding)? = effects.performed.first?.action.arguments["contact"] else { return XCTFail() }
+        XCTAssertEqual(binding.displayName, "Sam Ortiz")
     }
 
     func testUncertainRouteOfflineFallsBackLocally() async throws {
@@ -79,12 +92,12 @@ final class AssistantTests: XCTestCase {
         e.script(whenPromptContains: "long-term memory", logits: ["A": 5, "B": -3, "C": -3])
         e.script(whenPromptContains: "How should", logits: ["A": -3, "B": 5, "C": -3, "D": -3])
         e.script(whenPromptContains: "Which tool", logits: ["A": 0, "B": 0, "C": 0, "D": 0, "E": 0, "F": 6, "G": 0])
-        let (a, acts, _) = try make(e)
+        let (a, effects, _) = try make(e)
         _ = try await a.handle("I'm allergic to peanuts")
         let t = try await a.handle("What am I allergic to?")
-        guard case .acted(let text) = t.reply else { return XCTFail("\(t.reply)") }
-        XCTAssertTrue(text.lowercased().contains("peanut"), text)
-        XCTAssertTrue(acts.performed.isEmpty, "search_memory never leaves PocketCore")
+        guard case .local(let replyText) = t.reply else { return XCTFail("\(t.reply)") }
+        XCTAssertTrue(replyText.lowercased().contains("peanut"), replyText)
+        XCTAssertEqual(effects.performCount, 0, "search_memory never leaves PocketCore")
     }
 
     func testOfflineSensitiveEscalationRunsSensitivityAndKeepsOnDevice() async throws {

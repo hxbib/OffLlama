@@ -23,10 +23,10 @@ final class CloudConfigurationTests: XCTestCase {
         assistant.scrubber = PrivacyScrubber(knownNames: ["Morgan"])
         await firstBrain.release()
         let originalReply = try await pending.value
-        XCTAssertEqual(originalReply, "Dana from the original brain")
+        XCTAssertEqual(originalReply.text, "Dana from the original brain")
 
         let nextReply = try await assistant.reason("Summarize.", text: "Morgan: " + String(repeating: "project update ", count: 250))
-        XCTAssertEqual(nextReply, "Morgan from the new brain")
+        XCTAssertEqual(nextReply.text, "Morgan from the new brain")
     }
 }
 

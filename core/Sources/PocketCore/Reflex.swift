@@ -1,6 +1,6 @@
 import Foundation
 
-public struct ReflexDecision: Sendable {
+public struct ReflexDecision: Sendable, Equatable {
     public let type: DecisionType
     public let chosen: DecisionOption        // after threshold (fallback if escalated)
     public let argmax: DecisionOption        // model's raw top choice
