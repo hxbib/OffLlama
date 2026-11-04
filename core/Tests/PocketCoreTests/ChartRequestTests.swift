@@ -78,4 +78,14 @@ final class ChartRequestTests: XCTestCase {
         XCTAssertNil(HTMLViz.requestData(in: "Make a chart in HTML"))
         XCTAssertNil(HTMLViz.reply(text: "rent, food, transit"))
     }
+
+    func testNewChartRequestIsNotUsedAsPendingMessageBody() async throws {
+        let (a, _, effects) = try assistant(route: "A")
+        let draft = MessageDraft(requestID: UserRequestID(), contact: "Dana", channel: .imessage, lastAsked: .body)
+        let turn = try await a.handle("Make a chart: rent 1200, food 400, transit 130", pendingDrafts: [draft])
+        guard case .local(let text) = turn.reply else { return XCTFail("\(turn.reply)") }
+        XCTAssertTrue(RichReply.containsMarkup(text))
+        XCTAssertTrue(turn.consumedDrafts.isEmpty)
+        XCTAssertEqual(effects.performCount, 0)
+    }
 }

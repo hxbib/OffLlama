@@ -374,4 +374,83 @@ final class MessagingReviewRegressionTests: XCTestCase {
         XCTAssertFalse(jsonl.contains("Dana personal body text"),
                        "capability is a free String; the secret-free claim is call-site convention, not construction")
     }
+
+    func testNamedGroupRequestsNeverSelectTheFirstContact() async throws {
+        let (a, effects) = try makeA(toolEngine())
+        wireDana(effects)
+        for request in ["text Dana group chat saying hi", "send a message to the Family group saying dinner at 7",
+                        "text the \"Family Party\" group chat: hi", "message the group called Dana Friends saying hi"] {
+            let turn = try await a.handle(request)
+            guard case .clarify(let text) = turn.reply else { XCTFail("\(turn.reply)"); continue }
+            XCTAssertTrue(text.contains("group"), text)
+            XCTAssertNil(turn.action)
+            XCTAssertNil(turn.pendingDraft)
+            XCTAssertEqual(effects.performCount, 0)
+        }
+    }
+
+    func testGroupMentionInMessageBodyIsLiteral() async throws {
+        let (a, effects) = try makeA(toolEngine())
+        wireDana(effects)
+        let turn = try await a.handle("text Dana saying the family group chat moved to 7")
+        guard case .needsConfirmation(let card) = turn.reply else { return XCTFail("\(turn.reply)") }
+        XCTAssertEqual(card.fields.first { $0.name == "body" }?.value, "the family group chat moved to 7")
+    }
+
+    func testGroupNameAnswerDoesNotBindAsAnIndividual() {
+        let d = draft(channel: .imessage, body: "hi", lastAsked: .contact)
+        guard case .clarifyKeep(let text) = MessageFollowUp.resolve("the Family group chat", drafts: [d], now: now) else {
+            return XCTFail("A named group must not become a contact")
+        }
+        XCTAssertTrue(text.contains("group"))
+    }
+
+    func testChannelOnlySuffixLeavesTheBodyMissing() {
+        let (d, _) = MessageDraft.retain(utterance: "text Dana on WhatsApp", requestID: UserRequestID(), lowConfidence: false, now: now)
+        XCTAssertEqual(d.contact, "Dana")
+        XCTAssertEqual(d.channel, .whatsapp)
+        XCTAssertNil(d.body)
+        XCTAssertEqual(d.lastAsked, .body)
+    }
+
+    func testUnmarkedBodyAppWordDoesNotChooseDestination() {
+        for text in ["text Dana Instagram is down", "text Dana WhatsApp is down", "text Dana ig is down"] {
+            XCTAssertEqual(MessageChannel.parse(in: text), .imessage, text)
+        }
+    }
+
+    func testMessageBodyKeepsInternalQuotesColonAndURL() {
+        for body in ["He said \"hi\" to me", "Meet at 6:30", "https://example.com/page"] {
+            let parts = MessageDraft.messageArgs("Text Dana " + body)
+            XCTAssertEqual(parts.body, body)
+            let d = draft(contact: "Dana", channel: .imessage, lastAsked: .body)
+            guard case .completed(let done) = MessageFollowUp.resolve(body, drafts: [d], now: now) else {
+                XCTFail("Body was not bound: \(body)"); continue
+            }
+            XCTAssertEqual(done.body, body)
+        }
+    }
+
+    func testRepeatedMessageAfterChatAndWrongSkillPickStillStagesReview() async throws {
+        let engine = toolEngine()
+        let (a, effects) = try makeA(engine)
+        wireDana(effects)
+        let request = "text Dana saying hii"
+        let first = try await a.handle(request)
+        guard case .needsConfirmation(let original) = first.reply else { return XCTFail("\(first.reply)") }
+        engine.generated = "hii"
+        engine.script(whenPromptContains: "How should", logits: ["A": 8, "B": -5, "C": -5, "D": -5])
+        _ = try await a.handle("What is 2 + 2?")
+        let generations = engine.generatePrompts.count
+        engine.script(whenPromptContains: "Which phone action", logits: ["A": 0, "B": 6, "C": 0, "D": 0])
+        for _ in 0..<3 {
+            let later = try await a.handle(request)
+            guard case .needsConfirmation(let card) = later.reply else { XCTFail("\(later.reply)"); continue }
+            XCTAssertEqual(card.capabilityID, "imessage_send")
+            XCTAssertEqual(card.fields.first { $0.name == "body" }?.value, "hii")
+            XCTAssertNotEqual(card.attemptID, original.attemptID)
+            XCTAssertEqual(engine.generatePrompts.count, generations)
+            XCTAssertEqual(effects.performCount, 0)
+        }
+    }
 }

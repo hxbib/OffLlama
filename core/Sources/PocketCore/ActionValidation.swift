@@ -196,6 +196,15 @@ public enum ActionValidation {
     /// Message sends take one recipient and text only. Inspect the command prefix, stopping at a quote,
     /// colon, or body phrase, so a quoted body that mentions an attachment is not treated as instruction.
     private static func messageOptionsIssue(_ utterance: String) -> ArgumentIssue? {
+        let groupHead = utterance.components(separatedBy: .newlines).joined(separator: " ")
+            .replacingOccurrences(of: #"(?:\bsaying\b|\bthat says\b|\bto say\b|\bwith the message\b|:)[\s\S]*$"#,
+                                  with: "", options: [.regularExpression, .caseInsensitive])
+            .replacingOccurrences(of: #"["“][^"”]*["”]"#, with: "", options: .regularExpression)
+        if groupHead.range(of: #"\b(?:group(?:\s+(?:chats?|threads?|messages?))?|chat\s+group)\b"#,
+                           options: [.regularExpression, .caseInsensitive]) != nil {
+            return ArgumentIssue("group", .unsupported,
+                "OffLlama can't address an existing group by its name. Open that group in Messages to compose there, or ask to text one person. No recipient was selected.")
+        }
         let ns = utterance as NSString
         let bodyStart = try! NSRegularExpression(
             pattern: #"\b(?:saying|that says|to say|with the message|that)\b|["“”:]"#,
@@ -208,7 +217,7 @@ public enum ActionValidation {
         }
         let person = #"(?:@[A-Za-z0-9_.]+|[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}|[A-Za-z][A-Za-z0-9_.'-]*(?:\s+[A-Za-z][A-Za-z0-9_.'-]*)?)"#
         let list = person + #"\s*(?:,|;|\+|/|&|\band\b)\s*(?!(?:about|subject|body|message|saying|that|re|fwd|attached|attachment|cc|bcc|copy|schedule|today|tomorrow|tonight|at|on|in)\b)"# + person
-        let recipientList = #"\b(?:email|e-mail|mail|text|message|dm|direct message|whatsapp)\s+(?:a\s+(?:dm|message|text)\s+to\s+)?(?:to\s+)?"# + list
+        let recipientList = #"\b(?:email|e-mail|mail|text|sms|message|dm|direct message|whatsapp)\s+(?:a\s+(?:dm|message|text)\s+to\s+)?(?:to\s+)?"# + list
         let sendList = #"\bsend\s+(?:an?\s+(?:text|message|email|e-mail|dm)\s+to\s+)?(?:to\s+)?"# + list
         let messageOptions = [
             recipientList,

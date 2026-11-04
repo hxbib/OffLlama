@@ -126,6 +126,10 @@ public final class Assistant: @unchecked Sendable {
         if let sharedText, sharedText.count > ActionValidation.sharedTextLimit {
             throw EffectError.invalidEdit("Shared text exceeds 24,000 characters. Choose a smaller excerpt.")
         }
+        if MessageCommand.isExplicitMessageRequest(utterance),
+           let issue = ActionValidation.requestIssue(capabilityID: "imessage_send", utterance: utterance) {
+            return AssistantTurn(reply: .clarify(issue.question), decisions: [], remembered: [])
+        }
         var decisions: [ReflexDecision] = []
         let requestID = UserRequestID()
         var readResult: ReadResult?
@@ -589,18 +593,24 @@ public enum ArgumentExtractor {
             }
             a["body"] = body.trimmed
         case "send_message":
-            let contactPattern = #"(?:(?i:text|sms|whatsapp|message|msg|dm|ping|tell|send)\s+(?i:a message to\s+)?|(?i:reply to|respond to|write to)\s+)([A-Z][a-z]+(?: [A-Z][a-z]+)?)"#
+            let contactPattern = #"(?:(?i:text|sms|whatsapp|message|msg|dm|ping|tell|send)\s+(?i:(?:(?:an?\s+)?(?:message|text|sms|dm)\s+to\s+|to\s+)?)|(?i:reply to|respond to|write to)\s+)([\p{L}][\p{L}\p{N}_.’'-]*(?: (?!(?:He|She|They|We|You|It|Meet|Please|Thanks|Hello|Hi|Hey|On|At|In|Saying|That|Instagram|WhatsApp)\b)[A-Z][a-z]+)?)"#
             var rest: String?
             if let re = try? NSRegularExpression(pattern: contactPattern),
                let m = re.firstMatch(in: u, range: NSRange(u.startIndex..., in: u)),
                let contact = Range(m.range(at: 1), in: u), let full = Range(m.range, in: u) {
-                a["contact"] = String(u[contact]).trimmed
-                rest = String(u[full.upperBound...]).trimmed
+                let name = String(u[contact]).trimmed
+                let firstWord = name.split(separator: " ").first.map(String.init) ?? ""
+                if !SkillArgs.notNames.contains(firstWord.lowercased()),
+                   firstWord.range(of: #"['’](?:ll|m|ve|d|re|s|t)$"#, options: [.regularExpression, .caseInsensitive]) == nil {
+                    a["contact"] = name
+                    rest = String(u[full.upperBound...]).trimmed
+                }
             }
             var body = rest ?? ""
             // Recipient-first commands ("send Dana a message saying hi") carry the
             // message noun after the name; it is not body text.
             body = first(#"^(?:an?\s+(?:(?:WhatsApp|Instagram|Twitter|X|iMessage|SMS)\s+)?(?:dm|message|text)\b\s*(?=(?:saying|that says|to say|with the message|that\b|:|on\b|via\b|$)))?([\s\S]*)$"#, in: body) ?? body
+            body = first(#"^(?:on|via|using)\s+(?:Instagram|WhatsApp|Twitter|X|iMessage|SMS)(?:\s+|$)([\s\S]*)$"#, in: body) ?? body
             body = first(#"^(?:(?:on|via)\s+(?:Instagram|WhatsApp|Twitter|X|iMessage|SMS)\s+)?(?:(?:that says|with the message|to say|saying|that)\b|:)\s*([\s\S]*)$"#, in: body) ?? body
             if (body.first == "\"" && body.last == "\"") || (body.first == "“" && body.last == "”"), body.count >= 2 {
                 body = String(body.dropFirst().dropLast())

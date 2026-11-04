@@ -37,9 +37,14 @@ public enum MessageChannel: String, Sendable, Equatable, Codable {
     /// Bare "dm" names no app and returns nil.
     public static func parse(in utterance: String) -> MessageChannel? {
         let n = MessageCommand.head(utterance)
-        if n.contains(" whatsapp ") || n.contains(" whats app ") { return .whatsapp }
-        if n.contains(" instagram ") || n.contains(" insta ") || n.contains(" ig ") { return .instagram }
-        if n.contains(" twitter ") || n.contains(" on x ") || n.contains(" x dm ") { return .x }
+        let head = MessageCommand.stripped(n)
+        func named(_ names: String) -> Bool {
+            head.range(of: #"(?:^ "# + names + #"\b|\b(?:on|via|using) "# + names + #"\b|\ban? "# + names + #" (?:message|text|dm)\b)"#,
+                       options: .regularExpression) != nil
+        }
+        if named("(?:whatsapp|whats app)") { return .whatsapp }
+        if named("(?:instagram|insta|ig)") { return .instagram }
+        if named("(?:twitter|x)") { return .x }
         if n.contains(" imessage ") || n.contains(" sms ") || n.contains(" text message ")
             || n.contains(" messages app ") { return .imessage }
         if MessageCommand.isEmailHead(utterance) { return nil }
@@ -154,7 +159,7 @@ public struct MessageDraft: Sendable, Equatable, Codable {
     public static func messageArgs(_ utterance: String) -> (contact: String?, body: String?) {
         let base = ArgumentExtractor.heuristic(tool: "send_message", utterance: utterance)
         let contact = nonempty(base["contact"]) ?? SkillArgs.person(utterance)
-        var body = SkillArgs.body(utterance) ?? nonempty(base["body"])
+        var body = nonempty(base["body"]) ?? SkillArgs.body(utterance)
         if contact == nil, body == nil, var rest = MessageCommand.restAfterVerb(utterance) {
             if let r = rest.range(of: #"^(?:on|via)\s+[A-Za-z]+\s+"#, options: .regularExpression) {
                 rest = String(rest[r.upperBound...]).trimmed
@@ -186,9 +191,7 @@ public enum MessageFollowUp {
                                 "don't send", "dont send", "do not send"]
     static let cancelWhole = ["cancel", "cancelled", "canceled", "stop", "abort"]
     static let negativeWhole = ["no", "nope", "nah", "neither", "not that"]
-    static let questionStarts = ["what", "when", "where", "who", "why", "how", "is", "are",
-                                 "do", "does", "did", "can", "could", "would", "should", "will"]
-    static let commandStarts = ["remind", "schedule", "book", "set", "create", "add", "open", "play",
+    static let commandStarts = ["remind", "schedule", "book", "set", "make", "draw", "render", "chart", "graph", "plot", "visualize", "create", "add", "open", "play",
                                 "call", "search", "find", "show", "start", "run", "turn", "check"]
 
     public static func resolve(_ utterance: String, drafts: [MessageDraft],
@@ -297,6 +300,9 @@ public enum MessageFollowUp {
             return fill(draft, contact: nil, channel: nil, body: body, now: now)
         }
         if draft.lastAsked == .contact {
+            if let issue = ActionValidation.requestIssue(capabilityID: "imessage_send", utterance: "text " + utterance) {
+                return .clarifyKeep(issue.question)
+            }
             guard let contact = contactAnswer(utterance, norm: n) else { return .clarifyKeep(draft.question()) }
             return fill(draft, contact: contact, channel: nil, body: nil, now: now)
         }
@@ -305,12 +311,6 @@ public enum MessageFollowUp {
         let contact = channel == nil ? contactAnswer(utterance, norm: n) : nil
         let body = bodyAnswer(utterance, norm: n, draft: draft)
         if contact == nil, channel == nil, body == nil {
-            if draft.lastAsked == .body, let text = shortBody(utterance), !text.isEmpty {
-                return fill(draft, contact: nil, channel: nil, body: text, now: now)
-            }
-            if draft.lastAsked == .contact, let name = shortName(utterance) {
-                return fill(draft, contact: name, channel: nil, body: nil, now: now)
-            }
             if draft.lastAsked == .channel {
                 return .clarifyKeep(draft.question())
             }
@@ -383,12 +383,12 @@ public enum MessageFollowUp {
     }
 
     private static func bodyAnswer(_ utterance: String, norm n: String, draft: MessageDraft) -> String? {
-        if let quoted = SkillArgs.first(#"[\"“]([^\"”]+)[\"”]"#, in: utterance, literal: true) { return quoted }
-        if let marked = SkillArgs.first(#"(?:\bsaying|\bthat says|\bto say|\bwith the message|:)\s+([\s\S]+)$"#, in: utterance, literal: true) {
+        if let quoted = SkillArgs.first(#"^\s*[\"“]([\s\S]+)[\"”]\s*$"#, in: utterance, literal: true) { return quoted }
+        if let marked = SkillArgs.first(#"^\s*(?:saying|that says|to say|with the message)\s+([\s\S]+)$"#, in: utterance, literal: true) {
             let clean = marked.trimmed
             return clean.isEmpty ? nil : clean
         }
-        if let to = SkillArgs.first(#"^to\s+[A-Z][a-z]+(?: [A-Z][a-z]+)?:\s*(.+)$"#, in: utterance, literal: true) {
+        if let to = SkillArgs.first(#"^\s*to\s+@?[\p{L}][\p{L}\p{N}_.’' -]*:\s*([\s\S]+)$"#, in: utterance, literal: true) {
             return to.trimmed
         }
         return nil
@@ -398,10 +398,6 @@ public enum MessageFollowUp {
         let t = utterance.trimmed.trimmingCharacters(in: CharacterSet(charactersIn: "\"“”'.!?"))
         guard !t.isEmpty, t.count <= ActionValidation.textLimit else { return nil }
         return utterance.trimmed
-    }
-
-    private static func shortName(_ utterance: String) -> String? {
-        contactAnswer(utterance, norm: SkillRegistry.norm(utterance))
     }
 
     /// A follow-up that names only an app: "Instagram", "on WhatsApp", "X".
@@ -429,12 +425,6 @@ public enum MessageFollowUp {
     private static func isNegative(_ n: String) -> Bool {
         let t = n.trimmingCharacters(in: .whitespaces)
         return negativeWhole.contains(t)
-    }
-
-    private static func isQuestionLike(_ trimmed: String, norm n: String) -> Bool {
-        if trimmed.hasSuffix("?") { return true }
-        let first = n.split(separator: " ").first.map(String.init) ?? ""
-        return questionStarts.contains(first)
     }
 
     private static func isCommandLike(_ n: String) -> Bool {
