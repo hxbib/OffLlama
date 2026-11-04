@@ -1,0 +1,319 @@
+[
+ {
+  "case": "text my brother",
+  "decision": "route",
+  "candidates": null,
+  "gold": "tool",
+  "bare": {
+   "argmax": "tool",
+   "label": "Do a phone action: set a reminder, add/check calendar, text someone, look up a contact, recall a saved memory",
+   "conf": 0.76,
+   "local": false,
+   "raw_letter_logprobs": {
+    "B": -0.2571895718574524,
+    "A": -1.729674220085144,
+    "D": -3.3122222423553467,
+    "C": -4.443844795227051
+   }
+  },
+  "with_memory": {
+   "argmax": "tool",
+   "label": "Do a phone action: set a reminder, add/check calendar, text someone, look up a contact, recall a saved memory",
+   "conf": 0.627,
+   "local": false,
+   "raw_letter_logprobs": {
+    "B": -0.4307776391506195,
+    "A": -1.347157597541809,
+    "D": -2.7879438400268555,
+    "C": -3.6109437942504883
+   }
+  }
+ },
+ {
+  "case": "text my brother",
+  "decision": "toolChoice",
+  "candidates": null,
+  "gold": "send_message",
+  "bare": {
+   "argmax": "send_message",
+   "label": "Send a text message (text/tell/message someone)",
+   "conf": 0.981,
+   "local": true,
+   "raw_letter_logprobs": {
+    "D": -0.021578995271089516,
+    "A": -4.425455570220947,
+    "B": -5.613951206207275,
+    "G": -6.172233581542969,
+    "E": -6.5455002784729,
+    "C": -7.0496296882629395,
+    "F": -8.594411849975586
+   }
+  },
+  "with_memory": {
+   "argmax": "send_message",
+   "label": "Send a text message (text/tell/message someone)",
+   "conf": 0.965,
+   "local": true,
+   "raw_letter_logprobs": {
+    "D": -0.03922824189066887,
+    "A": -3.8617494106292725,
+    "B": -5.013050079345703,
+    "G": -5.436195373535156,
+    "E": -6.109903335571289,
+    "C": -6.472738265991211,
+    "F": -7.433256149291992
+   }
+  }
+ },
+ {
+  "case": "same first name, memory names brother",
+  "decision": "contactPick",
+  "candidates": [
+   "Sam Lee",
+   "Sam Ortiz"
+  ],
+  "gold": "c1",
+  "bare": {
+   "argmax": "c0",
+   "label": "Sam Lee",
+   "conf": 0.712,
+   "local": false,
+   "raw_letter_logprobs": {
+    "A": -0.4050770401954651,
+    "B": -1.6977101564407349,
+    "C": -2.019136428833008
+   }
+  },
+  "with_memory": {
+   "argmax": "c1",
+   "label": "Sam Ortiz",
+   "conf": 0.996,
+   "local": true,
+   "raw_letter_logprobs": {
+    "B": -0.014188929836936084,
+    "C": -4.955918788909912,
+    "A": -5.744605541229248
+   }
+  }
+ },
+ {
+  "case": "same first name, no hint in utterance",
+  "decision": "contactPick",
+  "candidates": [
+   "Sam Lee",
+   "Sam Ortiz"
+  ],
+  "gold": "ask",
+  "bare": {
+   "argmax": "c0",
+   "label": "Sam Lee",
+   "conf": 0.661,
+   "local": false,
+   "raw_letter_logprobs": {
+    "A": -0.5257537961006165,
+    "C": -1.618889570236206,
+    "B": -1.6410548686981201
+   }
+  },
+  "with_memory": {
+   "argmax": "c1",
+   "label": "Sam Ortiz",
+   "conf": 0.996,
+   "local": true,
+   "raw_letter_logprobs": {
+    "B": -0.014424927532672882,
+    "C": -4.966367244720459,
+    "A": -5.889358043670654
+   }
+  }
+ },
+ {
+  "case": "event via memory",
+  "decision": "route",
+  "candidates": null,
+  "gold": "tool",
+  "bare": {
+   "argmax": "tool",
+   "label": "Do a phone action: set a reminder, add/check calendar, text someone, look up a contact, recall a saved memory",
+   "conf": 0.877,
+   "local": false,
+   "raw_letter_logprobs": {
+    "B": -0.11876050382852554,
+    "A": -2.6976332664489746,
+    "D": -3.446807384490967,
+    "C": -4.412696361541748
+   }
+  },
+  "with_memory": {
+   "argmax": "tool",
+   "label": "Do a phone action: set a reminder, add/check calendar, text someone, look up a contact, recall a saved memory",
+   "conf": 0.837,
+   "local": false,
+   "raw_letter_logprobs": {
+    "B": -0.16177117824554443,
+    "A": -2.25441312789917,
+    "D": -3.503812313079834,
+    "C": -4.305100917816162
+   }
+  }
+ },
+ {
+  "case": "event via memory",
+  "decision": "toolChoice",
+  "candidates": null,
+  "gold": "find_event",
+  "bare": {
+   "argmax": "find_event",
+   "label": "Look up the calendar (what's on / when is my...)",
+   "conf": 0.863,
+   "local": false,
+   "raw_letter_logprobs": {
+    "C": -0.15907235915049225,
+    "A": -3.040165662765503,
+    "B": -3.4372832775115967,
+    "D": -3.455734968185425,
+    "F": -3.9166994094848633,
+    "G": -4.498772621154785,
+    "E": -5.798636436462402
+   }
+  },
+  "with_memory": {
+   "argmax": "find_event",
+   "label": "Look up the calendar (what's on / when is my...)",
+   "conf": 0.974,
+   "local": true,
+   "raw_letter_logprobs": {
+    "C": -0.03177453950047493,
+    "A": -4.412576675415039,
+    "D": -4.757287979125977,
+    "B": -5.598459243774414,
+    "G": -5.747365951538086,
+    "F": -5.899545669555664,
+    "E": -8.046525955200195
+   }
+  }
+ },
+ {
+  "case": "event via memory",
+  "decision": "eventPick",
+  "candidates": [
+   "Checkup with Dr. Park (Tue 3pm)",
+   "Team sync (Mon 9am)"
+  ],
+  "gold": "e0",
+  "bare": {
+   "argmax": "e0",
+   "label": "Checkup with Dr. Park (Tue 3pm)",
+   "conf": 0.917,
+   "local": true,
+   "raw_letter_logprobs": {
+    "A": -0.41355741024017334,
+    "C": -1.310552954673767,
+    "B": -3.3612122535705566
+   }
+  },
+  "with_memory": {
+   "argmax": "e0",
+   "label": "Checkup with Dr. Park (Tue 3pm)",
+   "conf": 0.922,
+   "local": true,
+   "raw_letter_logprobs": {
+    "A": -0.3544815480709076,
+    "C": -1.4405850172042847,
+    "B": -3.2806613445281982
+   }
+  }
+ },
+ {
+  "case": "memory Q&A",
+  "decision": "route",
+  "candidates": null,
+  "gold": "tool",
+  "bare": {
+   "argmax": "clarify",
+   "label": "Too vague to act on: says 'it/that/the thing' with no clear object or person",
+   "conf": 0.462,
+   "local": false,
+   "raw_letter_logprobs": {
+    "D": -0.6034002900123596,
+    "A": -1.2969332933425903,
+    "B": -1.993916630744934,
+    "C": -3.1877145767211914
+   }
+  },
+  "with_memory": {
+   "argmax": "answer_local",
+   "label": "Reply directly: greeting, thanks, small talk, quick arithmetic, short rewrite or translation",
+   "conf": 0.64,
+   "local": false,
+   "raw_letter_logprobs": {
+    "A": -0.43283629417419434,
+    "D": -1.6719491481781006,
+    "B": -2.360320806503296,
+    "C": -2.726705312728882
+   }
+  }
+ },
+ {
+  "case": "memory Q&A",
+  "decision": "toolChoice",
+  "candidates": null,
+  "gold": "search_memory",
+  "bare": {
+   "argmax": "lookup_contact",
+   "label": "Look up a contact's phone, email or address",
+   "conf": 0.878,
+   "local": false,
+   "raw_letter_logprobs": {
+    "E": -0.4344929630017795,
+    "F": -1.5478224754333496,
+    "G": -3.246032238006592,
+    "A": -3.294187068939209,
+    "D": -3.515918016433716,
+    "C": -3.9732089042663574,
+    "B": -4.467984676361084
+   }
+  },
+  "with_memory": {
+   "argmax": "lookup_contact",
+   "label": "Look up a contact's phone, email or address",
+   "conf": 0.348,
+   "local": false,
+   "raw_letter_logprobs": {
+    "F": -0.4122156798839569,
+    "A": -2.0549654960632324,
+    "E": -2.5057921409606934,
+    "C": -3.253352642059326,
+    "G": -3.281238079071045,
+    "B": -3.5263590812683105,
+    "D": -3.9191508293151855
+   }
+  }
+ },
+ {
+  "case": "memory Q&A",
+  "decision": "answerability",
+  "candidates": null,
+  "gold": "yes",
+  "bare": {
+   "argmax": "yes",
+   "label": "Yes: greeting, translation of a word, small arithmetic, spelling",
+   "conf": 0.878,
+   "local": false,
+   "raw_letter_logprobs": {
+    "A": -0.5294474363327026,
+    "B": -0.9017447233200073
+   }
+  },
+  "with_memory": {
+   "argmax": "yes",
+   "label": "Yes: greeting, translation of a word, small arithmetic, spelling",
+   "conf": 0.877,
+   "local": false,
+   "raw_letter_logprobs": {
+    "A": -0.5343568325042725,
+    "B": -0.8934457898139954
+   }
+  }
+ }
+]

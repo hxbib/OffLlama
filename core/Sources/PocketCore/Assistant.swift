@@ -137,7 +137,10 @@ public final class Assistant: @unchecked Sendable {
         let facts = try await memoryContext(utterance)
         let mem = MemoryDisclosure.local.render(facts)
         let online = isOnline()
-        let ctx = "\(mem)Network: \(online ? "online" : "offline")\nUser: \(utterance)"
+        // Route sees exactly the gold/calibration row shape. Retrieved memories lowered shipped route confidence in every
+        // measured case (docs/verification/LOCAL_MODEL_RELIABILITY_2026-11-04.md); pickers still get them for aliases.
+        let routeCtx = "Network: \(online ? "online" : "offline")\nUser: \(utterance)"
+        let ctx = mem + routeCtx
 
         // Memory write path (cheap reflex; runs every turn).
         var remembered: [MemoryFact] = []
@@ -188,7 +191,7 @@ public final class Assistant: @unchecked Sendable {
             }
         }
 
-        let route = try await reflex.decide(OptionSets.route, context: ctx)
+        let route = try await reflex.decide(OptionSets.route, context: routeCtx)
         decisions.append(route)
         if let data = HTMLViz.requestData(in: utterance, sharedText: sharedText),
            let reply = HTMLViz.reply(text: data) {

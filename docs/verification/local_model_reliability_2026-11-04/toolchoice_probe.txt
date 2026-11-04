@@ -1,0 +1,30 @@
+bare offline Remind me to call mom at 5pm                     gold=tool           argmax=create_reminder conf=0.750 below
+bare offline Add lunch with Ana tomorrow at noon to my calend gold=tool           argmax=create_event   conf=0.984 LOCAL
+bare offline Text Sam I'm running late                        gold=tool           argmax=send_message   conf=0.961 LOCAL
+bare offline Send a message to Mia saying hii                 gold=tool           argmax=send_message   conf=0.990 LOCAL
+bare offline text mia hii                                     gold=tool           argmax=send_message   conf=0.979 LOCAL
+bare offline Message the family group that dinner is at 7     gold=tool           argmax=send_message   conf=0.955 LOCAL
+bare offline What's Leo's phone number?                       gold=tool           argmax=lookup_contact conf=0.947 LOCAL
+bare offline What did I say my locker code was?               gold=tool           argmax=search_memory  conf=0.361 below
+bare offline hii                                              gold=answer_local   argmax=send_message   conf=0.891 below
+bare offline thanks!                                          gold=answer_local   argmax=send_message   conf=0.597 below
+bare offline What's 12 times 7?                               gold=answer_local   argmax=create_event   conf=0.499 below
+bare offline Write a detailed plan for a week in Japan        gold=escalate_cloud argmax=create_event   conf=0.838 below
+bare offline Change that one                                  gold=clarify        argmax=create_event   conf=0.367 below
+== bare: argmax correct 0/13, conf>=0.90 6/13
+
+mem  offline Remind me to call mom at 5pm                     gold=tool           argmax=send_message   conf=0.566 below
+mem  offline Add lunch with Ana tomorrow at noon to my calend gold=tool           argmax=create_event   conf=0.953 LOCAL
+mem  offline Text Sam I'm running late                        gold=tool           argmax=send_message   conf=0.957 LOCAL
+mem  offline Send a message to Mia saying hii                 gold=tool           argmax=send_message   conf=0.977 LOCAL
+mem  offline text mia hii                                     gold=tool           argmax=send_message   conf=0.965 LOCAL
+mem  offline Message the family group that dinner is at 7     gold=tool           argmax=send_message   conf=0.921 LOCAL
+mem  offline What's Leo's phone number?                       gold=tool           argmax=lookup_contact conf=0.791 below
+mem  offline What did I say my locker code was?               gold=tool           argmax=find_event     conf=0.283 below
+mem  offline hii                                              gold=answer_local   argmax=send_message   conf=0.841 below
+mem  offline thanks!                                          gold=answer_local   argmax=send_message   conf=0.677 below
+mem  offline What's 12 times 7?                               gold=answer_local   argmax=create_event   conf=0.409 below
+mem  offline Write a detailed plan for a week in Japan        gold=escalate_cloud argmax=create_event   conf=0.830 below
+mem  offline Change that one                                  gold=clarify        argmax=create_event   conf=0.257 below
+== mem: argmax correct 0/13, conf>=0.90 5/13
+

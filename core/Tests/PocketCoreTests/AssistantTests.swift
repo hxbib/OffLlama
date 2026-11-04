@@ -35,6 +35,37 @@ final class AssistantTests: XCTestCase {
         XCTAssertTrue(t.action!.json.contains("\"tool\" : \"create_reminder\""), t.action!.json)
     }
 
+    func testRouteSeesCalibrationRowWhileLocalAnswerKeepsMemories() async throws {
+        let e = ScriptedEngine()
+        e.script(whenPromptContains: "long-term memory", logits: ["A": -3, "B": -3, "C": 3])
+        e.script(whenPromptContains: "How should", logits: ["A": 5, "B": -3, "C": -3, "D": -3])
+        e.generated = "Try a peanut-free stir fry."
+        let (a, _, tel) = try make(e)
+        for f in RuleFactExtractor.extract("My mom's name is Linda") { try await a.memory.upsert(f) }
+        let t = try await a.handle("What should I cook for my mom Linda tonight?")
+        guard case .local = t.reply else { return XCTFail("\(t.reply)") }
+        let route = try XCTUnwrap(try tel.all().first { $0.decisionType == .route })
+        XCTAssertEqual(route.context, "Network: offline\nUser: What should I cook for my mom Linda tonight?")
+        XCTAssertTrue(e.generatePrompts.last!.contains("Linda"), "local answer keeps the user's memories")
+    }
+
+    func testContactPickStillSeesRelationshipMemory() async throws {
+        let e = ScriptedEngine()
+        e.script(whenPromptContains: "long-term memory", logits: ["A": -3, "B": -3, "C": 3])
+        e.script(whenPromptContains: "How should", logits: ["A": -3, "B": 5, "C": -3, "D": -3])
+        e.script(whenPromptContains: "Which tool", logits: ["A": 0, "B": 0, "C": 0, "D": 0, "E": 5, "F": 0, "G": 0])
+        e.script(whenPromptContains: "Which contact", logits: ["A": -3, "B": 5, "C": -3])
+        let (a, _, tel) = try make(e)
+        for f in RuleFactExtractor.extract("My brother's name is Sam Ortiz") { try await a.memory.upsert(f) }
+        let t = try await a.handle("Find the number for Sam, my brother")
+        XCTAssertEqual(t.reply, .local("Sam Ortiz"))
+        let rows = try tel.all()
+        let route = try XCTUnwrap(rows.first { $0.decisionType == .route })
+        let pick = try XCTUnwrap(rows.first { $0.decisionType == .contactPick })
+        XCTAssertEqual(route.context, "Network: offline\nUser: Find the number for Sam, my brother")
+        XCTAssertTrue(pick.context!.contains("Sam is the user's brother"), pick.context!)
+    }
+
     func testMessageDisambiguatesContactAndAlwaysConfirms() async throws {
         let e = ScriptedEngine()
         e.script(whenPromptContains: "long-term memory", logits: ["A": -3, "B": -3, "C": 3])
