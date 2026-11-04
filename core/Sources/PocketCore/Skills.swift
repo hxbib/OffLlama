@@ -325,27 +325,44 @@ public enum HTMLViz {
     /// "rent 1200, food 400; transit: 130" -> [(rent,1200),(food,400),(transit,130)]. Unlabeled numbers get #1, #2…
     public static func pairs(from text: String) -> [(label: String, value: Double)] {
         let numRe = try! NSRegularExpression(pattern: #"-?\$?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?%?"#)
+        let ungrouped = NSMutableString(string: text)
+        for match in numRe.matches(in: text, range: NSRange(location: 0, length: ungrouped.length)).reversed() {
+            let raw = ungrouped.substring(with: match.range)
+            if raw.contains(",") { ungrouped.replaceCharacters(in: match.range, with: raw.replacingOccurrences(of: ",", with: "")) }
+        }
+        func label(_ raw: String) -> String {
+            var value = raw
+            if let colon = value.lastIndex(where: { $0 == ":" || $0 == "=" }) {
+                let after = String(value[value.index(after: colon)...])
+                value = after.contains(where: \.isLetter) ? after : String(value[..<colon])
+            }
+            return value.split { !$0.isLetter && !$0.isNumber && $0 != "'" && $0 != "&" }
+                .suffix(3).joined(separator: " ")
+        }
         var out: [(String, Double)] = []
-        for seg in text.components(separatedBy: CharacterSet(charactersIn: ";\n|")) {
+        for seg in (ungrouped as String).components(separatedBy: CharacterSet(charactersIn: ",;\n|")) {
             let ns = seg as NSString
             let matches = numRe.matches(in: seg, range: NSRange(location: 0, length: ns.length))
+            guard let first = matches.first else { continue }
+            let labelsFollowValues = ns.substring(to: first.range.location).trimmed.isEmpty
             var labelStart = 0
             for (index, m) in matches.enumerated() {
-                var label = ns.substring(with: NSRange(location: labelStart, length: m.range.location - labelStart))
-                if index + 1 < matches.count, label.trimmed.range(of: #"(?:^|[ ,])[A-Za-z]$"#, options: .regularExpression) != nil {
+                let before = ns.substring(with: NSRange(location: labelStart, length: m.range.location - labelStart))
+                let raw = ns.substring(with: m.range)
+                let numberedLabel = before.range(of: #"(?:^|\s)[A-Za-z]$"#, options: .regularExpression) != nil
+                let yearLabel = before.contains(where: \.isLetter) && raw.range(of: #"^\d{4}$"#, options: .regularExpression) != nil
+                if !labelsFollowValues, index + 1 < matches.count, numberedLabel || yearLabel {
                     let gap = ns.substring(with: NSRange(location: NSMaxRange(m.range),
                                                        length: matches[index + 1].range.location - NSMaxRange(m.range)))
                     if !gap.isEmpty, gap.allSatisfy(\.isWhitespace) { continue }
                 }
                 labelStart = NSMaxRange(m.range)
-                let raw = ns.substring(with: m.range).filter { $0.isNumber || $0 == "." || $0 == "-" }
-                guard let v = Double(raw), v.isFinite else { continue }
-                if let c = label.lastIndex(where: { $0 == ":" || $0 == "=" }) {
-                    let after = String(label[label.index(after: c)...])
-                    label = after.contains(where: \.isLetter) ? after : String(label[..<c])
-                }
-                let words = label.split { !$0.isLetter && !$0.isNumber && $0 != "'" && $0 != "&" }.suffix(3)
-                out.append((words.joined(separator: " "), v))
+                let number = raw.filter { $0.isNumber || $0 == "." || $0 == "-" }
+                guard let value = Double(number), value.isFinite else { return [] }
+                let next = index + 1 < matches.count ? matches[index + 1].range.location : ns.length
+                let name = labelsFollowValues
+                    ? ns.substring(with: NSRange(location: labelStart, length: next - labelStart)) : before
+                out.append((label(name), value))
             }
         }
         return out.enumerated().map { ($0.element.0.isEmpty ? "#\($0.offset + 1)" : $0.element.0, $0.element.1) }

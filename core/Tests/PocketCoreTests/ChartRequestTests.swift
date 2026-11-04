@@ -23,6 +23,34 @@ final class ChartRequestTests: XCTestCase {
         XCTAssertEqual(values.map(\.value), [1200.5, 400, 100, 200, -12.5, 1, 2, 3])
     }
 
+    func testYearLabelsDoNotBecomeSeparateBars() async throws {
+        for (input, labels) in [("sales 2023 100, sales 2024 200", ["sales 2023", "sales 2024"]),
+                                ("Jan 2023 100,Feb 2023 200", ["Jan 2023", "Feb 2023"])] {
+            let values = HTMLViz.pairs(from: input)
+            XCTAssertEqual(values.map(\.label), labels)
+            XCTAssertEqual(values.map(\.value), [100, 200])
+            let (a, _, effects) = try assistant(route: "A")
+            let turn = try await a.handle("Make a chart: " + input)
+            guard case .local(let reply) = turn.reply else { return XCTFail("\(turn.reply)") }
+            XCTAssertTrue(reply.contains("2 bars"), reply)
+            XCTAssertEqual(effects.performCount, 0)
+        }
+    }
+
+    func testLabelsAfterValuesStayWithTheirOwnItems() {
+        for input in ["5 apples, 3 pears", "5 apples,3 pears", "5 apples 3 pears"] {
+            let values = HTMLViz.pairs(from: input)
+            XCTAssertEqual(values.map(\.label), ["apples", "pears"])
+            XCTAssertEqual(values.map(\.value), [5, 3])
+        }
+    }
+
+    func testTrailingUnitsDoNotLeakIntoTheNextItem() {
+        let values = HTMLViz.pairs(from: "temperature 72 degrees,humidity 40 percent; rain 1,200 mm, wind 10 mph")
+        XCTAssertEqual(values.map(\.label), ["temperature", "humidity", "rain", "wind"])
+        XCTAssertEqual(values.map(\.value), [72, 40, 1200, 10])
+    }
+
     private func assistant(route: String) throws -> (Assistant, ScriptedEngine, FakePhoneEffects) {
         let engine = ScriptedEngine()
         engine.generated = "rent 1200 | food 400 | transit 130"
@@ -93,6 +121,7 @@ final class ChartRequestTests: XCTestCase {
 
     func testNonFiniteNumbersAreNotRendered() {
         XCTAssertNil(HTMLViz.render(text: "unrepresentable " + String(repeating: "9", count: 500)))
+        XCTAssertNil(HTMLViz.render(text: "valid 5, unrepresentable " + String(repeating: "9", count: 500)))
     }
 
     func testChartRequestWithoutNumbersDoesNotInventData() {

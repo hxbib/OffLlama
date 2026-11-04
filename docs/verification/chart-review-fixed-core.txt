@@ -1,0 +1,906 @@
+[0/1] Planning build
+Building for debugging...
+[0/5] Write sources
+[2/5] Write swift-version-24593BA9C3E375BF.txt
+[4/7] Compiling PocketCore Skills.swift
+[5/7] Emitting module PocketCore
+[6/15] Write Objects.LinkFileList
+[7/17] Linking pg-cli
+[9/17] Compiling PocketCoreTests ChartRequestTests.swift
+[10/17] Emitting module PocketCoreTests
+[11/17] /build/x86_64-unknown-linux-gnu/debug/PocketCorePackageDiscoveredTests.derived/all-discovered-tests.swift
+[12/18] Write sources
+[14/21] Compiling PocketCorePackageDiscoveredTests all-discovered-tests.swift
+[15/21] Emitting module PocketCorePackageDiscoveredTests
+[16/21] Compiling PocketCorePackageDiscoveredTests PocketCoreTests.swift
+[17/19] Write Objects.LinkFileList
+[18/19] Linking PocketCorePackageTests.xctest
+Build complete! (5.45s)
+Test Suite 'All tests' started at 2026-11-04 23:36:57.661
+Test Suite 'debug.xctest' started at 2026-11-04 23:36:57.663
+Test Suite 'ActionPlanTests' started at 2026-11-04 23:36:57.663
+Test Case 'ActionPlanTests.testAtomicStageRollsBackWhenSecondInsertFails' started at 2026-11-04 23:36:57.663
+Test Case 'ActionPlanTests.testAtomicStageRollsBackWhenSecondInsertFails' passed (0.016 seconds)
+Test Case 'ActionPlanTests.testBoundsAndConflictingBodyRejectTheWholePlan' started at 2026-11-04 23:36:57.679
+Test Case 'ActionPlanTests.testBoundsAndConflictingBodyRejectTheWholePlan' passed (0.007 seconds)
+Test Case 'ActionPlanTests.testCancelledPredecessorDoesNotBlockIndependentThirdStep' started at 2026-11-04 23:36:57.686
+Test Case 'ActionPlanTests.testCancelledPredecessorDoesNotBlockIndependentThirdStep' passed (0.012 seconds)
+Test Case 'ActionPlanTests.testCapacityAndInvalidDependencyRefuseWithoutEviction' started at 2026-11-04 23:36:57.698
+Test Case 'ActionPlanTests.testCapacityAndInvalidDependencyRefuseWithoutEviction' passed (0.01 seconds)
+Test Case 'ActionPlanTests.testConcurrentConfirmAndRepeatedStageDoNotDuplicate' started at 2026-11-04 23:36:57.708
+Test Case 'ActionPlanTests.testConcurrentConfirmAndRepeatedStageDoNotDuplicate' passed (0.057 seconds)
+Test Case 'ActionPlanTests.testCorruptMetadataCannotBecomeAnIndependentClaim' started at 2026-11-04 23:36:57.765
+Test Case 'ActionPlanTests.testCorruptMetadataCannotBecomeAnIndependentClaim' passed (0.004 seconds)
+Test Case 'ActionPlanTests.testDependentUsesVerifiedReceiptAndNeedsFreshReview' started at 2026-11-04 23:36:57.769
+Test Case 'ActionPlanTests.testDependentUsesVerifiedReceiptAndNeedsFreshReview' passed (0.012 seconds)
+Test Case 'ActionPlanTests.testEditedProducerMaterializesOnlyFinalReceipt' started at 2026-11-04 23:36:57.781
+Test Case 'ActionPlanTests.testEditedProducerMaterializesOnlyFinalReceipt' passed (0.012 seconds)
+Test Case 'ActionPlanTests.testEveryNonProducerOutcomeBlocksDependency' started at 2026-11-04 23:36:57.793
+Test Case 'ActionPlanTests.testEveryNonProducerOutcomeBlocksDependency' passed (0.052 seconds)
+Test Case 'ActionPlanTests.testIndependentMessageDoesNotWaitForReminder' started at 2026-11-04 23:36:57.845
+Test Case 'ActionPlanTests.testIndependentMessageDoesNotWaitForReminder' passed (0.004 seconds)
+Test Case 'ActionPlanTests.testLegacyDuplicateRequestRowsSurviveMigration' started at 2026-11-04 23:36:57.849
+Test Case 'ActionPlanTests.testLegacyDuplicateRequestRowsSurviveMigration' passed (0.011 seconds)
+Test Case 'ActionPlanTests.testReceiptFailureKeepsDependentBlockedWithoutReplay' started at 2026-11-04 23:36:57.860
+Test Case 'ActionPlanTests.testReceiptFailureKeepsDependentBlockedWithoutReplay' passed (0.007 seconds)
+Test Case 'ActionPlanTests.testRestartAndCancelPreserveClaimedStep' started at 2026-11-04 23:36:57.867
+Test Case 'ActionPlanTests.testRestartAndCancelPreserveClaimedStep' passed (0.029 seconds)
+Test Case 'ActionPlanTests.testUnsupportedProducerAndConsumerNeverClaim' started at 2026-11-04 23:36:57.896
+Test Case 'ActionPlanTests.testUnsupportedProducerAndConsumerNeverClaim' passed (0.004 seconds)
+Test Suite 'ActionPlanTests' passed at 2026-11-04 23:36:57.901
+	 Executed 14 tests, with 0 failures (0 unexpected) in 0.236 (0.236) seconds
+Test Suite 'ActionTimeConstraintTests' started at 2026-11-04 23:36:57.901
+Test Case 'ActionTimeConstraintTests.testCalendarConstraintVariantsRequireCorrectionButSimpleRequestsDoNot' started at 2026-11-04 23:36:57.901
+Test Case 'ActionTimeConstraintTests.testCalendarConstraintVariantsRequireCorrectionButSimpleRequestsDoNot' passed (0.006 seconds)
+Test Case 'ActionTimeConstraintTests.testCalendarSimpleRequestAlwaysShowsCompleteReviewAndActsOnlyAfterConfirm' started at 2026-11-04 23:36:57.907
+Test Case 'ActionTimeConstraintTests.testCalendarSimpleRequestAlwaysShowsCompleteReviewAndActsOnlyAfterConfirm' passed (0.003 seconds)
+Test Case 'ActionTimeConstraintTests.testCalendarUnsupportedRequestsNeverReachEffects' started at 2026-11-04 23:36:57.911
+Test Case 'ActionTimeConstraintTests.testCalendarUnsupportedRequestsNeverReachEffects' passed (0.01 seconds)
+Test Case 'ActionTimeConstraintTests.testDatetimeTextLimitAppliesToArgumentsAndExecution' started at 2026-11-04 23:36:57.921
+Test Case 'ActionTimeConstraintTests.testDatetimeTextLimitAppliesToArgumentsAndExecution' passed (0.007 seconds)
+Test Case 'ActionTimeConstraintTests.testFutureAlarmHandoffKeepsTheExactPhrase' started at 2026-11-04 23:36:57.928
+Test Case 'ActionTimeConstraintTests.testFutureAlarmHandoffKeepsTheExactPhrase' passed (0.004 seconds)
+Test Case 'ActionTimeConstraintTests.testMalformedRecipientListDoesNotBecomeConfirmableBody' started at 2026-11-04 23:36:57.933
+Test Case 'ActionTimeConstraintTests.testMalformedRecipientListDoesNotBecomeConfirmableBody' passed (0.013 seconds)
+Test Case 'ActionTimeConstraintTests.testMessageBodyMentionsAreNotCommandOptions' started at 2026-11-04 23:36:57.946
+Test Case 'ActionTimeConstraintTests.testMessageBodyMentionsAreNotCommandOptions' passed (0.005 seconds)
+Test Case 'ActionTimeConstraintTests.testNoonMidnightTonightAndDayAfterTomorrowStayExact' started at 2026-11-04 23:36:57.952
+Test Case 'ActionTimeConstraintTests.testNoonMidnightTonightAndDayAfterTomorrowStayExact' passed (0.0 seconds)
+Test Case 'ActionTimeConstraintTests.testPastAlarmAndReminderStageCorrectionAndNeverExecute' started at 2026-11-04 23:36:57.952
+Test Case 'ActionTimeConstraintTests.testPastAlarmAndReminderStageCorrectionAndNeverExecute' passed (0.004 seconds)
+Test Case 'ActionTimeConstraintTests.testRecipientListsAndAttachmentsRequireCorrection' started at 2026-11-04 23:36:57.957
+Test Case 'ActionTimeConstraintTests.testRecipientListsAndAttachmentsRequireCorrection' passed (0.007 seconds)
+Test Case 'ActionTimeConstraintTests.testRelativeHandoffThatResolvedPastDoesNotBecomeConfirmable' started at 2026-11-04 23:36:57.963
+Test Case 'ActionTimeConstraintTests.testRelativeHandoffThatResolvedPastDoesNotBecomeConfirmable' passed (0.007 seconds)
+Test Case 'ActionTimeConstraintTests.testStaleCalendarSnapshotCannotExecuteUnderTheNewPolicy' started at 2026-11-04 23:36:57.971
+Test Case 'ActionTimeConstraintTests.testStaleCalendarSnapshotCannotExecuteUnderTheNewPolicy' passed (0.003 seconds)
+Test Case 'ActionTimeConstraintTests.testTimeExtractionPreservesTheWholePhraseAndResolverInput' started at 2026-11-04 23:36:57.974
+Test Case 'ActionTimeConstraintTests.testTimeExtractionPreservesTheWholePhraseAndResolverInput' passed (0.004 seconds)
+Test Case 'ActionTimeConstraintTests.testTimeParserRefusesZonesRangesMultipleTimesAndPast' started at 2026-11-04 23:36:57.978
+Test Case 'ActionTimeConstraintTests.testTimeParserRefusesZonesRangesMultipleTimesAndPast' passed (0.001 seconds)
+Test Suite 'ActionTimeConstraintTests' passed at 2026-11-04 23:36:57.979
+	 Executed 14 tests, with 0 failures (0 unexpected) in 0.077 (0.077) seconds
+Test Suite 'ActionValidationTests' started at 2026-11-04 23:36:57.979
+Test Case 'ActionValidationTests.testAllCapabilitiesHaveExportableRulesAndRejectUnknownFields' started at 2026-11-04 23:36:57.979
+Test Case 'ActionValidationTests.testAllCapabilitiesHaveExportableRulesAndRejectUnknownFields' passed (0.006 seconds)
+Test Case 'ActionValidationTests.testAmbiguousClockNeverUsesDetectorGuess' started at 2026-11-04 23:36:57.985
+Test Case 'ActionValidationTests.testAmbiguousClockNeverUsesDetectorGuess' passed (0.001 seconds)
+Test Case 'ActionValidationTests.testConfirmedReadCannotAcquireLaterSharedInput' started at 2026-11-04 23:36:57.985
+Test Case 'ActionValidationTests.testConfirmedReadCannotAcquireLaterSharedInput' passed (0.012 seconds)
+Test Case 'ActionValidationTests.testEditedTextIsNeverTruncatedAndCanBeRepaired' started at 2026-11-04 23:36:57.997
+Test Case 'ActionValidationTests.testEditedTextIsNeverTruncatedAndCanBeRepaired' passed (0.106 seconds)
+Test Case 'ActionValidationTests.testMissingAndInvalidHandlesRemainEditable' started at 2026-11-04 23:36:58.103
+Test Case 'ActionValidationTests.testMissingAndInvalidHandlesRemainEditable' passed (0.003 seconds)
+Test Case 'ActionValidationTests.testTimerRejectsInvalidAndSupportsCompoundDurations' started at 2026-11-04 23:36:58.106
+Test Case 'ActionValidationTests.testTimerRejectsInvalidAndSupportsCompoundDurations' passed (0.007 seconds)
+Test Case 'ActionValidationTests.testUnsafeURLsAndTypedBypassAreRejected' started at 2026-11-04 23:36:58.112
+Test Case 'ActionValidationTests.testUnsafeURLsAndTypedBypassAreRejected' passed (0.001 seconds)
+Test Case 'ActionValidationTests.testUnsupportedRequestsAreNotSilentlySimplified' started at 2026-11-04 23:36:58.113
+Test Case 'ActionValidationTests.testUnsupportedRequestsAreNotSilentlySimplified' passed (0.001 seconds)
+Test Suite 'ActionValidationTests' passed at 2026-11-04 23:36:58.114
+	 Executed 8 tests, with 0 failures (0 unexpected) in 0.135 (0.135) seconds
+Test Suite 'AssistantTests' started at 2026-11-04 23:36:58.114
+Test Case 'AssistantTests.testLocallyRoutedSensitiveRequestStillShowsSensitivityCard' started at 2026-11-04 23:36:58.114
+Test Case 'AssistantTests.testLocallyRoutedSensitiveRequestStillShowsSensitivityCard' passed (0.009 seconds)
+Test Case 'AssistantTests.testMessageDisambiguatesContactAndAlwaysConfirms' started at 2026-11-04 23:36:58.123
+Test Case 'AssistantTests.testMessageDisambiguatesContactAndAlwaysConfirms' passed (0.011 seconds)
+Test Case 'AssistantTests.testOfflineSensitiveEscalationRunsSensitivityAndKeepsOnDevice' started at 2026-11-04 23:36:58.134
+Test Case 'AssistantTests.testOfflineSensitiveEscalationRunsSensitivityAndKeepsOnDevice' passed (0.008 seconds)
+Test Case 'AssistantTests.testOfflineUnanswerableSaysSoInsteadOfGuessing' started at 2026-11-04 23:36:58.142
+Test Case 'AssistantTests.testOfflineUnanswerableSaysSoInsteadOfGuessing' passed (0.004 seconds)
+Test Case 'AssistantTests.testOnlineEscalationScrubsAndRestores' started at 2026-11-04 23:36:58.147
+Test Case 'AssistantTests.testOnlineEscalationScrubsAndRestores' passed (0.006 seconds)
+Test Case 'AssistantTests.testRememberingThroughAssistantUsesConflictDecision' started at 2026-11-04 23:36:58.152
+Test Case 'AssistantTests.testRememberingThroughAssistantUsesConflictDecision' passed (0.009 seconds)
+Test Case 'AssistantTests.testReminderActsWithoutConfirmation' started at 2026-11-04 23:36:58.161
+Test Case 'AssistantTests.testReminderActsWithoutConfirmation' passed (0.007 seconds)
+Test Case 'AssistantTests.testSearchMemoryAnswersOnDeviceWithoutConfirm' started at 2026-11-04 23:36:58.168
+Test Case 'AssistantTests.testSearchMemoryAnswersOnDeviceWithoutConfirm' passed (0.009 seconds)
+Test Case 'AssistantTests.testSensitiveOnlineEscalationStaysOnDeviceAndFlagsWithheld' started at 2026-11-04 23:36:58.177
+Test Case 'AssistantTests.testSensitiveOnlineEscalationStaysOnDeviceAndFlagsWithheld' passed (0.012 seconds)
+Test Case 'AssistantTests.testUncertainRouteOfflineFallsBackLocally' started at 2026-11-04 23:36:58.190
+Test Case 'AssistantTests.testUncertainRouteOfflineFallsBackLocally' passed (0.005 seconds)
+Test Suite 'AssistantTests' passed at 2026-11-04 23:36:58.194
+	 Executed 10 tests, with 0 failures (0 unexpected) in 0.079 (0.079) seconds
+Test Suite 'CalibrationTests' started at 2026-11-04 23:36:58.194
+Test Case 'CalibrationTests.testECEAndTau' started at 2026-11-04 23:36:58.194
+Test Case 'CalibrationTests.testECEAndTau' passed (0.001 seconds)
+Test Case 'CalibrationTests.testFitTemperatureRecoversOverconfidence' started at 2026-11-04 23:36:58.195
+Test Case 'CalibrationTests.testFitTemperatureRecoversOverconfidence' passed (0.018 seconds)
+Test Case 'CalibrationTests.testProfileRoundTrip' started at 2026-11-04 23:36:58.213
+Test Case 'CalibrationTests.testProfileRoundTrip' passed (0.004 seconds)
+Test Case 'CalibrationTests.testSoftmaxSumsToOneAndTemperatureSharpens' started at 2026-11-04 23:36:58.217
+Test Case 'CalibrationTests.testSoftmaxSumsToOneAndTemperatureSharpens' passed (0.103 seconds)
+Test Suite 'CalibrationTests' passed at 2026-11-04 23:36:58.320
+	 Executed 4 tests, with 0 failures (0 unexpected) in 0.126 (0.126) seconds
+Test Suite 'ChartRequestTests' started at 2026-11-04 23:36:58.321
+Test Case 'ChartRequestTests.testChartDefinitionIsStillConversation' started at 2026-11-04 23:36:58.321
+Test Case 'ChartRequestTests.testChartDefinitionIsStillConversation' passed (0.015 seconds)
+Test Case 'ChartRequestTests.testChartInstructionInsideMessageDoesNotExecuteChart' started at 2026-11-04 23:36:58.336
+Test Case 'ChartRequestTests.testChartInstructionInsideMessageDoesNotExecuteChart' passed (0.018 seconds)
+Test Case 'ChartRequestTests.testChartRequestWithoutNumbersDoesNotInventData' started at 2026-11-04 23:36:58.354
+Test Case 'ChartRequestTests.testChartRequestWithoutNumbersDoesNotInventData' passed (0.001 seconds)
+Test Case 'ChartRequestTests.testCompactAndUnpunctuatedListsKeepEveryLabelAndValue' started at 2026-11-04 23:36:58.355
+Test Case 'ChartRequestTests.testCompactAndUnpunctuatedListsKeepEveryLabelAndValue' passed (0.029 seconds)
+Test Case 'ChartRequestTests.testExplicitNumericChartRendersForEveryClassifierRoute' started at 2026-11-04 23:36:58.384
+Test Case 'ChartRequestTests.testExplicitNumericChartRendersForEveryClassifierRoute' passed (0.056 seconds)
+Test Case 'ChartRequestTests.testLabelsAfterValuesStayWithTheirOwnItems' started at 2026-11-04 23:36:58.439
+Test Case 'ChartRequestTests.testLabelsAfterValuesStayWithTheirOwnItems' passed (0.001 seconds)
+Test Case 'ChartRequestTests.testLargeFiniteNumbersRenderWithoutIntegerOverflow' started at 2026-11-04 23:36:58.440
+Test Case 'ChartRequestTests.testLargeFiniteNumbersRenderWithoutIntegerOverflow' passed (0.001 seconds)
+Test Case 'ChartRequestTests.testNewChartRequestIsNotUsedAsPendingMessageBody' started at 2026-11-04 23:36:58.441
+Test Case 'ChartRequestTests.testNewChartRequestIsNotUsedAsPendingMessageBody' passed (0.017 seconds)
+Test Case 'ChartRequestTests.testNonFiniteNumbersAreNotRendered' started at 2026-11-04 23:36:58.458
+Test Case 'ChartRequestTests.testNonFiniteNumbersAreNotRendered' passed (0.001 seconds)
+Test Case 'ChartRequestTests.testSharedChartDataBecomesInlineMarkup' started at 2026-11-04 23:36:58.459
+Test Case 'ChartRequestTests.testSharedChartDataBecomesInlineMarkup' passed (0.015 seconds)
+Test Case 'ChartRequestTests.testThousandsDecimalAndNumberedLabelsKeepTheirValues' started at 2026-11-04 23:36:58.474
+Test Case 'ChartRequestTests.testThousandsDecimalAndNumberedLabelsKeepTheirValues' passed (0.001 seconds)
+Test Case 'ChartRequestTests.testTrailingUnitsDoNotLeakIntoTheNextItem' started at 2026-11-04 23:36:58.476
+Test Case 'ChartRequestTests.testTrailingUnitsDoNotLeakIntoTheNextItem' passed (0.001 seconds)
+Test Case 'ChartRequestTests.testYearLabelsDoNotBecomeSeparateBars' started at 2026-11-04 23:36:58.476
+Test Case 'ChartRequestTests.testYearLabelsDoNotBecomeSeparateBars' passed (0.028 seconds)
+Test Suite 'ChartRequestTests' passed at 2026-11-04 23:36:58.504
+	 Executed 13 tests, with 0 failures (0 unexpected) in 0.183 (0.183) seconds
+Test Suite 'CloudBrainTests' started at 2026-11-04 23:36:58.504
+Test Case 'CloudBrainTests.testCancellationNeverTriesAnotherProvider' started at 2026-11-04 23:36:58.504
+Test Case 'CloudBrainTests.testCancellationNeverTriesAnotherProvider' passed (0.001 seconds)
+Test Case 'CloudBrainTests.testContributorModeIsRefusedBeforeTransport' started at 2026-11-04 23:36:58.506
+Test Case 'CloudBrainTests.testContributorModeIsRefusedBeforeTransport' passed (0.0 seconds)
+Test Case 'CloudBrainTests.testMalformedSettingsCannotReachTransport' started at 2026-11-04 23:36:58.506
+Test Case 'CloudBrainTests.testMalformedSettingsCannotReachTransport' passed (0.0 seconds)
+Test Suite 'CloudBrainTests' passed at 2026-11-04 23:36:58.507
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.002 (0.002) seconds
+Test Suite 'CloudConfigurationTests' started at 2026-11-04 23:36:58.507
+Test Case 'CloudConfigurationTests.testSettingsChangeAppliesToNextRequestWithoutChangingPendingReplyRestoration' started at 2026-11-04 23:36:58.507
+Test Case 'CloudConfigurationTests.testSettingsChangeAppliesToNextRequestWithoutChangingPendingReplyRestoration' passed (0.004 seconds)
+Test Suite 'CloudConfigurationTests' passed at 2026-11-04 23:36:58.511
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.004 (0.004) seconds
+Test Suite 'CloudPrivacyTests' started at 2026-11-04 23:36:58.511
+Test Case 'CloudPrivacyTests.testBenignLongDocumentStillEscalatesWithFullTail' started at 2026-11-04 23:36:58.511
+Test Case 'CloudPrivacyTests.testBenignLongDocumentStillEscalatesWithFullTail' passed (0.005 seconds)
+Test Case 'CloudPrivacyTests.testCancellationDuringScreeningMakesNoCloudCall' started at 2026-11-04 23:36:58.516
+Test Case 'CloudPrivacyTests.testCancellationDuringScreeningMakesNoCloudCall' passed (0.003 seconds)
+Test Case 'CloudPrivacyTests.testCloudProfileFiltersCorrectionHistoryAndSensitiveAliasesButLocalKeepsThem' started at 2026-11-04 23:36:58.519
+Test Case 'CloudPrivacyTests.testCloudProfileFiltersCorrectionHistoryAndSensitiveAliasesButLocalKeepsThem' passed (0.004 seconds)
+Test Case 'CloudPrivacyTests.testFullSensitiveMemoryStillReachesLocalPrompt' started at 2026-11-04 23:36:58.523
+Test Case 'CloudPrivacyTests.testFullSensitiveMemoryStillReachesLocalPrompt' passed (0.004 seconds)
+Test Case 'CloudPrivacyTests.testNonfiniteScreeningPreventsCall' started at 2026-11-04 23:36:58.527
+Test Case 'CloudPrivacyTests.testNonfiniteScreeningPreventsCall' passed (0.007 seconds)
+Test Case 'CloudPrivacyTests.testOversizedGraphemeWithholdsInsteadOfSending' started at 2026-11-04 23:36:58.535
+Test Case 'CloudPrivacyTests.testOversizedGraphemeWithholdsInsteadOfSending' passed (0.061 seconds)
+Test Case 'CloudPrivacyTests.testPartnerProfileValueIsMaskedInTheWholeCloudPayload' started at 2026-11-04 23:36:58.595
+Test Case 'CloudPrivacyTests.testPartnerProfileValueIsMaskedInTheWholeCloudPayload' passed (0.006 seconds)
+Test Case 'CloudPrivacyTests.testRememberedAliasIsMaskedInProfileAndUtteranceAndRestored' started at 2026-11-04 23:36:58.601
+Test Case 'CloudPrivacyTests.testRememberedAliasIsMaskedInProfileAndUtteranceAndRestored' passed (0.006 seconds)
+Test Case 'CloudPrivacyTests.testReplyPayloadIsTheScreenedTurnAndFiltersRetrievedSensitiveFacts' started at 2026-11-04 23:36:58.607
+Test Case 'CloudPrivacyTests.testReplyPayloadIsTheScreenedTurnAndFiltersRetrievedSensitiveFacts' passed (0.009 seconds)
+Test Case 'CloudPrivacyTests.testScanTelemetryDoesNotStoreDocumentText' started at 2026-11-04 23:36:58.616
+Test Case 'CloudPrivacyTests.testScanTelemetryDoesNotStoreDocumentText' passed (0.011 seconds)
+Test Case 'CloudPrivacyTests.testScreeningModelErrorPreventsCall' started at 2026-11-04 23:36:58.628
+Test Case 'CloudPrivacyTests.testScreeningModelErrorPreventsCall' passed (0.004 seconds)
+Test Case 'CloudPrivacyTests.testSensitiveInstructionWithholdsCloud' started at 2026-11-04 23:36:58.632
+Test Case 'CloudPrivacyTests.testSensitiveInstructionWithholdsCloud' passed (0.004 seconds)
+Test Case 'CloudPrivacyTests.testSensitiveTextInsideTheCapPreventsCall' started at 2026-11-04 23:36:58.636
+Test Case 'CloudPrivacyTests.testSensitiveTextInsideTheCapPreventsCall' passed (0.039 seconds)
+Test Case 'CloudPrivacyTests.testSensitiveUnicodeTailPreventsCallAndStatesLocalReadingLimit' started at 2026-11-04 23:36:58.675
+Test Case 'CloudPrivacyTests.testSensitiveUnicodeTailPreventsCallAndStatesLocalReadingLimit' passed (0.006 seconds)
+Test Case 'CloudPrivacyTests.testSettingsChangedDuringScreeningDoNotAffectInFlightRequest' started at 2026-11-04 23:36:58.681
+Test Case 'CloudPrivacyTests.testSettingsChangedDuringScreeningDoNotAffectInFlightRequest' passed (0.062 seconds)
+Test Case 'CloudPrivacyTests.testTextBeyondTheCapIsNotSent' started at 2026-11-04 23:36:58.742
+Test Case 'CloudPrivacyTests.testTextBeyondTheCapIsNotSent' passed (0.016 seconds)
+Test Case 'CloudPrivacyTests.testUncertainScreeningPreventsCall' started at 2026-11-04 23:36:58.759
+Test Case 'CloudPrivacyTests.testUncertainScreeningPreventsCall' passed (0.005 seconds)
+Test Case 'CloudPrivacyTests.testWithheldDocumentScreenIsNotExportedAsATrainingExample' started at 2026-11-04 23:36:58.764
+Test Case 'CloudPrivacyTests.testWithheldDocumentScreenIsNotExportedAsATrainingExample' passed (0.004 seconds)
+Test Suite 'CloudPrivacyTests' passed at 2026-11-04 23:36:58.768
+	 Executed 18 tests, with 0 failures (0 unexpected) in 0.256 (0.256) seconds
+Test Suite 'CloudReadOutcomeTests' started at 2026-11-04 23:36:58.768
+Test Case 'CloudReadOutcomeTests.testBothReceiptAndAmbiguityWriteFailureKeepPayloadAndClaimedRecovery' started at 2026-11-04 23:36:58.768
+Test Case 'CloudReadOutcomeTests.testBothReceiptAndAmbiguityWriteFailureKeepPayloadAndClaimedRecovery' passed (0.002 seconds)
+Test Case 'CloudReadOutcomeTests.testCancelledConfirmedReadRetainsPayloadAndRecoversWithoutReplay' started at 2026-11-04 23:36:58.771
+Test Case 'CloudReadOutcomeTests.testCancelledConfirmedReadRetainsPayloadAndRecoversWithoutReplay' passed (0.015 seconds)
+Test Case 'CloudReadOutcomeTests.testCancelledImmediateShareRetainsExactAttemptedTextWithoutFallback' started at 2026-11-04 23:36:58.786
+Test Case 'CloudReadOutcomeTests.testCancelledImmediateShareRetainsExactAttemptedTextWithoutFallback' passed (0.017 seconds)
+Test Case 'CloudReadOutcomeTests.testDirectCloudAnswerRetainsPayloadWhenLocalAnswerAlsoFails' started at 2026-11-04 23:36:58.802
+Test Case 'CloudReadOutcomeTests.testDirectCloudAnswerRetainsPayloadWhenLocalAnswerAlsoFails' passed (0.014 seconds)
+Test Case 'CloudReadOutcomeTests.testFailedLocalFallbackRetainsCloudAttemptAndDoesNotDisplayProviderError' started at 2026-11-04 23:36:58.816
+Test Case 'CloudReadOutcomeTests.testFailedLocalFallbackRetainsCloudAttemptAndDoesNotDisplayProviderError' passed (0.013 seconds)
+Test Case 'CloudReadOutcomeTests.testReceiptWriteFailureRetainsKnownPayloadWithoutClaimingSuccess' started at 2026-11-04 23:36:58.830
+Test Case 'CloudReadOutcomeTests.testReceiptWriteFailureRetainsKnownPayloadWithoutClaimingSuccess' passed (0.003 seconds)
+Test Case 'CloudReadOutcomeTests.testRepeatedSettledReadKeepsItsReceiptPayloadWithoutRunningAgain' started at 2026-11-04 23:36:58.833
+Test Case 'CloudReadOutcomeTests.testRepeatedSettledReadKeepsItsReceiptPayloadWithoutRunningAgain' passed (0.002 seconds)
+Test Suite 'CloudReadOutcomeTests' passed at 2026-11-04 23:36:58.835
+	 Executed 7 tests, with 0 failures (0 unexpected) in 0.066 (0.066) seconds
+Test Suite 'CloudSettingsCheckTests' started at 2026-11-04 23:36:58.835
+Test Case 'CloudSettingsCheckTests.testAgreesWithValidatorForEverySampleURL' started at 2026-11-04 23:36:58.835
+Test Case 'CloudSettingsCheckTests.testAgreesWithValidatorForEverySampleURL' passed (0.0 seconds)
+Test Case 'CloudSettingsCheckTests.testCustomStatusesFollowTheRequestPathValidator' started at 2026-11-04 23:36:58.835
+Test Case 'CloudSettingsCheckTests.testCustomStatusesFollowTheRequestPathValidator' passed (0.0 seconds)
+Test Case 'CloudSettingsCheckTests.testMetaStatuses' started at 2026-11-04 23:36:58.835
+Test Case 'CloudSettingsCheckTests.testMetaStatuses' passed (0.0 seconds)
+Test Case 'CloudSettingsCheckTests.testPlainHTTPIsEnabledButWarned' started at 2026-11-04 23:36:58.835
+Test Case 'CloudSettingsCheckTests.testPlainHTTPIsEnabledButWarned' passed (0.0 seconds)
+Test Suite 'CloudSettingsCheckTests' passed at 2026-11-04 23:36:58.835
+	 Executed 4 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
+Test Suite 'ConformalTests' started at 2026-11-04 23:36:58.835
+Test Case 'ConformalTests.testBinomCDF' started at 2026-11-04 23:36:58.835
+Test Case 'ConformalTests.testBinomCDF' passed (0.0 seconds)
+Test Case 'ConformalTests.testClopperPearsonZeroErrors' started at 2026-11-04 23:36:58.835
+Test Case 'ConformalTests.testClopperPearsonZeroErrors' passed (0.0 seconds)
+Test Case 'ConformalTests.testGuaranteeHoldsInSimulation' started at 2026-11-04 23:36:58.836
+Test Case 'ConformalTests.testGuaranteeHoldsInSimulation' passed (2.155 seconds)
+Test Case 'ConformalTests.testMinRows' started at 2026-11-04 23:37:00.991
+Test Case 'ConformalTests.testMinRows' passed (0.0 seconds)
+Test Case 'ConformalTests.testPicksThresholdAboveNoise' started at 2026-11-04 23:37:00.991
+Test Case 'ConformalTests.testPicksThresholdAboveNoise' passed (0.006 seconds)
+Test Case 'ConformalTests.testSystemOneConfidence' started at 2026-11-04 23:37:00.996
+Test Case 'ConformalTests.testSystemOneConfidence' passed (0.0 seconds)
+Test Case 'ConformalTests.testTightestBoundAndMinRows' started at 2026-11-04 23:37:00.997
+Test Case 'ConformalTests.testTightestBoundAndMinRows' passed (0.002 seconds)
+Test Case 'ConformalTests.testTooFewRowsEscalatesAll' started at 2026-11-04 23:37:00.999
+Test Case 'ConformalTests.testTooFewRowsEscalatesAll' passed (0.001 seconds)
+Test Suite 'ConformalTests' passed at 2026-11-04 23:37:01.000
+	 Executed 8 tests, with 0 failures (0 unexpected) in 2.164 (2.164) seconds
+Test Suite 'ConversationTests' started at 2026-11-04 23:37:01.000
+Test Case 'ConversationTests.testClearKeepsPendingActionsAndDropsDraftsAndEverythingElse' started at 2026-11-04 23:37:01.000
+Test Case 'ConversationTests.testClearKeepsPendingActionsAndDropsDraftsAndEverythingElse' passed (0.001 seconds)
+Test Case 'ConversationTests.testClearingNeverTouchesTheLedger' started at 2026-11-04 23:37:01.000
+Test Case 'ConversationTests.testClearingNeverTouchesTheLedger' passed (0.001 seconds)
+Test Case 'ConversationTests.testContextIsBoundedAndSkipsCardsPendingAndSystem' started at 2026-11-04 23:37:01.002
+Test Case 'ConversationTests.testContextIsBoundedAndSkipsCardsPendingAndSystem' passed (0.002 seconds)
+Test Case 'ConversationTests.testContextReachesOnlyTheOnDevicePromptAndNeverCloudOrRouting' started at 2026-11-04 23:37:01.004
+Test Case 'ConversationTests.testContextReachesOnlyTheOnDevicePromptAndNeverCloudOrRouting' passed (0.01 seconds)
+Test Case 'ConversationTests.testDeleteIsRefusedWhileAnActionIsPendingThenAllowed' started at 2026-11-04 23:37:01.014
+Test Case 'ConversationTests.testDeleteIsRefusedWhileAnActionIsPendingThenAllowed' passed (0.001 seconds)
+Test Case 'ConversationTests.testEmptyContextPromptIsByteIdenticalOnEveryLocalPath' started at 2026-11-04 23:37:01.015
+Test Case 'ConversationTests.testEmptyContextPromptIsByteIdenticalOnEveryLocalPath' passed (0.012 seconds)
+Test Case 'ConversationTests.testFullChatAndTooManyChatsRefuseInsteadOfEvicting' started at 2026-11-04 23:37:01.027
+Test Case 'ConversationTests.testFullChatAndTooManyChatsRefuseInsteadOfEvicting' passed (0.0 seconds)
+Test Case 'ConversationTests.testFutureVersionIsSetAsideNotDowngraded' started at 2026-11-04 23:37:01.027
+Test Case 'ConversationTests.testFutureVersionIsSetAsideNotDowngraded' passed (0.003 seconds)
+Test Case 'ConversationTests.testLaterSaveReplacesHistoryAndSurvivesRelaunch' started at 2026-11-04 23:37:01.030
+Test Case 'ConversationTests.testLaterSaveReplacesHistoryAndSurvivesRelaunch' passed (0.006 seconds)
+Test Case 'ConversationTests.testLedgerReadFailureDoesNotReleaseRestoredDraft' started at 2026-11-04 23:37:01.036
+Test Case 'ConversationTests.testLedgerReadFailureDoesNotReleaseRestoredDraft' passed (0.001 seconds)
+Test Case 'ConversationTests.testMessagesAndDraftsStayInTheirOwnConversation' started at 2026-11-04 23:37:01.037
+Test Case 'ConversationTests.testMessagesAndDraftsStayInTheirOwnConversation' passed (0.0 seconds)
+Test Case 'ConversationTests.testNewChatReusesAnUntouchedBlankChat' started at 2026-11-04 23:37:01.038
+Test Case 'ConversationTests.testNewChatReusesAnUntouchedBlankChat' passed (0.0 seconds)
+Test Case 'ConversationTests.testOversizeSnapshotFailsHonestlyAndKeepsTheOldFile' started at 2026-11-04 23:37:01.038
+Test Case 'ConversationTests.testOversizeSnapshotFailsHonestlyAndKeepsTheOldFile' passed (0.001 seconds)
+Test Case 'ConversationTests.testProtectionAndBackupExclusionReadback' started at 2026-11-04 23:37:01.039
+Test Case 'ConversationTests.testProtectionAndBackupExclusionReadback' passed (0.002 seconds)
+Test Case 'ConversationTests.testRealTransportBodyNeverCarriesHistoryOnSuccessOrFallback' started at 2026-11-04 23:37:01.041
+Test Case 'ConversationTests.testRealTransportBodyNeverCarriesHistoryOnSuccessOrFallback' passed (0.012 seconds)
+Test Case 'ConversationTests.testReconcileWithoutLedgerTableKeepsDrafts' started at 2026-11-04 23:37:01.054
+Test Case 'ConversationTests.testReconcileWithoutLedgerTableKeepsDrafts' passed (0.0 seconds)
+Test Case 'ConversationTests.testRestoredDraftWhoseActionReachedTheLedgerIsDropped' started at 2026-11-04 23:37:01.054
+Test Case 'ConversationTests.testRestoredDraftWhoseActionReachedTheLedgerIsDropped' passed (0.012 seconds)
+Test Case 'ConversationTests.testRoundTripAcrossRelaunchAndEphemeralIsNotWritten' started at 2026-11-04 23:37:01.066
+Test Case 'ConversationTests.testRoundTripAcrossRelaunchAndEphemeralIsNotWritten' passed (0.008 seconds)
+Test Case 'ConversationTests.testTitleComesFromFirstUserMessage' started at 2026-11-04 23:37:01.074
+Test Case 'ConversationTests.testTitleComesFromFirstUserMessage' passed (0.0 seconds)
+Test Case 'ConversationTests.testUnreadableHistoryIsSetAsideNotOverwritten' started at 2026-11-04 23:37:01.074
+Test Case 'ConversationTests.testUnreadableHistoryIsSetAsideNotOverwritten' passed (0.005 seconds)
+Test Suite 'ConversationTests' passed at 2026-11-04 23:37:01.079
+	 Executed 20 tests, with 0 failures (0 unexpected) in 0.079 (0.079) seconds
+Test Suite 'CuratorMemoryTests' started at 2026-11-04 23:37:01.079
+Test Case 'CuratorMemoryTests.testBudgetEvictsLeastTrustedThenOldest' started at 2026-11-04 23:37:01.079
+Test Case 'CuratorMemoryTests.testBudgetEvictsLeastTrustedThenOldest' passed (0.004 seconds)
+Test Case 'CuratorMemoryTests.testCorrectionsRetrievedIntoReflexContext' started at 2026-11-04 23:37:01.083
+Test Case 'CuratorMemoryTests.testCorrectionsRetrievedIntoReflexContext' passed (0.002 seconds)
+Test Case 'CuratorMemoryTests.testProvenanceStoredAndMigrated' started at 2026-11-04 23:37:01.085
+Test Case 'CuratorMemoryTests.testProvenanceStoredAndMigrated' passed (0.001 seconds)
+Test Suite 'CuratorMemoryTests' passed at 2026-11-04 23:37:01.087
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.007 (0.007) seconds
+Test Suite 'DecisionPresentationTests' started at 2026-11-04 23:37:01.087
+Test Case 'DecisionPresentationTests.testCertaintyDoesNotClaimSuccessAndStatesTheBar' started at 2026-11-04 23:37:01.087
+Test Case 'DecisionPresentationTests.testCertaintyDoesNotClaimSuccessAndStatesTheBar' passed (0.0 seconds)
+Test Case 'DecisionPresentationTests.testChosenVersusTopOnlyWhenTheyDiffer' started at 2026-11-04 23:37:01.087
+Test Case 'DecisionPresentationTests.testChosenVersusTopOnlyWhenTheyDiffer' passed (0.0 seconds)
+Test Case 'DecisionPresentationTests.testDynamicCandidatesAndSkillTitles' started at 2026-11-04 23:37:01.087
+Test Case 'DecisionPresentationTests.testDynamicCandidatesAndSkillTitles' passed (0.0 seconds)
+Test Case 'DecisionPresentationTests.testPrimaryLabelsHaveNoRawIdentifiers' started at 2026-11-04 23:37:01.087
+Test Case 'DecisionPresentationTests.testPrimaryLabelsHaveNoRawIdentifiers' passed (0.0 seconds)
+Test Case 'DecisionPresentationTests.testStatusLabelsNeverImplyDeliveryWithoutProof' started at 2026-11-04 23:37:01.088
+Test Case 'DecisionPresentationTests.testStatusLabelsNeverImplyDeliveryWithoutProof' passed (0.0 seconds)
+Test Suite 'DecisionPresentationTests' passed at 2026-11-04 23:37:01.088
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
+Test Suite 'EffectRecoveryTests' started at 2026-11-04 23:37:01.088
+Test Case 'EffectRecoveryTests.testAmbiguousContactDoesNotBindFirstAndRequiresMethod' started at 2026-11-04 23:37:01.088
+Test Case 'EffectRecoveryTests.testAmbiguousContactDoesNotBindFirstAndRequiresMethod' passed (0.004 seconds)
+Test Case 'EffectRecoveryTests.testAutoreplySameRuleTwiceCommitsWithoutAttemptToken' started at 2026-11-04 23:37:01.092
+Test Case 'EffectRecoveryTests.testAutoreplySameRuleTwiceCommitsWithoutAttemptToken' passed (0.005 seconds)
+Test Case 'EffectRecoveryTests.testCancelledClaimedSheetNeverSticksInClaimed' started at 2026-11-04 23:37:01.096
+Test Case 'EffectRecoveryTests.testCancelledClaimedSheetNeverSticksInClaimed' passed (0.003 seconds)
+Test Case 'EffectRecoveryTests.testChangedContactMethodAtConfirmPausesInsteadOfUsingAnotherNumber' started at 2026-11-04 23:37:01.099
+Test Case 'EffectRecoveryTests.testChangedContactMethodAtConfirmPausesInsteadOfUsingAnotherNumber' passed (0.002 seconds)
+Test Case 'EffectRecoveryTests.testClaimWithoutReceiptReopensUnresolved' started at 2026-11-04 23:37:01.101
+Test Case 'EffectRecoveryTests.testClaimWithoutReceiptReopensUnresolved' passed (0.021 seconds)
+Test Case 'EffectRecoveryTests.testCompiledArgumentsRejectUnsupportedFields' started at 2026-11-04 23:37:01.122
+Test Case 'EffectRecoveryTests.testCompiledArgumentsRejectUnsupportedFields' passed (0.002 seconds)
+Test Case 'EffectRecoveryTests.testConcurrentConfirmPerformsOnce' started at 2026-11-04 23:37:01.124
+Test Case 'EffectRecoveryTests.testConcurrentConfirmPerformsOnce' passed (0.154 seconds)
+Test Case 'EffectRecoveryTests.testConcurrentConflictingEditsPerformWinningPayload' started at 2026-11-04 23:37:01.278
+Test Case 'EffectRecoveryTests.testConcurrentConflictingEditsPerformWinningPayload' passed (0.104 seconds)
+Test Case 'EffectRecoveryTests.testEveryBuiltinHasOneCatalogClassification' started at 2026-11-04 23:37:01.382
+Test Case 'EffectRecoveryTests.testEveryBuiltinHasOneCatalogClassification' passed (0.001 seconds)
+Test Case 'EffectRecoveryTests.testExplicitMessageDraftPerformsZeroTimes' started at 2026-11-04 23:37:01.382
+Test Case 'EffectRecoveryTests.testExplicitMessageDraftPerformsZeroTimes' passed (0.003 seconds)
+Test Case 'EffectRecoveryTests.testExplicitZonePhraseStagesCorrectionInsteadOfGuessing' started at 2026-11-04 23:37:01.386
+Test Case 'EffectRecoveryTests.testExplicitZonePhraseStagesCorrectionInsteadOfGuessing' passed (0.001 seconds)
+Test Case 'EffectRecoveryTests.testFileReopenRestoresAwaitingCard' started at 2026-11-04 23:37:01.386
+Test Case 'EffectRecoveryTests.testFileReopenRestoresAwaitingCard' passed (0.008 seconds)
+Test Case 'EffectRecoveryTests.testMailQueuedIsNotDeliveryAndDraftIsNotSent' started at 2026-11-04 23:37:01.394
+Test Case 'EffectRecoveryTests.testMailQueuedIsNotDeliveryAndDraftIsNotSent' passed (0.004 seconds)
+Test Case 'EffectRecoveryTests.testMessageAcceptedIsNotCommittedDelivery' started at 2026-11-04 23:37:01.398
+Test Case 'EffectRecoveryTests.testMessageAcceptedIsNotCommittedDelivery' passed (0.002 seconds)
+Test Case 'EffectRecoveryTests.testMismatchedEventKitEvidenceIsAmbiguous' started at 2026-11-04 23:37:01.401
+Test Case 'EffectRecoveryTests.testMismatchedEventKitEvidenceIsAmbiguous' passed (0.006 seconds)
+Test Case 'EffectRecoveryTests.testModelActClaimsBeforeEventSave' started at 2026-11-04 23:37:01.406
+Test Case 'EffectRecoveryTests.testModelActClaimsBeforeEventSave' passed (0.004 seconds)
+Test Case 'EffectRecoveryTests.testPastInstantConfirmPausesAndExecutesShownInstant' started at 2026-11-04 23:37:01.410
+Test Case 'EffectRecoveryTests.testPastInstantConfirmPausesAndExecutesShownInstant' passed (0.004 seconds)
+Test Case 'EffectRecoveryTests.testPermissionReportIsFailedAndSaveCountStaysZero' started at 2026-11-04 23:37:01.414
+Test Case 'EffectRecoveryTests.testPermissionReportIsFailedAndSaveCountStaysZero' passed (0.004 seconds)
+Test Case 'EffectRecoveryTests.testRemovedOrChangedContactAtConfirmRefreshesChoicesWithoutFirstMatch' started at 2026-11-04 23:37:01.418
+Test Case 'EffectRecoveryTests.testRemovedOrChangedContactAtConfirmRefreshesChoicesWithoutFirstMatch' passed (0.002 seconds)
+Test Case 'EffectRecoveryTests.testReplyOnlyStagesWithoutPerformingAndPayloadSurvivesReopen' started at 2026-11-04 23:37:01.421
+Test Case 'EffectRecoveryTests.testReplyOnlyStagesWithoutPerformingAndPayloadSurvivesReopen' passed (0.01 seconds)
+Test Case 'EffectRecoveryTests.testSameTitleIsHintAndSecondRequestClaims' started at 2026-11-04 23:37:01.431
+Test Case 'EffectRecoveryTests.testSameTitleIsHintAndSecondRequestClaims' passed (0.005 seconds)
+Test Case 'EffectRecoveryTests.testSheetBusyReturnsToAwaitingNotFailed' started at 2026-11-04 23:37:01.436
+Test Case 'EffectRecoveryTests.testSheetBusyReturnsToAwaitingNotFailed' passed (0.004 seconds)
+Test Case 'EffectRecoveryTests.testSheetUnavailableAndCancellationAreTypedNotFallbacks' started at 2026-11-04 23:37:01.440
+Test Case 'EffectRecoveryTests.testSheetUnavailableAndCancellationAreTypedNotFallbacks' passed (0.009 seconds)
+Test Case 'EffectRecoveryTests.testStartedHandoffIsNotReplayed' started at 2026-11-04 23:37:01.452
+Test Case 'EffectRecoveryTests.testStartedHandoffIsNotReplayed' passed (0.003 seconds)
+Test Case 'EffectRecoveryTests.testUnknownContractVersionStaysVisibleAndNeverExecutes' started at 2026-11-04 23:37:01.455
+Test Case 'EffectRecoveryTests.testUnknownContractVersionStaysVisibleAndNeverExecutes' passed (0.009 seconds)
+Test Case 'EffectRecoveryTests.testUnparsedEventDoesNotSaveOrInventTime' started at 2026-11-04 23:37:01.465
+Test Case 'EffectRecoveryTests.testUnparsedEventDoesNotSaveOrInventTime' passed (0.003 seconds)
+Test Case 'EffectRecoveryTests.testUrlAcceptedDoesNotSatisfySend' started at 2026-11-04 23:37:01.468
+Test Case 'EffectRecoveryTests.testUrlAcceptedDoesNotSatisfySend' passed (0.003 seconds)
+Test Case 'EffectRecoveryTests.testUrlRefusedIsFailedAndAcceptedIsHandoff' started at 2026-11-04 23:37:01.470
+Test Case 'EffectRecoveryTests.testUrlRefusedIsFailedAndAcceptedIsHandoff' passed (0.003 seconds)
+Test Case 'EffectRecoveryTests.testUserHandoffCardShowsActualHostAndSnapshotsTemplate' started at 2026-11-04 23:37:01.473
+Test Case 'EffectRecoveryTests.testUserHandoffCardShowsActualHostAndSnapshotsTemplate' passed (0.003 seconds)
+Test Case 'EffectRecoveryTests.testUserJSONCannotDowngradeIMessage' started at 2026-11-04 23:37:01.476
+Test Case 'EffectRecoveryTests.testUserJSONCannotDowngradeIMessage' passed (0.004 seconds)
+Test Case 'EffectRecoveryTests.testUserJSONCollectorTemplateRejected' started at 2026-11-04 23:37:01.480
+Test Case 'EffectRecoveryTests.testUserJSONCollectorTemplateRejected' passed (0.0 seconds)
+Test Suite 'EffectRecoveryTests' passed at 2026-11-04 23:37:01.481
+	 Executed 31 tests, with 0 failures (0 unexpected) in 0.388 (0.388) seconds
+Test Suite 'KeyEntryTests' started at 2026-11-04 23:37:01.481
+Test Case 'KeyEntryTests.testBlankAndMalformedEntriesChangeNothing' started at 2026-11-04 23:37:01.481
+Test Case 'KeyEntryTests.testBlankAndMalformedEntriesChangeNothing' passed (0.0 seconds)
+Test Case 'KeyEntryTests.testFailedReplacementKeepsOldKeyAndNeverRemovesFirst' started at 2026-11-04 23:37:01.481
+Test Case 'KeyEntryTests.testFailedReplacementKeepsOldKeyAndNeverRemovesFirst' passed (0.0 seconds)
+Test Case 'KeyEntryTests.testFailureWithNoPriorKeyDoesNotClaimOneWasRetained' started at 2026-11-04 23:37:01.481
+Test Case 'KeyEntryTests.testFailureWithNoPriorKeyDoesNotClaimOneWasRetained' passed (0.0 seconds)
+Test Case 'KeyEntryTests.testFailureWithUnreadableKeychainAdmitsUncertainty' started at 2026-11-04 23:37:01.481
+Test Case 'KeyEntryTests.testFailureWithUnreadableKeychainAdmitsUncertainty' passed (0.0 seconds)
+Test Case 'KeyEntryTests.testFirstSaveDoesNotClaimAReplacement' started at 2026-11-04 23:37:01.481
+Test Case 'KeyEntryTests.testFirstSaveDoesNotClaimAReplacement' passed (0.0 seconds)
+Test Case 'KeyEntryTests.testMessagesNeverContainTheEnteredKey' started at 2026-11-04 23:37:01.481
+Test Case 'KeyEntryTests.testMessagesNeverContainTheEnteredKey' passed (0.001 seconds)
+Test Case 'KeyEntryTests.testRemovalMessagesAreTruthful' started at 2026-11-04 23:37:01.483
+Test Case 'KeyEntryTests.testRemovalMessagesAreTruthful' passed (0.0 seconds)
+Test Case 'KeyEntryTests.testSaveReplacesAndReportsReplacement' started at 2026-11-04 23:37:01.483
+Test Case 'KeyEntryTests.testSaveReplacesAndReportsReplacement' passed (0.0 seconds)
+Test Suite 'KeyEntryTests' passed at 2026-11-04 23:37:01.483
+	 Executed 8 tests, with 0 failures (0 unexpected) in 0.002 (0.002) seconds
+Test Suite 'MemoryProfileTests' started at 2026-11-04 23:37:01.483
+Test Case 'MemoryProfileTests.testAliasRetrievalHitAndMigration' started at 2026-11-04 23:37:01.483
+Test Case 'MemoryProfileTests.testAliasRetrievalHitAndMigration' passed (0.005 seconds)
+Test Case 'MemoryProfileTests.testConsolidateDedupesSupersedesPurgesAndBudgets' started at 2026-11-04 23:37:01.488
+Test Case 'MemoryProfileTests.testConsolidateDedupesSupersedesPurgesAndBudgets' passed (0.006 seconds)
+Test Case 'MemoryProfileTests.testOnePagerSectionsCorrectionsEntitiesAndBound' started at 2026-11-04 23:37:01.494
+Test Case 'MemoryProfileTests.testOnePagerSectionsCorrectionsEntitiesAndBound' passed (0.008 seconds)
+Test Case 'MemoryProfileTests.testProfileReachesLocalPromptAndScrubbedCloudPrompt' started at 2026-11-04 23:37:01.502
+Test Case 'MemoryProfileTests.testProfileReachesLocalPromptAndScrubbedCloudPrompt' passed (0.014 seconds)
+Test Case 'MemoryProfileTests.testTasksBoard' started at 2026-11-04 23:37:01.516
+Test Case 'MemoryProfileTests.testTasksBoard' passed (0.004 seconds)
+Test Suite 'MemoryProfileTests' passed at 2026-11-04 23:37:01.521
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.037 (0.037) seconds
+Test Suite 'MemoryTests' started at 2026-11-04 23:37:01.521
+Test Case 'MemoryTests.testBudgetEvictionAlsoRemovesHistoryWithoutNestedTransaction' started at 2026-11-04 23:37:01.521
+Test Case 'MemoryTests.testBudgetEvictionAlsoRemovesHistoryWithoutNestedTransaction' passed (0.105 seconds)
+Test Case 'MemoryTests.testContradictionSupersedesSingleValued' started at 2026-11-04 23:37:01.625
+Test Case 'MemoryTests.testContradictionSupersedesSingleValued' passed (0.002 seconds)
+Test Case 'MemoryTests.testExpiry' started at 2026-11-04 23:37:01.627
+Test Case 'MemoryTests.testExpiry' passed (0.001 seconds)
+Test Case 'MemoryTests.testForgetRemovesSupersededChainAcrossReopen' started at 2026-11-04 23:37:01.629
+Test Case 'MemoryTests.testForgetRemovesSupersededChainAcrossReopen' passed (0.021 seconds)
+Test Case 'MemoryTests.testMultiValuedKeepsBothAndDuplicateRefreshes' started at 2026-11-04 23:37:01.650
+Test Case 'MemoryTests.testMultiValuedKeepsBothAndDuplicateRefreshes' passed (0.002 seconds)
+Test Case 'MemoryTests.testPersistsAcrossConnections' started at 2026-11-04 23:37:01.652
+Test Case 'MemoryTests.testPersistsAcrossConnections' passed (0.006 seconds)
+Test Case 'MemoryTests.testResolverCanIgnoreNew' started at 2026-11-04 23:37:01.658
+Test Case 'MemoryTests.testResolverCanIgnoreNew' passed (0.102 seconds)
+Test Case 'MemoryTests.testRetrievalRanksRelevantFirst' started at 2026-11-04 23:37:01.760
+Test Case 'MemoryTests.testRetrievalRanksRelevantFirst' passed (0.003 seconds)
+Test Case 'MemoryTests.testRuleExtraction' started at 2026-11-04 23:37:01.763
+Test Case 'MemoryTests.testRuleExtraction' passed (0.0 seconds)
+Test Suite 'MemoryTests' passed at 2026-11-04 23:37:01.764
+	 Executed 9 tests, with 0 failures (0 unexpected) in 0.242 (0.242) seconds
+Test Suite 'MessageDraftTests' started at 2026-11-04 23:37:01.764
+Test Case 'MessageDraftTests.testAmbiguousChannelAsksAppWithoutGuessing' started at 2026-11-04 23:37:01.764
+Test Case 'MessageDraftTests.testAmbiguousChannelAsksAppWithoutGuessing' passed (0.018 seconds)
+Test Case 'MessageDraftTests.testChannelFollowUpBindsThenStagesChosenApp' started at 2026-11-04 23:37:01.782
+Test Case 'MessageDraftTests.testChannelFollowUpBindsThenStagesChosenApp' passed (0.02 seconds)
+Test Case 'MessageDraftTests.testChannelWordsResolveWithoutGuessing' started at 2026-11-04 23:37:01.802
+Test Case 'MessageDraftTests.testChannelWordsResolveWithoutGuessing' passed (0.102 seconds)
+Test Case 'MessageDraftTests.testContactsDeniedExplainsOnCard' started at 2026-11-04 23:37:01.905
+Test Case 'MessageDraftTests.testContactsDeniedExplainsOnCard' passed (0.02 seconds)
+Test Case 'MessageDraftTests.testContactsNotDeterminedExplainsInsteadOfNoMatch' started at 2026-11-04 23:37:01.925
+Test Case 'MessageDraftTests.testContactsNotDeterminedExplainsInsteadOfNoMatch' passed (0.017 seconds)
+Test Case 'MessageDraftTests.testDiagnosticsStaySecretFree' started at 2026-11-04 23:37:01.941
+Test Case 'MessageDraftTests.testDiagnosticsStaySecretFree' passed (0.001 seconds)
+Test Case 'MessageDraftTests.testDoubleConfirmPerformsOnce' started at 2026-11-04 23:37:01.942
+Test Case 'MessageDraftTests.testDoubleConfirmPerformsOnce' passed (0.023 seconds)
+Test Case 'MessageDraftTests.testExplicitMessageBypassesChatWithoutRegistry' started at 2026-11-04 23:37:01.966
+Test Case 'MessageDraftTests.testExplicitMessageBypassesChatWithoutRegistry' passed (0.016 seconds)
+Test Case 'MessageDraftTests.testExplicitMessageDetectorCoversPoliteAndRecipientFirstForms' started at 2026-11-04 23:37:01.982
+Test Case 'MessageDraftTests.testExplicitMessageDetectorCoversPoliteAndRecipientFirstForms' passed (0.006 seconds)
+Test Case 'MessageDraftTests.testFollowUpBodyCompletesDraftIntoConfirmableCard' started at 2026-11-04 23:37:01.988
+Test Case 'MessageDraftTests.testFollowUpBodyCompletesDraftIntoConfirmableCard' passed (0.033 seconds)
+Test Case 'MessageDraftTests.testFollowUpShortAnswerBindsToLastAskedField' started at 2026-11-04 23:37:02.020
+Test Case 'MessageDraftTests.testFollowUpShortAnswerBindsToLastAskedField' passed (0.019 seconds)
+Test Case 'MessageDraftTests.testLowConfidenceRoutingRetainsExplicitDraftHonestly' started at 2026-11-04 23:37:02.040
+Test Case 'MessageDraftTests.testLowConfidenceRoutingRetainsExplicitDraftHonestly' passed (0.015 seconds)
+Test Case 'MessageDraftTests.testMisroutedToolChoiceStillStagesMessage' started at 2026-11-04 23:37:02.055
+Test Case 'MessageDraftTests.testMisroutedToolChoiceStillStagesMessage' passed (0.019 seconds)
+Test Case 'MessageDraftTests.testMissingRecipientRetainsBodyAskingWho' started at 2026-11-04 23:37:02.074
+Test Case 'MessageDraftTests.testMissingRecipientRetainsBodyAskingWho' passed (0.018 seconds)
+Test Case 'MessageDraftTests.testMultiplePendingDraftsDisambiguate' started at 2026-11-04 23:37:02.091
+Test Case 'MessageDraftTests.testMultiplePendingDraftsDisambiguate' passed (0.029 seconds)
+Test Case 'MessageDraftTests.testNegativeReplyIsNeverMessageBody' started at 2026-11-04 23:37:02.120
+Test Case 'MessageDraftTests.testNegativeReplyIsNeverMessageBody' passed (0.03 seconds)
+Test Case 'MessageDraftTests.testNewMessageRequestDoesNotHijackPendingDraft' started at 2026-11-04 23:37:02.150
+Test Case 'MessageDraftTests.testNewMessageRequestDoesNotHijackPendingDraft' passed (0.024 seconds)
+Test Case 'MessageDraftTests.testRecipientFirstAndPoliteCommandsStageDirectly' started at 2026-11-04 23:37:02.175
+Test Case 'MessageDraftTests.testRecipientFirstAndPoliteCommandsStageDirectly' passed (0.024 seconds)
+Test Case 'MessageDraftTests.testRecipientFirstEmailNeverBecomesTextDraft' started at 2026-11-04 23:37:02.199
+Test Case 'MessageDraftTests.testRecipientFirstEmailNeverBecomesTextDraft' passed (0.015 seconds)
+Test Case 'MessageDraftTests.testRecipientFirstExtractionKeepsContactAndBody' started at 2026-11-04 23:37:02.215
+Test Case 'MessageDraftTests.testRecipientFirstExtractionKeepsContactAndBody' passed (0.013 seconds)
+Test Case 'MessageDraftTests.testStaleDraftDisambiguatesInsteadOfApplying' started at 2026-11-04 23:37:02.228
+Test Case 'MessageDraftTests.testStaleDraftDisambiguatesInsteadOfApplying' passed (0.022 seconds)
+Test Case 'MessageDraftTests.testTextDanaRetainsTypedDraftAskingForBody' started at 2026-11-04 23:37:02.249
+Test Case 'MessageDraftTests.testTextDanaRetainsTypedDraftAskingForBody' passed (0.024 seconds)
+Test Case 'MessageDraftTests.testUnavailableComposerFailsHonestly' started at 2026-11-04 23:37:02.273
+Test Case 'MessageDraftTests.testUnavailableComposerFailsHonestly' passed (0.018 seconds)
+Test Case 'MessageDraftTests.testUnrelatedRequestLeavesDraftUntouched' started at 2026-11-04 23:37:02.291
+Test Case 'MessageDraftTests.testUnrelatedRequestLeavesDraftUntouched' passed (0.021 seconds)
+Test Suite 'MessageDraftTests' passed at 2026-11-04 23:37:02.312
+	 Executed 24 tests, with 0 failures (0 unexpected) in 0.547 (0.547) seconds
+Test Suite 'MessagingReviewRegressionTests' started at 2026-11-04 23:37:02.312
+Test Case 'MessagingReviewRegressionTests.testApostropheContactAnswerCompletes' started at 2026-11-04 23:37:02.312
+Test Case 'MessagingReviewRegressionTests.testApostropheContactAnswerCompletes' passed (0.002 seconds)
+Test Case 'MessagingReviewRegressionTests.testAskedBodyPreservesImperativesAndAppNames' started at 2026-11-04 23:37:02.314
+Test Case 'MessagingReviewRegressionTests.testAskedBodyPreservesImperativesAndAppNames' passed (0.005 seconds)
+Test Case 'MessagingReviewRegressionTests.testBareThatSeparatesMessageBodyFromChannelAndGroupDetection' started at 2026-11-04 23:37:02.319
+Test Case 'MessagingReviewRegressionTests.testBareThatSeparatesMessageBodyFromChannelAndGroupDetection' passed (0.073 seconds)
+Test Case 'MessagingReviewRegressionTests.testBodyChannelWordDoesNotStageWrongApp' started at 2026-11-04 23:37:02.392
+Test Case 'MessagingReviewRegressionTests.testBodyChannelWordDoesNotStageWrongApp' passed (0.02 seconds)
+Test Case 'MessagingReviewRegressionTests.testBodyQuestionDoesNotBecomeChat' started at 2026-11-04 23:37:02.412
+Test Case 'MessagingReviewRegressionTests.testBodyQuestionDoesNotBecomeChat' passed (0.032 seconds)
+Test Case 'MessagingReviewRegressionTests.testBodyStartingWithNoCompletes' started at 2026-11-04 23:37:02.444
+Test Case 'MessagingReviewRegressionTests.testBodyStartingWithNoCompletes' passed (0.002 seconds)
+Test Case 'MessagingReviewRegressionTests.testBodyThatIsAQuestionCompletes' started at 2026-11-04 23:37:02.446
+Test Case 'MessagingReviewRegressionTests.testBodyThatIsAQuestionCompletes' passed (0.002 seconds)
+Test Case 'MessagingReviewRegressionTests.testChannelOnlySuffixLeavesTheBodyMissing' started at 2026-11-04 23:37:02.447
+Test Case 'MessagingReviewRegressionTests.testChannelOnlySuffixLeavesTheBodyMissing' passed (0.001 seconds)
+Test Case 'MessagingReviewRegressionTests.testChannelWordInBodyDoesNotHijackFirstTurn' started at 2026-11-04 23:37:02.449
+Test Case 'MessagingReviewRegressionTests.testChannelWordInBodyDoesNotHijackFirstTurn' passed (0.001 seconds)
+Test Case 'MessagingReviewRegressionTests.testChannelWordInsideBodyDoesNotSwitchChannel' started at 2026-11-04 23:37:02.449
+Test Case 'MessagingReviewRegressionTests.testChannelWordInsideBodyDoesNotSwitchChannel' passed (0.104 seconds)
+Test Case 'MessagingReviewRegressionTests.testColonBodyExtracts' started at 2026-11-04 23:37:02.553
+Test Case 'MessagingReviewRegressionTests.testColonBodyExtracts' passed (0.001 seconds)
+Test Case 'MessagingReviewRegressionTests.testCompleteMessageUsesCompiledCardWhenRegistryIsEmpty' started at 2026-11-04 23:37:02.555
+Test Case 'MessagingReviewRegressionTests.testCompleteMessageUsesCompiledCardWhenRegistryIsEmpty' passed (0.034 seconds)
+Test Case 'MessagingReviewRegressionTests.testDeniedContactRefreshDoesNotBindOrPerform' started at 2026-11-04 23:37:02.589
+Test Case 'MessagingReviewRegressionTests.testDeniedContactRefreshDoesNotBindOrPerform' passed (0.022 seconds)
+Test Case 'MessagingReviewRegressionTests.testDiagnosticsCapabilityFieldIsFreeText' started at 2026-11-04 23:37:02.611
+Test Case 'MessagingReviewRegressionTests.testDiagnosticsCapabilityFieldIsFreeText' passed (0.0 seconds)
+Test Case 'MessagingReviewRegressionTests.testFollowUpBodyWithAppWordStaysOnDraft' started at 2026-11-04 23:37:02.612
+Test Case 'MessagingReviewRegressionTests.testFollowUpBodyWithAppWordStaysOnDraft' passed (0.028 seconds)
+Test Case 'MessagingReviewRegressionTests.testGroupMentionInMessageBodyIsLiteral' started at 2026-11-04 23:37:02.640
+Test Case 'MessagingReviewRegressionTests.testGroupMentionInMessageBodyIsLiteral' passed (0.017 seconds)
+Test Case 'MessagingReviewRegressionTests.testGroupNameAnswerDoesNotBindAsAnIndividual' started at 2026-11-04 23:37:02.657
+Test Case 'MessagingReviewRegressionTests.testGroupNameAnswerDoesNotBindAsAnIndividual' passed (0.002 seconds)
+Test Case 'MessagingReviewRegressionTests.testHandleContactAnswerCompletes' started at 2026-11-04 23:37:02.659
+Test Case 'MessagingReviewRegressionTests.testHandleContactAnswerCompletes' passed (0.002 seconds)
+Test Case 'MessagingReviewRegressionTests.testLimitedContactsStillBind' started at 2026-11-04 23:37:02.661
+Test Case 'MessagingReviewRegressionTests.testLimitedContactsStillBind' passed (0.018 seconds)
+Test Case 'MessagingReviewRegressionTests.testLowercaseContactAnswerCompletes' started at 2026-11-04 23:37:02.679
+Test Case 'MessagingReviewRegressionTests.testLowercaseContactAnswerCompletes' passed (0.002 seconds)
+Test Case 'MessagingReviewRegressionTests.testLowercaseFollowUpDoesNotBecomeChat' started at 2026-11-04 23:37:02.681
+Test Case 'MessagingReviewRegressionTests.testLowercaseFollowUpDoesNotBecomeChat' passed (0.031 seconds)
+Test Case 'MessagingReviewRegressionTests.testLowercaseToContactAnswerCompletes' started at 2026-11-04 23:37:02.713
+Test Case 'MessagingReviewRegressionTests.testLowercaseToContactAnswerCompletes' passed (0.002 seconds)
+Test Case 'MessagingReviewRegressionTests.testMessageBodyKeepsInternalQuotesColonAndURL' started at 2026-11-04 23:37:02.715
+Test Case 'MessagingReviewRegressionTests.testMessageBodyKeepsInternalQuotesColonAndURL' passed (0.006 seconds)
+Test Case 'MessagingReviewRegressionTests.testMultiRecipientIsRefusedPrecisely' started at 2026-11-04 23:37:02.721
+Test Case 'MessagingReviewRegressionTests.testMultiRecipientIsRefusedPrecisely' passed (0.013 seconds)
+Test Case 'MessagingReviewRegressionTests.testNamedCancelAmongMany' started at 2026-11-04 23:37:02.734
+Test Case 'MessagingReviewRegressionTests.testNamedCancelAmongMany' passed (0.001 seconds)
+Test Case 'MessagingReviewRegressionTests.testNamedGroupRequestsNeverSelectTheFirstContact' started at 2026-11-04 23:37:02.735
+Test Case 'MessagingReviewRegressionTests.testNamedGroupRequestsNeverSelectTheFirstContact' passed (0.017 seconds)
+Test Case 'MessagingReviewRegressionTests.testNewExplicitBodyIsNotBlockedBySavedBody' started at 2026-11-04 23:37:02.752
+Test Case 'MessagingReviewRegressionTests.testNewExplicitBodyIsNotBlockedBySavedBody' passed (0.003 seconds)
+Test Case 'MessagingReviewRegressionTests.testNewlineBodyPreserved' started at 2026-11-04 23:37:02.755
+Test Case 'MessagingReviewRegressionTests.testNewlineBodyPreserved' passed (0.002 seconds)
+Test Case 'MessagingReviewRegressionTests.testNoRegistryToolNoneStagesCompiledMessage' started at 2026-11-04 23:37:02.757
+Test Case 'MessagingReviewRegressionTests.testNoRegistryToolNoneStagesCompiledMessage' passed (0.019 seconds)
+Test Case 'MessagingReviewRegressionTests.testPermissionGrantRefreshesTheSameCardWithoutPerforming' started at 2026-11-04 23:37:02.775
+Test Case 'MessagingReviewRegressionTests.testPermissionGrantRefreshesTheSameCardWithoutPerforming' passed (0.022 seconds)
+Test Case 'MessagingReviewRegressionTests.testRecipientFirstWhatsAppMessageExtractsBody' started at 2026-11-04 23:37:02.797
+Test Case 'MessagingReviewRegressionTests.testRecipientFirstWhatsAppMessageExtractsBody' passed (0.001 seconds)
+Test Case 'MessagingReviewRegressionTests.testRepeatedMessageAfterChatAndWrongSkillPickStillStagesReview' started at 2026-11-04 23:37:02.799
+Test Case 'MessagingReviewRegressionTests.testRepeatedMessageAfterChatAndWrongSkillPickStillStagesReview' passed (0.039 seconds)
+Test Case 'MessagingReviewRegressionTests.testSMSVerbIsExplicit' started at 2026-11-04 23:37:02.838
+Test Case 'MessagingReviewRegressionTests.testSMSVerbIsExplicit' passed (0.001 seconds)
+Test Case 'MessagingReviewRegressionTests.testSendTextToFormExtracts' started at 2026-11-04 23:37:02.838
+Test Case 'MessagingReviewRegressionTests.testSendTextToFormExtracts' passed (0.001 seconds)
+Test Case 'MessagingReviewRegressionTests.testSeveralPhoneMethodsRequireChoiceThenConfirm' started at 2026-11-04 23:37:02.839
+Test Case 'MessagingReviewRegressionTests.testSeveralPhoneMethodsRequireChoiceThenConfirm' passed (0.018 seconds)
+Test Case 'MessagingReviewRegressionTests.testStaleDraftYesDoesNotLoop' started at 2026-11-04 23:37:02.857
+Test Case 'MessagingReviewRegressionTests.testStaleDraftYesDoesNotLoop' passed (0.004 seconds)
+Test Case 'MessagingReviewRegressionTests.testThreeTurnChannelThenBody' started at 2026-11-04 23:37:02.861
+Test Case 'MessagingReviewRegressionTests.testThreeTurnChannelThenBody' passed (0.003 seconds)
+Test Case 'MessagingReviewRegressionTests.testUnmarkedBodyAppWordDoesNotChooseDestination' started at 2026-11-04 23:37:02.864
+Test Case 'MessagingReviewRegressionTests.testUnmarkedBodyAppWordDoesNotChooseDestination' passed (0.002 seconds)
+Test Case 'MessagingReviewRegressionTests.testUnrelatedCommandIsNotStagedAsBody' started at 2026-11-04 23:37:02.866
+Test Case 'MessagingReviewRegressionTests.testUnrelatedCommandIsNotStagedAsBody' passed (0.002 seconds)
+Test Case 'MessagingReviewRegressionTests.testUnrelatedCommandNotStagedAsBody' started at 2026-11-04 23:37:02.868
+Test Case 'MessagingReviewRegressionTests.testUnrelatedCommandNotStagedAsBody' passed (0.026 seconds)
+Test Case 'MessagingReviewRegressionTests.testWhatsAppVerbIsExplicit' started at 2026-11-04 23:37:02.894
+Test Case 'MessagingReviewRegressionTests.testWhatsAppVerbIsExplicit' passed (0.001 seconds)
+Test Case 'MessagingReviewRegressionTests.testWrongSkillPickStillRetainsMessage' started at 2026-11-04 23:37:02.895
+Test Case 'MessagingReviewRegressionTests.testWrongSkillPickStillRetainsMessage' passed (0.019 seconds)
+Test Suite 'MessagingReviewRegressionTests' passed at 2026-11-04 23:37:02.914
+	 Executed 42 tests, with 0 failures (0 unexpected) in 0.598 (0.598) seconds
+Test Suite 'MetaModelPresetTests' started at 2026-11-04 23:37:02.914
+Test Case 'MetaModelPresetTests.testPresetsAreStandardModeAndAcceptedByTheValidator' started at 2026-11-04 23:37:02.914
+Test Case 'MetaModelPresetTests.testPresetsAreStandardModeAndAcceptedByTheValidator' passed (0.001 seconds)
+Test Case 'MetaModelPresetTests.testUnknownAndContributorValuesAreNotPresetsAndStayOnTheValidator' started at 2026-11-04 23:37:02.915
+Test Case 'MetaModelPresetTests.testUnknownAndContributorValuesAreNotPresetsAndStayOnTheValidator' passed (0.0 seconds)
+Test Suite 'MetaModelPresetTests' passed at 2026-11-04 23:37:02.915
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
+Test Suite 'MetaMultimodalTests' started at 2026-11-04 23:37:02.915
+Test Case 'MetaMultimodalTests.testDescribeAllReasoningNoContentIsAnError' started at 2026-11-04 23:37:02.915
+Test Case 'MetaMultimodalTests.testDescribeAllReasoningNoContentIsAnError' passed (0.002 seconds)
+Test Case 'MetaMultimodalTests.testDescribeAndSegmentMasksExplicitAndPickedConcepts' started at 2026-11-04 23:37:02.917
+Test Case 'MetaMultimodalTests.testDescribeAndSegmentMasksExplicitAndPickedConcepts' passed (0.011 seconds)
+Test Case 'MetaMultimodalTests.testDescribeRequestHasDataURLAndQuestion' started at 2026-11-04 23:37:02.928
+Test Case 'MetaMultimodalTests.testDescribeRequestHasDataURLAndQuestion' passed (0.001 seconds)
+Test Case 'MetaMultimodalTests.testGateKeepsSensitivePhotoOnDevice' started at 2026-11-04 23:37:02.928
+Test Case 'MetaMultimodalTests.testGateKeepsSensitivePhotoOnDevice' passed (0.006 seconds)
+Test Case 'MetaMultimodalTests.testGateLexicalFloorAndUserToggleAndOffline' started at 2026-11-04 23:37:02.934
+Test Case 'MetaMultimodalTests.testGateLexicalFloorAndUserToggleAndOffline' passed (0.006 seconds)
+Test Case 'MetaMultimodalTests.testGateStripsExifMasksTextAndRecordsPayloads' started at 2026-11-04 23:37:02.941
+Test Case 'MetaMultimodalTests.testGateStripsExifMasksTextAndRecordsPayloads' passed (0.007 seconds)
+Test Case 'MetaMultimodalTests.testGateWithholdsAmountOnlyReceiptsEvenWhenClassifierSaysOK' started at 2026-11-04 23:37:02.947
+Test Case 'MetaMultimodalTests.testGateWithholdsAmountOnlyReceiptsEvenWhenClassifierSaysOK' passed (0.004 seconds)
+Test Case 'MetaMultimodalTests.testLiveMetaAPIThroughTheGate' started at 2026-11-04 23:37:02.952
+/src/Tests/PocketCoreTests/MetaMultimodalTests.swift:362: MetaMultimodalTests.testLiveMetaAPIThroughTheGate : Test skipped - live Meta API test is opt-in
+Test Case 'MetaMultimodalTests.testLiveMetaAPIThroughTheGate' skipped (0.001 seconds)
+Test Case 'MetaMultimodalTests.testOneBitMaskDecodesToMetasReferenceRaster' started at 2026-11-04 23:37:02.952
+Test Case 'MetaMultimodalTests.testOneBitMaskDecodesToMetasReferenceRaster' passed (0.066 seconds)
+Test Case 'MetaMultimodalTests.testSegmentConceptIsMaskedBeforeRequest' started at 2026-11-04 23:37:03.018
+Test Case 'MetaMultimodalTests.testSegmentConceptIsMaskedBeforeRequest' passed (0.007 seconds)
+Test Case 'MetaMultimodalTests.testSegmentRequestAndParseLiveSAMOutput' started at 2026-11-04 23:37:03.025
+Test Case 'MetaMultimodalTests.testSegmentRequestAndParseLiveSAMOutput' passed (0.002 seconds)
+Test Case 'MetaMultimodalTests.testStripperDropsExifAndICCKeepsImageSegments' started at 2026-11-04 23:37:03.027
+Test Case 'MetaMultimodalTests.testStripperDropsExifAndICCKeepsImageSegments' passed (0.0 seconds)
+Test Case 'MetaMultimodalTests.testTranscribeMultipartCarriesAudioAndModel' started at 2026-11-04 23:37:03.028
+Test Case 'MetaMultimodalTests.testTranscribeMultipartCarriesAudioAndModel' passed (0.002 seconds)
+Test Case 'MetaMultimodalTests.testTranscriberRejectsNonWAVAndContributorModels' started at 2026-11-04 23:37:03.030
+Test Case 'MetaMultimodalTests.testTranscriberRejectsNonWAVAndContributorModels' passed (0.0 seconds)
+Test Case 'MetaMultimodalTests.testVoiceOfflineSendsNothing' started at 2026-11-04 23:37:03.030
+Test Case 'MetaMultimodalTests.testVoiceOfflineSendsNothing' passed (0.002 seconds)
+Test Case 'MetaMultimodalTests.testVoiceTranscriptGoesThroughTheSameAssistantPath' started at 2026-11-04 23:37:03.032
+Test Case 'MetaMultimodalTests.testVoiceTranscriptGoesThroughTheSameAssistantPath' passed (0.012 seconds)
+Test Case 'MetaMultimodalTests.testWAVCanonicalizerDropsExtraChunksAndValidatesFormat' started at 2026-11-04 23:37:03.044
+Test Case 'MetaMultimodalTests.testWAVCanonicalizerDropsExtraChunksAndValidatesFormat' passed (0.002 seconds)
+Test Suite 'MetaMultimodalTests' passed at 2026-11-04 23:37:03.046
+	 Executed 17 tests, with 1 test skipped and 0 failures (0 unexpected) in 0.131 (0.131) seconds
+Test Suite 'MorningBriefTests' started at 2026-11-04 23:37:03.046
+Test Case 'MorningBriefTests.testMorningBriefAssemblesBoardAndEventsGatedOncePerDay' started at 2026-11-04 23:37:03.046
+Test Case 'MorningBriefTests.testMorningBriefAssemblesBoardAndEventsGatedOncePerDay' passed (0.006 seconds)
+Test Suite 'MorningBriefTests' passed at 2026-11-04 23:37:03.052
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.006 (0.006) seconds
+Test Suite 'OptionSetTests' started at 2026-11-04 23:37:03.052
+Test Case 'OptionSetTests.testDynamicSetsCapAtEightAndEndWithAsk' started at 2026-11-04 23:37:03.052
+Test Case 'OptionSetTests.testDynamicSetsCapAtEightAndEndWithAsk' passed (0.004 seconds)
+Test Case 'OptionSetTests.testFallbacksAreValidAndLettersMap' started at 2026-11-04 23:37:03.056
+Test Case 'OptionSetTests.testFallbacksAreValidAndLettersMap' passed (0.0 seconds)
+Test Case 'OptionSetTests.testFewShotPromptHasExemplarsWithCorrectLetters' started at 2026-11-04 23:37:03.057
+Test Case 'OptionSetTests.testFewShotPromptHasExemplarsWithCorrectLetters' passed (0.001 seconds)
+Test Case 'OptionSetTests.testPromptFormatIsStable' started at 2026-11-04 23:37:03.057
+Test Case 'OptionSetTests.testPromptFormatIsStable' passed (0.0 seconds)
+Test Case 'OptionSetTests.testTwelveDecisionTypesCovered' started at 2026-11-04 23:37:03.057
+Test Case 'OptionSetTests.testTwelveDecisionTypesCovered' passed (0.0 seconds)
+Test Suite 'OptionSetTests' passed at 2026-11-04 23:37:03.058
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.005 (0.005) seconds
+Test Suite 'ProactiveTests' started at 2026-11-04 23:37:03.058
+Test Case 'ProactiveTests.testArriveAtStoreNudgesViaReflex' started at 2026-11-04 23:37:03.058
+Test Case 'ProactiveTests.testArriveAtStoreNudgesViaReflex' passed (0.002 seconds)
+Test Case 'ProactiveTests.testBirthdayWindow' started at 2026-11-04 23:37:03.060
+Test Case 'ProactiveTests.testBirthdayWindow' passed (0.003 seconds)
+Test Case 'ProactiveTests.testReflexCanVetoNudge' started at 2026-11-04 23:37:03.064
+Test Case 'ProactiveTests.testReflexCanVetoNudge' passed (0.003 seconds)
+Test Suite 'ProactiveTests' passed at 2026-11-04 23:37:03.066
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.008 (0.008) seconds
+Test Suite 'ReflexTests' started at 2026-11-04 23:37:03.066
+Test Case 'ReflexTests.testConfidentDecisionIsLocalAndLogged' started at 2026-11-04 23:37:03.066
+Test Case 'ReflexTests.testConfidentDecisionIsLocalAndLogged' passed (0.001 seconds)
+Test Case 'ReflexTests.testContextualCalibrationRemovesLetterPrior' started at 2026-11-04 23:37:03.068
+Test Case 'ReflexTests.testContextualCalibrationRemovesLetterPrior' passed (0.001 seconds)
+Test Case 'ReflexTests.testLowConfidenceEscalatesToFallback' started at 2026-11-04 23:37:03.069
+Test Case 'ReflexTests.testLowConfidenceEscalatesToFallback' passed (0.0 seconds)
+Test Case 'ReflexTests.testMeasurePriorsCoversAllSets' started at 2026-11-04 23:37:03.069
+Test Case 'ReflexTests.testMeasurePriorsCoversAllSets' passed (0.003 seconds)
+Test Case 'ReflexTests.testMissingLettersGetFloorNotDropped' started at 2026-11-04 23:37:03.072
+Test Case 'ReflexTests.testMissingLettersGetFloorNotDropped' passed (0.0 seconds)
+Test Case 'ReflexTests.testOldCalibrationJSONStillDecodes' started at 2026-11-04 23:37:03.073
+Test Case 'ReflexTests.testOldCalibrationJSONStillDecodes' passed (0.0 seconds)
+Test Case 'ReflexTests.testPerTypeTauAndTemperature' started at 2026-11-04 23:37:03.073
+Test Case 'ReflexTests.testPerTypeTauAndTemperature' passed (0.0 seconds)
+Test Suite 'ReflexTests' passed at 2026-11-04 23:37:03.073
+	 Executed 7 tests, with 0 failures (0 unexpected) in 0.007 (0.007) seconds
+Test Suite 'RequestInputStoreTests' started at 2026-11-04 23:37:03.073
+Test Case 'RequestInputStoreTests.testBodyCannotBeReplacedThroughStorageBoundary' started at 2026-11-04 23:37:03.073
+Test Case 'RequestInputStoreTests.testBodyCannotBeReplacedThroughStorageBoundary' passed (0.035 seconds)
+Test Case 'RequestInputStoreTests.testCameraPayloadIsBoundedAndExpiresAfterOneHour' started at 2026-11-04 23:37:03.109
+Test Case 'RequestInputStoreTests.testCameraPayloadIsBoundedAndExpiresAfterOneHour' passed (0.073 seconds)
+Test Case 'RequestInputStoreTests.testCompleteAndInterruptAreIdempotentForTheirTerminalDirection' started at 2026-11-04 23:37:03.182
+Test Case 'RequestInputStoreTests.testCompleteAndInterruptAreIdempotentForTheirTerminalDirection' passed (0.056 seconds)
+Test Case 'RequestInputStoreTests.testConcurrentClaimsHaveExactlyOneWinner' started at 2026-11-04 23:37:03.238
+Test Case 'RequestInputStoreTests.testConcurrentClaimsHaveExactlyOneWinner' passed (0.02 seconds)
+Test Case 'RequestInputStoreTests.testCorruptRowsFailClosed' started at 2026-11-04 23:37:03.258
+Test Case 'RequestInputStoreTests.testCorruptRowsFailClosed' passed (0.036 seconds)
+Test Case 'RequestInputStoreTests.testDiscardOnlyAcceptsStagedOrInterrupted' started at 2026-11-04 23:37:03.294
+Test Case 'RequestInputStoreTests.testDiscardOnlyAcceptsStagedOrInterrupted' passed (0.056 seconds)
+Test Case 'RequestInputStoreTests.testExpiryRemovesBodyAndTombstoneExpiresAfterThirtyDays' started at 2026-11-04 23:37:03.350
+Test Case 'RequestInputStoreTests.testExpiryRemovesBodyAndTombstoneExpiresAfterThirtyDays' passed (0.018 seconds)
+Test Case 'RequestInputStoreTests.testInterruptedRowsCountTowardActiveCaps' started at 2026-11-04 23:37:03.367
+Test Case 'RequestInputStoreTests.testInterruptedRowsCountTowardActiveCaps' passed (0.083 seconds)
+Test Case 'RequestInputStoreTests.testNewStageCountsInterruptedTranscriptsUntilBodyDeletion' started at 2026-11-04 23:37:03.450
+Test Case 'RequestInputStoreTests.testNewStageCountsInterruptedTranscriptsUntilBodyDeletion' passed (0.036 seconds)
+Test Case 'RequestInputStoreTests.testProcessingRequiresRecoveryAndLaterRecoveryCannotInterruptLiveClaim' started at 2026-11-04 23:37:03.486
+Test Case 'RequestInputStoreTests.testProcessingRequiresRecoveryAndLaterRecoveryCannotInterruptLiveClaim' passed (0.013 seconds)
+Test Case 'RequestInputStoreTests.testRecoverIsOneShotAndNeverClaimsStagedRows' started at 2026-11-04 23:37:03.499
+Test Case 'RequestInputStoreTests.testRecoverIsOneShotAndNeverClaimsStagedRows' passed (0.016 seconds)
+Test Case 'RequestInputStoreTests.testReleasingOwnerLetsNextInstanceRecoverClaimAsInterrupted' started at 2026-11-04 23:37:03.515
+Test Case 'RequestInputStoreTests.testReleasingOwnerLetsNextInstanceRecoverClaimAsInterrupted' passed (0.036 seconds)
+Test Case 'RequestInputStoreTests.testSecondInstanceInSameProcessIsNotOwnerAndCannotInterruptLiveClaim' started at 2026-11-04 23:37:03.551
+Test Case 'RequestInputStoreTests.testSecondInstanceInSameProcessIsNotOwnerAndCannotInterruptLiveClaim' passed (0.03 seconds)
+Test Case 'RequestInputStoreTests.testStageClaimCompleteRoundTripsEachBodyKind' started at 2026-11-04 23:37:03.581
+Test Case 'RequestInputStoreTests.testStageClaimCompleteRoundTripsEachBodyKind' passed (0.05 seconds)
+Test Case 'RequestInputStoreTests.testStagedBodiesAreIsolatedPerRequest' started at 2026-11-04 23:37:03.631
+Test Case 'RequestInputStoreTests.testStagedBodiesAreIsolatedPerRequest' passed (0.028 seconds)
+Test Case 'RequestInputStoreTests.testSummariesDoNotClaimOrExecute' started at 2026-11-04 23:37:03.660
+Test Case 'RequestInputStoreTests.testSummariesDoNotClaimOrExecute' passed (0.023 seconds)
+Test Case 'RequestInputStoreTests.testSummaryCountsRetainedAudioAndUTF8Transcript' started at 2026-11-04 23:37:03.683
+Test Case 'RequestInputStoreTests.testSummaryCountsRetainedAudioAndUTF8Transcript' passed (0.142 seconds)
+Test Case 'RequestInputStoreTests.testTerminalRowsDeleteSensitiveFieldsAndCannotRegainBody' started at 2026-11-04 23:37:03.825
+Test Case 'RequestInputStoreTests.testTerminalRowsDeleteSensitiveFieldsAndCannotRegainBody' passed (0.019 seconds)
+Test Case 'RequestInputStoreTests.testTranscriptByteCapIncludesOneOversizedGrapheme' started at 2026-11-04 23:37:03.844
+Test Case 'RequestInputStoreTests.testTranscriptByteCapIncludesOneOversizedGrapheme' passed (0.092 seconds)
+Test Case 'RequestInputStoreTests.testTranscriptCapacityRefusalPreservesTheSavedAudio' started at 2026-11-04 23:37:03.935
+Test Case 'RequestInputStoreTests.testTranscriptCapacityRefusalPreservesTheSavedAudio' passed (0.129 seconds)
+Test Case 'RequestInputStoreTests.testTranscriptIsWriteOnceAndSurvivesInterruptRetry' started at 2026-11-04 23:37:04.064
+Test Case 'RequestInputStoreTests.testTranscriptIsWriteOnceAndSurvivesInterruptRetry' passed (0.012 seconds)
+Test Case 'RequestInputStoreTests.testUnicodeRoundTripsAndNULEmptyAndOversizeAreRefused' started at 2026-11-04 23:37:04.076
+Test Case 'RequestInputStoreTests.testUnicodeRoundTripsAndNULEmptyAndOversizeAreRefused' passed (0.014 seconds)
+Test Suite 'RequestInputStoreTests' passed at 2026-11-04 23:37:04.090
+	 Executed 22 tests, with 0 failures (0 unexpected) in 1.015 (1.015) seconds
+Test Suite 'ReviewMemoryTests' started at 2026-11-04 23:37:04.090
+Test Case 'ReviewMemoryTests.testPurgeExpiredAndBudgetEvictionOrder' started at 2026-11-04 23:37:04.090
+Test Case 'ReviewMemoryTests.testPurgeExpiredAndBudgetEvictionOrder' passed (0.003 seconds)
+Test Suite 'ReviewMemoryTests' passed at 2026-11-04 23:37:04.093
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.003 (0.003) seconds
+Test Suite 'ReviewPrivacyTests' started at 2026-11-04 23:37:04.093
+Test Case 'ReviewPrivacyTests.testCSVOmitsContextUnlessAsked' started at 2026-11-04 23:37:04.093
+Test Case 'ReviewPrivacyTests.testCSVOmitsContextUnlessAsked' passed (0.002 seconds)
+Test Case 'ReviewPrivacyTests.testRestoreWithTenPlusPlaceholdersDoesNotCollide' started at 2026-11-04 23:37:04.095
+Test Case 'ReviewPrivacyTests.testRestoreWithTenPlusPlaceholdersDoesNotCollide' passed (0.001 seconds)
+Test Suite 'ReviewPrivacyTests' passed at 2026-11-04 23:37:04.096
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.003 (0.003) seconds
+Test Suite 'ReviewReflexTests' started at 2026-11-04 23:37:04.096
+Test Case 'ReviewReflexTests.testFloorAndPriorHandComputed' started at 2026-11-04 23:37:04.096
+Test Case 'ReviewReflexTests.testFloorAndPriorHandComputed' passed (0.002 seconds)
+Test Case 'ReviewReflexTests.testReadOnlyTelemetryDoesNotDiscardTheDecision' started at 2026-11-04 23:37:04.098
+PocketGlimmer: decision telemetry could not be saved.
+Test Case 'ReviewReflexTests.testReadOnlyTelemetryDoesNotDiscardTheDecision' passed (0.003 seconds)
+Test Case 'ReviewReflexTests.testTieGoesToFirstLetterAndTauIsInclusive' started at 2026-11-04 23:37:04.102
+Test Case 'ReviewReflexTests.testTieGoesToFirstLetterAndTauIsInclusive' passed (0.0 seconds)
+Test Suite 'ReviewReflexTests' passed at 2026-11-04 23:37:04.102
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.006 (0.006) seconds
+Test Suite 'ReviewScrubberPatternTests' started at 2026-11-04 23:37:04.102
+Test Case 'ReviewScrubberPatternTests.testSSNAndInternationalPhoneAreMasked' started at 2026-11-04 23:37:04.102
+Test Case 'ReviewScrubberPatternTests.testSSNAndInternationalPhoneAreMasked' passed (0.001 seconds)
+Test Suite 'ReviewScrubberPatternTests' passed at 2026-11-04 23:37:04.103
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
+Test Suite 'ReviewStatsTests' started at 2026-11-04 23:37:04.103
+Test Case 'ReviewStatsTests.testClopperPearsonOneError' started at 2026-11-04 23:37:04.103
+Test Case 'ReviewStatsTests.testClopperPearsonOneError' passed (0.0 seconds)
+Test Case 'ReviewStatsTests.testConformalEdgeCases' started at 2026-11-04 23:37:04.103
+Test Case 'ReviewStatsTests.testConformalEdgeCases' passed (0.018 seconds)
+Test Case 'ReviewStatsTests.testECEHandComputed' started at 2026-11-04 23:37:04.121
+Test Case 'ReviewStatsTests.testECEHandComputed' passed (0.0 seconds)
+Test Case 'ReviewStatsTests.testShippingCal180BoundMatchesPythonAndDocs' started at 2026-11-04 23:37:04.122
+Test Case 'ReviewStatsTests.testShippingCal180BoundMatchesPythonAndDocs' passed (0.032 seconds)
+Test Suite 'ReviewStatsTests' passed at 2026-11-04 23:37:04.154
+	 Executed 4 tests, with 0 failures (0 unexpected) in 0.051 (0.051) seconds
+Test Suite 'RichReplyTests' started at 2026-11-04 23:37:04.154
+Test Case 'RichReplyTests.testAngleBracketsInProseAreNotMarkup' started at 2026-11-04 23:37:04.154
+Test Case 'RichReplyTests.testAngleBracketsInProseAreNotMarkup' passed (0.0 seconds)
+Test Case 'RichReplyTests.testCRLFIsHandled' started at 2026-11-04 23:37:04.155
+Test Case 'RichReplyTests.testCRLFIsHandled' passed (0.0 seconds)
+Test Case 'RichReplyTests.testFencedHTMLBetweenProseKeepsBothSides' started at 2026-11-04 23:37:04.155
+Test Case 'RichReplyTests.testFencedHTMLBetweenProseKeepsBothSides' passed (0.0 seconds)
+Test Case 'RichReplyTests.testFencedHelperSurvivesBackticksInContent' started at 2026-11-04 23:37:04.155
+Test Case 'RichReplyTests.testFencedHelperSurvivesBackticksInContent' passed (0.0 seconds)
+Test Case 'RichReplyTests.testFencedSVGKindAndTildeFenceAndCaseInsensitiveTag' started at 2026-11-04 23:37:04.155
+Test Case 'RichReplyTests.testFencedSVGKindAndTildeFenceAndCaseInsensitiveTag' passed (0.0 seconds)
+Test Case 'RichReplyTests.testHTMLVizOutputRoundTripsThroughTheFence' started at 2026-11-04 23:37:04.156
+Test Case 'RichReplyTests.testHTMLVizOutputRoundTripsThroughTheFence' passed (0.001 seconds)
+Test Case 'RichReplyTests.testIndentedFourSpacesIsNotAFence' started at 2026-11-04 23:37:04.157
+Test Case 'RichReplyTests.testIndentedFourSpacesIsNotAFence' passed (0.0 seconds)
+Test Case 'RichReplyTests.testOtherLanguagesAndUnterminatedFencesStayProse' started at 2026-11-04 23:37:04.157
+Test Case 'RichReplyTests.testOtherLanguagesAndUnterminatedFencesStayProse' passed (0.0 seconds)
+Test Case 'RichReplyTests.testOversizeBlockStaysProseAndDocumentCountIsCapped' started at 2026-11-04 23:37:04.157
+Test Case 'RichReplyTests.testOversizeBlockStaysProseAndDocumentCountIsCapped' passed (0.047 seconds)
+Test Case 'RichReplyTests.testPageCarriesRestrictiveCSPAndKeepsHostileSourceVerbatimForTheRenderer' started at 2026-11-04 23:37:04.204
+Test Case 'RichReplyTests.testPageCarriesRestrictiveCSPAndKeepsHostileSourceVerbatimForTheRenderer' passed (0.101 seconds)
+Test Case 'RichReplyTests.testPlainTextIsOneUntouchedProseSegment' started at 2026-11-04 23:37:04.304
+Test Case 'RichReplyTests.testPlainTextIsOneUntouchedProseSegment' passed (0.0 seconds)
+Test Case 'RichReplyTests.testSVGFenceWithoutSVGRootStaysProse' started at 2026-11-04 23:37:04.305
+Test Case 'RichReplyTests.testSVGFenceWithoutSVGRootStaysProse' passed (0.0 seconds)
+Test Case 'RichReplyTests.testWholeReplyDocumentsAreMarkupButMixedUnfencedIsNot' started at 2026-11-04 23:37:04.305
+Test Case 'RichReplyTests.testWholeReplyDocumentsAreMarkupButMixedUnfencedIsNot' passed (0.0 seconds)
+Test Suite 'RichReplyTests' passed at 2026-11-04 23:37:04.305
+	 Executed 13 tests, with 0 failures (0 unexpected) in 0.151 (0.151) seconds
+Test Suite 'ScrubberAndCloudTests' started at 2026-11-04 23:37:04.305
+Test Case 'ScrubberAndCloudTests.testRequestShapeAndChainFallback' started at 2026-11-04 23:37:04.305
+Test Case 'ScrubberAndCloudTests.testRequestShapeAndChainFallback' passed (0.001 seconds)
+Test Case 'ScrubberAndCloudTests.testScrubRoundTrip' started at 2026-11-04 23:37:04.306
+Test Case 'ScrubberAndCloudTests.testScrubRoundTrip' passed (0.001 seconds)
+Test Suite 'ScrubberAndCloudTests' passed at 2026-11-04 23:37:04.307
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
+Test Suite 'SharedReadRecoveryTests' started at 2026-11-04 23:37:04.307
+Test Case 'SharedReadRecoveryTests.testCancelledConfirmedReadStaysUncertainAndCannotReplay' started at 2026-11-04 23:37:04.307
+Test Case 'SharedReadRecoveryTests.testCancelledConfirmedReadStaysUncertainAndCannotReplay' passed (0.003 seconds)
+Test Case 'SharedReadRecoveryTests.testDefaultShareUsesItsDocumentOnEveryNonToolRoute' started at 2026-11-04 23:37:04.309
+Test Case 'SharedReadRecoveryTests.testDefaultShareUsesItsDocumentOnEveryNonToolRoute' passed (0.04 seconds)
+Test Case 'SharedReadRecoveryTests.testFailedConfirmedReadDoesNotClaimNothingWasSent' started at 2026-11-04 23:37:04.349
+Test Case 'SharedReadRecoveryTests.testFailedConfirmedReadDoesNotClaimNothingWasSent' passed (0.003 seconds)
+Test Case 'SharedReadRecoveryTests.testFailedSharedReadKeepsTheOutboundPayloadWithLocalFallback' started at 2026-11-04 23:37:04.352
+Test Case 'SharedReadRecoveryTests.testFailedSharedReadKeepsTheOutboundPayloadWithLocalFallback' passed (0.016 seconds)
+Test Case 'SharedReadRecoveryTests.testLongDefaultShareSendsItsDocumentEvenWhenRouteSaysLocal' started at 2026-11-04 23:37:04.368
+Test Case 'SharedReadRecoveryTests.testLongDefaultShareSendsItsDocumentEvenWhenRouteSaysLocal' passed (0.014 seconds)
+Test Case 'SharedReadRecoveryTests.testSensitiveSharedDocumentIsWithheldFromCloud' started at 2026-11-04 23:37:04.382
+Test Case 'SharedReadRecoveryTests.testSensitiveSharedDocumentIsWithheldFromCloud' passed (0.016 seconds)
+Test Suite 'SharedReadRecoveryTests' passed at 2026-11-04 23:37:04.398
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.091 (0.091) seconds
+Test Suite 'SkillsTests' started at 2026-11-04 23:37:04.398
+Test Case 'SkillsTests.testArgExtraction' started at 2026-11-04 23:37:04.398
+Test Case 'SkillsTests.testArgExtraction' passed (0.004 seconds)
+Test Case 'SkillsTests.testBelowTauExplicitMessageRetainsDraftInsteadOfChoices' started at 2026-11-04 23:37:04.402
+Test Case 'SkillsTests.testBelowTauExplicitMessageRetainsDraftInsteadOfChoices' passed (0.018 seconds)
+Test Case 'SkillsTests.testBelowTauSkillPickClarifiesWithTopThree' started at 2026-11-04 23:37:04.419
+Test Case 'SkillsTests.testBelowTauSkillPickClarifiesWithTopThree' passed (0.015 seconds)
+Test Case 'SkillsTests.testContactSkillBindsIdentifierAndSafeReadActs' started at 2026-11-04 23:37:04.434
+Test Case 'SkillsTests.testContactSkillBindsIdentifierAndSafeReadActs' passed (0.019 seconds)
+Test Case 'SkillsTests.testDynamicSkillPickSet' started at 2026-11-04 23:37:04.454
+Test Case 'SkillsTests.testDynamicSkillPickSet' passed (0.0 seconds)
+Test Case 'SkillsTests.testEmailDigestCloudReadPreservesProviderAndPayload' started at 2026-11-04 23:37:04.454
+Test Case 'SkillsTests.testEmailDigestCloudReadPreservesProviderAndPayload' passed (0.02 seconds)
+Test Case 'SkillsTests.testEmailDigestUsesRequestInputOnDevice' started at 2026-11-04 23:37:04.474
+Test Case 'SkillsTests.testEmailDigestUsesRequestInputOnDevice' passed (0.03 seconds)
+Test Case 'SkillsTests.testExplicitEmailUsesCompiledMailHandoff' started at 2026-11-04 23:37:04.507
+Test Case 'SkillsTests.testExplicitEmailUsesCompiledMailHandoff' passed (0.015 seconds)
+Test Case 'SkillsTests.testExplicitRequestOverridesNonToolRouteOnlyWhenSkillPickIsSure' started at 2026-11-04 23:37:04.522
+Test Case 'SkillsTests.testExplicitRequestOverridesNonToolRouteOnlyWhenSkillPickIsSure' passed (0.02 seconds)
+Test Case 'SkillsTests.testImmediateSharedTextReadPreservesCloudMetadata' started at 2026-11-04 23:37:04.542
+Test Case 'SkillsTests.testImmediateSharedTextReadPreservesCloudMetadata' passed (0.023 seconds)
+Test Case 'SkillsTests.testInstagramDMPlansSkillWithConfirmAndRunsThroughCompiledHandoff' started at 2026-11-04 23:37:04.565
+Test Case 'SkillsTests.testInstagramDMPlansSkillWithConfirmAndRunsThroughCompiledHandoff' passed (0.019 seconds)
+Test Case 'SkillsTests.testJSONRoundTripAndHardRuleSurvivesJSON' started at 2026-11-04 23:37:04.584
+Test Case 'SkillsTests.testJSONRoundTripAndHardRuleSurvivesJSON' passed (0.033 seconds)
+Test Case 'SkillsTests.testMemoryRecallSkillReadsMemoryNotPlaceholder' started at 2026-11-04 23:37:04.617
+Test Case 'SkillsTests.testMemoryRecallSkillReadsMemoryNotPlaceholder' passed (0.017 seconds)
+Test Case 'SkillsTests.testNoRegistryRetainsCompiledMessagingAndTrainedTools' started at 2026-11-04 23:37:04.635
+Test Case 'SkillsTests.testNoRegistryRetainsCompiledMessagingAndTrainedTools' passed (0.031 seconds)
+Test Case 'SkillsTests.testOfflineChartFromNumbers' started at 2026-11-04 23:37:04.666
+Test Case 'SkillsTests.testOfflineChartFromNumbers' passed (0.002 seconds)
+Test Case 'SkillsTests.testRegistryHasAtLeast25UniqueSkillsAndHardRules' started at 2026-11-04 23:37:04.667
+Test Case 'SkillsTests.testRegistryHasAtLeast25UniqueSkillsAndHardRules' passed (0.0 seconds)
+Test Case 'SkillsTests.testRetrievalFindsTheRightSkill' started at 2026-11-04 23:37:04.667
+Test Case 'SkillsTests.testRetrievalFindsTheRightSkill' passed (0.006 seconds)
+Test Case 'SkillsTests.testTemplateFillPercentEncodes' started at 2026-11-04 23:37:04.673
+Test Case 'SkillsTests.testTemplateFillPercentEncodes' passed (0.0 seconds)
+Test Case 'SkillsTests.testUserJSONReplacementCannotChangeIMessageBindingOrFloor' started at 2026-11-04 23:37:04.674
+Test Case 'SkillsTests.testUserJSONReplacementCannotChangeIMessageBindingOrFloor' passed (0.028 seconds)
+Test Suite 'SkillsTests' passed at 2026-11-04 23:37:04.702
+	 Executed 19 tests, with 0 failures (0 unexpected) in 0.3 (0.3) seconds
+Test Suite 'TakeoverRegressionTests' started at 2026-11-04 23:37:04.702
+Test Case 'TakeoverRegressionTests.testAppleTVNonToolRouteReachesRegisteredSkill' started at 2026-11-04 23:37:04.702
+Test Case 'TakeoverRegressionTests.testAppleTVNonToolRouteReachesRegisteredSkill' passed (0.032 seconds)
+Test Case 'TakeoverRegressionTests.testAppleTVRequestReachesSkillRouting' started at 2026-11-04 23:37:04.734
+Test Case 'TakeoverRegressionTests.testAppleTVRequestReachesSkillRouting' passed (0.002 seconds)
+Test Case 'TakeoverRegressionTests.testDemoMessagePlansFullBodyAndWaitsForConfirmation' started at 2026-11-04 23:37:04.736
+Test Case 'TakeoverRegressionTests.testDemoMessagePlansFullBodyAndWaitsForConfirmation' passed (0.01 seconds)
+Test Case 'TakeoverRegressionTests.testDemoMessagePreservesBodyWithoutSeparator' started at 2026-11-04 23:37:04.745
+Test Case 'TakeoverRegressionTests.testDemoMessagePreservesBodyWithoutSeparator' passed (0.001 seconds)
+Test Case 'TakeoverRegressionTests.testMessageParserKeepsExplicitAndTwoWordForms' started at 2026-11-04 23:37:04.746
+Test Case 'TakeoverRegressionTests.testMessageParserKeepsExplicitAndTwoWordForms' passed (0.006 seconds)
+Test Case 'TakeoverRegressionTests.testMessageSkillClarifiesMissingBodyAndKeepsFullBodyWhenGiven' started at 2026-11-04 23:37:04.752
+Test Case 'TakeoverRegressionTests.testMessageSkillClarifiesMissingBodyAndKeepsFullBodyWhenGiven' passed (0.024 seconds)
+Test Case 'TakeoverRegressionTests.testMissingMessageArgsClarifyWithoutAction' started at 2026-11-04 23:37:04.776
+Test Case 'TakeoverRegressionTests.testMissingMessageArgsClarifyWithoutAction' passed (0.013 seconds)
+Test Case 'TakeoverRegressionTests.testSharedTextEscalationScrubsRememberedEntityNames' started at 2026-11-04 23:37:04.789
+Test Case 'TakeoverRegressionTests.testSharedTextEscalationScrubsRememberedEntityNames' passed (0.014 seconds)
+Test Case 'TakeoverRegressionTests.testSharedTextScreensSensitiveContentBeyondTheOpeningExcerpt' started at 2026-11-04 23:37:04.803
+Test Case 'TakeoverRegressionTests.testSharedTextScreensSensitiveContentBeyondTheOpeningExcerpt' passed (0.108 seconds)
+Test Case 'TakeoverRegressionTests.testUncertainMessageRouteGetsConfidentSkillAndStillConfirms' started at 2026-11-04 23:37:04.910
+Test Case 'TakeoverRegressionTests.testUncertainMessageRouteGetsConfidentSkillAndStillConfirms' passed (0.02 seconds)
+Test Case 'TakeoverRegressionTests.testUncertainMessageSkillBecomesEditableDraft' started at 2026-11-04 23:37:04.931
+Test Case 'TakeoverRegressionTests.testUncertainMessageSkillBecomesEditableDraft' passed (0.019 seconds)
+Test Suite 'TakeoverRegressionTests' passed at 2026-11-04 23:37:04.950
+	 Executed 11 tests, with 0 failures (0 unexpected) in 0.248 (0.248) seconds
+Test Suite 'TelemetryTests' started at 2026-11-04 23:37:04.950
+Test Case 'TelemetryTests.testDailyShareAndCSV' started at 2026-11-04 23:37:04.950
+Test Case 'TelemetryTests.testDailyShareAndCSV' passed (0.004 seconds)
+Test Case 'TelemetryTests.testDistillationExportSkipsMissingAndBlankContexts' started at 2026-11-04 23:37:04.954
+Test Case 'TelemetryTests.testDistillationExportSkipsMissingAndBlankContexts' passed (0.002 seconds)
+Test Case 'TelemetryTests.testDistillationLoopRoundTripExportAndVerdicts' started at 2026-11-04 23:37:04.956
+Test Case 'TelemetryTests.testDistillationLoopRoundTripExportAndVerdicts' passed (0.005 seconds)
+Test Suite 'TelemetryTests' passed at 2026-11-04 23:37:04.961
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.01 (0.01) seconds
+Test Suite 'TextWindowsTests' started at 2026-11-04 23:37:04.961
+Test Case 'TextWindowsTests.testCoverIsContiguousBoundedAndUnicodeSafe' started at 2026-11-04 23:37:04.961
+Test Case 'TextWindowsTests.testCoverIsContiguousBoundedAndUnicodeSafe' passed (0.001 seconds)
+Test Case 'TextWindowsTests.testEmptyTextHasNoWindows' started at 2026-11-04 23:37:04.962
+Test Case 'TextWindowsTests.testEmptyTextHasNoWindows' passed (0.0 seconds)
+Test Case 'TextWindowsTests.testMaximumWindowLeavesRoomForTheFrozenDecisionPrompt' started at 2026-11-04 23:37:04.962
+Test Case 'TextWindowsTests.testMaximumWindowLeavesRoomForTheFrozenDecisionPrompt' passed (0.001 seconds)
+Test Case 'TextWindowsTests.testOverlapKeepsABoundaryPhraseWhole' started at 2026-11-04 23:37:04.963
+Test Case 'TextWindowsTests.testOverlapKeepsABoundaryPhraseWhole' passed (0.0 seconds)
+Test Case 'TextWindowsTests.testSingleOversizedGraphemeFailsClosed' started at 2026-11-04 23:37:04.963
+Test Case 'TextWindowsTests.testSingleOversizedGraphemeFailsClosed' passed (0.0 seconds)
+Test Suite 'TextWindowsTests' passed at 2026-11-04 23:37:04.963
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.002 (0.002) seconds
+Test Suite 'debug.xctest' passed at 2026-11-04 23:37:04.963
+	 Executed 378 tests, with 1 test skipped and 0 failures (0 unexpected) in 7.272 (7.272) seconds
+Test Suite 'All tests' passed at 2026-11-04 23:37:04.963
+	 Executed 378 tests, with 1 test skipped and 0 failures (0 unexpected) in 7.272 (7.272) seconds
+◇ Test run started.
+↳ Testing Library Version: 6.1.3 (1d1f7e489c9c606)
+↳ Target Platform: x86_64-unknown-linux-gnu
+✔ Test run with 0 tests passed after 0.002 seconds.
