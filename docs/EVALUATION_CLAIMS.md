@@ -11,7 +11,7 @@ Each row tests one multiple-choice decision, not a complete phone task. These re
 | Calibration/selection split | 180 | 64 | 64 |
 | Report-only split | 120 | 44 | 41 |
 
-The report-only split has 98/120 correct before thresholding. At the earlier comparison threshold of 0.80, it accepts 61/120, with 56/61 correct. ECE is 0.0638 and AURC is about 0.085. Sources: `eval/results/after_floor.calibration_split.json`, `after_floor.test.json`, `AFTER_FLOOR.md`, and `RISK_COVERAGE.md`.
+The report-only split has 98/120 correct before thresholding in the saved reference run. At the earlier comparison threshold of 0.80, it accepts 61/120, with 56/61 correct. ECE is 0.0638 and AURC is about 0.085. Sources: `eval/results/after_floor.calibration_split.json`, `after_floor.test.json`, `AFTER_FLOOR.md`, and `RISK_COVERAGE.md`.
 
 The 300 examples were written by one person and split by decision type: 15 calibration and 10 report-only examples per type. They are a small internal diagnostic set, not a random sample of deployment traffic. The project records selection on cal180; no shipping choice used test120. There are 13 saved report-only test120 result files, including a precommitted permutation experiment. It was not evaluated only once. The early prompt-selection artifact lacks original contexts, limiting a complete reconstruction of that comparison.
 
@@ -28,6 +28,8 @@ We therefore call 10.2% a **nominal calculation on the selection set**, not a va
 At fixed τ = 0.90, the report-only count of 3 errors in 44 accepted decisions gives a nominal one-sided 90% binomial upper limit of about 14.6% (95%: 16.7%). That calculation also needs sampling assumptions; this hand-authored, stratified set does not establish a deployment guarantee. It is not a replacement certificate.
 
 The 5% target was not certified. The often-quoted 135 zero-error accepted rows is the sample requirement for a fixed model, independent sampling, δ = 0.1 and a 99-threshold grid. It does not account for adaptive model selection. The 5%-target `conformal.py --profile` path would write τ = 1.01 when no threshold qualifies. The shipped τ = 0.90 was set separately using the tightest nominal calculation; it is a product operating point, not a 5% certificate.
+
+The headline ECE of 0.0638 belongs to that saved reference run. A paired single-order readout in the permutation experiment recorded about 0.0475, while the rejected permutation-averaged method recorded about 0.0869. The latter changes the readout and is not another repeat of the shipping procedure. Report runtime state and method when comparing these files; do not treat the headline ECE as a constant across setups.
 
 ## Limits of the evidence
 
