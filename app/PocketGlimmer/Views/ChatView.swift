@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 import PocketCore
 
 struct ChatView: View {
@@ -40,7 +41,7 @@ struct ChatView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .principal) { StatusPill() }
-                ToolbarItemGroup(placement: .keyboard) { Spacer(); Button("Done") { focused = false } }
+                ToolbarItemGroup(placement: .keyboard) { Spacer(); Button("Done") { focused = false; UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil) } }
             }
             .navigationBarTitleDisplayMode(.inline)
         }
@@ -300,7 +301,7 @@ struct DraftCardView: View {
 struct EmptyChat: View {
     var body: some View {
         VStack(spacing: 10) {
-            Image(systemName: "sparkle").font(.system(size: 36, weight: .light)).foregroundStyle(Theme.accent)
+            Image(systemName: "bubble.left.and.text.bubble.right").font(.system(size: 36, weight: .light)).foregroundStyle(Theme.accent)
             Text("Try: “Remind me to call Mom at 7”").foregroundStyle(.secondary)
             Text("or “I'm out of oat milk”").foregroundStyle(.tertiary)
         }

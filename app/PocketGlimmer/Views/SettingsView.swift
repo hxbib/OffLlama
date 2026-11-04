@@ -1,8 +1,11 @@
 import SwiftUI
 import UIKit
+import Security
 
 struct SettingsView: View {
     @Environment(AppModel.self) private var model
+    @Environment(\.scenePhase) private var scenePhase
+    @State private var keyStatus = ""
     @AppStorage("meta_model") private var metaModel = "muse-spark-1.3"
     @AppStorage("byok_url") private var byokURL = ""
     @AppStorage("byok_model") private var byokModel = ""
@@ -28,6 +31,7 @@ struct SettingsView: View {
                     TextField("Model", text: $metaModel).textInputAutocapitalization(.never)
                     SecureField("New API key", text: $metaKey).textInputAutocapitalization(.never).autocorrectionDisabled()
                     Text(metaKeySaved ? "Key saved in Keychain" : "No key saved").font(.caption).foregroundStyle(.secondary)
+                    if metaKeySaved { Button("Remove Meta key", role: .destructive) { removeKey("meta_key") } }
                 } header: { Text("Meta Model API · Muse Spark / Muse Wonder") } footer: {
                     Text("Standard mode only. Contributor-mode ids are refused before any request leaves the phone.")
                 }
@@ -41,6 +45,7 @@ struct SettingsView: View {
                     TextField("Model", text: $byokModel).textInputAutocapitalization(.never)
                     SecureField("New API key", text: $byokKey).textInputAutocapitalization(.never).autocorrectionDisabled()
                     Text(byokKeySaved ? "Key saved in Keychain" : "No key saved").font(.caption).foregroundStyle(.secondary)
+                    if byokKeySaved { Button("Remove endpoint key", role: .destructive) { removeKey("byok_key") } }
                 }
                 Section {
                     Button("Export decisions for distillation") {
@@ -62,15 +67,37 @@ struct SettingsView: View {
                         .font(.caption).foregroundStyle(.secondary)
                 }
                 Section { Button("Save") {
-                    if !metaKey.isEmpty { Keychain.set(metaKey, for: "meta_key"); metaKey = "" }
-                    if !byokKey.isEmpty { Keychain.set(byokKey, for: "byok_key"); byokKey = "" }
-                    metaKeySaved = Keychain.get("meta_key") != nil; byokKeySaved = Keychain.get("byok_key") != nil
+                    var failures: [String] = []
+                    if !metaKey.isEmpty {
+                        if Keychain.set(metaKey, for: "meta_key") == errSecSuccess { metaKey = "" } else { failures.append("Meta") }
+                    }
+                    if !byokKey.isEmpty {
+                        if Keychain.set(byokKey, for: "byok_key") == errSecSuccess { byokKey = "" } else { failures.append("endpoint") }
+                    }
+                    refreshKeyState()
+                    keyStatus = failures.isEmpty ? "Settings saved." : "Could not save the \(failures.joined(separator: " and ")) key. The previous key was retained."
                     model.reloadCloud()
-                } } footer: { Text("Keys are stored in the iOS Keychain on this device only. Without keys, built-in cloud inference is unavailable. Links and Shortcuts can still open other apps.") }
+                }
+                    if !keyStatus.isEmpty { Text(keyStatus).font(.caption) }
+                } footer: { Text("Keys are stored in the iOS Keychain on this device only. Without keys, built-in cloud inference is unavailable. Links and Shortcuts can still open other apps.") }
             }
             .scrollDismissesKeyboard(.interactively)
             .toolbar { ToolbarItemGroup(placement: .keyboard) { Spacer(); Button("Done") { UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil) } } }
             .navigationTitle("Settings")
+            .onDisappear { clearSecrets() }
+            .onChange(of: scenePhase) { _, phase in if phase != .active { clearSecrets() } }
         }
+    }
+
+    private func clearSecrets() { metaKey = ""; byokKey = "" }
+    private func refreshKeyState() {
+        metaKeySaved = Keychain.get("meta_key") != nil
+        byokKeySaved = Keychain.get("byok_key") != nil
+    }
+    private func removeKey(_ key: String) {
+        let status = Keychain.remove(key)
+        refreshKeyState()
+        keyStatus = (status == errSecSuccess || status == errSecItemNotFound) ? "Key removed." : "Could not remove key."
+        model.reloadCloud()
     }
 }
