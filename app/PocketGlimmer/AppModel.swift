@@ -200,7 +200,7 @@ final class AppModel {
     private func loadScrubberNames() async {
         if let t = scrubberNamesTask { await t.value; return }
         guard assistant != nil else { return }
-        let t = Task {
+        let t = Task { () -> Void in
             self.assistant?.scrubber.knownNames = await Self.contactNames()
         }
         scrubberNamesTask = t
