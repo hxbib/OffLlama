@@ -65,19 +65,22 @@ final class VoiceRecorder {
     }
 }
 
-/// Mic button for the composer: press and hold to talk, release to send. The transcript goes through
+/// Record-and-upload button for the composer (waveform, not Apple Dictation): press and hold to talk, release to send. The transcript goes through
 /// `AppModel.send` (and so `Assistant.handle`) exactly like typed text: same Reflex decisions, same sensitivity gate,
 /// same badges. Online-only; offline it records nothing and says so.
 struct MicButton: View {
     @Environment(AppModel.self) private var model
     @State private var recorder = VoiceRecorder()
     @State private var pressing = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @ScaledMetric(relativeTo: .title) private var iconSize = 30
 
     var body: some View {
-        Image(systemName: recorder.isRecording ? "waveform.circle.fill" : "mic.circle")
-            .font(.system(size: 30))
+        Image(systemName: recorder.isRecording ? "waveform.circle.fill" : "waveform.circle")
+            .font(.system(size: iconSize))
+            .frame(minWidth: 44, minHeight: 44)
             .foregroundStyle(recorder.isRecording ? Color.red : (model.isOnline ? Theme.accent : Color.secondary))
-            .symbolEffect(.pulse, isActive: recorder.isRecording)
+            .symbolEffect(.pulse, isActive: recorder.isRecording && !reduceMotion)
             .contentShape(Circle())
             .gesture(
                 DragGesture(minimumDistance: 0)
@@ -92,7 +95,8 @@ struct MicButton: View {
                     }
             )
             .disabled(model.busy)
-            .accessibilityLabel(recorder.isRecording ? "Recording. Release to send." : "Hold to talk")
+            .accessibilityLabel(recorder.isRecording ? "Recording for upload. Release to send." : "Hold to record and upload")
+            .accessibilityHint("Sends the recording to Muse Voice Transcribe. Needs internet and a Meta key. For Apple Dictation, use the microphone on the keyboard.")
             .accessibilityAddTraits(.isButton)
     }
 

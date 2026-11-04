@@ -1,7 +1,6 @@
 import Foundation
 import UIKit
 import SwiftUI
-import WebKit
 import PDFKit
 import UniformTypeIdentifiers
 import PocketCore
@@ -34,8 +33,7 @@ final class IOSSkillRunner: SkillRunner, @unchecked Sendable {
             guard let r = HTMLViz.render(text: data, title: args["title"] ?? "Chart") else {
                 return "No numbers to chart. Paste them like “rent 1200, food 400”, or share a document first."
             }
-            await HTMLSheet.present(html: r.html, title: args["title"] ?? "Chart")
-            return "Chart ready: \(r.bars) bars, drawn on device"
+            return "Chart ready: \(r.bars) bars, drawn on device\n\n" + RichReply.fenced(r.html)
         default:
             return "\(skill.title) isn't available on this build · nothing done"
         }
@@ -90,47 +88,5 @@ final class DocumentPicker: NSObject, UIDocumentPickerDelegate {
     }
     nonisolated func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
         MainActor.assumeIsolated { finish(nil) }
-    }
-}
-
-// MARK: - HTML sheet (WKWebView, no network: generated HTML only)
-
-struct HTMLWebView: UIViewRepresentable {
-    let html: String
-    func makeUIView(context: Context) -> WKWebView {
-        let cfg = WKWebViewConfiguration()
-        cfg.defaultWebpagePreferences.allowsContentJavaScript = false   // static SVG; no scripts
-        let v = WKWebView(frame: .zero, configuration: cfg)
-        v.isOpaque = false
-        return v
-    }
-    func updateUIView(_ v: WKWebView, context: Context) { v.loadHTMLString(html, baseURL: nil) }
-}
-
-struct HTMLSheetView: View {
-    let html: String, title: String
-    var dismiss: () -> Void
-    var body: some View {
-        NavigationStack {
-            HTMLWebView(html: html)
-                .navigationTitle(title)
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .confirmationAction) { Button("Done", action: dismiss) }
-                    ToolbarItem(placement: .topBarLeading) { ShareLink(item: html) }
-                }
-        }
-    }
-}
-
-@MainActor
-enum HTMLSheet {
-    static func present(html: String, title: String) {
-        guard let top = ComposeSheets.presenter() else { return }
-        weak var host: UIViewController?
-        let view = HTMLSheetView(html: html, title: title) { host?.dismiss(animated: true) }
-        let vc = UIHostingController(rootView: view)
-        host = vc
-        top.present(vc, animated: true)
     }
 }

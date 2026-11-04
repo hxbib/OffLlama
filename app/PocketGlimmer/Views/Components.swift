@@ -1,12 +1,14 @@
 import SwiftUI
+import UIKit
 
 /// Top-of-screen pill: airplane/offline vs online, and the loaded model.
 struct StatusPill: View {
     @Environment(AppModel.self) private var model
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     var body: some View {
         HStack(spacing: 6) {
             Image(systemName: model.isOnline ? "wifi" : "airplane")
-                .symbolEffect(.bounce, value: model.isOnline)
+                .symbolEffect(.bounce, value: reduceMotion ? false : model.isOnline)
             Text(model.isOnline ? "Online" : "Offline · fully on device")
         }
         .font(.caption.weight(.semibold))
@@ -90,3 +92,10 @@ struct DecisionCard: View {
 }
 
 typealias DecisionCell = DecisionCard
+
+extension UIApplication {
+    /// Ends editing in whichever field currently holds the keyboard, SwiftUI-focused or not.
+    static func resignKeyboard() {
+        shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}

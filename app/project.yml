@@ -50,7 +50,7 @@ targets:
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
         NSRemindersFullAccessUsageDescription: OffLlama creates and reads reminders you ask for, on this iPhone.
         NSCalendarsFullAccessUsageDescription: OffLlama creates and looks up events you ask for, on this iPhone.
-        NSMicrophoneUsageDescription: Hold the mic to talk. After you release it, the recording is sent to Muse Voice Transcribe, then deleted. You can turn voice off in Settings.
+        NSMicrophoneUsageDescription: Hold the waveform button to record. After you release it, the recording is uploaded to Muse Voice Transcribe, then deleted. You can turn voice upload off in Settings.
         NSCameraUsageDescription: Take a photo for a "glimpse". The sensitivity check runs on device before anything is sent to Muse Spark or SAM 3.1.
         NSPhotoLibraryUsageDescription: Pick a photo for a "glimpse". EXIF and location data are stripped before anything leaves the phone.
         NSContactsUsageDescription: OffLlama finds contacts on this iPhone and uses known names to mask cloud text. Messages require your confirmation.

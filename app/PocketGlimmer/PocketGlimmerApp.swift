@@ -4,6 +4,7 @@ import UserNotifications
 @main
 struct PocketGlimmerApp: App {
     @State private var model = AppModel.shared
+    init() { PrivacyShield.shared.install() }
     var body: some Scene {
         WindowGroup {
             Group {
@@ -19,7 +20,7 @@ struct PocketGlimmerApp: App {
 struct RootView: View {
     var body: some View {
         TabView {
-            ChatView().tabItem { Label("Assistant", systemImage: "sparkle") }
+            ChatView().tabItem { Label("Assistant", systemImage: "bubble.left.and.text.bubble.right") }
             ReflexView().tabItem { Label("Reflex", systemImage: "bolt.fill") }
             MemoryView().tabItem { Label("Memory", systemImage: "brain") }
             SettingsView().tabItem { Label("Settings", systemImage: "slider.horizontal.3") }

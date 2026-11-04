@@ -40,7 +40,7 @@ struct GlimpseView: View {
                         }
                         Toggle("Photos stay on this iPhone", isOn: $photosStayOnDevice).font(.callout)
                         Button { Task { await run() } } label: {
-                            Label(running ? "Checking on device…" : "Glimpse", systemImage: "sparkle.magnifyingglass").frame(maxWidth: .infinity)
+                            Label(running ? "Checking on device…" : "Glimpse", systemImage: "camera.viewfinder").frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.borderedProminent).disabled(running || (mode == .find && concept.trimmingCharacters(in: .whitespaces).isEmpty))
                     }
@@ -53,7 +53,7 @@ struct GlimpseView: View {
             .scrollDismissesKeyboard(.interactively)
             .navigationTitle("Glimpse").navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItemGroup(placement: .keyboard) { Spacer(); Button("Hide keyboard") { UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil) } }
+                ToolbarItemGroup(placement: .keyboard) { Spacer(); Button("Done") { UIApplication.resignKeyboard() } }
                 ToolbarItem(placement: .principal) { StatusPill() }
                 ToolbarItem(placement: .confirmationAction) { Button("Done") { dismiss() } }
             }

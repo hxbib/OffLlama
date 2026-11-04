@@ -4,8 +4,9 @@ import UserNotifications
 struct OnboardingView: View {
     @Environment(AppModel.self) private var model
     @State private var page = 0
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     private let pages: [(String, String, String)] = [
-        ("sparkle", "Your assistant, in your pocket", "A small Meta model runs entirely on this iPhone. Turn on Airplane Mode: it still works."),
+        ("airplane", "Your assistant, in your pocket", "A small Meta model runs entirely on this iPhone. Turn on Airplane Mode: it still works."),
         ("bolt.fill", "Reflex decides in milliseconds", "Every choice is one forward pass with a confidence score. When it isn't sure, it says so and asks for help."),
         ("brain", "It remembers, privately", "Facts you share stay in an on-device database. You can see and delete every memory."),
         ("arrow.up.forward.circle", "Hard questions go to a bigger brain", "Only when you're online and it's allowed, with names and numbers masked first."),
@@ -23,7 +24,7 @@ struct OnboardingView: View {
             }
             .tabViewStyle(.page(indexDisplayMode: .always))
             Button {
-                if page < pages.count - 1 { withAnimation { page += 1 } }
+                if page < pages.count - 1 { withAnimation(reduceMotion ? nil : .default) { page += 1 } }
                 else {
                     Task {
                         await model.actions.requestAccess()

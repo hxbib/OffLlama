@@ -6,6 +6,8 @@ struct ChatView: View {
     @Environment(AppModel.self) private var model
     @State private var input = ""
     @FocusState private var focused: Bool
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @ScaledMetric(relativeTo: .title) private var sendSize = 32
 
     var body: some View {
         NavigationStack {
@@ -20,28 +22,34 @@ struct ChatView: View {
                         .padding()
                     }
                     .scrollDismissesKeyboard(.interactively)
-                    .onChange(of: model.chat.count) { if let l = model.chat.last { withAnimation { proxy.scrollTo(l.id, anchor: .bottom) } } }
+                    .onChange(of: model.chat.count) {
+                        guard let l = model.chat.last else { return }
+                        if reduceMotion { proxy.scrollTo(l.id, anchor: .bottom) } else { withAnimation { proxy.scrollTo(l.id, anchor: .bottom) } }
+                    }
                 }
                 if let last = model.decisions.first { LiveReflexStrip(row: last) }
                 HStack(spacing: 10) {
-                    MicButton()       // hold to talk: Muse Voice Transcribe -> the same Reflex path as typed text (online only)
+                    MicButton()       // hold to talk: uploads audio to Muse Voice Transcribe -> the same Reflex path as typed text (online only; not Apple Dictation)
                     CameraButton()    // glimpse: sensitivity gate -> Muse Spark 1.3 vision / SAM 3.1 (online only)
                     TextField("Ask or tell me something", text: $input, axis: .vertical)
                         .lineLimit(1...4).focused($focused)
+                        .accessibilityLabel("Message")
+                        .accessibilityHint("Type, or use the microphone on the keyboard to dictate with Apple Dictation.")
                         .padding(.horizontal, 14).padding(.vertical, 10)
                         .background(.quaternary.opacity(0.6), in: RoundedRectangle(cornerRadius: 20))
                     Button {
-                        guard model.assistant != nil else { return }
+                        guard model.assistant != nil, !model.busy else { return }
                         let t = input; input = ""
                         Task { await model.send(t) }
-                    } label: { Image(systemName: "arrow.up.circle.fill").font(.system(size: 32)) }
+                    } label: { Image(systemName: "arrow.up.circle.fill").font(.system(size: sendSize)).frame(minWidth: 44, minHeight: 44) }
+                    .accessibilityLabel("Send")
                     .disabled(input.trimmingCharacters(in: .whitespaces).isEmpty || model.busy || model.assistant == nil)
                 }
                 .padding(.horizontal).padding(.vertical, 8)
             }
             .toolbar {
                 ToolbarItem(placement: .principal) { StatusPill() }
-                ToolbarItemGroup(placement: .keyboard) { Spacer(); Button("Done") { focused = false; UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil) } }
+                ToolbarItemGroup(placement: .keyboard) { Spacer(); Button("Done") { focused = false; UIApplication.resignKeyboard() } }
             }
             .navigationBarTitleDisplayMode(.inline)
         }
@@ -85,7 +93,7 @@ struct Bubble: View {
                     if let card = item.card {
                         DraftCardView(item: item, card: card)
                     } else {
-                        Text(item.text).textSelection(.enabled).padding(12).background(.quaternary.opacity(0.6), in: RoundedRectangle(cornerRadius: 18))
+                        ReplyBodyView(text: item.text)
                     }
                     if item.keptOnDevice {
                         Label("Kept on device · nothing sent", systemImage: "lock.fill")
@@ -124,7 +132,7 @@ struct Bubble: View {
     }
 }
 
-/// What actually left the phone: names, emails, numbers replaced by placeholders before the cloud call.
+/// The masked text prepared for a cloud request. Availability of this text does not confirm delivery.
 struct PrivacySheet: View {
     let sent: String, provider: String
     @Environment(\.dismiss) private var dismiss
@@ -133,14 +141,15 @@ struct PrivacySheet: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 14) {
                     Label(provider, systemImage: "arrow.up.forward.circle").font(.headline)
-                    Text("Sent after masking on device:").font(.subheadline).foregroundStyle(.secondary)
+                    Text("Cloud request text").font(.subheadline.weight(.semibold))
+                    Text("Masked on device. A failed request may already have reached the provider.").font(.subheadline).foregroundStyle(.secondary)
                     Text(highlighted).font(.callout.monospaced()).textSelection(.enabled)
                         .padding(12).frame(maxWidth: .infinity, alignment: .leading)
                         .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 12))
                     Text("Placeholders like [PERSON_1] are restored to real names only on this iPhone.").font(.caption).foregroundStyle(.secondary)
                 }.padding()
             }
-            .navigationTitle("Privacy").navigationBarTitleDisplayMode(.inline)
+            .navigationTitle("Cloud request").navigationBarTitleDisplayMode(.inline)
             .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Done") { dismiss() } } }
         }
         .presentationDetents([.medium, .large])

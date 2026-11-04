@@ -988,7 +988,7 @@ generate_project() {
     printf '     Install it yourself: brew install xcodegen\n'
     return 1
   fi
-  if ! ( cd "$ROOT/app" && xcodegen generate ) >"$log" 2>&1; then
+  if ! sh "$ROOT/scripts/generate-offllama-project.sh" >"$log" 2>&1; then
     fail "xcodegen generate failed"
     printf '     Full log: %s\n' "$log"
     tail -30 "$log" >&2 || true

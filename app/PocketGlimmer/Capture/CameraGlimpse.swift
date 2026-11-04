@@ -51,6 +51,7 @@ struct CameraButton: View {
     @State private var showLibrary = false
     @State private var photo: GlimpsePhoto?
     @State private var preparing = false
+    @ScaledMetric(relativeTo: .title) private var iconSize = 30
 
     var body: some View {
         Button {
@@ -58,11 +59,13 @@ struct CameraButton: View {
             askSource = true
         } label: {
             Image(systemName: preparing ? "hourglass.circle" : "camera.circle")
-                .font(.system(size: 30))
+                .font(.system(size: iconSize))
                 .foregroundStyle(model.isOnline ? Theme.accent : Color.secondary)
+                .frame(minWidth: 44, minHeight: 44)
         }
         .disabled(model.busy || preparing)
         .accessibilityLabel("Camera")
+        .accessibilityHint(model.isOnline ? "Checks the photo on this iPhone, then may send it to Muse Spark or SAM." : "Needs internet. Nothing is sent.")
         .confirmationDialog("Glimpse", isPresented: $askSource) {
             if UIImagePickerController.isSourceTypeAvailable(.camera) { Button("Take photo") { showCamera = true } }
             Button("Choose photo") { showLibrary = true }
