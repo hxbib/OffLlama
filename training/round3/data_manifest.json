@@ -1,0 +1,85 @@
+{
+ "builder": "training/round3/data_build.py",
+ "notes": [
+  "squad_fallback_local_sample"
+ ],
+ "fetched_snapshot_sha256": {
+  "bfcl_snapshot": "975f51c51f688649fd190078efd87081241e0a326f9114a2ea3c1ca2440d8690"
+ },
+ "stats": {
+  "pool_rows": 8245,
+  "unlabeled_remainder": 6455,
+  "recheck_seen_context_duplicates": 79,
+  "drop_seen_context": 79,
+  "drop_prior_train_group_train": 1654,
+  "drop_synthetic_template_excess": 2158,
+  "train_from_pool": 2564,
+  "synthetic_distinct_cores_in_train": 906,
+  "drop_eval_group_train": 1,
+  "drop_cross_split_group_train": 2,
+  "train_clinc_new": 800,
+  "drop_cross_split_group_report": 1,
+  "skill_registry_skills_parsed": 36
+ },
+ "splits": {
+  "train": {
+   "file": "data_train.jsonl",
+   "rows": 3964,
+   "groups": 3789,
+   "sha256": "661bad5a54862212bf6e262c9ddf75f770585ffe77aa25308897ced0d30770fb",
+   "by_type": {
+    "nudgeNow": 323,
+    "contactPick": 37,
+    "timing": 12,
+    "route": 2660,
+    "toolChoice": 541,
+    "answerability": 391
+   },
+   "by_label_status": {
+    "needs_label": 3964
+   }
+  },
+  "dev": {
+   "file": "data_dev.jsonl",
+   "rows": 500,
+   "groups": 500,
+   "sha256": "58ff640d828f228d19434503001876d9e10153e959ce91fb5335d0d61026f4f4",
+   "by_type": {
+    "route": 234,
+    "answerability": 266
+   },
+   "by_label_status": {
+    "needs_label": 350,
+    "deterministic_gold": 150
+   }
+  },
+  "calfit": {
+   "file": "data_calfit.jsonl",
+   "rows": 255,
+   "groups": 255,
+   "sha256": "2670d6340134492f833115a68c0df0b7a682b76e3776adfa86cf54b0df904da2",
+   "by_type": {
+    "answerability": 89,
+    "route": 166
+   },
+   "by_label_status": {
+    "needs_label": 250,
+    "deterministic_gold": 5
+   }
+  },
+  "report": {
+   "file": "data_report.jsonl",
+   "rows": 899,
+   "groups": 889,
+   "sha256": "1fad11d9ca052ee5cbc6a1e39edd953bb69aec691fb070b71d895f74bfc29892",
+   "by_type": {
+    "route": 840,
+    "skillPick": 59
+   },
+   "by_label_status": {
+    "needs_label": 600,
+    "deterministic_gold": 299
+   }
+  }
+ }
+}

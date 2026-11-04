@@ -1,0 +1,29 @@
+{
+  "name": "round3_phone_benchmark_v1",
+  "frozen_before_scores": true,
+  "replaces": "the research reports' ambiguous 'zero errors OR optimized bound' wording; that gate is void for new candidates",
+  "manifests": "training/round3/data_manifest.json (sha256 per split recorded there; this protocol is invalid if those hashes change)",
+  "layers": {
+    "L1_choice": "route/toolChoice/skillPick letter or skill-id accuracy (graders.grade_choice)",
+    "L2_slots": "per-slot exact match incl. timezone and contact method keys (graders.grade_slots)",
+    "L3_feasibility": "permission/confirmation/offline expectations (graders.grade_feasibility)",
+    "L4_outcome": "fake-executor effects, no-effect on refusal, recovery (graders.grade_outcome); simulated effects only, never device success"
+  },
+  "primary_metric": {
+    "definition": "On the final-report split, among deterministic_gold groups only: handled share at the single tau frozen from cal-fit, reported with handled-group error rate and its two-sided 95% Wilson interval (unit = source group). Needs-label report rows are inventory, NOT MEASURED, until a frozen label file exists.",
+    "error_denominator": "handled source groups (not rows, not duplicated renderings)",
+    "threshold_fitting": "cal-fit split only; dev is for recipe selection; report is scored exactly once per frozen candidate; no threshold, prior, prompt, or recipe choice may use report or test120; cal180 is historical only",
+    "gate": "Promotion requires ALL of: (a) report handled-group Wilson upper bound below 0.10 with at least 135 handled groups, (b) handled share at least 0.35, (c) no L2/L3/L4 category with a measured regression versus the paired baseline beyond its interval overlap, (d) every category below min_groups reported NOT MEASURED rather than passed. Zero errors on fewer than 135 handled groups can never satisfy (a) by itself: 0/64 gives an upper bound near 0.10 before any selection correction, so small zero-error sets establish nothing.",
+    "min_groups_per_category": 30,
+    "categories": ["decision_routing", "abstention_oos", "action_arguments", "contact_method_timezone", "permissions_confirmation", "refusal_no_effect", "recovery", "privacy_sensitivity", "general_answer_regression", "skill_routing"]
+  },
+  "inference_protocol": {
+    "readout": "deployment-matched GGUF readout only: same prompt style, contextual priors, row order, server flags (-t 4 -c 4096 or the frozen successor), and tau for baseline and candidate",
+    "server_starts": "two fresh server starts per model; each start runs one fresh pass then one warm pass; all four passes reported, none discarded",
+    "pairing": "baseline and candidate alternate order per start (AB then BA) with identical flags; GGUF sha256 recorded per model",
+    "final_reporting": "report split scored exactly once per frozen candidate after the gate above is computed from cal-fit/dev; repeated report scoring converts the set to development data and must be disclosed",
+    "oos_caveat": "CLINC OOS renderings are correlated proxies (one utterance, multiple envelopes). They are reported as proxy rows with group-collapsed intervals and never as independent task error rates.",
+    "not_measured": ["real iPhone latency/memory/thermal (no device in this run)", "actual EventKit/Contacts/Messages delivery", "Shortcuts execution on device", "any action family with fewer than 30 deterministic groups", "needs_label categories before a frozen Meta-teacher label file exists"]
+  },
+  "validation_command": "python3 training/round3/data_validate.py && python3 eval/round3/validate_benchmark.py"
+}
