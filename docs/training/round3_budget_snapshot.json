@@ -1,0 +1,32 @@
+{
+  "checked_at": "2026-11-04T17:56:13+00:00",
+  "modal_summary": {
+    "metered_cost": "19.92132361",
+    "billed_cost": "0E-8",
+    "adjustments": {
+      "free_storage": "-0E-8",
+      "network_egress_allowance": "-0.14132361",
+      "plan_cost": "0E-8",
+      "credits": "-19.78000000",
+      "reservation_adjustment": "-0E-8"
+    },
+    "metered_cost_breakdown": {
+      "volumes": "0E-8",
+      "llm_tokens": "0E-8",
+      "network_egress": "0.14132361",
+      "ephemeral_apps": "17.88339441",
+      "deployed_apps": "1.89370398"
+    }
+  },
+  "modal_rates_usd_per_hour": {
+    "gpu_hour_cost_h100": "3.95000",
+    "gpu_hour_cost_a100_80gb": "2.50000",
+    "cpu_hour_cost": "0.04730",
+    "mem_gib_hour_cost": "0.00800"
+  },
+  "baseten_billing_http": 403,
+  "baseten_recorded_project_spend_usd": 16.62,
+  "baseten_remaining_credit": null,
+  "modal_remaining_credit": null,
+  "input_r2c_sha256": "afcf82d78426f6a096fbc52774cb654f44faaaac7a3ec97b0cc3953fec7dd3b3"
+}

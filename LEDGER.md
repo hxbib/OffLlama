@@ -333,3 +333,16 @@ memory-recall and cloud-provenance findings overlap that migration and were sent
 Apple reasoners remain excluded by the user's Meta-only runtime requirement. No runtime
 model, training job or paid inference was added. The current iPhone app is still unbuilt.
 The action-recovery implementation and independent code review remain open.
+
+## 2026-11-04, training reopened and durable orchestration record
+
+The user authorized further training with remaining Modal and Baseten credits and requested a durable
+orchestrator ledger. `ORCHESTRATOR_LEDGER.md` now owns the current handoff. The decision trail moves
+to `docs/ORCHESTRATOR_DECISIONS.tsv`, preserving the previous local rows. Existing app recovery and
+reviews continue independently. Shipping weights remain ep1 until a candidate passes validation.
+
+Live Modal billing at approximately 17:52 UTC reported $19.92132361 monthly metered usage and $0
+billed, with $19.78 in applied credits. This is not remaining credit. Baseten billing returned HTTP 403;
+its $16.62 repository spend record is historical. A dashboard-balance question is pending. A $5 Modal
+pilot allocation tests two epochs of the existing V4/r2c recipe, with no shipping overwrite. The larger
+data, evaluation, and spending plan is `docs/training/SCALING_RUN_2026-11-04.md`.
