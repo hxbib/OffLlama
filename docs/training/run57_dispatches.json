@@ -15,8 +15,10 @@
       ],
       "sourceCommit": "b41ffae",
       "statusAtDispatch": "running",
-      "modalReservationUSD": 35,
-      "basetenReservationUSD": 0
+      "modalReservationUSD": 100,
+      "basetenReservationUSD": 0,
+      "modalReservationUSDAtDispatch": 35,
+      "budgetSupersededAt": "2026-11-04T19:34:07+00:00"
     },
     {
       "role": "contract_review",

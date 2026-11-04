@@ -1,0 +1,814 @@
+{
+  "task": "glimmer-v2 probability labels (Round 3)",
+  "state": "completed",
+  "teacher": {
+    "model_id": "meta-models/Muse-Glimmer-30B",
+    "revision": "main",
+    "revision_note": "Mutable cache limitation: weights volume pg-glimmer-weights holds revision main with a .complete marker containing main; there is no immutable snapshot id. File names, byte sizes, config and template hashes are recorded per run as the available weight identity.",
+    "template_sha256": "cfc67e5f349f37690dfd31ed1f18bc4442a9dd32fe39a648f993cb4eb3cae678",
+    "no_trust_remote_code": true,
+    "readout": "Direct batched vLLM. Rendered prompt (checkpoint chat template, Reflex system via pg_train.prompts.chat_messages, reasoning_strength low, current_date 2026-10-31, bos_token empty) plus forced suffix ' to=user<|message|>Answer:', tokenized with add_special_tokens=False. One forward per prompt, SamplingParams temperature=1.0, top_p=1.0, max_tokens=1, logprobs top-k, no logit bias, no penalties. Missing legal letter tokens are completed by exact prompt-logprob probes; remaining censoring is bounded or the row is invalid."
+  },
+  "inputs": {
+    "anchor": {
+      "path": "training/round3/anchor_inputs.jsonl",
+      "rows": 600,
+      "sha256": "efea3ad2c53b8b93b4a7d5f4f39707de727dcfb8c9c4e1822c5f3c3be17685ed"
+    },
+    "full": {
+      "path": "training/round3/target_comparison_inputs.jsonl",
+      "rows": 2915,
+      "sha256": "f4bfe57be6ad9e013a3523ef64c76b14c3ae81399649211f52b2112053fd8c3e"
+    },
+    "held_out_use": "none; existing training contexts only"
+  },
+  "gpu_choice": {
+    "rates_usd_per_hour_checked_2026_11_04": {
+      "B200": 6.25,
+      "H200": 4.54,
+      "H100": 3.95
+    },
+    "choice_order": [
+      "B200",
+      "H200",
+      "H100"
+    ],
+    "reason": "B200 is the fastest listed compatible accelerator (Blackwell, largest memory) and its worst-case launch cost still fits the cap. The existing H100 deployment proves the model and vLLM 0.33 path on H100; if B200 engine startup fails, fall back once to H200, then H100, recording each failure. GPU choice never changes the teacher.",
+    "function_timeout_seconds": 1200,
+    "scaledown_window_seconds": 60,
+    "max_containers": 1,
+    "retries": 0
+  },
+  "budget": {
+    "cap_usd": 20.0,
+    "settled_usd": 3.8134698039453823,
+    "calls": [
+      {
+        "gpu": "B200",
+        "seconds": 25.684221029281616,
+        "usd": 0.04776694350979063,
+        "note": "preflight_meta_cpu_conservative_gpu_rate"
+      },
+      {
+        "gpu": "B200",
+        "seconds": 1077.140950202942,
+        "usd": 2.0032428027218714,
+        "note": "preflight chunk@0"
+      },
+      {
+        "gpu": "B200",
+        "seconds": 27.908652305603027,
+        "usd": 0.05190389136568705,
+        "note": "preflight_meta_cpu_conservative_gpu_rate"
+      },
+      {
+        "gpu": "B200",
+        "seconds": 423.69282937049866,
+        "usd": 0.7879745086670451,
+        "note": "anchor chunk@0"
+      },
+      {
+        "gpu": "B200",
+        "seconds": 8.357586860656738,
+        "usd": 0.01554325431929694,
+        "note": "anchor chunk@128"
+      },
+      {
+        "gpu": "B200",
+        "seconds": 8.507546424865723,
+        "usd": 0.01582214578437805,
+        "note": "anchor chunk@256"
+      },
+      {
+        "gpu": "B200",
+        "seconds": 9.226376056671143,
+        "usd": 0.017159009159617954,
+        "note": "anchor chunk@384"
+      },
+      {
+        "gpu": "B200",
+        "seconds": 9.64400315284729,
+        "usd": 0.017935702752484215,
+        "note": "anchor chunk@512"
+      },
+      {
+        "gpu": "B200",
+        "seconds": 33.04692530632019,
+        "usd": 0.06145993730857637,
+        "note": "preflight_meta_cpu_conservative_gpu_rate"
+      },
+      {
+        "gpu": "B200",
+        "seconds": 286.0452928543091,
+        "usd": 0.5319806790883806,
+        "note": "full chunk@0"
+      },
+      {
+        "gpu": "B200",
+        "seconds": 8.330939531326294,
+        "usd": 0.015493696208371056,
+        "note": "full chunk@128"
+      },
+      {
+        "gpu": "B200",
+        "seconds": 9.076075315475464,
+        "usd": 0.0168794831811587,
+        "note": "full chunk@256"
+      },
+      {
+        "gpu": "B200",
+        "seconds": 8.19215202331543,
+        "usd": 0.015235582285139295,
+        "note": "full chunk@384"
+      },
+      {
+        "gpu": "B200",
+        "seconds": 9.18344759941101,
+        "usd": 0.017079171768771276,
+        "note": "full chunk@512"
+      },
+      {
+        "gpu": "B200",
+        "seconds": 8.997419834136963,
+        "usd": 0.01673320146486494,
+        "note": "full chunk@640"
+      },
+      {
+        "gpu": "B200",
+        "seconds": 8.459756851196289,
+        "usd": 0.015733267797258164,
+        "note": "full chunk@768"
+      },
+      {
+        "gpu": "B200",
+        "seconds": 8.28896951675415,
+        "usd": 0.015415641307936774,
+        "note": "full chunk@896"
+      },
+      {
+        "gpu": "B200",
+        "seconds": 8.619747877120972,
+        "usd": 0.01603081555191676,
+        "note": "full chunk@1024"
+      },
+      {
+        "gpu": "B200",
+        "seconds": 8.092466354370117,
+        "usd": 0.015050189093271889,
+        "note": "full chunk@1152"
+      },
+      {
+        "gpu": "B200",
+        "seconds": 7.637282848358154,
+        "usd": 0.014203648923979864,
+        "note": "full chunk@1280"
+      },
+      {
+        "gpu": "B200",
+        "seconds": 8.033133506774902,
+        "usd": 0.014939843181822033,
+        "note": "full chunk@1408"
+      },
+      {
+        "gpu": "B200",
+        "seconds": 8.378012418746948,
+        "usd": 0.015581241318331824,
+        "note": "full chunk@1536"
+      },
+      {
+        "gpu": "B200",
+        "seconds": 8.073797225952148,
+        "usd": 0.015015468663109672,
+        "note": "full chunk@1664"
+      },
+      {
+        "gpu": "B200",
+        "seconds": 7.561009407043457,
+        "usd": 0.014061797272788152,
+        "note": "full chunk@1792"
+      },
+      {
+        "gpu": "B200",
+        "seconds": 8.079041719436646,
+        "usd": 0.015025222255547841,
+        "note": "full chunk@1920"
+      },
+      {
+        "gpu": "B200",
+        "seconds": 7.308246850967407,
+        "usd": 0.013591715087943605,
+        "note": "full chunk@2048"
+      },
+      {
+        "gpu": "B200",
+        "seconds": 7.9118664264678955,
+        "usd": 0.01471431336069107,
+        "note": "full chunk@2176"
+      },
+      {
+        "gpu": "B200",
+        "seconds": 1.0198156833648682,
+        "usd": 0.0018966305453512404,
+        "note": "full chunk@2304"
+      }
+    ]
+  },
+  "commands_redacted": [
+    "source /tmp/gencode/sec/env.sh (values never printed); PG_GLIMMER_GPU=B200 /tmp/gencode/modalenv/bin/modal run training/round3/glimmer_modal.py --input-path training/round3/anchor_inputs.jsonl --out-path /tmp/pocket-glimmer-training-scale/glimmer-v2/labels.jsonl --status-path /tmp/pocket-glimmer-training-scale/glimmer-v2/status.json --template-path /tmp/pocket-glimmer-training-scale/glimmer-v2/chat_template.jinja --phase preflight",
+    "source /tmp/gencode/sec/env.sh (values never printed); PG_GLIMMER_GPU=B200 /tmp/gencode/modalenv/bin/modal run training/round3/glimmer_modal.py --input-path training/round3/anchor_inputs.jsonl --out-path /tmp/pocket-glimmer-training-scale/glimmer-v2/labels.jsonl --status-path /tmp/pocket-glimmer-training-scale/glimmer-v2/status.json --template-path /tmp/pocket-glimmer-training-scale/glimmer-v2/chat_template.jinja --phase anchor",
+    "source /tmp/gencode/sec/env.sh (values never printed); PG_GLIMMER_GPU=B200 /tmp/gencode/modalenv/bin/modal run training/round3/glimmer_modal.py --input-path training/round3/target_comparison_inputs.jsonl --out-path /tmp/pocket-glimmer-training-scale/glimmer-v2/labels.jsonl --status-path /tmp/pocket-glimmer-training-scale/glimmer-v2/status.json --template-path /tmp/pocket-glimmer-training-scale/glimmer-v2/chat_template.jinja --phase full"
+  ],
+  "runs": [
+    {
+      "phase": "preflight",
+      "gpu": "B200",
+      "gpu_name": "NVIDIA B200",
+      "app_id": "ap-3J9f4LhHR5m6eV5iOR9EOj",
+      "rows": 24,
+      "usable": 24,
+      "engine_ready_seconds": 174.14,
+      "inference_seconds": 3.33,
+      "wall_seconds": 1077.14,
+      "settled_usd_cumulative": 2.051,
+      "note": "Wall exceeds container engine+inference time by about 900s (scheduling/container start). Settled uses local wall at the B200 rate, which is conservative; Modal per-app billing will be checked at the end. Installed vLLM capped SamplingParams logprobs at 20 (requested 100, fell back), prompt-logprob probes completed every legal letter token."
+    },
+    {
+      "phase": "anchor",
+      "gpu": "B200",
+      "gpu_name": "NVIDIA B200",
+      "app_id": "ap-SJ4Mav6HWdtYZv3Pi7TtRF",
+      "rows_new": 576,
+      "rows_total": 600,
+      "usable_rate": 1.0,
+      "letter_mass_min": 0.932,
+      "settled_usd_cumulative": 2.957,
+      "gate": "PASS >=95% usable, continue to full"
+    },
+    {
+      "phase": "full",
+      "gpu": "B200",
+      "gpu_name": "NVIDIA B200",
+      "app_id": "ap-etw8IVdN6c1BNU4GOGWZvA",
+      "rows_new": 2315,
+      "rows_total": 2915,
+      "usable_rate": 1.0,
+      "settled_usd_cumulative": 3.813
+    }
+  ],
+  "out_path": "/tmp/pocket-glimmer-training-scale/glimmer-v2/labels.jsonl",
+  "limitations": [
+    "Weights revision is the mutable string main in a cached volume. File byte sizes, config and template SHA-256 are recorded instead of an immutable snapshot.",
+    "bf16 Glimmer logits differ from the shipped IQ2_M llama-server teacher logits. These labels are a new teacher readout, not a reproduction of the 892 floor rows.",
+    "Letter mass is high on these training contexts. It does not measure label correctness on weak types or on held-out data.",
+    "Startup wall time includes Modal scheduling and FlashInfer JIT compilation. Warm throughput is the steady-state figure."
+  ],
+  "failures": [
+    {
+      "phase": "preflight",
+      "gpu": "B200",
+      "app_id": "ap-OScmgeYn8z5I6PbiahNbTG",
+      "error": "Image build failed: Jinja2==3.1.2 conflicts with vllm 0.33 fastapi jinja2>=3.1.5. No GPU started. Fix: drop Jinja2 pin from container image (rendering is local).",
+      "image_id": "im-77MpbtBbs4zcMrWgr79ttB"
+    }
+  ],
+  "preflight_meta": {
+    "vllm_version": "0.33.0",
+    "template_sha256": "cfc67e5f349f37690dfd31ed1f18bc4442a9dd32fe39a648f993cb4eb3cae678",
+    "complete_marker": "main",
+    "weight_files_bytes": {
+      ".complete": 4,
+      "LICENSE": 11358,
+      "README.md": 17266,
+      "USAGE_POLICY.md": 5230,
+      "chat_template.jinja": 9992,
+      "config.json": 5109,
+      "generation_config.json": 202,
+      "model-00001-of-00002.safetensors": 49950112952,
+      "model-00002-of-00002.safetensors": 9603322320,
+      "model.safetensors.index.json": 132674,
+      "processor_config.json": 1084,
+      "tokenizer.json": 28129897,
+      "tokenizer_config.json": 79936
+    }
+  },
+  "phase": "full",
+  "gpu": "B200",
+  "input_path": "training/round3/target_comparison_inputs.jsonl",
+  "input_sha256": "f4bfe57be6ad9e013a3523ef64c76b14c3ae81399649211f52b2112053fd8c3e",
+  "template_sha256": "cfc67e5f349f37690dfd31ed1f18bc4442a9dd32fe39a648f993cb4eb3cae678",
+  "todo_at_start": 2315,
+  "last_chunk": {
+    "start": 2304,
+    "rows": 11,
+    "wall_seconds": 1.0198156833648682,
+    "engine_ready_seconds": 1.6689300537109375e-06,
+    "inference_seconds": 0.7642607688903809,
+    "gpu_name": "NVIDIA B200",
+    "settled_entry": {
+      "gpu": "B200",
+      "seconds": 1.0198156833648682,
+      "usd": 0.0018966305453512404,
+      "note": "full chunk@2304"
+    },
+    "done_total": 2915
+  },
+  "chunks": [
+    {
+      "start": 0,
+      "rows": 24,
+      "wall_seconds": 1077.140950202942,
+      "engine_ready_seconds": 174.1403272151947,
+      "inference_seconds": 3.3341920375823975,
+      "gpu_name": "NVIDIA B200",
+      "settled_entry": {
+        "gpu": "B200",
+        "seconds": 1077.140950202942,
+        "usd": 2.0032428027218714,
+        "note": "preflight chunk@0"
+      },
+      "done_total": 24
+    },
+    {
+      "start": 0,
+      "rows": 128,
+      "wall_seconds": 423.69282937049866,
+      "engine_ready_seconds": 287.68555545806885,
+      "inference_seconds": 6.069702625274658,
+      "gpu_name": "NVIDIA B200",
+      "settled_entry": {
+        "gpu": "B200",
+        "seconds": 423.69282937049866,
+        "usd": 0.7879745086670451,
+        "note": "anchor chunk@0"
+      },
+      "done_total": 152
+    },
+    {
+      "start": 128,
+      "rows": 128,
+      "wall_seconds": 8.357586860656738,
+      "engine_ready_seconds": 1.9073486328125e-06,
+      "inference_seconds": 7.886625051498413,
+      "gpu_name": "NVIDIA B200",
+      "settled_entry": {
+        "gpu": "B200",
+        "seconds": 8.357586860656738,
+        "usd": 0.01554325431929694,
+        "note": "anchor chunk@128"
+      },
+      "done_total": 280
+    },
+    {
+      "start": 256,
+      "rows": 128,
+      "wall_seconds": 8.507546424865723,
+      "engine_ready_seconds": 2.1457672119140625e-06,
+      "inference_seconds": 8.0656578540802,
+      "gpu_name": "NVIDIA B200",
+      "settled_entry": {
+        "gpu": "B200",
+        "seconds": 8.507546424865723,
+        "usd": 0.01582214578437805,
+        "note": "anchor chunk@256"
+      },
+      "done_total": 408
+    },
+    {
+      "start": 384,
+      "rows": 128,
+      "wall_seconds": 9.226376056671143,
+      "engine_ready_seconds": 1.1920928955078125e-06,
+      "inference_seconds": 8.750202417373657,
+      "gpu_name": "NVIDIA B200",
+      "settled_entry": {
+        "gpu": "B200",
+        "seconds": 9.226376056671143,
+        "usd": 0.017159009159617954,
+        "note": "anchor chunk@384"
+      },
+      "done_total": 536
+    },
+    {
+      "start": 512,
+      "rows": 64,
+      "wall_seconds": 9.64400315284729,
+      "engine_ready_seconds": 1.430511474609375e-06,
+      "inference_seconds": 9.078653335571289,
+      "gpu_name": "NVIDIA B200",
+      "settled_entry": {
+        "gpu": "B200",
+        "seconds": 9.64400315284729,
+        "usd": 0.017935702752484215,
+        "note": "anchor chunk@512"
+      },
+      "done_total": 600
+    },
+    {
+      "start": 0,
+      "rows": 128,
+      "wall_seconds": 286.0452928543091,
+      "engine_ready_seconds": 248.14803838729858,
+      "inference_seconds": 7.952272891998291,
+      "gpu_name": "NVIDIA B200",
+      "settled_entry": {
+        "gpu": "B200",
+        "seconds": 286.0452928543091,
+        "usd": 0.5319806790883806,
+        "note": "full chunk@0"
+      },
+      "done_total": 728
+    },
+    {
+      "start": 128,
+      "rows": 128,
+      "wall_seconds": 8.330939531326294,
+      "engine_ready_seconds": 1.9073486328125e-06,
+      "inference_seconds": 7.825249910354614,
+      "gpu_name": "NVIDIA B200",
+      "settled_entry": {
+        "gpu": "B200",
+        "seconds": 8.330939531326294,
+        "usd": 0.015493696208371056,
+        "note": "full chunk@128"
+      },
+      "done_total": 856
+    },
+    {
+      "start": 256,
+      "rows": 128,
+      "wall_seconds": 9.076075315475464,
+      "engine_ready_seconds": 1.1920928955078125e-06,
+      "inference_seconds": 8.517944574356079,
+      "gpu_name": "NVIDIA B200",
+      "settled_entry": {
+        "gpu": "B200",
+        "seconds": 9.076075315475464,
+        "usd": 0.0168794831811587,
+        "note": "full chunk@256"
+      },
+      "done_total": 984
+    },
+    {
+      "start": 384,
+      "rows": 128,
+      "wall_seconds": 8.19215202331543,
+      "engine_ready_seconds": 7.152557373046875e-07,
+      "inference_seconds": 7.685589790344238,
+      "gpu_name": "NVIDIA B200",
+      "settled_entry": {
+        "gpu": "B200",
+        "seconds": 8.19215202331543,
+        "usd": 0.015235582285139295,
+        "note": "full chunk@384"
+      },
+      "done_total": 1112
+    },
+    {
+      "start": 512,
+      "rows": 128,
+      "wall_seconds": 9.18344759941101,
+      "engine_ready_seconds": 7.152557373046875e-07,
+      "inference_seconds": 8.60342025756836,
+      "gpu_name": "NVIDIA B200",
+      "settled_entry": {
+        "gpu": "B200",
+        "seconds": 9.18344759941101,
+        "usd": 0.017079171768771276,
+        "note": "full chunk@512"
+      },
+      "done_total": 1240
+    },
+    {
+      "start": 640,
+      "rows": 128,
+      "wall_seconds": 8.997419834136963,
+      "engine_ready_seconds": 7.152557373046875e-07,
+      "inference_seconds": 8.399688482284546,
+      "gpu_name": "NVIDIA B200",
+      "settled_entry": {
+        "gpu": "B200",
+        "seconds": 8.997419834136963,
+        "usd": 0.01673320146486494,
+        "note": "full chunk@640"
+      },
+      "done_total": 1368
+    },
+    {
+      "start": 768,
+      "rows": 128,
+      "wall_seconds": 8.459756851196289,
+      "engine_ready_seconds": 9.5367431640625e-07,
+      "inference_seconds": 7.9462645053863525,
+      "gpu_name": "NVIDIA B200",
+      "settled_entry": {
+        "gpu": "B200",
+        "seconds": 8.459756851196289,
+        "usd": 0.015733267797258164,
+        "note": "full chunk@768"
+      },
+      "done_total": 1496
+    },
+    {
+      "start": 896,
+      "rows": 128,
+      "wall_seconds": 8.28896951675415,
+      "engine_ready_seconds": 1.430511474609375e-06,
+      "inference_seconds": 7.757025718688965,
+      "gpu_name": "NVIDIA B200",
+      "settled_entry": {
+        "gpu": "B200",
+        "seconds": 8.28896951675415,
+        "usd": 0.015415641307936774,
+        "note": "full chunk@896"
+      },
+      "done_total": 1624
+    },
+    {
+      "start": 1024,
+      "rows": 128,
+      "wall_seconds": 8.619747877120972,
+      "engine_ready_seconds": 1.1920928955078125e-06,
+      "inference_seconds": 7.961703777313232,
+      "gpu_name": "NVIDIA B200",
+      "settled_entry": {
+        "gpu": "B200",
+        "seconds": 8.619747877120972,
+        "usd": 0.01603081555191676,
+        "note": "full chunk@1024"
+      },
+      "done_total": 1752
+    },
+    {
+      "start": 1152,
+      "rows": 128,
+      "wall_seconds": 8.092466354370117,
+      "engine_ready_seconds": 1.9073486328125e-06,
+      "inference_seconds": 7.424250841140747,
+      "gpu_name": "NVIDIA B200",
+      "settled_entry": {
+        "gpu": "B200",
+        "seconds": 8.092466354370117,
+        "usd": 0.015050189093271889,
+        "note": "full chunk@1152"
+      },
+      "done_total": 1880
+    },
+    {
+      "start": 1280,
+      "rows": 128,
+      "wall_seconds": 7.637282848358154,
+      "engine_ready_seconds": 9.5367431640625e-07,
+      "inference_seconds": 7.103473663330078,
+      "gpu_name": "NVIDIA B200",
+      "settled_entry": {
+        "gpu": "B200",
+        "seconds": 7.637282848358154,
+        "usd": 0.014203648923979864,
+        "note": "full chunk@1280"
+      },
+      "done_total": 2008
+    },
+    {
+      "start": 1408,
+      "rows": 128,
+      "wall_seconds": 8.033133506774902,
+      "engine_ready_seconds": 9.5367431640625e-07,
+      "inference_seconds": 7.498127222061157,
+      "gpu_name": "NVIDIA B200",
+      "settled_entry": {
+        "gpu": "B200",
+        "seconds": 8.033133506774902,
+        "usd": 0.014939843181822033,
+        "note": "full chunk@1408"
+      },
+      "done_total": 2136
+    },
+    {
+      "start": 1536,
+      "rows": 128,
+      "wall_seconds": 8.378012418746948,
+      "engine_ready_seconds": 1.1920928955078125e-06,
+      "inference_seconds": 7.837996959686279,
+      "gpu_name": "NVIDIA B200",
+      "settled_entry": {
+        "gpu": "B200",
+        "seconds": 8.378012418746948,
+        "usd": 0.015581241318331824,
+        "note": "full chunk@1536"
+      },
+      "done_total": 2264
+    },
+    {
+      "start": 1664,
+      "rows": 128,
+      "wall_seconds": 8.073797225952148,
+      "engine_ready_seconds": 9.5367431640625e-07,
+      "inference_seconds": 7.442958116531372,
+      "gpu_name": "NVIDIA B200",
+      "settled_entry": {
+        "gpu": "B200",
+        "seconds": 8.073797225952148,
+        "usd": 0.015015468663109672,
+        "note": "full chunk@1664"
+      },
+      "done_total": 2392
+    },
+    {
+      "start": 1792,
+      "rows": 128,
+      "wall_seconds": 7.561009407043457,
+      "engine_ready_seconds": 1.1920928955078125e-06,
+      "inference_seconds": 6.961193084716797,
+      "gpu_name": "NVIDIA B200",
+      "settled_entry": {
+        "gpu": "B200",
+        "seconds": 7.561009407043457,
+        "usd": 0.014061797272788152,
+        "note": "full chunk@1792"
+      },
+      "done_total": 2520
+    },
+    {
+      "start": 1920,
+      "rows": 128,
+      "wall_seconds": 8.079041719436646,
+      "engine_ready_seconds": 1.1920928955078125e-06,
+      "inference_seconds": 7.509437561035156,
+      "gpu_name": "NVIDIA B200",
+      "settled_entry": {
+        "gpu": "B200",
+        "seconds": 8.079041719436646,
+        "usd": 0.015025222255547841,
+        "note": "full chunk@1920"
+      },
+      "done_total": 2648
+    },
+    {
+      "start": 2048,
+      "rows": 128,
+      "wall_seconds": 7.308246850967407,
+      "engine_ready_seconds": 1.1920928955078125e-06,
+      "inference_seconds": 6.8186938762664795,
+      "gpu_name": "NVIDIA B200",
+      "settled_entry": {
+        "gpu": "B200",
+        "seconds": 7.308246850967407,
+        "usd": 0.013591715087943605,
+        "note": "full chunk@2048"
+      },
+      "done_total": 2776
+    },
+    {
+      "start": 2176,
+      "rows": 128,
+      "wall_seconds": 7.9118664264678955,
+      "engine_ready_seconds": 1.430511474609375e-06,
+      "inference_seconds": 7.4430248737335205,
+      "gpu_name": "NVIDIA B200",
+      "settled_entry": {
+        "gpu": "B200",
+        "seconds": 7.9118664264678955,
+        "usd": 0.01471431336069107,
+        "note": "full chunk@2176"
+      },
+      "done_total": 2904
+    },
+    {
+      "start": 2304,
+      "rows": 11,
+      "wall_seconds": 1.0198156833648682,
+      "engine_ready_seconds": 1.6689300537109375e-06,
+      "inference_seconds": 0.7642607688903809,
+      "gpu_name": "NVIDIA B200",
+      "settled_entry": {
+        "gpu": "B200",
+        "seconds": 1.0198156833648682,
+        "usd": 0.0018966305453512404,
+        "note": "full chunk@2304"
+      },
+      "done_total": 2915
+    }
+  ],
+  "summary": {
+    "rows": 2915,
+    "usable": 2915,
+    "usable_rate": 1.0,
+    "by_status": {
+      "valid_complete": 2915
+    },
+    "letter_mass_min": 0.9323562191005559,
+    "letter_mass_p05": 0.9605690090766642,
+    "letter_mass_median": 0.9789656646485021,
+    "letter_mass_max": 0.9933457664026171
+  },
+  "actual_billed_usd_from_modal_report": {
+    "total": 1.887815,
+    "preflight": 0.365384,
+    "anchor": 0.724218,
+    "full": 0.798212,
+    "failed_image_build": 0.0,
+    "note": "Provider billing report for 2026-11-04 checked after all apps stopped. The budget ledger settled figure ($3.81) uses local wall seconds at the B200 rate and is the conservative bound figure. Baseten and Meta API spend are zero."
+  },
+  "output_summary": {
+    "labels_path": "/tmp/pocket-glimmer-training-scale/glimmer-v2/labels.jsonl",
+    "labels_sha256": "eb918f218eb4f8ff3ac52bbad80b6f633dc2bf66afb68e66b20ca76ffe3cd2fb",
+    "rows": 2915,
+    "usable": 2915,
+    "statuses": {
+      "valid_complete": 2915
+    },
+    "letter_mass": {
+      "min": 0.9323562191005559,
+      "median": 0.9789656646485021,
+      "max": 0.9933457664026171
+    },
+    "tokens_in_total": 428495,
+    "tokens_out_total": 2915,
+    "per_type": {
+      "answerability": {
+        "n": 344,
+        "usable": 344,
+        "mass_min": 0.9323562191005559,
+        "mass_median": 0.965405698708319,
+        "top_median": 0.8933
+      },
+      "confirmBeforeAct": {
+        "n": 104,
+        "usable": 104,
+        "mass_min": 0.977931535253301,
+        "mass_median": 0.9870126594151288,
+        "top_median": 0.9876
+      },
+      "contactPick": {
+        "n": 333,
+        "usable": 333,
+        "mass_min": 0.9581328780933549,
+        "mass_median": 0.9861200467942968,
+        "top_median": 0.9332
+      },
+      "eventPick": {
+        "n": 104,
+        "usable": 104,
+        "mass_min": 0.9676714068357676,
+        "mass_median": 0.9798145973392994,
+        "top_median": 0.7867
+      },
+      "memoryConflict": {
+        "n": 137,
+        "usable": 137,
+        "mass_min": 0.9745590809172185,
+        "mass_median": 0.9843910268598566,
+        "top_median": 0.9853
+      },
+      "notificationTriage": {
+        "n": 152,
+        "usable": 152,
+        "mass_min": 0.9730441780173485,
+        "mass_median": 0.982225608089619,
+        "top_median": 0.9793
+      },
+      "nudgeNow": {
+        "n": 886,
+        "usable": 886,
+        "mass_min": 0.955332289284526,
+        "mass_median": 0.9746762467448741,
+        "top_median": 0.7265
+      },
+      "rememberOrNot": {
+        "n": 144,
+        "usable": 144,
+        "mass_min": 0.9579408583223482,
+        "mass_median": 0.9852916169629483,
+        "top_median": 0.9708
+      },
+      "route": {
+        "n": 101,
+        "usable": 101,
+        "mass_min": 0.9572570616475352,
+        "mass_median": 0.9793884754415911,
+        "top_median": 0.9437
+      },
+      "sensitivity": {
+        "n": 98,
+        "usable": 98,
+        "mass_min": 0.9802634659998373,
+        "mass_median": 0.9863182278933598,
+        "top_median": 0.9933
+      },
+      "timing": {
+        "n": 384,
+        "usable": 384,
+        "mass_min": 0.9650182873716808,
+        "mass_median": 0.9811388432936237,
+        "top_median": 0.9739
+      },
+      "toolChoice": {
+        "n": 128,
+        "usable": 128,
+        "mass_min": 0.958983071932114,
+        "mass_median": 0.9794569017518118,
+        "top_median": 0.9828
+      }
+    }
+  }
+}

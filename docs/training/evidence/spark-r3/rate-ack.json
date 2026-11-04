@@ -1,0 +1,14 @@
+{
+ "ack": "quota transition to 70 RPM accepted",
+ "from_rpm": 94,
+ "to_rpm": 70,
+ "reason": "aggregate <=95 RPM with disjoint phone-generation worker at 25 RPM",
+ "cap_usd": 25.0,
+ "state": "70 RPM enforced after graceful restart",
+ "provider_limits_measured": {
+  "x-ratelimit-limit-requests": 100,
+  "x-ratelimit-limit-tokens": 2000000,
+  "window": "per minute"
+ },
+ "unknown_reserved_note": "8 in-flight RESERVED at stop became UNKNOWN on recovery, reserves retained, draws retried as new attempts"
+}

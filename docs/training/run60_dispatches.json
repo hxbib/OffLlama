@@ -1,0 +1,25 @@
+{
+  "recordedAt": "2026-11-04T19:38:21.517Z",
+  "jobs": [
+    {
+      "role": "spark_phone_expansion",
+      "taskId": "node:delegated-task:command%3Amcp%3A8bddd659-3294-4254-bb7c-00c3efae21c6%3Adelegate-task%3Apg-r3-spark-phone-expansion-20261104-v1",
+      "childThreadId": "thread:delegated-task:command%3Amcp%3A8bddd659-3294-4254-bb7c-00c3efae21c6%3Adelegate-task%3Apg-r3-spark-phone-expansion-20261104-v1",
+      "link": "<t3-thread://v2/1fc19a6b-4359-418d-a801-4f7fb5e9b320/thread:delegated-task:command%3Amcp%3A8bddd659-3294-4254-bb7c-00c3efae21c6%3Adelegate-task%3Apg-r3-spark-phone-expansion-20261104-v1>",
+      "providerInstanceId": "muse",
+      "model": "muse-wonder-1.0",
+      "options": [
+        {
+          "id": "reasoningEffort",
+          "value": "max"
+        }
+      ],
+      "sourceCommit": "2922acb",
+      "statusAtDispatch": "running",
+      "modalReservationUSD": 0,
+      "basetenReservationUSD": 54.99,
+      "rpm": 25,
+      "outputDirectory": "/tmp/pocket-glimmer-training-scale/spark-phone-v1"
+    }
+  ]
+}

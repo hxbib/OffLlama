@@ -1,0 +1,102 @@
+{
+  "labels_path": "/tmp/pocket-glimmer-training-scale/glimmer-v2/labels.jsonl",
+  "labels_sha256": "eb918f218eb4f8ff3ac52bbad80b6f633dc2bf66afb68e66b20ca76ffe3cd2fb",
+  "rows": 2915,
+  "usable": 2915,
+  "statuses": {
+    "valid_complete": 2915
+  },
+  "letter_mass": {
+    "min": 0.9323562191005559,
+    "median": 0.9789656646485021,
+    "max": 0.9933457664026171
+  },
+  "tokens_in_total": 428495,
+  "tokens_out_total": 2915,
+  "per_type": {
+    "answerability": {
+      "n": 344,
+      "usable": 344,
+      "mass_min": 0.9323562191005559,
+      "mass_median": 0.965405698708319,
+      "top_median": 0.8933
+    },
+    "confirmBeforeAct": {
+      "n": 104,
+      "usable": 104,
+      "mass_min": 0.977931535253301,
+      "mass_median": 0.9870126594151288,
+      "top_median": 0.9876
+    },
+    "contactPick": {
+      "n": 333,
+      "usable": 333,
+      "mass_min": 0.9581328780933549,
+      "mass_median": 0.9861200467942968,
+      "top_median": 0.9332
+    },
+    "eventPick": {
+      "n": 104,
+      "usable": 104,
+      "mass_min": 0.9676714068357676,
+      "mass_median": 0.9798145973392994,
+      "top_median": 0.7867
+    },
+    "memoryConflict": {
+      "n": 137,
+      "usable": 137,
+      "mass_min": 0.9745590809172185,
+      "mass_median": 0.9843910268598566,
+      "top_median": 0.9853
+    },
+    "notificationTriage": {
+      "n": 152,
+      "usable": 152,
+      "mass_min": 0.9730441780173485,
+      "mass_median": 0.982225608089619,
+      "top_median": 0.9793
+    },
+    "nudgeNow": {
+      "n": 886,
+      "usable": 886,
+      "mass_min": 0.955332289284526,
+      "mass_median": 0.9746762467448741,
+      "top_median": 0.7265
+    },
+    "rememberOrNot": {
+      "n": 144,
+      "usable": 144,
+      "mass_min": 0.9579408583223482,
+      "mass_median": 0.9852916169629483,
+      "top_median": 0.9708
+    },
+    "route": {
+      "n": 101,
+      "usable": 101,
+      "mass_min": 0.9572570616475352,
+      "mass_median": 0.9793884754415911,
+      "top_median": 0.9437
+    },
+    "sensitivity": {
+      "n": 98,
+      "usable": 98,
+      "mass_min": 0.9802634659998373,
+      "mass_median": 0.9863182278933598,
+      "top_median": 0.9933
+    },
+    "timing": {
+      "n": 384,
+      "usable": 384,
+      "mass_min": 0.9650182873716808,
+      "mass_median": 0.9811388432936237,
+      "top_median": 0.9739
+    },
+    "toolChoice": {
+      "n": 128,
+      "usable": 128,
+      "mass_min": 0.958983071932114,
+      "mass_median": 0.9794569017518118,
+      "top_median": 0.9828
+    }
+  }
+}

@@ -1,6 +1,6 @@
 # Orchestrator handoff ledger
 
-Updated 2026-11-04T19:22:07+00:00 during parent run 57. Parent T3 thread `4311f30f-96dc-4e78-9f19-860e3bbea796`.
+Updated 2026-11-04T19:38:53+00:00 during parent run 60. Parent T3 thread `4311f30f-96dc-4e78-9f19-860e3bbea796`.
 This file owns the current handoff. Older entries in `LEDGER.md` and `NEXT_AGENT.md` are historical snapshots.
 
 ## Current objective and authorization
@@ -65,10 +65,10 @@ do not reapply it over the now-integrated implementation.
 | Busy input preservation | Still open. `AppModel.send` rejects while busy. Request-bound documents fix cross-talk but do not save rejected inputs. Use `docs/research/REQUEST_INPUT_GROUNDING.md` and the accepted Muse findings for durable explicit resume, without automatic replay. |
 | Privacy and cloud reliability | Prior independent review found partner-value masking and cancellation bugs. Fixes and regression tests are in the resumed patch, with malformed-settings checks and local fallback. Fresh review pending. |
 | Mac packaging | `11c07cf` integrates `18762c3`. Empty executable, missing model, and symlinked framework false passes are repaired. 84 Linux/mock fixtures passed here; no Xcode proof. |
-| Glimmer labels | Existing Muse worker remains active, observed in run 57. B200 anchor job `ap-SJ4Mav6HWdtYZv3Pi7TtRF` passed its label-usability gate. At the user-requested status check, the full 2,915-row job had 1,496 rows saved; existing $20 Modal cap unchanged. Await completion and verify its final artifact, quality gate, total bill, and stopped GPU tasks. |
-| Spark Open labels | Existing Muse worker remains active, observed in run 57. Existing $25 Baseten cap unchanged. At the user-requested status check, 3,501 of the fixed-five sampling calls had settled for the 2,915-row batch. Await completion and verify the restart-safe reservation ledger, labels, quality gate, and total known/unknown spend. |
+| Glimmer labels | Completed and integrated at `2922acb`. Parent checked all 2,915 source IDs, rendered prompt hashes, option mappings and recomputed probability distributions, plus nine tests. Exact label hash and compressed archive are under `docs/training/evidence/glimmer-r3/`. Live Modal app listing confirms all four batch apps stopped with zero tasks. Teacher is bf16 with mutable `main` revision; keep identity distinct from IQ2_M. No student improvement follows from label completeness. |
+| Spark Open labels | Existing Muse worker remains active, observed in run 57. Existing $25 Baseten cap unchanged. The recovered status snapshot records 4,630 settled sampling calls for the 2,915-row batch, with $4.361473 recorded settled usage and $0.031885 retained for unknown calls. The 70 RPM restart is acknowledged; those counts are a snapshot, not completion. Await completion and verify the restart-safe reservation ledger, labels, quality gate, and total known/unknown spend. |
 | Phone data and benchmark | `78e0355` integrated source-group splits and protocol. Grader fixes at `74f2341` reject inexact slots, unconfirmed execution, empty traces, and duplicate effects. 22 Python checks pass. Enough labeled independent groups and actual model evaluation remain pending. |
-| Expanded phone-specific training | A separate $35 Modal reservation now funds new phone-action data and student training/export. New owner must use the compiled contract manifest, preserve held-out groups, and record actual candidate results. No new Baseten worker competes with the active rate-limited run. |
+| Expanded phone-specific training | User expanded the active phone worker to a $100 Modal total cap, replacing $35, including evaluation. A new $54.99 Baseten phone-expansion allocation shares the verified request quota with the existing $25 batch. Existing phone owner remains active; the separate Spark phone-expansion task was dispatched in run 60. Both must use the compiled contract manifest, preserve held-out groups, and exchange immutable inputs/labels for paired experiments. Quota partition is 70 RPM for the existing matched batch and 25 RPM for the new expansion; the transition acknowledgment is archived under docs/training/evidence/spark-r3/. |
 | R3E2 two-epoch evaluation | `3e5df77` integrated the evaluation. Failed every-pass gate, no promotion, no paid evaluation and no test120 use. |
 | Late links | Assessment completed in run 54 and saved at `docs/research/LATE_WEBGPU_KERNEL_REVIEW.md`. No drop-in iOS speedup was established; no model/runtime substitution. |
 
@@ -76,7 +76,7 @@ do not reapply it over the now-integrated implementation.
 Mac repair. Read it alongside `round3_jobs.json`, which records the earlier pilot.
 Run 57 added phone-training execution, contract/privacy/trail review, and comment review.
 Their IDs and user-selected targets are recorded there and in `docs/training/run57_dispatches.json`.
-Phone training uses Muse Wonder max with the $35 Modal allocation. Contract review uses
+Phone training uses Muse Wonder max with the user-expanded $100 Modal allocation. Contract review uses
 River08 and comment review River03, both DeepSeek V4.1 Flash 1017 at max.
 Independent review is pending, so this checkpoint is not declared release-ready.
 Follow a delegate's `next`; do not poll running delegates. Review source and actual
@@ -106,11 +106,11 @@ and approximately $80–90 remaining on Baseten. Use $110 and the conservative $
 as the current credit budgets, with reported rather than API-verified provenance.
 
 The pilot's original $5 reservation is closed. The current per-app bill verifies $0.18916778.
-A new $20 Modal allocation funds Glimmer labeling, and $25 Baseten funds bounded Spark Open labeling.
+The $20 Glimmer allocation is closed at $1.88781456 actual, verified by summing its billing rows. The $25 Baseten matched-label batch remains active.
 Spark spending cannot start until per-call reservations and restart safety are implemented and tested.
-Run 57 additionally reserves $35 Modal for phone-specific data and student training/export.
-Remaining planning balances after these reservations are $54.81083222 Modal and $55 Baseten.
-Of those, protect $15 Modal and $20 Baseten for evaluation and integration. These are planning
+The user subsequently requested aggressive use of all remaining credits. Phone-specific Modal generation/training/export/evaluation now has a $100 total cap, replacing $35.
+Baseten phone expansion has a $54.99 allocation and the one-call rate probe reserves $0.01.
+Unallocated planning balances are $7.92301766 Modal and $0 Baseten. Evaluation is funded within the active allocations; the older protected reserves are superseded. These are planning
 balances against user reports, not API-confirmed remaining credits.
 
 At the resumed live check, Modal's month summary was $20.10288506 metered and $0 billed.
@@ -162,3 +162,36 @@ Preserve the useful pilot discovery: the Modal command must use
 The r2c input has 2,915 rows and SHA-256
 `afcf82d78426f6a096fbc52774cb654f44faaaac7a3ec97b0cc3953fec7dd3b3`.
 The $5 pilot reservation transfers to the Muse replacement; it is not a second allocation.
+
+## Latest scale-up and rate-limit evidence
+
+The user asked to use all remaining credits and increase parallelism. Baseten model-details
+GET returned 403, so the parent made one authorized, capped inference call. HTTP 200
+headers confirmed 100 requests/minute and 2,000,000 tokens/minute for Spark Open.
+These are independent limits. See `docs/verification/baseten_rate_limits_2026-11-04.json`
+and https://docs.baseten.co/inference/model-apis/pricing-and-limits. The existing
+Spark worker owns its live process and has acknowledged a restart at 70 RPM.
+A separate 25 RPM worker was dispatched in run 60 for batched phone-example generation;
+it must verify that acknowledgment before paid requests.
+
+The completed Glimmer budget code is not proof of crash-safe reservations: its
+exception path does not charge unknown GPU calls. Parent warned the new phone
+worker to persist reservations before launch and retain them across failure/restart.
+The completed run's actual spend was checked independently; future reuse requires
+the stronger accounting contract.
+
+## Run 60 recovery and next integration
+
+Recovered the interrupted run-57 allocations without duplicating the active Modal or
+matched Spark workers. The $54.99 Spark phone expansion was reserved but not dispatched
+before the interruption; `docs/training/run60_dispatches.json` now records the real task.
+It uses the standing Muse Wonder 1.0 max assignment, owns `spark_phone_*`, and writes
+raw output/status under `/tmp/pocket-glimmer-training-scale/spark-phone-v1`.
+The Modal phone worker was steered to publish frozen input paths/hashes and retain
+compute for paired Spark/Glimmer training. No additional Modal allocation was created.
+
+Contract/privacy and comment reviewers were still working at recovery; no replacement
+review was launched. Follow completion notifications rather than polling. Next actions:
+validate returned artifacts, integrate accepted review repairs, finish the open busy-input
+work, and compare exported candidates under the frozen benchmark protocol. All reported
+allocations are caps, not money already spent or evidence of a trained improvement.

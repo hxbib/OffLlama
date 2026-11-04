@@ -1,0 +1,33 @@
+{
+ "phase": "running",
+ "updated_at": "2026-11-04T19:34:45Z",
+ "model": "meta-models/muse-spark-open-1026",
+ "endpoint": "https://inference.baseten.co/v1/chat/completions",
+ "teacher_sampling": {
+  "temperature": 1.0,
+  "reasoning_effort": "low",
+  "top_p": 1.0
+ },
+ "cap_usd": 25.0,
+ "billed_usd": 4.361473,
+ "unknown_reserved_usd": 0.031885,
+ "committed_usd": 4.425165,
+ "calls": {
+  "RESERVED": 8,
+  "SETTLED": 4630,
+  "UNKNOWN": 8
+ },
+ "rows_total": 2915,
+ "limits": {
+  "rpm_throttle": "70 enforced; provider limit 100 RPM measured via x-ratelimit-limit-requests",
+  "prices_usd_per_1m": {
+   "input": 1.25,
+   "output": 4.25,
+   "source": "training/config/pricing.json verified 2026-10-31; not re-verified live"
+  },
+  "gpu": "hosted Baseten endpoint; GPU not controllable by caller"
+ },
+ "input_sha256": "f4bfe57be6ad9e013a3523ef64c76b14c3ae81399649211f52b2112053fd8c3e",
+ "settled_draws": 4630,
+ "denied": 0
+}

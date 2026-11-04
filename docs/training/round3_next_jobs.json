@@ -18,8 +18,11 @@
       "sourceCommit": "4bf72c9",
       "modalReservationUSD": 20,
       "basetenReservationUSD": 0,
-      "stateAtResume": "active_observed_at_resume",
-      "allocationUnchanged": true
+      "stateAtResume": "integrated",
+      "allocationUnchanged": true,
+      "integratedCommit": "2922acb",
+      "actualModalUSD": 1.88781456,
+      "artifactSHA256": "eb918f218eb4f8ff3ac52bbad80b6f633dc2bf66afb68e66b20ca76ffe3cd2fb"
     },
     {
       "role": "spark",
@@ -39,7 +42,9 @@
       "modalReservationUSD": 0,
       "basetenReservationUSD": 25,
       "stateAtResume": "active_observed_at_resume",
-      "allocationUnchanged": true
+      "allocationUnchanged": true,
+      "rateRPM": 70,
+      "rateTransitionEvidence": "docs/training/evidence/spark-r3/rate-ack.json"
     },
     {
       "role": "data",
@@ -153,8 +158,9 @@
       ],
       "sourceCommit": "b41ffae",
       "statusAtDispatch": "running",
-      "modalReservationUSD": 35,
-      "basetenReservationUSD": 0
+      "modalReservationUSD": 100,
+      "basetenReservationUSD": 0,
+      "budgetSupersededAt": "2026-11-04T19:34:07+00:00"
     },
     {
       "role": "contract_review",
@@ -191,8 +197,28 @@
       "statusAtDispatch": "running",
       "modalReservationUSD": 0,
       "basetenReservationUSD": 0
+    },
+    {
+      "role": "spark_phone_expansion",
+      "taskId": "node:delegated-task:command%3Amcp%3A8bddd659-3294-4254-bb7c-00c3efae21c6%3Adelegate-task%3Apg-r3-spark-phone-expansion-20261104-v1",
+      "childThreadId": "thread:delegated-task:command%3Amcp%3A8bddd659-3294-4254-bb7c-00c3efae21c6%3Adelegate-task%3Apg-r3-spark-phone-expansion-20261104-v1",
+      "link": "<t3-thread://v2/1fc19a6b-4359-418d-a801-4f7fb5e9b320/thread:delegated-task:command%3Amcp%3A8bddd659-3294-4254-bb7c-00c3efae21c6%3Adelegate-task%3Apg-r3-spark-phone-expansion-20261104-v1>",
+      "providerInstanceId": "muse",
+      "model": "muse-wonder-1.0",
+      "options": [
+        {
+          "id": "reasoningEffort",
+          "value": "max"
+        }
+      ],
+      "sourceCommit": "2922acb",
+      "statusAtDispatch": "running",
+      "modalReservationUSD": 0,
+      "basetenReservationUSD": 54.99,
+      "rpm": 25,
+      "outputDirectory": "/tmp/pocket-glimmer-training-scale/spark-phone-v1"
     }
   ],
   "resumedAt": "2026-11-04T19:22:07+00:00",
-  "updatedAt": "2026-11-04T19:27:51+00:00"
+  "updatedAt": "2026-11-04T19:38:53+00:00"
 }

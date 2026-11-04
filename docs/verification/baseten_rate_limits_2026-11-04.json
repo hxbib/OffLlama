@@ -1,0 +1,28 @@
+{
+  "model": "meta-models/muse-spark-open-1026",
+  "purpose": "single rate-limit header check",
+  "reserved_max_usd": 0.01,
+  "calls": 1,
+  "http_status": 200,
+  "rate_limit_headers": {
+    "x-ratelimit-limit-requests": "100",
+    "x-ratelimit-limit-tokens": "2000000",
+    "x-ratelimit-remaining-requests": "49",
+    "x-ratelimit-remaining-tokens": "2000000"
+  },
+  "usage": {
+    "prompt_tokens": 148,
+    "completion_tokens": 16,
+    "total_tokens": 164,
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 10,
+      "audio_tokens": 0,
+      "reasoning_tokens": 13,
+      "rejected_prediction_tokens": 32
+    }
+  }
+}

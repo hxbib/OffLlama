@@ -39,9 +39,11 @@
   },
   "allocated_usd": {
     "modal_pilot": 0,
-    "modal_glimmer_labels": 20,
+    "modal_glimmer_labels": 0,
     "baseten_spark_labels": 25,
-    "modal_phone_training": 35
+    "modal_phone_training": 100,
+    "baseten_phone_expansion": 54.99,
+    "baseten_rate_probe": 0.01
   },
   "resumed_at": "2026-11-04T18:39:59+00:00",
   "pilot_actual_attributable_usd": 0.18916778,
@@ -64,14 +66,16 @@
     }
   },
   "protected_unallocated_usd": {
-    "modal_evaluation_and_integration": 15,
-    "baseten_final_evaluation": 20
+    "modal_evaluation_and_integration": 0,
+    "baseten_final_evaluation": 0
   },
   "unallocated_after_known_pilot_and_reservations_usd": {
-    "modal": 54.81083222,
-    "baseten": 55
+    "modal": 7.92301766,
+    "baseten": 0
   },
   "accounting_note": "Remaining values are planning balances from user-reported credits minus attributable pilot cost and reservations, not API-confirmed credit balances. Latest per-app bill confirms pilot $0.18916778; latest month summary is $20.10288506, not the child-reported $20.31. Reports have different aggregation/refresh behavior; do not derive pilot cost from their difference.",
   "new_allocation_at": "2026-11-04T19:25:22+00:00",
-  "new_allocation_note": "Reserve up to $35 Modal total for phone-specific Glimmer generation/labeling plus student training/export under user-authorized scale-up. Separate from existing $20 Glimmer-label and $25 Spark-label caps. No new Baseten concurrency or allocation. No paid job started by this reservation."
+  "new_allocation_note": "User explicitly requested all remaining credits be used for aggressive training. Phone worker cap100 replaces35; evaluation included within cap. Glimmer20 reservation closed at1.88781456 actual. Spark matched batch25 retained, phone expansion54.99 reserved, diagnostic0.01 reserved. Remaining7.92301766 Modal available for follow-on evaluation/reconciliation. No automatic pay-as-you-go beyond reported credits.",
+  "glimmer_actual_attributable_usd": 1.88781456,
+  "allocation_updated_at": "2026-11-04T19:34:07+00:00"
 }
