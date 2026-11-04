@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Pocket Glimmer: demo slides</title>
+<!--
+  Pocket Glimmer demo slides. Self-contained: inline CSS, no external fonts, no JS.
+  11 slides, 1920x1080 each, <section id="slideN">. Cmd+P -> Save as PDF gives one page per slide.
+  Every number here is sourced from README.md, docs/research/JUDGE_BRIEF.md, LEDGER.md §6,
+  eval/results/{AFTER_FLOOR,PER_TYPE_TAU090,RISK_COVERAGE,OOS_STRESS,REPRO_NOV4,PERM_AVG,QUANT_IDENTITY,SPARK_TEACHER}.md,
+  eval/skills/SKILL_PROBE.md, docs/SKILLS.md, docs/META_MULTIMODAL.md. PNG renders: docs/img/slide_01.png ... slide_11.png
+  (regenerate with docs/demo/render_slides.sh).
+-->
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#05070a}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue","Inter","Liberation Sans","DejaVu Sans",Arial,sans-serif;color:#f3f5f9;-webkit-font-smoothing:antialiased}
+section{width:1920px;height:1080px;position:relative;overflow:hidden;background:#0b0e14;padding:70px 110px 150px;display:flex;flex-direction:column;margin:0}
+.kicker{font-size:30px;letter-spacing:.14em;text-transform:uppercase;color:#6ee7a8;font-weight:700;margin-bottom:26px}
+h1{font-size:150px;line-height:1;font-weight:800;letter-spacing:-.03em}
+h2{font-size:66px;line-height:1.08;font-weight:800;letter-spacing:-.015em;margin-bottom:34px}
+p,li{font-size:42px;line-height:1.35;color:#d9dee7}
+.muted{color:#9aa4b5}
+.green{color:#4ade80}.orange{color:#fb923c}.blue{color:#7cb4ff}.white{color:#fff}
+.foot{position:absolute;left:110px;right:110px;bottom:34px;font-size:22px;line-height:1.35;color:#9aa4b5;border-top:2px solid #232b39;padding-top:18px;display:flex;justify-content:space-between;gap:40px}
+.foot .n{white-space:nowrap;color:#6b7587}
+.badge{display:inline-block;border:3px solid #6ee7a8;color:#6ee7a8;border-radius:14px;padding:10px 26px;font-size:34px;font-weight:800;letter-spacing:.04em}
+.card{background:#141a24;border:2px solid #263042;border-radius:26px;padding:34px 38px}
+.row{display:flex;gap:40px}
+.col{display:flex;flex-direction:column;gap:28px}
+.big{font-size:120px;font-weight:800;line-height:1;letter-spacing:-.02em}
+.chip{display:inline-block;font-size:25px;font-weight:700;padding:8px 18px;border-radius:999px;background:#1b2330;border:2px solid #2f3a4e;color:#e7ecf3;margin:0 12px 14px 0;font-family:"SF Mono",Menlo,"DejaVu Sans Mono",monospace}
+.chip.dyn{border:3px dashed #7cb4ff;color:#7cb4ff;background:#0f1a2b}
+.mono{font-family:"SF Mono",Menlo,"DejaVu Sans Mono",monospace}
+.arrow{font-size:52px;color:#5d6880;align-self:center;font-weight:700}
+.warn{border-left:10px solid #fb923c;background:#1e1610;padding:22px 30px;border-radius:0 18px 18px 0;font-size:34px;line-height:1.35;color:#ffd9b8}
+
+/* slide 1 */
+#slide1{justify-content:center;background:radial-gradient(1200px 700px at 78% 30%,#15233a 0%,#0b0e14 60%)}
+#slide1 .sub{font-size:66px;line-height:1.2;font-weight:700;color:#e9edf4;max-width:1500px;margin-top:40px}
+.bars{margin-top:70px;width:1100px;position:relative}
+.bar{height:34px;border-radius:17px;background:#1b2330;margin-bottom:26px;position:relative;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:17px}
+.bars .tau{position:absolute;top:-18px;bottom:8px;left:90%;border-left:4px dashed #e7ecf3}
+.bars .taul{position:absolute;top:-62px;left:90%;transform:translateX(-50%);font-size:30px;font-weight:700;color:#e7ecf3}
+.barlab{font-size:28px;font-weight:700;margin:-14px 0 22px}
+
+/* slide 3 flow */
+.flow{display:flex;align-items:stretch;gap:16px;margin-bottom:36px;height:400px}
+.box{background:#141a24;border:3px solid #2f3a4e;border-radius:22px;padding:22px 22px;font-size:27px;line-height:1.3;font-weight:600;flex:1;display:flex;flex-direction:column;justify-content:center}
+.box b{font-size:33px;color:#fff;display:block;margin-bottom:8px}
+.box.model{border-color:#6ee7a8}
+.letters{display:flex;gap:10px;margin-top:12px}
+.letters span{font-family:"DejaVu Sans Mono",monospace;font-size:30px;font-weight:800;width:56px;text-align:center;border-radius:10px;background:#1f2a3b;padding:6px 0}
+.split{display:flex;flex-direction:column;gap:18px;flex:1.25}
+.out{border-radius:22px;padding:18px 22px;font-size:27px;line-height:1.3;font-weight:600}
+.out b{font-size:32px;display:block}
+.out.act{background:#0f2418;border:3px solid #4ade80}
+.out.esc{background:#2a1a0e;border:3px solid #fb923c}
+
+/* slide 4 table */
+table{border-collapse:collapse;width:100%}
+th{font-size:32px;text-align:left;color:#9aa4b5;font-weight:700;padding:0 24px 22px;border-bottom:3px solid #263042}
+td{font-size:46px;padding:26px 24px;border-bottom:2px solid #1d2532;vertical-align:middle}
+td.m{font-size:38px;color:#d9dee7;font-weight:600;width:44%}
+td.m small{display:block;font-size:26px;color:#9aa4b5;font-weight:500;margin-top:6px}
+td.b{color:#aab3c2;font-weight:700}
+td.a{font-weight:800;color:#4ade80;font-size:60px}
+td.a small{font-size:28px;color:#b7f5cf;font-weight:600;margin-left:12px}
+
+/* slide 5 */
+.chartcard{background:#fff;border-radius:22px;padding:16px;width:880px;flex:none}
+.chartcard img{display:block;width:848px;height:auto}
+
+/* slide 7 */
+.models{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.models .card{padding:20px 28px}
+.models h3{font-size:34px;font-weight:800;margin-bottom:8px}
+.models .role{font-size:23px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;margin-bottom:10px}
+.models p{font-size:26px;line-height:1.33}
+.lineage{margin-top:18px;font-size:29px;line-height:1.35;color:#e7ecf3}
+.senses{margin-top:16px;border:2px dashed #3b4a63;border-radius:20px;padding:14px 26px;font-size:24px;line-height:1.35;color:#c9d2df}
+
+/* slide 8 */
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px}
+.grid3 .card{padding:26px 30px}
+.grid3 h3{font-size:34px;font-weight:800;margin-bottom:10px;color:#fff}
+.grid3 p{font-size:28px;line-height:1.35}
+.grid3 .r2{border:3px dashed #7cb4ff;background:#0f1a2b}
+
+/* slide 9 */
+.steps{display:flex;flex-direction:column;gap:14px}
+.step{display:flex;gap:20px;align-items:center;font-size:31px;line-height:1.3}
+.step .k{flex:none;width:220px;font-size:26px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#7cb4ff}
+.step .v{flex:1;background:#141a24;border:2px solid #263042;border-radius:16px;padding:14px 22px}
+
+/* slide 10 loop */
+.loop{display:grid;grid-template-columns:1fr 120px 1fr;grid-template-rows:auto 90px auto;gap:0;align-items:center}
+.loop .box{font-size:31px}
+.va{font-size:64px;color:#5d6880;text-align:center;font-weight:700}
+
+/* slide 11 */
+#slide11{justify-content:center;background:radial-gradient(1100px 650px at 25% 70%,#11261b 0%,#0b0e14 62%)}
+#slide11 .close{font-size:92px;line-height:1.12;font-weight:800;letter-spacing:-.02em;max-width:1600px}
+#slide11 .url{margin-top:60px;font-size:50px;font-weight:700;color:#7cb4ff}
+
+@media print{
+  @page{size:1920px 1080px;margin:0}
+  html,body{background:#0b0e14;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  section{margin:0;page-break-after:always;break-after:page;page-break-inside:avoid;break-inside:avoid}
+  section:last-of-type{page-break-after:auto;break-after:auto}
+}
+</style>
+</head>
+<body style="margin:0;overflow:hidden">
+<section id="slide9">
+  <div class="kicker">Open-world actions · skills layer</div>
+  <h2 style="margin-bottom:34px">35 phone skills. One dynamic decision. No retraining.</h2>
+  <div class="row" style="gap:50px;align-items:flex-start">
+    <div class="steps" style="flex:1.35">
+      <div class="step"><div class="k">You say</div><div class="v mono" style="font-size:30px">"DM Sam on Instagram: congrats"</div></div>
+      <div class="step"><div class="k">Retrieve</div><div class="v">top 7 of 35 skills, on device (BM25 + trigram embedder)</div></div>
+      <div class="step"><div class="k">skillPick</div><div class="v">the same 1B, one forward pass, confidence vs τ → <span class="mono">instagram_dm</span></div></div>
+      <div class="step"><div class="k">Confirm</div><div class="v">hard rule: every message/social skill asks first</div></div>
+      <div class="step"><div class="k">Act</div><div class="v">opens Instagram's own DM link, message copied to clipboard</div></div>
+    </div>
+    <div class="col" style="flex:1;gap:22px">
+      <div class="card"><div class="big green" style="font-size:96px">23/25</div><p style="font-size:32px;margin-top:8px">right skill at argmax (25/25 in the retrieved top 7)</p></div>
+      <div class="card"><div class="big green" style="font-size:96px">13/14</div><p style="font-size:32px;margin-top:8px">correct when kept on device: 14/25 kept at τ = 0.90</p></div>
+    </div>
+  </div>
+  <div class="warn" style="margin-top:30px;font-size:31px">Honest iOS limit: deep link + clipboard + confirm. No app can type or press Send inside Instagram; you paste and tap Send.</div>
+  <div class="foot"><span>N=25 smoke test, one author-written utterance per skill. The shipping model was never trained on skills. Not gold, not covered by the cal180 bound. Box CPU. Sources: SKILL_PROBE.md, SKILLS.md.</span><span class="n">9 / 11</span></div>
+</section>
+</body></html>
