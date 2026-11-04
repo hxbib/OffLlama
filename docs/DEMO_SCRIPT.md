@@ -1,3 +1,5 @@
+> Historical Pocket Glimmer draft. Use the current [OffLlama three-minute recording plan](demo/OFFLLAMA_THREE_MINUTE_DEMO.md) for the final video. The older claims and shots below require rechecking.
+
 # Pocket Glimmer: 3:00 demo video script
 
 > **Edit-ready cut: [docs/demo/STORYBOARD.md](demo/STORYBOARD.md)** (beat-by-beat timing, verbatim voiceover, fallbacks, 25 s no-iPhone variant, iMovie checklist). Finished slides: `docs/img/slide_01.png` … `slide_11.png` (1920×1080, from `docs/demo/slides.html`; re-render with `bash docs/demo/render_slides.sh`).

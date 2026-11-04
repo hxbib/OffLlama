@@ -1,3 +1,5 @@
+> Historical Pocket Glimmer draft. Use the current [OffLlama three-minute recording plan](demo/OFFLLAMA_THREE_MINUTE_DEMO.md) for the final video. The older claims and shots below require rechecking.
+
 # Demo script, 3:00 (draft)
 
 Note: the percentages and ms below are placeholders for the script; say whatever the phone actually shows.

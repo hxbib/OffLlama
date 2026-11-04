@@ -1,3 +1,5 @@
+> Historical Pocket Glimmer draft. Use the current [OffLlama three-minute recording plan](OFFLLAMA_THREE_MINUTE_DEMO.md) for the final video. The older claims and shots below require rechecking.
+
 # Pocket Glimmer: canonical 3:00 storyboard (edit-ready)
 
 This is the canonical 3:00 cut. docs/DEMO_SCRIPT.md holds the τ = 0.90 rehearsal checks; docs/FINAL_HOURS.md should

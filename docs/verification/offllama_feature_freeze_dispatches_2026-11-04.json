@@ -1,0 +1,107 @@
+{
+  "recordedAt": "2026-11-04 23:26:52 UTC",
+  "functionalSource": "d3a76ddb2b0cab1d13f42e07ad92a833491ab56d",
+  "demoCommit": "f87567b",
+  "installedSource": "7857cd68",
+  "userWindow": "Feature freeze within about one hour; prepare public repository, submission and three-minute demo.",
+  "opus": {
+    "taskId": "node:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Aoffllama-local-model-reliability-opus-20261104-v1",
+    "childThreadId": "thread:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Aoffllama-local-model-reliability-opus-20261104-v1",
+    "link": "<t3-thread://v2/1fc19a6b-4359-418d-a801-4f7fb5e9b320/thread:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Aoffllama-local-model-reliability-opus-20261104-v1>",
+    "childRunId": "run:thread:thread%3Adelegated-task%3Acommand%253Amcp%253Ac14bd552-7a98-4a52-b11a-f64a33895d9a%253Adelegate-task%253Aoffllama-local-model-reliability-opus-20261104-v1:ordinal:1",
+    "childNodeId": "node:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Aoffllama-local-model-reliability-opus-20261104-v1",
+    "status": "running",
+    "workState": "working",
+    "hasPendingChildRuns": false,
+    "latestTerminalRunId": null,
+    "latestTerminalStatus": null,
+    "latestTerminalSummary": null,
+    "latestTerminalResultContextTransferId": null,
+    "providerInstanceId": "claudeAgent_arkhamog_claude",
+    "model": "claude-opus-5-5",
+    "options": [
+      {
+        "id": "effort",
+        "value": "high"
+      }
+    ],
+    "summary": null,
+    "resultContextTransferId": null,
+    "hasPendingQuestion": false,
+    "pendingApproval": null,
+    "waitTimedOut": false,
+    "next": "Completion wakes this thread, so end your turn. Do not wait on it or poll it."
+  },
+  "macReview": {
+    "taskId": "node:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Aremote-delegate%3Aoffllama-mac-conversations-independent-review-20261104-v1",
+    "childThreadId": null,
+    "remoteChild": {
+      "environmentId": "e471ef05-c8d6-49ec-b176-96ab6da0d020",
+      "threadId": "mcp:launch:1742884358a36918f404ed338a8711a9319d79d8b54d87f67292fbf34608f301",
+      "label": "Habib’s MacBook Air"
+    },
+    "link": "<t3-thread://v2/e471ef05-c8d6-49ec-b176-96ab6da0d020/mcp:launch:1742884358a36918f404ed338a8711a9319d79d8b54d87f67292fbf34608f301>",
+    "childRunId": null,
+    "childNodeId": "node:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Aremote-delegate%3Aoffllama-mac-conversations-independent-review-20261104-v1",
+    "status": "running",
+    "workState": "working",
+    "hasPendingChildRuns": false,
+    "latestTerminalRunId": null,
+    "latestTerminalStatus": null,
+    "latestTerminalSummary": null,
+    "latestTerminalResultContextTransferId": null,
+    "providerInstanceId": "claudeAgent_2",
+    "model": "claude-sonnet-5-5",
+    "summary": null,
+    "resultContextTransferId": null,
+    "hasPendingQuestion": false,
+    "pendingApproval": null,
+    "waitTimedOut": false
+  },
+  "training": {
+    "taskId": "node:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Aoffllama-phone-runtime-calibration-evaluation-20261104-v2",
+    "childThreadId": "thread:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Aoffllama-phone-runtime-calibration-evaluation-20261104-v2",
+    "link": "<t3-thread://v2/1fc19a6b-4359-418d-a801-4f7fb5e9b320/thread:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Aoffllama-phone-runtime-calibration-evaluation-20261104-v2>",
+    "childRunId": "run:thread:thread%3Adelegated-task%3Acommand%253Amcp%253Ac14bd552-7a98-4a52-b11a-f64a33895d9a%253Adelegate-task%253Aoffllama-phone-runtime-calibration-evaluation-20261104-v2:ordinal:1",
+    "childNodeId": "node:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Aoffllama-phone-runtime-calibration-evaluation-20261104-v2",
+    "status": "running",
+    "workState": "working",
+    "hasPendingChildRuns": false,
+    "latestTerminalRunId": null,
+    "latestTerminalStatus": null,
+    "latestTerminalSummary": null,
+    "latestTerminalResultContextTransferId": null,
+    "providerInstanceId": "muse",
+    "model": "muse-wonder-1.0",
+    "options": [
+      {
+        "id": "reasoningEffort",
+        "value": "max"
+      }
+    ],
+    "summary": null,
+    "resultContextTransferId": null,
+    "hasPendingQuestion": false,
+    "pendingApproval": null,
+    "waitTimedOut": false,
+    "next": "Completion wakes this thread, so end your turn. Do not wait on it or poll it."
+  },
+  "verification": {
+    "linuxCore": {
+      "executed": 375,
+      "skipped": 1,
+      "failures": 0
+    },
+    "macPreviousSource": "ff54688f1276fcd635317ef900d6f8a1e92a2716",
+    "newIntegratedMacBuild": "pending",
+    "phoneProtection": "unverified",
+    "fullPlanReview": "pending",
+    "planAppWiring": false,
+    "trainingPromotion": false
+  },
+  "reviewFindingsFixed": [
+    "85ffccc message-body/chart/empty-registry repairs",
+    "d3a76dd fail-closed draft recovery and atomic repeated history replacement"
+  ],
+  "accounting": "Training retains its original aggregate $100 Modal cap. No new paid allocation for Opus or Mac review."
+}
