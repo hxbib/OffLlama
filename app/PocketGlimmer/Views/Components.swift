@@ -73,7 +73,7 @@ struct DecisionCard: View {
                             Text(String(format: "%.3f", p.p)).font(.caption.monospacedDigit()).foregroundStyle(.secondary)
                         }
                     }
-                    Text(String(format: "τ = %.2f · one forward pass · letter logits → calibrated softmax", row.tau))
+                    Text(String(format: "τ = %.2f · one forward pass · letter logits → prior-corrected softmax", row.tau))
                         .font(.caption2).foregroundStyle(.tertiary).padding(.top, 2)
                 }
                 if let json = row.toolCallJSON {

@@ -168,10 +168,8 @@ actor LlamaCppEngine: LLMEngine {
         let t0 = Date()
         let tokens = try tokenize(prompt, addBOS: true)     // same token stream as the llama-server eval (see tokenize)
         try prefillDecision(prompt, tokens)
-        if prefixReuse {
-            print(String(format: "PGPERF decision prompt_tokens=%d prefill_ms=%.0f prefix_hits=%d prefix_misses=%d prefixes=%d",
-                         tokens.count, Date().timeIntervalSince(t0) * 1000, prefixHits, prefixMisses, prefixes.count))
-        }
+        print(String(format: "PGPERF decision prompt_tokens=%d prefill_ms=%.0f prefix_hits=%d prefix_misses=%d prefixes=%d",
+                     tokens.count, Date().timeIntervalSince(t0) * 1000, prefixHits, prefixMisses, prefixes.count))
         guard let logits = llama_get_logits_ith(ctx, -1) else { throw LLMError.badResponse("no logits") }
         // Parity with the certified eval (llama-server `n_probs: 40`, LlamaServerEngine.topK): only token variants inside
         // the top-40 of the full vocabulary count, and a letter with no variant there is omitted so Reflex applies the

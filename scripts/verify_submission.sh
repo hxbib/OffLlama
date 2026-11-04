@@ -55,12 +55,26 @@ if git grep -niE 'temperature[- ]scal(ed|ing) (is|was) (used|applied)|well[- ]ca
 
 note "== 4. secrets (tracked files + history)"
 pat='(sk-[A-Za-z0-9]{20,}|ghp_[A-Za-z0-9]{30,}|gho_[A-Za-z0-9]{30,}|AKIA[0-9A-Z]{16}|hf_[A-Za-z0-9]{30,}|ak-[A-Za-z0-9]{20,}|as-[A-Za-z0-9]{20,})'
-tracked=$(git grep -nIE "$pat" -- . ':!core/Sources/CSQLite/*' 2>/dev/null | head -3 || true)
-if [ -n "$tracked" ]; then printf '%s\n' "$tracked"; bad "key-like string in tracked files"; else note "ok tracked"; fi
-history=$(git log -p --all -- . ':!core/Sources/CSQLite/*' 2>/dev/null | grep -aEo "$pat" | sort -u | head -3 || true)
-if [ -n "$history" ]; then printf '%s\n' "$history"; bad "key-like string in history"; else note "ok history"; fi
+tracked=$(git grep -lIE "$pat" -- . ':!core/Sources/CSQLite/*' 2>/dev/null)
+scan_rc=$?
+if [ "$scan_rc" -eq 0 ]; then
+  printf '%s\n' "$tracked"
+  bad "key-like string in the files above (values redacted)"
+elif [ "$scan_rc" -eq 1 ]; then note "ok tracked"
+else bad "tracked-file secret scan could not run"
+fi
+history_count=$(mktemp) || exit 1
+git log -p --all -- . ':!core/Sources/CSQLite/*' 2>/dev/null | grep -aEc "$pat" > "$history_count"
+scan_status=("${PIPESTATUS[@]}")
+if [ "${scan_status[0]}" -ne 0 ] || [ "${scan_status[1]}" -gt 1 ]; then
+  bad "history secret scan could not run"
+elif [ "$(cat "$history_count")" -gt 0 ]; then
+  bad "key-like strings in history (values redacted; inspect with a redacting scanner)"
+else note "ok history"
+fi
+rm -f "$history_count"
 if command -v gitleaks >/dev/null 2>&1; then
-  if gitleaks detect --no-banner -q 2>/dev/null; then note "ok gitleaks"; else bad "gitleaks findings"; fi
+  if gitleaks detect --no-banner --redact -q 2>/dev/null; then note "ok gitleaks"; else bad "gitleaks findings"; fi
 else
   note "gitleaks not installed (optional)"
 fi
@@ -152,4 +166,5 @@ if [ "$release_incomplete" -ne 0 ]; then
   note "CORE CHECKS PASSED; RELEASE INCOMPLETE: repository visibility is not PUBLIC"
   exit 2
 fi
-note "ALL CHECKS PASSED"
+note "AUTOMATED CHECKS PASSED: model, document scans, secret scans, core tests, and repository visibility"
+note "This script does not verify Xcode, a signed device build, video playback, or form submission."
