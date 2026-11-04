@@ -90,6 +90,29 @@ or training-target model substitutions. The Mac build/device role remains GPT6.1
   returned incomplete because Swift was deliberately checked separately and
   GitHub remains private. It did not report an all-clear.
 
+## OffLlama action/UI dispatch checkpoint
+
+Five fresh owners were dispatched from `cc839e4`; task IDs, links and user-selected
+settings are in `docs/verification/offllama_action_dispatches_2026-11-04.json`.
+All are pending results. Do not poll; completion wakes the parent.
+
+- Messaging and two-turn clarification repair: Muse Spark1.3Contributor max. Owns
+  routing/message extraction, AppModel.send draft continuity and native compose/contacts
+  adapters. Parent must coordinate its AppModel changes before privacy integration.
+- Owner-locked core request store: Muse Wonder1.0 max. New store/helper/tests only.
+  Caller, voice and camera integration are still required after this first unit.
+- Multi-step candidate A: Muse Wonder1.0 max. Read-only design in its isolated checkout.
+- Multi-step candidate B: Grok Build Grok4.7 xhigh. Read-only independent design.
+  Parent cross-judges completed packages against `MULTISTEP_DESIGN_RUBRIC.md` next.
+- Mac UI/build: codex13 GPT6.1Terra high, linked Mac existing checkout. Owns Views,
+  native HTML, branding/icon packaging, native dictation setup, concealed API-key
+  entry, unsigned/signed builds and installation. It must preserve user files and
+  cannot bypass the failed Device panel for UI automation. AppModel/core action
+  behavior requires a later integrated build after other owners return.
+
+The parent still owns shared-read/privacy follow-up findings and final integration.
+No delegated repair or new phone action test is complete at this dispatch checkpoint.
+
 ## Active work and ownership
 
 The recovery and privacy review workers that failed on event-stream reconnection
