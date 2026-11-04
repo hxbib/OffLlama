@@ -62,13 +62,15 @@ were $17.82792011 for `pg-round2` and $2.09050191 for `pg-glimmer-vllm`.
 The only listed deployed app was `pg-glimmer-vllm`, with zero running tasks.
 
 Baseten's billing endpoint returned HTTP 403. The repository's last recorded cumulative spend is
-$16.62, not a verified current balance. The user has been asked asynchronously for dashboard balances.
-Do not count that unanswered question as a balance confirmation.
+$16.62, not a verified current balance. The user subsequently reported $110 remaining on Modal
+and approximately $80–90 remaining on Baseten. Use $110 and the conservative $80 respectively
+as the current credit budgets, with reported rather than API-verified provenance.
 
-The initial training pilot has a $5 Modal reservation. No other new paid batch is authorized by this
-ledger until the parent records its cap and owner. This allocation controls concurrent spending within
-the user's broader authorization; it is not a request for permission to train. Expand allocations as
-evidence and available credit permit. Avoid out-of-pocket overages.
+The initial training pilot has a $5 Modal reservation, leaving $105 unallocated. Baseten has $80
+unallocated. No other new paid batch is allocated by this ledger until the parent records its cap
+and owner. This allocation controls concurrent spending within the user's broader authorization;
+it is not a request for permission to train. Expand allocations as evidence permits, reserve credit
+for candidate evaluation and app integration, and avoid out-of-pocket overages.
 
 Credentials exist locally in `/tmp/gencode/sec/env.sh` and `meta.env`. Never print their contents,
 copy them into a report, or commit them. The existing Modal CLI is

@@ -60,6 +60,8 @@ or authorize promotion. A new data-and-evaluation plan must precede the larger s
    deterministic answer. A teacher's confident opinion is not a verified phone action.
    General pretraining requires a separate throughput and useful-token estimate before allocation.
 
+The user confirmed $110 remaining Modal credit and estimated $80–90 remaining Baseten credit.
+Budget against $110 and $80. The $5 pilot reservation leaves $105 Modal and $80 Baseten unallocated.
 No new Baseten or Muse API spend has been allocated yet. Parent-side budget snapshots are under
 `/tmp/pocket-glimmer-training-scale/`. Fresh task IDs and dispatch states will be stored in
 `docs/training/round3_jobs.json` once dispatched.

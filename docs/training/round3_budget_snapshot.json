@@ -28,5 +28,17 @@
   "baseten_recorded_project_spend_usd": 16.62,
   "baseten_remaining_credit": null,
   "modal_remaining_credit": null,
-  "input_r2c_sha256": "afcf82d78426f6a096fbc52774cb654f44faaaac7a3ec97b0cc3953fec7dd3b3"
+  "input_r2c_sha256": "afcf82d78426f6a096fbc52774cb654f44faaaac7a3ec97b0cc3953fec7dd3b3",
+  "remaining_credits_user_reported": {
+    "modal_usd": 110,
+    "baseten_estimate_usd": [
+      80,
+      90
+    ],
+    "baseten_budget_floor_usd": 80
+  },
+  "allocated_usd": {
+    "modal_pilot": 5,
+    "baseten": 0
+  }
 }
