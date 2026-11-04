@@ -22,6 +22,15 @@ final class IOSSkillRunner: SkillRunner, @unchecked Sendable {
             return await openURLSkill(skill, template: template, args: args)
         case .shortcut(let name, let input):
             let text = SkillTemplate.fill(input, args: args, encode: false)
+            if skill.id == "appletv_play" {
+                // Shortcuts' TV "Play" action is the only way to start playback; if the user hasn't installed the
+                // "PG Play on Apple TV" shortcut, open the show page in the TV app so the demo still lands on the show.
+                let r = await runShortcut(name: name, text: text, skill: skill)
+                if r.hasPrefix("Handed to Shortcut") { return "Playing “\(text)” on Apple TV via Shortcut “\(name)” (Up Next = latest unwatched episode)" }
+                let q = text.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? text
+                if let u = URL(string: "https://tv.apple.com/search?term=\(q)"), await ComposeSheets.open(u) { return "Opened “\(text)” in the TV app · tap the latest episode" }
+                return r
+            }
             return await runShortcut(name: name, text: text, skill: skill)
         case .native(let handler):
             return await runNative(handler, skill: skill, args: args)

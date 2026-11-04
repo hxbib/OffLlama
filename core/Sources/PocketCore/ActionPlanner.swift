@@ -265,6 +265,9 @@ public enum SkillArgs {
             case (_, .url): v = first(#"(https?://\S+)"#, in: u)
             case (_, .place): v = first(#"\b(?:directions to|navigate to|uber to|ride to|take me to|get me to|weather in|forecast for|to|in|at)\s+(.+?)(?:\s+(?:tomorrow|today|tonight|now))?$"#, in: u)
             case (_, .app): v = first(#"\b(?:open|launch|start)\s+(?:the\s+)?(.+?)(?:\s+app)?$"#, in: u)
+            case ("show", .query):
+                v = first(#"\b(?:episode of|episodes of|season of|watch|play|put on|open)\s+(?:the\s+)?(?:latest|newest|new|next|last)?\s*(?:episode of\s+)?(.+?)\s+(?:on|in)\s+(?:the\s+)?(?:apple\s*tv|tv app|appletv)\b"#, in: u)
+                    ?? first(#"\b(?:episode of|watch|play|put on|open)\s+(?:the\s+)?(?:latest|newest|new|next|last)?\s*(?:episode of\s+)?(.+)$"#, in: u)
             case (_, .query):
                 v = first(#"\bplay\s+(.+?)\s+on spotify"#, in: u) ?? first(#"\b(?:search(?: the web)? for|google|look up|search)\s+(.+)$"#, in: u)
                     ?? (skill.id == "web_search" ? u : nil)

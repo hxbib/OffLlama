@@ -12,7 +12,7 @@ struct MemoryView: View {
             List {
                 if model.facts.isEmpty {
                     ContentUnavailableView("Nothing remembered yet", systemImage: "brain",
-                                           description: Text("Tell me things like “I'm allergic to peanuts”. Memories never leave this phone."))
+                                           description: Text("Tell me things like “I'm allergic to peanuts”. Memories are stored only on this phone; when a request escalates, the relevant ones are sent masked."))
                 }
                 if !model.onePager.isEmpty {
                     Section {

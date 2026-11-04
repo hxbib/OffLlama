@@ -34,7 +34,7 @@
       },
       "note" : "Opens the system Messages compose sheet pre-filled; you tap Send.",
       "offlineCapable" : true,
-      "title" : "Send an iMessage / text"
+      "title" : "Send an iMessage \/ text"
     },
     {
       "aliases" : [
@@ -67,7 +67,7 @@
       ],
       "id" : "instagram_dm",
       "invocation" : {
-        "template" : "https://ig.me/m/{contact}",
+        "template" : "https:\/\/ig.me\/m\/{contact}",
         "type" : "url"
       },
       "note" : "Instagram has no API to send DMs. ig.me opens the DM thread; the message is on your clipboard: paste and send.",
@@ -105,7 +105,7 @@
       ],
       "id" : "x_dm",
       "invocation" : {
-        "template" : "https://x.com/{contact}",
+        "template" : "https:\/\/x.com\/{contact}",
         "type" : "url"
       },
       "note" : "X needs a numeric recipient_id to prefill a DM; we open @handle's profile (tap Message) with the text on your clipboard.",
@@ -138,7 +138,7 @@
       ],
       "id" : "whatsapp_send",
       "invocation" : {
-        "template" : "whatsapp://send?text={body}",
+        "template" : "whatsapp:\/\/send?text={body}",
         "type" : "url"
       },
       "note" : "Opens WhatsApp with the text prefilled; you pick the chat and tap Send.",
@@ -179,7 +179,7 @@
       },
       "note" : "iOS lets no app read or answer Instagram DMs. The rule is saved to memory and turned into a Shortcuts Automation recipe.",
       "offlineCapable" : true,
-      "title" : "Auto-reply rule (Instagram / any app)"
+      "title" : "Auto-reply rule (Instagram \/ any app)"
     },
     {
       "aliases" : [
@@ -488,7 +488,7 @@
       ],
       "id" : "maps_directions",
       "invocation" : {
-        "template" : "maps://?daddr={place}",
+        "template" : "maps:\/\/?daddr={place}",
         "type" : "url"
       },
       "offlineCapable" : false,
@@ -516,7 +516,7 @@
       ],
       "id" : "uber_ride",
       "invocation" : {
-        "template" : "uber://?action=setPickup&pickup=my_location&dropoff[formatted_address]={place}",
+        "template" : "uber:\/\/?action=setPickup&pickup=my_location&dropoff[formatted_address]={place}",
         "type" : "url"
       },
       "note" : "Opens Uber with the drop-off filled; you confirm the ride (spends money) in Uber.",
@@ -547,7 +547,7 @@
       ],
       "id" : "web_search",
       "invocation" : {
-        "template" : "https://duckduckgo.com/?q={query}",
+        "template" : "https:\/\/duckduckgo.com\/?q={query}",
         "type" : "url"
       },
       "offlineCapable" : false,
@@ -570,7 +570,7 @@
       "category" : "web",
       "confirm" : false,
       "examples" : [
-        "open https://hunter.cuny.edu"
+        "open https:\/\/hunter.cuny.edu"
       ],
       "id" : "open_url",
       "invocation" : {
@@ -635,7 +635,7 @@
       ],
       "id" : "run_shortcut",
       "invocation" : {
-        "template" : "shortcuts://run-shortcut?name={name}&input=text&text={text}",
+        "template" : "shortcuts:\/\/run-shortcut?name={name}&input=text&text={text}",
         "type" : "url"
       },
       "offlineCapable" : true,
@@ -659,10 +659,10 @@
       ],
       "id" : "create_shortcut",
       "invocation" : {
-        "template" : "shortcuts://create-shortcut",
+        "template" : "shortcuts:\/\/create-shortcut",
         "type" : "url"
       },
-      "note" : "Apps cannot write Shortcuts; this opens the Shortcuts editor (and docs/SKILLS.md lists recipes).",
+      "note" : "Apps cannot write Shortcuts; this opens the Shortcuts editor (and docs\/SKILLS.md lists recipes).",
       "offlineCapable" : true,
       "title" : "Create a new Shortcut"
     },
@@ -689,7 +689,7 @@
       ],
       "id" : "music_play",
       "invocation" : {
-        "template" : "music://",
+        "template" : "music:\/\/",
         "type" : "url"
       },
       "offlineCapable" : true,
@@ -721,6 +721,40 @@
     },
     {
       "aliases" : [
+        "apple tv",
+        "appletv",
+        "tv app",
+        "latest episode",
+        "new episode",
+        "watch",
+        "episode"
+      ],
+      "argSchema" : [
+        {
+          "kind" : "query",
+          "name" : "show",
+          "required" : true
+        }
+      ],
+      "category" : "shortcuts",
+      "confirm" : false,
+      "examples" : [
+        "open the latest episode of Severance on Apple TV",
+        "play Ted Lasso on apple tv",
+        "put on the new episode of Silo"
+      ],
+      "id" : "appletv_play",
+      "invocation" : {
+        "input" : "{show}",
+        "name" : "PG Play on Apple TV",
+        "type" : "shortcut"
+      },
+      "note" : "iOS has no public URL that plays a specific show. The Shortcut “PG Play on Apple TV” (Shortcuts → TV → “Play” with the show name as input; set “Play Up Next” on, which resumes or starts the newest unwatched episode) does the playback. Fallback when the Shortcut is missing: https:\/\/tv.apple.com\/search?term={show} opens the show page in the TV app.",
+      "offlineCapable" : false,
+      "title" : "Apple TV: play a show"
+    },
+    {
+      "aliases" : [
         "note",
         "notes",
         "jot down",
@@ -745,7 +779,7 @@
         "name" : "PG Create Note",
         "type" : "shortcut"
       },
-      "note" : "Shortcut wraps Notes “Create Note”; mobilenotes:// only opens Notes.",
+      "note" : "Shortcut wraps Notes “Create Note”; mobilenotes:\/\/ only opens Notes.",
       "offlineCapable" : true,
       "title" : "Create a note"
     },
@@ -767,7 +801,7 @@
       ],
       "id" : "photos_open",
       "invocation" : {
-        "template" : "photos-redirect://",
+        "template" : "photos-redirect:\/\/",
         "type" : "url"
       },
       "offlineCapable" : true,
@@ -833,7 +867,7 @@
       },
       "note" : "Numbers in the text become an inline SVG bar chart offline, no model needed.",
       "offlineCapable" : true,
-      "title" : "Make a chart / HTML visualization"
+      "title" : "Make a chart \/ HTML visualization"
     },
     {
       "aliases" : [

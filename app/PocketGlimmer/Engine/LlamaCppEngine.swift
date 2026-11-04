@@ -24,6 +24,22 @@ actor LlamaCppEngine: LLMEngine {
     private var prefixBudget: Int { nCtx / 2 }                  // max cached prefix tokens (rest is for the live sequence)
     private var prefixHits = 0, prefixMisses = 0
     static let userTurn = "<|start_header_id|>user<|end_header_id|>"
+    /// Same k as LlamaServerEngine.topK / training `n_probs` (top-40 letter readout).
+    static let topK = 40
+
+    /// k-th largest value of `p[0..<count]` (one pass, k-slot insertion buffer; k = 40 over a 128k vocab is ~0.1 ms).
+    static func kthLargest(_ p: UnsafeMutablePointer<Float>, count: Int, k: Int) -> Float {
+        guard count > 0, k > 0 else { return -.infinity }
+        var top = [Float](); top.reserveCapacity(k + 1)       // ascending; top[0] = current k-th largest
+        for i in 0..<count {
+            let x = p[i]
+            if top.count == k { if x <= top[0] { continue }; top.removeFirst() }
+            var j = top.count
+            while j > 0 && top[j - 1] > x { j -= 1 }
+            top.insert(x, at: j)
+        }
+        return top.count < k ? -.infinity : top[0]
+    }
 
     enum EngineError: Error { case load(String), context, tokenize, decode(Int32) }
 
@@ -157,13 +173,19 @@ actor LlamaCppEngine: LLMEngine {
                          tokens.count, Date().timeIntervalSince(t0) * 1000, prefixHits, prefixMisses, prefixes.count))
         }
         guard let logits = llama_get_logits_ith(ctx, -1) else { throw LLMError.badResponse("no logits") }
+        // Parity with the certified eval (llama-server `n_probs: 40`, LlamaServerEngine.topK): only token variants inside
+        // the top-40 of the full vocabulary count, and a letter with no variant there is omitted so Reflex applies the
+        // same floor (min seen - 2) as eval/score_decisions.py. Raw logits vs server log-probs differ by one constant
+        // (log Z), which the letter softmax and the relative floor cancel.
+        let cutoff = Self.kthLargest(logits, count: Int(llama_vocab_n_tokens(vocab)), k: Self.topK)
         var out: [String: Double] = [:]
         for l in candidates {
             // log-sum-exp over the letter's token variants, mirroring LlamaServerEngine.
-            let v = try letterTokenIDs(l).map { Double(logits[Int($0)]) }
-            let m = v.max()!
+            let v = try letterTokenIDs(l).map { logits[Int($0)] }.filter { $0 >= cutoff }.map { Double($0) }
+            guard let m = v.max() else { continue }
             out[l] = m + log(v.reduce(0) { $0 + exp($1 - m) })
         }
+        guard !out.isEmpty else { throw LLMError.noCandidateTokens }
         return out
     }
 

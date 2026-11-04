@@ -19,7 +19,7 @@ struct StatusPill: View {
 
 struct ConfidenceBar: View {
     let value: Double
-    var tau: Double = 0.8
+    var tau: Double = 0.9
     var body: some View {
         GeometryReader { g in
             ZStack(alignment: .leading) {

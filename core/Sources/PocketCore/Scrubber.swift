@@ -10,7 +10,9 @@ public struct PrivacyScrubber: Sendable {
 
     static let patterns: [(String, String)] = [
         ("EMAIL", #"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}"#),
+        ("SSN", #"\b\d{3}-\d{2}-\d{4}\b"#),                                   // US SSN (9 digits: neither CARD nor PHONE matched it)
         ("CARD", #"\b(?:\d[ -]?){13,16}\b"#),
+        ("PHONE", #"\+\d{1,3}(?:[ .-]?\d{2,4}){2,4}\b"#),                     // international, e.g. +44 20 7946 0958
         ("PHONE", #"(?:\+?\d{1,2}[ .-]?)?\(?\d{3}\)?[ .-]?\d{3}[ .-]?\d{4}\b"#),
         ("ADDRESS", #"\b\d{1,5} [A-Z][a-z]+(?: [A-Z][a-z]+)* (?:St|Street|Ave|Avenue|Rd|Road|Blvd|Lane|Ln|Dr|Drive)\b\.?"#),
     ]

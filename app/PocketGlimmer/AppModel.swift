@@ -1,6 +1,7 @@
 import Foundation
 import Network
 import Observation
+import Contacts
 import UserNotifications
 import PocketCore
 
@@ -19,7 +20,7 @@ struct ChatItem: Identifiable, Equatable {
 struct DecisionRow: Identifiable, Equatable {
     let id = UUID()
     let type: String, choice: String, confidence: Double, ms: Double, escalated: Bool, at: Date
-    var tau: Double = 0.8
+    var tau: Double = 0.9            // overwritten from ReflexDecision.tau in init
     var probabilities: [(id: String, p: Double)] = []
     var toolCallJSON: String? = nil
     static func == (a: DecisionRow, b: DecisionRow) -> Bool { a.id == b.id }
@@ -87,12 +88,26 @@ final class AppModel {
     static func findModel() -> URL? {
         let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let inDocs = (try? FileManager.default.contentsOfDirectory(at: docs, includingPropertiesForKeys: nil))?.filter { $0.pathExtension == "gguf" } ?? []
-        let bundled = Bundle.main.urls(forResourcesWithExtension: "gguf", subdirectory: nil) ?? []
+        let bundled = (Bundle.main.urls(forResourcesWithExtension: "gguf", subdirectory: nil) ?? [])
+            + (Bundle.main.urls(forResourcesWithExtension: "gguf", subdirectory: "Models") ?? [])
         let all = inDocs + bundled
         return all.first { $0.lastPathComponent.lowercased().contains("reflex") } ?? all.first
     }
 
+    @ObservationIgnored private var bootTask: Task<Void, Never>?
+
+    /// Single-flight: the app's `.task` and an App Intent (Ask / Trigger) can both call boot() during launch; without this
+    /// both pass the `assistant == nil` check across the model-load await and load two copies of the GGUF.
     func boot() async {
+        if assistant != nil { return }
+        if let t = bootTask { await t.value; return }
+        let t = Task { await bootOnce() }
+        bootTask = t
+        await t.value
+        if assistant == nil { bootTask = nil }      // failed (e.g. no model yet): allow a later retry
+    }
+
+    private func bootOnce() async {
         guard assistant == nil else { return }
         do {
             let db = try SQLiteDB(path: Self.dataDir.appendingPathComponent("pocket.sqlite").path)
@@ -102,10 +117,19 @@ final class AppModel {
             guard let url = Self.findModel() else { modelState = "No model file. Add a .gguf (see README)."; return }
             let engine = try await Task.detached(priority: .userInitiated) { try LlamaCppEngine(modelURL: url) }.value
             var profile = CalibrationProfile.uncalibrated
-            if let cal = Bundle.main.url(forResource: "calibration", withExtension: "json"), let p = try? CalibrationProfile.load(from: cal) { profile = p }
+            // XcodeGen adds Resources/Models as a group, so calibration.json is copied flat to the bundle root; the
+            // subdirectory lookup covers a folder-reference setup. A missing/broken file must be loud: the uncalibrated
+            // fallback has no priors and tau 0.8, i.e. not the certified tau 0.90 operating point.
+            let calURL = Bundle.main.url(forResource: "calibration", withExtension: "json")
+                ?? Bundle.main.url(forResource: "calibration", withExtension: "json", subdirectory: "Models")
+            do {
+                guard let cal = calURL else { throw CocoaError(.fileNoSuchFile) }
+                profile = try CalibrationProfile.load(from: cal)
+            } catch { print("PGWARN calibration.json not loaded (\(error)); running UNCALIBRATED (tau 0.8, no priors)") }
             let reflex = Reflex(engine: engine, profile: profile, telemetry: tel, source: "device")
             let a = Assistant(reflex: reflex, memory: mem, actions: actions, cloud: CloudSettings.chain(), isOnline: { OnlineFlag.shared.value })
             SkillSetup.install(on: a, memory: mem)   // open-world phone actions (docs/SKILLS.md); idempotent
+            a.scrubber.knownNames = await Self.contactNames()   // mask contact names in escalations, not only memory entities
             assistant = a; telemetry = tel; memory = mem
             let pe = ProactiveEngine(memory: mem, reflex: reflex)
             let acts = actions
@@ -116,6 +140,22 @@ final class AppModel {
         } catch { modelState = "Model failed to load: \(error)" }
     }
 
+
+    /// Contact full names + given names for PrivacyScrubber (read on device, never sent). Empty without Contacts access.
+    /// Trade-off: a given name that is also a word ("Will", "May") is masked in that word's sense too; restore() puts it back.
+    nonisolated static func contactNames() async -> [String] {
+        await Task.detached(priority: .utility) { () -> [String] in
+            let st = CNContactStore.authorizationStatus(for: .contacts)
+            guard st == .authorized || st == .limited else { return [] }
+            var names = Set<String>()
+            let req = CNContactFetchRequest(keysToFetch: [CNContactGivenNameKey, CNContactFamilyNameKey] as [CNKeyDescriptor])
+            try? CNContactStore().enumerateContacts(with: req) { c, _ in
+                let full = [c.givenName, c.familyName].filter { !$0.isEmpty }.joined(separator: " ")
+                for n in [full, c.givenName] where n.count > 2 { names.insert(n) }
+            }
+            return Array(names)
+        }.value
+    }
 
     func reloadCloud() { assistant?.cloud = CloudSettings.chain() }
 

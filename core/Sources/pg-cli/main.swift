@@ -110,6 +110,12 @@ case "skill-probe":
         print(String(format: "%-16@ %-16@ %.3f %@ %@  %@", e as NSString, pickedID as NSString, d.confidence, d.escalated ? "esc  " : "local", hit ? "✓" : "✗", u as NSString))
     }
     print("\nskillPick probe: n=\(items.count) retrieval-hit \(retrieved)/\(items.count); argmax \(ok)/\(items.count); handled \(handled)/\(items.count), correct on handled \(handledOk)")
+case "dump-skills":
+    // Regenerate app/PocketGlimmer/Resources/Skills/builtin.json from the Swift built-ins (source of truth).
+    let enc = JSONEncoder(); enc.outputFormatting = [.prettyPrinted, .sortedKeys]
+    let data = try enc.encode(["skills": BuiltinSkills.all])
+    if let out = CommandLine.arguments.dropFirst(2).first { try data.write(to: URL(fileURLWithPath: out)); print("wrote \(BuiltinSkills.all.count) skills -> \(out)") }
+    else { print(String(decoding: data, as: UTF8.self)) }
 case "skill-priors":
     // Content-free priors for the dynamic skillPick sets (2...8 options), merged into an existing calibration.json.
     let path = arg("--calibration", "calibration.json")
@@ -141,6 +147,15 @@ case "teacher-verdicts":
     // Lines {"id":..,"agreed":true/false} -> decisions.agreed_teacher
     let n = try TelemetryLog(db: SQLiteDB(path: arg("--db", "e2e-telemetry.sqlite"))).importTeacherVerdicts(jsonl: String(contentsOfFile: arg("--in", "verdicts.jsonl"), encoding: .utf8))
     print("updated \(n) decisions")
+case "cloud-probe":
+    // One System-2 escalation through the app's own CloudBrain code (CloudPresets.modal -> OpenAICompatibleBrain), e.g.
+    //   pg-cli cloud-probe --url https://<app>.modal.run/v1/ --model muse-glimmer --key "$PG_GLIMMER_TOKEN" "question"
+    let q = CommandLine.arguments.last ?? ""
+    let key = arg("--key", ProcessInfo.processInfo.environment["PG_GLIMMER_TOKEN"] ?? "")
+    let brain = CloudPresets.modal(model: arg("--model", "muse-glimmer"), baseURL: url, apiKey: key)
+    let sys = "You are the reasoning brain of a private phone assistant. Placeholders like [PERSON_1] stand for private data; keep them verbatim."
+    let ans = try await brain.complete([ChatMessage(role: "system", content: sys), ChatMessage(role: "user", content: q)])
+    print("[\(ans.provider) · \(ans.model)] \(String(format: "%.0f", ans.latencyMs)) ms\n\(ans.text)")
 default:
-    print("pg-cli e2e | decide <type> <context> | telemetry | distill-queue | teacher-verdicts  [--url URL] [--db PATH] [--tau X]")
+    print("pg-cli e2e | decide <type> <context> | cloud-probe <q> | telemetry | distill-queue | teacher-verdicts  [--url URL] [--db PATH] [--tau X]")
 }

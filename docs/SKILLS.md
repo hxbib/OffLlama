@@ -86,6 +86,7 @@ calibration.json). `Reflex.measureSkillPickPriors()` produces its content-free p
 | `calendar_find` | Check my calendar | native `find_event` | yes | no |
 | `alarm_create` | Set an alarm | Shortcut “PG Create Alarm” (input `{time}\|{label}`) | yes | no |
 | `timer_start` | Start a timer | Shortcut “PG Start Timer” (input `{duration}`) | yes | no |
+| `appletv_play` | Apple TV: play a show ("open the latest episode of Severance on Apple TV") | Shortcut “PG Play on Apple TV” (input `{show}`); fallback `https://tv.apple.com/search?term={show}` opens the show in the TV app | no | no |
 | `call` | Phone call | URL `tel:{phone}` | yes | yes |
 | `facetime` | FaceTime | URL `facetime:{phone}` | no | yes |
 | `maps_directions` | Directions in Maps | URL `maps://?daddr={place}` | no | no |
@@ -119,6 +120,7 @@ too: one extra tap.
 |---|---|
 | PG Create Alarm | Receive **Text** input → Split Text by `\|` → Clock › **Create Alarm** (time = item 1, label = item 2) |
 | PG Start Timer | Receive Text → Clock › **Start Timer** (duration = input) |
+| PG Play on Apple TV | Receive **Text** input → TV › **Find TV Shows** (Name contains input, limit 1) → TV › **Play** (Play Up Next **on**: resumes or starts the newest unwatched episode; Shuffle off). Without this Shortcut the app opens the show's page in the TV app instead, and you tap the latest episode. |
 | PG Open App | Receive Text → **Open App** (app = input) |
 | PG Create Note | Receive Text → Notes › **Create Note** (body = input) |
 | PG Toggle Flashlight / PG Toggle Focus / PG Toggle Low Power | **Set Flashlight** / **Set Focus** / **Set Low Power Mode** → Toggle |

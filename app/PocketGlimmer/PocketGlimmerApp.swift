@@ -30,5 +30,7 @@ struct RootView: View {
 enum Theme {
     static let accent = Color(red: 0.36, green: 0.42, blue: 1.0)
     /// At or above tau: handled on device (accent). Below tau: orange (escalate / ask / confirm).
-    static func confidenceColor(_ c: Double, tau: Double = 0.8) -> Color { c >= tau ? accent : .orange }
+    /// Default = the shipped calibration.json defaultTau (0.90), so a caller that forgets to pass the row's tau
+    /// (e.g. ChatView's LiveReflexStrip) never paints an escalated 0.85 decision as "handled".
+    static func confidenceColor(_ c: Double, tau: Double = 0.9) -> Color { c >= tau ? accent : .orange }
 }

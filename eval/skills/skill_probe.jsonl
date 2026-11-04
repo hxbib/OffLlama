@@ -23,3 +23,5 @@
 {"utterance": "reply haha nice to every reel Sam sends me", "expected": "instagram_autoreply"}
 {"utterance": "turn on low power mode", "expected": "low_power_toggle"}
 {"utterance": "email the landlord about the leak in the bathroom", "expected": "email_compose"}
+{"utterance": "open the latest episode of Severance on Apple TV", "expected": "appletv_play"}
+{"utterance": "play the new episode of Silo on the tv app", "expected": "appletv_play"}
