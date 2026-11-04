@@ -138,7 +138,7 @@ the same τ rule (docs/SKILLS.md).
   Messages also always confirm by rule, whatever the confidence.
 - **Distillation.** Muse Glimmer 30B (local IQ2_M) → 892 Glimmer-labeled examples → LoRA r16, 1 epoch, loss only at the
   answer letter → merge → Q4_K_M GGUF → llama.cpp Metal. Trained on CPU (bf16, 112 steps, 502 s).
-  A round-2 sweep (Spark Open labels, Modal H100) was run on Nov 4 under the same cal180 gate; see eval/results/ROUND2.md for the outcome.
+  A round-2 sweep (1,790 new Muse Spark Open labels, 11 LoRA variants on Modal H100) was run on Nov 4 under the same cal180 gate and **rejected**: the best variant (V4, teacher-confidence-weighted KL+CE) improved the certified bound to 9.6–9.8% @τ0.88 with 0.54 handled, but its ECE (0.059 fresh / 0.066 warm) crossed the 0.06 clause on repeat runs, so ep1 stays shipping. Full table and lessons: eval/results/ROUND2.md.
 - **Threshold: selective prediction with a certificate.** The reject option goes back to Chow (1970); Geifman &
   El-Yaniv (2017) frame it as risk vs coverage. We pick τ with Learn-Then-Test (Angelopoulos, Bates et al. 2021):
   exact binomial (Clopper–Pearson) p-values, Bonferroni over a fixed 99-point grid, α 0.05, δ 0.1, on the 180-item

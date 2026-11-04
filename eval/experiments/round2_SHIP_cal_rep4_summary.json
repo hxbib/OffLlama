@@ -1,0 +1,39 @@
+{
+ "n": 180,
+ "acc": 0.8,
+ "correct": 144,
+ "handled_at_0.8": 0.49444444444444446,
+ "handled_n_at_0.8": 89,
+ "acc_on_handled_at_0.8": 0.9662921348314607,
+ "ece_10bin": 0.05176825760466702,
+ "ltt_tightest": {
+  "tau": 0.9,
+  "handled": 63,
+  "errors": 0,
+  "handled_share": 0.35,
+  "error_upper_bound": 0.10370652453011428,
+  "delta": 0.1
+ },
+ "ltt_alpha05": {
+  "tau": null,
+  "alpha": 0.05,
+  "delta": 0.1,
+  "n": 180,
+  "handled": 0,
+  "errors": 0,
+  "handled_share": 0.0,
+  "empirical_error": null,
+  "error_upper_bound": null,
+  "p_value": null,
+  "min_rows_needed_zero_errors": 135
+ },
+ "nudgeNow_correct": 8,
+ "median_ms": 257.97557830810547,
+ "p90_ms": 397.22204208374023,
+ "eval_seconds": 50.6,
+ "gguf": "models/SHIPPING-ep1-Llama-3.2-1B-PocketGlimmer-Reflex-Q4_K_M.gguf",
+ "set": "cal",
+ "rep": 4,
+ "server_pass": 2,
+ "server": "warm (pass 2 on the same server)"
+}

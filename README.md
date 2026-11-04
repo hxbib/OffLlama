@@ -68,7 +68,7 @@ distribution, not a guarantee. On the frozen test set the same τ keeps 37% (44/
 - **Distillation**: the only teacher is **Muse Glimmer 30B**, run locally (IQ2_M), which labels each question with soft
   option-letter probabilities. Low-confidence labels are dropped (1,006 → 892). LoRA r16, 1 epoch, loss only at the
   answer-letter position: KL(teacher ‖ student over the letter tokens) + 0.5 × CE on the hard label.
-  A round-2 sweep (Spark Open labels, Modal H100) was run on Nov 4 under the same cal180 gate; see eval/results/ROUND2.md for the outcome.
+  A round-2 sweep (1,790 new Muse Spark Open labels, 11 LoRA variants on Modal H100) was run on Nov 4 under the same cal180 gate and **rejected**: the best variant (V4, teacher-confidence-weighted KL+CE) improved the certified bound to 9.6–9.8% @τ0.88 with 0.54 handled, but its ECE (0.059 fresh / 0.066 warm) crossed the 0.06 clause on repeat runs, so ep1 stays shipping. Full table and lessons: eval/results/ROUND2.md.
 
 ## Skills: open-world phone actions
 Beyond the built-in tools, a skill registry lets the phone pick from open-world actions (deep links, Shortcuts, share

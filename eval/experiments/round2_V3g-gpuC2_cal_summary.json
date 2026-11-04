@@ -1,0 +1,37 @@
+{
+ "n": 180,
+ "acc": 0.8111111111111111,
+ "correct": 146,
+ "handled_at_0.8": 0.4111111111111111,
+ "handled_n_at_0.8": 74,
+ "acc_on_handled_at_0.8": 0.9864864864864865,
+ "ece_10bin": 0.1386243446851469,
+ "ltt_tightest": {
+  "tau": 0.75,
+  "handled": 92,
+  "errors": 1,
+  "handled_share": 0.5111111111111111,
+  "error_upper_bound": 0.09588255562369627,
+  "delta": 0.1
+ },
+ "ltt_alpha05": {
+  "tau": null,
+  "alpha": 0.05,
+  "delta": 0.1,
+  "n": 180,
+  "handled": 0,
+  "errors": 0,
+  "handled_share": 0.0,
+  "empirical_error": null,
+  "error_upper_bound": null,
+  "p_value": null,
+  "min_rows_needed_zero_errors": 135
+ },
+ "nudgeNow_correct": 9,
+ "median_ms": 259.4916820526123,
+ "p90_ms": 398.93317222595215,
+ "eval_seconds": 63.2,
+ "gguf": "/tmp/gencode/round2/V3g-gpuC2.gguf",
+ "set": "cal",
+ "rep": 1
+}
