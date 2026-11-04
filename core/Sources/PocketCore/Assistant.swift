@@ -122,7 +122,7 @@ public final class Assistant: @unchecked Sendable {
     }
 
     public func handle(_ utterance: String, now: Date = Date(), sharedText: String? = nil,
-                       pendingDrafts: [MessageDraft] = []) async throws -> AssistantTurn {
+                       pendingDrafts: [MessageDraft] = [], conversationContext: String = "") async throws -> AssistantTurn {
         if let sharedText, sharedText.count > ActionValidation.sharedTextLimit {
             throw EffectError.invalidEdit("Shared text exceeds 24,000 characters. Choose a smaller excerpt.")
         }
@@ -239,7 +239,7 @@ public final class Assistant: @unchecked Sendable {
                                  cloudPromptSent: readResult?.cloudPromptSent, corrections: corrections,
                                  cloudWithheldForSensitivity: readResult?.withheldForSensitivity ?? false)
         case "clarify":
-            let q = try await reflex.engine.generate(prompt: Self.localPrompt("Ask ONE short clarifying question about: \(utterance)", mem: lmem), maxTokens: 40, temperature: 0.2)
+            let q = try await reflex.engine.generate(prompt: Self.localPrompt("Ask ONE short clarifying question about: \(utterance)", mem: lmem, history: conversationContext), maxTokens: 40, temperature: 0.2)
             return AssistantTurn(reply: .clarify(q.trimmed), decisions: decisions, remembered: remembered, corrections: corrections)
         case "answer_local":
             // Lexically sensitive requests still get the sensitivity card, so the user sees it was kept on device.
@@ -249,7 +249,7 @@ public final class Assistant: @unchecked Sendable {
                 decisions.append(sens)
                 withheld = sens.chosen.id == "sensitive"
             }
-            let a = try await reflex.engine.generate(prompt: Self.localPrompt(utterance, mem: lmem), maxTokens: 200, temperature: 0.3)
+            let a = try await reflex.engine.generate(prompt: Self.localPrompt(utterance, mem: lmem, history: conversationContext), maxTokens: 200, temperature: 0.3)
             return AssistantTurn(reply: .local(a.trimmed), decisions: decisions, remembered: remembered, corrections: corrections,
                                  cloudWithheldForSensitivity: withheld)
         default: // escalate_cloud (chosen by the model, or fallback because confidence < tau)
@@ -257,7 +257,7 @@ public final class Assistant: @unchecked Sendable {
             let sens = try await reflex.decide(OptionSets.sensitivity, context: "User: \(utterance)")
             decisions.append(sens)
             if sens.chosen.id == "sensitive" {
-                let a = try await reflex.engine.generate(prompt: Self.localPrompt(utterance, mem: lmem), maxTokens: 200, temperature: 0.3)
+                let a = try await reflex.engine.generate(prompt: Self.localPrompt(utterance, mem: lmem, history: conversationContext), maxTokens: 200, temperature: 0.3)
                 return AssistantTurn(reply: .local(a.trimmed), decisions: decisions, remembered: remembered, corrections: corrections,
                                      cloudWithheldForSensitivity: true)
             }
@@ -272,7 +272,7 @@ public final class Assistant: @unchecked Sendable {
                                                                               : "I'm not sure about that offline. Here's what I know: " + mem.replacingOccurrences(of: "Known about the user:\n", with: "").trimmed),
                                          decisions: decisions, remembered: remembered, corrections: corrections)
                 }
-                let a = try await reflex.engine.generate(prompt: Self.localPrompt(utterance, mem: lmem), maxTokens: 200, temperature: 0.3)
+                let a = try await reflex.engine.generate(prompt: Self.localPrompt(utterance, mem: lmem, history: conversationContext), maxTokens: 200, temperature: 0.3)
                 return AssistantTurn(reply: .offlineFallback(a.trimmed), decisions: decisions, remembered: remembered, corrections: corrections)
             }
             let profile = cloudProfileMaxChars > 0
@@ -293,7 +293,7 @@ public final class Assistant: @unchecked Sendable {
                         let text: String
                         if can.chosen.id == "yes" {
                             text = "Cloud unavailable. On-device answer: " + (try await reflex.engine.generate(
-                                prompt: Self.localPrompt(utterance, mem: lmem), maxTokens: 200, temperature: 0.3)).trimmed
+                                prompt: Self.localPrompt(utterance, mem: lmem, history: conversationContext), maxTokens: 200, temperature: 0.3)).trimmed
                         } else {
                             text = "The cloud providers could not answer, and I'm not confident enough to answer on device. Please try again later."
                         }
@@ -305,7 +305,7 @@ public final class Assistant: @unchecked Sendable {
                 }
             case .withheld:
                 // The early sensitivity card may have said ok; nothing was sent and the badge stays truthful.
-                let a = try await reflex.engine.generate(prompt: Self.localPrompt(utterance, mem: lmem), maxTokens: 200, temperature: 0.3)
+                let a = try await reflex.engine.generate(prompt: Self.localPrompt(utterance, mem: lmem, history: conversationContext), maxTokens: 200, temperature: 0.3)
                 return AssistantTurn(reply: .local(a.trimmed), decisions: decisions, remembered: remembered, corrections: corrections,
                                      cloudWithheldForSensitivity: true)
             }
@@ -553,8 +553,8 @@ public final class Assistant: @unchecked Sendable {
     }
 
 
-    static func localPrompt(_ q: String, mem: String) -> String {
-        "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\nYou are a concise, warm personal assistant running fully offline on the user's phone. \(mem)<|eot_id|><|start_header_id|>user<|end_header_id|>\n\n\(q)<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n"
+    static func localPrompt(_ q: String, mem: String, history: String = "") -> String {
+        "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\nYou are a concise, warm personal assistant running fully offline on the user's phone. \(mem)\(history)<|eot_id|><|start_header_id|>user<|end_header_id|>\n\n\(q)<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n"
     }
 }
 
