@@ -1,0 +1,23 @@
+prompt style: fewShot, prior correction: on (24 sets)
+type                 expected        argmax          conf   esc   ms
+route                tool            tool            0.944  no      849 ✓
+route                tool            tool            0.769  yes    1026 ✓
+route                answer_local    answer_local    0.753  yes     978 ✓
+route                escalate_cloud  escalate_cloud  0.984  no     1070 ✓
+route                clarify         answer_local    0.402  yes    3395 ✗
+toolChoice           create_reminder create_reminder 0.961  no     1368 ✓
+toolChoice           find_event      find_event      0.976  no     1102 ✓
+toolChoice           send_message    send_message    0.995  no     1067 ✓
+rememberOrNot        remember_fact   remember_fact   0.961  no     1117 ✓
+rememberOrNot        no              no              0.491  yes     999 ✓
+memoryConflict       update          update          0.739  yes     825 ✓
+notificationTriage   interrupt       interrupt       0.977  no      871 ✓
+notificationTriage   ignore          ignore          0.989  no      837 ✓
+confirmBeforeAct     confirm         confirm         0.802  yes    1261 ✓
+timing               recurring       at_time         0.663  yes    1292 ✗
+sensitivity          sensitive       sensitive       0.927  no      966 ✓
+contactPick          c1              c1              0.996  no     1349 ✓
+nudgeNow             nudge           nudge           0.680  yes     841 ✓
+
+argmax accuracy 16/18; handled locally (conf>=tau) 10/18, of which correct 10; median latency 1067 ms
+(latency = llama-server round-trip on this Linux CPU box incl. prompt eval; NOT an iPhone number)
