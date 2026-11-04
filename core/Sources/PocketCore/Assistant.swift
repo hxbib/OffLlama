@@ -153,6 +153,15 @@ public final class Assistant: @unchecked Sendable {
                                  cloudWithheldForSensitivity: readResult?.withheldForSensitivity ?? false)
         }
 
+        if let sharedText, route.chosen.id != "tool" {
+            let result = try await reason(utterance, text: sharedText)
+            decisions.append(contentsOf: result.decisions)
+            let reply: Reply = result.provider.map { .cloud(result.text, provider: $0) } ?? .local(result.text)
+            return AssistantTurn(reply: reply, decisions: decisions, remembered: remembered,
+                                 cloudPromptSent: result.cloudPromptSent, corrections: corrections,
+                                 cloudWithheldForSensitivity: result.withheldForSensitivity)
+        }
+
         switch route.chosen.id {
         case "tool":
             var planned: PlannedAction?

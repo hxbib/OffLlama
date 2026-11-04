@@ -309,3 +309,5 @@ Their output paths are `/tmp/pg-input-design-20261104/a/design.md` and
 started. Dispatch records are in `docs/verification/run65_dispatches.json`.
 
 A fresh Terra high Mac worker now owns build continuation from pushed15ab389, with the correctly registered Mac project `/Users/habib/src/pocket-glimmer`. It will retest the wrapper, identify concrete regenerable disk consumers, resolve available tool prerequisites, and compile when space permits. OpenCode River04 DeepSeek V4.1 Flash1017 max independently reviews the packaging fix and run65 evidence. Both task IDs are recorded in `docs/verification/run65_dispatches.json`. Their results are pending.
+
+The independent contract/privacy review returned FAIL for release readiness. Archived report and current adjudication are in docs/verification/CONTRACT_REVIEW_2026-11-04.md and REVIEW_REPAIR_STATUS.md. Parent repaired C1/C2/W1/W4 source paths and added six behavioral tests. Updated suite executes189 tests with1skip and0failures; AppModel syntax parsing passes only. C3/C4/W2 time/calendar/message guards and W3 attempted-provider attribution remain open, as do physical acceptance and independent recheck.

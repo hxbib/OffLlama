@@ -234,7 +234,11 @@ final class AppModel {
             let reflexMs = turn.decisions.map(\.latencyMs).reduce(0, +)
             let onDevice = String(format: "on device · %.0f ms", reflexMs)
             switch turn.reply {
-            case .local(let t): chat.append(.init(role: .assistant, text: t, badge: onDevice, decisions: rows, keptOnDevice: turn.cloudWithheldForSensitivity))
+            case .local(let t):
+                chat.append(.init(role: .assistant, text: t,
+                                  badge: turn.cloudPromptSent == nil ? onDevice : "local fallback · cloud request attempted",
+                                  decisions: rows, cloudPromptSent: turn.cloudPromptSent,
+                                  keptOnDevice: turn.cloudWithheldForSensitivity))
             case .acted(let effect): chat.append(.init(role: .assistant, text: effect.summary, badge: onDevice, decisions: rows))
             case .clarify(let t): chat.append(.init(role: .assistant, text: t, badge: onDevice, decisions: rows))
             case .cloud(let t, let p): chat.append(.init(role: .assistant, text: t, badge: prettyProvider(p), decisions: rows, cloudPromptSent: turn.cloudPromptSent))
@@ -274,13 +278,14 @@ final class AppModel {
             case .read(let read):
                 chat[i].card = nil
                 chat[i].text = read.text
-                chat[i].badge = read.provider.map { prettyProvider($0) } ?? "on device"
+                chat[i].badge = read.provider.map { prettyProvider($0) }
+                    ?? (read.cloudPromptSent == nil ? "on device" : "local fallback · cloud request attempted")
                 chat[i].decisions = read.decisions.map { DecisionRow($0) }
                 chat[i].cloudPromptSent = read.cloudPromptSent
                 chat[i].keptOnDevice = read.withheldForSensitivity
             }
         } catch {
-            chat.append(.init(role: .system, text: "Couldn't complete that card: \(error). Nothing was changed."))
+            chat.append(.init(role: .system, text: "Couldn't verify completion: \(error). The request may already have been sent or acted on. Check the destination before starting a new request."))
         }
     }
 

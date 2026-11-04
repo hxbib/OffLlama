@@ -1171,6 +1171,9 @@ public final class EffectLedger: @unchecked Sendable {
         case .claimed:
             return "This attempt already started and has no recorded result. It will not run again."
         case .ambiguous(let reason):
+            if CapabilityCatalog.isReplyOnly(action.capabilityID) {
+                return "The read has no verified result. A cloud request may already have been sent. This attempt will not run again."
+            }
             let name = nameFor(action)
             switch action.executor {
             case .messageSend:
@@ -1612,9 +1615,11 @@ public struct EffectSession: Sendable {
                 try ledger.record(attemptID: attemptID, phase: .settled(.read(result.receipt)))
                 return .read(result)
             } catch {
-                try ledger.record(attemptID: attemptID, phase: .settled(.failed(.unavailable)))
-                return .finished(EffectResult(attemptID: attemptID, phase: .settled(.failed(.unavailable)),
-                                              summary: "The read did not finish. Nothing was sent or changed."))
+                let phase = AttemptPhase.ambiguous(.claimedWithoutReceipt)
+                try ledger.record(attemptID: attemptID, phase: phase)
+                if CloudBrainChain.isCancellation(error) { throw error }
+                return .finished(EffectResult(attemptID: attemptID, phase: phase,
+                                              summary: EffectLedger.summary(for: phase, contract: contract, action: claimed.action)))
             }
         case .mismatch(let current):
             return .staged(EffectLedger.card(for: current, contract: contract, duplicate: nil, now: ledger.now()))

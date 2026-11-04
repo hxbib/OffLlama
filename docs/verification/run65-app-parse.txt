@@ -1,0 +1,4 @@
+Command: docker run --rm -v /home/habib/pocket-glimmer/app:/app -w /app swift:6.1-noble swiftc -frontend -parse PocketGlimmer/AppModel.swift
+Exit: 0
+Output: empty
+Scope: Swift syntax only. No Apple SDK typecheck or runtime test.
