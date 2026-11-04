@@ -7,8 +7,8 @@
   Pocket Glimmer demo slides. Self-contained: inline CSS, no external fonts, no JS.
   11 slides, 1920x1080 each, <section id="slideN">. Cmd+P -> Save as PDF gives one page per slide.
   Every number here is sourced from README.md, docs/research/JUDGE_BRIEF.md, LEDGER.md §6,
-  eval/results/{AFTER_FLOOR,PER_TYPE_TAU090,RISK_COVERAGE,OOS_STRESS,REPRO_NOV4,PERM_AVG,QUANT_IDENTITY,SPARK_TEACHER}.md,
-  eval/skills/SKILL_PROBE.md, docs/SKILLS.md, docs/META_MULTIMODAL.md. PNG renders: docs/img/slide_01.png ... slide_11.png
+  eval/results/{AFTER_FLOOR,PER_TYPE_TAU090,RISK_COVERAGE,OOS_STRESS,REPRO_NOV4,PERM_AVG,QUANT_IDENTITY,SPARK_TEACHER,ROUND2}.md,
+  eval/skills/SKILL_PROBE.md, docs/SKILLS.md, docs/META_MULTIMODAL.md, docs/OPEN_WEIGHTS_SYSTEM2.md. PNG renders: docs/img/slide_01.png ... slide_11.png
   (regenerate with docs/demo/render_slides.sh).
 -->
 <style>
@@ -115,15 +115,15 @@ td.a small{font-size:28px;color:#b7f5cf;font-weight:600;margin-left:12px}
 <body style="margin:0;overflow:hidden">
 <section id="slide7">
   <div class="kicker">Built with Llama · every model is Meta's</div>
-  <h2 style="margin-bottom:24px">Four Meta models, four jobs.</h2>
+  <h2 style="margin-bottom:24px">Meta models, distinct jobs.</h2>
   <div class="models">
     <div class="card" style="border-color:#2f6b49"><div class="role green">Student · on the phone</div><h3>Llama 3.2 1B → Llama-Reflex-1B</h3><p>12 typed decisions, Q4_K_M GGUF (808 MB), llama.cpp + Metal. Llama 3.2 Community License.</p></div>
     <div class="card"><div class="role" style="color:#e9c46a">Teacher · local</div><h3>Muse Glimmer 30B</h3><p>Run locally (IQ2_M). Its option-letter probabilities are the soft labels (892 labels). Apache-2.0 open weights.</p></div>
-    <div class="card" style="border-color:#2c4f80"><div class="role blue">Escalation · cloud</div><h3>Muse Spark 1.3</h3><p>Only when the phone is unsure. Meta Model API, Standard mode only, behind a privacy scrubber.</p></div>
-    <div class="card"><div class="role" style="color:#aab3c2">Evaluated · rejected</div><h3>Muse Spark Open</h3><p>As teacher: labels matched gold 178/180, but the 1B it taught was overconfident (cal180 bound 13.7% vs 10.2%).</p></div>
+    <div class="card" style="border-color:#2c4f80"><div class="role blue">Escalation · cloud</div><h3>Muse Spark 1.3</h3><p>Default cloud escalation when the phone is unsure. Meta Model API, Standard mode only, behind a privacy scrubber.</p></div>
+    <div class="card" style="border-color:#3b4a63"><div class="role" style="color:#aab3c2">Optional · self-hosted cloud</div><h3>Muse Glimmer 30B on Modal</h3><p>H100, vLLM 0.33, bf16, scale-to-zero. Saved Swift smoke: 2.8 s cloud probe, two prompts. Cloud only, never on the phone; no current-liveness claim.</p></div>
   </div>
   <div class="lineage">Meta built Glimmer by logit-distilling Muse Spark (arXiv 2610.24628); we add one more hop, onto the phone:<br><span class="mono" style="font-size:31px;color:#6ee7a8">Muse Spark → Muse Glimmer 30B → Llama-Reflex-1B</span></div>
-  <div class="senses"><span class="blue" style="font-weight:800">System-2 senses (online only, same gate):</span> Muse Voice Transcribe for speech, Muse Spark 1.3 vision and SAM 3.1 for the camera. Each call passes the on-device sensitivity decision, masking and Standard mode. API calls verified live Nov 4; the iOS mic/camera UI is not yet verified on a device.</div>
-  <div class="foot"><span>Sources: README "Meta stack", JUDGE_BRIEF §3, SPARK_TEACHER.md, ARXIV_SCAN_NOV4.md, META_MULTIMODAL.md.</span><span class="n">7 / 11</span></div>
+  <div class="senses"><span class="blue" style="font-weight:800">System-2 senses (online only):</span> Muse Voice Transcribe for speech (audio uploads before any sensitivity check; the transcript then follows the typed-text path), Muse Spark 1.3 vision and SAM 3.1 for the camera (permitted photos leave as images; text is masked, pixels are not). Meta calls verified live Nov 4; the iOS mic/camera UI is unverified on a device.</div>
+  <div class="foot"><span>Sources: README "Meta stack", JUDGE_BRIEF §3, SPARK_TEACHER.md, ARXIV_SCAN_NOV4.md, META_MULTIMODAL.md, OPEN_WEIGHTS_SYSTEM2.md. Spark Open teacher rejected (13.7% vs 10.2% cal180 bound); Round 2 finished and rejected.</span><span class="n">7 / 11</span></div>
 </section>
 </body></html>

@@ -7,8 +7,8 @@
   Pocket Glimmer demo slides. Self-contained: inline CSS, no external fonts, no JS.
   11 slides, 1920x1080 each, <section id="slideN">. Cmd+P -> Save as PDF gives one page per slide.
   Every number here is sourced from README.md, docs/research/JUDGE_BRIEF.md, LEDGER.md §6,
-  eval/results/{AFTER_FLOOR,PER_TYPE_TAU090,RISK_COVERAGE,OOS_STRESS,REPRO_NOV4,PERM_AVG,QUANT_IDENTITY,SPARK_TEACHER}.md,
-  eval/skills/SKILL_PROBE.md, docs/SKILLS.md, docs/META_MULTIMODAL.md. PNG renders: docs/img/slide_01.png ... slide_11.png
+  eval/results/{AFTER_FLOOR,PER_TYPE_TAU090,RISK_COVERAGE,OOS_STRESS,REPRO_NOV4,PERM_AVG,QUANT_IDENTITY,SPARK_TEACHER,ROUND2}.md,
+  eval/skills/SKILL_PROBE.md, docs/SKILLS.md, docs/META_MULTIMODAL.md, docs/OPEN_WEIGHTS_SYSTEM2.md. PNG renders: docs/img/slide_01.png ... slide_11.png
   (regenerate with docs/demo/render_slides.sh).
 -->
 <style>
@@ -123,6 +123,6 @@ td.a small{font-size:28px;color:#b7f5cf;font-weight:600;margin-left:12px}
     <tr><td class="m">Calibration error (ECE)<small>10 bins, lower is better</small></td><td class="b">0.150</td><td class="a">0.064</td></tr>
     <tr><td class="m">Area under risk–coverage (AURC)<small>lower is better</small></td><td class="b">0.148</td><td class="a">0.085</td></tr>
   </table>
-  <div class="foot"><span>Frozen held-out test set, N=120 hand-labeled decisions (10 per type), never used for selection. One item = 0.83 pts (95% CI ≈ ±7 pts). Raw letter softmax, no temperature scaling. Measured via llama-server on a Linux x86 CPU; the same GGUF ships on the phone. Sources: AFTER_FLOOR.md, RISK_COVERAGE.md.</span><span class="n">4 / 11</span></div>
+  <div class="foot"><span>Frozen held-out test set, N=120 hand-labeled decisions (10 per type), never used for selection. One item = 0.83 pts (95% CI ≈ ±7 pts). Raw letter softmax, no temperature scaling. Measured via llama-server on a Linux x86 CPU; the same GGUF is the one bundled for the phone. Sources: AFTER_FLOOR.md, RISK_COVERAGE.md.</span><span class="n">4 / 11</span></div>
 </section>
 </body></html>

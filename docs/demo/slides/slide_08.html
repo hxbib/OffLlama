@@ -7,8 +7,8 @@
   Pocket Glimmer demo slides. Self-contained: inline CSS, no external fonts, no JS.
   11 slides, 1920x1080 each, <section id="slideN">. Cmd+P -> Save as PDF gives one page per slide.
   Every number here is sourced from README.md, docs/research/JUDGE_BRIEF.md, LEDGER.md §6,
-  eval/results/{AFTER_FLOOR,PER_TYPE_TAU090,RISK_COVERAGE,OOS_STRESS,REPRO_NOV4,PERM_AVG,QUANT_IDENTITY,SPARK_TEACHER}.md,
-  eval/skills/SKILL_PROBE.md, docs/SKILLS.md, docs/META_MULTIMODAL.md. PNG renders: docs/img/slide_01.png ... slide_11.png
+  eval/results/{AFTER_FLOOR,PER_TYPE_TAU090,RISK_COVERAGE,OOS_STRESS,REPRO_NOV4,PERM_AVG,QUANT_IDENTITY,SPARK_TEACHER,ROUND2}.md,
+  eval/skills/SKILL_PROBE.md, docs/SKILLS.md, docs/META_MULTIMODAL.md, docs/OPEN_WEIGHTS_SYSTEM2.md. PNG renders: docs/img/slide_01.png ... slide_11.png
   (regenerate with docs/demo/render_slides.sh).
 -->
 <style>
@@ -124,7 +124,7 @@ td.a small{font-size:28px;color:#b7f5cf;font-weight:600;margin-left:12px}
     <div class="card"><h3>Quant ladder</h3><p>f16 14.5%, Q8_0 13.9%, Q3_K_M 13.9%, Q2_K 30.4%. Nothing beat Q4_K_M on cal180.</p></div>
     <div class="card"><h3>Option-order averaging</h3><p>Ranks better, but under-confident: ECE 0.072–0.101 vs ≤0.056, at 2–3× latency. Did not ship.</p></div>
   </div>
-  <div class="card r2" style="margin-top:24px;padding:22px 30px;border:3px dashed #7cb4ff;background:#0f1a2b"><p style="font-size:34px"><span class="blue" style="font-weight:800">Round 2 (Nov 4): see eval/results/ROUND2.md</span> <span class="muted">· same cal180 gate; the shipping model changes only if a variant wins.</span></p></div>
-  <div class="foot"><span>All selection on the calibration split (N=180); bounds are LTT tightest, δ = 0.1. Box CPU, not iPhone. Sources: README gate 1, LEDGER §6 and §12, AFTER_FLOOR_EP2.md, AFTER_FLOOR_NV2.md, SPARK_TEACHER.md, QUANT_IDENTITY.md, PERM_AVG.md.</span><span class="n">8 / 11</span></div>
+  <div class="card r2" style="margin-top:24px;padding:22px 30px;border:3px dashed #7cb4ff;background:#0f1a2b"><p style="font-size:34px"><span class="blue" style="font-weight:800">Round 2 (Nov 4): finished and rejected.</span> <span class="muted">No variant cleared every gate run. ep1, Glimmer-only, still ships.</span></p></div>
+  <div class="foot"><span>All selection on the calibration split (N=180); bounds are LTT tightest, δ = 0.1. Box CPU, not iPhone. Sources: README gate 1, LEDGER §6 and §12, AFTER_FLOOR_EP2.md, AFTER_FLOOR_NV2.md, SPARK_TEACHER.md, QUANT_IDENTITY.md, PERM_AVG.md, ROUND2.md.</span><span class="n">8 / 11</span></div>
 </section>
 </body></html>

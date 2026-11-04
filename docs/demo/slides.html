@@ -7,8 +7,8 @@
   Pocket Glimmer demo slides. Self-contained: inline CSS, no external fonts, no JS.
   11 slides, 1920x1080 each, <section id="slideN">. Cmd+P -> Save as PDF gives one page per slide.
   Every number here is sourced from README.md, docs/research/JUDGE_BRIEF.md, LEDGER.md §6,
-  eval/results/{AFTER_FLOOR,PER_TYPE_TAU090,RISK_COVERAGE,OOS_STRESS,REPRO_NOV4,PERM_AVG,QUANT_IDENTITY,SPARK_TEACHER}.md,
-  eval/skills/SKILL_PROBE.md, docs/SKILLS.md, docs/META_MULTIMODAL.md. PNG renders: docs/img/slide_01.png ... slide_11.png
+  eval/results/{AFTER_FLOOR,PER_TYPE_TAU090,RISK_COVERAGE,OOS_STRESS,REPRO_NOV4,PERM_AVG,QUANT_IDENTITY,SPARK_TEACHER,ROUND2}.md,
+  eval/skills/SKILL_PROBE.md, docs/SKILLS.md, docs/META_MULTIMODAL.md, docs/OPEN_WEIGHTS_SYSTEM2.md. PNG renders: docs/img/slide_01.png ... slide_11.png
   (regenerate with docs/demo/render_slides.sh).
 -->
 <style>
@@ -118,7 +118,7 @@ td.a small{font-size:28px;color:#b7f5cf;font-weight:600;margin-left:12px}
 <section id="slide1">
   <div class="kicker">Meta Global AI Hackathon 2026 · Build for Your World</div>
   <h1>Pocket Glimmer</h1>
-  <div class="sub">A 1B Meta model on an iPhone that knows when it doesn't know.</div>
+  <div class="sub">A 1B Meta model built for iPhone that knows when it doesn't know.</div>
   <div class="bars">
     <div class="taul">τ</div>
     <div class="tau"></div>
@@ -139,15 +139,16 @@ td.a small{font-size:28px;color:#b7f5cf;font-weight:600;margin-left:12px}
     <div class="col" style="flex:1.1;gap:34px">
       <p><span class="white" style="font-weight:800">Habib</span> · CS student, Hunter College · lives in the Bronx. The commute is on the subway, mostly with no signal.</p>
       <p><span class="green" style="font-weight:800">Memory stays on the phone</span> (on-device SQLite: facts, people, corrections).</p>
-      <p><span class="blue" style="font-weight:800">The cloud only ever sees masked text</span>, and only when the model is unsure.</p>
+      <p><span class="blue" style="font-weight:800">Typed escalations send masked text only</span>, and only when the model is unsure.</p>
     </div>
     <div class="card" style="flex:.9;border-color:#3b4a63">
-      <div style="font-size:26px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:#7cb4ff;margin-bottom:18px">What left the phone (illustration)</div>
+      <div style="font-size:26px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:#7cb4ff;margin-bottom:18px">What left the phone (typed escalation, illustration)</div>
       <div class="mono" style="font-size:31px;line-height:1.45;color:#e7ecf3">Plan my week around Professor <span class="orange">[PERSON_1]</span>'s CSCI 335 final and my calc midterm.</div>
       <div style="margin-top:24px;font-size:27px;line-height:1.4;color:#9aa4b5">Names from Contacts and memory, emails, phones, addresses and card numbers are masked first and restored on the phone. An escalation carries the masked request plus the masked memory lines retrieved for it. The app shows the exact text it sent.</div>
     </div>
   </div>
-  <div class="foot"><span>Escalation target: Muse Spark 1.3, Meta Model API, Standard mode only. Source: README "How it works".</span><span class="n">2 / 11</span></div>
+  <p class="muted" style="font-size:27px;margin-top:30px;line-height:1.4">Voice audio uploads to Muse Voice Transcribe before any on-device check. A permitted photo leaves as an image with EXIF/GPS stripped; the question text is masked, the pixels are not redacted. The photo sensitivity gate is heuristic, not a guarantee.</p>
+  <div class="foot"><span>Escalation target for typed text: Muse Spark 1.3, Meta Model API, Standard mode only. Source: README "How it works", docs/META_MULTIMODAL.md.</span><span class="n">2 / 11</span></div>
 </section>
 
 <!-- 3 -->
@@ -188,7 +189,7 @@ td.a small{font-size:28px;color:#b7f5cf;font-weight:600;margin-left:12px}
     <tr><td class="m">Calibration error (ECE)<small>10 bins, lower is better</small></td><td class="b">0.150</td><td class="a">0.064</td></tr>
     <tr><td class="m">Area under risk–coverage (AURC)<small>lower is better</small></td><td class="b">0.148</td><td class="a">0.085</td></tr>
   </table>
-  <div class="foot"><span>Frozen held-out test set, N=120 hand-labeled decisions (10 per type), never used for selection. One item = 0.83 pts (95% CI ≈ ±7 pts). Raw letter softmax, no temperature scaling. Measured via llama-server on a Linux x86 CPU; the same GGUF ships on the phone. Sources: AFTER_FLOOR.md, RISK_COVERAGE.md.</span><span class="n">4 / 11</span></div>
+  <div class="foot"><span>Frozen held-out test set, N=120 hand-labeled decisions (10 per type), never used for selection. One item = 0.83 pts (95% CI ≈ ±7 pts). Raw letter softmax, no temperature scaling. Measured via llama-server on a Linux x86 CPU; the same GGUF is the one bundled for the phone. Sources: AFTER_FLOOR.md, RISK_COVERAGE.md.</span><span class="n">4 / 11</span></div>
 </section>
 
 <!-- 5 -->
@@ -229,16 +230,16 @@ td.a small{font-size:28px;color:#b7f5cf;font-weight:600;margin-left:12px}
 <!-- 7 -->
 <section id="slide7">
   <div class="kicker">Built with Llama · every model is Meta's</div>
-  <h2 style="margin-bottom:24px">Four Meta models, four jobs.</h2>
+  <h2 style="margin-bottom:24px">Meta models, distinct jobs.</h2>
   <div class="models">
     <div class="card" style="border-color:#2f6b49"><div class="role green">Student · on the phone</div><h3>Llama 3.2 1B → Llama-Reflex-1B</h3><p>12 typed decisions, Q4_K_M GGUF (808 MB), llama.cpp + Metal. Llama 3.2 Community License.</p></div>
     <div class="card"><div class="role" style="color:#e9c46a">Teacher · local</div><h3>Muse Glimmer 30B</h3><p>Run locally (IQ2_M). Its option-letter probabilities are the soft labels (892 labels). Apache-2.0 open weights.</p></div>
-    <div class="card" style="border-color:#2c4f80"><div class="role blue">Escalation · cloud</div><h3>Muse Spark 1.3</h3><p>Only when the phone is unsure. Meta Model API, Standard mode only, behind a privacy scrubber.</p></div>
-    <div class="card"><div class="role" style="color:#aab3c2">Evaluated · rejected</div><h3>Muse Spark Open</h3><p>As teacher: labels matched gold 178/180, but the 1B it taught was overconfident (cal180 bound 13.7% vs 10.2%).</p></div>
+    <div class="card" style="border-color:#2c4f80"><div class="role blue">Escalation · cloud</div><h3>Muse Spark 1.3</h3><p>Default cloud escalation when the phone is unsure. Meta Model API, Standard mode only, behind a privacy scrubber.</p></div>
+    <div class="card" style="border-color:#3b4a63"><div class="role" style="color:#aab3c2">Optional · self-hosted cloud</div><h3>Muse Glimmer 30B on Modal</h3><p>H100, vLLM 0.33, bf16, scale-to-zero. Saved Swift smoke: 2.8 s cloud probe, two prompts. Cloud only, never on the phone; no current-liveness claim.</p></div>
   </div>
   <div class="lineage">Meta built Glimmer by logit-distilling Muse Spark (arXiv 2610.24628); we add one more hop, onto the phone:<br><span class="mono" style="font-size:31px;color:#6ee7a8">Muse Spark → Muse Glimmer 30B → Llama-Reflex-1B</span></div>
-  <div class="senses"><span class="blue" style="font-weight:800">System-2 senses (online only, same gate):</span> Muse Voice Transcribe for speech, Muse Spark 1.3 vision and SAM 3.1 for the camera. Each call passes the on-device sensitivity decision, masking and Standard mode. API calls verified live Nov 4; the iOS mic/camera UI is not yet verified on a device.</div>
-  <div class="foot"><span>Sources: README "Meta stack", JUDGE_BRIEF §3, SPARK_TEACHER.md, ARXIV_SCAN_NOV4.md, META_MULTIMODAL.md.</span><span class="n">7 / 11</span></div>
+  <div class="senses"><span class="blue" style="font-weight:800">System-2 senses (online only):</span> Muse Voice Transcribe for speech (audio uploads before any sensitivity check; the transcript then follows the typed-text path), Muse Spark 1.3 vision and SAM 3.1 for the camera (permitted photos leave as images; text is masked, pixels are not). Meta calls verified live Nov 4; the iOS mic/camera UI is unverified on a device.</div>
+  <div class="foot"><span>Sources: README "Meta stack", JUDGE_BRIEF §3, SPARK_TEACHER.md, ARXIV_SCAN_NOV4.md, META_MULTIMODAL.md, OPEN_WEIGHTS_SYSTEM2.md. Spark Open teacher rejected (13.7% vs 10.2% cal180 bound); Round 2 finished and rejected.</span><span class="n">7 / 11</span></div>
 </section>
 
 <!-- 8 -->
@@ -253,29 +254,29 @@ td.a small{font-size:28px;color:#b7f5cf;font-weight:600;margin-left:12px}
     <div class="card"><h3>Quant ladder</h3><p>f16 14.5%, Q8_0 13.9%, Q3_K_M 13.9%, Q2_K 30.4%. Nothing beat Q4_K_M on cal180.</p></div>
     <div class="card"><h3>Option-order averaging</h3><p>Ranks better, but under-confident: ECE 0.072–0.101 vs ≤0.056, at 2–3× latency. Did not ship.</p></div>
   </div>
-  <div class="card r2" style="margin-top:24px;padding:22px 30px;border:3px dashed #7cb4ff;background:#0f1a2b"><p style="font-size:34px"><span class="blue" style="font-weight:800">Round 2 (Nov 4): see eval/results/ROUND2.md</span> <span class="muted">· same cal180 gate; the shipping model changes only if a variant wins.</span></p></div>
-  <div class="foot"><span>All selection on the calibration split (N=180); bounds are LTT tightest, δ = 0.1. Box CPU, not iPhone. Sources: README gate 1, LEDGER §6 and §12, AFTER_FLOOR_EP2.md, AFTER_FLOOR_NV2.md, SPARK_TEACHER.md, QUANT_IDENTITY.md, PERM_AVG.md.</span><span class="n">8 / 11</span></div>
+  <div class="card r2" style="margin-top:24px;padding:22px 30px;border:3px dashed #7cb4ff;background:#0f1a2b"><p style="font-size:34px"><span class="blue" style="font-weight:800">Round 2 (Nov 4): finished and rejected.</span> <span class="muted">No variant cleared every gate run. ep1, Glimmer-only, still ships.</span></p></div>
+  <div class="foot"><span>All selection on the calibration split (N=180); bounds are LTT tightest, δ = 0.1. Box CPU, not iPhone. Sources: README gate 1, LEDGER §6 and §12, AFTER_FLOOR_EP2.md, AFTER_FLOOR_NV2.md, SPARK_TEACHER.md, QUANT_IDENTITY.md, PERM_AVG.md, ROUND2.md.</span><span class="n">8 / 11</span></div>
 </section>
 
 <!-- 9 -->
 <section id="slide9">
   <div class="kicker">Open-world actions · skills layer</div>
-  <h2 style="margin-bottom:34px">35 phone skills. One dynamic decision. No retraining.</h2>
+  <h2 style="margin-bottom:34px">36 phone skills. One dynamic decision. No retraining.</h2>
   <div class="row" style="gap:50px;align-items:flex-start">
     <div class="steps" style="flex:1.35">
       <div class="step"><div class="k">You say</div><div class="v mono" style="font-size:30px">"DM Sam on Instagram: congrats"</div></div>
-      <div class="step"><div class="k">Retrieve</div><div class="v">top 7 of 35 skills, on device (BM25 + trigram embedder)</div></div>
+      <div class="step"><div class="k">Retrieve</div><div class="v">top 7 of 36 skills, on device (BM25 + trigram embedder)</div></div>
       <div class="step"><div class="k">skillPick</div><div class="v">the same 1B, one forward pass, confidence vs τ → <span class="mono">instagram_dm</span></div></div>
       <div class="step"><div class="k">Confirm</div><div class="v">hard rule: every message/social skill asks first</div></div>
       <div class="step"><div class="k">Act</div><div class="v">opens Instagram's own DM link, message copied to clipboard</div></div>
     </div>
     <div class="col" style="flex:1;gap:22px">
-      <div class="card"><div class="big green" style="font-size:96px">23/25</div><p style="font-size:32px;margin-top:8px">right skill at argmax (25/25 in the retrieved top 7)</p></div>
-      <div class="card"><div class="big green" style="font-size:96px">13/14</div><p style="font-size:32px;margin-top:8px">correct when kept on device: 14/25 kept at τ = 0.90</p></div>
+      <div class="card"><div class="big green" style="font-size:96px">25/27</div><p style="font-size:32px;margin-top:8px">right skill at argmax (27/27 in the retrieved top 7)</p></div>
+      <div class="card"><div class="big green" style="font-size:96px">15/15</div><p style="font-size:32px;margin-top:8px">correct when kept on device: 15/27 kept at τ = 0.90</p></div>
     </div>
   </div>
-  <div class="warn" style="margin-top:30px;font-size:31px">Honest iOS limit: deep link + clipboard + confirm. No app can type or press Send inside Instagram; you paste and tap Send.</div>
-  <div class="foot"><span>N=25 smoke test, one author-written utterance per skill. The shipping model was never trained on skills. Not gold, not covered by the cal180 bound. Box CPU. Sources: SKILL_PROBE.md, SKILLS.md.</span><span class="n">9 / 11</span></div>
+  <div class="warn" style="margin-top:26px;font-size:28px">Honest iOS limit: deep link + clipboard + confirm. No app can type or press Send inside Instagram; you paste and tap Send. Shortcut skills only hand off; the app cannot confirm the Shortcut ran. Full iOS action behavior is unverified on a device.</div>
+  <div class="foot"><span>N=27 author-written smoke test (26 distinct skills; two Apple TV phrasings). The shipping model was never trained on skillPick, and skillPick has no cal180 certificate. Not gold, not covered by the cal180 bound. Box CPU. Sources: SKILL_PROBE.md, SKILLS.md.</span><span class="n">9 / 11</span></div>
 </section>
 
 <!-- 10 -->
@@ -293,13 +294,13 @@ td.a small{font-size:28px;color:#b7f5cf;font-weight:600;margin-left:12px}
     <div class="va">←</div>
     <div class="box"><b>3 · Verdicts back</b>teacher agreement written to the phone's telemetry; merged, deduped against every eval item</div>
   </div>
-  <div class="foot"><span>label_queue.py → verdicts.py → merge_round.py → existing LoRA/GGUF/cal180 chain. selftest.sh passes on the box with the shipping model as stand-in teacher. One distillation round has shipped so far.</span><span class="n">10 / 11</span></div>
+  <div class="foot"><span>label_queue.py → verdicts.py → merge_round.py → existing LoRA/GGUF/cal180 chain. selftest.sh passes on the box with the shipping model as stand-in teacher. One distillation round has shipped; round 2 was rejected at the gate.</span><span class="n">10 / 11</span></div>
 </section>
 
 <!-- 11 -->
 <section id="slide11">
   <div class="kicker">Pocket Glimmer · Built with Llama</div>
-  <div class="close">Open weights on the phone, Meta's cloud only when unsure. <span class="green">It's in my pocket.</span></div>
+  <div class="close">Open weights small enough for a phone. Meta's cloud only when it needs it. <span class="green">That's Pocket Glimmer.</span></div>
   <div class="url mono">github.com/hxbib/pocket-glimmer</div>
   <div class="foot"><span>https://github.com/hxbib/pocket-glimmer · Habib · Hunter College · Bronx</span><span class="n">11 / 11</span></div>
 </section>

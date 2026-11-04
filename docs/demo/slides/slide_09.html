@@ -7,8 +7,8 @@
   Pocket Glimmer demo slides. Self-contained: inline CSS, no external fonts, no JS.
   11 slides, 1920x1080 each, <section id="slideN">. Cmd+P -> Save as PDF gives one page per slide.
   Every number here is sourced from README.md, docs/research/JUDGE_BRIEF.md, LEDGER.md §6,
-  eval/results/{AFTER_FLOOR,PER_TYPE_TAU090,RISK_COVERAGE,OOS_STRESS,REPRO_NOV4,PERM_AVG,QUANT_IDENTITY,SPARK_TEACHER}.md,
-  eval/skills/SKILL_PROBE.md, docs/SKILLS.md, docs/META_MULTIMODAL.md. PNG renders: docs/img/slide_01.png ... slide_11.png
+  eval/results/{AFTER_FLOOR,PER_TYPE_TAU090,RISK_COVERAGE,OOS_STRESS,REPRO_NOV4,PERM_AVG,QUANT_IDENTITY,SPARK_TEACHER,ROUND2}.md,
+  eval/skills/SKILL_PROBE.md, docs/SKILLS.md, docs/META_MULTIMODAL.md, docs/OPEN_WEIGHTS_SYSTEM2.md. PNG renders: docs/img/slide_01.png ... slide_11.png
   (regenerate with docs/demo/render_slides.sh).
 -->
 <style>
@@ -115,21 +115,21 @@ td.a small{font-size:28px;color:#b7f5cf;font-weight:600;margin-left:12px}
 <body style="margin:0;overflow:hidden">
 <section id="slide9">
   <div class="kicker">Open-world actions · skills layer</div>
-  <h2 style="margin-bottom:34px">35 phone skills. One dynamic decision. No retraining.</h2>
+  <h2 style="margin-bottom:34px">36 phone skills. One dynamic decision. No retraining.</h2>
   <div class="row" style="gap:50px;align-items:flex-start">
     <div class="steps" style="flex:1.35">
       <div class="step"><div class="k">You say</div><div class="v mono" style="font-size:30px">"DM Sam on Instagram: congrats"</div></div>
-      <div class="step"><div class="k">Retrieve</div><div class="v">top 7 of 35 skills, on device (BM25 + trigram embedder)</div></div>
+      <div class="step"><div class="k">Retrieve</div><div class="v">top 7 of 36 skills, on device (BM25 + trigram embedder)</div></div>
       <div class="step"><div class="k">skillPick</div><div class="v">the same 1B, one forward pass, confidence vs τ → <span class="mono">instagram_dm</span></div></div>
       <div class="step"><div class="k">Confirm</div><div class="v">hard rule: every message/social skill asks first</div></div>
       <div class="step"><div class="k">Act</div><div class="v">opens Instagram's own DM link, message copied to clipboard</div></div>
     </div>
     <div class="col" style="flex:1;gap:22px">
-      <div class="card"><div class="big green" style="font-size:96px">23/25</div><p style="font-size:32px;margin-top:8px">right skill at argmax (25/25 in the retrieved top 7)</p></div>
-      <div class="card"><div class="big green" style="font-size:96px">13/14</div><p style="font-size:32px;margin-top:8px">correct when kept on device: 14/25 kept at τ = 0.90</p></div>
+      <div class="card"><div class="big green" style="font-size:96px">25/27</div><p style="font-size:32px;margin-top:8px">right skill at argmax (27/27 in the retrieved top 7)</p></div>
+      <div class="card"><div class="big green" style="font-size:96px">15/15</div><p style="font-size:32px;margin-top:8px">correct when kept on device: 15/27 kept at τ = 0.90</p></div>
     </div>
   </div>
-  <div class="warn" style="margin-top:30px;font-size:31px">Honest iOS limit: deep link + clipboard + confirm. No app can type or press Send inside Instagram; you paste and tap Send.</div>
-  <div class="foot"><span>N=25 smoke test, one author-written utterance per skill. The shipping model was never trained on skills. Not gold, not covered by the cal180 bound. Box CPU. Sources: SKILL_PROBE.md, SKILLS.md.</span><span class="n">9 / 11</span></div>
+  <div class="warn" style="margin-top:26px;font-size:28px">Honest iOS limit: deep link + clipboard + confirm. No app can type or press Send inside Instagram; you paste and tap Send. Shortcut skills only hand off; the app cannot confirm the Shortcut ran. Full iOS action behavior is unverified on a device.</div>
+  <div class="foot"><span>N=27 author-written smoke test (26 distinct skills; two Apple TV phrasings). The shipping model was never trained on skillPick, and skillPick has no cal180 certificate. Not gold, not covered by the cal180 bound. Box CPU. Sources: SKILL_PROBE.md, SKILLS.md.</span><span class="n">9 / 11</span></div>
 </section>
 </body></html>

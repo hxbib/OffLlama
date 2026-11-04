@@ -7,8 +7,8 @@
   Pocket Glimmer demo slides. Self-contained: inline CSS, no external fonts, no JS.
   11 slides, 1920x1080 each, <section id="slideN">. Cmd+P -> Save as PDF gives one page per slide.
   Every number here is sourced from README.md, docs/research/JUDGE_BRIEF.md, LEDGER.md §6,
-  eval/results/{AFTER_FLOOR,PER_TYPE_TAU090,RISK_COVERAGE,OOS_STRESS,REPRO_NOV4,PERM_AVG,QUANT_IDENTITY,SPARK_TEACHER}.md,
-  eval/skills/SKILL_PROBE.md, docs/SKILLS.md, docs/META_MULTIMODAL.md. PNG renders: docs/img/slide_01.png ... slide_11.png
+  eval/results/{AFTER_FLOOR,PER_TYPE_TAU090,RISK_COVERAGE,OOS_STRESS,REPRO_NOV4,PERM_AVG,QUANT_IDENTITY,SPARK_TEACHER,ROUND2}.md,
+  eval/skills/SKILL_PROBE.md, docs/SKILLS.md, docs/META_MULTIMODAL.md, docs/OPEN_WEIGHTS_SYSTEM2.md. PNG renders: docs/img/slide_01.png ... slide_11.png
   (regenerate with docs/demo/render_slides.sh).
 -->
 <style>
@@ -127,6 +127,6 @@ td.a small{font-size:28px;color:#b7f5cf;font-weight:600;margin-left:12px}
     <div class="va">←</div>
     <div class="box"><b>3 · Verdicts back</b>teacher agreement written to the phone's telemetry; merged, deduped against every eval item</div>
   </div>
-  <div class="foot"><span>label_queue.py → verdicts.py → merge_round.py → existing LoRA/GGUF/cal180 chain. selftest.sh passes on the box with the shipping model as stand-in teacher. One distillation round has shipped so far.</span><span class="n">10 / 11</span></div>
+  <div class="foot"><span>label_queue.py → verdicts.py → merge_round.py → existing LoRA/GGUF/cal180 chain. selftest.sh passes on the box with the shipping model as stand-in teacher. One distillation round has shipped; round 2 was rejected at the gate.</span><span class="n">10 / 11</span></div>
 </section>
 </body></html>

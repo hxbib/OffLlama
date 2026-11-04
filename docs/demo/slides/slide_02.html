@@ -7,8 +7,8 @@
   Pocket Glimmer demo slides. Self-contained: inline CSS, no external fonts, no JS.
   11 slides, 1920x1080 each, <section id="slideN">. Cmd+P -> Save as PDF gives one page per slide.
   Every number here is sourced from README.md, docs/research/JUDGE_BRIEF.md, LEDGER.md §6,
-  eval/results/{AFTER_FLOOR,PER_TYPE_TAU090,RISK_COVERAGE,OOS_STRESS,REPRO_NOV4,PERM_AVG,QUANT_IDENTITY,SPARK_TEACHER}.md,
-  eval/skills/SKILL_PROBE.md, docs/SKILLS.md, docs/META_MULTIMODAL.md. PNG renders: docs/img/slide_01.png ... slide_11.png
+  eval/results/{AFTER_FLOOR,PER_TYPE_TAU090,RISK_COVERAGE,OOS_STRESS,REPRO_NOV4,PERM_AVG,QUANT_IDENTITY,SPARK_TEACHER,ROUND2}.md,
+  eval/skills/SKILL_PROBE.md, docs/SKILLS.md, docs/META_MULTIMODAL.md, docs/OPEN_WEIGHTS_SYSTEM2.md. PNG renders: docs/img/slide_01.png ... slide_11.png
   (regenerate with docs/demo/render_slides.sh).
 -->
 <style>
@@ -120,14 +120,15 @@ td.a small{font-size:28px;color:#b7f5cf;font-weight:600;margin-left:12px}
     <div class="col" style="flex:1.1;gap:34px">
       <p><span class="white" style="font-weight:800">Habib</span> · CS student, Hunter College · lives in the Bronx. The commute is on the subway, mostly with no signal.</p>
       <p><span class="green" style="font-weight:800">Memory stays on the phone</span> (on-device SQLite: facts, people, corrections).</p>
-      <p><span class="blue" style="font-weight:800">The cloud only ever sees masked text</span>, and only when the model is unsure.</p>
+      <p><span class="blue" style="font-weight:800">Typed escalations send masked text only</span>, and only when the model is unsure.</p>
     </div>
     <div class="card" style="flex:.9;border-color:#3b4a63">
-      <div style="font-size:26px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:#7cb4ff;margin-bottom:18px">What left the phone (illustration)</div>
+      <div style="font-size:26px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:#7cb4ff;margin-bottom:18px">What left the phone (typed escalation, illustration)</div>
       <div class="mono" style="font-size:31px;line-height:1.45;color:#e7ecf3">Plan my week around Professor <span class="orange">[PERSON_1]</span>'s CSCI 335 final and my calc midterm.</div>
       <div style="margin-top:24px;font-size:27px;line-height:1.4;color:#9aa4b5">Names from Contacts and memory, emails, phones, addresses and card numbers are masked first and restored on the phone. An escalation carries the masked request plus the masked memory lines retrieved for it. The app shows the exact text it sent.</div>
     </div>
   </div>
-  <div class="foot"><span>Escalation target: Muse Spark 1.3, Meta Model API, Standard mode only. Source: README "How it works".</span><span class="n">2 / 11</span></div>
+  <p class="muted" style="font-size:27px;margin-top:30px;line-height:1.4">Voice audio uploads to Muse Voice Transcribe before any on-device check. A permitted photo leaves as an image with EXIF/GPS stripped; the question text is masked, the pixels are not redacted. The photo sensitivity gate is heuristic, not a guarantee.</p>
+  <div class="foot"><span>Escalation target for typed text: Muse Spark 1.3, Meta Model API, Standard mode only. Source: README "How it works", docs/META_MULTIMODAL.md.</span><span class="n">2 / 11</span></div>
 </section>
 </body></html>
