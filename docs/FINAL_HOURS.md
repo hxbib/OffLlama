@@ -1,10 +1,10 @@
 # Finish and submit Pocket Glimmer — Nov 4, 2026
 
-Submission deadline: **9:00 PM ET (Nov 5, 02:00 UTC)**. Target: **5:00 PM ET**. The Mac is currently unavailable; start the build sequence when it becomes available. The earlier morning cutoffs no longer apply.
+Submission deadline: **9:00 PM ET (Nov 5, 02:00 UTC)**. The working-demo target is **6:00 PM ET**, with some leeway for troubleshooting. Leave time for the video, benchmarks, repository cleanup, and submission. The Mac is now reachable through T3 Linked environments. Current-source compilation and phone installation remain unverified.
 
 The project is not yet ready to call a finished iPhone release. The current app needs Xcode compilation, signing, and device tests. The repository is private, the public video is missing, and form submission is unrecorded. [PROJECT_STATUS.md](PROJECT_STATUS.md) separates implemented features from verified behavior.
 
-Round 2 is finished and **rejected**. Keep ep1 and τ=0.90. Do not substitute a candidate model, its calibration, or its numbers. The shipping model's only teacher is Glimmer; Spark Open also supplied experimental labels. See [ROUND2.md](../eval/results/ROUND2.md).
+Round 2 is finished and **rejected**. Keep ep1 and τ=0.90 until a new candidate passes the recorded promotion protocol. Round 3 training continues under the user-authorized budgets in [ORCHESTRATOR_LEDGER.md](../ORCHESTRATOR_LEDGER.md). The shipping model's only teacher is Glimmer. Spark Open also supplied experimental labels. See [ROUND2.md](../eval/results/ROUND2.md).
 
 ## A. Evidence to collect
 

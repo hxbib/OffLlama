@@ -1,6 +1,6 @@
 # Orchestrator handoff ledger
 
-Updated 2026-11-04T19:38:53+00:00 during parent run 60. Parent T3 thread `4311f30f-96dc-4e78-9f19-860e3bbea796`.
+Updated during parent run 65 on 2026-11-04. Parent T3 thread `4311f30f-96dc-4e78-9f19-860e3bbea796`.
 This file owns the current handoff. Older entries in `LEDGER.md` and `NEXT_AGENT.md` are historical snapshots.
 
 ## Current objective and authorization
@@ -252,3 +252,58 @@ Adjudication is in docs/verification/CONTRACT_COMMENT_REVIEW.md. Parent repaired
 false comments, recursive typed grader equality, the manifest-derived action inventory,
 benchmark test gating and actor-isolated test counters. Targeted validation passed.
 The independent contract/privacy review remains separate and pending.
+
+## Run 65 pickup and Mac access
+
+The parent resumed from clean, pushed checkpoint `1e5c56e`. T3 now reports
+Habib's MacBook Air reachable with full access, linked environment
+`e471ef05-c8d6-49ec-b176-96ab6da0d020`. No remote build had started at pickup.
+The parent's device list still exposes only Linux/Android. A linked environment
+is not itself an iOS device host in this parent's Device panel.
+
+Remote capability discovery succeeded. The user assigned GPT 6.1 Terra and
+authorized the parent to choose effort. The parent dispatched it at high effort,
+retaining the inherited codex_13 account. Do not choose a substitute.
+The Mac has a registered home project rooted at `/Users/habib`; its Pocket
+Glimmer checkout still needs locating without disturbing local changes.
+
+Recovered phone-training, Spark phone-expansion, and contract-review threads
+are still active. Their assignments and allocations are unchanged. No duplicate
+paid job or replacement review was started. The busy-input repair remains open.
+The build and acceptance documents now reflect the reachable Mac, the flexible
+6 PM Eastern demo target, integrated action recovery, and the need to record
+the phone's actual OS separately from the installed SDK.
+
+The Mac build task is `node:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Aremote-delegate%3Apg-mac-build-device-20261104-v1`. Its remote thread is `mcp:launch:ac62b2466b0bf4d53a719bebd59fe60247f039860055ddc9a3aacc16f7b87a4c`. The remote worker owns build/compiler repairs and phone evidence. The parent retains busy-input work. No build result is available at dispatch.
+
+The first Mac worker returned without compiling. It found the checkout at
+`/Users/habib/src/pocket-glimmer` and fast-forwarded it to `1e5c56e`, preserving
+the pre-existing untracked `app/PocketGlimmer/Support/Info.plist`. Xcode 27.2,
+the iPhoneOS 27.2 SDK, XcodeGen 2.46.0, an Apple Development identity, and the
+connected iPhone 17 Pro were observed. Shipping model and calibration passed
+checks. Free space was only 159 to 453 MiB across the two commands. Bundling
+the model and compiling require more space. The worker asked the user to free
+several GB. Its report and logs remain on the Mac under the repository's
+`docs/verification/MAC_BUILD_2026-11-04.md` and `ios/.build/`.
+
+The real Mac logs showed a symbol check fail and then pass on the same existing
+framework. Parent reproduced the shell cause: `grep -q` exits after matching,
+the upstream producer receives SIGPIPE, and `pipefail` reports a failure even
+though the match succeeded. The packaging fix drains the output and requires a
+defined text symbol. All 88 Linux/mock fixtures pass, including large symbol
+tables, missing/undefined symbols, and failed `nm`. This is not yet a Mac retest.
+The existing framework also lacks a provenance marker, which is a separate
+remaining requirement. A clean source checkout at the pin alone does not prove
+that an old binary was built from it.
+
+The Mac device panel returned no devices, reported missing agent-device 0.21.31,
+and saw the system developer directory set to Command Line Tools. Build commands
+worked with `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer`. No iPhone
+interaction, installation, runtime behavior, or performance result is verified.
+
+Two read-only busy-input designs are running under the standing general-agent
+assignment, OpenCode River02 and River03 DeepSeek V4.1 Flash 1017 at max. They
+compare a separate request store with a journal-integrated admission boundary.
+Their output paths are `/tmp/pg-input-design-20261104/a/design.md` and
+`/tmp/pg-input-design-20261104/b/design.md`. No input-store implementation has
+started. Dispatch records are in `docs/verification/run65_dispatches.json`.

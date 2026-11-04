@@ -39,7 +39,7 @@ Sources are [the shipping evaluation](../eval/results/AFTER_FLOOR.md), [results 
 
 ## What remains before calling the phone app finished
 
-1. Integrate and independently review the pending action-recovery and reply-path repairs, including email routing and truthful cloud badges.
+1. Finish independent review of the integrated action-recovery and reply-path repairs, including email routing and truthful cloud badges. Preserve requests arriving while busy as durable inputs that require explicit resume.
 2. Build the current source with Xcode and the pinned llama.cpp framework.
 3. Install a signed Release build with the exact shipping model and bundled calibration.
 4. Verify first launch, permissions, offline actions, confirmation/cancellation, cloud privacy behavior, and Shortcuts on the phone.
