@@ -18,7 +18,7 @@ if git grep -nE '\[AFTER_|\[PLACEHOLDER|\[TBD' -- README.md docs/SUBMISSION.md d
 if git grep -nE '\[PHONE_' -- README.md docs/SUBMISSION.md 2>/dev/null; then bad "[PHONE_*] in README/SUBMISSION"; else note "ok no PHONE_ in README/SUBMISSION"; fi
 
 note "== 3. forbidden claims"
-if git grep -niE 'temperature[- ]scal(ed|ing) (is|was) (used|applied)|well[- ]calibrated out of the box|guaranteed (win|placing)' -- README.md docs/ 2>/dev/null | grep -v 'never\|no temperature\|not used\|not certified'; then bad "forbidden claim wording"; else note "ok"; fi
+if git grep -niE 'temperature[- ]scal(ed|ing) (is|was) (used|applied)|well[- ]calibrated out of the box|guaranteed (win|placing)' -- README.md docs/ 2>/dev/null | grep -viE 'never|no temperature|not used|not certified|is not used|no scaling'; then bad "forbidden claim wording"; else note "ok"; fi
 
 note "== 4. secrets (tracked files + history)"
 pat='(sk-[A-Za-z0-9]{20,}|ghp_[A-Za-z0-9]{30,}|gho_[A-Za-z0-9]{30,}|AKIA[0-9A-Z]{16}|hf_[A-Za-z0-9]{30,}|ak-[A-Za-z0-9]{20,}|as-[A-Za-z0-9]{20,})'

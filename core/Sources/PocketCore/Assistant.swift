@@ -138,6 +138,15 @@ public final class Assistant: @unchecked Sendable {
                                      cloudWithheldForSensitivity: true)
             }
             guard online, !cloud.brains.isEmpty else {
+                // Offline with a question the Reflex wanted to escalate: ask the trained `answerability` decision whether a
+                // small on-device model can answer it at all; if not, say so instead of guessing (no made-up answer).
+                let can = try await reflex.decide(OptionSets.answerability, context: "\(mem)User: \(utterance)")
+                decisions.append(can)
+                guard can.chosen.id == "yes" else {
+                    return AssistantTurn(reply: .offlineFallback(mem.isEmpty ? "I can't answer that offline, and you haven't told me anything about it. Ask again when you're online."
+                                                                              : "I'm not sure about that offline. Here's what I know: " + mem.replacingOccurrences(of: "Known about the user:\n", with: "").trimmed),
+                                         decisions: decisions, remembered: remembered, corrections: corrections)
+                }
                 let a = try await reflex.engine.generate(prompt: Self.localPrompt(utterance, mem: lmem), maxTokens: 200, temperature: 0.3)
                 return AssistantTurn(reply: .offlineFallback(a.trimmed), decisions: decisions, remembered: remembered, corrections: corrections)
             }
@@ -179,6 +188,11 @@ public final class Assistant: @unchecked Sendable {
         }
         let action = PlannedAction(tool: tool.chosen.id, args: args)
         planned = action
+        if action.tool == "search_memory" {   // fully on device: answer from MemoryStore, or say so when nothing matches
+            let hits = try await memory.retrieve(args["query"] ?? utterance, k: 3)
+            guard !hits.isEmpty else { return .local("You haven't told me that yet.") }
+            return .acted("From memory: " + hits.map { $0.fact.text }.joined(separator: "; "))
+        }
         let conf = try await reflex.decide(OptionSets.confirmBeforeAct, context: "\(ctx)\nPlanned action: \(action.tool) \(args.sorted { $0.key < $1.key }.map { "\($0.key)=\($0.value)" }.joined(separator: ", "))")
         decisions.append(conf)
         if conf.chosen.id == "confirm" || action.tool == "send_message" {   // messages always confirm: hard rule

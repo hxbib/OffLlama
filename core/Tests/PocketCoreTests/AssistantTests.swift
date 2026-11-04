@@ -52,12 +52,39 @@ final class AssistantTests: XCTestCase {
     func testUncertainRouteOfflineFallsBackLocally() async throws {
         let e = ScriptedEngine(); e.generated = " local best effort "
         e.script(whenPromptContains: "acceptable to send this request", logits: ["A": 5, "B": -5])
+        e.script(whenPromptContains: "without the internet", logits: ["A": 5, "B": -5])   // answerability: yes
         let (a, _, tel) = try make(e)  // uniform route logits => escalate; sensitivity says ok
         let t = try await a.handle("Explain the tax implications of exercising ISOs")
         XCTAssertEqual(t.reply, .offlineFallback("local best effort"))
         XCTAssertFalse(t.cloudWithheldForSensitivity)
-        XCTAssertEqual(try tel.all().map(\.decisionType), [.rememberOrNot, .route, .sensitivity])
-        XCTAssertTrue(try tel.all().filter { $0.decisionType != .sensitivity }.allSatisfy(\.escalated))
+        XCTAssertEqual(try tel.all().map(\.decisionType), [.rememberOrNot, .route, .sensitivity, .answerability])
+        XCTAssertTrue(try tel.all().filter { ![.sensitivity, .answerability].contains($0.decisionType) }.allSatisfy(\.escalated))
+    }
+
+    func testOfflineUnanswerableSaysSoInsteadOfGuessing() async throws {
+        let e = ScriptedEngine(); e.generated = " a made-up wifi password "
+        e.script(whenPromptContains: "acceptable to send this request", logits: ["A": 5, "B": -5])
+        e.script(whenPromptContains: "without the internet", logits: ["A": -5, "B": 5])   // answerability: no
+        let (a, _, tel) = try make(e)
+        let t = try await a.handle("What's my landlord's new Wi-Fi password?")
+        guard case .offlineFallback(let text) = t.reply else { return XCTFail("\(t.reply)") }
+        XCTAssertTrue(text.contains("can't answer that offline"), text)
+        XCTAssertFalse(text.contains("made-up"))
+        XCTAssertEqual(try tel.all().map(\.decisionType).last, .answerability)
+        XCTAssertTrue(e.generatePrompts.isEmpty, "no generation when the model says it cannot answer")
+    }
+
+    func testSearchMemoryAnswersOnDeviceWithoutConfirm() async throws {
+        let e = ScriptedEngine()
+        e.script(whenPromptContains: "long-term memory", logits: ["A": 5, "B": -3, "C": -3])
+        e.script(whenPromptContains: "How should", logits: ["A": -3, "B": 5, "C": -3, "D": -3])
+        e.script(whenPromptContains: "Which tool", logits: ["A": 0, "B": 0, "C": 0, "D": 0, "E": 0, "F": 6, "G": 0])
+        let (a, acts, _) = try make(e)
+        _ = try await a.handle("I'm allergic to peanuts")
+        let t = try await a.handle("What am I allergic to?")
+        guard case .acted(let text) = t.reply else { return XCTFail("\(t.reply)") }
+        XCTAssertTrue(text.lowercased().contains("peanut"), text)
+        XCTAssertTrue(acts.performed.isEmpty, "search_memory never leaves PocketCore")
     }
 
     func testOfflineSensitiveEscalationRunsSensitivityAndKeepsOnDevice() async throws {

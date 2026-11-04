@@ -102,7 +102,7 @@ final class SystemActions: ActionExecutor, @unchecked Sendable {
             }
             return "Couldn't open Mail on this device · nothing sent"
         case "search_memory":
-            return "Searching memory…"   // handled by AppModel using MemoryStore
+            return "Searched memory"      // PocketCore.Assistant answers search_memory from MemoryStore before perform() is reached
         default:
             return "Nothing to do."
         }
