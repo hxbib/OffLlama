@@ -46,7 +46,8 @@ public enum ActionPlanner {
                                             "alarm", "wake me", "timer", "pomodoro", "flashlight", "do not disturb", "low power",
                                             "battery", "storage left", "chart", "graph", "visualize", "visualization",
                                             "my emails", "recent emails", "last emails", "these emails", "this document", "this pdf",
-                                            "shortcut", "weather", "directions to", "auto reply", "every reel"]
+                                            "shortcut", "weather", "directions to", "auto reply", "every reel",
+                                            "apple tv", "appletv", "tv app"]
     public static func isExplicitRequest(_ utterance: String) -> Bool {
         let u = SkillRegistry.norm(utterance)
         if u.range(of: #" (?:last|recent|latest) \d+ (?:e ?)?mails? "#, options: .regularExpression) != nil { return true }
@@ -176,10 +177,11 @@ extension Assistant {
         if text.count > localLimit, isOnline(), !cloud.brains.isEmpty {
             let sens = try await reflex.decide(OptionSets.sensitivity, context: "User: \(instruction)\n\(String(text.prefix(400)))")
             if sens.chosen.id == "ok" {
-                let s = scrubber.scrub(String(text.prefix(24_000)))
+                let sc = cloudScrubber()
+                let s = sc.scrub(String(text.prefix(24_000)))
                 let ans = try await cloud.complete([ChatMessage(role: "system", content: "You are the reasoning brain of a private phone assistant. Placeholders like [PERSON_1] stand for private data; keep them verbatim."),
                                                     ChatMessage(role: "user", content: instruction + "\n\n" + s.text)])
-                return scrubber.restore(ans.text, mapping: s.mapping)
+                return sc.restore(ans.text, mapping: s.mapping)
             }
         }
         let window = String(text.prefix(localLimit))
@@ -288,6 +290,7 @@ public enum SkillArgs {
         case .place: return "Where to?"
         case .url: return "Which link?"
         case .app: return "Which app?"
+        case .text where spec.name == "body": return "What should the message say?"
         default: return "What should \(skill.title) use for \(spec.name)?"
         }
     }

@@ -82,6 +82,13 @@ public final class Assistant: @unchecked Sendable {
         return p + "\n" + mem
     }
 
+    /// Copy of the scrubber with remembered entity names merged, for any prompt that may leave the device.
+    func cloudScrubber() -> PrivacyScrubber {
+        var sc = scrubber
+        sc.knownNames = Array(Set(scrubber.knownNames + ((try? memory.entityNames()) ?? [])))
+        return sc
+    }
+
     public func handle(_ utterance: String, now: Date = Date()) async throws -> AssistantTurn {
         var decisions: [ReflexDecision] = []
         let (mem, _) = try await memoryContext(utterance)
@@ -157,8 +164,7 @@ public final class Assistant: @unchecked Sendable {
                 let a = try await reflex.engine.generate(prompt: Self.localPrompt(utterance, mem: lmem), maxTokens: 200, temperature: 0.3)
                 return AssistantTurn(reply: .offlineFallback(a.trimmed), decisions: decisions, remembered: remembered, corrections: corrections)
             }
-            var sc = scrubber
-            sc.knownNames = Array(Set(scrubber.knownNames + ((try? memory.entityNames()) ?? [])))
+            let sc = cloudScrubber()
             let prof = cloudProfileMaxChars > 0 ? ((try? memory.profileOnePager(maxChars: cloudProfileMaxChars, redactSensitive: true)) ?? "") : ""
             let s = sc.scrub((prof.isEmpty ? "" : prof + "\n") + mem + utterance)
             let ans = try await cloud.complete([ChatMessage(role: "system", content: "You are the reasoning brain of a private phone assistant. Placeholders like [PERSON_1] stand for private data; keep them verbatim."),
@@ -177,6 +183,13 @@ public final class Assistant: @unchecked Sendable {
         guard tool.chosen.id != "none" else { return .clarify("What would you like me to do?") }
         var args = ArgumentExtractor.heuristic(tool: tool.chosen.id, utterance: utterance)
 
+        if tool.chosen.id == "send_message" {
+            guard let who = args["contact"], !who.isEmpty else { return .clarify("Who should I message?") }
+            guard let body = args["body"], !body.isEmpty else { return .clarify("What should I say to \(who)?") }
+        }
+        if tool.chosen.id == "lookup_contact", (args["contact"] ?? "").isEmpty {
+            return .clarify("Who should I look up?")
+        }
         if ["send_message", "lookup_contact"].contains(tool.chosen.id), let who = args["contact"] {
             let cands = try await actions.searchContacts(who)
             if cands.count > 1 {
@@ -223,17 +236,30 @@ public final class Assistant: @unchecked Sendable {
 public enum ArgumentExtractor {
     public static func heuristic(tool: String, utterance u: String) -> [String: String] {
         var a: [String: String] = [:]
-        func first(_ p: String, ci: Bool = true) -> String? {
+        func first(_ p: String, in s: String, ci: Bool = true) -> String? {
             guard let re = try? NSRegularExpression(pattern: p, options: ci ? .caseInsensitive : []),
-                  let m = re.firstMatch(in: u, range: NSRange(u.startIndex..., in: u)), m.numberOfRanges > 1,
-                  let r = Range(m.range(at: 1), in: u) else { return nil }
-            return String(u[r]).trimmed
+                  let m = re.firstMatch(in: s, range: NSRange(s.startIndex..., in: s)), m.numberOfRanges > 1,
+                  let r = Range(m.range(at: 1), in: s) else { return nil }
+            return String(s[r]).trimmed
         }
+        func first(_ p: String, ci: Bool = true) -> String? { first(p, in: u, ci: ci) }
         let when = first(#"\b((?:tomorrow|today|tonight|next \w+|on \w+day|at \d{1,2}(?::\d{2})?\s?(?:am|pm)?|in \d+ (?:minutes?|hours?|days?))(?:\s(?:at|by) \d{1,2}(?::\d{2})?\s?(?:am|pm)?)?)"#)
         switch tool {
         case "send_message":
-            a["contact"] = first(#"(?i:text|message|tell|send)\s+(?i:a message to\s+)?([A-Z][a-z]+(?: [A-Z][a-z]+)?)"#, ci: false)
-            a["body"] = first(#"(?:that|saying|:)\s+(.+)$"#) ?? ""
+            let contactPattern = #"(?i:text|message|tell|send)\s+(?i:a message to\s+)?([A-Z][a-z]+(?: [A-Z][a-z]+)?)"#
+            var rest: String?
+            if let re = try? NSRegularExpression(pattern: contactPattern),
+               let m = re.firstMatch(in: u, range: NSRange(u.startIndex..., in: u)),
+               let contact = Range(m.range(at: 1), in: u), let full = Range(m.range, in: u) {
+                a["contact"] = String(u[contact]).trimmed
+                rest = String(u[full.upperBound...]).trimmed
+            }
+            var body = first(#"[\"“]([^\"”]+)[\"”]"#)
+                ?? first(#"(?:that says|with the message|to say|saying|that|:)\s+(.+)$"#)
+            if body == nil, let rest {
+                body = rest.trimmingCharacters(in: CharacterSet(charactersIn: " ,;:–—-"))
+            }
+            a["body"] = body ?? ""
         case "lookup_contact":
             a["contact"] = first(#"([A-Z][a-z]+(?: [A-Z][a-z]+)?)'s"#, ci: false) ?? first(#"(?i:call|for|of)\s+([A-Z][a-z]+)"#, ci: false)
         case "create_reminder":

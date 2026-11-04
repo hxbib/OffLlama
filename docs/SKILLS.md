@@ -29,9 +29,11 @@ tests in `core/Tests/PocketCoreTests/SkillsTests.swift`.
    `skillPick#N`, the same mechanism as `contactPick#N`), softmax, then the τ gate.
    - **Below τ → clarify** with the top 3 skills: "Did you mean: Instagram DM, X (Twitter) DM or WhatsApp message?"
      The trained decisions already "know when they don't know"; this carries that to open-world actions.
-5. **Argument filling**: regexes per `ArgSpec` (contact names, `@handles`, quoted text or text after "saying", times,
-   durations, URLs, numbers, places). Contacts with several matches go through the **trained `contactPick`**. Social
-   handles never touch Contacts. If a required argument is missing, it asks for it ("What time?").
+5. **Argument filling**: regexes per `ArgSpec` (contact names, `@handles`, quoted text, text after a separator such as
+   "that", "saying" or ":", or the remainder after the contact for direct messages, times, durations, URLs, numbers,
+   places). This is a bounded heuristic, not general natural-language parsing. Contacts with several matches go through
+   the **trained `contactPick`**. Social handles never touch Contacts. If a required argument is missing, it asks for it
+   ("What time?").
 6. **Confirmation**: the trained `confirmBeforeAct` runs, then the **hard rule**: `skill.confirm` forces confirmation.
    Every message, social or email skill has `confirm = true`. The registry enforces this on load, so a JSON file can't
    turn it off. Anything that spends money (Uber) or calls someone also confirms.
@@ -61,6 +63,9 @@ calibration.json). `Reflex.measureSkillPickPriors()` produces its content-free p
 - **Alarms, timers, toggles, notes, weather**: there is no public URL scheme for them, so they run through tiny
   user-installed Shortcuts that call Apple's built-in actions. We open `shortcuts://run-shortcut?name=…&input=text&text=…`.
   If a Shortcut isn't installed, the Shortcuts app says so. Nothing claims success that didn't happen.
+- **Apple TV playback** is only a Shortcut hand-off. There is no established public playback API or callback, so the app
+  cannot tell whether the user's Shortcut exists or ran. It reports only the hand-off. The Shortcut is user-configured
+  and device-dependent.
 - **Mail can't be read by apps.** "Analyze my last few emails" works through the share sheet: select messages in Mail →
   Share → **PG Share Emails** → Pocket Glimmer summarizes them on device. Long threads escalate to Muse Spark 1.3 only
   when online and configured, and only if the `sensitivity` decision says the text is OK to send. It is scrubbed first.
@@ -86,7 +91,7 @@ calibration.json). `Reflex.measureSkillPickPriors()` produces its content-free p
 | `calendar_find` | Check my calendar | native `find_event` | yes | no |
 | `alarm_create` | Set an alarm | Shortcut “PG Create Alarm” (input `{time}\|{label}`) | yes | no |
 | `timer_start` | Start a timer | Shortcut “PG Start Timer” (input `{duration}`) | yes | no |
-| `appletv_play` | Apple TV: play a show ("open the latest episode of Severance on Apple TV") | Shortcut “PG Play on Apple TV” (input `{show}`); fallback `https://tv.apple.com/search?term={show}` opens the show in the TV app | no | no |
+| `appletv_play` | Apple TV: play a show ("open the latest episode of Severance on Apple TV") | Shortcut “PG Play on Apple TV” (input `{show}`); hand-off only, playback not confirmed | no | no |
 | `call` | Phone call | URL `tel:{phone}` | yes | yes |
 | `facetime` | FaceTime | URL `facetime:{phone}` | no | yes |
 | `maps_directions` | Directions in Maps | URL `maps://?daddr={place}` | no | no |
@@ -120,7 +125,7 @@ too: one extra tap.
 |---|---|
 | PG Create Alarm | Receive **Text** input → Split Text by `\|` → Clock › **Create Alarm** (time = item 1, label = item 2) |
 | PG Start Timer | Receive Text → Clock › **Start Timer** (duration = input) |
-| PG Play on Apple TV | Receive **Text** input → TV › **Find TV Shows** (Name contains input, limit 1) → TV › **Play** (Play Up Next **on**: resumes or starts the newest unwatched episode; Shuffle off). Without this Shortcut the app opens the show's page in the TV app instead, and you tap the latest episode. |
+| PG Play on Apple TV | Receive **Text** input → TV › **Find TV Shows** (Name contains input, limit 1) → TV › **Play** (Play Up Next **on**: resumes or starts the newest unwatched episode; Shuffle off). User-configured and device-dependent: the app hands the show name to Shortcuts and reports only that hand-off. It cannot detect whether this Shortcut exists or confirm playback. If Shortcuts cannot open, the app opens a TV app search page instead. |
 | PG Open App | Receive Text → **Open App** (app = input) |
 | PG Create Note | Receive Text → Notes › **Create Note** (body = input) |
 | PG Toggle Flashlight / PG Toggle Focus / PG Toggle Low Power | **Set Flashlight** / **Set Focus** / **Set Low Power Mode** → Toggle |

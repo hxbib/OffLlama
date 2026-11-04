@@ -18,7 +18,7 @@
         {
           "kind" : "text",
           "name" : "body",
-          "required" : false
+          "required" : true
         }
       ],
       "category" : "message",
@@ -55,7 +55,7 @@
         {
           "kind" : "text",
           "name" : "body",
-          "required" : false
+          "required" : true
         }
       ],
       "category" : "social",
@@ -93,7 +93,7 @@
         {
           "kind" : "text",
           "name" : "body",
-          "required" : false
+          "required" : true
         }
       ],
       "category" : "social",
@@ -127,7 +127,7 @@
         {
           "kind" : "text",
           "name" : "body",
-          "required" : false
+          "required" : true
         }
       ],
       "category" : "social",
@@ -204,7 +204,7 @@
         {
           "kind" : "text",
           "name" : "body",
-          "required" : false
+          "required" : true
         }
       ],
       "category" : "email",
@@ -749,7 +749,7 @@
         "name" : "PG Play on Apple TV",
         "type" : "shortcut"
       },
-      "note" : "iOS has no public URL that plays a specific show. The Shortcut “PG Play on Apple TV” (Shortcuts → TV → “Play” with the show name as input; set “Play Up Next” on, which resumes or starts the newest unwatched episode) does the playback. Fallback when the Shortcut is missing: https:\/\/tv.apple.com\/search?term={show} opens the show page in the TV app.",
+      "note" : "iOS has no public playback API. You configure the Shortcut “PG Play on Apple TV” on your device (Shortcuts → TV → Find TV Shows → Play; Play Up Next on). The app only hands the show name to Shortcuts, so it cannot confirm that the Shortcut exists or that playback started. If Shortcuts cannot open, the app opens a TV app search page instead.",
       "offlineCapable" : false,
       "title" : "Apple TV: play a show"
     },
