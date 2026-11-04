@@ -40,7 +40,8 @@
   "allocated_usd": {
     "modal_pilot": 0,
     "modal_glimmer_labels": 20,
-    "baseten_spark_labels": 25
+    "baseten_spark_labels": 25,
+    "modal_phone_training": 35
   },
   "resumed_at": "2026-11-04T18:39:59+00:00",
   "pilot_actual_attributable_usd": 0.18916778,
@@ -67,8 +68,10 @@
     "baseten_final_evaluation": 20
   },
   "unallocated_after_known_pilot_and_reservations_usd": {
-    "modal": 89.81083222,
+    "modal": 54.81083222,
     "baseten": 55
   },
-  "accounting_note": "Remaining values are planning balances from user-reported credits minus attributable pilot cost and reservations, not API-confirmed credit balances. Latest per-app bill confirms pilot $0.18916778; latest month summary is $20.10288506, not the child-reported $20.31. Reports have different aggregation/refresh behavior; do not derive pilot cost from their difference."
+  "accounting_note": "Remaining values are planning balances from user-reported credits minus attributable pilot cost and reservations, not API-confirmed credit balances. Latest per-app bill confirms pilot $0.18916778; latest month summary is $20.10288506, not the child-reported $20.31. Reports have different aggregation/refresh behavior; do not derive pilot cost from their difference.",
+  "new_allocation_at": "2026-11-04T19:25:22+00:00",
+  "new_allocation_note": "Reserve up to $35 Modal total for phone-specific Glimmer generation/labeling plus student training/export under user-authorized scale-up. Separate from existing $20 Glimmer-label and $25 Spark-label caps. No new Baseten concurrency or allocation. No paid job started by this reservation."
 }

@@ -1,0 +1,143 @@
+{
+  "recordedAt": "2026-11-04T18:44:19.509Z",
+  "jobs": [
+    {
+      "role": "glimmer",
+      "taskId": "node:delegated-task:command%3Amcp%3Aa0129668-74f4-43e7-bd53-699336f64acc%3Adelegate-task%3Apg-r3-glimmer-labels-20261104-v2",
+      "childThreadId": "thread:delegated-task:command%3Amcp%3Aa0129668-74f4-43e7-bd53-699336f64acc%3Adelegate-task%3Apg-r3-glimmer-labels-20261104-v2",
+      "link": "<t3-thread://v2/1fc19a6b-4359-418d-a801-4f7fb5e9b320/thread:delegated-task:command%3Amcp%3Aa0129668-74f4-43e7-bd53-699336f64acc%3Adelegate-task%3Apg-r3-glimmer-labels-20261104-v2>",
+      "providerInstanceId": "muse",
+      "model": "muse-wonder-1.0",
+      "options": [
+        {
+          "id": "reasoningEffort",
+          "value": "max"
+        }
+      ],
+      "statusAtDispatch": "running",
+      "sourceCommit": "4bf72c9",
+      "modalReservationUSD": 20,
+      "basetenReservationUSD": 0,
+      "stateAtResume": "active_observed_at_resume",
+      "allocationUnchanged": true
+    },
+    {
+      "role": "spark",
+      "taskId": "node:delegated-task:command%3Amcp%3Aa0129668-74f4-43e7-bd53-699336f64acc%3Adelegate-task%3Apg-r3-spark-labels-20261104-v2",
+      "childThreadId": "thread:delegated-task:command%3Amcp%3Aa0129668-74f4-43e7-bd53-699336f64acc%3Adelegate-task%3Apg-r3-spark-labels-20261104-v2",
+      "link": "<t3-thread://v2/1fc19a6b-4359-418d-a801-4f7fb5e9b320/thread:delegated-task:command%3Amcp%3Aa0129668-74f4-43e7-bd53-699336f64acc%3Adelegate-task%3Apg-r3-spark-labels-20261104-v2>",
+      "providerInstanceId": "muse",
+      "model": "muse-wonder-1.0",
+      "options": [
+        {
+          "id": "reasoningEffort",
+          "value": "max"
+        }
+      ],
+      "statusAtDispatch": "running",
+      "sourceCommit": "4bf72c9",
+      "modalReservationUSD": 0,
+      "basetenReservationUSD": 25,
+      "stateAtResume": "active_observed_at_resume",
+      "allocationUnchanged": true
+    },
+    {
+      "role": "data",
+      "taskId": "node:delegated-task:command%3Amcp%3Aa0129668-74f4-43e7-bd53-699336f64acc%3Adelegate-task%3Apg-r3-phone-benchmarks-20261104-v2",
+      "childThreadId": "thread:delegated-task:command%3Amcp%3Aa0129668-74f4-43e7-bd53-699336f64acc%3Adelegate-task%3Apg-r3-phone-benchmarks-20261104-v2",
+      "link": "<t3-thread://v2/1fc19a6b-4359-418d-a801-4f7fb5e9b320/thread:delegated-task:command%3Amcp%3Aa0129668-74f4-43e7-bd53-699336f64acc%3Adelegate-task%3Apg-r3-phone-benchmarks-20261104-v2>",
+      "providerInstanceId": "muse",
+      "model": "muse-wonder-1.0",
+      "options": [
+        {
+          "id": "reasoningEffort",
+          "value": "max"
+        }
+      ],
+      "statusAtDispatch": "running",
+      "sourceCommit": "4bf72c9",
+      "modalReservationUSD": 0,
+      "basetenReservationUSD": 0,
+      "stateAtResume": "integrated",
+      "integratedCommit": "78e0355"
+    },
+    {
+      "role": "eval",
+      "taskId": "node:delegated-task:command%3Amcp%3Aa0129668-74f4-43e7-bd53-699336f64acc%3Adelegate-task%3Apg-r3-duration-eval-20261104-v2",
+      "childThreadId": "thread:delegated-task:command%3Amcp%3Aa0129668-74f4-43e7-bd53-699336f64acc%3Adelegate-task%3Apg-r3-duration-eval-20261104-v2",
+      "link": "<t3-thread://v2/1fc19a6b-4359-418d-a801-4f7fb5e9b320/thread:delegated-task:command%3Amcp%3Aa0129668-74f4-43e7-bd53-699336f64acc%3Adelegate-task%3Apg-r3-duration-eval-20261104-v2>",
+      "providerInstanceId": "muse",
+      "model": "muse-wonder-1.0",
+      "options": [
+        {
+          "id": "reasoningEffort",
+          "value": "max"
+        }
+      ],
+      "statusAtDispatch": "running",
+      "sourceCommit": "4bf72c9",
+      "modalReservationUSD": 0,
+      "basetenReservationUSD": 0,
+      "stateAtResume": "integrated",
+      "integratedCommit": "3e5df77"
+    },
+    {
+      "role": "recovery",
+      "taskId": "node:delegated-task:command%3Amcp%3Aa0129668-74f4-43e7-bd53-699336f64acc%3Adelegate-task%3Apg-effect-recovery-resume-20261104-v2",
+      "childThreadId": "thread:delegated-task:command%3Amcp%3Aa0129668-74f4-43e7-bd53-699336f64acc%3Adelegate-task%3Apg-effect-recovery-resume-20261104-v2",
+      "link": "<t3-thread://v2/1fc19a6b-4359-418d-a801-4f7fb5e9b320/thread:delegated-task:command%3Amcp%3Aa0129668-74f4-43e7-bd53-699336f64acc%3Adelegate-task%3Apg-effect-recovery-resume-20261104-v2>",
+      "providerInstanceId": "opencode",
+      "model": "river07/deepseek-v4.1-flash-1017",
+      "options": [
+        {
+          "id": "variant",
+          "value": "max"
+        }
+      ],
+      "statusAtDispatch": "running",
+      "sourceCommit": "4bf72c9",
+      "modalReservationUSD": 0,
+      "basetenReservationUSD": 0,
+      "stateAtResume": "integrated",
+      "integratedCommit": "1507e36"
+    },
+    {
+      "role": "privacy",
+      "taskId": "node:delegated-task:command%3Amcp%3Aa0129668-74f4-43e7-bd53-699336f64acc%3Adelegate-task%3Apg-privacy-review-resume-20261104-v2",
+      "childThreadId": "thread:delegated-task:command%3Amcp%3Aa0129668-74f4-43e7-bd53-699336f64acc%3Adelegate-task%3Apg-privacy-review-resume-20261104-v2",
+      "link": "<t3-thread://v2/1fc19a6b-4359-418d-a801-4f7fb5e9b320/thread:delegated-task:command%3Amcp%3Aa0129668-74f4-43e7-bd53-699336f64acc%3Adelegate-task%3Apg-privacy-review-resume-20261104-v2>",
+      "providerInstanceId": "opencode",
+      "model": "river08/deepseek-v4.1-flash-1017",
+      "options": [
+        {
+          "id": "variant",
+          "value": "max"
+        }
+      ],
+      "statusAtDispatch": "running",
+      "sourceCommit": "4bf72c9",
+      "modalReservationUSD": 0,
+      "basetenReservationUSD": 0,
+      "stateAtResume": "review_returned_with_findings",
+      "report": "/tmp/pocket-glimmer-takeover/resumed-review-v2/findings.md"
+    },
+    {
+      "role": "mac_packaging",
+      "taskId": "node:delegated-task:command%3Amcp%3A43909027-8a5e-43a3-b42d-af030426fae5%3Adelegate-task%3Apg-mac-review-fixes-20261104-v3",
+      "childThreadId": "thread:delegated-task:command%3Amcp%3A43909027-8a5e-43a3-b42d-af030426fae5%3Adelegate-task%3Apg-mac-review-fixes-20261104-v3",
+      "providerInstanceId": "opencode",
+      "model": "river08/deepseek-v4.1-flash-1017",
+      "options": [
+        {
+          "id": "variant",
+          "value": "max"
+        }
+      ],
+      "stateAtResume": "integrated",
+      "sourceCommit": "18762c33527f50685b3fff43fcc8b2ccc4e7c914",
+      "integratedCommit": "11c07cf",
+      "verification": "84 fixtures passed in parent; no Xcode or phone"
+    }
+  ],
+  "resumedAt": "2026-11-04T19:22:07+00:00"
+}

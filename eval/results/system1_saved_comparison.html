@@ -1,0 +1,14 @@
+<!doctype html><html><head><meta charset="utf-8"><style>body{font-family:var(--font-sans);color:var(--foreground);font-size:14px}h3{font-size:16px;margin:8px 0}p{font-size:12px;color:var(--muted-foreground);line-height:1.5}section{margin:20px 0}.row{display:grid;grid-template-columns:94px 1fr 112px;gap:8px;align-items:center;margin:7px 0}.track{height:18px}.bar{height:18px;border-radius:3px;background:var(--chart-2)}.after{background:var(--chart-1)}.value{font:12px var(--font-mono);white-space:nowrap}small{display:block;color:var(--muted-foreground);line-height:1.5}</style></head><body><h3>Corrected saved System 1 results</h3><p>120 hand-authored decisions on Linux. These are saved results, not a new run or a measure of iPhone task success.</p>
+<section><strong>Decision accuracy</strong>
+<div class="row"><span>Baseline</span><div class="track"><div class="bar " style="width:74.1667%"></div></div><span class="value">74.2% (89/120)</span></div>
+<div class="row"><span>Shipping</span><div class="track"><div class="bar after" style="width:81.6667%"></div></div><span class="value">81.7% (98/120)</span></div>
+</section>
+<section><strong>Eligible for local handling at threshold 0.80</strong>
+<div class="row"><span>Baseline</span><div class="track"><div class="bar " style="width:15.0000%"></div></div><span class="value">15.0% (18/120)</span></div>
+<div class="row"><span>Shipping</span><div class="track"><div class="bar after" style="width:50.8333%"></div></div><span class="value">50.8% (61/120)</span></div>
+</section>
+<section><strong>Eligible for local handling at shipping threshold 0.90</strong>
+<div class="row"><span>Baseline</span><div class="track"><div class="bar " style="width:7.5000%"></div></div><span class="value">7.5% (9/120)</span></div>
+<div class="row"><span>Shipping</span><div class="track"><div class="bar after" style="width:36.6667%"></div></div><span class="value">36.7% (44/120)</span></div>
+</section>
+<small>Correction: the earlier chart showed 6.7% for the baseline at 0.90. The exact-threshold result is 9/120 = 7.5%. At that threshold, baseline had 0 errors among 9 accepted; shipping had 3 among 44. Higher coverage alone does not establish lower risk.<br>Source: eval/results/risk_coverage_test120.json, at_tau rows. Test120 remains report-only. No industry-wide frontier or phone-speed claim.</small></body></html>

@@ -1,6 +1,6 @@
 # Orchestrator handoff ledger
 
-Updated 2026-11-04 during the resumed run at 18:45 UTC. Parent T3 thread `4311f30f-96dc-4e78-9f19-860e3bbea796`.
+Updated 2026-11-04T19:22:07+00:00 during parent run 57. Parent T3 thread `4311f30f-96dc-4e78-9f19-860e3bbea796`.
 This file owns the current handoff. Older entries in `LEDGER.md` and `NEXT_AGENT.md` are historical snapshots.
 
 ## Current objective and authorization
@@ -26,36 +26,68 @@ licensed training-target sources. Runtime and teacher models remain Meta models.
 
 ## Verified repository checkpoint
 
-- Privacy and Mac preparation repairs are integrated through `4b92321`. Training reassignment was pushed at `f22e38d`; the completed pilot report was integrated at `eb4ea4e`. Subsequent resume evidence and allocations are recorded below and in `docs/ORCHESTRATOR_DECISIONS.tsv`.
-- Prior integrated verification ran 136 Swift tests, one skipped, zero failures. The Mac preparation
-  fixtures passed 73 checks. These checks do not establish an Xcode build or phone behavior.
-- Shipping model remains ep1 Q4_K_M, SHA-256 `a5c60a8836aa73adeb847185aa30184cd9c33c522185f59fa9ac55a9d00782c2`.
-- Shipping threshold is 0.90. Keep shipped priors, prompt templates, and weights unchanged during experiments.
-- `docs/EVALUATION_CLAIMS.md` supersedes historical claims of a 10.2% certificate. Cal180 was reused
-  for model selection. Test120 is report-only, not a tuning set. Do not rerun it for candidate selection.
-- The user said the Mac is unavailable. Current iOS source remains unbuilt. Signed install,
-  device acceptance, phone measurements, demo video, repository visibility, and submission remain open.
+- Recovery was integrated at `1507e36`, the new data tranche at `78e0355`, and
+  two-epoch evaluation at `3e5df77`. The Mac packaging repair is `11c07cf`.
+- Run 57 preserved the interrupted action-validation and privacy patch, completed
+  its artifact export, and reran the current sources. 183 Swift tests passed with
+  one opt-in live test skipped. All 84 Mac preparation fixtures and 22 Python
+  data/evaluation/grader tests passed. App syntax parsing passed on 18 files.
+- `docs/ACTION_VALIDATION.md` describes the implemented limits and remaining gaps.
+  `docs/ACTION_CONTRACTS.json` exports 38 compiled contracts, including the
+  unavailable app alarm. The bundled registry has 36 skills and now includes
+  translation's required target language.
+- Shipping model remains ep1 Q4_K_M, SHA-256
+  `a5c60a8836aa73adeb847185aa30184cd9c33c522185f59fa9ac55a9d00782c2`.
+  The resource check verified its hash, calibration hash, 31 prior sets, registry,
+  and entitlements. Shipping threshold remains 0.90.
+- R3E2 failed its every-pass diagnostic gate. It is not promoted. Cal180 remains
+  selection history, and test120 is report-only. No candidate was selected from
+  test120 during this continuation.
+- One real text-cloud smoke call passed earlier on source `4bf72c9` through
+  PocketCore and Meta Spark 1.3, HTTP 200. Its local decisions were scripted.
+  Evidence is `docs/verification/cloud_smoke_2026-11-04.json`. It is not a fresh
+  phone test or a verification of every provider, task, or multimodal path.
+- Mac unavailable per the user. Current app code remains unbuilt with Xcode.
+  Signed install, phone acceptance, phone measurements, demo video, public
+  repository visibility, and submission remain open. Submission verification
+  returned incomplete because Swift was deliberately checked separately and
+  GitHub remains private. It did not report an all-clear.
 
 ## Active work and ownership
 
-Both existing OpenCode workers failed on event stream reconnection during the resumed run.
-`task_cancel` and terminal status confirmed no pending child runs. Preserve their checkouts.
-The recovery patch and new files are saved at `/tmp/pocket-glimmer-takeover/recovery-resume/`.
-Its manifest records hashes and the original `009430f` base. Do not merge this unfinished patch
-without preserving the newer privacy code and testing the integrated result.
+The recovery and privacy review workers that failed on event-stream reconnection
+were replaced in run 48. Their old saved patch is historical recovery material;
+do not reapply it over the now-integrated implementation.
 
 | Work | State and next action |
 |---|---|
-| Durable action recovery, editable drafts, email routing, memory recall, cloud result provenance | Resume the saved patch with the same River07 assignment. Old checkout `/home/habib/.t3/worktrees/pocket-glimmer/t3-7b160d24`. The worker had 144 tests, one skipped, and four assertions failing on two already-known privacy cases in its old base. Merge the current privacy implementation and rerun. No iOS build claim. |
-| Independent privacy and Mac review | Resume with the same River08 assignment. Logs under `/tmp/pocket-glimmer-takeover/resumed-review/` show 136 tests with one skip and no failures, plus 73 Mac fixtures passing. No final independent verdict was written, so review is still open. |
-| Request-bound shared input | Investigation archived at `docs/research/REQUEST_INPUT_GROUNDING.md`. Global inbox ownership is unsafe. Apply the repair after recovery integration; do not reorder the global inbox write as a shortcut. |
-| Two-epoch training pilot | Complete, artifact and bill checked. `docs/training/R3E2_PILOT.md` and `docs/training/evidence/` preserve evidence. No promotion. |
-| Both-teacher scale-up and stronger benchmarks | Execution contract at `docs/training/ROUND3_EXECUTION.md`. Muse Wonder max remains assigned. Next task IDs will be appended to `docs/training/round3_jobs.json`. |
-| Handoff, spend reservations, integration | Parent owns this ledger, current job records, and the canonical decision trail. |
+| Durable action recovery and argument validation | Integrated recovery plus the resumed validator patch at `8c990e4`. Versioned contracts, editable drafts, exact contact methods, required local times, external handoff review, and request-bound shared text. Independent review of the combined patch remains required. |
+| Busy input preservation | Still open. `AppModel.send` rejects while busy. Request-bound documents fix cross-talk but do not save rejected inputs. Use `docs/research/REQUEST_INPUT_GROUNDING.md` and the accepted Muse findings for durable explicit resume, without automatic replay. |
+| Privacy and cloud reliability | Prior independent review found partner-value masking and cancellation bugs. Fixes and regression tests are in the resumed patch, with malformed-settings checks and local fallback. Fresh review pending. |
+| Mac packaging | `11c07cf` integrates `18762c3`. Empty executable, missing model, and symlinked framework false passes are repaired. 84 Linux/mock fixtures passed here; no Xcode proof. |
+| Glimmer labels | Existing Muse worker remains active, observed in run 57. B200 anchor job `ap-SJ4Mav6HWdtYZv3Pi7TtRF` passed its label-usability gate. At the user-requested status check, the full 2,915-row job had 1,496 rows saved; existing $20 Modal cap unchanged. Await completion and verify its final artifact, quality gate, total bill, and stopped GPU tasks. |
+| Spark Open labels | Existing Muse worker remains active, observed in run 57. Existing $25 Baseten cap unchanged. At the user-requested status check, 3,501 of the fixed-five sampling calls had settled for the 2,915-row batch. Await completion and verify the restart-safe reservation ledger, labels, quality gate, and total known/unknown spend. |
+| Phone data and benchmark | `78e0355` integrated source-group splits and protocol. Grader fixes at `74f2341` reject inexact slots, unconfirmed execution, empty traces, and duplicate effects. 22 Python checks pass. Enough labeled independent groups and actual model evaluation remain pending. |
+| Expanded phone-specific training | A separate $35 Modal reservation now funds new phone-action data and student training/export. New owner must use the compiled contract manifest, preserve held-out groups, and record actual candidate results. No new Baseten worker competes with the active rate-limited run. |
+| R3E2 two-epoch evaluation | `3e5df77` integrated the evaluation. Failed every-pass gate, no promotion, no paid evaluation and no test120 use. |
+| Late links | Assessment completed in run 54 and saved at `docs/research/LATE_WEBGPU_KERNEL_REVIEW.md`. No drop-in iOS speedup was established; no model/runtime substitution. |
 
-Follow a delegate's `next`. Completion wakes the parent. Do not poll running delegates. A result
-is not integrated merely because a child says it is finished. Resume tasks must receive consolidated
-original requirements and later corrections, not only the original brief.
+`docs/training/round3_next_jobs.json` records the six run-48 task IDs and the later
+Mac repair. Read it alongside `round3_jobs.json`, which records the earlier pilot.
+New review/implementation dispatches must be appended there before handoff.
+Follow a delegate's `next`; do not poll running delegates. Review source and actual
+artifacts before integrating. A passing core suite cannot prove phone behavior.
+
+## Throughput checkpoint for this continuation
+
+- Blocking first steps. Recover active writers and prior decisions before edits;
+  verify the interrupted patch before creating a checkpoint for follow-up work.
+- Independent workstreams. Existing Glimmer and Spark workers keep their separate
+  checkouts and allocations. Mac packaging and core integration touch separate files.
+- Shared mutable state. The parent alone integrates the main checkout. New writers
+  get prepared worktrees. No suite runs inside a worker's checkout from the parent.
+- Smallest safe decomposition. One owner must finish input admission across core,
+  AppModel, intents, and capture. Correctness review reads the stable checkpoint.
 
 ## Spending and credentials
 
@@ -72,7 +104,8 @@ as the current credit budgets, with reported rather than API-verified provenance
 The pilot's original $5 reservation is closed. The current per-app bill verifies $0.18916778.
 A new $20 Modal allocation funds Glimmer labeling, and $25 Baseten funds bounded Spark Open labeling.
 Spark spending cannot start until per-call reservations and restart safety are implemented and tested.
-Remaining planning balances after these reservations are $89.81083222 Modal and $55 Baseten.
+Run 57 additionally reserves $35 Modal for phone-specific data and student training/export.
+Remaining planning balances after these reservations are $54.81083222 Modal and $55 Baseten.
 Of those, protect $15 Modal and $20 Baseten for evaluation and integration. These are planning
 balances against user reports, not API-confirmed remaining credits.
 
