@@ -1,8 +1,9 @@
 # Action time and recipient repairs
 
 This change implements the accepted defects from the independent review's C3, C4, and
-W2 findings, plus the datetime text-size check. The parent already repaired C1, C2,
-W1, and W4 at `5912cd7`; those paths are untouched here.
+W2 findings, plus the datetime text-size check. The parent repaired ordinary C1/C2 fallback paths at `5912cd7`. W1/W4 still have
+projection, recovery and edit-path gaps recorded in `SHARED_READ_FIX_REVIEW_2026-11-04.md`;
+those paths are untouched here.
 
 No iPhone, Xcode, EventKit, NSDataDetector, Messages, Mail, or Shortcuts run was
 available. All evidence below is Linux core with fake effects and fake date resolvers.
@@ -126,6 +127,5 @@ calendar and datetime rules.
   This is the existing first-match extraction behavior, not a new guarantee.
 - Calendar guards are lexical. A reason or subject clause can be conservatively
   refused when it contains a duration, `with`, or a location phrase.
-- `docs/ACTION_VALIDATION.md` still says "Compiled contracts use version 2." That
-  sentence needs a follow-up because three contracts are now version 3.
+- Parent integration updated `docs/ACTION_VALIDATION.md` to describe the three version-3 contracts.
 - No iOS parser, EventKit, Messages, Mail, or Shortcuts proof exists.

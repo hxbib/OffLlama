@@ -55,3 +55,13 @@ Linux reproduction source and output are `calibration_guard_probe.swift` and
 `calibration-guard-linux.txt`. The probe was compiled using Swift 6.1 with the
 repository's `Decision.swift` and `Calibration.swift`; place the probe at
 `main.swift` when compiling those three files together.
+
+## User-confirmed offline answer
+
+After the diagnostic build installation, the user closed and reopened the app and
+confirmed it answered `4` to `What is 2 + 2?` with Airplane Mode enabled and Wi-Fi
+disabled. This is a manual observation. It does not identify the original calibration
+error cause or establish Metal, latency, thermal or action behavior. The next manual
+report was that a messaging request produced chat prose without opening a composer.
+The exact request was not provided. Keyboard dismissal and inline HTML were also
+reported missing; action and UI work continues.

@@ -31,7 +31,7 @@ The bundled registry is generated separately with `pg-cli dump-skills`.
   Shortcuts. These guards are not a complete natural-language parser.
 - Translation requires both text and a target language.
 
-Compiled contracts use version 2. Pending version-1 cards cannot execute under
+Compiled contracts use version 2, except reminder, calendar and alarm datetime contracts at version 3. Pending cards with a different contract version cannot execute under
 the new policy. Users must start a new request. User-defined handoffs retain their
 reviewed contract snapshot so missing required fields stay required after restart.
 

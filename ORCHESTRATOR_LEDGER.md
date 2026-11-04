@@ -1,6 +1,6 @@
 # Orchestrator handoff ledger
 
-Updated during parent run 65 on 2026-11-04. Parent T3 thread `4311f30f-96dc-4e78-9f19-860e3bbea796`.
+Updated during the 2026-11-04 runtime and action continuation. Parent T3 thread `4311f30f-96dc-4e78-9f19-860e3bbea796`.
 This file owns the current handoff. Older entries in `LEDGER.md` and `NEXT_AGENT.md` are historical snapshots.
 
 `docs/ORCHESTRATOR_DECISIONS.tsv` is append-only. Its `ts` column records when
@@ -28,6 +28,16 @@ with `variant=max`. The user authorized any working River account except the bro
 `river` account. Do not substitute models or settings. Agent selection does not change the separately
 licensed training-target sources. Runtime and teacher models remain Meta models.
 
+## Latest action scope
+
+The user requires reliable multi-step phone actions in addition to single actions, inline HTML,
+keyboard dismissal, UI polish and a new original icon. The bounded implementation and proof
+requirements are in `docs/research/ACTION_PROGRAM_2026-11-04.md`. Coding delegates may now
+also use Muse Spark1.3Contributor MAX, Muse Wonder1.0 MAX for hard tasks, Grok4.7 xhigh
+through Grok Build, and Qoder qfmodel (Qwen3.8-Flash). Preserve unspecified options; do not
+choose an ambiguous Qoder account without an assignment. These are coding agents, not runtime
+or training-target model substitutions. The Mac build/device role remains GPT6.1Terra high.
+
 ## Verified repository checkpoint
 
 - Recovery was integrated at `1507e36`, the new data tranche at `78e0355`, and
@@ -36,6 +46,10 @@ licensed training-target sources. Runtime and teacher models remain Meta models.
   its artifact export, and reran the current sources. 183 Swift tests passed with
   one opt-in live test skipped. All 84 Mac preparation fixtures and 22 Python
   data/evaluation/grader tests passed. App syntax parsing passed on 18 files.
+- Date/recipient repair `b3a2618` is integrated as `759fce5`. Its author reports203
+  Swift tests, one skip, zero failures. Parent independently reran the integrated
+  core suite with the same result; evidence is `action-time-parent-core-tests.txt`. Conservative guards
+  do not mean full duration/attendee/timezone support.
 - Run 65 added shared-read recovery/privacy repairs at `5912cd7`. The updated
   Swift suite executes 189 tests with one skipped and zero failures. Packaging
   fixtures increased to 88, all passing, with the symbol-pipeline fix at `571d80d`.
@@ -62,7 +76,8 @@ licensed training-target sources. Runtime and teacher models remain Meta models.
   `docs/verification/MAC_INSTALL_CHECKPOINT_2026-11-04.md` for remote evidence paths.
   User-confirmed UI launch exposed a calibration startup error before model
   initialization. Diagnostic patch `43d1811` is integrated as `647c261` and the
-  Mac worker reports the diagnostic build installed; manual reopen is pending.
+  Mac worker reports the diagnostic build installed. The user confirmed it answered 4
+  with Airplane Mode on and Wi-Fi off. The original mismatch cause remains unconfirmed.
   Metal inference, phone acceptance, phone measurements, demo video, public
   repository visibility, and submission remain open. Submission verification
   returned incomplete because Swift was deliberately checked separately and
@@ -77,13 +92,13 @@ do not reapply it over the now-integrated implementation.
 | Work | State and next action |
 |---|---|
 | Durable action recovery and argument validation | Integrated recovery plus the resumed validator patch at `8c990e4`. Versioned contracts, editable drafts, exact contact methods, required local times, external handoff review, and request-bound shared text. Independent review of the combined patch remains required. |
-| Busy input preservation | Both design candidates returned and were read. A uses a separate protected SQLite store; B uses shared-database metadata plus protected files. Cross-review is running; no base selected or store implementation yet. Parent objections are in `docs/research/REQUEST_INPUT_DESIGN_A_REVIEW.md`. |
-| Privacy and cloud reliability | Prior independent review found partner-value masking and cancellation bugs. Fixes and regression tests are in the resumed patch, with malformed-settings checks and local fallback. Fresh review pending. |
-| Mac packaging and runtime | Independent symbol-check review passed; its diagnostic wording fix passes 88 Linux/mock fixtures. Real signed builds and installation passed. User reports calibration code2 at startup; Linux and Apple Swift probes pass, cause unconfirmed. Diagnostic patch647c261 is integrated and installed by Mac worker; manual reopen pending. Device UI tooling remains unavailable. |
+| Busy input preservation | Both candidates and cross-judge returned. Selected A with process ownership lock, strict immutable/terminal schema, bounded retention, B caller behavior and mandatory datetime review on resume. See `docs/research/REQUEST_INPUT_SYNTHESIS.md`. Core store implementation is next; no durable ingress is claimed yet. |
+| Privacy and cloud reliability | Prior independent review found partner-value masking and cancellation bugs. Fixes and regression tests are in the resumed patch, with malformed-settings checks and local fallback. Fresh review at5912cd7 passes ordinary C1/C2 and leaves ambiguous read payload/badge/recovery, immediate cloud-error disclosure and edit copy open. See `SHARED_READ_FIX_REVIEW_2026-11-04.md`. |
+| Mac packaging and runtime | Independent symbol-check review passed; its diagnostic wording fix passes 88 Linux/mock fixtures. Real signed builds and installation passed. The diagnostic build answers 4 offline by user observation; original calibration failure cause remains unconfirmed. User reports message request returned chat prose instead of an action. Keyboard/HTML/UI and native action verification are now priority work. Device UI tooling remains unavailable. |
 | Glimmer labels | Completed and integrated at `2922acb`. Parent checked all 2,915 source IDs, rendered prompt hashes, option mappings and recomputed probability distributions, plus nine tests. Exact label hash and compressed archive are under `docs/training/evidence/glimmer-r3/`. Live Modal app listing confirms all four batch apps stopped with zero tasks. Teacher is bf16 with mutable `main` revision; keep identity distinct from IQ2_M. No student improvement follows from label completeness. |
-| Spark Open labels | Existing Muse worker remains active, observed in run 57. Existing $25 Baseten cap unchanged. The recovered status snapshot records 4,630 settled sampling calls for the 2,915-row batch, with $4.361473 recorded settled usage and $0.031885 retained for unknown calls. The 70 RPM restart is acknowledged; those counts are a snapshot, not completion. Await completion and verify the restart-safe reservation ledger, labels, quality gate, and total known/unknown spend. |
+| Spark Open labels | Existing Muse worker remains active, observed in run 57. Existing $25 Baseten cap unchanged. The recovered status snapshot records 4,630 settled sampling calls for the 2,915-row batch, with $4.361473 recorded settled usage and $0.031885 retained for unknown calls. Those counts are a historical snapshot. User now requests99–100RPM; expansion has drained traffic and parent relayed its acknowledgment for matched owner to apply99RPM under the100RPM account cap. Applied rate/throughput acknowledgment is pending. Await completion and verify the restart-safe reservation ledger, labels, quality gate, and total known/unknown spend. |
 | Phone data and benchmark | `78e0355` integrated source-group splits and protocol. Grader fixes at `74f2341` reject inexact slots, unconfirmed execution, empty traces, and duplicate effects. 22 Python checks pass. Enough labeled independent groups and actual model evaluation remain pending. |
-| Expanded phone-specific training | User expanded the active phone worker to a $100 Modal total cap, replacing $35, including evaluation. A new $54.99 Baseten phone-expansion allocation shares the verified request quota with the existing $25 batch. Existing phone owner remains active; the separate Spark phone-expansion task was dispatched in run 60. Both must use the compiled contract manifest, preserve held-out groups, and exchange immutable inputs/labels for paired experiments. Quota partition is 70 RPM for the existing matched batch and 25 RPM for the new expansion; the transition acknowledgment is archived under docs/training/evidence/spark-r3/. |
+| Expanded phone-specific training | User expanded the active phone worker to a $100 Modal total cap, replacing $35, including evaluation. A new $54.99 Baseten phone-expansion allocation shares the verified request quota with the existing $25 batch. Existing phone owner remains active; the separate Spark phone-expansion task was dispatched in run 60. Both must use the compiled contract manifest, preserve held-out groups, and exchange immutable inputs/labels for paired experiments. The former70/25RPM partition is superseded. Expansion has drained paid traffic; matched labeling receives99RPM, then hands the quota back explicitly. Expansion reports1454settled calls,$5.8592billed,$.2158uncertain reserved,$6.0750committed; its unchanged cap is$54.99. These are worker-reported checkpoints, not independently reconciled final billing. |
 | R3E2 two-epoch evaluation | `3e5df77` integrated the evaluation. Failed every-pass gate, no promotion, no paid evaluation and no test120 use. |
 | Late links | Assessment completed in run 54 and saved at `docs/research/LATE_WEBGPU_KERNEL_REVIEW.md`. No drop-in iOS speedup was established; no model/runtime substitution. |
 
