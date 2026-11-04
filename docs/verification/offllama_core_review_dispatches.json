@@ -1,0 +1,73 @@
+{
+  "sourceCommit": "e7024b2",
+  "reviews": [
+    {
+      "clientRequestId": "offllama-input-store-independent-review-20261104-v1",
+      "requestedOptions": {
+        "reasoningEffort": "max"
+      },
+      "result": {
+        "taskId": "node:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Aoffllama-input-store-independent-review-20261104-v1",
+        "childThreadId": "thread:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Aoffllama-input-store-independent-review-20261104-v1",
+        "link": "<t3-thread://v2/1fc19a6b-4359-418d-a801-4f7fb5e9b320/thread:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Aoffllama-input-store-independent-review-20261104-v1>",
+        "childRunId": "run:thread:thread%3Adelegated-task%3Acommand%253Amcp%253Ac14bd552-7a98-4a52-b11a-f64a33895d9a%253Adelegate-task%253Aoffllama-input-store-independent-review-20261104-v1:ordinal:1",
+        "childNodeId": "node:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Aoffllama-input-store-independent-review-20261104-v1",
+        "status": "running",
+        "workState": "working",
+        "hasPendingChildRuns": false,
+        "latestTerminalRunId": null,
+        "latestTerminalStatus": null,
+        "latestTerminalSummary": null,
+        "latestTerminalResultContextTransferId": null,
+        "providerInstanceId": "muse",
+        "model": "muse-wonder-1.0",
+        "options": [
+          {
+            "id": "reasoningEffort",
+            "value": "max"
+          }
+        ],
+        "summary": null,
+        "resultContextTransferId": null,
+        "hasPendingQuestion": false,
+        "pendingApproval": null,
+        "waitTimedOut": false,
+        "next": "Completion wakes this thread, so end your turn. Do not wait on it or poll it."
+      }
+    },
+    {
+      "clientRequestId": "offllama-messaging-independent-review-20261104-v1",
+      "requestedOptions": {
+        "reasoningEffort": "max"
+      },
+      "result": {
+        "taskId": "node:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Aoffllama-messaging-independent-review-20261104-v1",
+        "childThreadId": "thread:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Aoffllama-messaging-independent-review-20261104-v1",
+        "link": "<t3-thread://v2/1fc19a6b-4359-418d-a801-4f7fb5e9b320/thread:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Aoffllama-messaging-independent-review-20261104-v1>",
+        "childRunId": "run:thread:thread%3Adelegated-task%3Acommand%253Amcp%253Ac14bd552-7a98-4a52-b11a-f64a33895d9a%253Adelegate-task%253Aoffllama-messaging-independent-review-20261104-v1:ordinal:1",
+        "childNodeId": "node:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Aoffllama-messaging-independent-review-20261104-v1",
+        "status": "running",
+        "workState": "working",
+        "hasPendingChildRuns": false,
+        "latestTerminalRunId": null,
+        "latestTerminalStatus": null,
+        "latestTerminalSummary": null,
+        "latestTerminalResultContextTransferId": null,
+        "providerInstanceId": "muse",
+        "model": "muse-wonder-1.0",
+        "options": [
+          {
+            "id": "reasoningEffort",
+            "value": "max"
+          }
+        ],
+        "summary": null,
+        "resultContextTransferId": null,
+        "hasPendingQuestion": false,
+        "pendingApproval": null,
+        "waitTimedOut": false,
+        "next": "Completion wakes this thread, so end your turn. Do not wait on it or poll it."
+      }
+    }
+  ]
+}
