@@ -2,7 +2,14 @@
 
 You will NOT have the Grok Bot box (/workspace/...). Everything you need is in this repo, its Git LFS files and its GitHub release. Read **LEDGER.md** first: measurement protocol (section 0), results, rejected ideas, in-flight work.
 
-## 0. State at handoff (Tue Nov 3 2026, 12:30 PM ET) — read this first
+## 0a. State at 8:45 AM ET Wed Nov 4 (submission day) — read this first, then docs/FINAL_HOURS.md
+- **Everything a machine without the iPhone can do is done and pushed** (`master` 63dbecb; `scripts/verify_submission.sh` passes: sha, no placeholders, no forbidden claims, no secrets, 7 Python + 94 Swift tests). LEDGER.md has two dated Nov 4 entries with every number and its source.
+- **Habib's remaining path is docs/FINAL_HOURS.md**: Mac + iPhone build → fill the three `[PHONE_*]` numbers → shoot the 3:00 video from docs/demo/STORYBOARD.md with the slide PNGs in docs/img/slide_*.png → make the repo PUBLIC and check logged out → submit on the CV form with the text in FINAL_HOURS §F. Before shooting: install the Shortcuts listed in docs/SKILLS.md (incl. "PG Play on Apple TV"), and hit the Glimmer endpoint `/health` ten minutes early if the open-weights hand-off is in the video.
+- **Shipping model unchanged: ep1 Q4_K_M** (round 2 rejected under the gate, eval/results/ROUND2.md). τ = 0.90 via the bundled `app/PocketGlimmer/Resources/Models/calibration.json` (31 cc prior sets, incl. skillPick).
+- **Spend authorized and used (Nov 4):** Baseten $16.62 cumulative, Meta Model API < $1, Modal ≈ $10–20 (round-2 H100 trainings + the Glimmer vLLM endpoint, which scales to zero; keys/URL only in /tmp/gencode/sec on the build box, never in git). The Nov 2 no-spend standing order was lifted by Habib at ~6:20 AM ET Nov 4.
+- New since Nov 3: skills layer (docs/SKILLS.md), Meta voice/vision/SAM 3.1 (docs/META_MULTIMODAL.md), self-hosted Glimmer System 2 (docs/OPEN_WEIGHTS_SYSTEM2.md), closed loop (training/loop/), code review (docs/CODE_REVIEW_NOV4.md), research pack (docs/research/), demo kit (docs/demo/). The app code compiled last on the Mac at e0e5b82; expect small Xcode fixes (the review lists the riskiest lines).
+
+## 0. State at handoff (Tue Nov 3 2026, 12:30 PM ET) — historical
 - **Standing order from Habib (Nov 2, 4:05 PM ET):** no training and nothing that spends API credit anywhere until he gives new directives. Spend so far: Baseten $11.06, Modal $0, Meta API $0 (training/spark_teacher/spend.jsonl). Do NOT set `PG_ALLOW_SPEND=1`.
 - **Shipping model is frozen:** ep1 Q4_K_M. Numbers re-derived on that exact file:
   - cal180: acc 0.783, 49% handled at conf ≥0.8, acc-on-handled 0.955, ECE 0.042; LTT bound ≤10.2% at τ=0.90 (64/180 handled, 0 errors). 5% is NOT certified.
