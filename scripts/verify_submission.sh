@@ -102,7 +102,7 @@ else
   if command -v swift >/dev/null 2>&1; then
     if ( cd core && swift build && swift test ) >"$swift_log" 2>&1; then
       tail -5 "$swift_log"
-      if grep -qE 'Executed [0-9]+ tests, with( [0-9]+ tests? skipped and)? 0 failures' "$swift_log"; then
+      if grep -qE 'Executed [1-9][0-9]* tests, with( [0-9]+ tests? skipped and)? 0 failures' "$swift_log"; then
         note "ok swift"
       else
         bad "no passing Swift test summary"
@@ -117,7 +117,7 @@ else
       if docker run --rm -v "$PWD/core:/src" -w /src swift:6.1-noble \
         bash -c 'set -o pipefail; swift build && swift test' >"$swift_log" 2>&1; then
         tail -5 "$swift_log"
-        if grep -qE 'Executed [0-9]+ tests, with( [0-9]+ tests? skipped and)? 0 failures' "$swift_log"; then
+        if grep -qE 'Executed [1-9][0-9]* tests, with( [0-9]+ tests? skipped and)? 0 failures' "$swift_log"; then
           note "ok swift (Docker)"
         else
           bad "no passing Swift test summary"
