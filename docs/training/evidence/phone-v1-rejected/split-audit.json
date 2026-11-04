@@ -1,0 +1,499 @@
+{
+  "passes_exact_overlap_gate": false,
+  "failures": [
+    "train/dev: 62 rows repeat exact decision inputs",
+    "train/calfit: 64 rows repeat exact decision inputs",
+    "dev/calfit: 23 rows repeat exact decision inputs"
+  ],
+  "files": {
+    "train": {
+      "sha256": "c083288a9455f4111339e67d8c2d92a18c0f82b7571f7692698acffb633bfc6c",
+      "rows": 3115,
+      "groups": 2070
+    },
+    "dev": {
+      "sha256": "58d654374d6282f0a190d10a4fb5d437a5462347568b4fbee6929940de56da51",
+      "rows": 736,
+      "groups": 466
+    },
+    "calfit": {
+      "sha256": "96e9f15ed0b149fc879efeed73cc6f3b180ccd6724f3d11404a640830d7279f0",
+      "rows": 753,
+      "groups": 501
+    }
+  },
+  "comparisons": [
+    {
+      "left": "train",
+      "right": "dev",
+      "shared_groups": 0,
+      "shared_row_ids": 0,
+      "overlap": {
+        "exact_decision_input": {
+          "shared_keys": 54,
+          "affected_right_rows": 62,
+          "by_type": {
+            "timing": 25,
+            "confirmBeforeAct": 12,
+            "toolChoice": 3,
+            "route": 5,
+            "sensitivity": 7,
+            "answerability": 3,
+            "rememberOrNot": 4,
+            "notificationTriage": 3
+          },
+          "examples": [
+            {
+              "right_id": "phone-02883",
+              "left_ids": [
+                "phone-02900"
+              ]
+            },
+            {
+              "right_id": "phone-02932",
+              "left_ids": [
+                "phone-02934",
+                "phone-02935"
+              ]
+            },
+            {
+              "right_id": "phone-02933",
+              "left_ids": [
+                "phone-02934",
+                "phone-02935"
+              ]
+            },
+            {
+              "right_id": "phone-02940",
+              "left_ids": [
+                "phone-02934",
+                "phone-02935"
+              ]
+            },
+            {
+              "right_id": "phone-02941",
+              "left_ids": [
+                "phone-02923",
+                "phone-02937"
+              ]
+            }
+          ]
+        },
+        "exact_context": {
+          "shared_keys": 284,
+          "affected_right_rows": 358,
+          "by_type": {
+            "skillPick": 271,
+            "timing": 25,
+            "contactPick": 1,
+            "eventPick": 24,
+            "confirmBeforeAct": 12,
+            "toolChoice": 3,
+            "route": 5,
+            "sensitivity": 7,
+            "answerability": 3,
+            "rememberOrNot": 4,
+            "notificationTriage": 3
+          },
+          "examples": [
+            {
+              "right_id": "phone-00255",
+              "left_ids": [
+                "phone-00315"
+              ]
+            },
+            {
+              "right_id": "phone-00277",
+              "left_ids": [
+                "phone-00310"
+              ]
+            },
+            {
+              "right_id": "phone-00345",
+              "left_ids": [
+                "phone-00351"
+              ]
+            },
+            {
+              "right_id": "phone-00479",
+              "left_ids": [
+                "phone-00478"
+              ]
+            },
+            {
+              "right_id": "phone-00702",
+              "left_ids": [
+                "phone-00691",
+                "phone-00693",
+                "phone-00696"
+              ]
+            }
+          ]
+        },
+        "wrapper_free_context": {
+          "shared_keys": 205,
+          "affected_right_rows": 530,
+          "by_type": {
+            "skillPick": 403,
+            "timing": 35,
+            "contactPick": 3,
+            "eventPick": 30,
+            "confirmBeforeAct": 13,
+            "toolChoice": 8,
+            "route": 7,
+            "sensitivity": 13,
+            "answerability": 5,
+            "rememberOrNot": 9,
+            "notificationTriage": 4
+          },
+          "examples": [
+            {
+              "right_id": "phone-00091",
+              "left_ids": [
+                "phone-00107",
+                "phone-00108"
+              ]
+            },
+            {
+              "right_id": "phone-00092",
+              "left_ids": [
+                "phone-00107",
+                "phone-00108"
+              ]
+            },
+            {
+              "right_id": "phone-00105",
+              "left_ids": [
+                "phone-00103",
+                "phone-00104"
+              ]
+            },
+            {
+              "right_id": "phone-00106",
+              "left_ids": [
+                "phone-00103",
+                "phone-00104"
+              ]
+            },
+            {
+              "right_id": "phone-00249",
+              "left_ids": [
+                "phone-00252"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "left": "train",
+      "right": "calfit",
+      "shared_groups": 0,
+      "shared_row_ids": 0,
+      "overlap": {
+        "exact_decision_input": {
+          "shared_keys": 52,
+          "affected_right_rows": 64,
+          "by_type": {
+            "timing": 21,
+            "confirmBeforeAct": 19,
+            "toolChoice": 4,
+            "route": 1,
+            "sensitivity": 6,
+            "answerability": 4,
+            "rememberOrNot": 5,
+            "notificationTriage": 4
+          },
+          "examples": [
+            {
+              "right_id": "phone-02915",
+              "left_ids": [
+                "phone-02919"
+              ]
+            },
+            {
+              "right_id": "phone-02926",
+              "left_ids": [
+                "phone-02936"
+              ]
+            },
+            {
+              "right_id": "phone-02927",
+              "left_ids": [
+                "phone-02929"
+              ]
+            },
+            {
+              "right_id": "phone-02949",
+              "left_ids": [
+                "phone-02943",
+                "phone-02945",
+                "phone-02967"
+              ]
+            },
+            {
+              "right_id": "phone-02962",
+              "left_ids": [
+                "phone-02956"
+              ]
+            }
+          ]
+        },
+        "exact_context": {
+          "shared_keys": 300,
+          "affected_right_rows": 388,
+          "by_type": {
+            "skillPick": 294,
+            "timing": 21,
+            "eventPick": 30,
+            "confirmBeforeAct": 19,
+            "toolChoice": 4,
+            "route": 1,
+            "sensitivity": 6,
+            "answerability": 4,
+            "rememberOrNot": 5,
+            "notificationTriage": 4
+          },
+          "examples": [
+            {
+              "right_id": "phone-00451",
+              "left_ids": [
+                "phone-00463"
+              ]
+            },
+            {
+              "right_id": "phone-00465",
+              "left_ids": [
+                "phone-00444"
+              ]
+            },
+            {
+              "right_id": "phone-00488",
+              "left_ids": [
+                "phone-00491",
+                "phone-00492"
+              ]
+            },
+            {
+              "right_id": "phone-00677",
+              "left_ids": [
+                "phone-00694"
+              ]
+            },
+            {
+              "right_id": "phone-00683",
+              "left_ids": [
+                "phone-00679"
+              ]
+            }
+          ]
+        },
+        "wrapper_free_context": {
+          "shared_keys": 206,
+          "affected_right_rows": 578,
+          "by_type": {
+            "skillPick": 445,
+            "timing": 30,
+            "contactPick": 1,
+            "eventPick": 35,
+            "confirmBeforeAct": 19,
+            "toolChoice": 10,
+            "route": 5,
+            "sensitivity": 11,
+            "answerability": 9,
+            "rememberOrNot": 9,
+            "notificationTriage": 4
+          },
+          "examples": [
+            {
+              "right_id": "phone-00270",
+              "left_ids": [
+                "phone-00246"
+              ]
+            },
+            {
+              "right_id": "phone-00271",
+              "left_ids": [
+                "phone-00247"
+              ]
+            },
+            {
+              "right_id": "phone-00272",
+              "left_ids": [
+                "phone-00248"
+              ]
+            },
+            {
+              "right_id": "phone-00273",
+              "left_ids": [
+                "phone-00252"
+              ]
+            },
+            {
+              "right_id": "phone-00274",
+              "left_ids": [
+                "phone-00253"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "left": "dev",
+      "right": "calfit",
+      "shared_groups": 0,
+      "shared_row_ids": 0,
+      "overlap": {
+        "exact_decision_input": {
+          "shared_keys": 19,
+          "affected_right_rows": 23,
+          "by_type": {
+            "timing": 10,
+            "confirmBeforeAct": 7,
+            "toolChoice": 2,
+            "answerability": 2,
+            "rememberOrNot": 1,
+            "notificationTriage": 1
+          },
+          "examples": [
+            {
+              "right_id": "phone-02961",
+              "left_ids": [
+                "phone-02969"
+              ]
+            },
+            {
+              "right_id": "phone-02962",
+              "left_ids": [
+                "phone-02948"
+              ]
+            },
+            {
+              "right_id": "phone-02970",
+              "left_ids": [
+                "phone-02980"
+              ]
+            },
+            {
+              "right_id": "phone-02988",
+              "left_ids": [
+                "phone-02980"
+              ]
+            },
+            {
+              "right_id": "phone-02989",
+              "left_ids": [
+                "phone-03041"
+              ]
+            }
+          ]
+        },
+        "exact_context": {
+          "shared_keys": 119,
+          "affected_right_rows": 153,
+          "by_type": {
+            "skillPick": 107,
+            "timing": 10,
+            "eventPick": 23,
+            "confirmBeforeAct": 7,
+            "toolChoice": 2,
+            "answerability": 2,
+            "rememberOrNot": 1,
+            "notificationTriage": 1
+          },
+          "examples": [
+            {
+              "right_id": "phone-00678",
+              "left_ids": [
+                "phone-00701"
+              ]
+            },
+            {
+              "right_id": "phone-00683",
+              "left_ids": [
+                "phone-00704"
+              ]
+            },
+            {
+              "right_id": "phone-00687",
+              "left_ids": [
+                "phone-00702",
+                "phone-00703"
+              ]
+            },
+            {
+              "right_id": "phone-00965",
+              "left_ids": [
+                "phone-00987"
+              ]
+            },
+            {
+              "right_id": "phone-00989",
+              "left_ids": [
+                "phone-00973"
+              ]
+            }
+          ]
+        },
+        "wrapper_free_context": {
+          "shared_keys": 141,
+          "affected_right_rows": 457,
+          "by_type": {
+            "skillPick": 342,
+            "timing": 26,
+            "contactPick": 1,
+            "eventPick": 35,
+            "confirmBeforeAct": 19,
+            "toolChoice": 6,
+            "route": 5,
+            "sensitivity": 10,
+            "answerability": 2,
+            "rememberOrNot": 9,
+            "notificationTriage": 2
+          },
+          "examples": [
+            {
+              "right_id": "phone-00273",
+              "left_ids": [
+                "phone-00249",
+                "phone-00264"
+              ]
+            },
+            {
+              "right_id": "phone-00274",
+              "left_ids": [
+                "phone-00250",
+                "phone-00265"
+              ]
+            },
+            {
+              "right_id": "phone-00275",
+              "left_ids": [
+                "phone-00251",
+                "phone-00266"
+              ]
+            },
+            {
+              "right_id": "phone-00282",
+              "left_ids": [
+                "phone-00300"
+              ]
+            },
+            {
+              "right_id": "phone-00283",
+              "left_ids": [
+                "phone-00301"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "limitations": [
+    "No teacher correctness or model quality measured.",
+    "Disjoint IDs alone do not establish independent scenarios.",
+    "Wrapper-free collisions require semantic adjudication."
+  ]
+}

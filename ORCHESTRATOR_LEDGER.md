@@ -195,3 +195,34 @@ review was launched. Follow completion notifications rather than polling. Next a
 validate returned artifacts, integrate accepted review repairs, finish the open busy-input
 work, and compare exported candidates under the frozen benchmark protocol. All reported
 allocations are caps, not money already spent or evidence of a trained improvement.
+
+## Phone worker startup return: not training completion
+
+The phone worker returned while its smoke app `ap-SRyOOiX3TaBGyMUxPobjTS`
+was still ephemeral with zero tasks. Parent resumed the same worker with unchanged
+Muse Wonder max assignment and unchanged $100 total cap. The updated task ID is in
+`round3_next_jobs.json`; there is no second Modal allocation or duplicate smoke.
+
+Parent found pre-integration blockers in the uncommitted phone code and assigned
+the owner repairs before further paid launches: non-atomic budget admission, reused
+attempt IDs that can erase unknown reservations, resume chunk IDs that skip remaining
+labels, parallel GPU settlement using wall time divided by concurrency, unreserved
+fallback GPU attempts, and fabricated missing-letter probabilities in GGUF evaluation.
+These findings remain OPEN pending corrected code and independent validation.
+
+The first frozen phone split is REJECTED for evaluation. It has disjoint group IDs
+but 62 dev rows and 64 calfit rows exactly repeat train decision inputs; 23 calfit
+rows repeat dev inputs. Candidate order and option IDs are included in this exact
+comparison. An additional wrapper-free screen detects broader related contexts,
+which require semantic adjudication because time/network can affect decisions.
+Raw frozen splits are archived compressed under `docs/training/evidence/phone-v1-rejected/`.
+Reproduce: `python3 eval/round3/audit_phone_splits.py docs/training/evidence/phone-v1-rejected`.
+Expected exit: 1, with overlap findings. The audit measures split hygiene only, not
+correctness or independence of every scenario. The original 3,115 training rows and
+2,070 declared groups are not evidence of 2,070 independent scenarios.
+
+Both phone and Spark expansion owners received the finding. Phone must publish a
+new immutable v2 after source grouping repairs. Spark may continue independent
+contract-grounded generation and runner work; v1-dependent training generation is
+on hold. Preserve any existing paid output by exact prompt hash for safe reuse.
+No v1 scores may support model selection or promotion.

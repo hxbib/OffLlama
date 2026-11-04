@@ -1,0 +1,15 @@
+{
+  "freeze": "phone inputs v1 for Spark phone expansion (read-only snapshot)",
+  "schema": "Each row: id, group_id, contract_id, contract_version, contract_availability, family, reflex_type, utterance, context, candidates, option_ids, fallback_id, typed_arguments, expected_disposition, deterministic_basis, provenance{source,template_family,generation_origin,note}, label_status=needs_teacher, split",
+  "files": {
+    "phone_inputs_all.jsonl": {"rows": 4604, "sha256": "833b54d837a04cb5d56d7f72916bace3b26da73c91126d87af0592b6d517e1ba"},
+    "phone_inputs_train.jsonl": {"rows": 3115, "sha256": "c083288a9455f4111339e67d8c2d92a18c0f82b7571f7692698acffb633bfc6c"},
+    "phone_inputs_dev.jsonl": {"rows": 736, "sha256": "58d654374d6282f0a190d10a4fb5d437a5462347568b4fbee6929940de56da51"},
+    "phone_inputs_calfit.jsonl": {"rows": 753, "sha256": "96e9f15ed0b149fc879efeed73cc6f3b180ccd6724f3d11404a640830d7279f0"}
+  },
+  "manifest": "phone_manifest.json sha256 b4a4769c758f3ac136d2474fadaa335035a0e029fd5e3054c6d1384e160ae04a; coverage phone_coverage.json sha256 8970998a0dbc5e21097ea91318bdae75e72ff979b25bb8b46702b99835075056",
+  "contracts": "docs/ACTION_CONTRACTS.json 38 contracts v2, one notWired (alarmkit_schedule)",
+  "grouping": "group_id groups paraphrases of one scenario instance; splits assign whole groups; dev/calfit groups disjoint from train and from frozen data_dev/calfit/report groups (phone_validate PASS)",
+  "ingest_rule": "Spark labels ingested only after artifact + grouping checks (ids, types, candidates, option map, full fixed-k, no imputation). Source groups stay separate from evaluation.",
+  "spark_expansion_dir": "/tmp/pocket-glimmer-training-scale/spark-phone-v1 (owned by Spark worker; this worker only reads final verified artifacts)"
+}

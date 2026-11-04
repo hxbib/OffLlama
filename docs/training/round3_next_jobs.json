@@ -145,7 +145,7 @@
     },
     {
       "role": "phone_training",
-      "taskId": "node:delegated-task:command%3Amcp%3A38efac7b-dee2-4a60-81ad-1534701d1e87%3Adelegate-task%3Apg-r3-phone-training-execution-20261104-v1",
+      "taskId": "node:delegated-task:command%3Amcp%3A8bddd659-3294-4254-bb7c-00c3efae21c6%3Athread-send%3Apg-phone-resume-completion-and-accounting-fixes-20261104-v1",
       "childThreadId": "thread:delegated-task:command%3Amcp%3A38efac7b-dee2-4a60-81ad-1534701d1e87%3Adelegate-task%3Apg-r3-phone-training-execution-20261104-v1",
       "link": "<t3-thread://v2/1fc19a6b-4359-418d-a801-4f7fb5e9b320/thread:delegated-task:command%3Amcp%3A38efac7b-dee2-4a60-81ad-1534701d1e87%3Adelegate-task%3Apg-r3-phone-training-execution-20261104-v1>",
       "providerInstanceId": "muse",
@@ -160,7 +160,20 @@
       "statusAtDispatch": "running",
       "modalReservationUSD": 100,
       "basetenReservationUSD": 0,
-      "budgetSupersededAt": "2026-11-04T19:34:07+00:00"
+      "budgetSupersededAt": "2026-11-04T19:34:07+00:00",
+      "priorTaskIds": [
+        "node:delegated-task:command%3Amcp%3A38efac7b-dee2-4a60-81ad-1534701d1e87%3Adelegate-task%3Apg-r3-phone-training-execution-20261104-v1"
+      ],
+      "stateAtResume": "continued_same_worker_after_startup_only_return",
+      "modalAppAtReturn": "ap-SRyOOiX3TaBGyMUxPobjTS",
+      "parentAudit": "docs/training/evidence/phone-v1-rejected/split-audit.json",
+      "pendingRepairs": [
+        "atomic per-attempt aggregate budget",
+        "resumable label IDs and durable output",
+        "per-GPU full cost and separately reserved retries",
+        "uncensored GGUF readout",
+        "content-group-disjoint v2 phone splits"
+      ]
     },
     {
       "role": "contract_review",
@@ -216,9 +229,10 @@
       "modalReservationUSD": 0,
       "basetenReservationUSD": 54.99,
       "rpm": 25,
-      "outputDirectory": "/tmp/pocket-glimmer-training-scale/spark-phone-v1"
+      "outputDirectory": "/tmp/pocket-glimmer-training-scale/spark-phone-v1",
+      "inputDependency": "phone frozen v1 rejected: exact train/dev/calfit overlaps; await corrected v2 for dependent generation"
     }
   ],
   "resumedAt": "2026-11-04T19:22:07+00:00",
-  "updatedAt": "2026-11-04T19:38:53+00:00"
+  "updatedAt": "2026-11-04T19:44:57+00:00"
 }
