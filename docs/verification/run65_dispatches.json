@@ -1,5 +1,5 @@
 {
-  "recordedAt": "2026-11-04T20:13:19.732Z",
+  "recordedAt": "2026-11-04T20:21:46.617Z",
   "jobs": [
     {
       "taskId": "node:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Aremote-delegate%3Apg-mac-build-device-20261104-v1",
@@ -94,8 +94,8 @@
       "link": "<t3-thread://v2/e471ef05-c8d6-49ec-b176-96ab6da0d020/mcp:launch:4b7897f02f56364c576689f9c4e4835cc05ee7bcce99030851a9a3295253fc74>",
       "childRunId": null,
       "childNodeId": "node:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Aremote-delegate%3Apg-mac-build-unblock-20261104-v2",
-      "status": "running",
-      "workState": "working",
+      "status": "completed",
+      "workState": "result_available",
       "hasPendingChildRuns": false,
       "latestTerminalRunId": null,
       "latestTerminalStatus": null,
@@ -103,7 +103,7 @@
       "latestTerminalResultContextTransferId": null,
       "providerInstanceId": "codex_13",
       "model": "gpt-6.1-terra",
-      "summary": null,
+      "summary": "Patched symbol check verified on Mac. Disk630MiB, framework provenance absent, no compile/install/runtime. User rebooting Mac and will notify parent when back.",
       "resultContextTransferId": null,
       "hasPendingQuestion": false,
       "pendingApproval": null,
@@ -124,6 +124,62 @@
       "latestTerminalResultContextTransferId": null,
       "providerInstanceId": "opencode",
       "model": "river04/deepseek-v4.1-flash-1017",
+      "options": [
+        {
+          "id": "variant",
+          "value": "max"
+        }
+      ],
+      "summary": null,
+      "resultContextTransferId": null,
+      "hasPendingQuestion": false,
+      "pendingApproval": null,
+      "waitTimedOut": false,
+      "next": "Completion wakes this thread, so end your turn. Do not wait on it or poll it."
+    },
+    {
+      "taskId": "node:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Apg-time-constraint-repair-20261104-v1",
+      "childThreadId": "thread:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Apg-time-constraint-repair-20261104-v1",
+      "link": "<t3-thread://v2/1fc19a6b-4359-418d-a801-4f7fb5e9b320/thread:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Apg-time-constraint-repair-20261104-v1>",
+      "childRunId": "run:thread:thread%3Adelegated-task%3Acommand%253Amcp%253Ac14bd552-7a98-4a52-b11a-f64a33895d9a%253Adelegate-task%253Apg-time-constraint-repair-20261104-v1:ordinal:1",
+      "childNodeId": "node:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Apg-time-constraint-repair-20261104-v1",
+      "status": "running",
+      "workState": "working",
+      "hasPendingChildRuns": false,
+      "latestTerminalRunId": null,
+      "latestTerminalStatus": null,
+      "latestTerminalSummary": null,
+      "latestTerminalResultContextTransferId": null,
+      "providerInstanceId": "opencode",
+      "model": "river05/deepseek-v4.1-flash-1017",
+      "options": [
+        {
+          "id": "variant",
+          "value": "max"
+        }
+      ],
+      "summary": null,
+      "resultContextTransferId": null,
+      "hasPendingQuestion": false,
+      "pendingApproval": null,
+      "waitTimedOut": false,
+      "next": "Completion wakes this thread, so end your turn. Do not wait on it or poll it."
+    },
+    {
+      "taskId": "node:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Apg-shared-read-fix-review-20261104-v1",
+      "childThreadId": "thread:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Apg-shared-read-fix-review-20261104-v1",
+      "link": "<t3-thread://v2/1fc19a6b-4359-418d-a801-4f7fb5e9b320/thread:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Apg-shared-read-fix-review-20261104-v1>",
+      "childRunId": "run:thread:thread%3Adelegated-task%3Acommand%253Amcp%253Ac14bd552-7a98-4a52-b11a-f64a33895d9a%253Adelegate-task%253Apg-shared-read-fix-review-20261104-v1:ordinal:1",
+      "childNodeId": "node:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Apg-shared-read-fix-review-20261104-v1",
+      "status": "running",
+      "workState": "working",
+      "hasPendingChildRuns": false,
+      "latestTerminalRunId": null,
+      "latestTerminalStatus": null,
+      "latestTerminalSummary": null,
+      "latestTerminalResultContextTransferId": null,
+      "providerInstanceId": "opencode",
+      "model": "river08/deepseek-v4.1-flash-1017",
       "options": [
         {
           "id": "variant",
