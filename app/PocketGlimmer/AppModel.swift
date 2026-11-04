@@ -217,7 +217,7 @@ final class AppModel {
             let engine = try await Task.detached(priority: .userInitiated) { try LlamaCppEngine(modelURL: url) }.value
             let reflex = Reflex(engine: engine, profile: profile, telemetry: tel, source: "device")
             let ledger = try EffectLedger(db: db)
-            let dropped = (try? LedgerRequestIndex.reconcile(&book, db: db)) ?? 0
+            let dropped = try LedgerRequestIndex.reconcile(&book, db: db)
             if dropped > 0 { noteHistory("\(dropped) unfinished message draft\(dropped == 1 ? " was" : "s were") discarded because \(dropped == 1 ? "its" : "their") action was already prepared.") }
             let effects = PocketEffects(events: actions.events, contacts: actions.contacts, memory: mem)
             let a = Assistant(reflex: reflex, memory: mem, actions: actions, ledger: ledger, effects: effects,

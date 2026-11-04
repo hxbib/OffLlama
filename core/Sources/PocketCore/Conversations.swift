@@ -1,4 +1,9 @@
 import Foundation
+#if canImport(Darwin)
+import Darwin
+#elseif canImport(Glibc)
+import Glibc
+#endif
 
 // Conversation data model. One `ConversationBook` is the whole chat history. Every message, pending message draft
 // and in-flight result belongs to exactly one `ConversationID`; nothing here moves a message between chats.
@@ -252,14 +257,10 @@ public enum LedgerRequestIndex {
     public static func requestIDsWithAttempts(db: SQLiteDB, among ids: [UserRequestID]) throws -> Set<UserRequestID> {
         guard !ids.isEmpty else { return [] }
         let marks = ids.map { _ in "?" }.joined(separator: ",")
-        let rows: [[String: SQLValue]]
-        do {
-            rows = try db.query("SELECT DISTINCT request_id FROM action_attempts WHERE request_id IN (\(marks))",
+        let tables = try db.query("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'action_attempts'")
+        guard !tables.isEmpty else { return [] }
+        let rows = try db.query("SELECT DISTINCT request_id FROM action_attempts WHERE request_id IN (\(marks))",
                                 ids.map { .text($0.raw.uuidString) })
-        } catch {
-            // No ledger table yet means no attempt exists.
-            return []
-        }
         return Set(rows.compactMap { $0["request_id"]?.text.flatMap(UUID.init(uuidString:)) }.map { UserRequestID(raw: $0) })
     }
 
@@ -336,6 +337,7 @@ public final class ConversationStore: @unchecked Sendable {
             try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
             try Self.protect(directory)
             let tmp = directory.appendingPathComponent(Self.filename + ".tmp")
+            defer { try? FileManager.default.removeItem(at: tmp) }
             try? FileManager.default.removeItem(at: tmp)
             #if os(iOS) || os(tvOS) || os(watchOS)
             try data.write(to: tmp, options: [.completeFileProtection])
@@ -343,11 +345,10 @@ public final class ConversationStore: @unchecked Sendable {
             try data.write(to: tmp)
             #endif
             try Self.protect(tmp)
-            if FileManager.default.fileExists(atPath: fileURL.path) {
-                _ = try FileManager.default.replaceItemAt(fileURL, withItemAt: tmp)
-            } else {
-                try FileManager.default.moveItem(at: tmp, to: fileURL)
+            let replaced = tmp.path.withCString { source in
+                fileURL.path.withCString { destination in rename(source, destination) }
             }
+            guard replaced == 0 else { throw ConversationError.storage("history could not be replaced") }
             try Self.protect(fileURL)
         } catch let e as ConversationError { throw e }
         catch { throw ConversationError.storage("the file could not be written or protected") }

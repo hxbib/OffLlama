@@ -1,4 +1,7 @@
 import XCTest
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 @testable import PocketCore
 
 /// Conversation isolation, bounded persistence, clear/delete rules, ledger reconciliation and on-device-only context.
@@ -150,6 +153,31 @@ final class ConversationTests: XCTestCase {
             guard case .tooLarge = $0 as? ConversationError else { return XCTFail("\($0)") }
         }
         XCTAssertEqual(try Data(contentsOf: store.fileURL), good)
+    }
+
+    func testLaterSaveReplacesHistoryAndSurvivesRelaunch() throws {
+        let store = ConversationStore(directory: tempDir())
+        var book = ConversationBook()
+        try book.append(msg(.user, "first"), to: book.activeID)
+        try store.save(book)
+        try book.append(msg(.assistant, "second"), to: book.activeID)
+        try store.save(book)
+        let reopened = ConversationStore(directory: store.directory)
+        guard case .loaded(let loaded) = try reopened.load() else { return XCTFail("history missing after replacement") }
+        XCTAssertEqual(loaded.activeID, book.activeID)
+        XCTAssertEqual(loaded.active.messages.map(\.id), book.active.messages.map(\.id))
+        XCTAssertEqual(loaded.active.messages.map(\.text), ["first", "second"])
+        XCTAssertEqual(loaded.active.updated.timeIntervalSince1970, book.active.updated.timeIntervalSince1970, accuracy: 0.000_001)
+    }
+
+    func testLedgerReadFailureDoesNotReleaseRestoredDraft() throws {
+        let db = try SQLiteDB(path: ":memory:")
+        try db.exec("CREATE TABLE action_attempts (unexpected_column TEXT)")
+        var book = ConversationBook()
+        let draft = MessageDraft(requestID: UserRequestID(), contact: "Dana", channel: .imessage, body: "hi")
+        book.setDrafts([draft], for: book.activeID)
+        XCTAssertThrowsError(try LedgerRequestIndex.reconcile(&book, db: db))
+        XCTAssertEqual(book.active.drafts, [draft])
     }
 
     func testUnreadableHistoryIsSetAsideNotOverwritten() throws {
