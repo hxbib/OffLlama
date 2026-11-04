@@ -1,0 +1,76 @@
+{
+  "recorded_at": "2026-11-04T22:54:39.772Z",
+  "source_sha": "f77e5e8fa3af56999f4f55ebc7c3cc196771e97f",
+  "installed_source_sha": "7857cd68d0106eae580ecfb49d28a17b54704e9b",
+  "verification": {
+    "core": {
+      "executed": 329,
+      "skipped": 1,
+      "failures": 0,
+      "evidence": "docs/verification/message-boundaries-core.txt"
+    },
+    "phone": {
+      "offline_2_plus_2": "user confirmed 4 with Airplane Mode on and Wi-Fi off",
+      "keyboard_done": "user confirmed dismissal",
+      "keyboard_visibility": "user reports composer sometimes covered",
+      "chart": "user reports plain text or data-entry modal",
+      "messaging": "user reports named-group misbinding and later repeated command becomes chat"
+    }
+  },
+  "training": {
+    "previous_commit": "d6efcefe9f2779b55661898b9da2e0be1a68bf4f",
+    "previous_report": "/home/habib/.t3/worktrees/pocket-glimmer/t3-18e15aaa/docs/training/R3_PHONE_TRAINING.md",
+    "candidates": 8,
+    "promoted": false,
+    "prior_cost_usd_reported": 6.09,
+    "aggregate_modal_cap_usd": 100,
+    "new_allocation": false,
+    "parent_cost_reconciliation": "pending fresh owner verification before paid dispatch",
+    "premise_to_test": "Raw zeroShot confidence results do not establish performance under frozen runtime prompts and candidate-only calibration."
+  },
+  "dispatches": [
+    {
+      "role": "mac_product_build",
+      "taskId": "node:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Aremote-delegate%3Aoffllama-mac-conversations-keyboard-build-20261104-v1",
+      "link": "<t3-thread://v2/e471ef05-c8d6-49ec-b176-96ab6da0d020/mcp:launch:74e45e52f8be338a09f5a2e7b8607e0471b4d1e0d55e752565253d64900cc476>",
+      "childThreadId": null,
+      "remoteChild": {
+        "environmentId": "e471ef05-c8d6-49ec-b176-96ab6da0d020",
+        "threadId": "mcp:launch:74e45e52f8be338a09f5a2e7b8607e0471b4d1e0d55e752565253d64900cc476",
+        "label": "Habib’s MacBook Air"
+      },
+      "providerInstanceId": "claudeAgent_2",
+      "model": "claude-sonnet-5-5",
+      "requestedOptions": {
+        "effort": "high"
+      },
+      "statusAtDispatch": "running"
+    },
+    {
+      "role": "core_fix_review",
+      "taskId": "node:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Aoffllama-core-fix-independent-review-20261104-v2",
+      "link": "<t3-thread://v2/1fc19a6b-4359-418d-a801-4f7fb5e9b320/thread:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Aoffllama-core-fix-independent-review-20261104-v2>",
+      "childThreadId": "thread:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Aoffllama-core-fix-independent-review-20261104-v2",
+      "remoteChild": null,
+      "providerInstanceId": "muse",
+      "model": "muse-wonder-1.0",
+      "requestedOptions": {
+        "reasoningEffort": "max"
+      },
+      "statusAtDispatch": "running"
+    },
+    {
+      "role": "phone_runtime_evaluation",
+      "taskId": "node:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Aoffllama-phone-runtime-calibration-evaluation-20261104-v2",
+      "link": "<t3-thread://v2/1fc19a6b-4359-418d-a801-4f7fb5e9b320/thread:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Aoffllama-phone-runtime-calibration-evaluation-20261104-v2>",
+      "childThreadId": "thread:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Aoffllama-phone-runtime-calibration-evaluation-20261104-v2",
+      "remoteChild": null,
+      "providerInstanceId": "muse",
+      "model": "muse-wonder-1.0",
+      "requestedOptions": {
+        "reasoningEffort": "max"
+      },
+      "statusAtDispatch": "running"
+    }
+  ]
+}
