@@ -208,6 +208,10 @@ mostly (correctly) escalates. Distillation from Muse Glimmer is how coverage goe
 
 Lineage: Meta pre-trained Glimmer on Muse Spark's outputs with logit distillation (Glimmer tech report, arXiv
 2610.24628; Meta blog, Aug 10 2026), so the chain is **Spark → Glimmer → Llama-Reflex-1B**.
+
+Two more Meta roles added on Nov 4, both behind the same decision gate:
+- **Muse Voice Transcribe 1.0, Muse Spark 1.3 vision and SAM 3.1** (Meta Model API): hold-to-talk goes through the exact same Reflex path as typed text; a camera "glimpse" runs the sensitivity decision + on-device OCR first, strips EXIF/GPS, then asks Spark and lets SAM 3.1 outline what Spark named. Live-verified from Swift. See `docs/META_MULTIMODAL.md`.
+- **Muse Glimmer 30B as a self-hosted System 2** (vLLM on a Modal H100, Apache-2.0 weights, scale-to-zero): the escalation path can run on Meta **open weights end to end**; verified through the app's own `CloudBrain` code (`[PERSON_1]` placeholders survive, 46.7 tok/s warm). See `docs/OPEN_WEIGHTS_SYSTEM2.md`. The default demo escalation remains Muse Spark 1.3.
 Muse Wonder (`muse-wonder-1.0`) can be typed into Settings as the cloud model id; it isn't used by default.
 
 ## Why not run the 30B on the phone

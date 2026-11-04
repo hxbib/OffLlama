@@ -95,7 +95,8 @@ model", but it targets a 24–32 GB computer. This project puts its everyday jud
 | Muse Spark 1.3 | Meta Model API, **Standard mode** | Escalation when confidence < τ | Strong reasoning and tool calling |
 | Muse Spark Open | Muse Model License, via Baseten | Teacher candidate, rejected on cal180 | A much larger Meta open model (816B-A42B): a fair test of "bigger teacher" |
 
-SAM 3.1: not built.
+| Muse Voice Transcribe 1.0 · Muse Spark 1.3 vision · SAM 3.1 | Meta Model API, Standard mode | Voice in → same Reflex path as text; camera glimpse → sensitivity gate → Spark describes, SAM 3.1 outlines | Live-verified from Swift on Nov 4 (`docs/META_MULTIMODAL.md`) |
+| Muse Glimmer 30B, self-hosted (vLLM, Modal H100) | Apache-2.0, open weights | Optional System 2 on weights we serve ourselves; same `CloudBrain` code path | Escalation on Meta open weights end to end (`docs/OPEN_WEIGHTS_SYSTEM2.md`) |
 
 ## Agentic angle (Best Agentic Use-Case)
 Each request is a chain of typed on-device decisions, and every link can stop safely: **route → toolChoice →
