@@ -1,0 +1,54 @@
+{
+  "recordedAt": "2026-11-04 23:53:40 UTC",
+  "reviewedSource": "7bb9c49",
+  "functionalSource": "5382349",
+  "installedSource": "7857cd68",
+  "mac": {
+    "taskId": "node:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Aremote-delegate%3Aoffllama-mac-release-fixdiff-install-20261104-v1",
+    "link": "<t3-thread://v2/e471ef05-c8d6-49ec-b176-96ab6da0d020/mcp:launch:5044a329760b6f5fd2fa9f7ca1b634471396e72c16099640fb04e47c6e07f13b>",
+    "remoteChild": {
+      "environmentId": "e471ef05-c8d6-49ec-b176-96ab6da0d020",
+      "threadId": "mcp:launch:5044a329760b6f5fd2fa9f7ca1b634471396e72c16099640fb04e47c6e07f13b",
+      "label": "Habib’s MacBook Air"
+    },
+    "providerInstanceId": "claudeAgent_2",
+    "model": "claude-sonnet-5-5",
+    "options": {
+      "effort": "high"
+    },
+    "status": "running",
+    "scope": "Fresh independent repair review, exact signed build and conditional authorized install."
+  },
+  "opus": {
+    "threadId": "thread:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Aoffllama-local-model-reliability-opus-20261104-v1",
+    "link": "<t3-thread://v2/1fc19a6b-4359-418d-a801-4f7fb5e9b320/thread:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Aoffllama-local-model-reliability-opus-20261104-v1>",
+    "messageId": "message:mcp:c14bd552-7a98-4a52-b11a-f64a33895d9a:thread-send:offllama-opus-finish-owned-benchmark-report-20261104-v1",
+    "runId": "run:thread:thread%3Adelegated-task%3Acommand%253Amcp%253Ac14bd552-7a98-4a52-b11a-f64a33895d9a%253Adelegate-task%253Aoffllama-local-model-reliability-opus-20261104-v1:ordinal:3",
+    "status": "starting",
+    "delivery": "started",
+    "providerInstanceId": "claudeAgent_arkhamog_claude",
+    "model": "claude-opus-5-5",
+    "options": {
+      "effort": "high"
+    },
+    "reuseReason": "Uncommitted report and owned completed benchmark/server/watcher state."
+  },
+  "training": {
+    "taskId": "node:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Aoffllama-phone-runtime-calibration-evaluation-20261104-v2",
+    "link": "<t3-thread://v2/1fc19a6b-4359-418d-a801-4f7fb5e9b320/thread:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Aoffllama-phone-runtime-calibration-evaluation-20261104-v2>",
+    "status": "completed",
+    "hasPendingChildRuns": false,
+    "resultCommit": "68795be",
+    "verdict": "No promotion; no new spend."
+  },
+  "archivedResearchBranches": {
+    "research/phone-training-candidates-20261104": "d6efcef",
+    "research/spark-phone-labels-20261104": "0f7114a"
+  },
+  "rootTests": {
+    "executed": 385,
+    "skipped": 1,
+    "failures": 0,
+    "log": "docs/verification/release-candidate-core.txt"
+  }
+}
