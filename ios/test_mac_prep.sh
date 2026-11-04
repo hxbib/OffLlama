@@ -120,6 +120,19 @@ PY
   cp "$TMP/macho-$cpu" "$path"
 }
 
+# A tiny arm64 Mach-O executable header (file(1) reports a Mach-O executable).
+make_app_executable() {
+  local path=$1
+  mkdir -p "$(dirname "$path")"
+  python3 - "$path" <<'PY'
+import os, struct, sys
+path = sys.argv[1]
+with open(path, "wb") as fh:
+    fh.write(struct.pack("<IIIIIIII", 0xFEEDFACF, 0x0100000C, 0, 2, 0, 0, 0, 0))
+os.chmod(path, 0o755)
+PY
+}
+
 # Build a realistic source xcframework fixture (without a provenance marker).
 make_xcframework() {
   local fw=$1 cpu=${2:-arm64} slice h
@@ -189,8 +202,7 @@ make_app() {
   mkdir -p "$app/Models" "$app/Frameworks/llama.framework"
   cp "$REPO/app/PocketGlimmer/Resources/Models/calibration.json" "$app/Models/"
   cp "$REPO/app/PocketGlimmer/Resources/Skills/builtin.json" "$app/"
-  printf '#!/bin/sh\nexit 0\n' > "$app/PocketGlimmer"
-  chmod +x "$app/PocketGlimmer"
+  make_app_executable "$app/PocketGlimmer"
   make_macho "$app/Frameworks/llama.framework/llama"
   cat > "$app/Frameworks/llama.framework/Info.plist" <<'PLIST'
 <?xml version="1.0" encoding="UTF-8"?>
@@ -243,6 +255,11 @@ ROOT="$TMP/root"
 make_root "$ROOT"
 BASE_APP="$TMP/Base.app"
 make_app "$BASE_APP"
+BASE_APP_MODEL="$TMP/BaseWithModel.app"
+cp -R "$BASE_APP" "$BASE_APP_MODEL"
+if ! ln "$MODEL" "$BASE_APP_MODEL/shipped.gguf" 2>/dev/null; then
+  cp "$MODEL" "$BASE_APP_MODEL/shipped.gguf"
+fi
 make_xcframework "$TMP/fw-template"
 
 MOCKBIN="$TMP/mockbin"
@@ -256,7 +273,11 @@ esac
 SH
 cat > "$MOCKBIN/file" <<'SH'
 #!/bin/sh
-printf 'Mach-O 64-bit dynamically linked shared library arm64\n'
+path=${2:-}
+case "${path##*/}" in
+  llama) printf 'Mach-O 64-bit dynamically linked shared library arm64\n' ;;
+  *) printf '%s\n' "${FAKE_APP_FILE_OUTPUT:-Mach-O 64-bit executable arm64}" ;;
+esac
 SH
 cat > "$MOCKBIN/lipo" <<'SH'
 #!/bin/sh
@@ -309,6 +330,12 @@ if [ -n "${FAKE_APP_TEMPLATE:-}" ]; then
   mkdir -p "$(dirname "$app")"
   cp -R "$FAKE_APP_TEMPLATE" "$app"
 fi
+if [ -n "${FAKE_APP_MODEL_PATH:-}" ]; then
+  app="$dd/Build/Products/Release-iphoneos/PocketGlimmer.app"
+  if ! ln "$FAKE_APP_MODEL_PATH" "$app/shipped.gguf" 2>/dev/null; then
+    cp "$FAKE_APP_MODEL_PATH" "$app/shipped.gguf"
+  fi
+fi
 exit 0
 SH
 chmod +x "$MOCKBIN"/*
@@ -341,7 +368,26 @@ with open(p, "w", encoding="utf-8") as fh:
 PY
 expect_fail_with "verify-resources rejects a schema-invalid source calibration" "finite JSON number" \
   "$PREP" verify-resources --root "$BADROOT" --allow-no-model
-expect_ok "check-app accepts a complete unsigned fixture" "$PREP" check-app --root "$ROOT" --app "$BASE_APP" --allow-no-model
+expect_status_with "check-app reports a model-less app incomplete by default" 2 "must bundle the verified model" \
+  "$PREP" check-app --root "$ROOT" --app "$BASE_APP"
+expect_status_with "check-app --allow-no-model is compile-only and incomplete" 2 "compile-only request" \
+  "$PREP" check-app --root "$ROOT" --app "$BASE_APP" --allow-no-model
+expect_fail_with "check-app --require-model fails a model-less app" "no .gguf in the built app" \
+  "$PREP" check-app --root "$ROOT" --app "$BASE_APP" --require-model
+expect_ok "check-app accepts a complete model-bearing unsigned fixture" \
+  "$PREP" check-app --root "$ROOT" --app "$BASE_APP_MODEL" --require-model
+
+cp -R "$BASE_APP" "$TMP/empty-exe.app"
+: > "$TMP/empty-exe.app/PocketGlimmer"
+expect_fail_with "check-app rejects a zero-byte executable" "executable is empty" \
+  "$PREP" check-app --root "$ROOT" --app "$TMP/empty-exe.app" --allow-no-model
+
+cp -R "$BASE_APP" "$TMP/non-macho-exe.app"
+printf '#!/bin/sh\nexit 0\n' > "$TMP/non-macho-exe.app/PocketGlimmer"
+chmod +x "$TMP/non-macho-exe.app/PocketGlimmer"
+expect_fail_with "check-app on macOS rejects a non-Mach-O executable" "Mach-O arm64 executable" \
+  env PATH="$MOCKBIN:$PATH" FAKE_APP_FILE_OUTPUT='ASCII text executable' \
+  "$PREP" check-app --root "$ROOT" --app "$TMP/non-macho-exe.app" --allow-no-model
 
 ln -s "$MODEL" "$ROOT/app/PocketGlimmer/Resources/Models/source-symlink.gguf"
 expect_fail_with "verify-resources rejects a symlinked source model" "symlink" \
@@ -463,6 +509,18 @@ cp -R "$BASE_APP" "$TMP/embedded-empty.app"
 expect_fail_with "check-app rejects an empty embedded framework binary" "empty" \
   "$PREP" check-app --root "$ROOT" --app "$TMP/embedded-empty.app" --allow-no-model
 
+cp -R "$BASE_APP" "$TMP/embedded-fw-symlink.app"
+mv "$TMP/embedded-fw-symlink.app/Frameworks/llama.framework" "$TMP/external-embedded-fw"
+ln -s "$TMP/external-embedded-fw" "$TMP/embedded-fw-symlink.app/Frameworks/llama.framework"
+expect_fail_with "check-app rejects a symlinked embedded llama.framework directory" "symlink" \
+  "$PREP" check-app --root "$ROOT" --app "$TMP/embedded-fw-symlink.app" --allow-no-model
+
+cp -R "$BASE_APP" "$TMP/embedded-frameworks-symlink.app"
+mv "$TMP/embedded-frameworks-symlink.app/Frameworks" "$TMP/external-frameworks"
+ln -s "$TMP/external-frameworks" "$TMP/embedded-frameworks-symlink.app/Frameworks"
+expect_fail_with "check-app rejects a symlinked Frameworks directory" "Frameworks directory is a symlink" \
+  "$PREP" check-app --root "$ROOT" --app "$TMP/embedded-frameworks-symlink.app" --allow-no-model
+
 # --- model bundling ----------------------------------------------------------
 
 DEST="$ROOT/app/PocketGlimmer/Resources/Models/$(basename "$SHIPPING_MODEL_REL")"
@@ -520,6 +578,26 @@ expect_ok "framework verifies a complete device xcframework with pinned provenan
 expect_fail_with "framework rejects a simulator-platform device binary" "platform IOS" \
   env PATH="$MOCKBIN:$PATH" FAKE_VTOOL_PLATFORM=IOSSIMULATOR \
   "$PREP" framework --root "$FWROOT"
+
+cp -R "$FWROOT" "$TMP/fw-symlink"
+mv "$TMP/fw-symlink/app/Frameworks/llama.xcframework" "$TMP/fw-symlink-external"
+ln -s "$TMP/fw-symlink-external" "$TMP/fw-symlink/app/Frameworks/llama.xcframework"
+expect_fail_with "framework rejects a symlinked xcframework directory" "xcframework is a symlink" \
+  "$PREP" framework --root "$TMP/fw-symlink"
+
+cp -R "$FWROOT" "$TMP/fw-parent-symlink"
+mv "$TMP/fw-parent-symlink/app/Frameworks" "$TMP/fw-parent-external"
+ln -s "$TMP/fw-parent-external" "$TMP/fw-parent-symlink/app/Frameworks"
+expect_fail_with "framework rejects a symlinked app/Frameworks directory" "app/Frameworks is a symlink" \
+  "$PREP" framework --root "$TMP/fw-parent-symlink"
+
+cp -R "$FWROOT" "$TMP/fw-slice-symlink"
+mv "$TMP/fw-slice-symlink/app/Frameworks/llama.xcframework/ios-arm64/llama.framework" \
+  "$TMP/fw-slice-external"
+ln -s "$TMP/fw-slice-external" \
+  "$TMP/fw-slice-symlink/app/Frameworks/llama.xcframework/ios-arm64/llama.framework"
+expect_fail_with "framework rejects a symlinked device-slice llama.framework" "device slice is a symlink" \
+  "$PREP" framework --root "$TMP/fw-slice-symlink"
 
 cp -R "$FWROOT" "$TMP/fw-nomarker"
 rm -f "$TMP/fw-nomarker/app/Frameworks/llama.xcframework/.pocketglimmer-provenance.json"
@@ -719,8 +797,12 @@ expect_fail_with "build-unsigned reports the real xcodebuild exit code" "exit 7"
   env PATH="$MOCKBIN:$PATH" FAKE_XCODEBUILD_RC=7 \
   "$PREP" build-unsigned --root "$BUILDROOT2" --model "$MODEL" --derived-data "$DD"
 
-expect_ok "build-unsigned accepts a freshly produced valid app (mock Xcode)" \
+expect_status_with "build-unsigned reports a model-less fresh app as release-incomplete" 2 "RELEASE INCOMPLETE" \
   env PATH="$MOCKBIN:$PATH" FAKE_APP_TEMPLATE="$BASE_APP" \
+  "$PREP" build-unsigned --root "$BUILDROOT2" --model "$MODEL" --derived-data "$DD"
+
+expect_ok "build-unsigned accepts a freshly produced valid app with the verified model (mock Xcode)" \
+  env PATH="$MOCKBIN:$PATH" FAKE_APP_TEMPLATE="$BASE_APP" FAKE_APP_MODEL_PATH="$MODEL" \
   "$PREP" build-unsigned --root "$BUILDROOT2" --model "$MODEL" --derived-data "$DD"
 
 # --- no unsafe --no-generate -------------------------------------------------

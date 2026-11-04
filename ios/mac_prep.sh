@@ -280,6 +280,34 @@ verify_macho_native() {
   ok "$label: native arm64 iOS Mach-O, install name and pinned symbol verified"
 }
 
+verify_app_executable() {
+  local bin=$1 label=$2 out
+  if [ ! -s "$bin" ]; then
+    fail "$label is empty: $bin"
+    return 1
+  fi
+  if [ "$(uname -s)" != Darwin ]; then
+    ok "$label: non-empty (Mach-O executable proof needs macOS)"
+    return 0
+  fi
+  if ! command -v file >/dev/null 2>&1; then
+    fail "$label: file(1) is required to prove a Mach-O executable"
+    return 1
+  fi
+  if ! out=$(file -b "$bin" 2>&1); then
+    fail "$label: file(1) could not read the executable: $out"
+    return 1
+  fi
+  case "$out" in
+    *Mach-O*executable*arm64*|*Mach-O*arm64*executable*) ;;
+    *)
+      fail "$label: file reports '$out' (need a Mach-O arm64 executable)"
+      return 1
+      ;;
+  esac
+  ok "$label: Mach-O arm64 executable"
+}
+
 check_model_file() {
   local f=$1 label=${2:-model}
   local size hash
@@ -457,6 +485,14 @@ check_framework_source() {
   local -a headers=(llama.h ggml.h ggml-opt.h ggml-alloc.h ggml-backend.h
                    ggml-metal.h ggml-cpu.h ggml-blas.h gguf.h mtmd.h mtmd-helper.h)
 
+  if [ -L "$fw" ]; then
+    fail "$FRAMEWORK_REL is a symlink; keep the built framework inside app/Frameworks"
+    return 1
+  fi
+  if [ -L "$(dirname "$fw")" ]; then
+    fail "app/Frameworks is a symlink; refusing to follow it"
+    return 1
+  fi
   if [ ! -d "$fw" ]; then
     fail "missing $FRAMEWORK_REL"
     printf '     Build it from a clean checkout at %s: %s framework --llama-src ~/src/llama.cpp\n' "$LLAMA_COMMIT" "$0"
@@ -471,6 +507,14 @@ check_framework_source() {
   if [ ! -d "$slice" ]; then
     fail "$FRAMEWORK_REL has no ios-arm64/llama.framework device slice"
     printf '     Rebuild with: cd ~/src/llama.cpp && ./build-xcframework.sh ios-device\n'
+    return 1
+  fi
+  if [ -L "$fw/ios-arm64" ]; then
+    fail "$FRAMEWORK_REL ios-arm64 directory is a symlink; keep the built framework in place"
+    return 1
+  fi
+  if [ -L "$slice" ]; then
+    fail "$FRAMEWORK_REL device slice is a symlink; keep the built llama.framework in place"
     return 1
   fi
   if [ ! -f "$slice/Info.plist" ]; then
@@ -554,6 +598,14 @@ check_framework_embedded() {
   local binary="$fw/llama"
   local out
 
+  if [ -L "$fw" ]; then
+    fail "embedded llama.framework is a symlink; the app must embed the framework itself"
+    return 1
+  fi
+  if [ -L "$(dirname "$fw")" ]; then
+    fail "built app Frameworks directory is a symlink; refusing to follow it"
+    return 1
+  fi
   if [ ! -d "$fw" ]; then
     fail "built app has no embedded Frameworks/llama.framework"
     return 1
@@ -1049,9 +1101,11 @@ check_bundled_app_models() {
       fail "built app has no .gguf where AppModel.findModel looks (bundle root or Models/)"
       printf '     Found an unusable nested copy at %s; the app does not search there.\n' "$nested"
     elif [ "$REQUIRE_MODEL" = 1 ]; then
-      fail "no .gguf in the built app"
+      fail "no .gguf in the built app (--require-model)"
+    elif [ "$ALLOW_NO_MODEL" = 1 ]; then
+      skip "no .gguf in the built app; compile-only request (--allow-no-model), not install-ready"
     else
-      warn "no .gguf in the built app; copy the model through Files after install (Documents/ is device-only and not checked here)"
+      skip "no .gguf in the built app; a release app must bundle the verified model (pass --allow-no-model only for compile-only checks)"
     fi
   fi
 }
@@ -1070,10 +1124,15 @@ check_app() {
   fi
   name=$(plist_value "$app/Info.plist" CFBundleExecutable 2>/dev/null || true)
   name=${name:-PocketGlimmer}
+  if [ -L "$app/$name" ]; then
+    fail "app executable is a symlink: $app/$name"
+    return 1
+  fi
   if [ ! -f "$app/$name" ]; then
     fail "app executable missing: $app/$name"
     return 1
   fi
+  verify_app_executable "$app/$name" "app executable" || return 1
   if ! plist_true "$app/Info.plist" UIFileSharingEnabled; then
     fail "Info.plist does not enable UIFileSharingEnabled; Finder/Files model copy would not work"
     return 1
@@ -1118,16 +1177,26 @@ check_app() {
     printf '\nAPP BUNDLE FAILED: %d required check(s) failed.\n' "$FAILS"
     return 1
   fi
-  printf '\nAPP BUNDLE PASSED: calibration, skills, and embedded framework are in place.\n'
+  if [ "$SKIPS" -ne 0 ] || [ "$INCOMPLETE" -ne 0 ]; then
+    printf '\nAPP BUNDLE INCOMPLETE: %d check(s) skipped and %d not verified; this is not install-ready.\n' \
+      "$SKIPS" "$INCOMPLETE"
+    return 2
+  fi
+  printf '\nAPP BUNDLE PASSED: calibration, skills, embedded framework, and bundled model are in place.\n'
 }
 
 cmd_check_app() {
+  local rc
   if [ -z "$APP_OPT" ]; then
     die "check-app needs --app PATH"
   fi
   section "Built app"
-  check_app "$(abs_path "$APP_OPT")" || true
-  [ "$FAILS" -eq 0 ] || return 1
+  check_app "$(abs_path "$APP_OPT")"
+  rc=$?
+  if [ "$FAILS" -ne 0 ]; then
+    return 1
+  fi
+  return "$rc"
 }
 
 cmd_prepare() {
@@ -1249,10 +1318,12 @@ cmd_build_unsigned() {
     return 1
   fi
   section "Built app"
-  check_app "$app" || {
+  check_app "$app"
+  rc=$?
+  if [ "$rc" -eq 1 ] || [ "$FAILS" -ne 0 ]; then
     printf '     Build log: %s\n' "$log"
     return 1
-  }
+  fi
   if [ "$SKIPS" -ne 0 ] || [ "$INCOMPLETE" -ne 0 ]; then
     printf '\nUNSIGNED COMPILE PASSED; RELEASE INCOMPLETE: a required artifact is skipped or not provenance-verified.\n'
     if [ "$INCOMPLETE" -ne 0 ]; then
