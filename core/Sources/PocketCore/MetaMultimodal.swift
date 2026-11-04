@@ -537,14 +537,16 @@ public enum JPEGMetadataStripper {
 // MARK: - The gate
 
 /// Photos carry more than the words that come with them, so a stricter lexical floor applies on top of the trained
-/// sensitivity decision: documents with money, identity or health data never leave the phone.
+/// sensitivity decision. Matching money, identity or health text blocks upload; unreadable or unrecognized details can be missed.
 public enum PhotoSensitivityHint {
     static let re = try! NSRegularExpression(pattern: #"\b(receipts?|invoices?|bills?|bank|statements?|cheques?|credit|debit|visa|mastercard|amex|card ?number|pay ?stubs?|payslips?|tax|w-?2|passports?|driver'?s licen[cs]e|id card|social security|ssn|prescriptions?|pill bottles?|lab report|medical|x-?rays?|insurance|password|pin|naked|nude)\b"#, options: [.caseInsensitive])
     static let card = try! NSRegularExpression(pattern: #"(?:\b(?:\d[ -]?){13,16}\b)|(?:\*{2,}\s?\d{4})|(?:\bx{4}\s?\d{4})"#, options: [.caseInsensitive])
+    static let amount = try! NSRegularExpression(pattern: #"(?:\b(?:sub\s*total|total|amount\s+due|balance)\s*[:=]?\s*(?:(?:USD|EUR|GBP|CAD|AUD|JPY|INR)\s*)?[$€£¥₹]?\s*\d+(?:[.,]\d+)*\b)|(?:[$€£¥₹]\s*\d+(?:[.,]\d+)*\b)|(?:\b(?:USD|EUR|GBP|CAD|AUD|JPY|INR)\s+\d+(?:[.,]\d+)*\b)"#, options: [.caseInsensitive])
     /// `text` is the user's request plus any words read off the photo by on-device OCR (never sent).
     public static func matches(_ text: String) -> Bool {
         let r = NSRange(text.startIndex..., in: text)
-        return SensitivityHint.matches(text) || re.firstMatch(in: text, range: r) != nil || card.firstMatch(in: text, range: r) != nil
+        return SensitivityHint.matches(text) || re.firstMatch(in: text, range: r) != nil
+            || card.firstMatch(in: text, range: r) != nil || amount.firstMatch(in: text, range: r) != nil
     }
 }
 
@@ -636,7 +638,7 @@ public final class MultimodalGate: @unchecked Sendable {
             r.outcome = .keptOnDevice(reason: "Looks sensitive (\(Int((sens.probabilities["sensitive"] ?? 0) * 100))% sure). The photo stayed on this iPhone."); return r
         }
         if PhotoSensitivityHint.matches(intent + "\n" + (photoText ?? "")) {
-            r.outcome = .keptOnDevice(reason: "Photos of money, ID or health documents stay on this iPhone. Nothing was sent."); return r
+            r.outcome = .keptOnDevice(reason: "Potentially sensitive text detected. The photo stayed on this iPhone. Nothing was sent."); return r
         }
         guard assistant.isOnline(), let vision else { return r }
         guard let stripped = JPEGMetadataStripper.strip(imageJPEG) else {

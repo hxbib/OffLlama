@@ -46,8 +46,9 @@ $0.01/image) is also on the API. It is **not integrated**: a private assistant h
    unchanged) on `User: <intent> [photo attached; text in photo: <on-device OCR>]`. The OCR comes from Apple Vision
    (`VNRecognizeTextRequest`), and its text is used only for this local decision. It is never sent. "sensitive" →
    `.keptOnDevice`, nothing sent, and the decision card shows the probability.
-2. **A lexical floor for photos.** Receipts, statements, cards/card numbers (`**** 4421`), IDs, prescriptions, lab
-   reports and similar stay local even when the model says "ok". A photo carries more than the words that come with it.
+2. **A lexical floor for photos.** Recognized terms for receipts, statements, cards/card numbers (`**** 4421`), IDs,
+   prescriptions and lab reports block upload even when the model says "ok". Amount patterns such as `TOTAL 42.10`
+   and `$42.10` also block upload. These rules can miss sensitive content and can block benign photos with prices.
    The hint and the user toggle **"Photos stay on this iPhone"** (in the Glimpse sheet, `@AppStorage("photos_stay_on_device")`)
    both refuse with `.keptOnDevice`.
 3. **Online check.** Offline → "Voice and camera understanding need the cloud; nothing was sent." The sensitivity card
@@ -102,7 +103,7 @@ chart (Thu = 9 is tallest); `whiteboard.jpg` is an 800×500 whiteboard with five
 | Spark vision, bar chart, "tallest bar?" | `"The tallest bar is Thu with 9 thousand steps."` (correct) | 3.6 s |
 | Spark vision, whiteboard | All five notes, verbatim | 3.6 s |
 | SAM 3.1, bars, prompt `bar` | 5 boxes, conf 0.91; tallest box x1=404 y1=52 x2=490 y2=360 (= Thu) | 1.4 s |
-| SAM 3.1, whiteboard, prompt `yellow sticky note` | 5 boxes, conf 0.82–0.92 | 1.0 s |
+| SAM 3.1, whiteboard, prompt `yellow sticky note` | 5 boxes, saved confidence 0.812865–0.816092 | 1.0 s |
 | Swift live gate, "Both" on whiteboard | Spark lists the 5 notes and picks `yellow sticky note`; SAM 3.1 returns 5 segments; all 5 masks decode on device; 78 KB sent across 2 requests | 5.8 s |
 
 Lessons from the live runs that are now in the code:
@@ -126,14 +127,15 @@ replaced by `<N bytes …>`.
 
 - **Online-only.** Voice and camera need the network. There's no on-device ASR or vision model in this build. Offline, the
   mic and camera say so and send nothing.
-- **The sensitivity decision was trained on text.** For photos it sees the user's words plus on-device OCR, not pixels. A
-  photo of a document with no readable text and an innocent question could pass the model. The lexical floor and the
-  "Photos stay on device" toggle are the backstops. This is a known gap, not a solved problem.
+- **The sensitivity decision was trained on text.** For photos it sees the user's words plus only the first 240
+  characters of flattened OCR, not pixels. The lexical floor scans the full OCR string but cannot recognize every
+  sensitive detail or receipt. A readable disclosure outside that prefix can also be missed. The "Photos stay on
+  this iPhone" toggle blocks all photo uploads; screening alone does not guarantee that every sensitive photo stays local.
 - **SAM 3.1 is shown, not acted on.** Segments are drawn (boxes plus masks) and counted. They don't yet feed tools (for
   example, "make a reminder per sticky note" still goes through Spark's text answer and the normal tool path).
 - **One concept per SAM request** (an API rule). "Both" mode segments only the concept Spark names.
-- **Settings has no voice/photo toggles yet** (SettingsView belongs to another work stream). The photo toggle lives in the
-  Glimpse sheet. `voice_stays_on_device` and `keep_voice_recordings` are UserDefaults keys that default to off.
+- **Settings has a voice-upload toggle.** The photo toggle lives in the Glimpse sheet. The recording-retention
+  flag `keep_voice_recordings` has no Settings control yet and defaults to off, as does `voice_stays_on_device`.
 - **The voice file endpoint takes WAV only.** We record PCM WAV directly (~32 KB/s), not AAC. A 10 s request is ~320 KB.
   Realtime streaming (`wss://api.meta.ai/v1/asr/realtime`) would cut latency but isn't wired.
 - **App code was not compiled on this box** (no Xcode). See the iOS caveats below.
@@ -155,7 +157,7 @@ replaced by `<N bytes …>`.
 2. Point the camera at a real receipt and type "split this receipt" → hold on the lock badge for 2 s. Then do a
    whiteboard with 3–5 sticky notes → **Both** → hold on the overlay and the "What left the phone" box. That's ~12 s.
 3. Voice-over: "Voice and camera use three more Meta models (Muse Voice Transcribe, Muse Spark vision, SAM 3.1), and they
-   go through the same on-device gate. Sensitive photos never leave."
+   use on-device privacy checks. Detected sensitive content stays local, and I can turn photo uploads off entirely."
 
 ## iOS compile caveats (unverified on this box)
 

@@ -77,6 +77,19 @@ final class ReviewReflexTests: XCTestCase {
         XCTAssertTrue(d.escalated); XCTAssertEqual(d.chosen.id, "no"); XCTAssertEqual(d.argmax.id, "remember_fact")
         XCTAssertEqual(try tel.all().first?.chosenID, "remember_fact")   // telemetry logs the argmax, not the fallback
     }
+
+    func testReadOnlyTelemetryDoesNotDiscardTheDecision() async throws {
+        let db = try SQLiteDB(path: ":memory:")
+        let tel = try TelemetryLog(db: db)
+        try db.exec("PRAGMA query_only=ON")
+        let e = ScriptedEngine()
+        e.script(whenPromptContains: "confirmation", logits: ["A": 5, "B": -5])
+        let decision = try await Reflex(engine: e, telemetry: tel).decide(OptionSets.confirmBeforeAct, context: "synthetic request")
+        XCTAssertEqual(decision.chosen.id, "act")
+        XCTAssertFalse(decision.escalated)
+        XCTAssertNil(decision.telemetryID)
+        XCTAssertTrue(try tel.all().isEmpty)
+    }
 }
 
 final class ReviewPrivacyTests: XCTestCase {

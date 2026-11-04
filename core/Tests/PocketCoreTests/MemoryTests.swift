@@ -71,6 +71,41 @@ final class MemoryTests: XCTestCase {
         let m2 = try MemoryStore(db: SQLiteDB(path: path))
         XCTAssertEqual(try m2.profile()["diet"], ["vegan"])
     }
+
+    func testForgetRemovesSupersededChainAcrossReopen() async throws {
+        let dir = FileManager.default.temporaryDirectory.appendingPathComponent("forget-\(UUID())")
+        try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: dir) }
+        let path = dir.appendingPathComponent("memory.sqlite").path
+        var deleted: [Int64] = []
+        do {
+            let m = try MemoryStore(db: SQLiteDB(path: path))
+            for city in ["Boston", "Brooklyn", "Queens"] {
+                let result = try await m.upsert(.init(subject: "user", attribute: "lives_in", value: city, text: "User lives in \(city)"))
+                deleted.append(try XCTUnwrap(result.fact).id)
+            }
+            try await m.upsert(.init(subject: "user", attribute: "likes", value: "jazz", text: "User likes jazz"))
+            try m.forget(id: XCTUnwrap(deleted.last))
+            try m.forget(id: XCTUnwrap(deleted.last))
+        }
+        let m = try MemoryStore(db: SQLiteDB(path: path))
+        for id in deleted { XCTAssertNil(try m.fact(id: id)) }
+        XCTAssertTrue(try m.history(subject: "user", attribute: "lives_in").isEmpty)
+        XCTAssertTrue(try m.corrections().isEmpty)
+        XCTAssertEqual(try m.active().map(\.value), ["jazz"])
+    }
+
+    func testBudgetEvictionAlsoRemovesHistoryWithoutNestedTransaction() async throws {
+        let m = try store()
+        for city in ["Boston", "Brooklyn"] {
+            try await m.upsert(.init(subject: "user", attribute: "lives_in", value: city, text: "User lives in \(city)"))
+            now += 100
+        }
+        m.budget = 1
+        try await m.upsert(.init(subject: "user", attribute: "likes", value: "jazz", text: "User likes jazz"))
+        XCTAssertEqual(try m.active().map(\.value), ["jazz"])
+        XCTAssertTrue(try m.history(subject: "user", attribute: "lives_in").isEmpty)
+    }
 }
 
 final class ProactiveTests: XCTestCase {

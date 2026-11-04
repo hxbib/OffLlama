@@ -1,11 +1,13 @@
 import SwiftUI
 import Charts
+import UIKit
 import PocketCore
 
 /// Live decision feed + the "share of decisions handled in milliseconds" chart, built only from logged telemetry.
 struct ReflexView: View {
     @Environment(AppModel.self) private var model
-    @State private var exportURL: URL?
+    @State private var export: TelemetryExport?
+    @State private var exportFailed = false
     @State private var byRound = true
 
     var body: some View {
@@ -34,13 +36,32 @@ struct ReflexView: View {
             .navigationTitle("Reflex")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    if let u = exportURL { ShareLink(item: u) { Image(systemName: "square.and.arrow.up") } }
-                    else { Button { exportURL = model.exportCSV() } label: { Image(systemName: "tablecells") } }
+                    Button {
+                        if let url = model.exportCSV() { export = TelemetryExport(url: url) }
+                        else { exportFailed = true }
+                    } label: { Label("Export latest CSV", systemImage: "square.and.arrow.up") }
                 }
             }
             .onAppear { model.refresh() }
+            .sheet(item: $export) { CSVShareSheet(url: $0.url) }
+            .alert("Couldn’t export decisions", isPresented: $exportFailed) {
+                Button("OK", role: .cancel) { }
+            } message: { Text("The CSV could not be written. Please try again.") }
         }
     }
+}
+
+private struct TelemetryExport: Identifiable {
+    let id = UUID()
+    let url: URL
+}
+
+private struct CSVShareSheet: UIViewControllerRepresentable {
+    let url: URL
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        UIActivityViewController(activityItems: [url], applicationActivities: nil)
+    }
+    func updateUIViewController(_ controller: UIActivityViewController, context: Context) { }
 }
 
 struct ReflexChart: View {

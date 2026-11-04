@@ -260,6 +260,20 @@ final class MetaMultimodalTests: XCTestCase {
         XCTAssertTrue(fake.requests.isEmpty)
     }
 
+    func testGateWithholdsAmountOnlyReceiptsEvenWhenClassifierSaysOK() async throws {
+        let e = ScriptedEngine(); e.script(whenPromptContains: Self.sensitiveQ, logits: ["A": 5, "B": -5])
+        let fake = FakeTransport()
+        fake.replies["chat/completions"] = Self.chatReply("A cash receipt.")
+        let (gate, _, _) = try makeGate(e, online: true, fake: fake)
+        for text in ["TOTAL 42.10", "Subtotal: 1,234.56", "Amount due\nEUR 42,10", "Balance £42.10", "$42.10"] {
+            let result = try await gate.glimpse(imageJPEG: Self.jpeg, intent: "what is this?",
+                                              task: .describe(question: "what is this?"), photoText: text)
+            XCTAssertTrue(result.keptOnDevice, text)
+        }
+        XCTAssertTrue(fake.requests.isEmpty)
+        XCTAssertFalse(PhotoSensitivityHint.matches("A total of 42 sticky notes"))
+    }
+
     func testGateStripsExifMasksTextAndRecordsPayloads() async throws {
         let e = ScriptedEngine(); e.script(whenPromptContains: Self.sensitiveQ, logits: ["A": 5, "B": -5])
         let fake = FakeTransport()

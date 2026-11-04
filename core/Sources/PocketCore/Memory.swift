@@ -256,7 +256,17 @@ public final class MemoryStore: @unchecked Sendable {
         let olds = try db.query("SELECT * FROM facts WHERE superseded_by IS NOT NULL ORDER BY updated DESC LIMIT ?", [.int(Int64(limit))]).map(Self.decode)
         return try olds.compactMap { o in try fact(id: o.supersededBy!).map { (o, $0) } }
     }
-    public func forget(id: Int64) throws { try db.run("DELETE FROM facts WHERE id=?", [.int(id)]) }
+    /// Remove this fact and the older revisions it replaced. A single statement also works inside budget eviction's transaction.
+    public func forget(id: Int64) throws {
+        try db.run("""
+        WITH RECURSIVE forgotten(id) AS (
+          SELECT id FROM facts WHERE id=?
+          UNION
+          SELECT facts.id FROM facts JOIN forgotten ON facts.superseded_by=forgotten.id
+        )
+        DELETE FROM facts WHERE id IN (SELECT id FROM forgotten)
+        """, [.int(id)])
+    }
     /// Physically delete expired rows.
     @discardableResult public func purgeExpired() throws -> Int {
         let now = clock().timeIntervalSince1970          // one cutoff for both statements, in one transaction

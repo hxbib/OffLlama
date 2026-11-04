@@ -54,10 +54,16 @@ public final class Reflex: @unchecked Sendable {
         var probs: [String: Double] = [:]
         for (i, o) in set.options.enumerated() { probs[o.id] = p[i] }
         // Telemetry `chosen` = argmax (what the model would do), even when escalated; `escalated` records the fallback.
-        let id = try telemetry?.log(DecisionRecord(id: nil, timestamp: clock(), decisionType: set.type, chosenID: argmax.id,
+        let id: Int64?
+        do {
+            id = try telemetry?.log(DecisionRecord(id: nil, timestamp: clock(), decisionType: set.type, chosenID: argmax.id,
                                                    confidence: conf, escalated: escalated, latencyMs: ms,
                                                    model: engine.modelName, agreedWithTeacher: nil, source: source,
                                                    context: context, optionIDs: set.options.map(\.id), probabilities: probs))
+        } catch {
+            id = nil
+            print("PocketGlimmer: decision telemetry could not be saved.")
+        }
         return ReflexDecision(type: set.type, chosen: chosen, argmax: argmax, probabilities: probs, confidence: conf,
                               tau: tau, escalated: escalated, latencyMs: ms, telemetryID: id)
     }
