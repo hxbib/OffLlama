@@ -308,9 +308,9 @@ final class AppModel {
 
     private func append(_ original: ChatItem, to cid: ConversationID) {
         var item = original
-        let limit = ConversationLimits.standard.maxMessageCharacters
-        if item.text.count > limit {
-            item.text = String(item.text.prefix(limit - 60)) + "\n… (shortened to fit chat history)"
+        let fitted = ConversationBook.fit(item.text)
+        if fitted.truncated {
+            item.text = fitted.text
             noteHistory("A long message was shortened to fit chat history.")
         }
         let stored = StoredMessage(id: item.id, role: storedRole(item.role), text: item.text, badge: item.badge,
@@ -415,10 +415,7 @@ final class AppModel {
 
     /// Why a message would be refused before any work starts, so the caller can keep the typed text.
     func sendRefusal(for text: String) -> String? {
-        let limits = ConversationLimits.standard
-        if text.count > limits.maxMessageCharacters { return "That message is longer than \(limits.maxMessageCharacters) characters." }
-        if !book.hasRoomForTurn(in: book.activeID) { return ConversationError.chatFull(limit: limits.maxMessagesPerConversation).description }
-        return nil
+        book.refusal(forUserText: text, in: book.activeID)?.description
     }
 
     func showNotice(_ text: String) { noteHistory(text) }

@@ -174,6 +174,21 @@ public struct ConversationBook: Sendable, Codable, Equatable {
         return conversations.first { $0.messages.count < limits.maxMessagesPerConversation }?.id
     }
 
+    /// Why a typed message must be refused before any work starts, or nil when it is admitted. Callers keep the typed
+    /// text on refusal.
+    public func refusal(forUserText text: String, in id: ConversationID, limits: ConversationLimits = .standard) -> ConversationError? {
+        if text.count > limits.maxMessageCharacters { return .messageTooLong(limit: limits.maxMessageCharacters) }
+        if !hasRoomForTurn(in: id, limits: limits) { return .chatFull(limit: limits.maxMessagesPerConversation) }
+        return nil
+    }
+
+    /// Bounds a stored message. Over-long text is cut with an explicit marker, never dropped.
+    public static func fit(_ text: String, limits: ConversationLimits = .standard) -> (text: String, truncated: Bool) {
+        guard text.count > limits.maxMessageCharacters else { return (text, false) }
+        let marker = "\n… (shortened to fit chat history)"
+        return (String(text.prefix(limits.maxMessageCharacters - marker.count)) + marker, true)
+    }
+
     /// Room for a user turn plus its reply and the few system lines a turn can add.
     public func hasRoomForTurn(in id: ConversationID, limits: ConversationLimits = .standard) -> Bool {
         guard let c = conversation(id) else { return false }
