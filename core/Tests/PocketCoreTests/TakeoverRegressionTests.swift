@@ -101,6 +101,39 @@ final class TakeoverRegressionTests: XCTestCase {
         }
     }
 
+    func testUncertainMessageRouteGetsConfidentSkillAndStillConfirms() async throws {
+        let e = messageEngine()
+        e.script(whenPromptContains: "How should", logits: ["A": 0, "B": 2.4, "C": 0, "D": 0])
+        e.script(whenPromptContains: "Which phone action", logits: ["A": 6, "B": 0, "C": 0, "D": 0, "E": 0, "F": 0, "G": 0, "H": 0])
+        let (a, acts) = try makeAssistant(e)
+        a.reflex.profile.defaultTau = 0.90
+        a.skills = SkillRegistry()
+        let turn = try await a.handle("Text Mom I'll be home by 8")
+        let route = try XCTUnwrap(turn.decisions.first { $0.type == .route })
+        XCTAssertEqual(route.argmax.id, "tool")
+        XCTAssertTrue(route.escalated)
+        guard case .needsConfirmation(let action, _) = turn.reply else { return XCTFail("\(turn.reply)") }
+        XCTAssertEqual(action, PlannedAction(tool: "skill:imessage_send", args: ["contact": "Mom", "body": "I'll be home by 8"]))
+        XCTAssertTrue(acts.performed.isEmpty)
+    }
+
+    func testUncertainMessageSkillDoesNotBypassThreshold() async throws {
+        let e = messageEngine()
+        e.script(whenPromptContains: "How should", logits: ["A": 0, "B": 2.4, "C": 0, "D": 0])
+        e.script(whenPromptContains: "Which phone action", logits: ["A": 0, "B": 0, "C": 0, "D": 0, "E": 0, "F": 0, "G": 0, "H": 0])
+        let (a, acts) = try makeAssistant(e)
+        a.reflex.profile.defaultTau = 0.90
+        a.skills = SkillRegistry()
+        let turn = try await a.handle("Text Mom I'll be home by 8")
+        let pick = try XCTUnwrap(turn.decisions.first { $0.type == .skillPick })
+        XCTAssertTrue(pick.escalated)
+        guard case .clarify = turn.reply else { return XCTFail("\(turn.reply)") }
+        XCTAssertNil(turn.action)
+        XCTAssertTrue(acts.performed.isEmpty)
+        XCTAssertFalse(ActionPlanner.isExplicitRequest("Explain how text messages work"))
+        XCTAssertFalse(ActionPlanner.isExplicitRequest("The text of this poem is confusing"))
+    }
+
     func testSharedTextEscalationScrubsRememberedEntityNames() async throws {
         let e = ScriptedEngine()
         e.script(whenPromptContains: "acceptable to send this request", logits: ["A": 5, "B": -5])

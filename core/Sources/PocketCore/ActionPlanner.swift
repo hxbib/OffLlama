@@ -50,8 +50,14 @@ public enum ActionPlanner {
                                             "apple tv", "appletv", "tv app"]
     public static func isExplicitRequest(_ utterance: String) -> Bool {
         let u = SkillRegistry.norm(utterance)
+        if isExplicitMessageRequest(utterance) { return true }
         if u.range(of: #" (?:last|recent|latest) \d+ (?:e ?)?mails? "#, options: .regularExpression) != nil { return true }
         return explicitRequest.contains { u.contains(SkillRegistry.norm($0)) }
+    }
+
+    static func isExplicitMessageRequest(_ utterance: String) -> Bool {
+        SkillRegistry.norm(utterance).range(of: #"^ (?:please )?(?:text|message|send (?:a )?(?:text|message) to) "#,
+                                          options: .regularExpression) != nil
     }
 
     /// Whether the skill path should run instead of today's toolChoice path.
@@ -99,7 +105,8 @@ extension Assistant {
         let pick = try await reflex.decide(OptionSets.skillPick(candidates: cands.map(\.optionLabel)), context: ctx)
         decisions.append(pick)
         guard pick.chosen.id != "ask", let i = Int(pick.chosen.id.dropFirst()), i < cands.count else {
-            return fallThrough ? nil : .clarify("Did you mean: \(ActionPlanner.list(cands.prefix(3).map(\.title)))?")
+            if fallThrough && !ActionPlanner.isExplicitMessageRequest(utterance) { return nil }
+            return .clarify("Which action do you want: \(ActionPlanner.list(cands.prefix(3).map(\.title)))? Please restate the request with the app, recipient and message.")
         }
         let skill = cands[i]
         var args = SkillArgs.extract(skill, utterance: utterance)
