@@ -12,41 +12,23 @@ struct ChatView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                ScrollViewReader { proxy in
-                    ScrollView {
-                        LazyVStack(spacing: 12) {
-                            if model.chat.isEmpty { EmptyChat() }
-                            ForEach(model.chat) { item in Bubble(item: item).id(item.id) }
-                            if model.busy { ProgressView().padding(.top, 4) }
-                        }
-                        .padding()
+            ScrollViewReader { proxy in
+                ScrollView {
+                    LazyVStack(spacing: 12) {
+                        if model.chat.isEmpty { EmptyChat() }
+                        ForEach(model.chat) { item in Bubble(item: item).id(item.id) }
+                        if model.busy { ProgressView().padding(.top, 4) }
+                        Color.clear.frame(height: 1).id(Self.bottomID)
                     }
-                    .scrollDismissesKeyboard(.interactively)
-                    .onChange(of: model.chat.count) {
-                        guard let l = model.chat.last else { return }
-                        if reduceMotion { proxy.scrollTo(l.id, anchor: .bottom) } else { withAnimation { proxy.scrollTo(l.id, anchor: .bottom) } }
-                    }
+                    .padding()
                 }
-                if let last = model.decisions.first { LiveReflexStrip(row: last) }
-                HStack(spacing: 10) {
-                    MicButton()       // hold to talk: uploads audio to Muse Voice Transcribe -> the same Reflex path as typed text (online only; not Apple Dictation)
-                    CameraButton()    // glimpse: sensitivity gate -> Muse Spark 1.3 vision / SAM 3.1 (online only)
-                    TextField("Ask or tell me something", text: $input, axis: .vertical)
-                        .lineLimit(1...4).focused($focused)
-                        .accessibilityLabel("Message")
-                        .accessibilityHint("Type, or use the microphone on the keyboard to dictate with Apple Dictation.")
-                        .padding(.horizontal, 14).padding(.vertical, 10)
-                        .background(.quaternary.opacity(0.6), in: RoundedRectangle(cornerRadius: 20))
-                    Button {
-                        guard model.assistant != nil, !model.busy else { return }
-                        let t = input; input = ""
-                        Task { await model.send(t) }
-                    } label: { Image(systemName: "arrow.up.circle.fill").font(.system(size: sendSize)).frame(minWidth: 44, minHeight: 44) }
-                    .accessibilityLabel("Send")
-                    .disabled(input.trimmingCharacters(in: .whitespaces).isEmpty || model.busy || model.assistant == nil)
-                }
-                .padding(.horizontal).padding(.vertical, 8)
+                .scrollDismissesKeyboard(.interactively)
+                .onChange(of: model.chat.count) { scrollToBottom(proxy) }
+                .onChange(of: focused) { _, isFocused in if isFocused { scrollToBottom(proxy) } }
+                .onChange(of: input) { if focused { scrollToBottom(proxy) } }
+                // The composer is a bottom safe-area inset, so the scroll view, the keyboard and the composer
+                // share one inset. A plain VStack under a ScrollView leaves the last rows to the keyboard.
+                .safeAreaInset(edge: .bottom, spacing: 0) { composer }
             }
             .toolbar {
                 ToolbarItem(placement: .principal) { StatusPill() }
@@ -54,6 +36,38 @@ struct ChatView: View {
             }
             .navigationBarTitleDisplayMode(.inline)
         }
+    }
+
+    private static let bottomID = "chat-bottom"
+
+    private func scrollToBottom(_ proxy: ScrollViewProxy) {
+        if reduceMotion { proxy.scrollTo(Self.bottomID, anchor: .bottom) }
+        else { withAnimation(.easeOut(duration: 0.2)) { proxy.scrollTo(Self.bottomID, anchor: .bottom) } }
+    }
+
+    private var composer: some View {
+        VStack(spacing: 0) {
+            if let last = model.decisions.first { LiveReflexStrip(row: last) }
+            HStack(alignment: .bottom, spacing: 10) {
+                MicButton()       // hold to talk: uploads audio to Muse Voice Transcribe -> the same Reflex path as typed text (online only; not Apple Dictation)
+                CameraButton()    // glimpse: sensitivity gate -> Muse Spark 1.3 vision / SAM 3.1 (online only)
+                TextField("Ask or tell me something", text: $input, axis: .vertical)
+                    .lineLimit(1...5).focused($focused)
+                    .accessibilityLabel("Message")
+                    .accessibilityHint("Type, or use the microphone on the keyboard to dictate with Apple Dictation.")
+                    .padding(.horizontal, 14).padding(.vertical, 10)
+                    .background(.quaternary.opacity(0.6), in: RoundedRectangle(cornerRadius: 20))
+                Button {
+                    guard model.assistant != nil, !model.busy else { return }
+                    let t = input; input = ""
+                    Task { await model.send(t) }
+                } label: { Image(systemName: "arrow.up.circle.fill").font(.system(size: sendSize)).frame(minWidth: 44, minHeight: 44) }
+                .accessibilityLabel("Send")
+                .disabled(input.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || model.busy || model.assistant == nil)
+            }
+            .padding(.horizontal).padding(.vertical, 8)
+        }
+        .background(.bar)
     }
 }
 
