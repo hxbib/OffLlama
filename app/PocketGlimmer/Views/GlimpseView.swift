@@ -99,19 +99,20 @@ struct GlimpseView: View {
     /// Mirror the turn into the chat so it shows the same badges, decision cards and privacy sheet as text turns.
     private func record(_ r: GlimpseResult) {
         let rows = r.decisions.map { DecisionRow($0) }
+        let cid = model.activeConversationID
         for row in rows { model.decisions.insert(row, at: 0) }
-        model.chat.append(.init(role: .user, text: "Photo: " + intent))
+        model.post(.init(role: .user, text: "Photo: " + intent), in: cid)
         let sent = r.cloudPayloads.map { "\($0.line)\ntext: \($0.textSent)" }.joined(separator: "\n\n")
         switch r.outcome {
         case .keptOnDevice(let why):
-            model.chat.append(.init(role: .assistant, text: why, badge: "on device", decisions: rows, keptOnDevice: true))
+            model.post(.init(role: .assistant, text: why, badge: "On device", decisions: rows, keptOnDevice: true), in: cid)
         case .offline(let msg):
-            model.chat.append(.init(role: .assistant, text: msg, badge: "offline", decisions: rows))
+            model.post(.init(role: .assistant, text: msg, badge: "Offline", decisions: rows), in: cid)
         case .answered(let text):
-            model.chat.append(.init(role: .assistant, text: text, badge: prettyProvider(r.provider ?? ""), decisions: rows, cloudPromptSent: sent))
+            model.post(.init(role: .assistant, text: text, badge: prettyProvider(r.provider ?? ""), decisions: rows, cloudPromptSent: sent), in: cid)
         case .segmented(let segs, let answer):
             let text = (answer.map { $0 + "\n" } ?? "") + "SAM 3.1 outlined \(segs.count) × \(segs.first?.label ?? "object")."
-            model.chat.append(.init(role: .assistant, text: text, badge: r.provider ?? "", decisions: rows, cloudPromptSent: sent))
+            model.post(.init(role: .assistant, text: text, badge: r.provider ?? "", decisions: rows, cloudPromptSent: sent), in: cid)
         }
     }
 }

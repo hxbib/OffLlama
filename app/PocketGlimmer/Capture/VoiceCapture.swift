@@ -100,7 +100,7 @@ struct MicButton: View {
             .accessibilityAddTraits(.isButton)
     }
 
-    private func note(_ text: String) { model.chat.append(.init(role: .system, text: text)) }
+    private func note(_ text: String) { model.post(.init(role: .system, text: text)) }
 
     private func begin() async {
         guard !model.busy else { return }

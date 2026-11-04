@@ -1,5 +1,6 @@
 import SwiftUI
 import UIKit
+import PocketCore
 
 /// Top-of-screen pill: airplane/offline vs online, and the loaded model.
 struct StatusPill: View {
@@ -33,11 +34,12 @@ struct ConfidenceBar: View {
             }
         }
         .frame(height: 6)
-        .accessibilityLabel(String(format: "Confidence %.0f percent, threshold %.0f", value * 100, tau * 100))
+        .accessibilityLabel(String(format: "Model certainty %.0f percent. Needs %.0f percent.", value * 100, tau * 100))
     }
 }
 
-/// The decision object: type -> choice, confidence vs tau, latency; expands to the full distribution + tool-call JSON.
+/// One decision in plain words: what was chosen and how sure the model was of that choice. The number is the model's
+/// certainty about its choice, not the chance an action works or a message arrives. Raw ids and scores are under Details.
 struct DecisionCard: View {
     let row: DecisionRow
     var startExpanded = false
@@ -47,42 +49,40 @@ struct DecisionCard: View {
         VStack(alignment: .leading, spacing: 8) {
             Button { withAnimation(.snappy) { expanded.toggle() } } label: {
                 VStack(alignment: .leading, spacing: 6) {
-                    HStack(spacing: 6) {
-                        Text(row.type).font(.caption.monospaced()).foregroundStyle(.secondary)
-                        Image(systemName: "arrow.right").font(.caption2).foregroundStyle(.tertiary)
-                        Text(row.choice.replacingOccurrences(of: "_", with: " ")).font(.callout.weight(.medium)).foregroundStyle(.primary)
-                        Spacer()
-                        if row.escalated {
-                            Label("below τ", systemImage: "arrow.up.forward.circle").labelStyle(.titleAndIcon)
-                                .font(.caption2.weight(.medium)).foregroundStyle(.orange)
+                    HStack(alignment: .firstTextBaseline, spacing: 6) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(row.titleText).font(.caption).foregroundStyle(.secondary)
+                            Text(row.choiceText).font(.callout.weight(.medium)).foregroundStyle(.primary)
                         }
-                        Text(String(format: "%.0f%%", row.confidence * 100)).font(.callout.monospacedDigit().weight(.semibold))
-                            .foregroundStyle(Theme.confidenceColor(row.confidence, tau: row.tau))
-                        Text(String(format: "%.0f ms", row.ms)).font(.caption.monospacedDigit()).foregroundStyle(.secondary)
+                        Spacer()
                         Image(systemName: "chevron.down").font(.caption2).foregroundStyle(.tertiary).rotationEffect(.degrees(expanded ? 180 : 0))
                     }
+                    Text(row.certaintyText).font(.caption).foregroundStyle(Theme.confidenceColor(row.confidence, tau: row.tau))
                     ConfidenceBar(value: row.confidence, tau: row.tau)
+                    if let note = row.topChoiceNote { Text(note).font(.caption2).foregroundStyle(.orange) }
                 }
             }
             .buttonStyle(.plain)
 
             if expanded {
                 VStack(alignment: .leading, spacing: 4) {
+                    Text("Details").font(.caption.weight(.semibold))
+                    Text("Decision type: \(row.type) · top option: \(row.choice)").font(.caption2.monospaced()).foregroundStyle(.secondary)
                     ForEach(row.probabilities, id: \.id) { p in
                         HStack {
-                            Text(p.id.replacingOccurrences(of: "_", with: " ")).font(.caption)
+                            Text(p.id).font(.caption.monospaced())
                             Spacer()
                             Text(String(format: "%.3f", p.p)).font(.caption.monospacedDigit()).foregroundStyle(.secondary)
                         }
                     }
-                    Text(String(format: "τ = %.2f · one forward pass · letter logits → prior-corrected softmax", row.tau))
+                    Text(String(format: "Bar (τ) %.2f. Time for this decision: %@. One forward pass, letter scores corrected for prior bias.", row.tau, DecisionPresentation.seconds(row.ms)))
                         .font(.caption2).foregroundStyle(.tertiary).padding(.top, 2)
                 }
                 if let json = row.toolCallJSON {
                     Text(json).font(.caption.monospaced()).textSelection(.enabled)
                         .padding(10).frame(maxWidth: .infinity, alignment: .leading)
                         .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 10))
-                        .accessibilityLabel("Tool call JSON")
+                        .accessibilityLabel("Planned action details")
                 }
             }
         }

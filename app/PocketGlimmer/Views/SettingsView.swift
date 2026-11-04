@@ -9,6 +9,7 @@ struct SettingsView: View {
     @AppStorage("pg_kv_prefix") private var kvPrefix = false
 
     @State private var metaModel = UserDefaults.standard.string(forKey: "meta_model") ?? "muse-spark-1.3"
+    @State private var metaCustom = !MetaModelPresets.isPreset(UserDefaults.standard.string(forKey: "meta_model") ?? "muse-spark-1.3")
     @State private var byokURL = UserDefaults.standard.string(forKey: "byok_url") ?? ""
     @State private var byokModel = UserDefaults.standard.string(forKey: "byok_model") ?? ""
     @State private var metaKey = ""
@@ -31,6 +32,15 @@ struct SettingsView: View {
         var tint: Color { switch level { case .good: return .green; case .warning: return .orange; case .problem: return .red } }
     }
 
+    private static let customTag = "__custom__"
+    private var metaPickerSelection: Binding<String> {
+        Binding(get: { metaCustom ? Self.customTag : metaModel.trimmed },
+                set: { choice in
+                    if choice == Self.customTag { metaCustom = true }      // keeps the current value in the field
+                    else { metaCustom = false; metaModel = choice }
+                })
+    }
+
     private var metaPreview: CloudRouteStatus { CloudSettingsCheck.meta(model: metaModel, keySaved: metaKeySaved || !metaKey.isEmpty) }
     private var byokPreview: CloudRouteStatus { CloudSettingsCheck.custom(baseURL: byokURL, model: byokModel, keySaved: byokKeySaved || !byokKey.isEmpty) }
     private var hasUnsavedChanges: Bool {
@@ -47,23 +57,30 @@ struct SettingsView: View {
                 Section {
                     LabeledContent("Reflex + local answers", value: model.modelState)
                     StatusPill()
-                    Toggle("Reuse cached prompt prefix", isOn: $kvPrefix)
+                    Toggle("Reuse prompt prefix in the on-device model", isOn: $kvPrefix)
                 } header: { Text("On-device model") } footer: {
-                    Text("Keeps each decision type's fixed prompt prefix in the KV cache so a decision only evaluates the new part. Applies on next launch.")
+                    Text("Off by default. When on, the on-device Llama model keeps the fixed start of each decision prompt in memory so it only reads the new part. It affects only this iPhone's model, not cloud requests, and applies on next launch. Whether it makes answers faster has not been measured.")
                 }
                 Section {
-                    TextField("Model", text: $metaModel).textInputAutocapitalization(.never).autocorrectionDisabled()
+                    Picker("Model", selection: metaPickerSelection) {
+                        ForEach(MetaModelPresets.all, id: \.id) { Text($0.name).tag($0.id) }
+                        Text("Custom").tag(Self.customTag)
+                    }
+                    if metaCustom {
+                        TextField("Model ID", text: $metaModel).textInputAutocapitalization(.never).autocorrectionDisabled()
+                            .accessibilityHint("Any other chat model ID. It must pass the same Standard mode check as the presets.")
+                    }
                     SecureField("New API key", text: $metaKey).textInputAutocapitalization(.never).autocorrectionDisabled()
                         .accessibilityLabel("Meta API key").accessibilityHint("Enter a key to save or replace the saved one. Leave empty to keep it.")
                     keyStateRow(saved: metaKeySaved, entered: !metaKey.isEmpty)
                     routeRow(metaPreview)
                     if metaKeySaved { Button("Remove Meta key", role: .destructive) { removeKey("meta_key", label: "Meta", clearsEntry: { metaKey = "" }) } }
                 } header: { Text("Meta Model API · Muse Spark / Muse Wonder") } footer: {
-                    Text("Standard mode only. Contributor-mode ids are refused before any request leaves the phone. The key field is always empty; the saved key is never shown.")
+                    Text("Standard mode only. Contributor-mode ids are refused before any request leaves the phone, and no model is substituted for your choice. The cloud service caches repeated prompt starts on its own; there is no switch for that here. The key field is always empty; the saved key is never shown.")
                 }
                 Section {
                     Toggle("Voice stays on this iPhone", isOn: $voiceStaysOnDevice)
-                } header: { Text("Muse voice upload") } footer: {
+                } header: { Text("Muse Voice Transcribe") } footer: {
                     Text("The waveform button in chat records audio and, after you release it, uploads it to Muse Voice Transcribe, then deletes it. It needs internet and a Meta key, and it is not Apple Dictation. On: the waveform button sends nothing.")
                 }
                 DisclosureGroup("Other OpenAI-compatible endpoint") {

@@ -55,7 +55,7 @@ struct CameraButton: View {
 
     var body: some View {
         Button {
-            guard model.isOnline else { model.chat.append(.init(role: .system, text: "Voice and camera understanding need the cloud; nothing was sent.")); return }
+            guard model.isOnline else { model.post(.init(role: .system, text: "Voice and camera understanding need the cloud; nothing was sent.")); return }
             askSource = true
         } label: {
             Image(systemName: preparing ? "hourglass.circle" : "camera.circle")

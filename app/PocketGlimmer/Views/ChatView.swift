@@ -7,6 +7,8 @@ struct ChatView: View {
     @Environment(AppModel.self) private var model
     @State private var input = ""
     @FocusState private var focused: Bool
+    @State private var showChats = false
+    @State private var newChatError: String?
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @ScaledMetric(relativeTo: .title) private var sendSize = 32
 
@@ -17,7 +19,7 @@ struct ChatView: View {
                     LazyVStack(spacing: 12) {
                         if model.chat.isEmpty { EmptyChat() }
                         ForEach(model.chat) { item in Bubble(item: item).id(item.id) }
-                        if model.busy { ProgressView().padding(.top, 4) }
+                        if model.busyConversationID == model.activeConversationID { ProgressView().padding(.top, 4) }
                         Color.clear.frame(height: 1).id(Self.bottomID)
                     }
                     .padding()
@@ -32,9 +34,20 @@ struct ChatView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .principal) { StatusPill() }
+                ToolbarItem(placement: .topBarLeading) {
+                    Button { showChats = true } label: { Label("Chats", systemImage: "list.bullet") }
+                        .accessibilityHint("Shows your saved chats")
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button { newChatError = model.newChat() } label: { Label("New chat", systemImage: "square.and.pencil") }
+                }
                 ToolbarItemGroup(placement: .keyboard) { Spacer(); Button("Done") { focused = false; UIApplication.resignKeyboard() } }
             }
             .navigationBarTitleDisplayMode(.inline)
+            .sheet(isPresented: $showChats) { ConversationListView() }
+            .alert("Can't start a new chat", isPresented: Binding(get: { newChatError != nil }, set: { if !$0 { newChatError = nil } })) {
+                Button("OK", role: .cancel) { }
+            } message: { Text(newChatError ?? "") }
         }
     }
 
@@ -47,7 +60,11 @@ struct ChatView: View {
 
     private var composer: some View {
         VStack(spacing: 0) {
-            if let last = model.decisions.first { LiveReflexStrip(row: last) }
+            if let notice = model.historyNotice {
+                Text(notice).font(.caption).foregroundStyle(.orange)
+                    .frame(maxWidth: .infinity, alignment: .leading).padding(.horizontal).padding(.top, 6)
+            }
+            if let last = model.lastRoute { LiveReflexStrip(row: last) }
             HStack(alignment: .bottom, spacing: 10) {
                 MicButton()       // hold to talk: uploads audio to Muse Voice Transcribe -> the same Reflex path as typed text (online only; not Apple Dictation)
                 CameraButton()    // glimpse: sensitivity gate -> Muse Spark 1.3 vision / SAM 3.1 (online only)
@@ -71,22 +88,23 @@ struct ChatView: View {
     }
 }
 
-/// The latest Reflex decision, always visible above the composer: the "acts instantly, shows confidence" moment.
+/// The latest request-handling decision in plain words. The number is the model's certainty in that choice,
+/// not a prediction that the action will work.
 struct LiveReflexStrip: View {
     let row: DecisionRow
     var body: some View {
         HStack(spacing: 10) {
-            Image(systemName: "bolt.fill").foregroundStyle(Theme.accent)
-            Text(row.type).font(.caption.monospaced()).foregroundStyle(.secondary)
-            Text(row.choice.replacingOccurrences(of: "_", with: " ")).font(.caption.weight(.semibold))
+            Image(systemName: "bolt.fill").foregroundStyle(Theme.accent).accessibilityHidden(true)
+            Text(row.choiceText).font(.caption.weight(.semibold)).lineLimit(1)
             Spacer()
-            Text(String(format: "%.0f%%", row.confidence * 100)).font(.caption.monospacedDigit().weight(.semibold)).foregroundStyle(Theme.confidenceColor(row.confidence, tau: row.tau))
-            Text(String(format: "%.0f ms", row.ms)).font(.caption.monospacedDigit()).foregroundStyle(.secondary)
+            Text(String(format: "%.0f%% sure", row.confidence * 100)).font(.caption.monospacedDigit())
+                .foregroundStyle(Theme.confidenceColor(row.confidence, tau: row.tau))
         }
         .padding(.horizontal, 16).padding(.vertical, 8)
         .background(.bar)
-        .transition(.move(edge: .bottom).combined(with: .opacity))
         .id(row.id)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Last decision: \(row.choiceText). \(row.certaintyText).")
     }
 }
 
@@ -126,16 +144,20 @@ struct Bubble: View {
                                     Label(b, systemImage: "lock.shield").font(.caption2.weight(.medium))
                                 }.buttonStyle(.bordered).controlSize(.mini).tint(Theme.accent)
                             } else {
-                                Text(b).font(.caption2.monospaced()).foregroundStyle(.secondary)
+                                Text(b).font(.caption2).foregroundStyle(.secondary)
                             }
                         }
-                        if !item.decisions.isEmpty {
+                        if !item.decisions.isEmpty || item.detail != nil {
                             Button { withAnimation(.snappy) { showDecisions.toggle() } } label: {
-                                Label("\(item.decisions.count) decisions", systemImage: "bolt.fill").font(.caption2)
+                                Label(showDecisions ? "Hide details" : "How this was decided", systemImage: "info.circle").font(.caption2)
                             }.buttonStyle(.borderless).foregroundStyle(.secondary)
                         }
                     }.padding(.leading, 6)
                     if showDecisions {
+                        if let detail = item.detail {
+                            Text(detail).font(.caption).foregroundStyle(.secondary)
+                                .padding(.horizontal, 10).fixedSize(horizontal: false, vertical: true)
+                        }
                         VStack(spacing: 2) { ForEach(item.decisions) { DecisionCard(row: $0, startExpanded: $0.toolCallJSON != nil) } }
                             .padding(10).background(.background.secondary, in: RoundedRectangle(cornerRadius: 14))
                     }

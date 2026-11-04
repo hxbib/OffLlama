@@ -43,3 +43,16 @@ public enum CloudSettingsCheck {
         return .init(state: .enabled, detail: "Custom endpoint is enabled as a fallback when online." + plain)
     }
 }
+
+/// Standard-mode chat model ids offered as presets in Settings (https://dev.meta.ai/docs/models). Anything else a
+/// user types goes through the same validator as a preset; no id is ever substituted for a saved one.
+public enum MetaModelPresets {
+    public static let all: [(id: String, name: String)] = [
+        ("muse-spark-1.3", "Muse Spark 1.3"), ("muse-spark-1.2", "Muse Spark 1.2"),
+        ("muse-spark-1.1", "Muse Spark 1.1"), ("muse-wonder-1.0", "Muse Wonder 1.0"),
+    ]
+    public static func isPreset(_ id: String) -> Bool {
+        let t = id.trimmingCharacters(in: .whitespacesAndNewlines)
+        return all.contains { $0.id == t }
+    }
+}

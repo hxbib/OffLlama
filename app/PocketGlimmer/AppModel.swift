@@ -8,14 +8,27 @@ import CryptoKit
 
 struct ChatItem: Identifiable, Equatable {
     enum Role { case user, assistant, system }
-    let id = UUID()
+    var id = UUID()
     let role: Role
     var text: String
-    var badge: String? = nil        // "on device · 42 ms" / "Meta Model API · Muse Spark 1.3 (Standard mode)"
+    var badge: String? = nil        // plain status or provider, e.g. "On device · answered in 1.8 s"
     var card: DraftCard? = nil      // projection of a durable ledger row, never the source of truth
     var decisions: [DecisionRow] = []
     var cloudPromptSent: String? = nil   // screened text from a cloud request attempt
     var keptOnDevice = false             // cloud was available but withheld for sensitivity
+    var attemptID: AttemptID? = nil      // ledger attempt this message projects, if any
+    var detail: String? = nil            // timing and rule notes, shown under Details
+    var ephemeral = false                // rebuilt from the ledger each launch, not written to disk
+    /// A waiting card or an unverified outcome. Clear keeps these and Delete refuses while one exists.
+    var isPendingAction: Bool { card != nil || (attemptID != nil && badge == ActionStatusLabel.unverified) }
+}
+
+/// Display-only extras of a stored message. Never persisted: cards come from the ledger, decisions are diagnostics.
+struct ChatExtras {
+    var card: DraftCard?
+    var decisions: [DecisionRow]
+    var cloudPromptSent: String?
+    var detail: String?
 }
 
 struct DecisionRow: Identifiable, Equatable {
@@ -24,13 +37,23 @@ struct DecisionRow: Identifiable, Equatable {
     var tau: Double = 0.9            // overwritten from ReflexDecision.tau in init
     var probabilities: [(id: String, p: Double)] = []
     var toolCallJSON: String? = nil
+    // Plain wording for primary surfaces. `type`, `choice` and `probabilities` stay raw for Details and exports.
+    var titleText = ""
+    var choiceText = ""
+    var topChoiceNote: String? = nil
+    var certaintyText = ""
     static func == (a: DecisionRow, b: DecisionRow) -> Bool { a.id == b.id }
 
-    init(_ d: ReflexDecision, toolCallJSON: String? = nil) {
+    init(_ d: ReflexDecision, toolCallJSON: String? = nil, skillTitle: (String) -> String? = { _ in nil }) {
         type = d.type.rawValue; choice = d.argmax.id; confidence = d.confidence; ms = d.latencyMs; escalated = d.escalated; at = Date()
         tau = d.tau
         probabilities = d.probabilities.sorted { $0.value > $1.value }.map { ($0.key, $0.value) }
         self.toolCallJSON = toolCallJSON
+        titleText = DecisionPresentation.title(d.type)
+        choiceText = DecisionPresentation.choice(d.type, id: d.chosen.id, skillTitle: skillTitle)
+        topChoiceNote = DecisionPresentation.chosenVersusTop(chosen: d.chosen.id, top: d.argmax.id, escalated: d.escalated)
+            .map { "Top option: \(DecisionPresentation.choice(d.type, id: d.argmax.id, skillTitle: skillTitle)). \($0)" }
+        certaintyText = DecisionPresentation.certainty(confidence: d.confidence, tau: d.tau)
     }
 }
 
@@ -39,7 +62,7 @@ func prettyProvider(_ raw: String) -> String {
     let parts = raw.components(separatedBy: " · ")
     guard parts.count == 2 else { return raw }
     let m = parts[1]
-    let names = ["muse-spark-1.3": "Muse Spark 1.3 (Standard mode)", "muse-spark-1.3-contributor": "Muse Spark 1.3 (Contributor mode)",
+    let names = ["muse-spark-1.3": "Muse Spark 1.3 (Standard mode)", "muse-spark-1.2": "Muse Spark 1.2 (Standard mode)", "muse-spark-1.1": "Muse Spark 1.1 (Standard mode)", "muse-spark-1.3-contributor": "Muse Spark 1.3 (Contributor mode)",
                  "muse-wonder-1.0": "Muse Wonder", "accounts/fireworks/models/muse-spark-open": "Muse Spark Open",
                  "accounts/fireworks/models/muse-glimmer-30b": "Muse Glimmer 30B", "muse-glimmer": "Muse Glimmer 30B"]
     return "\(parts[0]) · \(names[m] ?? m)"
@@ -50,7 +73,17 @@ func prettyProvider(_ raw: String) -> String {
 final class AppModel {
     static let shared = AppModel()
 
-    var chat: [ChatItem] = []
+    /// All chats. Each message, unfinished message draft and in-flight result belongs to exactly one conversation.
+    private(set) var book: ConversationBook
+    private(set) var extras: [UUID: ChatExtras] = [:]
+    /// Honest history status shown above the composer (save failed, chat full, history set aside).
+    var historyNotice: String?
+    private(set) var busyConversationID: ConversationID?
+    /// The route decision of the most recent turn, for the compact strip above the composer.
+    private(set) var lastRoute: DecisionRow?
+    @ObservationIgnored private let historyStore: ConversationStore
+    @ObservationIgnored private var savingEnabled = true
+    var chat: [ChatItem] { items(for: book.activeID) }
     var decisions: [DecisionRow] = []
     var facts: [MemoryFact] = []
     var corrections: [(old: MemoryFact, new: MemoryFact)] = []
@@ -71,6 +104,21 @@ final class AppModel {
     private let monitor = NWPathMonitor()
 
     private init() {
+        let store = ConversationStore(directory: AppModel.dataDir.appendingPathComponent("Conversations"))
+        historyStore = store
+        var loaded = ConversationBook()
+        var notice: String?
+        var canSave = true
+        switch Result(catching: { try store.load() }) {
+        case .success(.loaded(let b)): loaded = b
+        case .success(.empty): break
+        case .success(.unreadable):
+            notice = "Saved chat history could not be read. It was kept aside on this iPhone and a new history started."
+        case .failure(let e):
+            notice = "\(e) This session's chats will not be saved."
+            canSave = false
+        }
+        book = loaded; historyNotice = notice; savingEnabled = canSave
         monitor.pathUpdateHandler = { path in
             let up = path.status == .satisfied
             OnlineFlag.shared.value = up
@@ -169,12 +217,14 @@ final class AppModel {
             let engine = try await Task.detached(priority: .userInitiated) { try LlamaCppEngine(modelURL: url) }.value
             let reflex = Reflex(engine: engine, profile: profile, telemetry: tel, source: "device")
             let ledger = try EffectLedger(db: db)
+            let dropped = (try? LedgerRequestIndex.reconcile(&book, db: db)) ?? 0
+            if dropped > 0 { noteHistory("\(dropped) unfinished message draft\(dropped == 1 ? " was" : "s were") discarded because \(dropped == 1 ? "its" : "their") action was already prepared.") }
             let effects = PocketEffects(events: actions.events, contacts: actions.contacts, memory: mem)
             let a = Assistant(reflex: reflex, memory: mem, actions: actions, ledger: ledger, effects: effects,
                               cloud: CloudSettings.chain(), isOnline: { OnlineFlag.shared.value })
             SkillSetup.install(on: a, memory: mem)   // open-world phone actions (docs/SKILLS.md); idempotent
             assistant = a; telemetry = tel; memory = mem
-            restoreEffectCards(a)
+            restoreHistory(a)
             await loadScrubberNames()
             let pe = ProactiveEngine(memory: mem, reflex: reflex)
             let acts = actions
@@ -227,157 +277,294 @@ final class AppModel {
         rounds = (try? telemetry?.shareByModel()) ?? []
     }
 
-    /// Incomplete message drafts awaiting a follow-up. Typed and request-bound; the
-    /// ledger owns staged cards, this only carries clarification across turns.
-    @ObservationIgnored private var messageDrafts: [MessageDraft] = []
+    // MARK: conversations
+
+    func items(for cid: ConversationID) -> [ChatItem] {
+        (book.conversation(cid)?.messages ?? []).map(item(from:))
+    }
+
+    private func item(from m: StoredMessage) -> ChatItem {
+        let x = extras[m.id]
+        let role: ChatItem.Role = m.role == .user ? .user : (m.role == .assistant ? .assistant : .system)
+        return ChatItem(id: m.id, role: role, text: m.text, badge: m.badge, card: x?.card, decisions: x?.decisions ?? [],
+                        cloudPromptSent: x?.cloudPromptSent, keptOnDevice: m.keptOnDevice,
+                        attemptID: m.attemptID.map { AttemptID(raw: $0) }, detail: x?.detail, ephemeral: m.ephemeral)
+    }
+
+    private func storedRole(_ r: ChatItem.Role) -> StoredRole { r == .user ? .user : (r == .assistant ? .assistant : .system) }
+
+    var activeConversationID: ConversationID { book.activeID }
+
+    /// Append to the conversation that owns the work, never to whichever chat happens to be on screen.
+    func post(_ item: ChatItem, in cid: ConversationID? = nil) {
+        append(item, to: cid ?? book.activeID)
+        persist()
+    }
+
+    private func append(_ item: ChatItem, to cid: ConversationID) {
+        let stored = StoredMessage(id: item.id, role: storedRole(item.role), text: item.text, badge: item.badge,
+                                   attemptID: item.attemptID?.raw, pendingAction: item.isPendingAction,
+                                   keptOnDevice: item.keptOnDevice, ephemeral: item.ephemeral)
+        do { try book.append(stored, to: cid) } catch { noteHistory("\(error)"); return }
+        setExtras(item)
+    }
+
+    private func setExtras(_ item: ChatItem) {
+        if item.card != nil || !item.decisions.isEmpty || item.cloudPromptSent != nil || item.detail != nil {
+            extras[item.id] = ChatExtras(card: item.card, decisions: item.decisions, cloudPromptSent: item.cloudPromptSent, detail: item.detail)
+        } else {
+            extras[item.id] = nil
+        }
+    }
+
+    private func mutate(_ id: UUID, _ change: (inout ChatItem) -> Void) {
+        guard let owner = book.owner(ofMessage: id), let stored = book.conversation(owner.conversation)?.messages[owner.index] else { return }
+        var it = item(from: stored)
+        change(&it)
+        book.update(messageID: id, in: owner.conversation) { m in
+            m.text = it.text; m.badge = it.badge; m.attemptID = it.attemptID?.raw
+            m.pendingAction = it.isPendingAction; m.keptOnDevice = it.keptOnDevice
+        }
+        setExtras(it)
+    }
+
+    private func chatItem(_ id: UUID) -> (item: ChatItem, conversation: ConversationID)? {
+        guard let o = book.owner(ofMessage: id), let m = book.conversation(o.conversation)?.messages[o.index] else { return nil }
+        return (item(from: m), o.conversation)
+    }
+
+    @ObservationIgnored private var noticeIsSaveFailure = false
+
+    private func noteHistory(_ text: String, saveFailure: Bool = false) {
+        historyNotice = text; noticeIsSaveFailure = saveFailure
+    }
+
+    private func persist() {
+        guard savingEnabled else { return }
+        do {
+            try historyStore.save(book)
+            if noticeIsSaveFailure { historyNotice = nil; noticeIsSaveFailure = false }
+        } catch {
+            noteHistory("\(error) Recent chat may be lost if the app closes.", saveFailure: true)
+        }
+    }
+
+    private func pruneExtras() {
+        let live = Set(book.conversations.flatMap { $0.messages.map(\.id) })
+        extras = extras.filter { live.contains($0.key) }
+    }
+
+    func newChat() -> String? {
+        do { try book.newConversation(); persist(); return nil } catch { return "\(error)" }
+    }
+
+    func selectChat(_ id: ConversationID) {
+        try? book.select(id); persist()
+    }
+
+    /// Clearing removes only ordinary messages and unfinished message drafts in this chat. It never cancels, replays
+    /// or erases a waiting or unverified action (the effect ledger owns those), and it does not touch saved memory.
+    func clearChat(_ id: ConversationID) -> String {
+        if busyConversationID == id { return "This chat is working on a request. Try again when it finishes." }
+        do {
+            let r = try book.clear(id)
+            pruneExtras(); persist()
+            var text = "Cleared \(r.removed) message\(r.removed == 1 ? "" : "s")."
+            if r.keptPending > 0 { text += " \(r.keptPending) waiting or unverified action\(r.keptPending == 1 ? "" : "s") stayed here." }
+            return text
+        } catch { return "\(error)" }
+    }
+
+    func deleteChat(_ id: ConversationID) -> String? {
+        if busyConversationID == id { return "This chat is working on a request. Try again when it finishes." }
+        do { try book.delete(id); pruneExtras(); persist(); return nil } catch { return "\(error)" }
+    }
+
+    private func skillTitle(_ id: String) -> String? { assistant?.skills?.skill(id: id)?.title }
+    private func row(_ d: ReflexDecision, json: String? = nil) -> DecisionRow {
+        DecisionRow(d, toolCallJSON: json, skillTitle: { [weak self] in self?.skillTitle($0) })
+    }
+
+    private func ruleNote(_ turn: AssistantTurn, text: String) -> String? {
+        if turn.followUp != nil { return "Continued your unfinished message by rule, not by a model choice." }
+        guard let route = turn.decisions.first(where: { $0.type == .route }), route.chosen.id != "tool",
+              let tool = turn.action?.tool else { return nil }
+        let chart = tool == ActionPlanner.toolPrefix + "html_viz"
+        guard chart || MessageCommand.isExplicitMessageRequest(text) else { return nil }
+        return "A built-in rule handled this as \(chart ? "a chart request" : "a message request"); the model's route choice was “\(DecisionPresentation.choice(.route, id: route.chosen.id))”."
+    }
 
     @discardableResult
     func send(_ text: String, sharedText: String? = nil, source: String = "share") async -> String {
         guard !busy else { return "I'm working on another request. Please try again shortly." }
         guard let assistant else { return modelState }
         guard !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return "No request was provided." }
-        chat.append(.init(role: .user, text: text))
-        busy = true; defer { busy = false; refresh() }
+        let cid = book.activeID                       // in-flight work is bound to this chat
+        let limits = ConversationLimits.standard
+        guard text.count <= limits.maxMessageCharacters else {
+            let m = "That message is longer than \(limits.maxMessageCharacters) characters."
+            noteHistory(m); return m
+        }
+        guard book.hasRoomForTurn(in: cid) else {
+            let m = ConversationError.chatFull(limit: limits.maxMessagesPerConversation).description
+            noteHistory(m); return m
+        }
+        let context = ConversationContext.render(book.conversation(cid)?.messages ?? [])
+        let drafts = book.conversation(cid)?.drafts ?? []
+        append(.init(role: .user, text: text), to: cid)
+        busy = true; busyConversationID = cid
+        defer { busy = false; busyConversationID = nil; refresh(); persist() }
+        persist()
         await loadScrubberNames()
+        let clock = ContinuousClock()
+        let started = clock.now
         do {
-            var turn = try await assistant.handle(text, sharedText: sharedText, pendingDrafts: messageDrafts)
-            if !turn.consumedDrafts.isEmpty {
-                messageDrafts.removeAll { turn.consumedDrafts.contains($0.requestID) }
-            }
+            var turn = try await assistant.handle(text, sharedText: sharedText, pendingDrafts: drafts, conversationContext: context)
+            var kept = drafts
+            if !turn.consumedDrafts.isEmpty { kept.removeAll { turn.consumedDrafts.contains($0.requestID) } }
             if let d = turn.pendingDraft {
-                if messageDrafts.count >= 5 && !messageDrafts.contains(where: { $0.requestID == d.requestID }) {
-                    turn.reply = .clarify("Five unfinished messages are waiting. Finish or cancel one before starting another. This new message was not saved as a draft.")
+                if kept.count >= ConversationLimits.standard.maxDraftsPerConversation && !kept.contains(where: { $0.requestID == d.requestID }) {
+                    turn.reply = .clarify("Five unfinished messages are waiting in this chat. Finish or cancel one before starting another. This new message was not saved as a draft.")
                 } else {
-                    messageDrafts.removeAll { $0.requestID == d.requestID }
-                    messageDrafts.append(d)
+                    kept.removeAll { $0.requestID == d.requestID }
+                    kept.append(d)
                 }
             }
-            let rows = turn.decisions.map { DecisionRow($0, toolCallJSON: [.toolChoice, .skillPick].contains($0.type) ? turn.action?.json : nil) }
+            book.setDrafts(kept, for: cid)
+            let rows = turn.decisions.map { row($0, json: [.toolChoice, .skillPick].contains($0.type) ? turn.action?.json : nil) }
             for r in rows { decisions.insert(r, at: 0) }
-            let reflexMs = turn.decisions.map(\.latencyMs).reduce(0, +)
-            let onDevice = String(format: "on device · %.0f ms", reflexMs)
-                + (turn.followUp.map { " · follow-up:\($0.rawValue)" } ?? "")
+            lastRoute = rows.first { $0.type == DecisionType.route.rawValue } ?? rows.last ?? lastRoute
+            let elapsed = clock.now - started
+            let elapsedMs = Double(elapsed.components.seconds) * 1000 + Double(elapsed.components.attoseconds) / 1e15
+            let classifierMs = turn.decisions.map(\.latencyMs).reduce(0, +)
+            var detail = "Answered in \(DecisionPresentation.seconds(elapsedMs)). The \(turn.decisions.count) model decision\(turn.decisions.count == 1 ? "" : "s") took \(DecisionPresentation.seconds(classifierMs)) in total; that is only the deciding part, not the whole answer time."
+            if let note = ruleNote(turn, text: text) { detail += "\n" + note }
+            let onDevice = "On device · answered in \(DecisionPresentation.seconds(elapsedMs))"
+            let id = UUID()
+            func reply(_ t: String, badge: String?, card: DraftCard? = nil, sent: String? = nil, kept: Bool = false, attempt: AttemptID? = nil) {
+                append(.init(id: id, role: .assistant, text: t, badge: badge, card: card, decisions: rows, cloudPromptSent: sent,
+                             keptOnDevice: kept, attemptID: attempt, detail: detail), to: cid)
+            }
             switch turn.reply {
             case .local(let t):
-                chat.append(.init(role: .assistant, text: t,
-                                  badge: turn.cloudPromptSent == nil ? onDevice : "local fallback · cloud request attempted",
-                                  decisions: rows, cloudPromptSent: turn.cloudPromptSent,
-                                  keptOnDevice: turn.cloudWithheldForSensitivity))
-            case .acted(let effect): chat.append(.init(role: .assistant, text: effect.summary, badge: onDevice, decisions: rows))
-            case .clarify(let t): chat.append(.init(role: .assistant, text: t, badge: onDevice, decisions: rows))
-            case .cloud(let t, let p): chat.append(.init(role: .assistant, text: t, badge: prettyProvider(p), decisions: rows, cloudPromptSent: turn.cloudPromptSent))
-            case .offlineFallback(let t): chat.append(.init(role: .assistant, text: t, badge: "local fallback · best effort", decisions: rows, cloudPromptSent: turn.cloudPromptSent))
+                reply(t, badge: turn.cloudPromptSent == nil ? onDevice : "On device · answered after a cloud attempt",
+                      sent: turn.cloudPromptSent, kept: turn.cloudWithheldForSensitivity)
+            case .acted(let effect): reply(effect.summary, badge: ActionStatusLabel.label(for: effect.phase), attempt: effect.attemptID)
+            case .clarify(let t): reply(t, badge: onDevice)
+            case .cloud(let t, let p): reply(t, badge: prettyProvider(p), sent: turn.cloudPromptSent)
+            case .offlineFallback(let t): reply(t, badge: "On device · best effort", sent: turn.cloudPromptSent)
             case .needsConfirmation(let card):
                 ActionDiagnostics.shared.record(attemptID: card.attemptID, capability: card.capabilityID,
                                                 phase: .projection, code: .cardProjected)
-                chat.append(.init(role: .assistant, text: card.title, badge: onDevice, card: card, decisions: rows))
+                reply(card.title, badge: ActionStatusLabel.awaitingReview, card: card, attempt: card.attemptID)
             }
-            let reply = chat.last?.text ?? ""
-            for c in turn.corrections { chat.append(.init(role: .system, text: "Corrected: \(c.old.value) → \(c.new.value)")) }
+            let answer = book.conversation(cid)?.messages.last { $0.id == id }?.text ?? ""
+            for c in turn.corrections { append(.init(role: .system, text: "Corrected: \(c.old.value) → \(c.new.value)"), to: cid) }
             if !turn.remembered.isEmpty {
-                chat.append(.init(role: .system, text: "Remembered: " + turn.remembered.map(\.text).joined(separator: " · ")))
+                append(.init(role: .system, text: "Remembered: " + turn.remembered.map(\.text).joined(separator: " · ")), to: cid)
             }
-            return reply
+            return answer
         } catch {
             if let failure = error as? CloudRequestFailure {
                 let message = "The request has no verified result. A cloud request may already have been sent."
-                chat.append(.init(role: .system, text: message, badge: "outcome unverified",
-                                  cloudPromptSent: failure.cloudPromptSent))
+                append(.init(role: .system, text: message, badge: ActionStatusLabel.unverified,
+                             cloudPromptSent: failure.cloudPromptSent), to: cid)
                 return message
             }
             let message = "Error: \(error.localizedDescription)"
-            chat.append(.init(role: .system, text: message))
+            append(.init(role: .system, text: message), to: cid)
             return message
         }
     }
 
     func confirm(_ item: ChatItem, edits: [DraftEdit] = []) async {
-        guard !busy, let assistant,
-              let i = chat.firstIndex(where: { $0.id == item.id }),
-              let card = chat[i].card else { return }
-        busy = true; defer { busy = false; refresh() }
+        guard !busy, let assistant, let found = chatItem(item.id), let card = found.item.card else { return }
+        let cid = found.conversation, id = item.id
+        busy = true; defer { busy = false; refresh(); persist() }
         do {
             let result = try await assistant.confirmEffect(card.attemptID, edits: edits, expectedRevision: card.revision)
             switch result {
             case .staged(let updated):
-                chat[i].card = updated
-                chat[i].text = updated.title
+                mutate(id) { $0.card = updated; $0.text = updated.title }
                 if !updated.canConfirm && !updated.notice.isEmpty {
-                    chat.append(.init(role: .system, text: updated.notice))
+                    append(.init(role: .system, text: updated.notice), to: cid)
                 }
             case .finished(let effect), .ignoredTerminal(let effect):
-                chat[i].card = nil
-                chat[i].text = effect.summary
-                chat[i].cloudPromptSent = effect.cloudPromptSent
-                if effect.cloudPromptSent != nil {
-                    chat[i].badge = "cloud request attempted"
-                    chat[i].keptOnDevice = false
-                }
-                if case .ambiguous = effect.phase {
-                    chat[i].badge = "outcome unverified"
-                    chat[i].keptOnDevice = false
-                }
-                if case .claimed = effect.phase {
-                    chat[i].badge = "outcome unverified"
-                    chat[i].keptOnDevice = false
+                mutate(id) {
+                    $0.card = nil
+                    $0.text = effect.summary
+                    $0.attemptID = effect.attemptID
+                    $0.cloudPromptSent = effect.cloudPromptSent
+                    $0.badge = ActionStatusLabel.label(for: effect.phase)
+                    if effect.cloudPromptSent != nil { $0.badge = "Cloud request attempted"; $0.keptOnDevice = false }
+                    if case .ambiguous = effect.phase { $0.badge = ActionStatusLabel.unverified; $0.keptOnDevice = false }
+                    if case .claimed = effect.phase { $0.badge = ActionStatusLabel.unverified; $0.keptOnDevice = false }
                 }
             case .read(let read):
-                chat[i].card = nil
-                chat[i].text = read.text
-                chat[i].badge = read.provider.map { prettyProvider($0) }
-                    ?? (read.cloudPromptSent == nil ? "on device" : "local fallback · cloud request attempted")
-                chat[i].decisions = read.decisions.map { DecisionRow($0) }
-                chat[i].cloudPromptSent = read.cloudPromptSent
-                chat[i].keptOnDevice = read.withheldForSensitivity
-            }
-        } catch {
-            chat[i].badge = "outcome unverified"
-            chat[i].keptOnDevice = false
-            chat[i].cloudPromptSent = (error as? CloudRequestFailure)?.cloudPromptSent ?? chat[i].cloudPromptSent
-            if let recovery = try? assistant.recoverEffects() {
-                chat[i].card = recovery.showAgain.first { $0.attemptID == card.attemptID }
-                if let unresolved = recovery.unresolved.first(where: { $0.attemptID == card.attemptID }) {
-                    chat[i].text = unresolved.summary
+                let rows = read.decisions.map { self.row($0) }
+                mutate(id) {
+                    $0.card = nil
+                    $0.text = read.text
+                    $0.badge = read.provider.map { prettyProvider($0) }
+                        ?? (read.cloudPromptSent == nil ? "On device" : "On device · answered after a cloud attempt")
+                    $0.decisions = rows
+                    $0.cloudPromptSent = read.cloudPromptSent
+                    $0.keptOnDevice = read.withheldForSensitivity
                 }
             }
-            chat.append(.init(role: .system, text: "Couldn't verify completion. The request may already have been sent or acted on. Check the destination before starting a new request."))
+        } catch {
+            let sent = (error as? CloudRequestFailure)?.cloudPromptSent
+            let recovery = try? assistant.recoverEffects()
+            mutate(id) {
+                $0.badge = ActionStatusLabel.unverified
+                $0.keptOnDevice = false
+                $0.attemptID = card.attemptID
+                $0.cloudPromptSent = sent ?? $0.cloudPromptSent
+                if let recovery {
+                    $0.card = recovery.showAgain.first { $0.attemptID == card.attemptID }
+                    if let unresolved = recovery.unresolved.first(where: { $0.attemptID == card.attemptID }) {
+                        $0.text = unresolved.summary
+                    }
+                }
+            }
+            append(.init(role: .system, text: "Couldn't verify completion. The request may already have been sent or acted on. Check the destination before starting a new request."), to: cid)
         }
     }
 
     /// Persists an edit (contact, method or exact time) without claiming. Body text is passed at Confirm.
     func edit(_ item: ChatItem, edits: [DraftEdit]) async {
-        guard !busy, let assistant,
-              let i = chat.firstIndex(where: { $0.id == item.id }),
-              let card = chat[i].card else { return }
-        busy = true; defer { busy = false }
+        guard !busy, let assistant, let found = chatItem(item.id), let card = found.item.card else { return }
+        let cid = found.conversation, id = item.id
+        busy = true; defer { busy = false; persist() }
         do {
             let updated = try await assistant.editEffect(card.attemptID, edits: edits, expectedRevision: card.revision)
-            chat[i].card = updated
-            chat[i].text = updated.title
+            mutate(id) { $0.card = updated; $0.text = updated.title }
         } catch {
             if let recovery = try? assistant.recoverEffects() {
-                chat[i].card = recovery.showAgain.first { $0.attemptID == card.attemptID }
-                if let updated = chat[i].card { chat[i].text = updated.title }
+                mutate(id) {
+                    $0.card = recovery.showAgain.first { $0.attemptID == card.attemptID }
+                    if let updated = $0.card { $0.text = updated.title }
+                }
             }
-            chat.append(.init(role: .system, text: "Couldn't verify the saved edit. It may already have been saved. Review the card before confirming."))
+            append(.init(role: .system, text: "Couldn't verify the saved edit. It may already have been saved. Review the card before confirming."), to: cid)
         }
     }
 
     func refreshContacts(_ item: ChatItem) async {
-        guard !busy, let assistant,
-              let i = chat.firstIndex(where: { $0.id == item.id }), let card = chat[i].card else { return }
-        busy = true; defer { busy = false }
+        guard !busy, let assistant, let found = chatItem(item.id), let card = found.item.card else { return }
+        let cid = found.conversation, id = item.id
+        busy = true; defer { busy = false; persist() }
         let access = await actions.requestContactsAccess()
         let fields = card.fields.filter { $0.kind == .contact }
         do {
             let updated = try await assistant.editEffect(card.attemptID,
                 edits: fields.map { DraftEdit(field: $0.name, value: .refreshContact) }, expectedRevision: card.revision)
-            chat[i].card = updated
+            mutate(id) { $0.card = updated }
             if access != .full && access != .limited {
-                chat.append(.init(role: .system, text: "Contacts access is off. Allow access in iOS Settings, then refresh the contact on this card."))
+                append(.init(role: .system, text: "Contacts access is off. Allow access in iOS Settings, then refresh the contact on this card."), to: cid)
             }
         } catch {
-            chat.append(.init(role: .system, text: "Could not refresh this contact. Review the latest card before confirming."))
+            append(.init(role: .system, text: "Could not refresh this contact. Review the latest card before confirming."), to: cid)
         }
     }
 
@@ -396,29 +583,53 @@ final class AppModel {
     }
 
     func cancel(_ item: ChatItem) async {
-        guard !busy, let assistant, let i = chat.firstIndex(where: { $0.id == item.id }), let card = chat[i].card else { return }
+        guard !busy, let assistant, let found = chatItem(item.id), let card = found.item.card else { return }
         do {
             let effect = try assistant.cancelEffect(card.attemptID)
-            chat[i].card = nil
-            chat[i].text = effect.summary
+            mutate(item.id) { $0.card = nil; $0.text = effect.summary; $0.badge = ActionStatusLabel.label(for: effect.phase); $0.attemptID = effect.attemptID }
         } catch {
-            chat.append(.init(role: .system, text: "Couldn't cancel that card: \(error). The card was kept."))
+            append(.init(role: .system, text: "Couldn't cancel that card: \(error). The card was kept."), to: found.conversation)
         }
+        persist()
     }
 
-    /// Read-only launch recovery: restore durable cards and warn about claimed rows that have no receipt.
-    private func restoreEffectCards(_ assistant: Assistant) {
+    /// Launch recovery. Waiting cards are re-attached to the chat message that already references their ledger
+    /// attempt; any the history does not know (crash before the chat was saved) are added to the active chat.
+    /// Read-only: it never performs or replays an effect.
+    private func restoreHistory(_ assistant: Assistant) {
         do {
             let recovery = try assistant.recoverEffects()
+            var byAttempt: [UUID: UUID] = [:]
+            for c in book.conversations { for m in c.messages { if let a = m.attemptID { byAttempt[a] = m.id } } }
+            var seen = Set<UUID>()
             for card in recovery.showAgain {
-                chat.append(.init(role: .assistant, text: card.title, card: card))
+                seen.insert(card.attemptID.raw)
+                if let mid = byAttempt[card.attemptID.raw] {
+                    mutate(mid) { $0.card = card; $0.text = card.title; $0.badge = ActionStatusLabel.awaitingReview; $0.attemptID = card.attemptID }
+                } else {
+                    append(.init(role: .assistant, text: card.title, badge: ActionStatusLabel.awaitingReview, card: card, attemptID: card.attemptID), to: book.activeID)
+                }
             }
             for open in recovery.unresolved {
-                chat.append(.init(role: .system, text: open.summary))
+                seen.insert(open.attemptID.raw)
+                if let mid = byAttempt[open.attemptID.raw] {
+                    mutate(mid) { $0.card = nil; $0.text = open.summary; $0.badge = ActionStatusLabel.unverified; $0.attemptID = open.attemptID }
+                } else {
+                    append(.init(role: .system, text: open.summary, badge: ActionStatusLabel.unverified, attemptID: open.attemptID, ephemeral: true), to: book.activeID)
+                }
+            }
+            for c in book.conversations {
+                for m in c.messages where m.pendingAction && m.attemptID.map({ !seen.contains($0) }) == true {
+                    mutate(m.id) {
+                        $0.card = nil; $0.badge = nil
+                        $0.text = "This action is no longer waiting. It finished or was cancelled, and nothing here will run it again."
+                    }
+                }
             }
         } catch {
-            chat.append(.init(role: .system, text: "Couldn't read saved actions: \(error)"))
+            append(.init(role: .system, text: "Couldn't read saved actions: \(error)"), to: book.activeID)
         }
+        persist()
     }
 
     func forget(_ f: MemoryFact) { try? memory?.forget(id: f.id); refresh() }
