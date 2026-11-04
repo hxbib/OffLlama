@@ -85,6 +85,31 @@ case "priors":
     let enc = JSONEncoder(); enc.outputFormatting = [.prettyPrinted, .sortedKeys]
     try enc.encode(prof).write(to: URL(fileURLWithPath: arg("--out", "calibration.json")))
     print("wrote \(prof.prior.count) priors -> \(arg("--out", "calibration.json"))")
+case "skill-probe":
+    // Measure the dynamic skillPick decision on the real model: retrieval top-k -> one forward pass -> conf vs tau.
+    // Items: --items <jsonl with {"utterance","expected"}> ; expected = skill id (or "ask").
+    var prof = CalibrationProfile(defaultTau: Double(arg("--tau", "0.9"))!)
+    let calPath = arg("--calibration", "")
+    if !calPath.isEmpty { prof = try CalibrationProfile.load(from: URL(fileURLWithPath: calPath)); prof.defaultTau = Double(arg("--tau", "\(prof.defaultTau)"))! }
+    let reg = SkillRegistry()
+    let reflex = Reflex(engine: engine, profile: prof)
+    let items = try String(contentsOfFile: arg("--items", "skill_probe.jsonl"), encoding: .utf8).split(separator: "\n").compactMap { l -> (String, String)? in
+        guard let d = try? JSONSerialization.jsonObject(with: Data(l.utf8)) as? [String: String], let u = d["utterance"], let e = d["expected"] else { return nil }
+        return (u, e)
+    }
+    var ok = 0, handled = 0, handledOk = 0, retrieved = 0
+    print("prior correction: \(prof.prior.keys.contains { $0.hasPrefix("skillPick") } ? "on" : "off"), tau \(prof.defaultTau)")
+    for (u, e) in items {
+        let cands = ActionPlanner.candidates(u, registry: reg)
+        let inTop = cands.contains { $0.id == e }; retrieved += inTop ? 1 : 0
+        let set = OptionSets.skillPick(candidates: cands.map(\.title))
+        let d = try await reflex.decide(set, context: "User: \(u)")
+        let pickedID = d.argmax.id == "ask" ? "ask" : (Int(d.argmax.id.dropFirst()).flatMap { cands.indices.contains($0) ? cands[$0].id : nil } ?? "?")
+        let hit = pickedID == e; ok += hit ? 1 : 0
+        if !d.escalated { handled += 1; handledOk += hit ? 1 : 0 }
+        print(String(format: "%-16@ %-16@ %.3f %@ %@  %@", e as NSString, pickedID as NSString, d.confidence, d.escalated ? "esc  " : "local", hit ? "✓" : "✗", u as NSString))
+    }
+    print("\nskillPick probe: n=\(items.count) retrieval-hit \(retrieved)/\(items.count); argmax \(ok)/\(items.count); handled \(handled)/\(items.count), correct on handled \(handledOk)")
 case "skill-priors":
     // Content-free priors for the dynamic skillPick sets (2...8 options), merged into an existing calibration.json.
     let path = arg("--calibration", "calibration.json")

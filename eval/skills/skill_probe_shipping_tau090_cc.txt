@@ -1,0 +1,28 @@
+prior correction: on, tau 0.9
+instagram_dm instagram_dm 0.895 esc   ✓  dm sam on instagram saying congrats on the new job
+x_dm x_dm 0.863 esc   ✓  message @priya on twitter that the draft is ready
+whatsapp_send whatsapp_send 0.917 local ✓  send a whatsapp to Leo saying I'm outside
+alarm_create alarm_create 0.960 local ✓  wake me up at 6:30 tomorrow
+timer_start timer_start 0.849 esc   ✓  set a timer for 12 minutes for the pasta
+device_status device_status 0.934 local ✓  how much battery and storage do I have left
+email_digest email_digest 0.881 esc   ✓  summarize my last five emails
+html_viz html_viz 0.558 esc   ✓  make a chart of these numbers: 12, 40, 33, 51
+analyze_document analyze_document 0.843 esc   ✓  analyze this document and tell me the key points
+maps_directions maps_directions 0.872 esc   ✓  directions to Hunter College
+uber_ride uber_ride 0.993 local ✓  get me an uber to JFK
+call call 0.981 local ✓  call Dad
+facetime facetime 0.952 local ✓  facetime Mom
+flashlight_toggle flashlight_toggle 0.986 local ✓  turn on the flashlight
+focus_toggle focus_toggle 0.993 local ✓  turn on do not disturb
+spotify_play music_play 0.906 local ✗  play some jazz on spotify
+open_app open_app 0.754 esc   ✓  open youtube
+run_shortcut run_shortcut 0.818 esc   ✓  run my good morning shortcut
+translate translate 0.940 local ✓  translate 'where is the station' to spanish
+weather weather 0.971 local ✓  what's the weather like today
+web_search web_search 0.996 local ✓  search the web for cheap flights to Lisbon in March
+notes_create notes_create 0.887 esc   ✓  make a note: pick up dry cleaning Thursday
+instagram_autoreply imessage_send 0.765 esc   ✗  reply haha nice to every reel Sam sends me
+low_power_toggle low_power_toggle 0.994 local ✓  turn on low power mode
+email_compose email_compose 0.985 local ✓  email the landlord about the leak in the bathroom
+
+skillPick probe: n=25 retrieval-hit 25/25; argmax 23/25; handled 14/25, correct on handled 13

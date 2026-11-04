@@ -1,0 +1,25 @@
+{"utterance": "dm sam on instagram saying congrats on the new job", "expected": "instagram_dm"}
+{"utterance": "message @priya on twitter that the draft is ready", "expected": "x_dm"}
+{"utterance": "send a whatsapp to Leo saying I'm outside", "expected": "whatsapp_send"}
+{"utterance": "wake me up at 6:30 tomorrow", "expected": "alarm_create"}
+{"utterance": "set a timer for 12 minutes for the pasta", "expected": "timer_start"}
+{"utterance": "how much battery and storage do I have left", "expected": "device_status"}
+{"utterance": "summarize my last five emails", "expected": "email_digest"}
+{"utterance": "make a chart of these numbers: 12, 40, 33, 51", "expected": "html_viz"}
+{"utterance": "analyze this document and tell me the key points", "expected": "analyze_document"}
+{"utterance": "directions to Hunter College", "expected": "maps_directions"}
+{"utterance": "get me an uber to JFK", "expected": "uber_ride"}
+{"utterance": "call Dad", "expected": "call"}
+{"utterance": "facetime Mom", "expected": "facetime"}
+{"utterance": "turn on the flashlight", "expected": "flashlight_toggle"}
+{"utterance": "turn on do not disturb", "expected": "focus_toggle"}
+{"utterance": "play some jazz on spotify", "expected": "spotify_play"}
+{"utterance": "open youtube", "expected": "open_app"}
+{"utterance": "run my good morning shortcut", "expected": "run_shortcut"}
+{"utterance": "translate 'where is the station' to spanish", "expected": "translate"}
+{"utterance": "what's the weather like today", "expected": "weather"}
+{"utterance": "search the web for cheap flights to Lisbon in March", "expected": "web_search"}
+{"utterance": "make a note: pick up dry cleaning Thursday", "expected": "notes_create"}
+{"utterance": "reply haha nice to every reel Sam sends me", "expected": "instagram_autoreply"}
+{"utterance": "turn on low power mode", "expected": "low_power_toggle"}
+{"utterance": "email the landlord about the leak in the bathroom", "expected": "email_compose"}
