@@ -1,0 +1,63 @@
+{
+  "recordedAt": "2026-11-04T17:59:40+00:00",
+  "note": "Dispatch states only. GPU app ID and training-start evidence come from the pilot report; a running delegate is not proof of a running GPU job.",
+  "jobs": [
+    {
+      "clientRequestId": "pg-r3-duration-pilot-20261104-v1",
+      "title": "Run one capped two-epoch V4 GPU training pilot",
+      "taskId": "node:delegated-task:command%3Amcp%3A0df30b98-7eae-44f2-96c6-ca85a2fa4524%3Adelegate-task%3Apg-r3-duration-pilot-20261104-v1",
+      "childThreadId": "thread:delegated-task:command%3Amcp%3A0df30b98-7eae-44f2-96c6-ca85a2fa4524%3Adelegate-task%3Apg-r3-duration-pilot-20261104-v1",
+      "link": "<t3-thread://v2/1fc19a6b-4359-418d-a801-4f7fb5e9b320/thread:delegated-task:command%3Amcp%3A0df30b98-7eae-44f2-96c6-ca85a2fa4524%3Adelegate-task%3Apg-r3-duration-pilot-20261104-v1>",
+      "statusAtDispatch": "running",
+      "providerInstanceId": "opencode",
+      "model": "river02/deepseek-v4.1-flash-1017",
+      "options": [
+        {
+          "id": "variant",
+          "value": "max"
+        }
+      ],
+      "modalReservationUSD": 5,
+      "basetenReservationUSD": 0,
+      "sourceCommit": "8711232"
+    },
+    {
+      "clientRequestId": "pg-r3-training-grounding-20261104-v1",
+      "title": "Ground training scale-up and freeze a defensible evaluation plan",
+      "taskId": "node:delegated-task:command%3Amcp%3A0df30b98-7eae-44f2-96c6-ca85a2fa4524%3Adelegate-task%3Apg-r3-training-grounding-20261104-v1",
+      "childThreadId": "thread:delegated-task:command%3Amcp%3A0df30b98-7eae-44f2-96c6-ca85a2fa4524%3Adelegate-task%3Apg-r3-training-grounding-20261104-v1",
+      "link": "<t3-thread://v2/1fc19a6b-4359-418d-a801-4f7fb5e9b320/thread:delegated-task:command%3Amcp%3A0df30b98-7eae-44f2-96c6-ca85a2fa4524%3Adelegate-task%3Apg-r3-training-grounding-20261104-v1>",
+      "statusAtDispatch": "running",
+      "providerInstanceId": "opencode",
+      "model": "river03/deepseek-v4.1-flash-1017",
+      "options": [
+        {
+          "id": "variant",
+          "value": "max"
+        }
+      ],
+      "modalReservationUSD": 0,
+      "basetenReservationUSD": 0,
+      "sourceCommit": "8711232"
+    },
+    {
+      "clientRequestId": "pg-r3-dataset-grounding-20261104-v1",
+      "title": "Find scalable licensed data and independent task evaluation",
+      "taskId": "node:delegated-task:command%3Amcp%3A0df30b98-7eae-44f2-96c6-ca85a2fa4524%3Adelegate-task%3Apg-r3-dataset-grounding-20261104-v1",
+      "childThreadId": "thread:delegated-task:command%3Amcp%3A0df30b98-7eae-44f2-96c6-ca85a2fa4524%3Adelegate-task%3Apg-r3-dataset-grounding-20261104-v1",
+      "link": "<t3-thread://v2/1fc19a6b-4359-418d-a801-4f7fb5e9b320/thread:delegated-task:command%3Amcp%3A0df30b98-7eae-44f2-96c6-ca85a2fa4524%3Adelegate-task%3Apg-r3-dataset-grounding-20261104-v1>",
+      "statusAtDispatch": "running",
+      "providerInstanceId": "opencode",
+      "model": "river04/deepseek-v4.1-flash-1017",
+      "options": [
+        {
+          "id": "variant",
+          "value": "max"
+        }
+      ],
+      "modalReservationUSD": 0,
+      "basetenReservationUSD": 0,
+      "sourceCommit": "8711232"
+    }
+  ]
+}
