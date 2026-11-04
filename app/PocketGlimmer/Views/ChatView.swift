@@ -21,6 +21,8 @@ struct ChatView: View {
                 }
                 if let last = model.decisions.first { LiveReflexStrip(row: last) }
                 HStack(spacing: 10) {
+                    MicButton()       // hold to talk: Muse Voice Transcribe -> the same Reflex path as typed text (online only)
+                    CameraButton()    // glimpse: sensitivity gate -> Muse Spark 1.3 vision / SAM 3.1 (online only)
                     TextField("Ask or tell me something", text: $input, axis: .vertical)
                         .lineLimit(1...4).focused($focused)
                         .padding(.horizontal, 14).padding(.vertical, 10)
