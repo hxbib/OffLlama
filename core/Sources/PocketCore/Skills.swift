@@ -445,7 +445,7 @@ public enum BuiltinSkills {
           [ArgSpec("show", .query, required: true)], offline: false,
           ["open the latest episode of Severance on Apple TV", "play Ted Lasso on apple tv", "put on the new episode of Silo"],
           aliases: ["apple tv", "appletv", "tv app", "latest episode", "new episode", "watch", "episode"],
-          note: "iOS has no public playback API. You configure the Shortcut “PG Play on Apple TV” on your device (Shortcuts → TV → Find TV Shows → Play; Play Up Next on). The app only hands the show name to Shortcuts, so it cannot confirm that the Shortcut exists or that playback started. If Shortcuts cannot open, the app opens a TV app search page instead."),
+          note: "Configure a Shortcut named “PG Play on Apple TV” that accepts a show name as text, using actions available on your device. The playback recipe is unverified. The app only hands the show name to Shortcuts; it cannot confirm that the Shortcut exists or that playback started. If Shortcuts cannot open, the app opens a TV app search page instead."),
         s("notes_create", "Create a note", .documents, .shortcut(name: "PG Create Note", input: "{text}"), [ArgSpec("text", .text, required: true)],
           offline: true, ["make a note: wifi code is on the fridge", "jot down the parking spot"], aliases: ["note", "notes", "jot down", "write down"],
           note: "Shortcut wraps Notes “Create Note”; mobilenotes:// only opens Notes."),

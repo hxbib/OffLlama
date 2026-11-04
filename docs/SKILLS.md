@@ -44,8 +44,10 @@ tests in `core/Tests/PocketCoreTests/SkillsTests.swift`.
 **The trained model is untouched.** No option id, label, letter, question or few-shot exemplar changed. `skillPick` is
 appended last in `DecisionType` (existing raw values unchanged). It is not in `staticSets` and has no shots. It is a
 zero-shot use of the multiple-choice skill the 1B was distilled for, like `contactPick` with runtime candidates.
-Its accuracy has **not been measured** on the shipping GGUF yet; until it is, it uses the default τ (0.90 in the bundled
-calibration.json). `Reflex.measureSkillPickPriors()` produces its content-free priors.
+The saved [27-item diagnostic probe](../eval/skills/SKILL_PROBE.md) retrieved the intended skill on 27/27 items,
+selected it at argmax on 25/27, and accepted 15/27 at τ=0.90 with 15/15 correct. These author-written examples are
+not a gold benchmark or covered by the cal180 risk calculation. `Reflex.measureSkillPickPriors()` produces the
+content-free priors; the app uses the bundled threshold of 0.90.
 
 ## Honest iOS limits
 
@@ -75,7 +77,7 @@ calibration.json). `Reflex.measureSkillPickPriors()` produces its content-free p
 - "Offline" in the table means the decision and the hand-off work in airplane mode. Delivery, like an iMessage going
   out, still needs a network later.
 
-## Catalog (35 built-in skills)
+## Catalog (36 built-in skills)
 
 | id | what it does | invocation | offline | confirm |
 |---|---|---|---|---|
@@ -125,7 +127,7 @@ too: one extra tap.
 |---|---|
 | PG Create Alarm | Receive **Text** input → Split Text by `\|` → Clock › **Create Alarm** (time = item 1, label = item 2) |
 | PG Start Timer | Receive Text → Clock › **Start Timer** (duration = input) |
-| PG Play on Apple TV | Receive **Text** input → TV › **Find TV Shows** (Name contains input, limit 1) → TV › **Play** (Play Up Next **on**: resumes or starts the newest unwatched episode; Shuffle off). User-configured and device-dependent: the app hands the show name to Shortcuts and reports only that hand-off. It cannot detect whether this Shortcut exists or confirm playback. If Shortcuts cannot open, the app opens a TV app search page instead. |
+| PG Play on Apple TV | Create a Shortcut with this exact name that receives the show name as Text, using the actions actually available on the device. The playback recipe is **unverified**; do not assume “Find TV Shows,” “Play,” or “Play Up Next” actions exist. Rehearse it independently before filming. The app confirms only the handoff, and can open TV search if Shortcuts itself cannot open. |
 | PG Open App | Receive Text → **Open App** (app = input) |
 | PG Create Note | Receive Text → Notes › **Create Note** (body = input) |
 | PG Toggle Flashlight / PG Toggle Focus / PG Toggle Low Power | **Set Flashlight** / **Set Focus** / **Set Low Power Mode** → Toggle |
