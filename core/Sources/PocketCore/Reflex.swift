@@ -32,6 +32,12 @@ public final class Reflex: @unchecked Sendable {
     }
 
     public func decide(_ set: OptionSet, context: String) async throws -> ReflexDecision {
+        try await decide(set, context: context, telemetryContext: context)
+    }
+
+    /// Same decision and calibration; the caller may keep a short telemetry label so scanned document text
+    /// is not copied into the local telemetry DB.
+    func decide(_ set: OptionSet, context: String, telemetryContext: String?) async throws -> ReflexDecision {
         let letters = set.activeLetters
         let start = DispatchTime.now().uptimeNanoseconds
         let raw = try await engine.nextTokenLogits(prompt: promptFormat(set, context, profile.promptStyle), candidates: letters)
@@ -59,7 +65,7 @@ public final class Reflex: @unchecked Sendable {
             id = try telemetry?.log(DecisionRecord(id: nil, timestamp: clock(), decisionType: set.type, chosenID: argmax.id,
                                                    confidence: conf, escalated: escalated, latencyMs: ms,
                                                    model: engine.modelName, agreedWithTeacher: nil, source: source,
-                                                   context: context, optionIDs: set.options.map(\.id), probabilities: probs))
+                                                   context: telemetryContext, optionIDs: set.options.map(\.id), probabilities: probs))
         } catch {
             id = nil
             print("PocketGlimmer: decision telemetry could not be saved.")

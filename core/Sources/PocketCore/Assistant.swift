@@ -31,8 +31,8 @@ public struct AssistantTurn: Sendable {
     /// Exactly what left the device on escalation (after scrubbing), for the privacy info view.
     public var cloudPromptSent: String? = nil
     public var corrections: [(old: MemoryFact, new: MemoryFact)] = []
-    /// True when the sensitivity decision said "sensitive" (online or offline): the turn was answered on device and nothing
-    /// was sent. Drives the "Kept on device · nothing sent" badge.
+    /// True when cloud-bound text was kept on device (sensitive, uncertain, or the privacy check failed): the turn was
+    /// answered locally and nothing was sent. Drives the "Kept on device · nothing sent" badge.
     public var cloudWithheldForSensitivity = false
 }
 
@@ -50,6 +50,12 @@ extension PlannedAction {
         guard let d = try? JSONSerialization.data(withJSONObject: obj, options: [.prettyPrinted, .sortedKeys]) else { return tool }
         return String(decoding: d, as: UTF8.self)
     }
+}
+
+/// One per-turn snapshot: a settings change mid-request cannot swap the chain or placeholder mapping.
+struct CloudConfiguration: Sendable {
+    let chain: CloudBrainChain
+    let scrubber: PrivacyScrubber
 }
 
 public final class Assistant: @unchecked Sendable {
@@ -80,9 +86,8 @@ public final class Assistant: @unchecked Sendable {
         self.reflex = reflex; self.memory = memory; self.actions = actions; self.configuredCloud = cloud; self.isOnline = isOnline
     }
 
-    func memoryContext(_ q: String) async throws -> (String, [MemoryFact]) {
-        let hits = try await memory.retrieve(q, k: 4).map(\.fact)
-        return (hits.isEmpty ? "" : "Known about the user:\n" + hits.map { "- " + $0.text }.joined(separator: "\n") + "\n", hits)
+    func memoryContext(_ q: String) async throws -> [MemoryFact] {
+        try await memory.retrieve(q, k: 4).map(\.fact)
     }
 
     /// Memory block for local generation: profile one-pager (bounded) + retrieved facts. Reflex decision contexts are unchanged.
@@ -91,15 +96,18 @@ public final class Assistant: @unchecked Sendable {
         return p + "\n" + mem
     }
 
-    func cloudScrubber() -> PrivacyScrubber {
-        var sc = scrubber
-        sc.knownNames = Array(Set(sc.knownNames + ((try? memory.entityNames()) ?? [])))
-        return sc
+    /// Captures the chain and scrubber under one lock, then adds remembered entity names. Call once per turn.
+    func cloudConfiguration() -> CloudConfiguration {
+        let (chain, base) = cloudSettingsLock.withLock { (configuredCloud, configuredScrubber) }
+        var scrubber = base
+        scrubber.knownNames = Array(Set(scrubber.knownNames + ((try? memory.entityNames()) ?? [])))
+        return CloudConfiguration(chain: chain, scrubber: scrubber)
     }
 
     public func handle(_ utterance: String, now: Date = Date()) async throws -> AssistantTurn {
         var decisions: [ReflexDecision] = []
-        let (mem, _) = try await memoryContext(utterance)
+        let facts = try await memoryContext(utterance)
+        let mem = MemoryDisclosure.local.render(facts)
         let online = isOnline()
         let ctx = "\(mem)Network: \(online ? "online" : "offline")\nUser: \(utterance)"
 
@@ -159,8 +167,8 @@ public final class Assistant: @unchecked Sendable {
                 return AssistantTurn(reply: .local(a.trimmed), decisions: decisions, remembered: remembered, corrections: corrections,
                                      cloudWithheldForSensitivity: true)
             }
-            let cloud = self.cloud
-            guard online, !cloud.brains.isEmpty else {
+            let config = cloudConfiguration()
+            guard online, !config.chain.brains.isEmpty else {
                 // Offline with a question the Reflex wanted to escalate: ask the trained `answerability` decision whether a
                 // small on-device model can answer it at all; if not, say so instead of guessing (no made-up answer).
                 let can = try await reflex.decide(OptionSets.answerability, context: "\(mem)User: \(utterance)")
@@ -173,13 +181,21 @@ public final class Assistant: @unchecked Sendable {
                 let a = try await reflex.engine.generate(prompt: Self.localPrompt(utterance, mem: lmem), maxTokens: 200, temperature: 0.3)
                 return AssistantTurn(reply: .offlineFallback(a.trimmed), decisions: decisions, remembered: remembered, corrections: corrections)
             }
-            let sc = cloudScrubber()
-            let prof = cloudProfileMaxChars > 0 ? ((try? memory.profileOnePager(maxChars: cloudProfileMaxChars, redactSensitive: true)) ?? "") : ""
-            let s = sc.scrub((prof.isEmpty ? "" : prof + "\n") + mem + utterance)
-            let ans = try await cloud.complete([ChatMessage(role: "system", content: "You are the reasoning brain of a private phone assistant. Placeholders like [PERSON_1] stand for private data; keep them verbatim."),
-                                                ChatMessage(role: "user", content: s.text)])
-            return AssistantTurn(reply: .cloud(sc.restore(ans.text, mapping: s.mapping), provider: "\(ans.provider) · \(ans.model)"), decisions: decisions,
-                                 remembered: remembered, cloudPromptSent: s.text, corrections: corrections)
+            let profile = cloudProfileMaxChars > 0
+                ? ((try? memory.profileOnePager(maxChars: cloudProfileMaxChars, redactSensitive: true)) ?? "")
+                : ""
+            switch try await CloudTurnComposer.prepareReply(profile: profile, facts: facts, utterance: utterance,
+                                                             scrubber: config.scrubber, reflex: reflex) {
+            case .prepared(let turn):
+                let ans = try await turn.send(on: config.chain)
+                return AssistantTurn(reply: .cloud(turn.restore(ans.text), provider: "\(ans.provider) · \(ans.model)"), decisions: decisions,
+                                     remembered: remembered, cloudPromptSent: turn.sentText, corrections: corrections)
+            case .withheld:
+                // The early sensitivity card may have said ok; nothing was sent and the badge stays truthful.
+                let a = try await reflex.engine.generate(prompt: Self.localPrompt(utterance, mem: lmem), maxTokens: 200, temperature: 0.3)
+                return AssistantTurn(reply: .local(a.trimmed), decisions: decisions, remembered: remembered, corrections: corrections,
+                                     cloudWithheldForSensitivity: true)
+            }
         }
     }
 

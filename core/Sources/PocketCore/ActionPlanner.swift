@@ -183,22 +183,30 @@ extension Assistant {
     }
 
     /// Local 1B for short inputs; long inputs escalate to the cloud chain only when online, configured and the
-    /// sensitivity decision allows (scrubbed). Otherwise the 1B reads a truncated window and says so.
+    /// complete assembled text passes the sensitivity gate. Otherwise the 1B reads a truncated window and says so.
     func reason(_ instruction: String, text: String, localLimit: Int = 2_500) async throws -> String {
-        let cloud = self.cloud
-        if text.count > localLimit, isOnline(), !cloud.brains.isEmpty {
-            let sens = try await reflex.decide(OptionSets.sensitivity, context: "User: \(instruction)\n\(String(text.prefix(400)))")
-            if sens.chosen.id == "ok" {
-                let sc = cloudScrubber()
-                let s = sc.scrub(String(text.prefix(24_000)))
-                let ans = try await cloud.complete([ChatMessage(role: "system", content: "You are the reasoning brain of a private phone assistant. Placeholders like [PERSON_1] stand for private data; keep them verbatim."),
-                                                    ChatMessage(role: "user", content: instruction + "\n\n" + s.text)])
-                return sc.restore(ans.text, mapping: s.mapping)
+        if text.count > localLimit, isOnline() {
+            let config = cloudConfiguration()
+            if !config.chain.brains.isEmpty {
+                switch try await CloudTurnComposer.prepareDocument(instruction: instruction, text: text,
+                                                                   scrubber: config.scrubber, reflex: reflex) {
+                case .prepared(let turn):
+                    let ans = try await turn.send(on: config.chain)
+                    return turn.restore(ans.text)
+                case .withheld(let reason):
+                    return try await localReason(instruction, text: text, limit: localLimit, note: reason.localNote)
+                }
             }
         }
-        let window = String(text.prefix(localLimit))
+        return try await localReason(instruction, text: text, limit: localLimit, note: nil)
+    }
+
+    private func localReason(_ instruction: String, text: String, limit: Int, note: String?) async throws -> String {
+        let window = String(text.prefix(limit))
         let out = try await reflex.engine.generate(prompt: Self.localPrompt(instruction + "\n\n" + window, mem: ""), maxTokens: 200, temperature: 0.3)
-        return out.trimmed + (text.count > localLimit ? "\n(On device: read the first \(localLimit) characters.)" : "")
+        guard text.count > limit else { return out.trimmed }
+        let why = note.map { "; \($0)" } ?? ""
+        return out.trimmed + "\n(On device: read the first \(limit) characters\(why).)"
     }
 }
 

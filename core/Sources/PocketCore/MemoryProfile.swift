@@ -14,6 +14,44 @@ public enum MemoryAttributes {
                                                 "password", "pin", "salary", "bank", "account", "ssn"]
 }
 
+/// One fact-disclosure policy for every memory representation: local prompts keep everything, cloud-bound
+/// profile/retrieval/correction text keeps only facts that pass the existing attribute set and lexical hint.
+enum MemoryDisclosure: Sendable, Equatable {
+    case local
+    case cloud
+
+    func admits(_ fact: MemoryFact) -> Bool {
+        switch self {
+        case .local: return true
+        case .cloud: return !Self.isSensitive(fact)
+        }
+    }
+
+    /// Both sides of a rendered correction must pass: the old value is transmitted too.
+    func admits(correction old: MemoryFact, _ new: MemoryFact) -> Bool {
+        admits(old) && admits(new)
+    }
+
+    /// Checks every field the profile/retrieval renderer can expose. The attribute is checked with underscores
+    /// replaced by spaces because that is how the profile renders it.
+    static func isSensitive(_ fact: MemoryFact) -> Bool {
+        if MemoryAttributes.sensitive.contains(fact.attribute) { return true }
+        let attribute = fact.attribute.replacingOccurrences(of: "_", with: " ")
+        return SensitivityHint.matches(fact.subject)
+            || SensitivityHint.matches(fact.value)
+            || SensitivityHint.matches(fact.text)
+            || SensitivityHint.matches(attribute)
+            || fact.aliases.contains { SensitivityHint.matches($0) }
+    }
+
+    /// The retrieved-memory block for `Assistant`. Local is byte-for-byte the previous rendering.
+    func render(_ facts: [MemoryFact]) -> String {
+        let shown = facts.filter(admits)
+        guard !shown.isEmpty else { return "" }
+        return "Known about the user:\n" + shown.map { "- " + $0.text }.joined(separator: "\n") + "\n"
+    }
+}
+
 public struct ConsolidationReport: Sendable, Equatable {
     public var purgedExpired = 0, deduplicated = 0, superseded = 0, evicted = 0
     public var total: Int { purgedExpired + deduplicated + superseded + evicted }
@@ -58,10 +96,12 @@ extension MemoryStore {
     /// The always-injected profile ("one-pager"): life context, autonomy calibration, communication style, preferences,
     /// dated corrections, entity index with aliases, open tasks. Sections in priority order; the result never exceeds
     /// `maxChars` (keeps a 1B context small). Empty string when nothing is known.
-    /// `redactSensitive` drops health/money/credential facts (attribute list or SensitivityHint match) and decision
-    /// corrections: used for the escalation prompt, which is scrubbed again before it leaves the device.
+    /// `redactSensitive` drops health/money/credential facts (attribute list or any rendered field matching
+    /// `SensitivityHint`) and decision corrections: used for the escalation prompt, which is scrubbed again before
+    /// it leaves the device. Local rendering (`false`) keeps every fact.
     public func profileOnePager(maxChars: Int = 600, redactSensitive: Bool = false) throws -> String {
-        let act = try active().filter { !redactSensitive || (!MemoryAttributes.sensitive.contains($0.attribute) && !SensitivityHint.matches($0.text)) }
+        let disclosure: MemoryDisclosure = redactSensitive ? .cloud : .local
+        let act = try active().filter { disclosure.admits($0) }
         let user = act.filter { $0.subject == "user" }
         func group(_ fs: [MemoryFact]) -> String {
             var order: [String] = [], vals: [String: [String]] = [:]
@@ -94,7 +134,7 @@ extension MemoryStore {
         if !prefs.isEmpty { lines.append("Preferences: " + prefs) }
 
         let ids = Set(act.map(\.id))
-        let fixes = try corrections(limit: 5).filter { ids.contains($0.new.id) && (!redactSensitive || !MemoryAttributes.sensitive.contains($0.old.attribute)) }
+        let fixes = try corrections(limit: 5).filter { ids.contains($0.new.id) && disclosure.admits(correction: $0.old, $0.new) }
         if !fixes.isEmpty {
             lines.append("Corrected by you: " + fixes.map { "\(Self.day($0.new.createdAt)) \($0.new.attribute.replacingOccurrences(of: "_", with: " ")) \($0.old.value) -> \($0.new.value)" }.joined(separator: "; "))
         }
