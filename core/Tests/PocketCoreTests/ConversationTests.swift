@@ -271,6 +271,66 @@ final class ConversationTests: XCTestCase {
     }
 }
 
+/// Real OpenAI-compatible brain; the transport records the exact HTTP body that would leave the phone.
+final class BodyRecorder: @unchecked Sendable {
+    private let lock = NSLock()
+    private var bodies: [String] = []
+    var all: [String] { lock.withLock { bodies } }
+    func add(_ request: URLRequest) { lock.withLock { bodies.append(String(decoding: request.httpBody ?? Data(), as: UTF8.self)) } }
+}
+
+extension ConversationTests {
+    private func cloudAssistant(engine: ScriptedEngine, recorder: BodyRecorder, fail: Bool) throws -> Assistant {
+        var brain = OpenAICompatibleBrain(providerName: "Meta Model API", model: "muse-spark-1.3",
+                                          baseURL: URL(string: "https://example.invalid/v1/")!, apiKey: "synthetic-test-key")
+        brain.transport = { req in
+            recorder.add(req)
+            if fail { throw CloudError.offline }
+            return (Data(#"{"choices":[{"message":{"content":"cloud answer"}}]}"#.utf8), 200)
+        }
+        let db = try SQLiteDB(path: ":memory:")
+        return Assistant(reflex: Reflex(engine: engine, telemetry: try TelemetryLog(db: db), source: "test"),
+                         memory: try MemoryStore(db: db), actions: RecordingActions(),
+                         ledger: try EffectLedger(db: db), effects: FakePhoneEffects(),
+                         cloud: CloudBrainChain([brain]), isOnline: { true })
+    }
+
+    private func cloudEngine() -> ScriptedEngine {
+        let e = ScriptedEngine(); e.generated = "local answer"
+        e.script(whenPromptContains: "How should", logits: ["A": -5, "B": -3, "C": 5, "D": -3])
+        e.script(whenPromptContains: "acceptable to send this request", logits: ["A": 5, "B": -5])
+        e.script(whenPromptContains: "small on-device model", logits: ["A": 5, "B": -5])
+        return e
+    }
+
+    func testRealTransportBodyNeverCarriesHistoryOnSuccessOrFallback() async throws {
+        let ctx = ConversationContext.render([msg(.user, "my codename is Kestrel"), msg(.assistant, "noted")])
+        XCTAssertTrue(ctx.contains("Kestrel"))
+        for fail in [false, true] {
+            let e = cloudEngine()
+            let rec = BodyRecorder()
+            let a = try cloudAssistant(engine: e, recorder: rec, fail: fail)
+            let t = try await a.handle("Compare two long term investing approaches in detail", conversationContext: ctx)
+            XCTAssertEqual(rec.all.count, 1, "fail=\(fail) \(t.reply)")
+            XCTAssertFalse(rec.all.joined().contains("Kestrel"), "history leaked into the HTTP body, fail=\(fail)")
+            XCTAssertFalse(rec.all.joined().contains("Earlier in this chat"))
+            if fail {
+                XCTAssertTrue(e.generatePrompts.joined().contains("Kestrel"), "on-device fallback may use history")
+            }
+        }
+    }
+
+    func testEmptyContextPromptIsByteIdenticalOnEveryLocalPath() async throws {
+        let e1 = cloudEngine(), e2 = cloudEngine()
+        let a1 = try cloudAssistant(engine: e1, recorder: BodyRecorder(), fail: true)
+        let a2 = try cloudAssistant(engine: e2, recorder: BodyRecorder(), fail: true)
+        _ = try await a1.handle("Compare two long term investing approaches in detail")
+        _ = try await a2.handle("Compare two long term investing approaches in detail", conversationContext: "")
+        XCTAssertFalse(e1.generatePrompts.isEmpty)
+        XCTAssertEqual(e1.generatePrompts, e2.generatePrompts)
+    }
+}
+
 private final class CloudBox: CloudBrain, @unchecked Sendable {
     let providerName = "box"
     let model = "m"
