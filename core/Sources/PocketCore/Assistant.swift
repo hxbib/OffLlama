@@ -31,8 +31,16 @@ public struct AssistantTurn: Sendable {
     /// Exactly what left the device on escalation (after scrubbing), for the privacy info view.
     public var cloudPromptSent: String? = nil
     public var corrections: [(old: MemoryFact, new: MemoryFact)] = []
-    /// True when a cloud brain was online and configured, but the sensitivity check kept the turn on device (nothing sent).
+    /// True when the sensitivity decision said "sensitive" (online or offline): the turn was answered on device and nothing
+    /// was sent. Drives the "Kept on device · nothing sent" badge.
     public var cloudWithheldForSensitivity = false
+}
+
+/// Cheap lexical pre-check: health, money/credentials and intimate topics. Only decides whether the sensitivity Reflex
+/// decision also runs on a locally-routed turn (to show its card); it never replaces that decision.
+public enum SensitivityHint {
+    static let re = try! NSRegularExpression(pattern: #"\b(cholesterol|ldl|hdl|blood (?:test|pressure|sugar|work)|a1c|glucose|diagnos\w*|hiv|std|sti|pregnan\w*|therap(?:y|ist)|medication|prescription|symptoms?|test results?|lab results?|biopsy|cancer|depress\w*|anxiety|bank account|account (?:number|balance)|bank balance|salary|debt|ssn|social security|credit card|pin code|password|passcode|routing number|tax return|intimate|sexual)\b"#, options: [.caseInsensitive])
+    public static func matches(_ s: String) -> Bool { re.firstMatch(in: s, range: NSRange(s.startIndex..., in: s)) != nil }
 }
 
 extension PlannedAction {
@@ -51,6 +59,10 @@ public final class Assistant: @unchecked Sendable {
     public var cloud: CloudBrainChain
     public var isOnline: () -> Bool
     public var scrubber = PrivacyScrubber()
+    /// Char budget of the always-injected memory profile in local prompts (0 = off). Small: the 1B context stays short.
+    public var profileMaxChars = 600
+    /// Char budget of the profile sent to the cloud on escalation, after scrubbing (0 = never send the profile).
+    public var cloudProfileMaxChars = 400
 
     public init(reflex: Reflex, memory: MemoryStore, actions: ActionExecutor, cloud: CloudBrainChain = .init([]), isOnline: @escaping () -> Bool = { false }) {
         self.reflex = reflex; self.memory = memory; self.actions = actions; self.cloud = cloud; self.isOnline = isOnline
@@ -59,6 +71,12 @@ public final class Assistant: @unchecked Sendable {
     func memoryContext(_ q: String) async throws -> (String, [MemoryFact]) {
         let hits = try await memory.retrieve(q, k: 4).map(\.fact)
         return (hits.isEmpty ? "" : "Known about the user:\n" + hits.map { "- " + $0.text }.joined(separator: "\n") + "\n", hits)
+    }
+
+    /// Memory block for local generation: profile one-pager (bounded) + retrieved facts. Reflex decision contexts are unchanged.
+    func localMemory(_ mem: String) -> String {
+        guard profileMaxChars > 0, let p = try? memory.profileOnePager(maxChars: profileMaxChars), !p.isEmpty else { return mem }
+        return p + "\n" + mem
     }
 
     public func handle(_ utterance: String, now: Date = Date()) async throws -> AssistantTurn {
@@ -89,6 +107,7 @@ public final class Assistant: @unchecked Sendable {
 
         let route = try await reflex.decide(OptionSets.route, context: ctx)
         decisions.append(route)
+        let lmem = localMemory(mem)
 
         switch route.chosen.id {
         case "tool":
@@ -96,27 +115,39 @@ public final class Assistant: @unchecked Sendable {
             let reply = try await toolPath(utterance, ctx: ctx, decisions: &decisions, planned: &planned)
             return AssistantTurn(reply: reply, decisions: decisions, remembered: remembered, action: planned, corrections: corrections)
         case "clarify":
-            let q = try await reflex.engine.generate(prompt: Self.localPrompt("Ask ONE short clarifying question about: \(utterance)", mem: mem), maxTokens: 40, temperature: 0.2)
+            let q = try await reflex.engine.generate(prompt: Self.localPrompt("Ask ONE short clarifying question about: \(utterance)", mem: lmem), maxTokens: 40, temperature: 0.2)
             return AssistantTurn(reply: .clarify(q.trimmed), decisions: decisions, remembered: remembered, corrections: corrections)
         case "answer_local":
-            let a = try await reflex.engine.generate(prompt: Self.localPrompt(utterance, mem: mem), maxTokens: 200, temperature: 0.3)
-            return AssistantTurn(reply: .local(a.trimmed), decisions: decisions, remembered: remembered, corrections: corrections)
-        default: // escalate_cloud (chosen by the model, or fallback because confidence < tau)
-            guard online, !cloud.brains.isEmpty else {
-                let a = try await reflex.engine.generate(prompt: Self.localPrompt(utterance, mem: mem), maxTokens: 200, temperature: 0.3)
-                return AssistantTurn(reply: .offlineFallback(a.trimmed), decisions: decisions, remembered: remembered, corrections: corrections)
+            // Lexically sensitive requests still get the sensitivity card, so the user sees it was kept on device.
+            var withheld = false
+            if SensitivityHint.matches(utterance) {
+                let sens = try await reflex.decide(OptionSets.sensitivity, context: "User: \(utterance)")
+                decisions.append(sens)
+                withheld = sens.chosen.id == "sensitive"
             }
+            let a = try await reflex.engine.generate(prompt: Self.localPrompt(utterance, mem: lmem), maxTokens: 200, temperature: 0.3)
+            return AssistantTurn(reply: .local(a.trimmed), decisions: decisions, remembered: remembered, corrections: corrections,
+                                 cloudWithheldForSensitivity: withheld)
+        default: // escalate_cloud (chosen by the model, or fallback because confidence < tau)
+            // Sensitivity runs online AND offline, so its card and the "Kept on device" badge show in airplane mode too.
             let sens = try await reflex.decide(OptionSets.sensitivity, context: "User: \(utterance)")
             decisions.append(sens)
             if sens.chosen.id == "sensitive" {
-                let a = try await reflex.engine.generate(prompt: Self.localPrompt(utterance, mem: mem), maxTokens: 200, temperature: 0.3)
+                let a = try await reflex.engine.generate(prompt: Self.localPrompt(utterance, mem: lmem), maxTokens: 200, temperature: 0.3)
                 return AssistantTurn(reply: .local(a.trimmed), decisions: decisions, remembered: remembered, corrections: corrections,
                                      cloudWithheldForSensitivity: true)
             }
-            let s = scrubber.scrub(mem + utterance)
+            guard online, !cloud.brains.isEmpty else {
+                let a = try await reflex.engine.generate(prompt: Self.localPrompt(utterance, mem: lmem), maxTokens: 200, temperature: 0.3)
+                return AssistantTurn(reply: .offlineFallback(a.trimmed), decisions: decisions, remembered: remembered, corrections: corrections)
+            }
+            var sc = scrubber
+            sc.knownNames = Array(Set(scrubber.knownNames + ((try? memory.entityNames()) ?? [])))
+            let prof = cloudProfileMaxChars > 0 ? ((try? memory.profileOnePager(maxChars: cloudProfileMaxChars, redactSensitive: true)) ?? "") : ""
+            let s = sc.scrub((prof.isEmpty ? "" : prof + "\n") + mem + utterance)
             let ans = try await cloud.complete([ChatMessage(role: "system", content: "You are the reasoning brain of a private phone assistant. Placeholders like [PERSON_1] stand for private data; keep them verbatim."),
                                                 ChatMessage(role: "user", content: s.text)])
-            return AssistantTurn(reply: .cloud(scrubber.restore(ans.text, mapping: s.mapping), provider: "\(ans.provider) · \(ans.model)"), decisions: decisions,
+            return AssistantTurn(reply: .cloud(sc.restore(ans.text, mapping: s.mapping), provider: "\(ans.provider) · \(ans.model)"), decisions: decisions,
                                  remembered: remembered, cloudPromptSent: s.text, corrections: corrections)
         }
     }

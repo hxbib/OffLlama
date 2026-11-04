@@ -9,13 +9,18 @@ struct SettingsView: View {
     @State private var metaKey = Keychain.get("meta_key") ?? ""
     @State private var fwKey = Keychain.get("fireworks_key") ?? ""
     @State private var byokKey = Keychain.get("byok_key") ?? ""
+    @State private var exportStatus = ""
+    @AppStorage("pg_kv_prefix") private var kvPrefix = false
 
     var body: some View {
         NavigationStack {
             Form {
-                Section("On-device model") {
+                Section {
                     LabeledContent("Reflex + local answers", value: model.modelState)
                     StatusPill()
+                    Toggle("Reuse cached prompt prefix", isOn: $kvPrefix)
+                } header: { Text("On-device model") } footer: {
+                    Text("Keeps each decision type's fixed prompt prefix in the KV cache so a decision only evaluates the new part. Applies on next launch.")
                 }
                 Section {
                     TextField("Model", text: $metaModel).textInputAutocapitalization(.never)
@@ -29,6 +34,16 @@ struct SettingsView: View {
                     TextField("Base URL (…/v1/)", text: $byokURL).textInputAutocapitalization(.never).keyboardType(.URL)
                     TextField("Model", text: $byokModel).textInputAutocapitalization(.never)
                     SecureField("API key", text: $byokKey)
+                }
+                Section {
+                    Button("Export decisions for distillation") {
+                        if let r = model.exportDistillation() {
+                            exportStatus = "\(r.rows) escalated decision\(r.rows == 1 ? "" : "s") → Files › Pocket Glimmer › \(r.url.lastPathComponent)"
+                        } else { exportStatus = "Export failed (model not loaded yet?)" }
+                    }
+                    if !exportStatus.isEmpty { Text(exportStatus).font(.caption).foregroundStyle(.secondary) }
+                } header: { Text("Distillation loop") } footer: {
+                    Text("Writes the last 30 days of low-confidence (escalated) decisions as JSONL for the next teacher-labeling round. The file stays on this iPhone until you share it; nothing is uploaded.")
                 }
                 Section("About") {
                     Text("Built with Llama").font(.callout.weight(.semibold))

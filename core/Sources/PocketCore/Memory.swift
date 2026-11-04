@@ -52,6 +52,8 @@ public struct MemoryFact: Sendable, Equatable, Identifiable {
     public var supersededBy: Int64?
     /// Where the fact came from (CURATOR-style provenance, arXiv 2606.25115): user_stated, model_extracted, user_correction, cloud, import.
     public var provenance: String = MemoryProvenance.userStated
+    /// Other names for this fact's entity (subject), lowercased: "mom", "my mother", "prof lee". Used by keyword retrieval.
+    public var aliases: [String] = []
     public var isActive: Bool { supersededBy == nil }
 }
 
@@ -60,10 +62,11 @@ public struct ExtractedFact: Sendable, Equatable {
     public var subject: String, attribute: String, value: String, text: String
     public var ttl: TimeInterval?
     public var provenance: String
+    public var aliases: [String]
     public init(subject: String, attribute: String, value: String, text: String, ttl: TimeInterval? = nil,
-                provenance: String = MemoryProvenance.userStated) {
+                provenance: String = MemoryProvenance.userStated, aliases: [String] = []) {
         self.subject = subject.lowercased(); self.attribute = attribute; self.value = value; self.text = text; self.ttl = ttl
-        self.provenance = provenance
+        self.provenance = provenance; self.aliases = MemoryStore.normAliases(aliases)
     }
 }
 
@@ -108,10 +111,40 @@ public final class MemoryStore: @unchecked Sendable {
         CREATE TABLE IF NOT EXISTS corrections(
           id INTEGER PRIMARY KEY AUTOINCREMENT, decision_type TEXT NOT NULL, context TEXT NOT NULL, wrong_id TEXT NOT NULL,
           correct_id TEXT NOT NULL, created REAL NOT NULL, embedding BLOB NOT NULL);
+        CREATE TABLE IF NOT EXISTS memory_meta(key TEXT PRIMARY KEY, value TEXT NOT NULL);
         """)
         // Migration for pre-provenance databases.
         let cols = try db.query("PRAGMA table_info(facts)").compactMap { $0["name"]?.text }
         if !cols.contains("provenance") { try db.exec("ALTER TABLE facts ADD COLUMN provenance TEXT NOT NULL DEFAULT 'user_stated'") }
+        // Migration for pre-alias databases ("|"-separated, lowercased).
+        if !cols.contains("aliases") { try db.exec("ALTER TABLE facts ADD COLUMN aliases TEXT NOT NULL DEFAULT ''") }
+    }
+
+    static func normAliases(_ a: [String]) -> [String] {
+        var seen = Set<String>()
+        return a.map { $0.lowercased().trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty && !$0.contains("|") && seen.insert($0).inserted }
+    }
+
+    /// All aliases recorded for an entity (union over its rows, including history).
+    public func aliases(forSubject subject: String) throws -> [String] {
+        let rows = try db.query("SELECT aliases FROM facts WHERE subject=? AND aliases != '' ORDER BY id", [.text(subject.lowercased())])
+        return Self.normAliases(rows.flatMap { ($0["aliases"]?.text ?? "").split(separator: "|").map(String.init) })
+    }
+
+    /// Attach aliases to an entity: stored on every row of that subject so keyword retrieval finds any of them.
+    /// No-op (returns []) when the entity has no facts yet.
+    @discardableResult public func addAliases(_ new: [String], to subject: String) throws -> [String] {
+        let merged = Self.normAliases(try aliases(forSubject: subject) + new)
+        guard !merged.isEmpty else { return [] }
+        try db.run("UPDATE facts SET aliases=? WHERE subject=?", [.text(merged.joined(separator: "|")), .text(subject.lowercased())])
+        let has = try db.query("SELECT COUNT(*) AS n FROM facts WHERE subject=?", [.text(subject.lowercased())]).first?["n"]?.int ?? 0
+        return has > 0 ? merged : []
+    }
+
+    func meta(_ key: String) throws -> String? { try db.query("SELECT value FROM memory_meta WHERE key=?", [.text(key)]).first?["value"]?.text }
+    func setMeta(_ key: String, _ value: String) throws {
+        try db.run("INSERT INTO memory_meta(key,value) VALUES(?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value", [.text(key), .text(value)])
     }
 
     /// Store a fact, handling contradictions. `resolver` is normally Reflex's memoryConflict decision.
@@ -123,6 +156,7 @@ public final class MemoryStore: @unchecked Sendable {
         if let same = existing.first(where: { $0.value.caseInsensitiveCompare(f.value) == .orderedSame }) {
             try db.run("UPDATE facts SET updated=?, expires=? WHERE id=?",
                        [.double(now.timeIntervalSince1970), f.ttl.map { .double(now.addingTimeInterval($0).timeIntervalSince1970) } ?? .null, .int(same.id)])
+            if !f.aliases.isEmpty { try addAliases(f.aliases, to: f.subject) }
             return (try fact(id: same.id), .ignoreNew)
         }
         var resolution: ConflictResolution? = nil
@@ -137,11 +171,13 @@ public final class MemoryStore: @unchecked Sendable {
         }
         let emb = try await embedder.embed(f.text)
         let bytes = emb.withUnsafeBufferPointer { Array(UnsafeRawBufferPointer($0)) }
+        let aliases = Self.normAliases(try aliases(forSubject: f.subject) + f.aliases)
         let id = try db.transaction { () throws -> Int64 in
-            let id = try db.run("INSERT INTO facts(subject,attribute,value,text,created,updated,expires,superseded_by,embedding,embedder,provenance) VALUES(?,?,?,?,?,?,?,NULL,?,?,?)",
+            let id = try db.run("INSERT INTO facts(subject,attribute,value,text,created,updated,expires,superseded_by,embedding,embedder,provenance,aliases) VALUES(?,?,?,?,?,?,?,NULL,?,?,?,?)",
                 [.text(f.subject), .text(f.attribute), .text(f.value), .text(f.text), .double(now.timeIntervalSince1970),
                  .double(now.timeIntervalSince1970), f.ttl.map { .double(now.addingTimeInterval($0).timeIntervalSince1970) } ?? .null,
-                 .blob(bytes), .text(embedder.name), .text(f.provenance)])
+                 .blob(bytes), .text(embedder.name), .text(f.provenance), .text(aliases.joined(separator: "|"))])
+            if !aliases.isEmpty { try db.run("UPDATE facts SET aliases=? WHERE subject=?", [.text(aliases.joined(separator: "|")), .text(f.subject)]) }
             for o in toSupersede { try db.run("UPDATE facts SET superseded_by=? WHERE id=?", [.int(id), .int(o.id)]) }
             return id
         }
@@ -230,30 +266,42 @@ public final class MemoryStore: @unchecked Sendable {
         return p
     }
 
-    /// Hybrid retrieval: cosine on embeddings + small keyword boost + recency tie-break.
+    /// Hybrid retrieval: (cosine on embeddings + small word-overlap boost) unioned with grep-style keyword hits on the
+    /// entity's aliases, its name and the fact value (Instinct-style). score = max(dense, keywordHit ? 0.6 : 0);
+    /// ties break on the dense score, then recency.
     public func retrieve(_ query: String, k: Int = 5, minScore: Float = 0.15) async throws -> [(fact: MemoryFact, score: Float)] {
         let q = try await embedder.embed(query)
         let qWords = Set(query.lowercased().split { !$0.isLetter && !$0.isNumber }.map(String.init).filter { $0.count > 2 })
         let rows = try db.query("SELECT * FROM facts WHERE superseded_by IS NULL AND (expires IS NULL OR expires > ?)", [.double(clock().timeIntervalSince1970)])
-        var scored: [(MemoryFact, Float)] = []
-        for r in rows {
+        let facts = rows.map(Self.decode)
+        var entityAliases: [String: Set<String>] = [:]
+        for f in facts { entityAliases[f.subject, default: []].formUnion(f.aliases) }
+        let ql = " " + Self.words(query) + " "
+        func hit(_ term: String, min: Int) -> Bool { let t = Self.words(term); return t.count >= min && ql.contains(" \(t) ") }
+        var scored: [(MemoryFact, Float, Float)] = []
+        for (r, f) in zip(rows, facts) {
             guard let b = r["embedding"]?.blob else { continue }
             let e: [Float] = b.withUnsafeBytes { Array($0.bindMemory(to: Float.self)) }
-            let f = Self.decode(r)
             let fw = Set((f.text + " " + f.subject + " " + f.value).lowercased().split { !$0.isLetter && !$0.isNumber }.map(String.init))
             let overlap = Float(qWords.intersection(fw).count)
-            let s = cosine(q, e) + 0.1 * overlap
-            if s >= minScore { scored.append((f, s)) }
+            let dense = cosine(q, e) + 0.1 * overlap
+            let keyword = (entityAliases[f.subject] ?? []).contains { hit($0, min: 2) } || (f.subject != "user" && hit(f.subject, min: 2)) || hit(f.value, min: 3)
+            let s = keyword ? max(dense, 0.6) : dense
+            if s >= minScore { scored.append((f, s, dense)) }
         }
-        return scored.sorted { $0.1 == $1.1 ? $0.0.updatedAt > $1.0.updatedAt : $0.1 > $1.1 }.prefix(k).map { (fact: $0.0, score: $0.1) }
+        return scored.sorted { $0.1 != $1.1 ? $0.1 > $1.1 : ($0.2 != $1.2 ? $0.2 > $1.2 : $0.0.updatedAt > $1.0.updatedAt) }
+            .prefix(k).map { (fact: $0.0, score: $0.1) }
     }
+
+    static func words(_ s: String) -> String { s.lowercased().split { !$0.isLetter && !$0.isNumber }.joined(separator: " ") }
 
     static func decode(_ r: [String: SQLValue]) -> MemoryFact {
         MemoryFact(id: r["id"]?.int ?? 0, subject: r["subject"]?.text ?? "", attribute: r["attribute"]?.text ?? "",
                    value: r["value"]?.text ?? "", text: r["text"]?.text ?? "",
                    createdAt: Date(timeIntervalSince1970: r["created"]?.double ?? 0), updatedAt: Date(timeIntervalSince1970: r["updated"]?.double ?? 0),
                    expiresAt: r["expires"]?.double.map { Date(timeIntervalSince1970: $0) }, supersededBy: r["superseded_by"]?.int,
-                   provenance: r["provenance"]?.text ?? MemoryProvenance.userStated)
+                   provenance: r["provenance"]?.text ?? MemoryProvenance.userStated,
+                   aliases: (r["aliases"]?.text ?? "").split(separator: "|").map(String.init))
     }
 }
 
@@ -276,6 +324,10 @@ public enum RuleFactExtractor {
         r(#"\bmy birthday is (?:on )?([A-Za-z]+ \d{1,2}(?:st|nd|rd|th)?)"#) { .init(subject: "user", attribute: "birthday", value: $0[1], text: "User's birthday is \($0[1])") },
         r(#"\bi (?:owe|promised) ([A-Z][a-z]+) (.{3,60}?)(?:[.!]|$)"#) { .init(subject: $0[1], attribute: "promise", value: $0[2], text: "User promised/owes \($0[1]) \($0[2])", ttl: 14 * day) },
         r(#"\bi(?:'m| am) (?:out of|running low on) ([a-z][a-z -]{1,30}?)(?:[.,!]|$| and)"#) { .init(subject: "user", attribute: "needs_to_buy", value: $0[1], text: "User needs to buy \($0[1])", ttl: 7 * day) },
+        r(#"\b(?:add|put) (.{3,60}?) (?:to|on) my (?:to-?do|todo|task) list\b"#) { .init(subject: "user", attribute: "todo", value: $0[1], text: "To do: \($0[1])", ttl: 30 * day) },
+        r(#"\bmy (mom|mother|dad|father|sister|brother|boss|roommate|landlord|professor|best friend)(?:'s name)? is ((?-i:[A-Z][a-z]+))\b"#) {
+            .init(subject: $0[2], attribute: "relation", value: $0[1].lowercased(), text: "\($0[2]) is the user's \($0[1].lowercased())",
+                  aliases: [$0[1], "my " + $0[1]]) },
         r(#"\bi(?:'m| am) (?:going to|flying to|traveling to|travelling to) ([A-Z][A-Za-z ]{1,30}?) (?:on|this|next|tomorrow)"#) { .init(subject: "user", attribute: "upcoming_trip", value: $0[1], text: "User is traveling to \($0[1])", ttl: 21 * day) },
     ]
 

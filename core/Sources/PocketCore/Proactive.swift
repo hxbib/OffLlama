@@ -3,6 +3,7 @@ import Foundation
 /// Triggers delivered by iOS Shortcuts personal automations -> App Intent -> `ProactiveEngine.handle`.
 public enum TriggerKind: String, Codable, CaseIterable, Sendable {
     case time, arrive, leave, email, message, charger
+    case morning   // daily brief (Shortcuts "Time of Day" automation): tasks board + today's events, gated by nudgeNow
 }
 
 public struct Trigger: Codable, Sendable, Equatable {
@@ -48,7 +49,7 @@ public enum ProactiveRules {
         ProactiveRule(name: "promise-when-messaged", kinds: [.message, .email],
             match: { t, f in f.attribute == "promise" && (t.sender ?? "").lowercased().contains(f.subject) },
             render: { t, f in n("\(t.sender ?? f.subject.capitalized) just wrote", "Heads-up: you owe \(f.subject.capitalized) \(f.value).", f) }),
-        ProactiveRule(name: "birthday-soon", kinds: [.time, .charger],
+        ProactiveRule(name: "birthday-soon", kinds: [.time, .charger, .morning],
             match: { t, f in f.attribute == "birthday" && f.subject != "user" && ProactiveRules.isWithin(days: 3, of: f.value, from: t.date) },
             render: { _, f in n("\(f.subject.capitalized)'s birthday", "\(f.subject.capitalized)'s birthday is \(f.value). Want a reminder to send something?", f) }),
         ProactiveRule(name: "trip-prep-overnight", kinds: [.charger, .time],
@@ -80,12 +81,40 @@ public final class ProactiveEngine: @unchecked Sendable {
     let memory: MemoryStore
     let reflex: Reflex?
     let rules: [ProactiveRule]
+    /// Today's calendar lines for the morning brief (EventKit on iOS). nil = no calendar.
+    public var todayEvents: (@Sendable (Date) async throws -> [String])? = nil
+
     public init(memory: MemoryStore, reflex: Reflex?, rules: [ProactiveRule] = ProactiveRules.defaults) {
         self.memory = memory; self.reflex = reflex; self.rules = rules
     }
 
+    /// Morning brief: tasks board + today's events, delivered at most once per local day and only if the Reflex
+    /// `nudgeNow` decision says "nudge" (a "later"/"skip" or a below-tau fallback lets a later trigger retry).
+    public func morningBrief(_ t: Trigger) async throws -> Nudge? {
+        let day = MemoryStore.day(t.date)
+        if try memory.meta("last_morning_brief") == day { return nil }
+        let board = try memory.tasksBoard()
+        let events = (try? await todayEvents?(t.date)) ?? []
+        var parts: [String] = []
+        if !events.isEmpty { parts.append("Today: " + events.prefix(4).joined(separator: "; ")) }
+        for (label, items) in [("Due soon", board.dueSoon), ("To do", board.open), ("Buy", board.shopping)] where !items.isEmpty {
+            parts.append("\(label): " + items.prefix(4).map(\.fact.value).joined(separator: "; "))
+        }
+        guard !parts.isEmpty else { return nil }
+        let body = parts.joined(separator: "\n")
+        var conf = 0.0
+        if let reflex {
+            let d = try await reflex.decide(OptionSets.nudgeNow, context: "\(t.summary)\nMemory: \(parts.joined(separator: "; "))\nDraft nudge: morning brief")
+            guard d.chosen.id == "nudge" else { return nil }
+            conf = d.confidence
+        }
+        try memory.setMeta("last_morning_brief", day)
+        return Nudge(title: "Good morning", body: body, factIDs: (board.dueSoon + board.open + board.shopping).map(\.fact.id), confidence: conf)
+    }
+
     public func handle(_ t: Trigger) async throws -> [Nudge] {
         var out: [Nudge] = []
+        if t.kind == .morning, let b = try await morningBrief(t) { out.append(b) }
         for f in try memory.active() {
             for r in rules where r.kinds.contains(t.kind) && r.match(t, f) {
                 let draft = r.render(t, f)

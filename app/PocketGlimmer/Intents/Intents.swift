@@ -4,10 +4,10 @@ import PocketCore
 /// Shortcuts personal automations (Time of Day, Arrive/Leave, Email, Message, Charger) call this intent.
 /// It runs without opening the app; Reflex decides whether a memory is worth a nudge right now.
 enum TriggerKindEntity: String, AppEnum {
-    case time, arrive, leave, email, message, charger
+    case time, arrive, leave, email, message, charger, morning
     static let typeDisplayRepresentation: TypeDisplayRepresentation = "Trigger"
     static let caseDisplayRepresentations: [TriggerKindEntity: DisplayRepresentation] = [
-        .time: "Time of day", .arrive: "Arrive", .leave: "Leave", .email: "Email", .message: "Message", .charger: "Charger"]
+        .time: "Time of day", .arrive: "Arrive", .leave: "Leave", .email: "Email", .message: "Message", .charger: "Charger", .morning: "Morning brief"]
 }
 
 struct ProactiveTriggerIntent: AppIntent {

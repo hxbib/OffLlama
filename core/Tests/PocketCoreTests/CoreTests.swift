@@ -137,6 +137,46 @@ final class TelemetryTests: XCTestCase {
         let byModel = try tel.shareByModel()
         XCTAssertEqual(byModel.map(\.model), ["m", "round2"]); XCTAssertEqual(byModel[0].handledLocally, 3); XCTAssertEqual(byModel[1].total, 1)
         let csv = try tel.csv().split(separator: "\n").dropLast()
-        XCTAssertEqual(csv.count, 6); XCTAssertTrue(csv[0].hasPrefix("id,timestamp_iso,decision_type"))
+        XCTAssertEqual(csv.count, 6); XCTAssertTrue(csv[0].hasPrefix("id,timestamp_iso,decision_type,chosen,confidence,escalated,latency_ms,model,agreed_with_teacher,source,"))
+    }
+
+    func testDistillationLoopRoundTripExportAndVerdicts() async throws {
+        let db = try SQLiteDB(path: ":memory:"); let tel = try TelemetryLog(db: db)
+        let now = Date(timeIntervalSince1970: 1_793_000_000)
+        let e = ScriptedEngine()
+        e.script(whenPromptContains: "How should", logits: ["A": -5, "B": 3, "C": -4, "D": -6])          // confident
+        e.script(whenPromptContains: "acceptable to send", logits: ["A": 0.1, "B": 0])                    // escalates
+        let r = Reflex(engine: e, telemetry: tel, source: "test", clock: { now })
+        let ok = try await r.decide(OptionSets.route, context: "User: remind me, \"quoted\"")
+        let esc = try await r.decide(OptionSets.sensitivity, context: "User: my LDL is 210")
+        let rows = try tel.all()
+        XCTAssertEqual(rows[0].context, "User: remind me, \"quoted\"")
+        XCTAssertEqual(rows[0].optionIDs, ["answer_local", "tool", "escalate_cloud", "clarify"])
+        XCTAssertEqual(rows[0].probabilities?["tool"] ?? 0, ok.probabilities["tool"]!, accuracy: 1e-12)
+        XCTAssertEqual(rows[1].probabilities?.count, 2)
+
+        let q = try tel.exportDistillationQueue(sinceDays: 30, now: now + 3600)
+        let lines = q.split(separator: "\n")
+        XCTAssertEqual(lines.count, 1)
+        let o = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(lines[0].utf8)) as? [String: Any])
+        XCTAssertEqual(Set(o.keys), ["id", "type", "context", "option_ids", "student_probs", "confidence", "ts", "source"])
+        XCTAssertEqual(o["id"] as? Int, Int(esc.telemetryID!)); XCTAssertEqual(o["type"] as? String, "sensitivity")
+        XCTAssertEqual(o["context"] as? String, "User: my LDL is 210"); XCTAssertEqual(o["option_ids"] as? [String], ["ok", "sensitive"])
+        XCTAssertEqual((o["student_probs"] as? [String: Double])?["ok"] ?? 0, esc.probabilities["ok"]!, accuracy: 1e-9)
+        XCTAssertEqual(o["ts"] as? String, "2026-10-26T07:33:20Z"); XCTAssertEqual(o["source"] as? String, "test")
+        XCTAssertEqual(try tel.exportDistillationQueue(sinceDays: 30, now: now + 31 * 86_400), "")    // window
+
+        let n = try tel.importTeacherVerdicts(jsonl: "{\"id\": \(esc.telemetryID!), \"agreed\": false}\nnot json\n{\"id\": 999, \"agreed\": true}\n{\"id\": \(ok.telemetryID!), \"agreed\": true}")
+        XCTAssertEqual(n, 2)
+        XCTAssertEqual(try tel.all().map(\.agreedWithTeacher), [true, false])
+
+        // Pre-context database migrates; old rows decode with nil context.
+        let old = try SQLiteDB(path: ":memory:")
+        try old.exec("CREATE TABLE decisions(id INTEGER PRIMARY KEY AUTOINCREMENT, ts REAL NOT NULL, type TEXT NOT NULL, chosen TEXT NOT NULL, confidence REAL NOT NULL, escalated INTEGER NOT NULL, latency_ms REAL NOT NULL, model TEXT NOT NULL, agreed_teacher INTEGER, source TEXT NOT NULL)")
+        try old.run("INSERT INTO decisions(ts,type,chosen,confidence,escalated,latency_ms,model,source) VALUES(1793000000,'route','tool',0.5,1,3,'m','device')")
+        let t2 = try TelemetryLog(db: old)
+        XCTAssertNil(try t2.all()[0].context)
+        XCTAssertEqual(try t2.exportDistillationQueue(sinceDays: 30, now: now).split(separator: "\n").count, 1)
+        try t2.log(rows[1]); XCTAssertEqual(try t2.all()[1].optionIDs, ["ok", "sensitive"])
     }
 }

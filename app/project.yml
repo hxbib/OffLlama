@@ -18,6 +18,7 @@ targets:
       # Built from llama.cpp with ./build-xcframework.sh (see app/README.md); placed at app/Frameworks/llama.xcframework
       - framework: Frameworks/llama.xcframework
         embed: true
+      - sdk: MessageUI.framework     # Messages / Mail compose sheets for confirmed send_message / send_email
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.habib.pocketglimmer

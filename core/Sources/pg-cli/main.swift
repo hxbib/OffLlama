@@ -5,6 +5,8 @@ import PocketCore
 //   pg-cli e2e [--url http://127.0.0.1:8088] [--db e2e.sqlite] [--tau 0.8]
 //   pg-cli decide <decisionType> "<context>"
 //   pg-cli telemetry --db e2e.sqlite      (CSV to stdout)
+//   pg-cli distill-queue --db e2e.sqlite [--days 30]      (escalated decisions, JSONL to stdout)
+//   pg-cli teacher-verdicts --db e2e.sqlite --in verdicts.jsonl
 
 struct Case { let set: OptionSet; let context: String; let expected: String }
 
@@ -98,6 +100,13 @@ case "dump-sets":
     print(String(decoding: try JSONSerialization.data(withJSONObject: obj, options: [.prettyPrinted, .sortedKeys]), as: UTF8.self))
 case "telemetry":
     print(try TelemetryLog(db: SQLiteDB(path: arg("--db", "e2e-telemetry.sqlite"))).csv(), terminator: "")
+case "distill-queue":
+    // JSONL of escalated decisions for the next teacher-labeling round (same schema as the app's Settings export).
+    print(try TelemetryLog(db: SQLiteDB(path: arg("--db", "e2e-telemetry.sqlite"))).exportDistillationQueue(sinceDays: Int(arg("--days", "30")) ?? 30), terminator: "")
+case "teacher-verdicts":
+    // Lines {"id":..,"agreed":true/false} -> decisions.agreed_teacher
+    let n = try TelemetryLog(db: SQLiteDB(path: arg("--db", "e2e-telemetry.sqlite"))).importTeacherVerdicts(jsonl: String(contentsOfFile: arg("--in", "verdicts.jsonl"), encoding: .utf8))
+    print("updated \(n) decisions")
 default:
-    print("pg-cli e2e | decide <type> <context> | telemetry  [--url URL] [--db PATH] [--tau X]")
+    print("pg-cli e2e | decide <type> <context> | telemetry | distill-queue | teacher-verdicts  [--url URL] [--db PATH] [--tau X]")
 }

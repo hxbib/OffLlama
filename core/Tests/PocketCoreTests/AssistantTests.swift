@@ -51,10 +51,50 @@ final class AssistantTests: XCTestCase {
 
     func testUncertainRouteOfflineFallsBackLocally() async throws {
         let e = ScriptedEngine(); e.generated = " local best effort "
-        let (a, _, tel) = try make(e)  // uniform logits => escalate
+        e.script(whenPromptContains: "acceptable to send this request", logits: ["A": 5, "B": -5])
+        let (a, _, tel) = try make(e)  // uniform route logits => escalate; sensitivity says ok
         let t = try await a.handle("Explain the tax implications of exercising ISOs")
         XCTAssertEqual(t.reply, .offlineFallback("local best effort"))
-        XCTAssertTrue(try tel.all().allSatisfy(\.escalated))
+        XCTAssertFalse(t.cloudWithheldForSensitivity)
+        XCTAssertEqual(try tel.all().map(\.decisionType), [.rememberOrNot, .route, .sensitivity])
+        XCTAssertTrue(try tel.all().filter { $0.decisionType != .sensitivity }.allSatisfy(\.escalated))
+    }
+
+    func testOfflineSensitiveEscalationRunsSensitivityAndKeepsOnDevice() async throws {
+        let e = ScriptedEngine(); e.generated = " LDL 210 is high. "
+        e.script(whenPromptContains: "acceptable to send this request", logits: ["A": -5, "B": 5])
+        final class Box: @unchecked Sendable { var called = false }
+        let box = Box()
+        var brain = OpenAICompatibleBrain(providerName: "Meta Model API", model: "muse-spark-1.3", baseURL: URL(string: "https://example.invalid/v1/")!, apiKey: "k")
+        brain.transport = { _ in box.called = true; return (Data(#"{"choices":[{"message":{"content":"x"}}]}"#.utf8), 200) }
+        for cloud in [[CloudBrain](), [brain]] {   // airplane mode, with and without a configured key
+            let (a, _, tel) = try make(e, online: false, cloud: cloud)
+            let t = try await a.handle("Explain what my cholesterol numbers mean: LDL 210.")
+            XCTAssertEqual(t.reply, .local("LDL 210 is high."))
+            XCTAssertTrue(t.cloudWithheldForSensitivity)
+            XCTAssertNil(t.cloudPromptSent)
+            let sens = t.decisions.first { $0.type == .sensitivity }
+            XCTAssertEqual(sens?.chosen.id, "sensitive"); XCTAssertEqual(sens?.escalated, false)
+            XCTAssertEqual(try tel.all().map(\.decisionType), [.rememberOrNot, .route, .sensitivity])
+        }
+        XCTAssertFalse(box.called)
+    }
+
+    func testLocallyRoutedSensitiveRequestStillShowsSensitivityCard() async throws {
+        let e = ScriptedEngine(); e.generated = "Your PIN stays here."
+        e.script(whenPromptContains: "How should", logits: ["A": 5, "B": -3, "C": -3, "D": -3])
+        e.script(whenPromptContains: "acceptable to send this request", logits: ["A": -5, "B": 5])
+        let (a, _, _) = try make(e, online: true)
+        let t = try await a.handle("What's my bank account password hint?")
+        XCTAssertEqual(t.reply, .local("Your PIN stays here."))
+        XCTAssertTrue(t.cloudWithheldForSensitivity)
+        XCTAssertEqual(t.decisions.last?.type, .sensitivity)
+        // Non-sensitive small talk: no extra decision, behavior unchanged.
+        let t2 = try await a.handle("Thanks, good night!")
+        XCTAssertFalse(t2.decisions.contains { $0.type == .sensitivity })
+        XCTAssertFalse(t2.cloudWithheldForSensitivity)
+        XCTAssertTrue(SensitivityHint.matches("Explain what my cholesterol numbers mean: LDL 210"))
+        XCTAssertFalse(SensitivityHint.matches("Suggest names for a golden retriever puppy"))
     }
 
     func testOnlineEscalationScrubsAndRestores() async throws {
@@ -89,10 +129,12 @@ final class AssistantTests: XCTestCase {
         XCTAssertFalse(box.called)
         XCTAssertEqual(t.decisions.last?.chosen.id, "sensitive")
 
-        // Offline: no cloud was available, so nothing was withheld.
+        // Offline: sensitivity still runs and still withholds (airplane-mode demo beat).
         let (off, _, _) = try make(e, online: false, cloud: [brain])
         let t2 = try await off.handle("Explain what my cholesterol numbers mean: LDL 210.")
-        XCTAssertFalse(t2.cloudWithheldForSensitivity)
+        XCTAssertTrue(t2.cloudWithheldForSensitivity)
+        XCTAssertEqual(t2.decisions.last?.chosen.id, "sensitive")
+        XCTAssertFalse(box.called)
     }
 
     func testRememberingThroughAssistantUsesConflictDecision() async throws {

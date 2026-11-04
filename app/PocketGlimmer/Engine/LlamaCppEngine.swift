@@ -14,10 +14,20 @@ actor LlamaCppEngine: LLMEngine {
     private var cached: [llama_token] = []
     private var letterTokens: [String: [llama_token]] = [:]   // " A" and "A" variants
     private let nCtx: Int
+    /// KV prefix reuse across decision types: each Reflex prompt prefix (system + that type's exemplars, i.e. everything
+    /// before the last user turn of DecisionPrompt.llama3) stays resident in its own sequence 1..<nSeq; a decision copies
+    /// it into seq 0 (metadata-only with kv_unified) and evaluates only the suffix. Off => exactly the old single-sequence path.
+    nonisolated let prefixReuse: Bool
+    static let nSeq: Int32 = 8                                   // seq 0 = live, 1..7 = cached prefixes
+    private var prefixes: [[llama_token]: (seq: Int32, used: UInt64)] = [:]
+    private var useClock: UInt64 = 0
+    private var prefixBudget: Int { nCtx / 2 }                  // max cached prefix tokens (rest is for the live sequence)
+    private var prefixHits = 0, prefixMisses = 0
+    static let userTurn = "<|start_header_id|>user<|end_header_id|>"
 
     enum EngineError: Error { case load(String), context, tokenize, decode(Int32) }
 
-    init(modelURL: URL, contextLength: UInt32 = 4096) throws {
+    init(modelURL: URL, contextLength: UInt32 = 4096, prefixReuse: Bool = LlamaCppEngine.prefixReuseDefault) throws {
         llama_backend_init()
         var mp = llama_model_default_params()
         mp.n_gpu_layers = 99                  // all layers on Metal
@@ -28,12 +38,19 @@ actor LlamaCppEngine: LLMEngine {
         cp.n_ubatch = 512
         let cores = Int32(max(2, min(6, ProcessInfo.processInfo.activeProcessorCount - 2)))
         cp.n_threads = cores; cp.n_threads_batch = cores
+        if prefixReuse { cp.n_seq_max = UInt32(Self.nSeq); cp.kv_unified = true }   // one shared KV buffer, every seq may use all of n_ctx
+        self.prefixReuse = prefixReuse
         guard let c = llama_init_from_model(m, cp) else { llama_model_free(m); throw EngineError.context }
         model = m; ctx = c; vocab = llama_model_get_vocab(m); nCtx = Int(contextLength)
         modelName = modelURL.deletingPathExtension().lastPathComponent
     }
 
     deinit { llama_free(ctx); llama_model_free(model) }
+
+    /// Default OFF for the submission build: prefix reuse is ~15% faster on cal180 (73.6 s vs 87.0 s on a Linux box) but
+    /// shifts a few confidences near τ (median 0.007, worst 0.135, 6 crossings on cal180), so on-screen numbers would
+    /// not match the certified cal180 operating point. Settings toggle "Reuse cached prompt prefix" turns it on.
+    static var prefixReuseDefault: Bool { UserDefaults.standard.object(forKey: "pg_kv_prefix") as? Bool ?? false }
 
     private func tokenize(_ text: String, special: Bool = true) throws -> [llama_token] {
         let utf8 = Array(text.utf8CString)
@@ -58,12 +75,16 @@ actor LlamaCppEngine: LLMEngine {
         var common = zip(cached, tokens).prefix { $0 == $1 }.count
         if common == tokens.count { common -= 1 }                   // must decode >= 1 token to get logits
         let mem = llama_get_memory(ctx)
-        if !llama_memory_seq_rm(mem, 0, Int32(common), -1) { llama_memory_clear(mem, true); common = 0 }
+        if !llama_memory_seq_rm(mem, 0, Int32(common), -1) { llama_memory_clear(mem, true); prefixes.removeAll(); common = 0 }
         var i = common
         while i < tokens.count {
             let n = min(Int(nBatch), tokens.count - i)
             var chunk = Array(tokens[i..<(i + n)])
             let rc = chunk.withUnsafeMutableBufferPointer { llama_decode(ctx, llama_batch_get_one($0.baseAddress, Int32(n))) }
+            if rc != 0, !prefixes.isEmpty {                            // KV slots taken by cached prefixes: drop them, redo once
+                llama_memory_clear(mem, true); prefixes.removeAll(); cached = []
+                return try prefill(tokens)
+            }
             guard rc == 0 else { cached = []; throw EngineError.decode(rc) }
             i += n
         }
@@ -78,8 +99,58 @@ actor LlamaCppEngine: LLMEngine {
         letterTokens[l] = ids; return ids
     }
 
+    /// Prefill a decision prompt, reusing a cached per-type prefix sequence when possible. Any mismatch => plain prefill.
+    private func prefillDecision(_ prompt: String, _ tokens: [llama_token]) throws {
+        guard prefixReuse, let r = prompt.range(of: Self.userTurn, options: .backwards), r.lowerBound > prompt.startIndex,
+              let pt = try? tokenize(String(prompt[..<r.lowerBound])), pt.count >= 16, pt.count < tokens.count,
+              tokens.starts(with: pt), pt.count <= prefixBudget else { return try prefill(tokens) }
+        let mem = llama_get_memory(ctx)
+        let L = Int32(pt.count)
+        useClock += 1
+        if let hit = prefixes[pt] {
+            prefixHits += 1
+            prefixes[pt]!.used = useClock
+            if !cached.starts(with: pt) {                           // seq 0 holds something else: swap in the cached prefix
+                _ = llama_memory_seq_rm(mem, 0, -1, -1)             // removing a whole sequence never fails
+                llama_memory_seq_cp(mem, hit.seq, 0, 0, L)
+                guard llama_memory_seq_pos_max(mem, 0) == L - 1 else {   // safety: copy didn't land as expected
+                    dropPrefixes(); cached = []; return try prefill(tokens)
+                }
+                cached = pt
+            }
+            do { try prefill(tokens) } catch { dropPrefixes(); cached = []; try prefill(tokens) }
+            return
+        }
+        prefixMisses += 1
+        // Make room (LRU by tokens), then evaluate normally and keep [0, L) of seq 0 as this prefix.
+        while !prefixes.isEmpty, prefixes.keys.reduce(0, { $0 + $1.count }) + pt.count > prefixBudget || prefixes.count >= Int(Self.nSeq) - 1 {
+            let victim = prefixes.min { $0.value.used < $1.value.used }!
+            _ = llama_memory_seq_rm(mem, victim.value.seq, -1, -1)
+            prefixes[victim.key] = nil
+        }
+        do { try prefill(tokens) } catch { dropPrefixes(); cached = []; try prefill(tokens) }
+        let used = Set(prefixes.values.map { $0.seq })
+        if let seq = (1..<Self.nSeq).first(where: { !used.contains($0) }) {
+            _ = llama_memory_seq_rm(mem, seq, -1, -1)
+            llama_memory_seq_cp(mem, 0, seq, 0, L)
+            if llama_memory_seq_pos_max(mem, seq) == L - 1 { prefixes[pt] = (seq, useClock) } else { _ = llama_memory_seq_rm(mem, seq, -1, -1) }
+        }
+    }
+
+    private func dropPrefixes() {
+        let mem = llama_get_memory(ctx)
+        for p in prefixes.values { _ = llama_memory_seq_rm(mem, p.seq, -1, -1) }
+        prefixes.removeAll()
+    }
+
     func nextTokenLogits(prompt: String, candidates: [String]) async throws -> [String: Double] {
-        try prefill(try tokenize(prompt))
+        let t0 = Date()
+        let tokens = try tokenize(prompt)
+        try prefillDecision(prompt, tokens)
+        if prefixReuse {
+            print(String(format: "PGPERF decision prompt_tokens=%d prefill_ms=%.0f prefix_hits=%d prefix_misses=%d prefixes=%d",
+                         tokens.count, Date().timeIntervalSince(t0) * 1000, prefixHits, prefixMisses, prefixes.count))
+        }
         guard let logits = llama_get_logits_ith(ctx, -1) else { throw LLMError.badResponse("no logits") }
         var out: [String: Double] = [:]
         for l in candidates {
@@ -95,6 +166,9 @@ actor LlamaCppEngine: LLMEngine {
         var tokens = try tokenize(prompt)
         let nPrompt = tokens.count
         let t0 = Date()
+        if prefixReuse, !prefixes.isEmpty, prefixes.keys.reduce(0, { $0 + $1.count }) + nPrompt + maxTokens >= nCtx {
+            dropPrefixes()                     // free KV cells so generation can use the whole context
+        }
         try prefill(tokens)
         let tPrefill = Date()
         var tFirstToken: Date? = nil

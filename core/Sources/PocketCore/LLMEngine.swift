@@ -39,5 +39,11 @@ public final class ScriptedEngine: LLMEngine, @unchecked Sendable {
         }
         return Dictionary(uniqueKeysWithValues: candidates.map { ($0, 0.0) }) // uniform = low confidence
     }
-    public func generate(prompt: String, maxTokens: Int, temperature: Double) async throws -> String { generated }
+    /// Prompts passed to `generate`, in order (tests inspect what the local model saw).
+    public private(set) var generatePrompts: [String] = []
+    public func generate(prompt: String, maxTokens: Int, temperature: Double) async throws -> String { record(prompt) }
+    private func record(_ prompt: String) -> String {
+        lock.lock(); defer { lock.unlock() }
+        generatePrompts.append(prompt); return generated
+    }
 }

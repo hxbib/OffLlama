@@ -87,7 +87,7 @@ struct Bubble: View {
                             .background(Theme.accent.opacity(0.12), in: Capsule())
                             .foregroundStyle(Theme.accent)
                             .padding(.leading, 6)
-                            .accessibilityLabel("Kept on device. Cloud was available, nothing was sent.")
+                            .accessibilityLabel("Kept on device. Marked sensitive, nothing was sent.")
                     }
                     HStack(spacing: 8) {
                         if let b = item.badge {

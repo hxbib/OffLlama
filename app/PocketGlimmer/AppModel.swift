@@ -52,6 +52,8 @@ final class AppModel {
     var decisions: [DecisionRow] = []
     var facts: [MemoryFact] = []
     var corrections: [(old: MemoryFact, new: MemoryFact)] = []
+    var onePager = ""                    // the profile the on-device model always sees (MemoryStore.profileOnePager)
+    var board = TaskBoard()
     var rounds: [(model: String, total: Int, handledLocally: Int)] = []
     var daily: [DailyReflexShare] = []
     var isOnline = false
@@ -96,6 +98,7 @@ final class AppModel {
             let db = try SQLiteDB(path: Self.dataDir.appendingPathComponent("pocket.sqlite").path)
             let tel = try TelemetryLog(db: db)
             let mem = try MemoryStore(db: db)
+            _ = try? mem.consolidateIfDue()      // daily reconciliation: dedupe, supersede, purge, budget
             guard let url = Self.findModel() else { modelState = "No model file. Add a .gguf (see README)."; return }
             let engine = try await Task.detached(priority: .userInitiated) { try LlamaCppEngine(modelURL: url) }.value
             var profile = CalibrationProfile.uncalibrated
@@ -103,7 +106,10 @@ final class AppModel {
             let reflex = Reflex(engine: engine, profile: profile, telemetry: tel, source: "device")
             let a = Assistant(reflex: reflex, memory: mem, actions: actions, cloud: CloudSettings.chain(), isOnline: { OnlineFlag.shared.value })
             assistant = a; telemetry = tel; memory = mem
-            proactive = ProactiveEngine(memory: mem, reflex: reflex)
+            let pe = ProactiveEngine(memory: mem, reflex: reflex)
+            let acts = actions
+            pe.todayEvents = { day in acts.eventsOn(day) }
+            proactive = pe
             modelState = engine.modelName
             refresh()
         } catch { modelState = "Model failed to load: \(error)" }
@@ -115,6 +121,8 @@ final class AppModel {
     func refresh() {
         facts = (try? memory?.active()) ?? []
         corrections = (try? memory?.corrections()) ?? []
+        onePager = (try? memory?.profileOnePager(maxChars: 1200)) ?? ""
+        board = (try? memory?.tasksBoard()) ?? TaskBoard()
         daily = (try? telemetry?.dailyShare()) ?? []
         rounds = (try? telemetry?.shareByModel()) ?? []
     }
@@ -170,6 +178,16 @@ final class AppModel {
     }
 
     func forget(_ f: MemoryFact) { try? memory?.forget(id: f.id); refresh() }
+    /// Writes escalated decisions (JSONL, schema fixed for training/round2/) into Documents, visible in Files / Finder.
+    /// Stays on this phone until the user shares the file; nothing is uploaded. Returns (file, row count).
+    func exportDistillation() -> (url: URL, rows: Int)? {
+        guard let jsonl = try? telemetry?.exportDistillationQueue(sinceDays: 30) else { return nil }
+        let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let u = docs.appendingPathComponent("distillation-queue.jsonl")
+        guard (try? jsonl.write(to: u, atomically: true, encoding: .utf8)) != nil else { return nil }
+        return (u, jsonl.split(separator: "\n").count)
+    }
+
     func exportCSV() -> URL? {
         guard let csv = try? telemetry?.csv() else { return nil }
         let u = FileManager.default.temporaryDirectory.appendingPathComponent("reflex-telemetry.csv")
