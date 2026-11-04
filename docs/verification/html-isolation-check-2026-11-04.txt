@@ -1,0 +1,72 @@
+PASS content rule list compiles
+PASS raw/img: own content still renders
+PASS raw/srcset: own content still renders
+PASS raw/link-css: own content still renders
+PASS raw/import-css: own content still renders
+PASS raw/font: own content still renders
+PASS raw/bg-image: own content still renders
+PASS raw/iframe: own content still renders
+PASS raw/object: own content still renders
+PASS raw/embed: own content still renders
+PASS raw/video: own content still renders
+PASS raw/audio: own content still renders
+PASS raw/prefetch: own content still renders
+PASS raw/script: own content still renders
+PASS raw/svg-image: own content still renders
+PASS raw/svg-use: own content still renders
+PASS raw/svg-style-import: own content still renders
+PASS raw/base-relative: own content still renders
+PASS raw/form-post: own content still renders
+PASS raw/anchor: own content still renders
+PASS raw/target-blank: own content still renders
+PASS raw/tel: own content still renders
+PASS raw/meta-refresh: navigation was cancelled by the delegate
+PASS raw/form-post: navigation was cancelled by the delegate
+PASS raw/anchor: navigation was cancelled by the delegate
+PASS raw/target-blank: navigation was cancelled by the delegate
+PASS raw/tel: navigation was cancelled by the delegate
+PASS page/img: own content still renders
+PASS page/srcset: own content still renders
+PASS page/link-css: own content still renders
+PASS page/import-css: own content still renders
+PASS page/font: own content still renders
+PASS page/bg-image: own content still renders
+PASS page/iframe: own content still renders
+PASS page/object: own content still renders
+PASS page/embed: own content still renders
+PASS page/video: own content still renders
+PASS page/audio: own content still renders
+PASS page/prefetch: own content still renders
+PASS page/script: own content still renders
+PASS page/svg-image: own content still renders
+PASS page/svg-use: own content still renders
+PASS page/svg-style-import: own content still renders
+PASS page/base-relative: own content still renders
+PASS page/form-post: own content still renders
+PASS page/anchor: own content still renders
+PASS page/target-blank: own content still renders
+PASS page/tel: own content still renders
+PASS page/meta-refresh: navigation was cancelled by the delegate
+PASS page/anchor: navigation was cancelled by the delegate
+PASS page/target-blank: navigation was cancelled by the delegate
+PASS page/tel: navigation was cancelled by the delegate
+PASS same page is not reloaded by repeated updates — finishes=1
+PASS content height (not viewport height) measured with page JavaScript off — heights=[176.0]
+PASS a different page does load — finishes=2
+PASS page script does not run
+PASS page script cannot mutate the document
+PASS no script message handler is exposed
+PASS website data store is non-persistent
+PASS no injected user scripts
+PASS document is not a file URL — url=about:blank
+failures=0
+--- server request log
+   1 /ablate-bg-image
+   1 /ablate-font
+   1 /ablate-img
+   1 /ablate-link-css
+   1 /control-bg-image
+   1 /control-font
+   1 /control-iframe
+   1 /control-img
+   1 /control-link-css
