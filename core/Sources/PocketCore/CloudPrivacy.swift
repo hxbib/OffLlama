@@ -43,7 +43,7 @@ struct PreparedCloudTurn: Sendable {
     private let scrubber: PrivacyScrubber
     private let mapping: [String: String]
 
-    init(sentText: String, scrubber: PrivacyScrubber, mapping: [String: String]) {
+    fileprivate init(sentText: String, scrubber: PrivacyScrubber, mapping: [String: String]) {
         self.sentText = sentText
         self.scrubber = scrubber
         self.mapping = mapping
@@ -70,9 +70,9 @@ struct PreparedCloudTurn: Sendable {
 enum CloudTurnComposer {
     static let systemPrompt = "You are the reasoning brain of a private phone assistant. Placeholders like [PERSON_1] stand for private data; keep them verbatim."
     static let maxUserTextCharacters = 24_000
-    /// UTF-8 bytes, not Characters. A token is at least one byte, so this stays inside the 4,096-token
-    /// on-device context even for CJK/emoji.
-    static let maxScanUTF8Bytes = 2_600
+    // Leave room for the frozen few-shot prompt and BOS within the 4,096-token context,
+    // even when the tokenizer falls back to one token per UTF-8 byte.
+    static let maxScanUTF8Bytes = 2_400
     static let scanOverlapCharacters = 300
     static let maxScanWindows = 48
     static let maxInstructionCharacters = 2_000
@@ -140,21 +140,22 @@ enum CloudTurnComposer {
         }
         guard !windows.isEmpty else { return .withheld(.emptyText) }
 
-        for (index, window) in windows.enumerated() {
+        for window in windows {
             try Task.checkCancellation()
             let decision: ReflexDecision
             do {
                 decision = try await reflex.decide(
                     OptionSets.sensitivity,
                     context: "User: \(String(userText[window]))",
-                    telemetryContext: "[cloud screen \(index + 1)/\(windows.count)]"
+                    telemetryContext: nil
                 )
             } catch is CancellationError {
                 throw CancellationError()
             } catch {
                 return .withheld(.scanUnavailable)
             }
-            if decision.chosen.id != "ok" {
+            if decision.chosen.id != "ok" || decision.escalated || !decision.confidence.isFinite
+                || decision.confidence < decision.tau {
                 return .withheld(decision.escalated ? .uncertain : .sensitive)
             }
         }

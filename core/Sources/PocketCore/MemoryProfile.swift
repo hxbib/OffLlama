@@ -88,9 +88,10 @@ extension MemoryStore {
         }
     }
 
-    /// Names of non-user entities (people, places, orgs), for the privacy scrubber.
+    /// Names and aliases of non-user entities (people, places, orgs), for the privacy scrubber.
     public func entityNames() throws -> [String] {
-        Array(Set(try active().map(\.subject).filter { $0 != "user" && $0.count > 1 })).sorted()
+        let names = try active().filter { $0.subject != "user" }.flatMap { [$0.subject] + $0.aliases }
+        return Array(Set(names.filter { $0.count > 1 })).sorted()
     }
 
     /// The always-injected profile ("one-pager"): life context, autonomy calibration, communication style, preferences,

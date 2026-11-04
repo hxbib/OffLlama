@@ -161,11 +161,14 @@ final class MemoryProfileTests: XCTestCase {
         var brain = OpenAICompatibleBrain(providerName: "Meta Model API", model: "muse-spark-1.3", baseURL: URL(string: "https://example.invalid/v1/")!, apiKey: "k")
         brain.transport = { req in
             box.sent = String(decoding: req.httpBody!, as: UTF8.self)
-            return (Data(#"{"choices":[{"message":{"content":"Ask [PERSON_1]."}}]}"#.utf8), 200)
+            let body = try XCTUnwrap(JSONSerialization.jsonObject(with: req.httpBody!) as? [String: Any])
+            let messages = try XCTUnwrap(body["messages"] as? [[String: String]])
+            let echoed = try XCTUnwrap(messages.last?["content"]?.components(separatedBy: "\n").last)
+            return (try JSONSerialization.data(withJSONObject: ["choices": [["message": ["content": echoed]]]]), 200)
         }
         let cloud = Assistant(reflex: Reflex(engine: e2), memory: mem, actions: RecordingActions(), cloud: CloudBrainChain([brain]), isOnline: { true })
         let t = try await cloud.handle("Plan a weekend trip for me and Linda")
-        XCTAssertEqual(t.reply, .cloud("Ask Linda.", provider: "Meta Model API · muse-spark-1.3"))
+        XCTAssertEqual(t.reply, .cloud("Plan a weekend trip for me and Linda", provider: "Meta Model API · muse-spark-1.3"))
         let sent = try XCTUnwrap(t.cloudPromptSent)
         XCTAssertTrue(sent.hasPrefix("Profile (as of "), sent)
         XCTAssertFalse(sent.contains("Linda"), sent); XCTAssertFalse(box.sent.contains("Linda"))

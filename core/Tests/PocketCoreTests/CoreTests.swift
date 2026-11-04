@@ -177,7 +177,23 @@ final class TelemetryTests: XCTestCase {
         try old.run("INSERT INTO decisions(ts,type,chosen,confidence,escalated,latency_ms,model,source) VALUES(1793000000,'route','tool',0.5,1,3,'m','device')")
         let t2 = try TelemetryLog(db: old)
         XCTAssertNil(try t2.all()[0].context)
-        XCTAssertEqual(try t2.exportDistillationQueue(sinceDays: 30, now: now).split(separator: "\n").count, 1)
+        XCTAssertEqual(try t2.exportDistillationQueue(sinceDays: 30, now: now), "")
         try t2.log(rows[1]); XCTAssertEqual(try t2.all()[1].optionIDs, ["ok", "sensitive"])
+        XCTAssertEqual(try t2.exportDistillationQueue(sinceDays: 30, now: now).split(separator: "\n").count, 1)
+    }
+
+    func testDistillationExportSkipsMissingAndBlankContexts() throws {
+        let tel = try TelemetryLog(db: SQLiteDB(path: ":memory:"))
+        let now = Date(timeIntervalSince1970: 1_793_000_000)
+        for context in [nil, "", " \n\t", "User: remind me"] as [String?] {
+            try tel.log(.init(id: nil, timestamp: now, decisionType: .route, chosenID: "tool",
+                              confidence: 0.5, escalated: true, latencyMs: 1, model: "test",
+                              agreedWithTeacher: nil, source: "test", context: context))
+        }
+        let lines = try tel.exportDistillationQueue(now: now).split(separator: "\n")
+        XCTAssertEqual(lines.count, 1)
+        let row = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(XCTUnwrap(lines.last).utf8)) as? [String: Any])
+        XCTAssertEqual(row["context"] as? String, "User: remind me")
+        XCTAssertEqual(try tel.all().count, 4)
     }
 }

@@ -15,12 +15,18 @@ final class CloudPrivacyTests: XCTestCase {
                          actions: RecordingActions(), cloud: CloudBrainChain(cloud), isOnline: { online })
     }
 
-    private func capturingBrain(_ capture: Capture, reply: String = "Cloud summary") -> OpenAICompatibleBrain {
+    private func capturingBrain(_ capture: Capture, reply: String = "Cloud summary", echoUserText: Bool = false) -> OpenAICompatibleBrain {
         var brain = OpenAICompatibleBrain(providerName: "Test", model: "test-model",
                                           baseURL: URL(string: "https://example.invalid/v1/")!, apiKey: "k")
         brain.transport = { request in
             capture.bodies.append(String(decoding: request.httpBody ?? Data(), as: UTF8.self))
-            let data = Data(#"{"choices":[{"message":{"content":"\#(reply)"}}]}"#.utf8)
+            var content = reply
+            if echoUserText {
+                let requestBody = try XCTUnwrap(JSONSerialization.jsonObject(with: request.httpBody ?? Data()) as? [String: Any])
+                let messages = try XCTUnwrap(requestBody["messages"] as? [[String: String]])
+                content = try XCTUnwrap(messages.last?["content"]?.components(separatedBy: "\n").last)
+            }
+            let data = try JSONSerialization.data(withJSONObject: ["choices": [["message": ["content": content]]]])
             return (data, 200)
         }
         return brain
@@ -48,7 +54,7 @@ final class CloudPrivacyTests: XCTestCase {
         let engine = ScriptedEngine()
         engine.script(whenPromptContains: "acceptable to send this request", logits: ["A": 5, "B": -5])
         let capture = Capture()
-        let assistant = try makeAssistant(engine, cloud: [capturingBrain(capture, reply: "Ask [PERSON_1] about bouldering.")],
+        let assistant = try makeAssistant(engine, cloud: [capturingBrain(capture, echoUserText: true)],
                                           memory: memory)
         assistant.cloudProfileMaxChars = 400
 
@@ -64,7 +70,7 @@ final class CloudPrivacyTests: XCTestCase {
         XCTAssertTrue(messages[1].content.contains("User likes bouldering"), messages[1].content)
         XCTAssertTrue(messages[1].content.contains("[PERSON_1]"), messages[1].content)
         XCTAssertFalse(capture.bodies[0].contains("Linda"), capture.bodies[0])
-        XCTAssertEqual(turn.reply, .cloud("Ask Linda about bouldering.", provider: "Test · test-model"))
+        XCTAssertEqual(turn.reply, .cloud("Plan a bouldering weekend trip for me and Linda", provider: "Test · test-model"))
 
         let facts = try memory.active()
         let allergy = try XCTUnwrap(facts.first { $0.attribute == "allergy" })
@@ -92,6 +98,26 @@ final class CloudPrivacyTests: XCTestCase {
         let localPrompt = try XCTUnwrap(engine.generatePrompts.last)
         XCTAssertTrue(localPrompt.contains("User is allergic to peanuts"), localPrompt)
         XCTAssertTrue(localPrompt.contains("lives in the Bronx"), localPrompt)
+    }
+
+    func testRememberedAliasIsMaskedInProfileAndUtteranceAndRestored() async throws {
+        let memory = try emptyMemory()
+        try await memory.upsert(.init(subject: "Dana", attribute: "role", value: "colleague",
+                                      text: "Dana is a colleague", aliases: ["Starling"]))
+        let engine = ScriptedEngine()
+        engine.script(whenPromptContains: "acceptable to send this request", logits: ["A": 5, "B": -5])
+        let capture = Capture()
+        let assistant = try makeAssistant(engine, cloud: [capturingBrain(capture, echoUserText: true)],
+                                          memory: memory)
+
+        let turn = try await assistant.handle("Plan a weekend with Starling")
+        XCTAssertEqual(capture.calls, 1)
+        let sent = try XCTUnwrap(turn.cloudPromptSent)
+        XCTAssertFalse(sent.contains("Dana"), sent)
+        XCTAssertFalse(sent.contains("Starling"), sent)
+        XCTAssertTrue(sent.contains("[PERSON_1]"), sent)
+        XCTAssertEqual(turn.reply, .cloud("Plan a weekend with Starling", provider: "Test · test-model"))
+        XCTAssertEqual(try memory.active().first?.aliases, ["starling"])
     }
 
     func testCloudProfileFiltersCorrectionHistoryAndSensitiveAliasesButLocalKeepsThem() async throws {
@@ -234,6 +260,21 @@ final class CloudPrivacyTests: XCTestCase {
         XCTAssertTrue(result.contains("privacy check was unavailable"), result)
     }
 
+    func testNonfiniteScreeningPreventsCall() async throws {
+        for logit in [Double.nan, .infinity, -.infinity] {
+            let engine = ScriptedEngine()
+            engine.generated = "Local fallback"
+            engine.script(whenPromptContains: "acceptable to send this request", logits: ["A": logit, "B": logit])
+            let capture = Capture()
+            let assistant = try makeAssistant(engine, cloud: [capturingBrain(capture)], memory: try emptyMemory())
+
+            let result = try await assistant.reason("Summarize this document",
+                                                    text: String(repeating: "Benign notes. ", count: 300))
+            XCTAssertEqual(capture.calls, 0)
+            XCTAssertTrue(result.contains("Local fallback"), result)
+        }
+    }
+
     func testOversizedGraphemeWithholdsInsteadOfSending() async throws {
         let engine = ScriptedEngine()
         engine.generated = "Local summary"
@@ -253,7 +294,7 @@ final class CloudPrivacyTests: XCTestCase {
         let engine = PausingSensitivityEngine()
         let capture = Capture()
         let assistant = try makeAssistant(engine, cloud: [capturingBrain(capture)], memory: try emptyMemory())
-        let text = String(repeating: "benign notes ", count: 200)   // > local limit, one scan window
+        let text = String(repeating: "benign notes ", count: 200)
         XCTAssertGreaterThan(text.count, 2_500)
 
         let task = Task { try await assistant.reason("Summarize this document", text: text) }
@@ -276,7 +317,7 @@ final class CloudPrivacyTests: XCTestCase {
         let assistant = try makeAssistant(engine, cloud: [capturingBrain(first, reply: "[PERSON_1] replied")],
                                           memory: try emptyMemory())
         assistant.scrubber = PrivacyScrubber(knownNames: ["Dana"])
-        let text = "Dana: " + String(repeating: "a", count: 2_550)   // one scan window
+        let text = "Dana: " + String(repeating: "a", count: 2_550)
 
         let task = Task { try await assistant.reason("Summarize this document", text: text) }
         await engine.waitUntilStarted()
@@ -309,15 +350,34 @@ final class CloudPrivacyTests: XCTestCase {
         XCTAssertFalse(rows.isEmpty)
         for row in rows {
             XCTAssertEqual(row.decisionType, .sensitivity)
-            let context = try XCTUnwrap(row.context)
-            XCTAssertTrue(context.hasPrefix("[cloud screen "), context)
-            XCTAssertFalse(context.contains("TELEMETRY_TAIL_MARKER"), context)
-            XCTAssertFalse(context.contains("Quarterly notes"), context)
+            XCTAssertNil(row.context)
         }
+    }
+
+    func testWithheldDocumentScreenIsNotExportedAsATrainingExample() async throws {
+        let db = try SQLiteDB(path: ":memory:")
+        let telemetry = try TelemetryLog(db: db)
+        let engine = ScriptedEngine()
+        let capture = Capture()
+        let assistant = try makeAssistant(engine, cloud: [capturingBrain(capture)],
+                                          memory: try MemoryStore(db: db), telemetry: telemetry)
+
+        _ = try await assistant.reason("Summarize", text: String(repeating: "Meeting notes. ", count: 300))
+        XCTAssertEqual(capture.calls, 0)
+        XCTAssertTrue(try telemetry.all().contains { $0.escalated })
+        XCTAssertEqual(try telemetry.exportDistillationQueue(), "")
     }
 }
 
 final class TextWindowsTests: XCTestCase {
+    func testMaximumWindowLeavesRoomForTheFrozenDecisionPrompt() {
+        let window = String(repeating: "x", count: CloudTurnComposer.maxScanUTF8Bytes)
+        for style in [PromptStyle.fewShot, .zeroShot] {
+            let prompt = DecisionPrompt.llama3(set: OptionSets.sensitivity, context: "User: " + window, style: style)
+            XCTAssertLessThan(prompt.utf8.count + 1, 4_096, "Byte bound must include the frozen prompt and BOS, not only scanned content")
+        }
+    }
+
     func testCoverIsContiguousBoundedAndUnicodeSafe() {
         let samples = [
             "",
@@ -390,6 +450,7 @@ private final class FailingSensitivityEngine: LLMEngine, @unchecked Sendable {
 private actor PausingSensitivityEngine: LLMEngine {
     nonisolated let modelName = "pausing-sensitivity"
     private var started = false
+    private var released = false
     private var startWaiters: [CheckedContinuation<Void, Never>] = []
     private var releaseContinuation: CheckedContinuation<Void, Never>?
 
@@ -397,7 +458,7 @@ private actor PausingSensitivityEngine: LLMEngine {
         started = true
         for waiter in startWaiters { waiter.resume() }
         startWaiters.removeAll()
-        await withCheckedContinuation { releaseContinuation = $0 }
+        if !released { await withCheckedContinuation { releaseContinuation = $0 } }
         return ["A": 5, "B": -5]
     }
 
@@ -409,6 +470,7 @@ private actor PausingSensitivityEngine: LLMEngine {
     }
 
     func release() {
+        released = true
         releaseContinuation?.resume()
         releaseContinuation = nil
     }

@@ -35,8 +35,7 @@ public final class Reflex: @unchecked Sendable {
         try await decide(set, context: context, telemetryContext: context)
     }
 
-    /// Same decision and calibration; the caller may keep a short telemetry label so scanned document text
-    /// is not copied into the local telemetry DB.
+    /// Same decision and calibration. A nil telemetry context omits text from storage and training export.
     func decide(_ set: OptionSet, context: String, telemetryContext: String?) async throws -> ReflexDecision {
         let letters = set.activeLetters
         let start = DispatchTime.now().uptimeNanoseconds

@@ -77,7 +77,7 @@ public final class TelemetryLog: @unchecked Sendable {
         try db.run("UPDATE decisions SET agreed_teacher=? WHERE id=?", [.int(agreed ? 1 : 0), .int(id)])
     }
 
-    /// Distillation queue: one JSON line per escalated decision (confidence < tau) in the last `sinceDays` days, with keys
+    /// Distillation queue: one JSON line per escalated decision with retained nonblank context in the last `sinceDays` days, with keys
     /// exactly {"id","type","context","option_ids","student_probs","confidence","ts","source"} (training/round2/ reads it;
     /// `ts` is ISO-8601 UTC). Privacy: this string/file stays on the device until the user shares it; nothing is uploaded.
     public func exportDistillationQueue(sinceDays: Int = 30, now: Date = Date()) throws -> String {
@@ -86,7 +86,8 @@ public final class TelemetryLog: @unchecked Sendable {
         var out = ""
         for row in try db.query("SELECT * FROM decisions WHERE escalated=1 AND ts >= ? ORDER BY ts, id", [.double(since)]) {
             let r = Self.decode(row)
-            let obj: [String: Any] = ["id": r.id ?? 0, "type": r.decisionType.rawValue, "context": r.context ?? NSNull(),
+            guard let context = r.context, !context.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { continue }
+            let obj: [String: Any] = ["id": r.id ?? 0, "type": r.decisionType.rawValue, "context": context,
                                       "option_ids": r.optionIDs ?? [], "student_probs": r.probabilities ?? [:],
                                       "confidence": r.confidence, "ts": iso.string(from: r.timestamp), "source": r.source]
             let d = try JSONSerialization.data(withJSONObject: obj, options: [.sortedKeys, .withoutEscapingSlashes])
