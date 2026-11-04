@@ -1,0 +1,600 @@
+{"id": "s0-00834", "type": "answerability", "context": "Now: Thu 10:05\nUser location: a cafe\nUser: Say hi to me in Spanish", "candidates": null}
+{"id": "ds-answerability-00159", "type": "answerability", "context": "Now: Sat 8:00\nUser location: commuting\nUser: What are the trade-offs between Postgres and SQLite for a mobile-first app?", "candidates": null}
+{"id": "ds-answerability-00573", "type": "answerability", "context": "Now: Fri 14:30\nUser location: the gym\nUser: Say hi to me in Spanish", "candidates": null}
+{"id": "ds-answerability-00558", "type": "answerability", "context": "Now: Sun 7:00\nUser location: work\nUser: Plan a 5-day Lisbon itinerary for two on a mid budget with one rest day", "candidates": null}
+{"id": "s0-00813", "type": "answerability", "context": "Now: Sun 16:55\nUser location: a cafe\nUser: Thanks!", "candidates": null}
+{"id": "s0-00046", "type": "answerability", "context": "Now: Wed 15:30\nUser location: home\nUser: Explain how mRNA vaccines train the immune system, with an analogy", "candidates": null}
+{"id": "s0-00371", "type": "answerability", "context": "Now: Sun 11:55\nUser location: home\nUser: What are the trade-offs between Postgres and SQLite for a mobile-first app?", "candidates": null}
+{"id": "hf-massive-answerability-114", "type": "answerability", "context": "User: Sex", "candidates": null}
+{"id": "hf-clinc-answerability-21", "type": "answerability", "context": "User: Is the shutdown over", "candidates": null}
+{"id": "s0-00280", "type": "answerability", "context": "User: Say hi to me in Spanish", "candidates": null}
+{"id": "s0-00105", "type": "answerability", "context": "Now: Sat 7:30\nUser location: commuting\nUser: Say hi to me in Spanish", "candidates": null}
+{"id": "hf-massive-answerability-82", "type": "answerability", "context": "User: What time do the trains depart to atlanta", "candidates": null}
+{"id": "ds-answerability-00524", "type": "answerability", "context": "Now: Thu 9:05\nUser location: home\nUser: Thanks!", "candidates": null}
+{"id": "s0-00224", "type": "answerability", "context": "Now: Sat 22:00\nUser location: commuting\nUser: Help me negotiate a 15% raise: give me a script and likely objections", "candidates": null}
+{"id": "ds-answerability-00211", "type": "answerability", "context": "Now: Wed 17:15\nUser location: the gym\nUser: What are the trade-offs between Postgres and SQLite for a mobile-first app?", "candidates": null}
+{"id": "hf-clinc-answerability-208", "type": "answerability", "context": "User: When did i have my car looked at", "candidates": null}
+{"id": "hf-clinc-answerability-257", "type": "answerability", "context": "User: Do i have anything on my schedule for may 3", "candidates": null}
+{"id": "ds-answerability-00686", "type": "answerability", "context": "Now: Sun 10:05\nUser location: work\nUser: Help me negotiate a 15% raise: give me a script and likely objections", "candidates": null}
+{"id": "hf-clinc-answerability-280", "type": "answerability", "context": "User: The date tomorrow is what", "candidates": null}
+{"id": "hf-clinc-answerability-229", "type": "answerability", "context": "User: Go to the next song now", "candidates": null}
+{"id": "s0-00129", "type": "answerability", "context": "Now: Sat 6:55\nUser location: a cafe\nUser: Good morning", "candidates": null}
+{"id": "hf-clinc-answerability-236", "type": "answerability", "context": "User: Tell me the carry on rules", "candidates": null}
+{"id": "s0-01000", "type": "answerability", "context": "Now: Tue 17:30\nUser location: home\nUser: Say hi to me in Spanish", "candidates": null}
+{"id": "hf-clinc-answerability-145", "type": "answerability", "context": "User: What is the definition of incomprehensible", "candidates": null}
+{"id": "hf-massive-answerability-120", "type": "answerability", "context": "User: Exchanges rates any problems", "candidates": null}
+{"id": "ds-answerability-00109", "type": "answerability", "context": "Now: Mon 22:05\nUser location: the gym\nUser: Compare index funds vs. paying down my 6% student loan and recommend a plan", "candidates": null}
+{"id": "ds-answerability-00336", "type": "answerability", "context": "Now: Thu 14:00\nUser location: the gym\nUser: Say hi to me in Spanish", "candidates": null}
+{"id": "s0-00246", "type": "answerability", "context": "User: Plan a 5-day Lisbon itinerary for two on a mid budget with one rest day", "candidates": null}
+{"id": "ds-answerability-00689", "type": "answerability", "context": "Now: Sat 9:42\nUser location: commuting\nUser: Rephrase this nicer: 'send it now'", "candidates": null}
+{"id": "ds-answerability-00297", "type": "answerability", "context": "Now: Wed 15:00\nUser location: commuting\nUser: What are the trade-offs between Postgres and SQLite for a mobile-first app?", "candidates": null}
+{"id": "hf-massive-answerability-11", "type": "answerability", "context": "User: Tell me about michael jackson", "candidates": null}
+{"id": "hf-clinc-answerability-85", "type": "answerability", "context": "User: What are some deals on amazon", "candidates": null}
+{"id": "ds-answerability-00185", "type": "answerability", "context": "Now: Wed 14:00\nUser location: the gym\nUser: Help me negotiate a 15% raise: give me a script and likely objections", "candidates": null}
+{"id": "s0-00411", "type": "answerability", "context": "Now: Thu 11:05\nUser location: the gym\nUser: Compare index funds vs. paying down my 6% student loan and recommend a plan", "candidates": null}
+{"id": "s0-00803", "type": "answerability", "context": "User: Thanks!", "candidates": null}
+{"id": "ds-answerability-00392", "type": "answerability", "context": "Now: Thu 6:42\nUser location: unknown\nUser: Explain how mRNA vaccines train the immune system, with an analogy", "candidates": null}
+{"id": "hf-clinc-answerability-184", "type": "answerability", "context": "User: Can you apply for idaho independent card for me", "candidates": null}
+{"id": "ds-answerability-00253", "type": "answerability", "context": "Now: Fri 8:15\nUser location: a cafe\nUser: Draft a 400-word cover letter for a product design role at a fintech startup", "candidates": null}
+{"id": "hf-clinc-answerability-98", "type": "answerability", "context": "User: How much has the market gone up or down so far in 2019", "candidates": null}
+{"id": "s0-00846", "type": "answerability", "context": "Now: Fri 18:30\nUser location: work\nUser: Rephrase this nicer: 'send it now'", "candidates": null}
+{"id": "hf-massive-answerability-43", "type": "answerability", "context": "User: Is there going to be any snow on tuesday", "candidates": null}
+{"id": "s0-00698", "type": "answerability", "context": "Now: Sun 18:15\nUser location: commuting\nUser: Thanks!", "candidates": null}
+{"id": "hf-clinc-answerability-250", "type": "answerability", "context": "User: When's my next payday", "candidates": null}
+{"id": "ds-answerability-00084", "type": "answerability", "context": "Now: Fri 13:55\nUser location: a cafe\nUser: What are the trade-offs between Postgres and SQLite for a mobile-first app?", "candidates": null}
+{"id": "s0-00435", "type": "answerability", "context": "Now: Thu 8:00\nUser location: unknown\nUser: Explain how mRNA vaccines train the immune system, with an analogy", "candidates": null}
+{"id": "s0-00538", "type": "answerability", "context": "Now: Wed 11:30\nUser location: home\nUser: Plan a 5-day Lisbon itinerary for two on a mid budget with one rest day", "candidates": null}
+{"id": "s0-00619", "type": "answerability", "context": "Now: Thu 21:42\nUser location: the gym\nUser: Plan a 5-day Lisbon itinerary for two on a mid budget with one rest day", "candidates": null}
+{"id": "ds-answerability-00631", "type": "answerability", "context": "Now: Tue 7:30\nUser location: the gym\nUser: Rephrase this nicer: 'send it now'", "candidates": null}
+{"id": "hf-clinc-answerability-210", "type": "answerability", "context": "User: Can i increase my credit limit to 700 dollars", "candidates": null}
+{"id": "s0-00359", "type": "answerability", "context": "Now: Wed 9:42\nUser location: work\nUser: Help me negotiate a 15% raise: give me a script and likely objections", "candidates": null}
+{"id": "s0-00865", "type": "confirmBeforeAct", "context": "Now: Fri 16:55\nUser location: the gym\nPlanned action: text the whole family group 'I'm pregnant'", "candidates": null}
+{"id": "s0-00627", "type": "confirmBeforeAct", "context": "Now: Thu 14:30\nUser location: unknown\nPlanned action: send message to Sam: 'I quit'", "candidates": null}
+{"id": "ds-confirmBeforeAct-00166", "type": "confirmBeforeAct", "context": "Now: Fri 6:15\nUser location: home\nPlanned action: text the whole family group 'I'm pregnant'", "candidates": null}
+{"id": "ds-confirmBeforeAct-00069", "type": "confirmBeforeAct", "context": "Now: Mon 7:15\nUser location: commuting\nPlanned action: text the whole family group 'I'm pregnant'", "candidates": null}
+{"id": "s0-00556", "type": "confirmBeforeAct", "context": "Now: Wed 16:00\nUser location: work\nPlanned action: send message to Sam: 'I quit'", "candidates": null}
+{"id": "s0-00649", "type": "confirmBeforeAct", "context": "Now: Mon 20:30\nUser location: work\nPlanned action: send message to Sam: 'I quit'", "candidates": null}
+{"id": "s0-01042", "type": "confirmBeforeAct", "context": "Now: Sun 23:15\nUser location: home\nPlanned action: create a reminder 'water plants' tomorrow 9am", "candidates": null}
+{"id": "s0-00523", "type": "confirmBeforeAct", "context": "Now: Sat 21:00\nUser location: a cafe\nPlanned action: send message to Sam: 'I quit'", "candidates": null}
+{"id": "ds-confirmBeforeAct-00229", "type": "confirmBeforeAct", "context": "Now: Thu 6:00\nUser location: unknown\nPlanned action: delete all events next week", "candidates": null}
+{"id": "s0-00125", "type": "confirmBeforeAct", "context": "Now: Tue 21:05\nUser location: work\nPlanned action: create a reminder 'water plants' tomorrow 9am", "candidates": null}
+{"id": "s0-00752", "type": "confirmBeforeAct", "context": "Now: Thu 11:30\nUser location: work\nPlanned action: send message to Sam: 'I quit'", "candidates": null}
+{"id": "s0-00466", "type": "confirmBeforeAct", "context": "Now: Thu 23:55\nUser location: unknown\nPlanned action: text the whole family group 'I'm pregnant'", "candidates": null}
+{"id": "s0-00788", "type": "confirmBeforeAct", "context": "Now: Tue 9:00\nUser location: commuting\nPlanned action: text the whole family group 'I'm pregnant'", "candidates": null}
+{"id": "ds-confirmBeforeAct-00315", "type": "confirmBeforeAct", "context": "Now: Sun 6:00\nUser location: work\nPlanned action: delete all events next week", "candidates": null}
+{"id": "s0-00345", "type": "confirmBeforeAct", "context": "Now: Mon 17:05\nUser location: commuting\nPlanned action: create a reminder 'water plants' tomorrow 9am", "candidates": null}
+{"id": "s0-00953", "type": "confirmBeforeAct", "context": "Planned action: create a reminder 'water plants' tomorrow 9am", "candidates": null}
+{"id": "s0-00740", "type": "confirmBeforeAct", "context": "Now: Tue 20:55\nUser location: work\nPlanned action: delete all events next week", "candidates": null}
+{"id": "s0-00603", "type": "confirmBeforeAct", "context": "Now: Thu 19:05\nUser location: the gym\nPlanned action: text the whole family group 'I'm pregnant'", "candidates": null}
+{"id": "ds-confirmBeforeAct-00054", "type": "confirmBeforeAct", "context": "Now: Wed 16:05\nUser location: unknown\nPlanned action: text the whole family group 'I'm pregnant'", "candidates": null}
+{"id": "ds-confirmBeforeAct-00283", "type": "confirmBeforeAct", "context": "Now: Mon 16:42\nUser location: the gym\nPlanned action: create a reminder 'water plants' tomorrow 9am", "candidates": null}
+{"id": "s0-01030", "type": "confirmBeforeAct", "context": "Now: Mon 23:30\nUser location: the gym\nPlanned action: create calendar event 'Gym' Thu 6pm", "candidates": null}
+{"id": "s0-00672", "type": "confirmBeforeAct", "context": "Now: Wed 21:55\nUser location: a cafe\nPlanned action: create calendar event 'Gym' Thu 6pm", "candidates": null}
+{"id": "s0-00408", "type": "confirmBeforeAct", "context": "Now: Thu 12:05\nUser location: commuting\nPlanned action: delete all events next week", "candidates": null}
+{"id": "s0-00231", "type": "confirmBeforeAct", "context": "Now: Tue 23:15\nUser location: work\nPlanned action: add 'eggs' to the shopping list", "candidates": null}
+{"id": "s0-00378", "type": "confirmBeforeAct", "context": "Now: Sat 21:55\nUser location: unknown\nPlanned action: create calendar event 'Gym' Thu 6pm", "candidates": null}
+{"id": "s0-00615", "type": "confirmBeforeAct", "context": "Now: Sat 17:05\nUser location: the gym\nPlanned action: delete all events next week", "candidates": null}
+{"id": "s0-00334", "type": "confirmBeforeAct", "context": "Now: Tue 10:42\nUser location: work\nPlanned action: create a reminder 'water plants' tomorrow 9am", "candidates": null}
+{"id": "s0-00545", "type": "confirmBeforeAct", "context": "Now: Mon 23:00\nUser location: work\nPlanned action: send message to Sam: 'I quit'", "candidates": null}
+{"id": "s0-00030", "type": "confirmBeforeAct", "context": "Now: Sat 19:00\nUser location: the gym\nPlanned action: add 'eggs' to the shopping list", "candidates": null}
+{"id": "s0-00018", "type": "confirmBeforeAct", "context": "Now: Sun 9:30\nUser location: home\nPlanned action: create calendar event 'Gym' Thu 6pm", "candidates": null}
+{"id": "s0-01008", "type": "confirmBeforeAct", "context": "Now: Tue 8:42\nUser location: commuting\nPlanned action: create calendar event 'Gym' Thu 6pm", "candidates": null}
+{"id": "s0-00717", "type": "confirmBeforeAct", "context": "Now: Mon 7:05\nUser location: the gym\nPlanned action: create a reminder 'water plants' tomorrow 9am", "candidates": null}
+{"id": "s0-00065", "type": "confirmBeforeAct", "context": "Now: Wed 19:30\nUser location: the gym\nPlanned action: delete all events next week", "candidates": null}
+{"id": "s0-00729", "type": "confirmBeforeAct", "context": "Planned action: add 'eggs' to the shopping list", "candidates": null}
+{"id": "s0-00567", "type": "confirmBeforeAct", "context": "Now: Mon 20:05\nUser location: home\nPlanned action: create calendar event 'Gym' Thu 6pm", "candidates": null}
+{"id": "s0-01054", "type": "confirmBeforeAct", "context": "Now: Mon 12:30\nUser location: unknown\nPlanned action: add 'eggs' to the shopping list", "candidates": null}
+{"id": "s0-00442", "type": "confirmBeforeAct", "context": "Now: Thu 17:42\nUser location: commuting\nPlanned action: create calendar event 'Gym' Thu 6pm", "candidates": null}
+{"id": "s0-00253", "type": "confirmBeforeAct", "context": "Now: Sat 10:30\nUser location: work\nPlanned action: send message to Sam: 'I quit'", "candidates": null}
+{"id": "ds-confirmBeforeAct-00177", "type": "confirmBeforeAct", "context": "Now: Tue 21:42\nUser location: the gym\nPlanned action: create calendar event 'Gym' Thu 6pm", "candidates": null}
+{"id": "s0-00137", "type": "confirmBeforeAct", "context": "Now: Sat 21:00\nUser location: a cafe\nPlanned action: text the whole family group 'I'm pregnant'", "candidates": null}
+{"id": "s0-00054", "type": "confirmBeforeAct", "context": "Planned action: send message to Sam: 'I quit'", "candidates": null}
+{"id": "ds-confirmBeforeAct-00296", "type": "confirmBeforeAct", "context": "Now: Thu 8:05\nUser location: unknown\nPlanned action: text the whole family group 'I'm pregnant'", "candidates": null}
+{"id": "s0-00886", "type": "confirmBeforeAct", "context": "Now: Sun 19:42\nUser location: a cafe\nPlanned action: send message to Sam: 'I quit'", "candidates": null}
+{"id": "s0-00367", "type": "confirmBeforeAct", "context": "Now: Wed 20:05\nUser location: unknown\nPlanned action: create calendar event 'Gym' Thu 6pm", "candidates": null}
+{"id": "s0-00930", "type": "confirmBeforeAct", "context": "Now: Thu 18:15\nUser location: the gym\nPlanned action: create a reminder 'water plants' tomorrow 9am", "candidates": null}
+{"id": "s0-00977", "type": "confirmBeforeAct", "context": "Now: Mon 18:42\nUser location: a cafe\nPlanned action: add 'eggs' to the shopping list", "candidates": null}
+{"id": "s0-00160", "type": "confirmBeforeAct", "context": "Now: Sat 15:15\nUser location: the gym\nPlanned action: delete all events next week", "candidates": null}
+{"id": "ds-confirmBeforeAct-00204", "type": "confirmBeforeAct", "context": "Now: Mon 17:42\nUser location: unknown\nPlanned action: create calendar event 'Gym' Thu 6pm", "candidates": null}
+{"id": "s0-00842", "type": "confirmBeforeAct", "context": "Now: Fri 9:00\nUser location: the gym\nPlanned action: create calendar event 'Gym' Thu 6pm", "candidates": null}
+{"id": "s0-00996", "type": "confirmBeforeAct", "context": "Now: Tue 18:15\nUser location: a cafe\nPlanned action: text the whole family group 'I'm pregnant'", "candidates": null}
+{"id": "ds-contactPick-00826", "type": "contactPick", "context": "Now: Wed 13:05\nUser location: work\nUser: Message my coach Omar: see you soon", "candidates": ["Omar Park (manager)", "Omar Lee (mom)", "Omar Novak (coach)"]}
+{"id": "ds-contactPick-00789", "type": "contactPick", "context": "Now: Mon 9:00\nUser location: home\nUser: Message Maya: see you soon", "candidates": ["Maya Park (dentist)", "Maya Novak (manager)", "Maya Khan (landlord)"]}
+{"id": "ds-contactPick-00142", "type": "contactPick", "context": "User: Message my dad Kenji: see you soon", "candidates": ["Kenji Lee (mom)", "Kenji Ortiz (manager)", "Kenji Park (dad)"]}
+{"id": "ds-contactPick-00397", "type": "contactPick", "context": "Now: Mon 19:30\nUser location: commuting\nUser: Message Fatima: see you soon", "candidates": ["Fatima Novak (brother)", "Fatima Khan (roommate)", "Fatima Park (dentist)"]}
+{"id": "ds-contactPick-00388", "type": "contactPick", "context": "Now: Thu 13:05\nUser location: a cafe\nUser: Message my manager Diego: see you soon", "candidates": ["Diego Khan (manager)", "Diego Lee (brother)", "Diego Novak (mom)"]}
+{"id": "ds-contactPick-00744", "type": "contactPick", "context": "Now: Sat 6:05\nUser location: unknown\nUser: Message my dad Aisha: see you soon", "candidates": ["Aisha Park (dad)", "Aisha Khan (coworker)", "Aisha Lee (coach)"]}
+{"id": "ds-contactPick-00566", "type": "contactPick", "context": "Now: Tue 6:55\nUser location: home\nUser: Message my manager Priya: see you soon", "candidates": ["Priya Park (coworker)", "Priya Khan (manager)", "Priya Ortiz (landlord)"]}
+{"id": "ds-contactPick-00005", "type": "contactPick", "context": "User: Message Priya: see you soon", "candidates": ["Priya Ortiz (coach)", "Priya Park (mom)", "Priya Khan (roommate)"]}
+{"id": "ds-contactPick-00855", "type": "contactPick", "context": "Now: Fri 6:55\nUser location: a cafe\nUser: Message my landlord Diego: see you soon", "candidates": ["Diego Park (dentist)", "Diego Novak (mom)", "Diego Lee (landlord)"]}
+{"id": "ds-contactPick-00309", "type": "contactPick", "context": "User: Message my sister Sam: see you soon", "candidates": ["Sam Novak (dad)", "Sam Lee (mom)", "Sam Park (sister)"]}
+{"id": "ds-contactPick-00731", "type": "contactPick", "context": "Now: Tue 19:00\nUser location: work\nUser: Message my brother Priya: see you soon", "candidates": ["Priya Lee (brother)", "Priya Ortiz (coach)", "Priya Novak (dad)"]}
+{"id": "ds-contactPick-00279", "type": "contactPick", "context": "Now: Sat 7:30\nUser location: unknown\nUser: Message my landlord Diego: see you soon", "candidates": ["Diego Novak (brother)", "Diego Lee (landlord)", "Diego Park (mom)"]}
+{"id": "ds-contactPick-00141", "type": "contactPick", "context": "Now: Tue 23:55\nUser location: home\nUser: Message my dad Aisha: see you soon", "candidates": ["Aisha Novak (coach)", "Aisha Khan (landlord)", "Aisha Ortiz (dad)"]}
+{"id": "ds-contactPick-00728", "type": "contactPick", "context": "Now: Sat 21:05\nUser location: home\nUser: Message my brother Diego: see you soon", "candidates": ["Diego Ortiz (coworker)", "Diego Khan (dentist)", "Diego Lee (brother)"]}
+{"id": "ds-contactPick-00376", "type": "contactPick", "context": "Now: Sun 17:00\nUser location: home\nUser: Message Omar: see you soon", "candidates": ["Omar Khan (roommate)", "Omar Park (landlord)", "Omar Novak (dad)"]}
+{"id": "ds-contactPick-00719", "type": "contactPick", "context": "Now: Sat 12:55\nUser location: work\nUser: Message my brother Noah: see you soon", "candidates": ["Noah Park (coach)", "Noah Lee (sister)", "Noah Ortiz (brother)"]}
+{"id": "ds-contactPick-00402", "type": "contactPick", "context": "Now: Mon 16:00\nUser location: a cafe\nUser: Message my sister Maya: see you soon", "candidates": ["Maya Ortiz (sister)", "Maya Lee (brother)", "Maya Park (manager)"]}
+{"id": "s0-00341", "type": "contactPick", "context": "Now: Thu 22:15\nUser location: work\nUser: Message my coach Fatima: see you soon", "candidates": ["Fatima Novak (landlord)", "Fatima Park (coach)", "Fatima Khan (mom)"]}
+{"id": "ds-contactPick-00563", "type": "contactPick", "context": "Now: Sun 21:30\nUser location: home\nUser: Message my brother Omar: see you soon", "candidates": ["Omar Novak (coach)", "Omar Lee (brother)", "Omar Ortiz (mom)"]}
+{"id": "ds-contactPick-00276", "type": "contactPick", "context": "Now: Sun 13:15\nUser location: the gym\nUser: Message Noah: see you soon", "candidates": ["Noah Novak (roommate)", "Noah Lee (coach)", "Noah Ortiz (manager)"]}
+{"id": "ds-contactPick-00087", "type": "contactPick", "context": "Now: Sun 11:15\nUser location: commuting\nUser: Message my sister Zoe: see you soon", "candidates": ["Zoe Lee (sister)", "Zoe Novak (manager)", "Zoe Ortiz (coach)"]}
+{"id": "ds-contactPick-00823", "type": "contactPick", "context": "Now: Sun 15:55\nUser location: work\nUser: Message my landlord Tom: see you soon", "candidates": ["Tom Ortiz (landlord)", "Tom Novak (sister)", "Tom Khan (manager)"]}
+{"id": "s0-00849", "type": "contactPick", "context": "Now: Tue 15:42\nUser location: home\nUser: Message my dentist Fatima: see you soon", "candidates": ["Fatima Lee (landlord)", "Fatima Novak (coach)", "Fatima Park (dentist)"]}
+{"id": "ds-contactPick-00089", "type": "contactPick", "context": "Now: Sat 21:05\nUser location: unknown\nUser: Message Noah: see you soon", "candidates": ["Noah Khan (mom)", "Noah Novak (roommate)", "Noah Lee (brother)"]}
+{"id": "ds-contactPick-00843", "type": "contactPick", "context": "Now: Mon 18:05\nUser location: work\nUser: Message my dentist Lena: see you soon", "candidates": ["Lena Park (dentist)", "Lena Lee (roommate)", "Lena Ortiz (landlord)"]}
+{"id": "ds-contactPick-00565", "type": "contactPick", "context": "Now: Fri 8:42\nUser location: home\nUser: Message my manager Sam: see you soon", "candidates": ["Sam Novak (manager)", "Sam Lee (landlord)", "Sam Khan (mom)"]}
+{"id": "ds-contactPick-00057", "type": "contactPick", "context": "User: Message my brother Diego: see you soon", "candidates": ["Diego Ortiz (coworker)", "Diego Lee (brother)", "Diego Khan (mom)"]}
+{"id": "ds-contactPick-00475", "type": "contactPick", "context": "Now: Wed 17:00\nUser location: unknown\nUser: Message my coworker Lena: see you soon", "candidates": ["Lena Khan (coworker)", "Lena Novak (manager)", "Lena Park (roommate)"]}
+{"id": "ds-contactPick-00228", "type": "contactPick", "context": "Now: Sun 21:30\nUser location: the gym\nUser: Message my coworker Aisha: see you soon", "candidates": ["Aisha Park (landlord)", "Aisha Ortiz (dad)", "Aisha Lee (coworker)"]}
+{"id": "ds-contactPick-00444", "type": "contactPick", "context": "Now: Fri 21:42\nUser location: unknown\nUser: Message my dentist Sam: see you soon", "candidates": ["Sam Park (roommate)", "Sam Ortiz (dad)", "Sam Lee (dentist)"]}
+{"id": "ds-contactPick-00464", "type": "contactPick", "context": "Now: Tue 21:00\nUser location: a cafe\nUser: Message my coach Kenji: see you soon", "candidates": ["Kenji Novak (coach)", "Kenji Lee (manager)", "Kenji Khan (coworker)"]}
+{"id": "ds-contactPick-00885", "type": "contactPick", "context": "Now: Mon 12:55\nUser location: the gym\nUser: Message my landlord Sam: see you soon", "candidates": ["Sam Khan (manager)", "Sam Ortiz (landlord)", "Sam Lee (mom)"]}
+{"id": "ds-contactPick-00149", "type": "contactPick", "context": "User: Message my dentist Sam: see you soon", "candidates": ["Sam Park (dentist)", "Sam Ortiz (coworker)", "Sam Lee (landlord)"]}
+{"id": "ds-contactPick-00324", "type": "contactPick", "context": "Now: Tue 17:55\nUser location: commuting\nUser: Message my coworker Aisha: see you soon", "candidates": ["Aisha Park (manager)", "Aisha Ortiz (landlord)", "Aisha Lee (coworker)"]}
+{"id": "ds-contactPick-00669", "type": "contactPick", "context": "Now: Thu 23:30\nUser location: unknown\nUser: Message my coworker Maya: see you soon", "candidates": ["Maya Lee (coworker)", "Maya Park (landlord)", "Maya Khan (coach)"]}
+{"id": "ds-contactPick-00252", "type": "contactPick", "context": "User: Message my dentist Tom: see you soon", "candidates": ["Tom Park (roommate)", "Tom Lee (dad)", "Tom Novak (dentist)"]}
+{"id": "ds-contactPick-00835", "type": "contactPick", "context": "Now: Wed 9:05\nUser location: work\nUser: Message Tom: see you soon", "candidates": ["Tom Lee (dad)", "Tom Khan (coworker)", "Tom Park (mom)"]}
+{"id": "ds-contactPick-00061", "type": "contactPick", "context": "Now: Thu 21:15\nUser location: the gym\nUser: Message my mom Zoe: see you soon", "candidates": ["Zoe Lee (dad)", "Zoe Novak (coworker)", "Zoe Khan (mom)"]}
+{"id": "ds-contactPick-00215", "type": "contactPick", "context": "Now: Wed 23:05\nUser location: work\nUser: Message my manager Maya: see you soon", "candidates": ["Maya Park (sister)", "Maya Lee (dad)", "Maya Ortiz (manager)"]}
+{"id": "ds-contactPick-00504", "type": "contactPick", "context": "Now: Fri 14:05\nUser location: a cafe\nUser: Message my manager Fatima: see you soon", "candidates": ["Fatima Lee (manager)", "Fatima Khan (coworker)", "Fatima Ortiz (sister)"]}
+{"id": "ds-contactPick-00859", "type": "contactPick", "context": "Now: Thu 23:30\nUser location: work\nUser: Message my mom Fatima: see you soon", "candidates": ["Fatima Lee (coworker)", "Fatima Khan (mom)", "Fatima Ortiz (sister)"]}
+{"id": "s0-00215", "type": "contactPick", "context": "Now: Thu 20:00\nUser location: unknown\nUser: Message my mom Omar: see you soon", "candidates": ["Omar Ortiz (dentist)", "Omar Lee (mom)", "Omar Khan (coworker)"]}
+{"id": "ds-contactPick-00600", "type": "contactPick", "context": "Now: Wed 22:05\nUser location: home\nUser: Message my coach Priya: see you soon", "candidates": ["Priya Novak (sister)", "Priya Khan (coach)", "Priya Park (dad)"]}
+{"id": "ds-contactPick-00034", "type": "contactPick", "context": "Now: Wed 23:30\nUser location: a cafe\nUser: Message my coach Aisha: see you soon", "candidates": ["Aisha Novak (brother)", "Aisha Park (roommate)", "Aisha Ortiz (coach)"]}
+{"id": "s0-00414", "type": "contactPick", "context": "Now: Fri 13:15\nUser location: commuting\nUser: Message my manager Diego: see you soon", "candidates": ["Diego Ortiz (manager)", "Diego Novak (roommate)", "Diego Khan (mom)"]}
+{"id": "ds-contactPick-00136", "type": "contactPick", "context": "Now: Sat 10:42\nUser location: work\nUser: Message my landlord Omar: see you soon", "candidates": ["Omar Ortiz (mom)", "Omar Park (roommate)", "Omar Khan (landlord)"]}
+{"id": "ds-contactPick-00081", "type": "contactPick", "context": "Now: Tue 7:55\nUser location: unknown\nUser: Message Fatima: see you soon", "candidates": ["Fatima Ortiz (coach)", "Fatima Khan (sister)", "Fatima Novak (dentist)"]}
+{"id": "s0-00735", "type": "contactPick", "context": "Now: Thu 17:05\nUser location: work\nUser: Message my roommate Tom: see you soon", "candidates": ["Tom Park (coach)", "Tom Lee (mom)", "Tom Ortiz (roommate)"]}
+{"id": "ds-contactPick-00277", "type": "contactPick", "context": "Now: Thu 15:05\nUser location: unknown\nUser: Message my mom Priya: see you soon", "candidates": ["Priya Ortiz (mom)", "Priya Khan (manager)", "Priya Park (brother)"]}
+{"id": "ds-contactPick-00617", "type": "contactPick", "context": "Now: Mon 14:00\nUser location: home\nUser: Message my coach Tom: see you soon", "candidates": ["Tom Novak (coach)", "Tom Khan (dentist)", "Tom Ortiz (landlord)"]}
+{"id": "ds-eventPick-00119", "type": "eventPick", "context": "Now: Sun 14:00\nUser location: unknown\nUser: Move my yoga to next week", "candidates": ["1:1 with Priya (Wed 10am)", "Dentist (Tue 3pm)", "Yoga (Thu 6pm)"]}
+{"id": "s0-00014", "type": "eventPick", "context": "Now: Sun 12:05\nUser location: home\nUser: Move my 1:1 with priya to next week", "candidates": ["Yoga (Thu 6pm)", "Dentist (Tue 3pm)", "1:1 with Priya (Wed 10am)"]}
+{"id": "s0-00961", "type": "eventPick", "context": "Now: Wed 19:15\nUser location: home\nUser: Move my flight to sfo to next week", "candidates": ["1:1 with Priya (Wed 10am)", "Dentist (Tue 3pm)", "Flight to SFO (Fri 7am)"]}
+{"id": "s0-00427", "type": "eventPick", "context": "Now: Tue 17:00\nUser location: the gym\nUser: Move my 1:1 with priya to next week", "candidates": ["Standup (daily 9:30am)", "Yoga (Thu 6pm)", "1:1 with Priya (Wed 10am)"]}
+{"id": "s0-00406", "type": "eventPick", "context": "Now: Sat 9:30\nUser location: home\nUser: Move my flight to sfo to next week", "candidates": ["Dentist (Tue 3pm)", "Flight to SFO (Fri 7am)", "Standup (daily 9:30am)"]}
+{"id": "s0-00772", "type": "eventPick", "context": "Now: Wed 22:42\nUser location: work\nUser: Move my dentist to next week", "candidates": ["Flight to SFO (Fri 7am)", "Yoga (Thu 6pm)", "Dentist (Tue 3pm)"]}
+{"id": "s0-00342", "type": "eventPick", "context": "Now: Wed 16:42\nUser location: home\nUser: Move my dentist to next week", "candidates": ["Yoga (Thu 6pm)", "Dentist (Tue 3pm)", "Standup (daily 9:30am)"]}
+{"id": "s0-00375", "type": "eventPick", "context": "Now: Fri 18:30\nUser location: home\nUser: Move my 1:1 with priya to next week", "candidates": ["1:1 with Priya (Wed 10am)", "Dentist (Tue 3pm)", "Flight to SFO (Fri 7am)"]}
+{"id": "s0-00073", "type": "eventPick", "context": "Now: Thu 17:55\nUser location: home\nUser: Move my flight to sfo to next week", "candidates": ["Dentist (Tue 3pm)", "Flight to SFO (Fri 7am)", "1:1 with Priya (Wed 10am)"]}
+{"id": "s0-00736", "type": "eventPick", "context": "Now: Wed 12:05\nUser location: home\nUser: Move my 1:1 with priya to next week", "candidates": ["Standup (daily 9:30am)", "Flight to SFO (Fri 7am)", "1:1 with Priya (Wed 10am)"]}
+{"id": "s0-00541", "type": "eventPick", "context": "Now: Mon 18:00\nUser location: a cafe\nUser: Move my standup to next week", "candidates": ["1:1 with Priya (Wed 10am)", "Yoga (Thu 6pm)", "Standup (daily 9:30am)"]}
+{"id": "s0-00296", "type": "eventPick", "context": "Now: Wed 22:30\nUser location: home\nUser: Move my 1:1 with priya to next week", "candidates": ["1:1 with Priya (Wed 10am)", "Yoga (Thu 6pm)", "Flight to SFO (Fri 7am)"]}
+{"id": "s0-00462", "type": "eventPick", "context": "Now: Fri 6:30\nUser location: unknown\nUser: Move my yoga to next week", "candidates": ["Standup (daily 9:30am)", "Yoga (Thu 6pm)", "Flight to SFO (Fri 7am)"]}
+{"id": "s0-00828", "type": "eventPick", "context": "User: Move my dentist to next week", "candidates": ["Dentist (Tue 3pm)", "Flight to SFO (Fri 7am)", "Yoga (Thu 6pm)"]}
+{"id": "s0-00439", "type": "eventPick", "context": "Now: Mon 21:55\nUser location: the gym\nUser: Move my 1:1 with priya to next week", "candidates": ["Dentist (Tue 3pm)", "1:1 with Priya (Wed 10am)", "Yoga (Thu 6pm)"]}
+{"id": "ds-eventPick-00353", "type": "eventPick", "context": "Now: Wed 18:15\nUser location: work\nUser: Move my 1:1 with priya to next week", "candidates": ["1:1 with Priya (Wed 10am)", "Flight to SFO (Fri 7am)", "Standup (daily 9:30am)"]}
+{"id": "s0-00611", "type": "eventPick", "context": "Now: Thu 14:30\nUser location: work\nUser: Move my yoga to next week", "candidates": ["Yoga (Thu 6pm)", "Dentist (Tue 3pm)", "Standup (daily 9:30am)"]}
+{"id": "s0-00748", "type": "eventPick", "context": "Now: Tue 22:00\nUser location: unknown\nUser: Move my yoga to next week", "candidates": ["Dentist (Tue 3pm)", "Yoga (Thu 6pm)", "1:1 with Priya (Wed 10am)"]}
+{"id": "s0-00795", "type": "eventPick", "context": "Now: Sun 15:55\nUser location: work\nUser: Move my yoga to next week", "candidates": ["Dentist (Tue 3pm)", "Standup (daily 9:30am)", "Yoga (Thu 6pm)"]}
+{"id": "s0-00353", "type": "eventPick", "context": "Now: Sat 8:42\nUser location: the gym\nUser: Move my yoga to next week", "candidates": ["1:1 with Priya (Wed 10am)", "Yoga (Thu 6pm)", "Standup (daily 9:30am)"]}
+{"id": "s0-00180", "type": "eventPick", "context": "Now: Wed 14:15\nUser location: a cafe\nUser: Move my dentist to next week", "candidates": ["Dentist (Tue 3pm)", "1:1 with Priya (Wed 10am)", "Flight to SFO (Fri 7am)"]}
+{"id": "ds-eventPick-00058", "type": "eventPick", "context": "Now: Wed 15:30\nUser location: home\nUser: Move my 1:1 with priya to next week", "candidates": ["Standup (daily 9:30am)", "Flight to SFO (Fri 7am)", "1:1 with Priya (Wed 10am)"]}
+{"id": "s0-00949", "type": "eventPick", "context": "Now: Wed 9:00\nUser location: work\nUser: Move my yoga to next week", "candidates": ["1:1 with Priya (Wed 10am)", "Yoga (Thu 6pm)", "Flight to SFO (Fri 7am)"]}
+{"id": "s0-00415", "type": "eventPick", "context": "Now: Sat 20:55\nUser location: unknown\nUser: Move my 1:1 with priya to next week", "candidates": ["Yoga (Thu 6pm)", "Standup (daily 9:30am)", "1:1 with Priya (Wed 10am)"]}
+{"id": "s0-00133", "type": "eventPick", "context": "User: Move my flight to sfo to next week", "candidates": ["Standup (daily 9:30am)", "Yoga (Thu 6pm)", "Flight to SFO (Fri 7am)"]}
+{"id": "ds-eventPick-00228", "type": "eventPick", "context": "Now: Mon 6:00\nUser location: a cafe\nUser: Move my 1:1 with priya to next week", "candidates": ["1:1 with Priya (Wed 10am)", "Standup (daily 9:30am)", "Yoga (Thu 6pm)"]}
+{"id": "ds-eventPick-00060", "type": "eventPick", "context": "Now: Mon 13:15\nUser location: home\nUser: Move my yoga to next week", "candidates": ["Yoga (Thu 6pm)", "Dentist (Tue 3pm)", "Standup (daily 9:30am)"]}
+{"id": "s0-00227", "type": "eventPick", "context": "Now: Mon 10:30\nUser location: work\nUser: Move my standup to next week", "candidates": ["1:1 with Priya (Wed 10am)", "Flight to SFO (Fri 7am)", "Standup (daily 9:30am)"]}
+{"id": "s0-00623", "type": "eventPick", "context": "Now: Sun 14:55\nUser location: unknown\nUser: Move my flight to sfo to next week", "candidates": ["1:1 with Priya (Wed 10am)", "Dentist (Tue 3pm)", "Flight to SFO (Fri 7am)"]}
+{"id": "s0-00599", "type": "eventPick", "context": "Now: Sat 22:05\nUser location: the gym\nUser: Move my standup to next week", "candidates": ["Yoga (Thu 6pm)", "Standup (daily 9:30am)", "1:1 with Priya (Wed 10am)"]}
+{"id": "s0-00760", "type": "eventPick", "context": "Now: Mon 16:00\nUser location: the gym\nUser: Move my dentist to next week", "candidates": ["Standup (daily 9:30am)", "Dentist (Tue 3pm)", "Flight to SFO (Fri 7am)"]}
+{"id": "s0-00519", "type": "eventPick", "context": "Now: Wed 11:00\nUser location: home\nUser: Move my dentist to next week", "candidates": ["Flight to SFO (Fri 7am)", "Standup (daily 9:30am)", "Dentist (Tue 3pm)"]}
+{"id": "s0-00121", "type": "eventPick", "context": "Now: Mon 6:30\nUser location: the gym\nUser: Move my 1:1 with priya to next week", "candidates": ["Standup (daily 9:30am)", "1:1 with Priya (Wed 10am)", "Dentist (Tue 3pm)"]}
+{"id": "s0-00474", "type": "eventPick", "context": "Now: Fri 17:05\nUser location: home\nUser: Move my 1:1 with priya to next week", "candidates": ["Yoga (Thu 6pm)", "Dentist (Tue 3pm)", "1:1 with Priya (Wed 10am)"]}
+{"id": "s0-00657", "type": "eventPick", "context": "Now: Mon 22:55\nUser location: home\nUser: Move my yoga to next week", "candidates": ["Standup (daily 9:30am)", "Dentist (Tue 3pm)", "Yoga (Thu 6pm)"]}
+{"id": "s0-00239", "type": "eventPick", "context": "Now: Sun 21:05\nUser location: unknown\nUser: Move my 1:1 with priya to next week", "candidates": ["Yoga (Thu 6pm)", "1:1 with Priya (Wed 10am)", "Dentist (Tue 3pm)"]}
+{"id": "s0-00838", "type": "eventPick", "context": "Now: Fri 20:55\nUser location: the gym\nUser: Move my yoga to next week", "candidates": ["1:1 with Priya (Wed 10am)", "Standup (daily 9:30am)", "Yoga (Thu 6pm)"]}
+{"id": "s0-00002", "type": "eventPick", "context": "User: Move my 1:1 with priya to next week", "candidates": ["Dentist (Tue 3pm)", "Standup (daily 9:30am)", "1:1 with Priya (Wed 10am)"]}
+{"id": "s0-00938", "type": "eventPick", "context": "Now: Fri 20:55\nUser location: home\nUser: Move my 1:1 with priya to next week", "candidates": ["Dentist (Tue 3pm)", "1:1 with Priya (Wed 10am)", "Standup (daily 9:30am)"]}
+{"id": "s0-00386", "type": "eventPick", "context": "Now: Wed 10:42\nUser location: work\nUser: Move my flight to sfo to next week", "candidates": ["Flight to SFO (Fri 7am)", "Yoga (Thu 6pm)", "Dentist (Tue 3pm)"]}
+{"id": "s0-00307", "type": "eventPick", "context": "Now: Sun 12:42\nUser location: the gym\nUser: Move my 1:1 with priya to next week", "candidates": ["Standup (daily 9:30am)", "1:1 with Priya (Wed 10am)", "Dentist (Tue 3pm)"]}
+{"id": "s0-00575", "type": "eventPick", "context": "Now: Sun 17:55\nUser location: unknown\nUser: Move my yoga to next week", "candidates": ["1:1 with Priya (Wed 10am)", "Yoga (Thu 6pm)", "Flight to SFO (Fri 7am)"]}
+{"id": "s0-00563", "type": "eventPick", "context": "Now: Fri 9:55\nUser location: unknown\nUser: Move my dentist to next week", "candidates": ["Standup (daily 9:30am)", "1:1 with Priya (Wed 10am)", "Dentist (Tue 3pm)"]}
+{"id": "s0-00973", "type": "eventPick", "context": "Now: Fri 12:15\nUser location: the gym\nUser: Move my flight to sfo to next week", "candidates": ["Flight to SFO (Fri 7am)", "1:1 with Priya (Wed 10am)", "Standup (daily 9:30am)"]}
+{"id": "s0-01016", "type": "eventPick", "context": "Now: Fri 7:00\nUser location: work\nUser: Move my standup to next week", "candidates": ["Flight to SFO (Fri 7am)", "Standup (daily 9:30am)", "1:1 with Priya (Wed 10am)"]}
+{"id": "s0-00725", "type": "eventPick", "context": "Now: Tue 7:30\nUser location: a cafe\nUser: Move my dentist to next week", "candidates": ["Dentist (Tue 3pm)", "Standup (daily 9:30am)", "1:1 with Priya (Wed 10am)"]}
+{"id": "s0-00396", "type": "eventPick", "context": "Now: Wed 6:15\nUser location: the gym\nUser: Move my dentist to next week", "candidates": ["Yoga (Thu 6pm)", "1:1 with Priya (Wed 10am)", "Dentist (Tue 3pm)"]}
+{"id": "s0-00508", "type": "eventPick", "context": "User: Move my flight to sfo to next week", "candidates": ["Yoga (Thu 6pm)", "Flight to SFO (Fri 7am)", "Standup (daily 9:30am)"]}
+{"id": "s0-00784", "type": "eventPick", "context": "Now: Tue 22:15\nUser location: unknown\nUser: Move my yoga to next week", "candidates": ["Dentist (Tue 3pm)", "Standup (daily 9:30am)", "Yoga (Thu 6pm)"]}
+{"id": "ds-eventPick-00098", "type": "eventPick", "context": "Now: Fri 9:05\nUser location: unknown\nUser: Move my yoga to next week", "candidates": ["1:1 with Priya (Wed 10am)", "Standup (daily 9:30am)", "Yoga (Thu 6pm)"]}
+{"id": "s0-01660", "type": "memoryConflict", "context": "Now: Sun 21:55\nUser location: work\nExisting memory: User works at Northwind\nNew statement: lol I'd quit Northwind if I won the lottery", "candidates": null}
+{"id": "s0-00099", "type": "memoryConflict", "context": "Now: Fri 13:05\nUser location: home\nExisting memory: Maya's birthday is March 4\nNew statement: Maya's birthday is March 4th right?", "candidates": null}
+{"id": "s0-00111", "type": "memoryConflict", "context": "Now: Tue 12:30\nUser location: work\nExisting memory: User is vegetarian\nNew statement: I started eating fish again, so pescatarian now", "candidates": null}
+{"id": "seed1-s1-01231", "type": "memoryConflict", "context": "Now: Sun 6:15\nUser location: work\nExisting memory: User is vegetarian\nNew statement: I started eating fish again, so pescatarian now", "candidates": null}
+{"id": "s0-01006", "type": "memoryConflict", "context": "Now: Sat 12:42\nUser location: work\nExisting memory: User works at Northwind\nNew statement: lol I'd quit Northwind if I won the lottery", "candidates": null}
+{"id": "s0-00906", "type": "memoryConflict", "context": "Now: Mon 7:15\nUser location: work\nExisting memory: User likes jazz\nNew statement: I also love techno", "candidates": null}
+{"id": "s0-01040", "type": "memoryConflict", "context": "Now: Sun 17:00\nUser location: a cafe\nExisting memory: Maya's birthday is March 4\nNew statement: Maya's birthday is March 4th right?", "candidates": null}
+{"id": "s0-00170", "type": "memoryConflict", "context": "Now: Sat 20:42\nUser location: unknown\nExisting memory: User is vegetarian\nNew statement: I started eating fish again, so pescatarian now", "candidates": null}
+{"id": "ds-memoryConflict-00060", "type": "memoryConflict", "context": "Now: Sun 6:42\nUser location: a cafe\nExisting memory: User likes jazz\nNew statement: I also love techno", "candidates": null}
+{"id": "ds-memoryConflict-00130", "type": "memoryConflict", "context": "Now: Fri 22:05\nUser location: a cafe\nExisting memory: User works at Northwind\nNew statement: lol I'd quit Northwind if I won the lottery", "candidates": null}
+{"id": "s0-00521", "type": "memoryConflict", "context": "Now: Fri 14:30\nUser location: a cafe\nExisting memory: User works at Northwind\nNew statement: lol I'd quit Northwind if I won the lottery", "candidates": null}
+{"id": "s0-00625", "type": "memoryConflict", "context": "Now: Sun 10:00\nUser location: unknown\nExisting memory: User is vegetarian\nNew statement: I started eating fish again, so pescatarian now", "candidates": null}
+{"id": "s0-01513", "type": "memoryConflict", "context": "Now: Sun 9:05\nUser location: home\nExisting memory: Maya's birthday is March 4\nNew statement: Maya's birthday is March 4th right?", "candidates": null}
+{"id": "seed1-s1-01072", "type": "memoryConflict", "context": "Now: Sat 22:55\nUser location: a cafe\nExisting memory: User lives in Boston\nNew statement: I just moved to Denver", "candidates": null}
+{"id": "s0-00940", "type": "memoryConflict", "context": "Now: Thu 18:05\nUser location: home\nExisting memory: User works at Northwind\nNew statement: lol I'd quit Northwind if I won the lottery", "candidates": null}
+{"id": "seed1-s1-00605", "type": "memoryConflict", "context": "Now: Sun 18:00\nUser location: the gym\nExisting memory: Maya's birthday is March 4\nNew statement: Maya's birthday is March 4th right?", "candidates": null}
+{"id": "s0-01206", "type": "memoryConflict", "context": "Now: Fri 7:42\nUser location: unknown\nExisting memory: User lives in Boston\nNew statement: I just moved to Denver", "candidates": null}
+{"id": "seed1-s1-01633", "type": "memoryConflict", "context": "Now: Sun 19:55\nUser location: the gym\nExisting memory: User is vegetarian\nNew statement: I started eating fish again, so pescatarian now", "candidates": null}
+{"id": "seed1-s1-01435", "type": "memoryConflict", "context": "Now: Mon 10:55\nUser location: a cafe\nExisting memory: User lives in Boston\nNew statement: I just moved to Denver", "candidates": null}
+{"id": "s0-01052", "type": "memoryConflict", "context": "Now: Wed 18:42\nUser location: a cafe\nExisting memory: User works at Northwind\nNew statement: lol I'd quit Northwind if I won the lottery", "candidates": null}
+{"id": "ds-memoryConflict-00113", "type": "memoryConflict", "context": "Now: Mon 14:30\nUser location: a cafe\nExisting memory: User likes jazz\nNew statement: I also love techno", "candidates": null}
+{"id": "s0-01415", "type": "memoryConflict", "context": "Now: Mon 17:05\nUser location: unknown\nExisting memory: User works at Northwind\nNew statement: lol I'd quit Northwind if I won the lottery", "candidates": null}
+{"id": "s0-01469", "type": "memoryConflict", "context": "Now: Sun 22:15\nUser location: home\nExisting memory: User lives in Boston\nNew statement: I just moved to Denver", "candidates": null}
+{"id": "seed1-s1-01687", "type": "memoryConflict", "context": "Now: Thu 20:00\nUser location: commuting\nExisting memory: Maya's birthday is March 4\nNew statement: Maya's birthday is March 4th right?", "candidates": null}
+{"id": "seed1-s1-00099", "type": "memoryConflict", "context": "Now: Tue 10:55\nUser location: the gym\nExisting memory: User is vegetarian\nNew statement: I started eating fish again, so pescatarian now", "candidates": null}
+{"id": "ds-memoryConflict-00133", "type": "memoryConflict", "context": "Now: Mon 7:00\nUser location: commuting\nExisting memory: Maya's birthday is March 4\nNew statement: Maya's birthday is March 4th right?", "candidates": null}
+{"id": "s0-00252", "type": "memoryConflict", "context": "Now: Wed 9:55\nUser location: home\nExisting memory: Maya's birthday is March 4\nNew statement: Maya's birthday is March 4th right?", "candidates": null}
+{"id": "ds-memoryConflict-00184", "type": "memoryConflict", "context": "Now: Fri 13:00\nUser location: work\nExisting memory: User works at Northwind\nNew statement: lol I'd quit Northwind if I won the lottery", "candidates": null}
+{"id": "s0-00533", "type": "memoryConflict", "context": "Now: Sun 17:00\nUser location: commuting\nExisting memory: User works at Northwind\nNew statement: lol I'd quit Northwind if I won the lottery", "candidates": null}
+{"id": "s0-00875", "type": "memoryConflict", "context": "Now: Sun 19:00\nUser location: unknown\nExisting memory: User works at Northwind\nNew statement: lol I'd quit Northwind if I won the lottery", "candidates": null}
+{"id": "s0-00928", "type": "memoryConflict", "context": "Now: Tue 17:15\nUser location: commuting\nExisting memory: User is vegetarian\nNew statement: I started eating fish again, so pescatarian now", "candidates": null}
+{"id": "s0-00309", "type": "memoryConflict", "context": "Now: Fri 18:30\nUser location: a cafe\nExisting memory: User works at Northwind\nNew statement: lol I'd quit Northwind if I won the lottery", "candidates": null}
+{"id": "ds-memoryConflict-00198", "type": "memoryConflict", "context": "Now: Thu 16:00\nUser location: commuting\nExisting memory: Maya's birthday is March 4\nNew statement: Maya's birthday is March 4th right?", "candidates": null}
+{"id": "s0-00087", "type": "memoryConflict", "context": "Now: Thu 8:55\nUser location: home\nExisting memory: User likes jazz\nNew statement: I also love techno", "candidates": null}
+{"id": "seed1-s1-00344", "type": "memoryConflict", "context": "Now: Sun 6:55\nUser location: unknown\nExisting memory: User likes jazz\nNew statement: I also love techno", "candidates": null}
+{"id": "s0-00274", "type": "memoryConflict", "context": "Existing memory: User lives in Boston\nNew statement: I just moved to Denver", "candidates": null}
+{"id": "s0-00365", "type": "memoryConflict", "context": "Now: Sat 6:30\nUser location: work\nExisting memory: User likes jazz\nNew statement: I also love techno", "candidates": null}
+{"id": "s0-00840", "type": "memoryConflict", "context": "Now: Wed 9:00\nUser location: home\nExisting memory: User likes jazz\nNew statement: I also love techno", "candidates": null}
+{"id": "s0-00589", "type": "memoryConflict", "context": "Now: Fri 20:30\nUser location: commuting\nExisting memory: User likes jazz\nNew statement: I also love techno", "candidates": null}
+{"id": "s0-00075", "type": "memoryConflict", "context": "Now: Tue 8:55\nUser location: a cafe\nExisting memory: Maya's birthday is March 4\nNew statement: Maya's birthday is March 4th right?", "candidates": null}
+{"id": "s0-00577", "type": "memoryConflict", "context": "Now: Tue 9:05\nUser location: home\nExisting memory: User likes jazz\nNew statement: I also love techno", "candidates": null}
+{"id": "s0-00298", "type": "memoryConflict", "context": "Now: Sun 22:15\nUser location: work\nExisting memory: User lives in Boston\nNew statement: I just moved to Denver", "candidates": null}
+{"id": "s0-00637", "type": "memoryConflict", "context": "Now: Sun 18:42\nUser location: unknown\nExisting memory: Maya's birthday is March 4\nNew statement: Maya's birthday is March 4th right?", "candidates": null}
+{"id": "s0-00994", "type": "memoryConflict", "context": "Now: Sat 22:05\nUser location: commuting\nExisting memory: Maya's birthday is March 4\nNew statement: Maya's birthday is March 4th right?", "candidates": null}
+{"id": "s0-00975", "type": "memoryConflict", "context": "Now: Fri 7:30\nUser location: work\nExisting memory: User likes jazz\nNew statement: I also love techno", "candidates": null}
+{"id": "seed1-s1-00526", "type": "memoryConflict", "context": "Now: Sun 11:42\nUser location: the gym\nExisting memory: User lives in Boston\nNew statement: I just moved to Denver", "candidates": null}
+{"id": "ds-memoryConflict-00215", "type": "memoryConflict", "context": "Now: Tue 10:00\nUser location: home\nExisting memory: User lives in Boston\nNew statement: I just moved to Denver", "candidates": null}
+{"id": "s0-00682", "type": "memoryConflict", "context": "Now: Sun 11:00\nUser location: the gym\nExisting memory: Maya's birthday is March 4\nNew statement: Maya's birthday is March 4th right?", "candidates": null}
+{"id": "ds-memoryConflict-00152", "type": "memoryConflict", "context": "Now: Wed 21:55\nUser location: unknown\nExisting memory: User works at Northwind\nNew statement: lol I'd quit Northwind if I won the lottery", "candidates": null}
+{"id": "s0-00147", "type": "memoryConflict", "context": "Now: Thu 11:00\nUser location: a cafe\nExisting memory: User lives in Boston\nNew statement: I just moved to Denver", "candidates": null}
+{"id": "ds-notificationTriage-00279", "type": "notificationTriage", "context": "Now: Tue 11:15\nUser location: work\nNotification from Mom: 'Call me when you can, it's about Grandpa'", "candidates": null}
+{"id": "ds-notificationTriage-00487", "type": "notificationTriage", "context": "Now: Tue 12:30\nUser location: commuting\nNotification from Calendar: 'Team lunch moved to 1pm tomorrow'", "candidates": null}
+{"id": "seed1-s1-00731", "type": "notificationTriage", "context": "Now: Wed 18:42\nUser location: unknown\nNotification from Mom: 'Call me when you can, it's about Grandpa'", "candidates": null}
+{"id": "ds-notificationTriage-00266", "type": "notificationTriage", "context": "Now: Tue 6:15\nUser location: unknown\nNotification from Slack: '3 new messages in #random'", "candidates": null}
+{"id": "seed1-s1-00719", "type": "notificationTriage", "context": "Now: Wed 20:30\nUser location: unknown\nNotification from Mom: 'Call me when you can, it's about Grandpa'", "candidates": null}
+{"id": "ds-notificationTriage-00625", "type": "notificationTriage", "context": "Now: Tue 14:05\nUser location: the gym\nNotification from Airline: 'Your flight UA 512 gate changed to B22'", "candidates": null}
+{"id": "ds-notificationTriage-00440", "type": "notificationTriage", "context": "Now: Thu 19:15\nUser location: unknown\nNotification from Bank: 'Unusual sign-in attempt on your account'", "candidates": null}
+{"id": "s0-00477", "type": "notificationTriage", "context": "Now: Sun 12:15\nUser location: home\nNotification from Calendar: 'Team lunch moved to 1pm tomorrow'", "candidates": null}
+{"id": "s0-00183", "type": "notificationTriage", "context": "Now: Thu 13:30\nUser location: a cafe\nNotification from Bank: 'Unusual sign-in attempt on your account'", "candidates": null}
+{"id": "s0-00366", "type": "notificationTriage", "context": "Now: Mon 22:15\nUser location: work\nNotification from Bank: 'Unusual sign-in attempt on your account'", "candidates": null}
+{"id": "s0-00195", "type": "notificationTriage", "context": "Notification from Airline: 'Your flight UA 512 gate changed to B22'", "candidates": null}
+{"id": "s0-00728", "type": "notificationTriage", "context": "Now: Sat 8:15\nUser location: commuting\nNotification from Newsletter: 'This week in design'", "candidates": null}
+{"id": "s0-01007", "type": "notificationTriage", "context": "Now: Mon 12:42\nUser location: unknown\nNotification from ShopMart: '20% off sneakers this weekend!'", "candidates": null}
+{"id": "s0-00124", "type": "notificationTriage", "context": "Now: Sun 19:42\nUser location: the gym\nNotification from Slack: '3 new messages in #random'", "candidates": null}
+{"id": "s0-00377", "type": "notificationTriage", "context": "Now: Fri 19:42\nUser location: the gym\nNotification from Bank: 'Unusual sign-in attempt on your account'", "candidates": null}
+{"id": "seed1-s1-00252", "type": "notificationTriage", "context": "Now: Fri 23:15\nUser location: commuting\nNotification from Calendar: 'Team lunch moved to 1pm tomorrow'", "candidates": null}
+{"id": "s0-00171", "type": "notificationTriage", "context": "Now: Tue 20:00\nUser location: the gym\nNotification from Mom: 'Call me when you can, it's about Grandpa'", "candidates": null}
+{"id": "s0-00830", "type": "notificationTriage", "context": "Now: Wed 16:42\nUser location: a cafe\nNotification from Calendar: 'Team lunch moved to 1pm tomorrow'", "candidates": null}
+{"id": "s0-01794", "type": "notificationTriage", "context": "Now: Fri 17:42\nUser location: home\nNotification from Newsletter: 'This week in design'", "candidates": null}
+{"id": "s0-00976", "type": "notificationTriage", "context": "Now: Sun 12:55\nUser location: a cafe\nNotification from Mom: 'Call me when you can, it's about Grandpa'", "candidates": null}
+{"id": "ds-notificationTriage-00130", "type": "notificationTriage", "context": "Now: Thu 15:00\nUser location: the gym\nNotification from Bank: 'Unusual sign-in attempt on your account'", "candidates": null}
+{"id": "s0-00430", "type": "notificationTriage", "context": "Now: Sun 21:00\nUser location: home\nNotification from ShopMart: '20% off sneakers this weekend!'", "candidates": null}
+{"id": "ds-notificationTriage-00528", "type": "notificationTriage", "context": "Now: Tue 19:55\nUser location: work\nNotification from Slack: '3 new messages in #random'", "candidates": null}
+{"id": "ds-notificationTriage-00423", "type": "notificationTriage", "context": "Now: Wed 15:30\nUser location: commuting\nNotification from Calendar: 'Team lunch moved to 1pm tomorrow'", "candidates": null}
+{"id": "s0-00602", "type": "notificationTriage", "context": "Now: Wed 10:55\nUser location: work\nNotification from Calendar: 'Team lunch moved to 1pm tomorrow'", "candidates": null}
+{"id": "s0-00299", "type": "notificationTriage", "context": "Now: Sun 15:05\nUser location: work\nNotification from Bank: 'Unusual sign-in attempt on your account'", "candidates": null}
+{"id": "s0-00929", "type": "notificationTriage", "context": "Now: Wed 11:15\nUser location: work\nNotification from Calendar: 'Team lunch moved to 1pm tomorrow'", "candidates": null}
+{"id": "s0-00798", "type": "notificationTriage", "context": "Now: Fri 16:30\nUser location: the gym\nNotification from Bank: 'Unusual sign-in attempt on your account'", "candidates": null}
+{"id": "s0-00112", "type": "notificationTriage", "context": "Now: Thu 7:05\nUser location: unknown\nNotification from Airline: 'Your flight UA 512 gate changed to B22'", "candidates": null}
+{"id": "seed1-s1-00925", "type": "notificationTriage", "context": "Now: Mon 11:55\nUser location: work\nNotification from ShopMart: '20% off sneakers this weekend!'", "candidates": null}
+{"id": "s0-01142", "type": "notificationTriage", "context": "Now: Fri 18:55\nUser location: home\nNotification from Calendar: 'Team lunch moved to 1pm tomorrow'", "candidates": null}
+{"id": "s0-00716", "type": "notificationTriage", "context": "Now: Thu 17:15\nUser location: the gym\nNotification from Newsletter: 'This week in design'", "candidates": null}
+{"id": "ds-notificationTriage-00398", "type": "notificationTriage", "context": "Now: Wed 7:05\nUser location: home\nNotification from Slack: '3 new messages in #random'", "candidates": null}
+{"id": "ds-notificationTriage-00122", "type": "notificationTriage", "context": "Now: Sun 22:05\nUser location: work\nNotification from Calendar: 'Team lunch moved to 1pm tomorrow'", "candidates": null}
+{"id": "s0-00897", "type": "notificationTriage", "context": "Now: Mon 6:30\nUser location: unknown\nNotification from Slack: '3 new messages in #random'", "candidates": null}
+{"id": "ds-notificationTriage-00282", "type": "notificationTriage", "context": "Now: Sat 21:15\nUser location: work\nNotification from Calendar: 'Team lunch moved to 1pm tomorrow'", "candidates": null}
+{"id": "s0-00952", "type": "notificationTriage", "context": "Now: Fri 16:05\nUser location: home\nNotification from Newsletter: 'This week in design'", "candidates": null}
+{"id": "ds-notificationTriage-00203", "type": "notificationTriage", "context": "Now: Mon 12:55\nUser location: a cafe\nNotification from Bank: 'Unusual sign-in attempt on your account'", "candidates": null}
+{"id": "ds-notificationTriage-00306", "type": "notificationTriage", "context": "Now: Mon 20:05\nUser location: the gym\nNotification from Mom: 'Call me when you can, it's about Grandpa'", "candidates": null}
+{"id": "s0-00907", "type": "notificationTriage", "context": "Now: Thu 21:05\nUser location: commuting\nNotification from Mom: 'Call me when you can, it's about Grandpa'", "candidates": null}
+{"id": "ds-notificationTriage-00173", "type": "notificationTriage", "context": "Now: Wed 21:15\nUser location: the gym\nNotification from Newsletter: 'This week in design'", "candidates": null}
+{"id": "ds-notificationTriage-00118", "type": "notificationTriage", "context": "Now: Tue 13:42\nUser location: a cafe\nNotification from Calendar: 'Team lunch moved to 1pm tomorrow'", "candidates": null}
+{"id": "s0-00264", "type": "notificationTriage", "context": "Now: Fri 16:42\nUser location: unknown\nNotification from Mom: 'Call me when you can, it's about Grandpa'", "candidates": null}
+{"id": "s0-00418", "type": "notificationTriage", "context": "Now: Thu 22:05\nUser location: work\nNotification from Mom: 'Call me when you can, it's about Grandpa'", "candidates": null}
+{"id": "s0-00578", "type": "notificationTriage", "context": "Now: Mon 19:30\nUser location: unknown\nNotification from Mom: 'Call me when you can, it's about Grandpa'", "candidates": null}
+{"id": "seed1-s1-01153", "type": "notificationTriage", "context": "Now: Sun 13:30\nUser location: the gym\nNotification from Mom: 'Call me when you can, it's about Grandpa'", "candidates": null}
+{"id": "ds-notificationTriage-00205", "type": "notificationTriage", "context": "Now: Tue 11:05\nUser location: a cafe\nNotification from Mom: 'Call me when you can, it's about Grandpa'", "candidates": null}
+{"id": "s0-00671", "type": "notificationTriage", "context": "Now: Thu 19:15\nUser location: the gym\nNotification from Bank: 'Unusual sign-in attempt on your account'", "candidates": null}
+{"id": "ds-notificationTriage-00179", "type": "notificationTriage", "context": "Now: Mon 16:55\nUser location: a cafe\nNotification from Calendar: 'Team lunch moved to 1pm tomorrow'", "candidates": null}
+{"id": "s0-00287", "type": "notificationTriage", "context": "Notification from Mom: 'Call me when you can, it's about Grandpa'", "candidates": null}
+{"id": "seed1-s1-01546", "type": "nudgeNow", "context": "Now: Thu 21:42\nUser location: commuting\nTrigger: arrive, place: home\nMemory: User needs to buy coffee beans", "candidates": null}
+{"id": "ds-nudgeNow-00626", "type": "nudgeNow", "context": "Trigger: arrive, place: CVS pharmacy\nMemory: User needs to buy coffee beans", "candidates": null}
+{"id": "ds-nudgeNow-00558", "type": "nudgeNow", "context": "Now: Fri 14:42\nUser location: commuting\nTrigger: time, 7:00 AM Monday\nMemory: User wants to plan Diego's surprise party next weekend", "candidates": null}
+{"id": "ds-nudgeNow-01310", "type": "nudgeNow", "context": "Now: Mon 9:30\nUser location: the gym\nTrigger: arrive, place: CVS pharmacy\nMemory: User needs to buy ibuprofen", "candidates": null}
+{"id": "ds-nudgeNow-00517", "type": "nudgeNow", "context": "Now: Sun 11:55\nUser location: unknown\nTrigger: arrive, place: Mom's house\nMemory: User needs to buy ibuprofen", "candidates": null}
+{"id": "s0-00209", "type": "nudgeNow", "context": "Now: Sun 18:55\nUser location: home\nTrigger: arrive, place: Trader Joe's\nMemory: User needs to buy coffee beans", "candidates": null}
+{"id": "ds-nudgeNow-00853", "type": "nudgeNow", "context": "Now: Fri 18:05\nUser location: unknown\nTrigger: arrive, place: home\nMemory: User needs to buy coffee beans", "candidates": null}
+{"id": "ds-nudgeNow-00995", "type": "nudgeNow", "context": "Now: Sat 15:42\nUser location: the gym\nTrigger: message, from: Kenji\nMemory: User promised to return Tom's charger", "candidates": null}
+{"id": "ds-nudgeNow-01050", "type": "nudgeNow", "context": "Now: Tue 19:15\nUser location: work\nTrigger: arrive, place: Office Depot\nMemory: User needs to buy envelopes", "candidates": null}
+{"id": "nv2-7-00282", "type": "nudgeNow", "context": "Now: Thu 13:00\nUser location: commuting\nTrigger: charger, time: 3:00 PM\nMemory: User's favorite color is green", "candidates": null}
+{"id": "ds-nudgeNow-00231", "type": "nudgeNow", "context": "Now: Sat 23:55\nUser location: work\nTrigger: message, from: Fatima\nMemory: User promised to send Sam the photos from Saturday", "candidates": null}
+{"id": "ds-nudgeNow-00872", "type": "nudgeNow", "context": "Now: Sun 19:42\nUser location: unknown\nTrigger: time, 10:00 PM\nMemory: User wants to email Lena first thing tomorrow morning", "candidates": null}
+{"id": "ds-nudgeNow-00661", "type": "nudgeNow", "context": "Trigger: message, from: Fatima\nMemory: User promised to ask Noah about the lab report", "candidates": null}
+{"id": "ds-nudgeNow-01656", "type": "nudgeNow", "context": "Now: Mon 15:05\nUser location: a cafe\nTrigger: arrive, place: Ace Hardware\nMemory: User needs to buy light bulbs", "candidates": null}
+{"id": "ds-nudgeNow-00126", "type": "nudgeNow", "context": "Now: Thu 11:55\nUser location: the gym\nTrigger: arrive, place: a friend's apartment\nMemory: User needs to buy sticky notes", "candidates": null}
+{"id": "ds-nudgeNow-01032", "type": "nudgeNow", "context": "Now: Tue 7:00\nUser location: work\nTrigger: arrive, place: Trader Joe's\nMemory: User needs to buy printer paper", "candidates": null}
+{"id": "nv2-7-00029", "type": "nudgeNow", "context": "Now: Tue 19:55\nUser location: commuting\nTrigger: arrive, place: Aldi\nMemory: User needs to buy rice", "candidates": null}
+{"id": "nv2-7-00087", "type": "nudgeNow", "context": "Now: Sat 19:30\nUser location: the gym\nTrigger: call, from: Diego\nMemory: User promised to send Diego the photos from Saturday", "candidates": null}
+{"id": "ds-nudgeNow-00378", "type": "nudgeNow", "context": "Now: Fri 16:15\nUser location: home\nTrigger: arrive, place: home\nMemory: User is lactose intolerant", "candidates": null}
+{"id": "ds-nudgeNow-00568", "type": "nudgeNow", "context": "Now: Tue 14:00\nUser location: commuting\nTrigger: arrive, place: the airport\nMemory: User needs to buy dish soap", "candidates": null}
+{"id": "seed1-s1-01823", "type": "nudgeNow", "context": "Now: Sun 7:30\nUser location: commuting\nTrigger: arrive, place: the airport\nMemory: User needs to buy coffee beans", "candidates": null}
+{"id": "ds-nudgeNow-00101", "type": "nudgeNow", "context": "Now: Fri 20:30\nUser location: work\nTrigger: time, 10:00 PM\nMemory: User wants to email Priya first thing tomorrow morning", "candidates": null}
+{"id": "ds-nudgeNow-01542", "type": "nudgeNow", "context": "Now: Tue 21:42\nUser location: commuting\nTrigger: arrive, place: Home Depot\nMemory: User needs to buy light bulbs", "candidates": null}
+{"id": "ds-nudgeNow-01164", "type": "nudgeNow", "context": "Now: Wed 8:00\nUser location: the gym\nTrigger: arrive, place: Office Depot\nMemory: User needs to buy sticky notes", "candidates": null}
+{"id": "ds-nudgeNow-00597", "type": "nudgeNow", "context": "Now: Sat 6:15\nUser location: work\nTrigger: call, from: Diego\nMemory: User promised to ask Diego about the lab report", "candidates": null}
+{"id": "ds-nudgeNow-01499", "type": "nudgeNow", "context": "Now: Mon 12:05\nUser location: unknown\nTrigger: message, from: Omar\nMemory: User promised to pay Omar back $15 for lunch", "candidates": null}
+{"id": "nv2-7-00118", "type": "nudgeNow", "context": "Now: Tue 20:05\nUser location: work\nTrigger: email, from: Aisha\nMemory: User promised to pay Aisha back $15 for lunch", "candidates": null}
+{"id": "ds-nudgeNow-01209", "type": "nudgeNow", "context": "Now: Tue 13:30\nUser location: home\nTrigger: arrive, place: Ace Hardware\nMemory: User needs to buy light bulbs", "candidates": null}
+{"id": "ds-nudgeNow-00052", "type": "nudgeNow", "context": "Trigger: email, from: Lena\nMemory: User promised to return Noah's charger", "candidates": null}
+{"id": "ds-nudgeNow-00881", "type": "nudgeNow", "context": "Now: Sat 7:05\nUser location: the gym\nTrigger: arrive, place: Ace Hardware\nMemory: User needs to buy light bulbs", "candidates": null}
+{"id": "ds-nudgeNow-01041", "type": "nudgeNow", "context": "Now: Sat 21:55\nUser location: work\nTrigger: charger, time: 3:00 PM\nMemory: User's favorite color is green", "candidates": null}
+{"id": "ds-nudgeNow-00349", "type": "nudgeNow", "context": "Now: Sat 20:15\nUser location: home\nTrigger: arrive, place: Stop & Shop\nMemory: User needs to buy bananas", "candidates": null}
+{"id": "ds-nudgeNow-01451", "type": "nudgeNow", "context": "Trigger: arrive, place: the office\nMemory: User needs to buy coffee beans", "candidates": null}
+{"id": "seed1-s1-01857", "type": "nudgeNow", "context": "Now: Wed 16:15\nUser location: commuting\nTrigger: arrive, place: the office\nMemory: User needs to buy printer paper", "candidates": null}
+{"id": "seed1-s1-00207", "type": "nudgeNow", "context": "Now: Wed 14:05\nUser location: unknown\nTrigger: arrive, place: home\nMemory: User needs to buy batteries", "candidates": null}
+{"id": "nv2-7-00224", "type": "nudgeNow", "context": "Now: Tue 10:00\nUser location: commuting\nTrigger: arrive, place: home\nMemory: User is lactose intolerant", "candidates": null}
+{"id": "ds-nudgeNow-01556", "type": "nudgeNow", "context": "Now: Sat 22:30\nUser location: commuting\nTrigger: arrive, place: CVS pharmacy\nMemory: User needs to buy batteries", "candidates": null}
+{"id": "ds-nudgeNow-00657", "type": "nudgeNow", "context": "Now: Sun 7:42\nUser location: work\nTrigger: arrive, place: the gym\nMemory: User needs to buy dish soap", "candidates": null}
+{"id": "ds-nudgeNow-01273", "type": "nudgeNow", "context": "Now: Sun 16:55\nUser location: commuting\nTrigger: arrive, place: Duane Reade\nMemory: User needs to buy contact solution", "candidates": null}
+{"id": "ds-nudgeNow-01425", "type": "nudgeNow", "context": "Now: Fri 9:05\nUser location: work\nTrigger: arrive, place: Office Depot\nMemory: User wants to buy sticky notes on the 15th for Priya's visit", "candidates": null}
+{"id": "ds-nudgeNow-00013", "type": "nudgeNow", "context": "Trigger: message, from: Zoe\nMemory: User promised to return Lena's charger", "candidates": null}
+{"id": "nv2-7-00088", "type": "nudgeNow", "context": "Now: Fri 17:05\nUser location: unknown\nTrigger: arrive, place: a friend's apartment\nMemory: User needs to buy cough drops", "candidates": null}
+{"id": "nv2-7-00190", "type": "nudgeNow", "context": "Now: Sun 9:55\nUser location: a cafe\nTrigger: message, from: Omar\nMemory: User promised to send Lena the photos from Saturday", "candidates": null}
+{"id": "ds-nudgeNow-01440", "type": "nudgeNow", "context": "Now: Wed 18:55\nUser location: commuting\nTrigger: call, from: Maya\nMemory: User promised to send Maya the photos from Saturday", "candidates": null}
+{"id": "ds-nudgeNow-01517", "type": "nudgeNow", "context": "Now: Mon 11:55\nUser location: work\nTrigger: arrive, place: Whole Foods\nMemory: User needs to buy batteries", "candidates": null}
+{"id": "ds-nudgeNow-01550", "type": "nudgeNow", "context": "Now: Mon 14:00\nUser location: unknown\nTrigger: arrive, place: Key Food\nMemory: User wants to buy rice on payday for Noah's visit", "candidates": null}
+{"id": "ds-nudgeNow-00094", "type": "nudgeNow", "context": "Now: Fri 15:55\nUser location: a cafe\nTrigger: arrive, place: Aldi\nMemory: User needs to buy bananas", "candidates": null}
+{"id": "nv2-7-00297", "type": "nudgeNow", "context": "Now: Thu 7:30\nUser location: home\nTrigger: message, from: Noah\nMemory: User promised to return Kenji's charger", "candidates": null}
+{"id": "ds-nudgeNow-01699", "type": "nudgeNow", "context": "Now: Mon 7:30\nUser location: the gym\nTrigger: email, from: Sam\nMemory: User promised to pay Sam back $15 for lunch", "candidates": null}
+{"id": "ds-nudgeNow-01172", "type": "nudgeNow", "context": "Now: Fri 9:42\nUser location: unknown\nTrigger: message, from: Zoe\nMemory: User promised to return Noah's charger", "candidates": null}
+{"id": "s0-00520", "type": "rememberOrNot", "context": "Now: Sat 12:00\nUser location: the gym\nUser: I moved to Austin last month.", "candidates": null}
+{"id": "s0-00863", "type": "rememberOrNot", "context": "Now: Thu 23:55\nUser location: work\nUser: I'm vegetarian now.", "candidates": null}
+{"id": "s0-01017", "type": "rememberOrNot", "context": "Now: Wed 20:05\nUser location: the gym\nUser: My partner's name is Jordan.", "candidates": null}
+{"id": "seed1-s1-00479", "type": "rememberOrNot", "context": "Now: Sun 12:00\nUser location: home\nUser: My partner's name is Jordan.", "candidates": null}
+{"id": "s0-01425", "type": "rememberOrNot", "context": "Now: Wed 7:15\nUser location: a cafe\nUser: I work at Northwind as a nurse.", "candidates": null}
+{"id": "seed1-s1-00319", "type": "rememberOrNot", "context": "Now: Wed 11:42\nUser location: commuting\nUser: Can you repeat that?", "candidates": null}
+{"id": "s0-00532", "type": "rememberOrNot", "context": "Now: Mon 19:15\nUser location: home\nUser: Ok sounds good", "candidates": null}
+{"id": "s0-00851", "type": "rememberOrNot", "context": "Now: Fri 7:55\nUser location: the gym\nUser: I moved to Austin last month.", "candidates": null}
+{"id": "ds-rememberOrNot-00344", "type": "rememberOrNot", "context": "Now: Mon 9:55\nUser location: commuting\nUser: Lena's birthday is March 4th.", "candidates": null}
+{"id": "s0-01228", "type": "rememberOrNot", "context": "Now: Mon 19:15\nUser location: commuting\nUser: I'm out of coffee beans.", "candidates": null}
+{"id": "s0-00916", "type": "rememberOrNot", "context": "Now: Sun 15:05\nUser location: home\nUser: Can you repeat that?", "candidates": null}
+{"id": "s0-00950", "type": "rememberOrNot", "context": "Now: Mon 14:42\nUser location: unknown\nUser: lol", "candidates": null}
+{"id": "s0-00737", "type": "rememberOrNot", "context": "Now: Wed 18:55\nUser location: home\nUser: Ok sounds good", "candidates": null}
+{"id": "ds-rememberOrNot-00043", "type": "rememberOrNot", "context": "Now: Fri 7:55\nUser location: home\nUser: I'm allergic to shellfish.", "candidates": null}
+{"id": "s0-00939", "type": "rememberOrNot", "context": "Now: Sat 16:05\nUser location: unknown\nUser: I'm at the airport until 5, then heading home", "candidates": null}
+{"id": "s0-01094", "type": "rememberOrNot", "context": "Now: Sat 19:05\nUser location: work\nUser: My partner's name is Jordan.", "candidates": null}
+{"id": "seed1-s1-00649", "type": "rememberOrNot", "context": "Now: Thu 20:00\nUser location: unknown\nUser: I'm out of coffee beans.", "candidates": null}
+{"id": "seed1-s1-01163", "type": "rememberOrNot", "context": "Now: Wed 7:30\nUser location: commuting\nUser: Ok sounds good", "candidates": null}
+{"id": "s0-00428", "type": "rememberOrNot", "context": "Now: Sat 13:15\nUser location: work\nUser: I'm vegetarian now.", "candidates": null}
+{"id": "s0-00098", "type": "rememberOrNot", "context": "Now: Mon 8:15\nUser location: commuting\nUser: I'm at Whole Foods until 5, then heading home", "candidates": null}
+{"id": "ds-rememberOrNot-00094", "type": "rememberOrNot", "context": "Now: Fri 16:00\nUser location: a cafe\nUser: I moved to Austin last month.", "candidates": null}
+{"id": "ds-rememberOrNot-00108", "type": "rememberOrNot", "context": "Now: Tue 12:55\nUser location: home\nUser: I'm at CVS pharmacy until 5, then heading home", "candidates": null}
+{"id": "s0-00796", "type": "rememberOrNot", "context": "Now: Sun 16:55\nUser location: unknown\nUser: I'm vegetarian now.", "candidates": null}
+{"id": "seed1-s1-00660", "type": "rememberOrNot", "context": "Now: Sun 10:05\nUser location: commuting\nUser: I work at Northwind as a nurse.", "candidates": null}
+{"id": "ds-rememberOrNot-00257", "type": "rememberOrNot", "context": "Now: Sat 8:15\nUser location: home\nUser: Ok sounds good", "candidates": null}
+{"id": "s0-01848", "type": "rememberOrNot", "context": "Now: Thu 17:00\nUser location: the gym\nUser: Lena's birthday is March 4th.", "candidates": null}
+{"id": "s0-00331", "type": "rememberOrNot", "context": "Now: Tue 12:42\nUser location: work\nUser: Ok sounds good", "candidates": null}
+{"id": "s0-00808", "type": "rememberOrNot", "context": "User: I'm out of coffee beans.", "candidates": null}
+{"id": "ds-rememberOrNot-00118", "type": "rememberOrNot", "context": "Now: Wed 15:55\nUser location: unknown\nUser: I'm at Trader Joe's until 5, then heading home", "candidates": null}
+{"id": "ds-rememberOrNot-00050", "type": "rememberOrNot", "context": "Now: Wed 10:15\nUser location: home\nUser: My partner's name is Jordan.", "candidates": null}
+{"id": "ds-rememberOrNot-00128", "type": "rememberOrNot", "context": "Now: Sat 12:55\nUser location: unknown\nUser: Can you repeat that?", "candidates": null}
+{"id": "seed1-s1-00625", "type": "rememberOrNot", "context": "Now: Tue 11:55\nUser location: work\nUser: I'm at Trader Joe's until 5, then heading home", "candidates": null}
+{"id": "s0-00440", "type": "rememberOrNot", "context": "Now: Tue 17:55\nUser location: the gym\nUser: Ok sounds good", "candidates": null}
+{"id": "s0-00051", "type": "rememberOrNot", "context": "Now: Sun 6:42\nUser location: the gym\nUser: I'm allergic to shellfish.", "candidates": null}
+{"id": "seed1-s1-01566", "type": "rememberOrNot", "context": "Now: Wed 21:05\nUser location: a cafe\nUser: Lena's birthday is March 4th.", "candidates": null}
+{"id": "s0-01705", "type": "rememberOrNot", "context": "Now: Tue 7:30\nUser location: commuting\nUser: I'm vegetarian now.", "candidates": null}
+{"id": "s0-01480", "type": "rememberOrNot", "context": "User: Can you repeat that?", "candidates": null}
+{"id": "seed1-s1-00433", "type": "rememberOrNot", "context": "Now: Fri 23:55\nUser location: unknown\nUser: lol", "candidates": null}
+{"id": "s0-00146", "type": "rememberOrNot", "context": "Now: Sun 20:00\nUser location: a cafe\nUser: My partner's name is Jordan.", "candidates": null}
+{"id": "s0-01569", "type": "rememberOrNot", "context": "Now: Wed 6:30\nUser location: home\nUser: Lena's birthday is March 4th.", "candidates": null}
+{"id": "seed1-s1-01323", "type": "rememberOrNot", "context": "Now: Thu 17:30\nUser location: work\nUser: I'm out of coffee beans.", "candidates": null}
+{"id": "seed1-s1-01252", "type": "rememberOrNot", "context": "Now: Mon 6:05\nUser location: work\nUser: Can you repeat that?", "candidates": null}
+{"id": "s0-00576", "type": "rememberOrNot", "context": "Now: Thu 22:00\nUser location: work\nUser: I work at Northwind as a nurse.", "candidates": null}
+{"id": "s0-01579", "type": "rememberOrNot", "context": "Now: Sat 6:05\nUser location: home\nUser: I'm vegetarian now.", "candidates": null}
+{"id": "ds-rememberOrNot-00250", "type": "rememberOrNot", "context": "Now: Sun 22:00\nUser location: work\nUser: Lena's birthday is March 4th.", "candidates": null}
+{"id": "seed1-s1-00957", "type": "rememberOrNot", "context": "Now: Wed 8:55\nUser location: unknown\nUser: I'm at Mom's house until 5, then heading home", "candidates": null}
+{"id": "s0-01005", "type": "rememberOrNot", "context": "Now: Mon 22:05\nUser location: unknown\nUser: What's the weather like?", "candidates": null}
+{"id": "s0-01051", "type": "rememberOrNot", "context": "Now: Sun 23:55\nUser location: commuting\nUser: I'm vegetarian now.", "candidates": null}
+{"id": "s0-00027", "type": "rememberOrNot", "context": "User: What's the weather like?", "candidates": null}
+{"id": "s0-00157", "type": "rememberOrNot", "context": "Now: Sun 13:42\nUser location: unknown\nUser: Lena's birthday is March 4th.", "candidates": null}
+{"id": "s0-00372", "type": "route", "context": "Now: Mon 17:30\nUser location: unknown\nNetwork: offline\nUser: Rephrase this nicer: 'send it now'", "candidates": null}
+{"id": "hf-clinc-route-358", "type": "route", "context": "Network: online\nUser: Tell my bank that i'll be in canada this weekend", "candidates": null}
+{"id": "hf-clinc-route-169", "type": "route", "context": "Network: online\nUser: Are there any transaction fees associated with my amex card if i am in the uk", "candidates": null}
+{"id": "s0-00935", "type": "route", "context": "Now: Sat 21:00\nUser location: home\nNetwork: online\nUser: What's Kenji's number?", "candidates": null}
+{"id": "s0-00436", "type": "route", "context": "Now: Fri 12:30\nUser location: home\nNetwork: offline\nUser: Good morning", "candidates": null}
+{"id": "s0-00094", "type": "route", "context": "Now: Mon 21:05\nUser location: commuting\nNetwork: offline\nUser: What's on my calendar this afternoon?", "candidates": null}
+{"id": "s0-00722", "type": "route", "context": "Network: online\nUser: Remind me to submit the expense report in 20 minutes", "candidates": null}
+{"id": "ds-route-00019", "type": "route", "context": "Now: Fri 23:30\nUser location: unknown\nNetwork: online\nUser: Text Lena that I'm running late", "candidates": null}
+{"id": "s0-00269", "type": "route", "context": "Now: Fri 19:42\nUser location: work\nNetwork: online\nUser: Text Maya that I'm running late", "candidates": null}
+{"id": "ds-route-00071", "type": "route", "context": "Now: Sun 6:05\nUser location: commuting\nNetwork: offline\nUser: Plan a 5-day Lisbon itinerary for two on a mid budget with one rest day", "candidates": null}
+{"id": "s0-00236", "type": "route", "context": "Now: Sun 15:15\nUser location: work\nNetwork: online\nUser: Remind me to submit the expense report next Monday", "candidates": null}
+{"id": "s0-00596", "type": "route", "context": "Now: Sat 6:30\nUser location: commuting\nNetwork: online\nUser: What's Kenji's number?", "candidates": null}
+{"id": "s0-00643", "type": "route", "context": "Now: Tue 22:00\nUser location: a cafe\nNetwork: offline\nUser: Change that one", "candidates": null}
+{"id": "hf-massive-route-301", "type": "route", "context": "Network: offline\nUser: Skip to the next episode in this podcast", "candidates": null}
+{"id": "s0-00316", "type": "route", "context": "Now: Tue 15:05\nUser location: the gym\nNetwork: online\nUser: Remind me to book the vet in 20 minutes", "candidates": null}
+{"id": "hf-clinc-route-156", "type": "route", "context": "Network: offline\nUser: Add this track to my rock playlist", "candidates": null}
+{"id": "s0-00471", "type": "route", "context": "Now: Tue 22:05\nUser location: work\nNetwork: online\nUser: Rephrase this nicer: 'send it now'", "candidates": null}
+{"id": "ds-route-00356", "type": "route", "context": "Now: Sun 6:55\nUser location: unknown\nNetwork: online\nUser: Text Priya that I'm running late", "candidates": null}
+{"id": "s0-00980", "type": "route", "context": "Now: Mon 21:30\nUser location: home\nNetwork: online\nUser: Text Fatima that I'm running late", "candidates": null}
+{"id": "s0-00189", "type": "route", "context": "Now: Fri 11:15\nUser location: home\nNetwork: offline\nUser: What's on my calendar tomorrow?", "candidates": null}
+{"id": "hf-massive-route-415", "type": "route", "context": "Network: online\nUser: Does byron's supports takeaways", "candidates": null}
+{"id": "hf-massive-route-475", "type": "route", "context": "Network: online\nUser: Are there any accidents on the four hundred and five", "candidates": null}
+{"id": "hf-snips-route-226", "type": "route", "context": "Network: offline\nUser: I'd like to eat with a party of nine in Snapfinger PA", "candidates": null}
+{"id": "hf-clinc-route-265", "type": "route", "context": "Network: offline\nUser: Tell me what my calendar looks like for march 12th", "candidates": null}
+{"id": "s0-00970", "type": "route", "context": "Now: Wed 17:05\nUser location: unknown\nNetwork: offline\nUser: Text Diego that I'm running late", "candidates": null}
+{"id": "s0-00901", "type": "route", "context": "Now: Wed 8:05\nUser location: home\nNetwork: offline\nUser: Plan a 5-day Lisbon itinerary for two on a mid budget with one rest day", "candidates": null}
+{"id": "hf-massive-route-266", "type": "route", "context": "Network: online\nUser: I want the email to be sent to my new email address a. b. c. at gmail dot com", "candidates": null}
+{"id": "hf-clinc-route-261", "type": "route", "context": "Network: offline\nUser: Show me the transaction on mcdonald", "candidates": null}
+{"id": "s0-00393", "type": "route", "context": "Now: Sun 11:00\nUser location: home\nNetwork: online\nUser: Text Priya that I'm running late", "candidates": null}
+{"id": "s0-01035", "type": "route", "context": "Now: Sat 19:55\nUser location: the gym\nNetwork: offline\nUser: Good morning", "candidates": null}
+{"id": "s0-00058", "type": "route", "context": "Network: offline\nUser: What's on my calendar Friday?", "candidates": null}
+{"id": "hf-clinc-route-366", "type": "route", "context": "Network: online\nUser: I want you to quit the action", "candidates": null}
+{"id": "s0-00958", "type": "route", "context": "Now: Wed 12:30\nUser location: the gym\nNetwork: offline\nUser: What's on my calendar this afternoon?", "candidates": null}
+{"id": "s0-00711", "type": "route", "context": "Now: Thu 23:15\nUser location: the gym\nNetwork: offline\nUser: Compare index funds vs. paying down my 6% student loan and recommend a plan", "candidates": null}
+{"id": "hf-snips-route-5", "type": "route", "context": "Network: offline\nUser: Is there snowfall nearby AMerican Samoa", "candidates": null}
+{"id": "ds-route-00124", "type": "route", "context": "Network: offline\nUser: What's on my calendar tomorrow?", "candidates": null}
+{"id": "s0-00792", "type": "route", "context": "Network: offline\nUser: Text Sam that I'm running late", "candidates": null}
+{"id": "s0-00350", "type": "route", "context": "Now: Fri 10:42\nUser location: the gym\nNetwork: offline\nUser: Say hi to me in Spanish", "candidates": null}
+{"id": "hf-clinc-route-131", "type": "route", "context": "Network: online\nUser: Find out for me what kind of benefits military veterans have after retirement", "candidates": null}
+{"id": "s0-00403", "type": "route", "context": "Now: Fri 12:15\nUser location: the gym\nNetwork: offline\nUser: Remind me to pay rent in 20 minutes", "candidates": null}
+{"id": "hf-clinc-route-287", "type": "route", "context": "Network: online\nUser: Can you check if i've added an item to throw out the carcasses on my todo list", "candidates": null}
+{"id": "hf-clinc-route-301", "type": "route", "context": "Network: online\nUser: I need to book a car rental in boston", "candidates": null}
+{"id": "hf-massive-route-138", "type": "route", "context": "Network: online\nUser: Send an invitation email to marilia", "candidates": null}
+{"id": "s0-00293", "type": "route", "context": "Now: Sat 22:05\nUser location: commuting\nNetwork: online\nUser: Thanks!", "candidates": null}
+{"id": "s0-01013", "type": "route", "context": "Now: Thu 19:42\nUser location: unknown\nNetwork: offline\nUser: Remind me to book the vet on Friday at noon", "candidates": null}
+{"id": "s0-00023", "type": "route", "context": "Now: Tue 7:55\nUser location: work\nNetwork: online\nUser: What's Tom's number?", "candidates": null}
+{"id": "hf-massive-route-259", "type": "route", "context": "Network: offline\nUser: Post comment from my phone on facebook", "candidates": null}
+{"id": "s0-00825", "type": "route", "context": "Now: Sun 11:00\nUser location: commuting\nNetwork: offline\nUser: Compare index funds vs. paying down my 6% student loan and recommend a plan", "candidates": null}
+{"id": "s0-00247", "type": "route", "context": "Now: Mon 6:30\nUser location: a cafe\nNetwork: online\nUser: What's on my calendar tomorrow?", "candidates": null}
+{"id": "s0-00880", "type": "route", "context": "Now: Tue 20:30\nUser location: unknown\nNetwork: online\nUser: Say hi to me in Spanish", "candidates": null}
+{"id": "ds-sensitivity-00034", "type": "sensitivity", "context": "Now: Fri 14:15\nUser location: home\nUser: Plan a weekend trip to the coast", "candidates": null}
+{"id": "s0-00878", "type": "sensitivity", "context": "Now: Fri 10:55\nUser location: home\nUser: Plan a weekend trip to the coast", "candidates": null}
+{"id": "s0-00211", "type": "sensitivity", "context": "Now: Thu 19:05\nUser location: a cafe\nUser: Summarize my therapy notes from Tuesday", "candidates": null}
+{"id": "ds-sensitivity-00031", "type": "sensitivity", "context": "Now: Mon 16:00\nUser location: the gym\nUser: Explain how compound interest works", "candidates": null}
+{"id": "s0-00234", "type": "sensitivity", "context": "Now: Tue 23:05\nUser location: home\nUser: Plan a weekend trip to the coast", "candidates": null}
+{"id": "ds-sensitivity-00068", "type": "sensitivity", "context": "Now: Mon 19:00\nUser location: unknown\nUser: Write a toast for [PERSON_1]'s wedding", "candidates": null}
+{"id": "s0-00755", "type": "sensitivity", "context": "Now: Tue 7:00\nUser location: unknown\nUser: Write a toast for [PERSON_1]'s wedding", "candidates": null}
+{"id": "ds-sensitivity-00248", "type": "sensitivity", "context": "Now: Thu 12:55\nUser location: unknown\nUser: Summarize my therapy notes from Tuesday", "candidates": null}
+{"id": "s0-00256", "type": "sensitivity", "context": "Now: Fri 22:15\nUser location: work\nUser: What's my bank PIN again?", "candidates": null}
+{"id": "s0-00348", "type": "sensitivity", "context": "Now: Sat 21:05\nUser location: home\nUser: Write a toast for [PERSON_1]'s wedding", "candidates": null}
+{"id": "s0-00933", "type": "sensitivity", "context": "Now: Wed 20:15\nUser location: unknown\nUser: Plan a weekend trip to the coast", "candidates": null}
+{"id": "s0-00245", "type": "sensitivity", "context": "Now: Tue 19:00\nUser location: a cafe\nUser: What's my bank PIN again?", "candidates": null}
+{"id": "s0-00889", "type": "sensitivity", "context": "Now: Mon 16:55\nUser location: the gym\nUser: Plan a weekend trip to the coast", "candidates": null}
+{"id": "s0-00900", "type": "sensitivity", "context": "Now: Sat 12:15\nUser location: unknown\nUser: Explain how compound interest works", "candidates": null}
+{"id": "s0-00999", "type": "sensitivity", "context": "Now: Mon 14:15\nUser location: a cafe\nUser: What's my bank PIN again?", "candidates": null}
+{"id": "s0-00743", "type": "sensitivity", "context": "Now: Sun 23:55\nUser location: a cafe\nUser: Plan a weekend trip to the coast", "candidates": null}
+{"id": "s0-00128", "type": "sensitivity", "context": "Now: Sat 9:05\nUser location: unknown\nUser: Plan a weekend trip to the coast", "candidates": null}
+{"id": "s0-00457", "type": "sensitivity", "context": "Now: Tue 18:42\nUser location: home\nUser: Summarize my therapy notes from Tuesday", "candidates": null}
+{"id": "s0-00833", "type": "sensitivity", "context": "Now: Mon 18:15\nUser location: work\nUser: Summarize my therapy notes from Tuesday", "candidates": null}
+{"id": "s0-00481", "type": "sensitivity", "context": "Now: Wed 16:00\nUser location: work\nUser: What's my bank PIN again?", "candidates": null}
+{"id": "ds-sensitivity-00107", "type": "sensitivity", "context": "Now: Mon 13:42\nUser location: a cafe\nUser: Write a toast for [PERSON_1]'s wedding", "candidates": null}
+{"id": "s0-00314", "type": "sensitivity", "context": "User: Plan a weekend trip to the coast", "candidates": null}
+{"id": "s0-00279", "type": "sensitivity", "context": "Now: Sun 23:42\nUser location: home\nUser: Explain how compound interest works", "candidates": null}
+{"id": "ds-sensitivity-00220", "type": "sensitivity", "context": "Now: Sat 7:05\nUser location: home\nUser: Interpret my blood test: LDL 190, A1C 7.1", "candidates": null}
+{"id": "s0-00303", "type": "sensitivity", "context": "Now: Thu 12:30\nUser location: a cafe\nUser: Summarize my therapy notes from Tuesday", "candidates": null}
+{"id": "ds-sensitivity-00228", "type": "sensitivity", "context": "Now: Thu 8:00\nUser location: commuting\nUser: Explain how compound interest works", "candidates": null}
+{"id": "s0-00720", "type": "sensitivity", "context": "Now: Sat 6:00\nUser location: the gym\nUser: Summarize my therapy notes from Tuesday", "candidates": null}
+{"id": "s0-00223", "type": "sensitivity", "context": "Now: Sat 22:00\nUser location: unknown\nUser: Interpret my blood test: LDL 190, A1C 7.1", "candidates": null}
+{"id": "s0-00630", "type": "sensitivity", "context": "Now: Sun 12:15\nUser location: work\nUser: What's my bank PIN again?", "candidates": null}
+{"id": "s0-00570", "type": "sensitivity", "context": "Now: Fri 23:15\nUser location: the gym\nUser: Write a toast for [PERSON_1]'s wedding", "candidates": null}
+{"id": "s0-00140", "type": "sensitivity", "context": "Now: Sun 16:15\nUser location: the gym\nUser: Write a toast for [PERSON_1]'s wedding", "candidates": null}
+{"id": "s0-01022", "type": "sensitivity", "context": "Now: Fri 11:30\nUser location: home\nUser: Explain how compound interest works", "candidates": null}
+{"id": "s0-00381", "type": "sensitivity", "context": "Now: Fri 14:55\nUser location: commuting\nUser: Write a toast for [PERSON_1]'s wedding", "candidates": null}
+{"id": "s0-00514", "type": "sensitivity", "context": "Now: Fri 11:05\nUser location: unknown\nUser: Plan a weekend trip to the coast", "candidates": null}
+{"id": "s0-00802", "type": "sensitivity", "context": "Now: Wed 22:05\nUser location: unknown\nUser: Plan a weekend trip to the coast", "candidates": null}
+{"id": "s0-00823", "type": "sensitivity", "context": "Now: Fri 12:55\nUser location: work\nUser: What's my bank PIN again?", "candidates": null}
+{"id": "s0-00175", "type": "sensitivity", "context": "Now: Mon 18:30\nUser location: a cafe\nUser: What's my bank PIN again?", "candidates": null}
+{"id": "s0-01045", "type": "sensitivity", "context": "Now: Wed 8:30\nUser location: commuting\nUser: What's my bank PIN again?", "candidates": null}
+{"id": "s0-00979", "type": "sensitivity", "context": "Now: Sat 6:00\nUser location: the gym\nUser: Interpret my blood test: LDL 190, A1C 7.1", "candidates": null}
+{"id": "s0-01033", "type": "sensitivity", "context": "Now: Mon 6:15\nUser location: home\nUser: Summarize my therapy notes from Tuesday", "candidates": null}
+{"id": "s0-00526", "type": "sensitivity", "context": "Now: Wed 11:30\nUser location: home\nUser: Summarize my therapy notes from Tuesday", "candidates": null}
+{"id": "s0-00199", "type": "sensitivity", "context": "Now: Mon 13:05\nUser location: unknown\nUser: Explain how compound interest works", "candidates": null}
+{"id": "ds-sensitivity-00216", "type": "sensitivity", "context": "Now: Mon 11:15\nUser location: the gym\nUser: What's my bank PIN again?", "candidates": null}
+{"id": "s0-00709", "type": "sensitivity", "context": "Now: Fri 15:55\nUser location: the gym\nUser: What's my bank PIN again?", "candidates": null}
+{"id": "s0-00370", "type": "sensitivity", "context": "Now: Thu 10:30\nUser location: commuting\nUser: Explain how compound interest works", "candidates": null}
+{"id": "ds-sensitivity-00038", "type": "sensitivity", "context": "Now: Sun 21:42\nUser location: unknown\nUser: Summarize my therapy notes from Tuesday", "candidates": null}
+{"id": "s0-00187", "type": "sensitivity", "context": "User: Explain how compound interest works", "candidates": null}
+{"id": "s0-00664", "type": "sensitivity", "context": "Now: Sun 10:00\nUser location: commuting\nUser: Write a toast for [PERSON_1]'s wedding", "candidates": null}
+{"id": "ds-sensitivity-00027", "type": "sensitivity", "context": "Now: Thu 20:00\nUser location: the gym\nUser: What's my bank PIN again?", "candidates": null}
+{"id": "s0-00401", "type": "sensitivity", "context": "Now: Thu 21:15\nUser location: a cafe\nUser: Explain how compound interest works", "candidates": null}
+{"id": "ds-timing-00754", "type": "timing", "context": "Now: Thu 10:05\nUser location: home\nUser: Every month remind me to pay rent", "candidates": null}
+{"id": "ds-timing-00286", "type": "timing", "context": "Now: Thu 13:05\nUser location: the gym\nUser: When I get to home remind me to call the plumber", "candidates": null}
+{"id": "s0-00044", "type": "timing", "context": "Now: Fri 10:15\nUser location: home\nUser: When I get to Trader Joe's remind me to pay rent", "candidates": null}
+{"id": "s0-00801", "type": "timing", "context": "Now: Mon 11:30\nUser location: work\nUser: Remind me to call the plumber tomorrow at 9am", "candidates": null}
+{"id": "ds-timing-00361", "type": "timing", "context": "Now: Sun 8:42\nUser location: work\nUser: When I get to the office remind me to pay rent", "candidates": null}
+{"id": "s0-00391", "type": "timing", "context": "Now: Sun 18:05\nUser location: work\nUser: When I get to the office remind me to submit the expense report", "candidates": null}
+{"id": "ds-timing-00165", "type": "timing", "context": "Now: Tue 20:30\nUser location: home\nUser: Every weekday remind me to pay rent", "candidates": null}
+{"id": "ds-timing-00829", "type": "timing", "context": "Now: Thu 9:05\nUser location: unknown\nUser: When I get to the gym remind me to take my vitamins", "candidates": null}
+{"id": "ds-timing-00172", "type": "timing", "context": "Now: Tue 23:42\nUser location: a cafe\nUser: Remind me to take my vitamins in 20 minutes", "candidates": null}
+{"id": "ds-timing-00770", "type": "timing", "context": "Now: Thu 17:30\nUser location: the gym\nUser: When I get to the airport remind me to submit the expense report", "candidates": null}
+{"id": "ds-timing-00184", "type": "timing", "context": "Now: Sat 6:15\nUser location: work\nUser: Remind me to submit the expense report now", "candidates": null}
+{"id": "ds-timing-00597", "type": "timing", "context": "Now: Mon 12:05\nUser location: a cafe\nUser: When I get to the office remind me to take my vitamins", "candidates": null}
+{"id": "ds-timing-00259", "type": "timing", "context": "Now: Mon 16:15\nUser location: home\nUser: When I get to the office remind me to pay rent", "candidates": null}
+{"id": "s0-00547", "type": "timing", "context": "User: Remind me to call the plumber tomorrow at 9am", "candidates": null}
+{"id": "ds-timing-00149", "type": "timing", "context": "Now: Fri 19:00\nUser location: unknown\nUser: Remind me to call the plumber in 20 minutes", "candidates": null}
+{"id": "ds-timing-00683", "type": "timing", "context": "Now: Tue 18:55\nUser location: unknown\nUser: Every month remind me to submit the expense report", "candidates": null}
+{"id": "ds-timing-00865", "type": "timing", "context": "Now: Wed 9:15\nUser location: commuting\nUser: Remind me to book the vet now", "candidates": null}
+{"id": "ds-timing-00173", "type": "timing", "context": "Now: Thu 8:42\nUser location: a cafe\nUser: Remind me to call the plumber in 20 minutes", "candidates": null}
+{"id": "ds-timing-00670", "type": "timing", "context": "User: Remind me to submit the expense report on Friday at noon", "candidates": null}
+{"id": "ds-timing-00132", "type": "timing", "context": "Now: Tue 11:05\nUser location: work\nUser: When I get to Mom's house remind me to submit the expense report", "candidates": null}
+{"id": "s0-00255", "type": "timing", "context": "User: When I get to Mom's house remind me to submit the expense report", "candidates": null}
+{"id": "ds-timing-00673", "type": "timing", "context": "Now: Sat 21:42\nUser location: commuting\nUser: When I get to the office remind me to pay rent", "candidates": null}
+{"id": "s0-00525", "type": "timing", "context": "Now: Mon 17:55\nUser location: the gym\nUser: Remind me to pay rent tomorrow at 9am", "candidates": null}
+{"id": "ds-timing-00444", "type": "timing", "context": "Now: Fri 11:42\nUser location: unknown\nUser: Remind me to take my vitamins tomorrow at 9am", "candidates": null}
+{"id": "s0-00685", "type": "timing", "context": "Now: Thu 15:15\nUser location: a cafe\nUser: When I get to Trader Joe's remind me to call the plumber", "candidates": null}
+{"id": "ds-timing-00727", "type": "timing", "context": "Now: Tue 23:05\nUser location: a cafe\nUser: Every weekday remind me to take my vitamins", "candidates": null}
+{"id": "ds-timing-00731", "type": "timing", "context": "Now: Sun 23:05\nUser location: home\nUser: Remind me to call the plumber tomorrow at 9am", "candidates": null}
+{"id": "ds-timing-00061", "type": "timing", "context": "User: When I get to the airport remind me to take my vitamins", "candidates": null}
+{"id": "ds-timing-00858", "type": "timing", "context": "Now: Mon 10:30\nUser location: commuting\nUser: Every weekday remind me to submit the expense report", "candidates": null}
+{"id": "ds-timing-00105", "type": "timing", "context": "Now: Wed 12:55\nUser location: unknown\nUser: When I get to home remind me to book the vet", "candidates": null}
+{"id": "s0-00400", "type": "timing", "context": "Now: Mon 14:00\nUser location: the gym\nUser: Remind me to water the plants on Friday at noon", "candidates": null}
+{"id": "ds-timing-00037", "type": "timing", "context": "Now: Sat 6:42\nUser location: unknown\nUser: When I get to the gym remind me to book the vet", "candidates": null}
+{"id": "ds-timing-00289", "type": "timing", "context": "Now: Wed 8:55\nUser location: unknown\nUser: Remind me to book the vet in 20 minutes", "candidates": null}
+{"id": "ds-timing-00265", "type": "timing", "context": "Now: Mon 12:15\nUser location: the gym\nUser: Remind me to take my vitamins now", "candidates": null}
+{"id": "ds-timing-00004", "type": "timing", "context": "Now: Tue 7:15\nUser location: unknown\nUser: Remind me to water the plants at 8pm", "candidates": null}
+{"id": "ds-timing-00158", "type": "timing", "context": "Now: Sat 19:05\nUser location: commuting\nUser: Remind me to water the plants now", "candidates": null}
+{"id": "ds-timing-00553", "type": "timing", "context": "Now: Sat 7:00\nUser location: commuting\nUser: Remind me to book the vet now", "candidates": null}
+{"id": "ds-timing-00305", "type": "timing", "context": "Now: Thu 20:30\nUser location: commuting\nUser: Every weekday remind me to call the plumber", "candidates": null}
+{"id": "s0-00290", "type": "timing", "context": "Now: Tue 19:55\nUser location: unknown\nUser: When I get to the office remind me to take my vitamins", "candidates": null}
+{"id": "ds-timing-00082", "type": "timing", "context": "Now: Thu 11:42\nUser location: the gym\nUser: Remind me to take my vitamins now", "candidates": null}
+{"id": "ds-timing-00297", "type": "timing", "context": "Now: Mon 8:30\nUser location: commuting\nUser: Remind me to call the plumber on Friday at noon", "candidates": null}
+{"id": "s0-00719", "type": "timing", "context": "Now: Tue 12:05\nUser location: unknown\nUser: Remind me to call the plumber on Friday at noon", "candidates": null}
+{"id": "ds-timing-00618", "type": "timing", "context": "Now: Thu 11:00\nUser location: commuting\nUser: Remind me to take my vitamins in 20 minutes", "candidates": null}
+{"id": "ds-timing-00609", "type": "timing", "context": "Now: Sat 11:00\nUser location: a cafe\nUser: Every weekday remind me to pay rent", "candidates": null}
+{"id": "ds-timing-00640", "type": "timing", "context": "Now: Wed 21:05\nUser location: a cafe\nUser: When I get to home remind me to book the vet", "candidates": null}
+{"id": "ds-timing-00114", "type": "timing", "context": "Now: Mon 21:15\nUser location: a cafe\nUser: Remind me to call the plumber at 8pm", "candidates": null}
+{"id": "ds-timing-00757", "type": "timing", "context": "Now: Wed 10:15\nUser location: unknown\nUser: Remind me to water the plants at 8pm", "candidates": null}
+{"id": "ds-timing-00416", "type": "timing", "context": "Now: Sun 15:05\nUser location: home\nUser: Remind me to water the plants at 8pm", "candidates": null}
+{"id": "ds-timing-00226", "type": "timing", "context": "Now: Sat 7:55\nUser location: the gym\nUser: Remind me to submit the expense report at 8pm", "candidates": null}
+{"id": "ds-timing-00433", "type": "timing", "context": "Now: Mon 7:42\nUser location: commuting\nUser: Remind me to water the plants now", "candidates": null}
+{"id": "s0-00361", "type": "toolChoice", "context": "User: When is my next meeting with Priya?", "candidates": null}
+{"id": "s0-00506", "type": "toolChoice", "context": "Now: Mon 9:42\nUser location: work\nUser: Schedule lunch with Sam at 8pm", "candidates": null}
+{"id": "s0-00881", "type": "toolChoice", "context": "Now: Wed 16:15\nUser location: unknown\nUser: Schedule lunch with Sam tonight", "candidates": null}
+{"id": "s0-00143", "type": "toolChoice", "context": "Now: Thu 7:00\nUser location: work\nUser: What's Fatima's email address?", "candidates": null}
+{"id": "s0-00413", "type": "toolChoice", "context": "Now: Tue 14:55\nUser location: the gym\nUser: Remind me to take my vitamins in 20 minutes", "candidates": null}
+{"id": "s0-00351", "type": "toolChoice", "context": "Now: Tue 23:42\nUser location: commuting\nUser: Tell Diego I'll be there in 12 minutes", "candidates": null}
+{"id": "hf-massive-toolChoice-2", "type": "toolChoice", "context": "User: Am i free friday afternoon", "candidates": null}
+{"id": "ds-toolChoice-00436", "type": "toolChoice", "context": "Now: Tue 7:30\nUser location: work\nUser: What did I say Aisha's favorite restaurant was?", "candidates": null}
+{"id": "s0-00404", "type": "toolChoice", "context": "Now: Thu 20:05\nUser location: unknown\nUser: Schedule lunch with Zoe in 20 minutes", "candidates": null}
+{"id": "hf-massive-toolChoice-141", "type": "toolChoice", "context": "User: Set reminder at three p. m.", "candidates": null}
+{"id": "s0-00826", "type": "toolChoice", "context": "Now: Tue 13:55\nUser location: home\nUser: Tell Sam I'll be there in 14 minutes", "candidates": null}
+{"id": "s0-00836", "type": "toolChoice", "context": "Now: Sun 14:05\nUser location: unknown\nUser: Schedule lunch with Aisha in 20 minutes", "candidates": null}
+{"id": "s0-00496", "type": "toolChoice", "context": "User: What did I say Maya's favorite restaurant was?", "candidates": null}
+{"id": "s0-00678", "type": "toolChoice", "context": "Now: Wed 6:55\nUser location: the gym\nUser: What did I say Maya's favorite restaurant was?", "candidates": null}
+{"id": "s0-00902", "type": "toolChoice", "context": "User: When is my next meeting with Maya?", "candidates": null}
+{"id": "s0-00083", "type": "toolChoice", "context": "User: Remind me to pay rent tonight", "candidates": null}
+{"id": "s0-00166", "type": "toolChoice", "context": "Now: Sun 10:00\nUser location: a cafe\nUser: What's Fatima's email address?", "candidates": null}
+{"id": "s0-00990", "type": "toolChoice", "context": "Now: Wed 12:42\nUser location: commuting\nUser: Tell Aisha I'll be there in 17 minutes", "candidates": null}
+{"id": "s0-00723", "type": "toolChoice", "context": "Now: Sat 12:42\nUser location: a cafe\nUser: What did I say Tom's favorite restaurant was?", "candidates": null}
+{"id": "hf-massive-toolChoice-97", "type": "toolChoice", "context": "User: Olly cancel business meeting on wednesday", "candidates": null}
+{"id": "s0-00793", "type": "toolChoice", "context": "Now: Sun 19:55\nUser location: the gym\nUser: What's Tom's email address?", "candidates": null}
+{"id": "ds-toolChoice-00358", "type": "toolChoice", "context": "Now: Sat 23:00\nUser location: work\nUser: Tell Priya I'll be there in 19 minutes", "candidates": null}
+{"id": "s0-00609", "type": "toolChoice", "context": "Now: Wed 17:00\nUser location: the gym\nUser: Remind me to pay rent in 20 minutes", "candidates": null}
+{"id": "s0-00700", "type": "toolChoice", "context": "Now: Sat 6:05\nUser location: a cafe\nUser: Tell Diego I'll be there in 17 minutes", "candidates": null}
+{"id": "s0-00655", "type": "toolChoice", "context": "Now: Wed 20:15\nUser location: unknown\nUser: What's Maya's email address?", "candidates": null}
+{"id": "s0-00294", "type": "toolChoice", "context": "Now: Wed 23:30\nUser location: the gym\nUser: What's Maya's email address?", "candidates": null}
+{"id": "s0-00758", "type": "toolChoice", "context": "Now: Fri 17:30\nUser location: work\nUser: Tell Noah I'll be there in 17 minutes", "candidates": null}
+{"id": "s0-00340", "type": "toolChoice", "context": "Now: Thu 9:55\nUser location: home\nUser: Tell Fatima I'll be there in 9 minutes", "candidates": null}
+{"id": "s0-00746", "type": "toolChoice", "context": "User: When is my next meeting with Noah?", "candidates": null}
+{"id": "hf-massive-toolChoice-365", "type": "toolChoice", "context": "User: Reply to the email", "candidates": null}
+{"id": "hf-massive-toolChoice-144", "type": "toolChoice", "context": "User: Create calendar event with my son", "candidates": null}
+{"id": "ds-toolChoice-00433", "type": "toolChoice", "context": "Now: Thu 19:30\nUser location: home\nUser: What's Kenji's email address?", "candidates": null}
+{"id": "ds-toolChoice-00307", "type": "toolChoice", "context": "Now: Sat 6:42\nUser location: commuting\nUser: Remind me to submit the expense report on Friday at noon", "candidates": null}
+{"id": "hf-massive-toolChoice-88", "type": "toolChoice", "context": "User: Clear current calendar", "candidates": null}
+{"id": "s0-01036", "type": "toolChoice", "context": "Now: Wed 11:42\nUser location: the gym\nUser: Tell Tom I'll be there in 12 minutes", "candidates": null}
+{"id": "s0-00689", "type": "toolChoice", "context": "Now: Sat 19:30\nUser location: home\nUser: What's Sam's email address?", "candidates": null}
+{"id": "s0-00633", "type": "toolChoice", "context": "Now: Sun 9:42\nUser location: a cafe\nUser: When is my next meeting with Tom?", "candidates": null}
+{"id": "s0-00107", "type": "toolChoice", "context": "Now: Mon 6:15\nUser location: unknown\nUser: Remind me to book the vet tonight", "candidates": null}
+{"id": "ds-toolChoice-00243", "type": "toolChoice", "context": "Now: Mon 20:15\nUser location: home\nUser: Tell Lena I'll be there in 24 minutes", "candidates": null}
+{"id": "s0-00815", "type": "toolChoice", "context": "Now: Wed 9:42\nUser location: the gym\nUser: Remind me to book the vet at 8pm", "candidates": null}
+{"id": "s0-00860", "type": "toolChoice", "context": "Now: Sat 21:42\nUser location: home\nUser: Schedule lunch with Noah next Monday", "candidates": null}
+{"id": "s0-00712", "type": "toolChoice", "context": "Now: Thu 20:15\nUser location: the gym\nUser: What's Sam's email address?", "candidates": null}
+{"id": "s0-01048", "type": "toolChoice", "context": "User: Tell Zoe I'll be there in 25 minutes", "candidates": null}
+{"id": "hf-massive-toolChoice-376", "type": "toolChoice", "context": "User: Set my alarm for time", "candidates": null}
+{"id": "s0-00425", "type": "toolChoice", "context": "Now: Sat 13:15\nUser location: the gym\nUser: Remind me to pay rent on Friday at noon", "candidates": null}
+{"id": "s0-00282", "type": "toolChoice", "context": "User: Tell Sam I'll be there in 21 minutes", "candidates": null}
+{"id": "s0-00328", "type": "toolChoice", "context": "Now: Thu 6:15\nUser location: unknown\nUser: What's Maya's email address?", "candidates": null}
+{"id": "s0-00734", "type": "toolChoice", "context": "Now: Fri 9:30\nUser location: work\nUser: When is my next meeting with Diego?", "candidates": null}
+{"id": "hf-massive-toolChoice-273", "type": "toolChoice", "context": "User: Alexa send the email to this new email address", "candidates": null}
+{"id": "s0-00131", "type": "toolChoice", "context": "Now: Sat 23:55\nUser location: commuting\nUser: What did I say Aisha's favorite restaurant was?", "candidates": null}

@@ -1,6 +1,6 @@
 # Orchestrator handoff ledger
 
-Updated 2026-11-04 at 17:55 UTC. Parent T3 thread `4311f30f-96dc-4e78-9f19-860e3bbea796`.
+Updated 2026-11-04 during the resumed run at 18:45 UTC. Parent T3 thread `4311f30f-96dc-4e78-9f19-860e3bbea796`.
 This file owns the current handoff. Older entries in `LEDGER.md` and `NEXT_AGENT.md` are historical snapshots.
 
 ## Current objective and authorization
@@ -26,7 +26,7 @@ licensed training-target sources. Runtime and teacher models remain Meta models.
 
 ## Verified repository checkpoint
 
-- `master` at `4b92321` contains the integrated privacy and Mac preparation repairs.
+- Privacy and Mac preparation repairs are integrated through `4b92321`. Training reassignment was pushed at `f22e38d`; the completed pilot report was integrated at `eb4ea4e`. Subsequent resume evidence and allocations are recorded below and in `docs/ORCHESTRATOR_DECISIONS.tsv`.
 - Prior integrated verification ran 136 Swift tests, one skipped, zero failures. The Mac preparation
   fixtures passed 73 checks. These checks do not establish an Xcode build or phone behavior.
 - Shipping model remains ep1 Q4_K_M, SHA-256 `a5c60a8836aa73adeb847185aa30184cd9c33c522185f59fa9ac55a9d00782c2`.
@@ -38,25 +38,24 @@ licensed training-target sources. Runtime and teacher models remain Meta models.
 
 ## Active work and ownership
 
-| Work | Owner | State and next action |
-|---|---|---|
-| Durable effects, editable drafts, exact contact/time binding, email routing, memory recall, cloud reply provenance | Existing River07 implementation | Running at last read. Worktree `/home/habib/.t3/worktrees/pocket-glimmer/t3-7b160d24`, branch `t3/7b160d24`, based on `009430f`. Wait for completion notification, inspect and integrate the diff, preserve newer privacy fixes. |
-| Independent privacy and Mac repair review | Existing River08 reviewer | Running at last read. Worktree `/home/habib/.t3/worktrees/pocket-glimmer/t3-a585ee5c`, based on `4b92321`. Expected report `/tmp/pocket-glimmer-takeover/resumed-review/findings.md`. |
-| Request-bound shared input investigation | Existing River06 researcher | Dispatched. Expected report `/tmp/pocket-glimmer-takeover/request-input-grounding.md`. Do not implement the unsafe global-inbox reorder. |
-| Scaling training | Parent plus Muse Wonder 1.0 max delegates | See `docs/training/SCALING_RUN_2026-11-04.md` and `round3_jobs.json`. Earlier DeepSeek training delegates were stopped before GPU launch. Separate candidate artifacts from shipping files. |
-| Handoff and budget reservations | Parent | Update this file, the scaling record, and the canonical decision trail at every milestone. |
+Both existing OpenCode workers failed on event stream reconnection during the resumed run.
+`task_cancel` and terminal status confirmed no pending child runs. Preserve their checkouts.
+The recovery patch and new files are saved at `/tmp/pocket-glimmer-takeover/recovery-resume/`.
+Its manifest records hashes and the original `009430f` base. Do not merge this unfinished patch
+without preserving the newer privacy code and testing the integrated result.
 
-Existing T3 task IDs:
+| Work | State and next action |
+|---|---|
+| Durable action recovery, editable drafts, email routing, memory recall, cloud result provenance | Resume the saved patch with the same River07 assignment. Old checkout `/home/habib/.t3/worktrees/pocket-glimmer/t3-7b160d24`. The worker had 144 tests, one skipped, and four assertions failing on two already-known privacy cases in its old base. Merge the current privacy implementation and rerun. No iOS build claim. |
+| Independent privacy and Mac review | Resume with the same River08 assignment. Logs under `/tmp/pocket-glimmer-takeover/resumed-review/` show 136 tests with one skip and no failures, plus 73 Mac fixtures passing. No final independent verdict was written, so review is still open. |
+| Request-bound shared input | Investigation archived at `docs/research/REQUEST_INPUT_GROUNDING.md`. Global inbox ownership is unsafe. Apply the repair after recovery integration; do not reorder the global inbox write as a shortcut. |
+| Two-epoch training pilot | Complete, artifact and bill checked. `docs/training/R3E2_PILOT.md` and `docs/training/evidence/` preserve evidence. No promotion. |
+| Both-teacher scale-up and stronger benchmarks | Execution contract at `docs/training/ROUND3_EXECUTION.md`. Muse Wonder max remains assigned. Next task IDs will be appended to `docs/training/round3_jobs.json`. |
+| Handoff, spend reservations, integration | Parent owns this ledger, current job records, and the canonical decision trail. |
 
-```text
-node:delegated-task:command%3Amcp%3A8f8c2e36-6b19-4647-931f-1e174af4bf42%3Adelegate-task%3Apg-effect-recovery-slice1-20261104
-node:delegated-task:command%3Amcp%3A70d07f15-d1da-4f88-9020-3c73240942e0%3Adelegate-task%3Apg-resumed-integration-independent-review-20261104-v1
-node:delegated-task:command%3Amcp%3A0df30b98-7eae-44f2-96c6-ca85a2fa4524%3Adelegate-task%3Apg-request-input-grounding-20261104-v1
-```
-
-Follow a delegate's `next`. Completion wakes the parent. Do not poll running delegates or start
-replacement writers before cancelling the original. New reviews use new tasks. A result is not
-integrated merely because a child says it is finished.
+Follow a delegate's `next`. Completion wakes the parent. Do not poll running delegates. A result
+is not integrated merely because a child says it is finished. Resume tasks must receive consolidated
+original requirements and later corrections, not only the original brief.
 
 ## Spending and credentials
 
@@ -70,11 +69,17 @@ $16.62, not a verified current balance. The user subsequently reported $110 rema
 and approximately $80–90 remaining on Baseten. Use $110 and the conservative $80 respectively
 as the current credit budgets, with reported rather than API-verified provenance.
 
-The initial training pilot has a $5 Modal reservation, leaving $105 unallocated. Baseten has $80
-unallocated. No other new paid batch is allocated by this ledger until the parent records its cap
-and owner. This allocation controls concurrent spending within the user's broader authorization;
-it is not a request for permission to train. Expand allocations as evidence permits, reserve credit
-for candidate evaluation and app integration, and avoid out-of-pocket overages.
+The pilot's original $5 reservation is closed. The current per-app bill verifies $0.18916778.
+A new $20 Modal allocation funds Glimmer labeling, and $25 Baseten funds bounded Spark Open labeling.
+Spark spending cannot start until per-call reservations and restart safety are implemented and tested.
+Remaining planning balances after these reservations are $89.81083222 Modal and $55 Baseten.
+Of those, protect $15 Modal and $20 Baseten for evaluation and integration. These are planning
+balances against user reports, not API-confirmed remaining credits.
+
+At the resumed live check, Modal's month summary was $20.10288506 metered and $0 billed.
+The child had reported $20.31. Preserve both snapshots; use the per-app report for pilot attribution,
+not differences between differently refreshed aggregates. The pilot is stopped with zero tasks.
+The existing Glimmer endpoint remains deployed with zero tasks at this check.
 
 Credentials exist locally in `/tmp/gencode/sec/env.sh` and `meta.env`. Never print their contents,
 copy them into a report, or commit them. The existing Modal CLI is

@@ -38,7 +38,37 @@
     "baseten_budget_floor_usd": 80
   },
   "allocated_usd": {
-    "modal_pilot": 5,
-    "baseten": 0
-  }
+    "modal_pilot": 0,
+    "modal_glimmer_labels": 20,
+    "baseten_spark_labels": 25
+  },
+  "resumed_at": "2026-11-04T18:39:59+00:00",
+  "pilot_actual_attributable_usd": 0.18916778,
+  "latest_modal_summary": {
+    "metered_cost": "20.10288506",
+    "billed_cost": "0E-8",
+    "adjustments": {
+      "plan_cost": "0E-8",
+      "network_egress_allowance": "-0.14288506",
+      "credits": "-19.96000000",
+      "free_storage": "-0E-8",
+      "reservation_adjustment": "-0E-8"
+    },
+    "metered_cost_breakdown": {
+      "volumes": "0E-8",
+      "network_egress": "0.14288506",
+      "llm_tokens": "0E-8",
+      "ephemeral_apps": "18.07100075",
+      "deployed_apps": "1.89370398"
+    }
+  },
+  "protected_unallocated_usd": {
+    "modal_evaluation_and_integration": 15,
+    "baseten_final_evaluation": 20
+  },
+  "unallocated_after_known_pilot_and_reservations_usd": {
+    "modal": 89.81083222,
+    "baseten": 55
+  },
+  "accounting_note": "Remaining values are planning balances from user-reported credits minus attributable pilot cost and reservations, not API-confirmed credit balances. Latest per-app bill confirms pilot $0.18916778; latest month summary is $20.10288506, not the child-reported $20.31. Reports have different aggregation/refresh behavior; do not derive pilot cost from their difference."
 }

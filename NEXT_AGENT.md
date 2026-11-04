@@ -8,6 +8,8 @@
 > Training-related delegates now use Muse Code `muse-wonder-1.0` with `reasoningEffort=max`,
 > per the user's latest assignment. Unrelated existing app delegates retain their assigned models.
 
+> **Resumed checkpoint, Nov 4 2026:** The V4 two-epoch pilot completed; its artifact hash and $0.18916778 bill were verified. Both OpenCode app delegates disconnected; their work and test logs are preserved for replacement tasks. Read `ORCHESTRATOR_LEDGER.md` and `docs/training/ROUND3_EXECUTION.md` for current allocations and task ownership. Current iOS source is still unbuilt.
+
 > **Continuation checkpoint, Nov 4 2026:** `1242605` integrates the strict Mac preflight repair. Its 73 fixture checks pass, and shipping model/calibration/resource validation passes. The cloud-text repair has complete-window screening and typed memory filtering. The Nov 4 17:39 UTC integrated suite passed 136 tests, one skipped, after alias masking and export repairs. Independent review is still pending. All four Muse reports are archived under `docs/research/`; read `MUSE_REVIEW_FINDINGS.md` for parent corrections. Durable action recovery is still running in its existing isolated T3 worktree and has not been integrated. Its assignment includes explicit email routing, real memory recall, and cloud-result provenance. Current iOS source remains unbuilt. The model, priors, threshold, prompt templates and test120 stay frozen. The older snapshots below are history, not current readiness claims.
 
 You will NOT have the Grok Bot box (/workspace/...). Everything you need is in this repo, its Git LFS files and its GitHub release. Read **LEDGER.md** first: measurement protocol (section 0), results, rejected ideas, in-flight work.

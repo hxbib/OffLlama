@@ -1,6 +1,8 @@
 # Training scale-up, November 4
 
-Status: authorized and being prepared. No new training result is claimed in this document.
+Status: the two-epoch pilot completed and its exported artifact verifies. Improvement is unproven.
+The current execution contract, dual-teacher allocations, and benchmark requirements are in
+[ROUND3_EXECUTION.md](ROUND3_EXECUTION.md). The initial planning details below remain as history.
 
 Training-related agent assignment: Muse Code provider `muse`, model `muse-wonder-1.0`,
 `reasoningEffort=max`. The user reassigned these tasks from DeepSeek on November 4.

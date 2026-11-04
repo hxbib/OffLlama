@@ -1,0 +1,16 @@
+{
+  "purpose": "Matched teacher-target comparison on existing training contexts only. Never use these rows as new held-out evaluation.",
+  "source": "training/round2/out/r2c_train.jsonl",
+  "sourceSHA256": "afcf82d78426f6a096fbc52774cb654f44faaaac7a3ec97b0cc3953fec7dd3b3",
+  "selection": "Anchor: first 50 per decision type after SHA256(r3-anchor-20261104 + NUL + id) ordering. Full input preserves r2c order.",
+  "files": {
+    "anchor_inputs.jsonl": {
+      "sha256": "efea3ad2c53b8b93b4a7d5f4f39707de727dcfb8c9c4e1822c5f3c3be17685ed",
+      "rows": 600
+    },
+    "target_comparison_inputs.jsonl": {
+      "sha256": "f4bfe57be6ad9e013a3523ef64c76b14c3ae81399649211f52b2112053fd8c3e",
+      "rows": 2915
+    }
+  }
+}

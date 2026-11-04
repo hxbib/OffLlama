@@ -89,9 +89,17 @@
           "value": "max"
         }
       ],
-      "modalReservationUSD": 5,
+      "modalReservationUSD": 0,
       "basetenReservationUSD": 0,
-      "sourceCommit": "79e0884"
+      "sourceCommit": "79e0884",
+      "statusAtRecovery": "completed",
+      "hasPendingChildRunsAtRecovery": false,
+      "resultCommit": "cab5c8c",
+      "modalActualAttributableUSD": 0.18916778,
+      "modalAppId": "ap-FvDrvwYplrjYFYMOfI4SVH",
+      "artifactSHA256": "90af88d44f4a2dae0bfad0803a4d14ed12aa7397d421380dee9e64a3606d837c",
+      "resultRecord": "docs/training/evidence/duration-pilot-status.json",
+      "reservationNote": "Closed after parent verified current per-app bill. Actual $0.18916778; unused $4.81083222 released."
     },
     {
       "clientRequestId": "pg-r3-training-grounding-muse-20261104-v1",
@@ -110,7 +118,11 @@
       ],
       "modalReservationUSD": 0,
       "basetenReservationUSD": 0,
-      "sourceCommit": "79e0884"
+      "sourceCommit": "79e0884",
+      "statusAtRecovery": "completed",
+      "hasPendingChildRunsAtRecovery": false,
+      "resultCommit": null,
+      "resultRecord": "docs/training/evidence/TRAINING_GROUNDING.md"
     },
     {
       "clientRequestId": "pg-r3-dataset-grounding-muse-20261104-v1",
@@ -129,13 +141,14 @@
       ],
       "modalReservationUSD": 0,
       "basetenReservationUSD": 0,
-      "sourceCommit": "79e0884"
+      "sourceCommit": "79e0884",
+      "statusAtRecovery": "completed",
+      "hasPendingChildRunsAtRecovery": false,
+      "resultCommit": null,
+      "resultRecord": "docs/training/evidence/DATA_GROUNDING.md"
     }
   ],
   "reassignedAt": "2026-11-04T18:06:56+00:00",
-  "activeTaskIds": [
-    "node:delegated-task:command%3Amcp%3A0df30b98-7eae-44f2-96c6-ca85a2fa4524%3Adelegate-task%3Apg-r3-duration-pilot-muse-20261104-v1",
-    "node:delegated-task:command%3Amcp%3A0df30b98-7eae-44f2-96c6-ca85a2fa4524%3Adelegate-task%3Apg-r3-training-grounding-muse-20261104-v1",
-    "node:delegated-task:command%3Amcp%3A0df30b98-7eae-44f2-96c6-ca85a2fa4524%3Adelegate-task%3Apg-r3-dataset-grounding-muse-20261104-v1"
-  ]
+  "activeTaskIds": [],
+  "recoveredAt": "2026-11-04T18:36:38+00:00"
 }
