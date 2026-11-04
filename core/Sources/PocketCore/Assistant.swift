@@ -56,9 +56,18 @@ public final class Assistant: @unchecked Sendable {
     public let reflex: Reflex
     public let memory: MemoryStore
     public let actions: ActionExecutor
-    public var cloud: CloudBrainChain
+    private let cloudSettingsLock = NSLock()
+    private var configuredCloud: CloudBrainChain
+    private var configuredScrubber = PrivacyScrubber()
+    public var cloud: CloudBrainChain {
+        get { cloudSettingsLock.withLock { configuredCloud } }
+        set { cloudSettingsLock.withLock { configuredCloud = newValue } }
+    }
     public var isOnline: () -> Bool
-    public var scrubber = PrivacyScrubber()
+    public var scrubber: PrivacyScrubber {
+        get { cloudSettingsLock.withLock { configuredScrubber } }
+        set { cloudSettingsLock.withLock { configuredScrubber = newValue } }
+    }
     /// Char budget of the always-injected memory profile in local prompts (0 = off). Small: the 1B context stays short.
     public var profileMaxChars = 600
     /// Char budget of the profile sent to the cloud on escalation, after scrubbing (0 = never send the profile).
@@ -68,7 +77,7 @@ public final class Assistant: @unchecked Sendable {
     public var skillRunner: SkillRunner? = nil   // runs `skill:` actions on the device (iOS IOSSkillRunner)
 
     public init(reflex: Reflex, memory: MemoryStore, actions: ActionExecutor, cloud: CloudBrainChain = .init([]), isOnline: @escaping () -> Bool = { false }) {
-        self.reflex = reflex; self.memory = memory; self.actions = actions; self.cloud = cloud; self.isOnline = isOnline
+        self.reflex = reflex; self.memory = memory; self.actions = actions; self.configuredCloud = cloud; self.isOnline = isOnline
     }
 
     func memoryContext(_ q: String) async throws -> (String, [MemoryFact]) {
@@ -85,7 +94,7 @@ public final class Assistant: @unchecked Sendable {
     /// Copy of the scrubber with remembered entity names merged, for any prompt that may leave the device.
     func cloudScrubber() -> PrivacyScrubber {
         var sc = scrubber
-        sc.knownNames = Array(Set(scrubber.knownNames + ((try? memory.entityNames()) ?? [])))
+        sc.knownNames = Array(Set(sc.knownNames + ((try? memory.entityNames()) ?? [])))
         return sc
     }
 
@@ -151,6 +160,7 @@ public final class Assistant: @unchecked Sendable {
                 return AssistantTurn(reply: .local(a.trimmed), decisions: decisions, remembered: remembered, corrections: corrections,
                                      cloudWithheldForSensitivity: true)
             }
+            let cloud = self.cloud
             guard online, !cloud.brains.isEmpty else {
                 // Offline with a question the Reflex wanted to escalate: ask the trained `answerability` decision whether a
                 // small on-device model can answer it at all; if not, say so instead of guessing (no made-up answer).
@@ -254,12 +264,12 @@ public enum ArgumentExtractor {
                 a["contact"] = String(u[contact]).trimmed
                 rest = String(u[full.upperBound...]).trimmed
             }
-            var body = first(#"[\"“]([^\"”]+)[\"”]"#)
-                ?? first(#"(?:that says|with the message|to say|saying|that|:)\s+(.+)$"#)
-            if body == nil, let rest {
-                body = rest.trimmingCharacters(in: CharacterSet(charactersIn: " ,;:–—-"))
+            var body = rest ?? ""
+            body = first(#"^(?:(?:on|via)\s+(?:Instagram|WhatsApp|Twitter|X|iMessage|SMS)\s+)?(?:(?:that says|with the message|to say|saying|that)\b|:)\s*([\s\S]*)$"#, in: body) ?? body
+            if (body.first == "\"" && body.last == "\"") || (body.first == "“" && body.last == "”"), body.count >= 2 {
+                body = String(body.dropFirst().dropLast())
             }
-            a["body"] = body ?? ""
+            a["body"] = body.trimmed
         case "lookup_contact":
             a["contact"] = first(#"([A-Z][a-z]+(?: [A-Z][a-z]+)?)'s"#, ci: false) ?? first(#"(?i:call|for|of)\s+([A-Z][a-z]+)"#, ci: false)
         case "create_reminder":

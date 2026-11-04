@@ -174,6 +174,7 @@ extension Assistant {
     /// Local 1B for short inputs; long inputs escalate to the cloud chain only when online, configured and the
     /// sensitivity decision allows (scrubbed). Otherwise the 1B reads a truncated window and says so.
     func reason(_ instruction: String, text: String, localLimit: Int = 2_500) async throws -> String {
+        let cloud = self.cloud
         if text.count > localLimit, isOnline(), !cloud.brains.isEmpty {
             let sens = try await reflex.decide(OptionSets.sensitivity, context: "User: \(instruction)\n\(String(text.prefix(400)))")
             if sens.chosen.id == "ok" {

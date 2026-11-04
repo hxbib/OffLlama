@@ -20,6 +20,8 @@ final class TakeoverRegressionTests: XCTestCase {
         XCTAssertEqual(args("Text Sam: I'm late")["body"], "I'm late")
         XCTAssertEqual(args(#"Text Sam "I'm late""#)["body"], "I'm late")
         XCTAssertEqual(args("Text Sam on Instagram saying congrats")["body"], "congrats")
+        XCTAssertEqual(args("Text Mom I think that we should leave: soon")["body"], "I think that we should leave: soon")
+        XCTAssertEqual(args(#"Text Mom I liked "that movie" yesterday"#)["body"], #"I liked "that movie" yesterday"#)
         XCTAssertEqual(args("Text Sam")["body"], "")
         XCTAssertTrue((args("Text I'll be home by 8")["contact"] ?? "").isEmpty)
     }
