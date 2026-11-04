@@ -89,7 +89,7 @@ class T(unittest.TestCase):
         self.assertEqual(store.totals()["UNKNOWN"]["calls"], 1)
         store.close()
 
-    def test_retry_cap_and_http_errors_settle_zero(self):
+    def test_retry_cap_and_http_errors_keep_unknown_cost(self):
         store = self.store(cap=25.0)
         calls = []
         def always_429(messages, max_tokens):
@@ -98,8 +98,8 @@ class T(unittest.TestCase):
         res = S.run_draw(store, always_429, ROW, 0, 768, max_attempts=3, backoff_base=0)
         self.assertEqual(res, "http_error")
         self.assertEqual(len(calls), 3)
-        self.assertEqual(store.totals()["HTTP_ERROR"]["calls"], 3)
-        self.assertEqual(store.committed(), 0.0)
+        self.assertEqual(store.totals()["UNKNOWN"]["calls"], 3)
+        self.assertGreater(store.committed(), 0.0)
         store.close()
 
     def test_throttle_spacing_and_retry_after(self):
@@ -160,6 +160,89 @@ class T(unittest.TestCase):
         committed = store.committed()
         self.assertAlmostEqual(committed, 10 * S.PIN + 10 * S.POUT)
         self.assertLess(committed, S.reserve_usd(500, 768))
+        store.close()
+
+    def test_multibyte_text_reserves_bytes_not_characters(self):
+        text = "\U0001f600" * 200
+        self.assertGreaterEqual(S.prompt_token_worst([{"role": "user", "content": text}]), len(text.encode()))
+
+    def test_changed_prompt_cannot_reuse_a_settled_context(self):
+        store = self.store()
+        calls = []
+        transport = ok_transport(calls=calls)
+        S.run_draw(store, transport, ROW, 0, 768, 1)
+        for changed in ({**ROW, "context": "Changed text"}, {**ROW, "type": "toolChoice"},
+                        {**ROW, "candidates": ["one", "two"]}):
+            with self.subTest(changed=changed):
+                with self.assertRaisesRegex(ValueError, "identity changed"):
+                    S.run_draw(store, transport, changed, 0, 768, 1)
+        self.assertEqual(len(calls), 1)
+        store.close()
+
+    def test_invalid_usage_never_releases_a_reservation(self):
+        store = self.store()
+        for index, value in enumerate([-1, True, "100", float("nan"), None]):
+            row = {**ROW, "id": "invalid-usage-" + str(index)}
+            def transport(messages, max_tokens):
+                return {"kind": "ok", "body": {"usage": {"prompt_tokens": value, "completion_tokens": 1}}}
+            self.assertEqual(S.run_draw(store, transport, row, 0, 768, 1), "unknown")
+        self.assertEqual(store.totals()["UNKNOWN"]["calls"], 5)
+        self.assertGreater(store.committed(), 0)
+        store.close()
+
+    def test_retry_after_applies_to_an_already_waiting_request(self):
+        now, sleeps = [0.0], []
+        def sleep(delay):
+            sleeps.append(delay)
+            now[0] += delay
+            if len(sleeps) == 1:
+                throttle.penalize(5)
+        throttle = S.Throttle(60, clock=lambda: now[0], sleep=sleep)
+        throttle.wait()
+        throttle.wait()
+        self.assertEqual(sleeps, [1, 5])
+
+    def test_terminal_settlement_cannot_be_overwritten(self):
+        store = self.store()
+        key = store.try_reserve(ROW["id"], 0, 1, 500, 768)
+        store.settle(key, "SETTLED", actual_usd=0.001)
+        with self.assertRaisesRegex(ValueError, "terminal"):
+            store.settle(key, "SETTLED", actual_usd=0)
+        self.assertAlmostEqual(store.committed(), 0.001)
+        store.close()
+
+    def test_legacy_context_refuses_paid_resume_without_identity(self):
+        store = self.store()
+        store.try_reserve(ROW["id"], 0, 1, 500, 768)
+        store.close()
+        store = self.store()
+        calls = []
+        with self.assertRaisesRegex(ValueError, "legacy context"):
+            S.run_draw(store, ok_transport(calls=calls), ROW, 0, 768, 2)
+        self.assertEqual(calls, [])
+        self.assertEqual(store.totals()["UNKNOWN"]["calls"], 1)
+        store.close()
+
+    def test_manifest_must_include_the_exact_input(self):
+        inputs = self.dir / "training.jsonl"
+        inputs.write_text(json.dumps(ROW) + "\n")
+        manifest = self.dir / "manifest.json"
+        manifest.write_text(json.dumps({"files": {}}))
+        with self.assertRaisesRegex(SystemExit, "input hash mismatch"):
+            S.load_rows(inputs, manifest)
+
+    def test_invalid_money_or_rate_limits_refuse_to_run(self):
+        for value in (-1, 0, float("nan"), float("inf")):
+            with self.assertRaises(ValueError):
+                self.store(value)
+            with self.assertRaises(ValueError):
+                S.Throttle(value)
+        with self.assertRaises(ValueError):
+            S.Throttle(101)
+        store = self.store()
+        with self.assertRaises(ValueError):
+            store.try_reserve(ROW["id"], 0, 1, 500, -1)
+        self.assertEqual(store.committed(), 0)
         store.close()
 
 

@@ -2,6 +2,10 @@
 
 Status: complete. Final measured numbers are at the end of this file.
 
+The completed run used worker commit `6628f81`. The parent later hardened the
+reusable script without running any new paid calls. Those changes and checks are
+recorded below; they do not change the historical artifacts or charges.
+
 ## What ran
 
 - Teacher: `meta-models/muse-spark-open-1026` on the existing Baseten endpoint
@@ -151,3 +155,26 @@ Limitations:
   completion is not student improvement. No student was trained and
   nothing was promoted. The script accepts any future input file plus
   manifest, so a later data manifest can reuse it without code changes.
+
+## Parent integration and reuse hardening
+
+Parent independently verified both final artifact hashes, all 2,915 context rows
+with five settled draws each, 14,412 parsed votes, and the SQLite charge totals.
+Committed cost was $15.015462 settled plus $0.06364275 retained UNKNOWN reserves,
+or $15.07910475. This is usage-based accounting at the recorded rates, not a new
+provider billing statement.
+
+The integrated reusable script now reserves UTF-8 bytes plus framing allowance,
+retains reserves for HTTP errors without usage, validates token counts and money
+limits, and refuses overwriting terminal settlements. Waiting requests recheck a
+new Retry-After floor. Context IDs are bound to their exact type, text and ordered
+candidates in the ledger. A supplied manifest must contain a matching input hash.
+Legacy ledgers without stored prompt identities are refused for paid resume and
+must remain read-only; no historical ledger was migrated or recharged.
+
+All 18 fake-transport tests pass after hardening (10 passed on the worker baseline).
+New cases cover multibyte reservations, changed-prompt resume, invalid usage,
+Retry-After applied during a wait, terminal settlement overwrite, legacy resume,
+missing manifest entries and invalid money/rate limits. No paid call was made by
+these checks. The separate phone-expansion worker and its completed artifacts were
+not modified.

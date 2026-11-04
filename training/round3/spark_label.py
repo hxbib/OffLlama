@@ -12,15 +12,14 @@ Money rules (fail closed):
   completion includes reasoning tokens). Missing usage is never assumed zero.
 - Timeout, dropped connection, missing usage, or a crash between response and
   settlement leaves the row UNKNOWN and its worst-case reserve charged forever.
-- Explicit HTTP responses (including 429/5xx) settle at 0 only because the
-  provider returned no billable usage; each retry is a new reservation.
+- HTTP errors without usage retain the reservation; each retry is a new reservation.
 - Committed = settled actuals + outstanding/UNKNOWN reserves. Admission is
   denied when committed + next reserve would exceed the cap.
 
 One writer only: an exclusive lock file guards the state directory.
 Per-draw records are appended to draws.jsonl with fsync at settlement time.
 """
-import argparse, contextlib, hashlib, json, os, re, sqlite3, sys, threading, time, urllib.error, urllib.request
+import argparse, contextlib, hashlib, json, math, os, re, sqlite3, sys, threading, time, urllib.error, urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -47,9 +46,7 @@ def parse_letter(text, letters):
 
 
 def prompt_token_worst(messages):
-    # Upper bound: one token covers at least one character of ordinary text,
-    # plus per-message framing overhead. Assumed bound, not a tokenizer count.
-    return sum(len(m.get("content") or "") for m in messages) + 16 * len(messages) + 8
+    return sum(len((m.get("content") or "").encode("utf-8")) for m in messages) + 32 * len(messages) + 16
 
 
 def reserve_usd(prompt_worst, max_tokens):
@@ -60,18 +57,21 @@ class Throttle:
     """Global request-start spacing plus Retry-After floor. 94 RPM default."""
 
     def __init__(self, rpm=94.0, clock=time.monotonic, sleep=time.sleep):
-        self.interval = 60.0 / rpm if rpm and rpm > 0 else 0.0
+        if not math.isfinite(rpm) or not 0 < rpm <= 100:
+            raise ValueError("RPM must be positive and no greater than the shared 100 RPM cap")
+        self.interval = 60.0 / rpm
         self.clock, self.sleep = clock, sleep
         self.lock = threading.Lock()
         self.next_at = 0.0
 
     def wait(self):
-        with self.lock:
-            now = self.clock()
-            at = max(now, self.next_at)
-            self.next_at = at + self.interval
-        delay = at - self.clock()
-        if delay > 0:
+        while True:
+            with self.lock:
+                now = self.clock()
+                delay = self.next_at - now
+                if delay <= 0:
+                    self.next_at = now + self.interval
+                    return
             self.sleep(delay)
 
     def penalize(self, seconds):
@@ -84,6 +84,8 @@ class Store:
         self.dir = Path(state_dir)
         self.dir.mkdir(parents=True, exist_ok=True)
         self.cap = float(cap_usd)
+        if not math.isfinite(self.cap) or self.cap <= 0:
+            raise ValueError("cap must be finite and positive")
         self.lock = threading.Lock()
         self.db = sqlite3.connect(str(self.dir / "state.sqlite3"), check_same_thread=False)
         self.db.execute("PRAGMA journal_mode=WAL")
@@ -133,6 +135,8 @@ class Store:
             return out
 
     def try_reserve(self, context_id, draw_index, attempt, prompt_worst, max_tokens):
+        if type(prompt_worst) is not int or prompt_worst < 0 or type(max_tokens) is not int or max_tokens <= 0:
+            raise ValueError("token reservation bounds must be nonnegative integers with a positive completion limit")
         reserve = reserve_usd(prompt_worst, max_tokens)
         key = f"{context_id}#{draw_index}#{attempt}"
         with self.lock:
@@ -152,11 +156,32 @@ class Store:
             return key
 
     def settle(self, key, state, actual_usd=None, usage=None, raw_content=None, parsed=None, error=None, http_status=None):
+        if state not in {"SETTLED", "UNKNOWN", "HTTP_ERROR"}:
+            raise ValueError("unknown settlement state")
+        if state == "SETTLED" and (actual_usd is None or not math.isfinite(actual_usd) or actual_usd < 0):
+            raise ValueError("settled cost must be finite and nonnegative")
         with self.lock:
-            self.db.execute(
-                "UPDATE calls SET state=?, actual_usd=?, usage_json=?, raw_content=?, parsed_letter=?, error=?, http_status=?, settled_at=? WHERE call_key=?",
+            changed = self.db.execute(
+                "UPDATE calls SET state=?, actual_usd=?, usage_json=?, raw_content=?, parsed_letter=?, error=?, http_status=?, settled_at=? WHERE call_key=? AND state='RESERVED'",
                 (state, actual_usd, json.dumps(usage) if usage is not None else None, raw_content, parsed,
                  (error or "")[:500] or None, http_status, time.time(), key))
+            if changed.rowcount != 1:
+                raise ValueError("reservation is missing or already terminal")
+            self.db.commit()
+
+    def bind_input(self, row):
+        identity = {key: row.get(key) for key in ("type", "context", "candidates")}
+        fingerprint = hashlib.sha256(json.dumps(identity, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
+        key = "prompt:" + row["id"]
+        with self.lock:
+            saved = self.db.execute("SELECT value FROM meta WHERE key=?", (key,)).fetchone()
+            if saved:
+                if saved[0] != fingerprint:
+                    raise ValueError("input identity changed for a saved context")
+                return
+            if self.db.execute("SELECT 1 FROM calls WHERE context_id=? LIMIT 1", (row["id"],)).fetchone():
+                raise ValueError("legacy context has no saved prompt identity; keep its ledger read-only")
+            self.db.execute("INSERT INTO meta(key,value) VALUES(?,?)", (key, fingerprint))
             self.db.commit()
 
     def attempts(self, context_id, draw_index):
@@ -202,6 +227,7 @@ def real_transport(key, throttle, timeout=120):
 
 
 def run_draw(store, transport, row, draw_index, max_tokens, max_attempts, backoff_base=1.0, sleep=time.sleep):
+    store.bind_input(row)
     s = prompts.get_set(row["type"], row.get("candidates"))
     letters = prompts.letters(s)
     messages = prompts.chat_messages(s, row["context"])
@@ -225,7 +251,8 @@ def run_draw(store, transport, row, draw_index, max_tokens, max_attempts, backof
         if kind == "ok":
             body = result.get("body") or {}
             usage = body.get("usage")
-            if not usage or usage.get("prompt_tokens") is None or usage.get("completion_tokens") is None:
+            if not isinstance(usage, dict) or any(type(usage.get(k)) is not int or usage[k] < 0
+                                                  for k in ("prompt_tokens", "completion_tokens")):
                 store.settle(key, "UNKNOWN", usage=usage, error="missing-usage-fails-closed", http_status=result.get("http_status"))
                 return "unknown"
             content = None
@@ -246,7 +273,7 @@ def run_draw(store, transport, row, draw_index, max_tokens, max_attempts, backof
             append_draw(store, rec)
             return "settled"
         if kind == "http_error":
-            store.settle(key, "HTTP_ERROR", actual_usd=0.0, error=result.get("error"), http_status=result.get("http_status"))
+            store.settle(key, "UNKNOWN", error=result.get("error"), http_status=result.get("http_status"))
             if attempt < max_attempts:
                 delay = result.get("retry_after") or min(30.0, backoff_base * (2 ** (attempt - 1)))
                 sleep(delay)
@@ -366,7 +393,7 @@ def load_rows(input_path, manifest_path=None):
     if manifest_path:
         man = json.loads(Path(manifest_path).read_text())
         entry = man.get("files", {}).get(p.name)
-        if entry and entry.get("sha256") != digest:
+        if entry is None or entry.get("sha256") != digest:
             raise SystemExit(f"input hash mismatch for {p.name}: {digest} != manifest")
     seen = {}
     for r in rows:
