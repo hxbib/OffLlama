@@ -1,0 +1,65 @@
+{
+  "name": "vision_whiteboard",
+  "endpoint": "https://api.meta.ai/v1/chat/completions",
+  "request": {
+    "json": {
+      "model": "muse-spark-1.3",
+      "max_tokens": 800,
+      "reasoning_effort": "low",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "This is a photo of my whiteboard. List each sticky note's text, one per line."
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": "data:image/jpeg;base64,<29070 bytes JPEG 800x500>"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "request_headers": {
+    "Authorization": "Bearer <REDACTED>",
+    "Content-Type": "application/json"
+  },
+  "status": 200,
+  "latency_ms": 3610,
+  "response_json": {
+    "id": "chatcmpl-01a1a676-9104-7015-a0ab-95a014d49519",
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "Buy oat milk\nCall Mom 7pm\nShip demo\nBook dentist\nPay rent Fri",
+          "refusal": null,
+          "role": "assistant"
+        },
+        "logprobs": null
+      }
+    ],
+    "created": 1793794150,
+    "model": "muse-spark-1.3",
+    "service_tier": "default",
+    "object": "chat.completion",
+    "usage": {
+      "completion_tokens": 359,
+      "prompt_tokens": 552,
+      "total_tokens": 911,
+      "completion_tokens_details": {
+        "reasoning_tokens": 331
+      },
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    }
+  },
+  "response_head": null
+}

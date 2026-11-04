@@ -1,0 +1,90 @@
+{
+  "name": "sam_segment_bars",
+  "endpoint": "https://api.meta.ai/v1/responses",
+  "request": {
+    "json": {
+      "model": "sam-3.1",
+      "input": [
+        {
+          "type": "message",
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "bar"
+            },
+            {
+              "type": "input_image",
+              "image_url": "data:image/jpeg;base64,<17905 bytes bars.jpg>"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "metadata": {
+        "include_confidence": "true",
+        "mask_encoding": "one_bit"
+      }
+    }
+  },
+  "request_headers": {
+    "Authorization": "Bearer <REDACTED>",
+    "Content-Type": "application/json"
+  },
+  "status": 200,
+  "latency_ms": 1394,
+  "response_json": {
+    "metadata": {
+      "mask_encoding": "one_bit",
+      "include_confidence": "true"
+    },
+    "top_logprobs": 0,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "service_tier": "default",
+    "model": "sam-3.1",
+    "background": false,
+    "tools": [],
+    "tool_choice": "auto",
+    "truncation": "disabled",
+    "id": "resp_6aeb20685e11b46359a644cf",
+    "object": "response",
+    "status": "completed",
+    "created_at": 1793794152.0,
+    "completed_at": 1793794152.0,
+    "error": null,
+    "incomplete_details": null,
+    "output": [
+      {
+        "type": "message",
+        "id": "msg_1df9bd53-4094-481a-941f-7598b9da2fbc",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "output_text",
+            "text": "<0f>0<|box;x1=188;y1=120;x2=273;y2=360;w=640;h=400;c=0.9139785170555115|><|mask;x=0;y=0;c=0.9139785170555115;data=241,86,!!!!!KK.2_x7U^wU=U[[P(_o:/){Mb4SnANFtS_$6J2/aOoxG'`!!|>,1<|box;x1=512;y1=189;x2=598;y2=360;w=640;h=400;c=0.9139785170555115|><|mask;x=0;y=0;c=0.9139785170555115;data=172,87,!!!!!6LBrHND0Nz_?#5]SVfC4RwS[%|>,2<|box;x1=80;y1=258;x2=165;y2=360;w=640;h=400;c=0.9139785170555115|><|mask;x=0;y=0;c=0.9139785170555115;data=103,86,!!!!!0Na'T(.x`xFE`4xx!!|>,3<|box;x1=404;y1=52;x2=490;y2=360;w=640;h=400;c=0.9101123809814453|><|mask;x=0;y=0;c=0.9101123809814453;data=309,87,!!!!!NK.2Z[y$S4KK-7[W-_?PjL+2cPTflZbAHnOTGK2NgvG!B-BubT'|>,4<|box;x1=296;y1=224;x2=382;y2=360;w=640;h=400;c=0.9139785170555115|><|mask;x=0;y=0;c=0.9139785170555115;data=137,87,!!!!!=LBo9Ye2Pd134B=ZPppuo&3L7*=4hlp|>\n",
+            "annotations": [],
+            "logprobs": []
+          }
+        ],
+        "status": "completed"
+      }
+    ],
+    "instructions": null,
+    "usage": {
+      "input_tokens": 0,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 0,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 0,
+      "images_processed": 1
+    },
+    "parallel_tool_calls": true,
+    "store": true
+  },
+  "response_head": null
+}

@@ -82,7 +82,11 @@ struct CameraButton: View {
             CameraPicker(onImage: { img in
                 showCamera = false
                 preparing = true
-                Task { photo = await GlimpsePhoto.prepare(img); preparing = false }
+                Task {
+                    let p = await GlimpsePhoto.prepare(img)
+                    try? await Task.sleep(for: .milliseconds(450))     // let the camera cover finish dismissing first
+                    photo = p; preparing = false
+                }
             }, onCancel: { showCamera = false })
             .ignoresSafeArea()
         }

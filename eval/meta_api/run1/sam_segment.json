@@ -1,0 +1,90 @@
+{
+  "name": "sam_segment",
+  "endpoint": "https://api.meta.ai/v1/responses",
+  "request": {
+    "json": {
+      "model": "sam-3.1",
+      "input": [
+        {
+          "type": "message",
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "sticky note"
+            },
+            {
+              "type": "input_image",
+              "image_url": "data:image/jpeg;base64,<29070 bytes whiteboard.jpg>"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "metadata": {
+        "include_confidence": "true",
+        "mask_encoding": "one_bit"
+      }
+    }
+  },
+  "request_headers": {
+    "Authorization": "Bearer <REDACTED>",
+    "Content-Type": "application/json"
+  },
+  "status": 200,
+  "latency_ms": 1562,
+  "response_json": {
+    "metadata": {
+      "include_confidence": "true",
+      "mask_encoding": "one_bit"
+    },
+    "top_logprobs": 0,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "service_tier": "default",
+    "model": "sam-3.1",
+    "background": false,
+    "tools": [],
+    "tool_choice": "auto",
+    "truncation": "disabled",
+    "id": "resp_6aeb20462f2c9707a2dd47a1",
+    "object": "response",
+    "status": "completed",
+    "created_at": 1793794118.0,
+    "completed_at": 1793794118.0,
+    "error": null,
+    "incomplete_details": null,
+    "output": [
+      {
+        "type": "message",
+        "id": "msg_e7cc94c6-9929-4cf6-bfb8-b275c23fb226",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "output_text",
+            "text": "",
+            "annotations": [],
+            "logprobs": []
+          }
+        ],
+        "status": "completed"
+      }
+    ],
+    "instructions": null,
+    "usage": {
+      "input_tokens": 0,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 0,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 0,
+      "images_processed": 1
+    },
+    "parallel_tool_calls": true,
+    "store": true
+  },
+  "response_head": null
+}

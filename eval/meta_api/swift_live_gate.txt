@@ -1,0 +1,7 @@
+transcript: remind me to call Mom at seven tonight.
+spark: The whiteboard says WEEK PLAN with five notes.
+Top row is Buy oat milk, Call Mom 7pm, Ship demo.
+Bottom row is Book dentist, Pay rent Fri.
+sam concept: yellow sticky note -> 5 segments
+38.5 KB to muse-spark-1.3 (api.meta.ai/v1/chat/completions)
+38.1 KB to sam-3.1 (api.meta.ai/v1/responses)

@@ -1,0 +1,31 @@
+{
+  "name": "voice_transcribe",
+  "endpoint": "https://api.meta.ai/v1/asr/transcribe",
+  "request": {
+    "multipart": {
+      "request": {
+        "model": "muse-voice-transcribe-1.0",
+        "audioEncoding": "WAV",
+        "mode": "PUSH_TO_TALK",
+        "languageBias": [
+          "English"
+        ]
+      },
+      "audio": "<84398 bytes WAV 16kHz mono, flite TTS: 'Remind me to call Mom at seven tonight.'>"
+    }
+  },
+  "request_headers": {
+    "Authorization": "Bearer <REDACTED>",
+    "Accept": "application/json",
+    "Content-Type": "multipart/form-data"
+  },
+  "status": 200,
+  "latency_ms": 1794,
+  "response_json": {
+    "sessionId": "voyager/transcribe/7E021F261F104E2E8D35412860489ACF",
+    "transcript": "remind me to me to call mom at seven tonight.",
+    "audioDurationMs": 2640,
+    "turns": []
+  },
+  "response_head": null
+}

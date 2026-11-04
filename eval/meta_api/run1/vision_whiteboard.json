@@ -1,0 +1,64 @@
+{
+  "name": "vision_whiteboard",
+  "endpoint": "https://api.meta.ai/v1/chat/completions",
+  "request": {
+    "json": {
+      "model": "muse-spark-1.3",
+      "max_tokens": 160,
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "This is a photo of my whiteboard. List each sticky note's text, one per line."
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": "data:image/jpeg;base64,<29070 bytes JPEG 800x500>"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "request_headers": {
+    "Authorization": "Bearer <REDACTED>",
+    "Content-Type": "application/json"
+  },
+  "status": 200,
+  "latency_ms": 2800,
+  "response_json": {
+    "id": "chatcmpl-01a1a676-1140-73f3-92be-7e6482bce887",
+    "choices": [
+      {
+        "finish_reason": "length",
+        "index": 0,
+        "message": {
+          "content": null,
+          "refusal": null,
+          "role": "assistant"
+        },
+        "logprobs": null
+      }
+    ],
+    "created": 1793794117,
+    "model": "muse-spark-1.3",
+    "service_tier": "default",
+    "object": "chat.completion",
+    "usage": {
+      "completion_tokens": 160,
+      "prompt_tokens": 552,
+      "total_tokens": 712,
+      "completion_tokens_details": {
+        "reasoning_tokens": 158
+      },
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    }
+  },
+  "response_head": null
+}

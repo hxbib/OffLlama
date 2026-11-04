@@ -1,0 +1,24 @@
+{
+  "name": "probe_sam_chat_completions",
+  "endpoint": "https://api.meta.ai/v1/chat/completions",
+  "request": {
+    "json": {
+      "model": "sam-3.1",
+      "messages": "<text 'sticky note' + image_url data URL>"
+    }
+  },
+  "request_headers": {
+    "Authorization": "Bearer <REDACTED>"
+  },
+  "status": 404,
+  "latency_ms": 407,
+  "response_json": {
+    "error": {
+      "code": null,
+      "message": "The model `sam-3.1` is not available on this endpoint. Use /v1/responses.",
+      "param": "model",
+      "type": "invalid_request_error"
+    }
+  },
+  "response_head": null
+}

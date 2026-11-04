@@ -1,0 +1,17 @@
+{
+  "name": "probe_audio_transcriptions",
+  "endpoint": "https://api.meta.ai/v1/audio/transcriptions",
+  "request": {
+    "multipart": {
+      "model": "muse-voice-transcribe-1.0",
+      "file": "<84398 bytes>"
+    }
+  },
+  "request_headers": {
+    "Authorization": "Bearer <REDACTED>"
+  },
+  "status": 404,
+  "latency_ms": 387,
+  "response_json": null,
+  "response_head": ""
+}
