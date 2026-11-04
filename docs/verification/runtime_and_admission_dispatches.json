@@ -1,0 +1,106 @@
+{
+  "recordedAt": "2026-11-04T20:46:22.136Z",
+  "sourceCommit": "d21d32a",
+  "jobs": [
+    {
+      "taskId": "node:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Aremote-delegate%3Apg-mac-calibration-runtime-repair-20261104-v1",
+      "childThreadId": null,
+      "remoteChild": {
+        "environmentId": "e471ef05-c8d6-49ec-b176-96ab6da0d020",
+        "threadId": "mcp:launch:f708f7954432bc17853889955c4e2b397ae8ff19a44cf20f13eafb28f155c7e4",
+        "label": "Habib\u2019s MacBook Air"
+      },
+      "link": "<t3-thread://v2/e471ef05-c8d6-49ec-b176-96ab6da0d020/mcp:launch:f708f7954432bc17853889955c4e2b397ae8ff19a44cf20f13eafb28f155c7e4>",
+      "childRunId": null,
+      "childNodeId": "node:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Aremote-delegate%3Apg-mac-calibration-runtime-repair-20261104-v1",
+      "status": "running",
+      "workState": "working",
+      "hasPendingChildRuns": false,
+      "latestTerminalRunId": null,
+      "latestTerminalStatus": null,
+      "latestTerminalSummary": null,
+      "latestTerminalResultContextTransferId": null,
+      "providerInstanceId": "codex_13",
+      "model": "gpt-6.1-terra",
+      "summary": null,
+      "resultContextTransferId": null,
+      "hasPendingQuestion": false,
+      "pendingApproval": null,
+      "waitTimedOut": false
+    },
+    {
+      "taskId": "node:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Apg-input-cross-judge-20261104-v1",
+      "childThreadId": "thread:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Apg-input-cross-judge-20261104-v1",
+      "link": "<t3-thread://v2/1fc19a6b-4359-418d-a801-4f7fb5e9b320/thread:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Apg-input-cross-judge-20261104-v1>",
+      "childRunId": "run:thread:thread%3Adelegated-task%3Acommand%253Amcp%253Ac14bd552-7a98-4a52-b11a-f64a33895d9a%253Adelegate-task%253Apg-input-cross-judge-20261104-v1:ordinal:1",
+      "childNodeId": "node:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Apg-input-cross-judge-20261104-v1",
+      "status": "running",
+      "workState": "working",
+      "hasPendingChildRuns": false,
+      "latestTerminalRunId": null,
+      "latestTerminalStatus": null,
+      "latestTerminalSummary": null,
+      "latestTerminalResultContextTransferId": null,
+      "providerInstanceId": "opencode",
+      "model": "river02/deepseek-v4.1-flash-1017",
+      "options": [
+        {
+          "id": "variant",
+          "value": "max"
+        }
+      ],
+      "summary": null,
+      "resultContextTransferId": null,
+      "hasPendingQuestion": false,
+      "pendingApproval": null,
+      "waitTimedOut": false,
+      "next": "Completion wakes this thread, so end your turn. Do not wait on it or poll it."
+    }
+  ],
+  "trainingCheckpointRequests": [
+    {
+      "role": "spark",
+      "result": {
+        "threadId": "thread:delegated-task:command%3Amcp%3Aa0129668-74f4-43e7-bd53-699336f64acc%3Adelegate-task%3Apg-r3-spark-labels-20261104-v2",
+        "link": "<t3-thread://v2/1fc19a6b-4359-418d-a801-4f7fb5e9b320/thread:delegated-task:command%3Amcp%3Aa0129668-74f4-43e7-bd53-699336f64acc%3Adelegate-task%3Apg-r3-spark-labels-20261104-v2>",
+        "messageId": "message:mcp:c14bd552-7a98-4a52-b11a-f64a33895d9a:thread-send:pg-user-training-check-spark-20261104-v1",
+        "runId": "run:thread:thread%3Adelegated-task%3Acommand%253Amcp%253Aa0129668-74f4-43e7-bd53-699336f64acc%253Adelegate-task%253Apg-r3-spark-labels-20261104-v2:ordinal:1",
+        "status": "running",
+        "delivery": "steered"
+      }
+    },
+    {
+      "role": "phone_training",
+      "result": {
+        "threadId": "thread:delegated-task:command%3Amcp%3A38efac7b-dee2-4a60-81ad-1534701d1e87%3Adelegate-task%3Apg-r3-phone-training-execution-20261104-v1",
+        "link": "<t3-thread://v2/1fc19a6b-4359-418d-a801-4f7fb5e9b320/thread:delegated-task:command%3Amcp%3A38efac7b-dee2-4a60-81ad-1534701d1e87%3Adelegate-task%3Apg-r3-phone-training-execution-20261104-v1>",
+        "messageId": "message:mcp:c14bd552-7a98-4a52-b11a-f64a33895d9a:thread-send:pg-user-training-check-phone_training-20261104-v1",
+        "runId": "run:thread:thread%3Adelegated-task%3Acommand%253Amcp%253A38efac7b-dee2-4a60-81ad-1534701d1e87%253Adelegate-task%253Apg-r3-phone-training-execution-20261104-v1:ordinal:2",
+        "taskId": "node:delegated-task:command%3Amcp%3A8bddd659-3294-4254-bb7c-00c3efae21c6%3Athread-send%3Apg-phone-resume-completion-and-accounting-fixes-20261104-v1",
+        "status": "running",
+        "delivery": "steered"
+      }
+    },
+    {
+      "role": "spark_phone_expansion",
+      "result": {
+        "threadId": "thread:delegated-task:command%3Amcp%3A8bddd659-3294-4254-bb7c-00c3efae21c6%3Adelegate-task%3Apg-r3-spark-phone-expansion-20261104-v1",
+        "link": "<t3-thread://v2/1fc19a6b-4359-418d-a801-4f7fb5e9b320/thread:delegated-task:command%3Amcp%3A8bddd659-3294-4254-bb7c-00c3efae21c6%3Adelegate-task%3Apg-r3-spark-phone-expansion-20261104-v1>",
+        "messageId": "message:mcp:c14bd552-7a98-4a52-b11a-f64a33895d9a:thread-send:pg-user-training-check-spark_phone_expansion-20261104-v1",
+        "runId": "run:thread:thread%3Adelegated-task%3Acommand%253Amcp%253A8bddd659-3294-4254-bb7c-00c3efae21c6%253Adelegate-task%253Apg-r3-spark-phone-expansion-20261104-v1:ordinal:2",
+        "status": "running",
+        "delivery": "steered"
+      }
+    }
+  ],
+  "macObservedCompletion": {
+    "recordedAt": "2026-11-04T20:49:31.590851+00:00",
+    "status": "completed",
+    "branch": "fix/apple-calibration-validation",
+    "diagnosticCommit": "43d1811",
+    "parentCherryPick": "647c261",
+    "nativeProbes": "Apple Swift debug and optimized pass for source and signed-bundle calibration",
+    "buildInstall": "signed diagnostic build passed and installed",
+    "rootCause": "unconfirmed; manual reopen requested"
+  }
+}

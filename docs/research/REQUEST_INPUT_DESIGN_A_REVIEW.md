@@ -1,8 +1,10 @@
 # Parent review of request-input candidate A
 
 Candidate: `/tmp/pg-input-design-20261104/a/design.md`, received 2026-11-04.
-The parent read the proposal. Candidate B and cross-review are still pending;
-no design is selected and no input-store implementation has started.
+The parent read the proposal and has now read completed candidate B at
+`/tmp/pg-input-design-20261104/b/design.md`. Cross-review is running under the
+standing River assignment; no design is selected and no input-store
+implementation has started.
 
 The separate protected store, immutable per-request body, explicit Resume,
 atomic claim, and effect-ledger reconciliation fit the accepted requirements.

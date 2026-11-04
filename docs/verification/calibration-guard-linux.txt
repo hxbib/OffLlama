@@ -1,0 +1,36 @@
+defaultTau 0.9 expected 0.9 equal true bits 3feccccccccccccd 3feccccccccccccd
+promptStyle fewShot true
+thresholdOverrides [:] true
+temperatureOverrides [:] true
+finitePriors true
+route actual 4 expected 4
+toolChoice actual 7 expected 7
+rememberOrNot actual 3 expected 3
+memoryConflict actual 3 expected 3
+notificationTriage actual 3 expected 3
+confirmBeforeAct actual 2 expected 2
+nudgeNow actual 3 expected 3
+timing actual 4 expected 4
+sensitivity actual 2 expected 2
+answerability actual 2 expected 2
+contactPick#2 actual 2 expected 2
+eventPick#2 actual 2 expected 2
+skillPick#2 actual 2 expected 2
+contactPick#3 actual 3 expected 3
+eventPick#3 actual 3 expected 3
+skillPick#3 actual 3 expected 3
+contactPick#4 actual 4 expected 4
+eventPick#4 actual 4 expected 4
+skillPick#4 actual 4 expected 4
+contactPick#5 actual 5 expected 5
+eventPick#5 actual 5 expected 5
+skillPick#5 actual 5 expected 5
+contactPick#6 actual 6 expected 6
+eventPick#6 actual 6 expected 6
+skillPick#6 actual 6 expected 6
+contactPick#7 actual 7 expected 7
+eventPick#7 actual 7 expected 7
+skillPick#7 actual 7 expected 7
+contactPick#8 actual 8 expected 8
+eventPick#8 actual 8 expected 8
+skillPick#8 actual 8 expected 8

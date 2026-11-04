@@ -88,7 +88,13 @@
       "hasPendingQuestion": false,
       "pendingApproval": null,
       "waitTimedOut": false,
-      "next": "Completion wakes this thread, so end your turn. Do not wait on it or poll it."
+      "next": "Completion wakes this thread, so end your turn. Do not wait on it or poll it.",
+      "observedCompletion": {
+        "recordedAt": "2026-11-04T20:49:31.590851+00:00",
+        "status": "completed",
+        "artifact": "/tmp/pg-input-design-20261104/b/design.md",
+        "disposition": "parent read; cross-review running, no design selected"
+      }
     },
     {
       "taskId": "node:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Aremote-delegate%3Apg-mac-build-unblock-20261104-v2",
@@ -142,7 +148,14 @@
       "hasPendingQuestion": false,
       "pendingApproval": null,
       "waitTimedOut": false,
-      "next": "Completion wakes this thread, so end your turn. Do not wait on it or poll it."
+      "next": "Completion wakes this thread, so end your turn. Do not wait on it or poll it.",
+      "observedCompletion": {
+        "recordedAt": "2026-11-04T20:49:31.590851+00:00",
+        "status": "completed",
+        "report": "docs/verification/MAC_SYMBOL_REVIEW_2026-11-04.md",
+        "adjudication": "docs/verification/MAC_SYMBOL_REVIEW_FOLLOWUP.md",
+        "verification": "88 Linux/mock fixtures pass after diagnostic wording fix"
+      }
     },
     {
       "taskId": "node:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Apg-time-constraint-repair-20261104-v1",

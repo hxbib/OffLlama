@@ -3,6 +3,10 @@
 Updated during parent run 65 on 2026-11-04. Parent T3 thread `4311f30f-96dc-4e78-9f19-860e3bbea796`.
 This file owns the current handoff. Older entries in `LEDGER.md` and `NEXT_AGENT.md` are historical snapshots.
 
+`docs/ORCHESTRATOR_DECISIONS.tsv` is append-only. Its `ts` column records when
+a checkpoint was written; some older rows were batch-written and are not exact
+event times. Use cited thread items and artifact timestamps for event ordering.
+
 ## Current objective and authorization
 
 Finish the Meta-model iPhone assistant and its verification. The user has now explicitly reopened
@@ -56,7 +60,10 @@ licensed training-target sources. Runtime and teacher models remain Meta models.
   `devicectl` installed the signed app on the iPhone 17 Pro after the user's
   Keychain approval. The parent recovered and applied the exact compile fix. See
   `docs/verification/MAC_INSTALL_CHECKPOINT_2026-11-04.md` for remote evidence paths.
-  Launch, Metal inference, phone acceptance, phone measurements, demo video, public
+  User-confirmed UI launch exposed a calibration startup error before model
+  initialization. Diagnostic patch `43d1811` is integrated as `647c261` and the
+  Mac worker reports the diagnostic build installed; manual reopen is pending.
+  Metal inference, phone acceptance, phone measurements, demo video, public
   repository visibility, and submission remain open. Submission verification
   returned incomplete because Swift was deliberately checked separately and
   GitHub remains private. It did not report an all-clear.
@@ -70,9 +77,9 @@ do not reapply it over the now-integrated implementation.
 | Work | State and next action |
 |---|---|
 | Durable action recovery and argument validation | Integrated recovery plus the resumed validator patch at `8c990e4`. Versioned contracts, editable drafts, exact contact methods, required local times, external handoff review, and request-bound shared text. Independent review of the combined patch remains required. |
-| Busy input preservation | Still open. Candidate A proposes a separate protected store and explicit resume; parent objections are in `docs/research/REQUEST_INPUT_DESIGN_A_REVIEW.md`. Candidate B and cross-review remain pending. No store implementation yet. |
+| Busy input preservation | Both design candidates returned and were read. A uses a separate protected SQLite store; B uses shared-database metadata plus protected files. Cross-review is running; no base selected or store implementation yet. Parent objections are in `docs/research/REQUEST_INPUT_DESIGN_A_REVIEW.md`. |
 | Privacy and cloud reliability | Prior independent review found partner-value masking and cancellation bugs. Fixes and regression tests are in the resumed patch, with malformed-settings checks and local fallback. Fresh review pending. |
-| Mac packaging | 88 Linux/mock fixtures pass. The post-reboot Mac rebuilt the pinned framework, validated provenance and resources, passed unsigned/signed Release builds, and installed on iPhone. Parent applied the exact compile fix after reading the completed worker's diff. Device panel failed twice; runtime checks remain unverified. |
+| Mac packaging and runtime | Independent symbol-check review passed; its diagnostic wording fix passes 88 Linux/mock fixtures. Real signed builds and installation passed. User reports calibration code2 at startup; Linux and Apple Swift probes pass, cause unconfirmed. Diagnostic patch647c261 is integrated and installed by Mac worker; manual reopen pending. Device UI tooling remains unavailable. |
 | Glimmer labels | Completed and integrated at `2922acb`. Parent checked all 2,915 source IDs, rendered prompt hashes, option mappings and recomputed probability distributions, plus nine tests. Exact label hash and compressed archive are under `docs/training/evidence/glimmer-r3/`. Live Modal app listing confirms all four batch apps stopped with zero tasks. Teacher is bf16 with mutable `main` revision; keep identity distinct from IQ2_M. No student improvement follows from label completeness. |
 | Spark Open labels | Existing Muse worker remains active, observed in run 57. Existing $25 Baseten cap unchanged. The recovered status snapshot records 4,630 settled sampling calls for the 2,915-row batch, with $4.361473 recorded settled usage and $0.031885 retained for unknown calls. The 70 RPM restart is acknowledged; those counts are a snapshot, not completion. Await completion and verify the restart-safe reservation ledger, labels, quality gate, and total known/unknown spend. |
 | Phone data and benchmark | `78e0355` integrated source-group splits and protocol. Grader fixes at `74f2341` reject inexact slots, unconfirmed execution, empty traces, and duplicate effects. 22 Python checks pass. Enough labeled independent groups and actual model evaluation remain pending. |
@@ -299,7 +306,10 @@ framework. Parent reproduced the shell cause: `grep -q` exits after matching,
 the upstream producer receives SIGPIPE, and `pipefail` reports a failure even
 though the match succeeded. The packaging fix drains the output and requires a
 defined text symbol. All 88 Linux/mock fixtures pass, including large symbol
-tables, missing/undefined symbols, and failed `nm`. This is not yet a Mac retest.
+tables, missing/undefined symbols, and failed `nm`. The later Mac retest confirmed
+the defined symbol; the post-reboot worker then rebuilt the framework and passed
+unsigned/signed builds and installation. These are separate evidence from the
+88 Linux/mock fixtures; see the current checkpoint above.
 The existing framework also lacks a provenance marker, which is a separate
 remaining requirement. A clean source checkout at the pin alone does not prove
 that an old binary was built from it.
