@@ -1,0 +1,147 @@
+{
+ "n": 180,
+ "acc": 0.7944444444444444,
+ "correct": 143,
+ "handled_at_0.8": 0.48333333333333334,
+ "handled_n_at_0.8": 87,
+ "acc_on_handled_at_0.8": 0.9655172413793104,
+ "ece_10bin": 0.040396723197301136,
+ "ltt_tightest": {
+  "tau": 0.9,
+  "handled": 63,
+  "errors": 0,
+  "handled_share": 0.35,
+  "error_upper_bound": 0.10370652453011428,
+  "delta": 0.1
+ },
+ "ltt_alpha05": {
+  "tau": null,
+  "alpha": 0.05,
+  "delta": 0.1,
+  "n": 180,
+  "handled": 0,
+  "errors": 0,
+  "handled_share": 0.0,
+  "empirical_error": null,
+  "error_upper_bound": null,
+  "p_value": null,
+  "min_rows_needed_zero_errors": 135
+ },
+ "nudgeNow_correct": 8,
+ "median_ms": 306.5316677093506,
+ "p90_ms": 506.4728260040283,
+ "eval_seconds": 80.0,
+ "gguf": "models/SHIPPING-ep1-Llama-3.2-1B-PocketGlimmer-Reflex-Q4_K_M.gguf",
+ "gguf_sha256": "a5c60a8836aa73adeb847185aa30184cd9c33c522185f59fa9ac55a9d00782c2",
+ "model_name": "SHIP",
+ "set": "cal",
+ "variant": "v2+cc",
+ "start": 2,
+ "pass_in_start": 1,
+ "global_pass": 3,
+ "server_pass": 1,
+ "server_state": "fresh",
+ "server": "fresh (start 2 pass 1)",
+ "threads": 4,
+ "context": 4096,
+ "server_cmd": "/tmp/gencode/llama.cpp/build/bin/llama-server -m models/SHIPPING-ep1-Llama-3.2-1B-PocketGlimmer-Reflex-Q4_K_M.gguf --port 8124 -t 4 -c 4096",
+ "raw_file": "eval/experiments/r3e2_SHIP_cal_s2p1.json",
+ "prompt_identity_sha256": "1ed13c51d67a4722f8d458b4363324e007937f50abbbc8cb2666f263d52b6ef2",
+ "prompt_count": 180,
+ "cf_identity_sha256": "6fa8021af03df9c322c4db33aa784354ded6ec435d856794e3b2b5317bc804db",
+ "cf_entries": 14,
+ "verification": {
+  "n": 180,
+  "expected_n": 180,
+  "count_ok": true,
+  "order_match": true,
+  "errors": 37,
+  "correct": 143,
+  "error_count_check": true
+ },
+ "per_type": {
+  "route": {
+   "n": 15,
+   "correct": 12,
+   "handled_at_0.8": 9,
+   "correct_on_handled_at_0.8": 9
+  },
+  "toolChoice": {
+   "n": 15,
+   "correct": 12,
+   "handled_at_0.8": 12,
+   "correct_on_handled_at_0.8": 12
+  },
+  "rememberOrNot": {
+   "n": 15,
+   "correct": 14,
+   "handled_at_0.8": 5,
+   "correct_on_handled_at_0.8": 5
+  },
+  "memoryConflict": {
+   "n": 15,
+   "correct": 14,
+   "handled_at_0.8": 7,
+   "correct_on_handled_at_0.8": 7
+  },
+  "notificationTriage": {
+   "n": 15,
+   "correct": 12,
+   "handled_at_0.8": 6,
+   "correct_on_handled_at_0.8": 6
+  },
+  "confirmBeforeAct": {
+   "n": 15,
+   "correct": 13,
+   "handled_at_0.8": 4,
+   "correct_on_handled_at_0.8": 4
+  },
+  "nudgeNow": {
+   "n": 15,
+   "correct": 8,
+   "handled_at_0.8": 0,
+   "correct_on_handled_at_0.8": 0
+  },
+  "timing": {
+   "n": 15,
+   "correct": 10,
+   "handled_at_0.8": 7,
+   "correct_on_handled_at_0.8": 6
+  },
+  "sensitivity": {
+   "n": 15,
+   "correct": 15,
+   "handled_at_0.8": 12,
+   "correct_on_handled_at_0.8": 12
+  },
+  "answerability": {
+   "n": 15,
+   "correct": 11,
+   "handled_at_0.8": 5,
+   "correct_on_handled_at_0.8": 5
+  },
+  "eventPick": {
+   "n": 15,
+   "correct": 12,
+   "handled_at_0.8": 9,
+   "correct_on_handled_at_0.8": 8
+  },
+  "contactPick": {
+   "n": 15,
+   "correct": 10,
+   "handled_at_0.8": 11,
+   "correct_on_handled_at_0.8": 10
+  }
+ },
+ "legacy_gate": {
+  "clause_a_bound_lt_10pct_share_ge_35pct": false,
+  "clause_b_acc_on_handled_at_0.8_ge_0.95": true,
+  "clause_c_ece_le_0.06": true,
+  "overall": false,
+  "bound": 0.10370652453011428,
+  "handled_share_at_bound_tau": 0.35,
+  "tau_at_bound": 0.9,
+  "handled_at_bound": 63,
+  "errors_at_bound": 0
+ }
+}

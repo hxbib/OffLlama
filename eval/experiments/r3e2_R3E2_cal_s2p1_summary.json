@@ -1,0 +1,147 @@
+{
+ "n": 180,
+ "acc": 0.8111111111111111,
+ "correct": 146,
+ "handled_at_0.8": 0.6055555555555555,
+ "handled_n_at_0.8": 109,
+ "acc_on_handled_at_0.8": 0.9724770642201835,
+ "ece_10bin": 0.06354557230580463,
+ "ltt_tightest": {
+  "tau": 0.89,
+  "handled": 67,
+  "errors": 0,
+  "handled_share": 0.37222222222222223,
+  "error_upper_bound": 0.09782865886506287,
+  "delta": 0.1
+ },
+ "ltt_alpha05": {
+  "tau": null,
+  "alpha": 0.05,
+  "delta": 0.1,
+  "n": 180,
+  "handled": 0,
+  "errors": 0,
+  "handled_share": 0.0,
+  "empirical_error": null,
+  "error_upper_bound": null,
+  "p_value": null,
+  "min_rows_needed_zero_errors": 135
+ },
+ "nudgeNow_correct": 11,
+ "median_ms": 271.7702388763428,
+ "p90_ms": 473.62351417541504,
+ "eval_seconds": 75.0,
+ "gguf": "/home/habib/.t3/worktrees/pocket-glimmer/t3-fc78b8a3/training/round2/out/R3E2-20261104/V4-R3E2-20261104.gguf",
+ "gguf_sha256": "90af88d44f4a2dae0bfad0803a4d14ed12aa7397d421380dee9e64a3606d837c",
+ "model_name": "R3E2",
+ "set": "cal",
+ "variant": "v2+cc",
+ "start": 2,
+ "pass_in_start": 1,
+ "global_pass": 3,
+ "server_pass": 1,
+ "server_state": "fresh",
+ "server": "fresh (start 2 pass 1)",
+ "threads": 4,
+ "context": 4096,
+ "server_cmd": "/tmp/gencode/llama.cpp/build/bin/llama-server -m /home/habib/.t3/worktrees/pocket-glimmer/t3-fc78b8a3/training/round2/out/R3E2-20261104/V4-R3E2-20261104.gguf --port 8124 -t 4 -c 4096",
+ "raw_file": "eval/experiments/r3e2_R3E2_cal_s2p1.json",
+ "prompt_identity_sha256": "1ed13c51d67a4722f8d458b4363324e007937f50abbbc8cb2666f263d52b6ef2",
+ "prompt_count": 180,
+ "cf_identity_sha256": "c9d96f5de00a5847eb170d10dc80232189dee3c4988f759fdeb91d71215ff4f4",
+ "cf_entries": 14,
+ "verification": {
+  "n": 180,
+  "expected_n": 180,
+  "count_ok": true,
+  "order_match": true,
+  "errors": 34,
+  "correct": 146,
+  "error_count_check": true
+ },
+ "per_type": {
+  "route": {
+   "n": 15,
+   "correct": 12,
+   "handled_at_0.8": 11,
+   "correct_on_handled_at_0.8": 11
+  },
+  "toolChoice": {
+   "n": 15,
+   "correct": 12,
+   "handled_at_0.8": 12,
+   "correct_on_handled_at_0.8": 12
+  },
+  "rememberOrNot": {
+   "n": 15,
+   "correct": 13,
+   "handled_at_0.8": 9,
+   "correct_on_handled_at_0.8": 9
+  },
+  "memoryConflict": {
+   "n": 15,
+   "correct": 14,
+   "handled_at_0.8": 11,
+   "correct_on_handled_at_0.8": 11
+  },
+  "notificationTriage": {
+   "n": 15,
+   "correct": 10,
+   "handled_at_0.8": 10,
+   "correct_on_handled_at_0.8": 8
+  },
+  "confirmBeforeAct": {
+   "n": 15,
+   "correct": 12,
+   "handled_at_0.8": 11,
+   "correct_on_handled_at_0.8": 10
+  },
+  "nudgeNow": {
+   "n": 15,
+   "correct": 11,
+   "handled_at_0.8": 1,
+   "correct_on_handled_at_0.8": 1
+  },
+  "timing": {
+   "n": 15,
+   "correct": 12,
+   "handled_at_0.8": 5,
+   "correct_on_handled_at_0.8": 5
+  },
+  "sensitivity": {
+   "n": 15,
+   "correct": 14,
+   "handled_at_0.8": 12,
+   "correct_on_handled_at_0.8": 12
+  },
+  "answerability": {
+   "n": 15,
+   "correct": 14,
+   "handled_at_0.8": 10,
+   "correct_on_handled_at_0.8": 10
+  },
+  "eventPick": {
+   "n": 15,
+   "correct": 12,
+   "handled_at_0.8": 7,
+   "correct_on_handled_at_0.8": 7
+  },
+  "contactPick": {
+   "n": 15,
+   "correct": 10,
+   "handled_at_0.8": 10,
+   "correct_on_handled_at_0.8": 10
+  }
+ },
+ "legacy_gate": {
+  "clause_a_bound_lt_10pct_share_ge_35pct": true,
+  "clause_b_acc_on_handled_at_0.8_ge_0.95": true,
+  "clause_c_ece_le_0.06": false,
+  "overall": false,
+  "bound": 0.09782865886506287,
+  "handled_share_at_bound_tau": 0.37222222222222223,
+  "tau_at_bound": 0.89,
+  "handled_at_bound": 67,
+  "errors_at_bound": 0
+ }
+}

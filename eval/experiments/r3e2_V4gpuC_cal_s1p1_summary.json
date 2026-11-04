@@ -1,0 +1,147 @@
+{
+ "n": 180,
+ "acc": 0.8055555555555556,
+ "correct": 145,
+ "handled_at_0.8": 0.5444444444444444,
+ "handled_n_at_0.8": 98,
+ "acc_on_handled_at_0.8": 0.9693877551020408,
+ "ece_10bin": 0.059486655634064245,
+ "ltt_tightest": {
+  "tau": 0.88,
+  "handled": 67,
+  "errors": 0,
+  "handled_share": 0.37222222222222223,
+  "error_upper_bound": 0.09782865886506287,
+  "delta": 0.1
+ },
+ "ltt_alpha05": {
+  "tau": null,
+  "alpha": 0.05,
+  "delta": 0.1,
+  "n": 180,
+  "handled": 0,
+  "errors": 0,
+  "handled_share": 0.0,
+  "empirical_error": null,
+  "error_upper_bound": null,
+  "p_value": null,
+  "min_rows_needed_zero_errors": 135
+ },
+ "nudgeNow_correct": 9,
+ "median_ms": 276.86333656311035,
+ "p90_ms": 459.93494987487793,
+ "eval_seconds": 74.7,
+ "gguf": "/tmp/gencode/round2/V4-gpuC.gguf",
+ "gguf_sha256": "1c456772fdee4a931e326b0cad7c32d6f59a32d552fab10809169ec7e79bd901",
+ "model_name": "V4gpuC",
+ "set": "cal",
+ "variant": "v2+cc",
+ "start": 1,
+ "pass_in_start": 1,
+ "global_pass": 1,
+ "server_pass": 1,
+ "server_state": "fresh",
+ "server": "fresh (start 1 pass 1)",
+ "threads": 4,
+ "context": 4096,
+ "server_cmd": "/tmp/gencode/llama.cpp/build/bin/llama-server -m /tmp/gencode/round2/V4-gpuC.gguf --port 8125 -t 4 -c 4096",
+ "raw_file": "eval/experiments/r3e2_V4gpuC_cal_s1p1.json",
+ "prompt_identity_sha256": "1ed13c51d67a4722f8d458b4363324e007937f50abbbc8cb2666f263d52b6ef2",
+ "prompt_count": 180,
+ "cf_identity_sha256": "bb055607a50c6b2fe68852c2abf9a447f9b41c9a69362d9d26e6ee80da640275",
+ "cf_entries": 14,
+ "verification": {
+  "n": 180,
+  "expected_n": 180,
+  "count_ok": true,
+  "order_match": true,
+  "errors": 35,
+  "correct": 145,
+  "error_count_check": true
+ },
+ "per_type": {
+  "route": {
+   "n": 15,
+   "correct": 12,
+   "handled_at_0.8": 10,
+   "correct_on_handled_at_0.8": 10
+  },
+  "toolChoice": {
+   "n": 15,
+   "correct": 12,
+   "handled_at_0.8": 12,
+   "correct_on_handled_at_0.8": 12
+  },
+  "rememberOrNot": {
+   "n": 15,
+   "correct": 13,
+   "handled_at_0.8": 4,
+   "correct_on_handled_at_0.8": 4
+  },
+  "memoryConflict": {
+   "n": 15,
+   "correct": 15,
+   "handled_at_0.8": 11,
+   "correct_on_handled_at_0.8": 11
+  },
+  "notificationTriage": {
+   "n": 15,
+   "correct": 10,
+   "handled_at_0.8": 9,
+   "correct_on_handled_at_0.8": 7
+  },
+  "confirmBeforeAct": {
+   "n": 15,
+   "correct": 12,
+   "handled_at_0.8": 10,
+   "correct_on_handled_at_0.8": 9
+  },
+  "nudgeNow": {
+   "n": 15,
+   "correct": 9,
+   "handled_at_0.8": 1,
+   "correct_on_handled_at_0.8": 1
+  },
+  "timing": {
+   "n": 15,
+   "correct": 12,
+   "handled_at_0.8": 5,
+   "correct_on_handled_at_0.8": 5
+  },
+  "sensitivity": {
+   "n": 15,
+   "correct": 14,
+   "handled_at_0.8": 13,
+   "correct_on_handled_at_0.8": 13
+  },
+  "answerability": {
+   "n": 15,
+   "correct": 15,
+   "handled_at_0.8": 9,
+   "correct_on_handled_at_0.8": 9
+  },
+  "eventPick": {
+   "n": 15,
+   "correct": 11,
+   "handled_at_0.8": 4,
+   "correct_on_handled_at_0.8": 4
+  },
+  "contactPick": {
+   "n": 15,
+   "correct": 10,
+   "handled_at_0.8": 10,
+   "correct_on_handled_at_0.8": 10
+  }
+ },
+ "legacy_gate": {
+  "clause_a_bound_lt_10pct_share_ge_35pct": true,
+  "clause_b_acc_on_handled_at_0.8_ge_0.95": true,
+  "clause_c_ece_le_0.06": true,
+  "overall": true,
+  "bound": 0.09782865886506287,
+  "handled_share_at_bound_tau": 0.37222222222222223,
+  "tau_at_bound": 0.88,
+  "handled_at_bound": 67,
+  "errors_at_bound": 0
+ }
+}

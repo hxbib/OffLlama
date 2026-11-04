@@ -1,0 +1,10 @@
+{
+ "label": "R3E2",
+ "gguf_sha256": "90af88d44f4a2dae0bfad0803a4d14ed12aa7397d421380dee9e64a3606d837c",
+ "n_prompts": 40,
+ "n_checkable": 23,
+ "checkable_correct": 23,
+ "collapse": 0,
+ "raw_file": "eval/experiments/r3e2_drift_R3E2.jsonl",
+ "method": "llama-server /completion, HF Llama-3.2 single-user chat string (26 Jul 2024 date), greedy temp0 top_k1 n_predict96 seed0, check/collapse logic copied from eval/drift/run_drift_gguf.py"
+}
