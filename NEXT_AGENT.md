@@ -5,6 +5,8 @@
 > may change training weights; shipping artifacts stay unchanged until validation. The durable ledger
 > owns live jobs, budget reservations, pending reviews, and takeover steps. Older freeze/readiness
 > statements below are historical.
+> Training-related delegates now use Muse Code `muse-wonder-1.0` with `reasoningEffort=max`,
+> per the user's latest assignment. Unrelated existing app delegates retain their assigned models.
 
 > **Continuation checkpoint, Nov 4 2026:** `1242605` integrates the strict Mac preflight repair. Its 73 fixture checks pass, and shipping model/calibration/resource validation passes. The cloud-text repair has complete-window screening and typed memory filtering. The Nov 4 17:39 UTC integrated suite passed 136 tests, one skipped, after alias masking and export repairs. Independent review is still pending. All four Muse reports are archived under `docs/research/`; read `MUSE_REVIEW_FINDINGS.md` for parent corrections. Durable action recovery is still running in its existing isolated T3 worktree and has not been integrated. Its assignment includes explicit email routing, real memory recall, and cloud-result provenance. Current iOS source remains unbuilt. The model, priors, threshold, prompt templates and test120 stay frozen. The older snapshots below are history, not current readiness claims.
 

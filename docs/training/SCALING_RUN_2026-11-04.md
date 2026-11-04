@@ -2,6 +2,10 @@
 
 Status: authorized and being prepared. No new training result is claimed in this document.
 
+Training-related agent assignment: Muse Code provider `muse`, model `muse-wonder-1.0`,
+`reasoningEffort=max`. The user reassigned these tasks from DeepSeek on November 4.
+The three initial DeepSeek delegates were stopped before any GPU pilot launched.
+
 ## Objective
 
 Improve the phone model's useful local decisions and investigate broader local task capability
@@ -28,6 +32,7 @@ Data expansion and evaluation design proceed independently.
 Keep the existing base Llama 3.2 1B Instruct, r2c data, V4 loss, rank, seed, and learning rate.
 Change only training duration from one epoch to two. Use the existing Modal training script,
 GPU mode, one candidate, and a unique name such as `V4-R3E2-20261104`.
+Select its explicit `training/round2/modal_round2.py::main` entrypoint. The file alone is ambiguous.
 
 Maximum reservation: $5 on Modal, including the job and attributable preparation. Do not start a
 CPU fallback sweep. The existing GPU function has a 1,500-second timeout. Record the actual

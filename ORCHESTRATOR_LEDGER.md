@@ -15,10 +15,14 @@ spending records, decisions, or unfinished app work. Push completed work to GitH
 Never force-push, expose credentials, or claim a guaranteed hackathon placing.
 
 Follow `/home/habib/.agents/MODEL_SELECTION.md`. The parent chat retains its user-selected settings.
-General delegates use `opencode`, `river02` through `river08` `/deepseek-v4.1-flash-1017`,
+Training-related delegates now use **Muse Code** provider `muse`, model `muse-wonder-1.0`,
+with `reasoningEffort=max`. This standing assignment covers training execution, data research,
+experiment design, evaluation, and training-related review. The user explicitly replaced the
+earlier DeepSeek assignment for these tasks. Existing app/recovery delegates keep their assignments.
+Other general delegates use `opencode`, `river02` through `river08` `/deepseek-v4.1-flash-1017`,
 with `variant=max`. The user authorized any working River account except the broken unsuffixed
-`river` account. The completed Muse comparison used the user's separate Muse Wonder 1.0 assignment.
-Do not substitute models or settings. Runtime and teacher models remain Meta models.
+`river` account. Do not substitute models or settings. Agent selection does not change the separately
+licensed training-target sources. Runtime and teacher models remain Meta models.
 
 ## Verified repository checkpoint
 
@@ -39,7 +43,7 @@ Do not substitute models or settings. Runtime and teacher models remain Meta mod
 | Durable effects, editable drafts, exact contact/time binding, email routing, memory recall, cloud reply provenance | Existing River07 implementation | Running at last read. Worktree `/home/habib/.t3/worktrees/pocket-glimmer/t3-7b160d24`, branch `t3/7b160d24`, based on `009430f`. Wait for completion notification, inspect and integrate the diff, preserve newer privacy fixes. |
 | Independent privacy and Mac repair review | Existing River08 reviewer | Running at last read. Worktree `/home/habib/.t3/worktrees/pocket-glimmer/t3-a585ee5c`, based on `4b92321`. Expected report `/tmp/pocket-glimmer-takeover/resumed-review/findings.md`. |
 | Request-bound shared input investigation | Existing River06 researcher | Dispatched. Expected report `/tmp/pocket-glimmer-takeover/request-input-grounding.md`. Do not implement the unsafe global-inbox reorder. |
-| Scaling training | Parent plus new isolated training delegates | New authorization. See `docs/training/SCALING_RUN_2026-11-04.md`. Separate candidate artifacts from shipping files. |
+| Scaling training | Parent plus Muse Wonder 1.0 max delegates | See `docs/training/SCALING_RUN_2026-11-04.md` and `round3_jobs.json`. Earlier DeepSeek training delegates were stopped before GPU launch. Separate candidate artifacts from shipping files. |
 | Handoff and budget reservations | Parent | Update this file, the scaling record, and the canonical decision trail at every milestone. |
 
 Existing T3 task IDs:
@@ -103,3 +107,16 @@ budget before checking the bounded-runtime tradeoff and the pending independent 
 
 The canonical decision trail is now `docs/ORCHESTRATOR_DECISIONS.tsv`. The earlier
 `/tmp/pocket-glimmer-takeover/decisions.tsv` is an archived predecessor for already-dispatched reviewers.
+
+## Training-agent reassignment checkpoint
+
+At approximately 18:05 UTC, all three DeepSeek scale-up tasks were confirmed interrupted with
+no pending child runs. Their worktrees were clean, and no reports or pilot-status artifact had been
+written. The pilot activity contains only read-only preflight commands. Modal app listing showed
+only the existing `pg-glimmer-vllm` deployment with zero running tasks. No new training job needs takeover.
+
+Preserve the useful pilot discovery: the Modal command must use
+`training/round2/modal_round2.py::main`, because the file has several local entrypoints.
+The r2c input has 2,915 rows and SHA-256
+`afcf82d78426f6a096fbc52774cb654f44faaaac7a3ec97b0cc3953fec7dd3b3`.
+The $5 pilot reservation transfers to the Muse replacement; it is not a second allocation.

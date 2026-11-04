@@ -19,7 +19,11 @@
       ],
       "modalReservationUSD": 5,
       "basetenReservationUSD": 0,
-      "sourceCommit": "8711232"
+      "sourceCommit": "8711232",
+      "statusAtReassignment": "interrupted",
+      "hasPendingChildRunsAtReassignment": false,
+      "supersededReason": "User reassigned all training-related tasks to Muse Wonder 1.0 max through Muse Code",
+      "reservationTransferred": true
     },
     {
       "clientRequestId": "pg-r3-training-grounding-20261104-v1",
@@ -38,7 +42,11 @@
       ],
       "modalReservationUSD": 0,
       "basetenReservationUSD": 0,
-      "sourceCommit": "8711232"
+      "sourceCommit": "8711232",
+      "statusAtReassignment": "interrupted",
+      "hasPendingChildRunsAtReassignment": false,
+      "supersededReason": "User reassigned all training-related tasks to Muse Wonder 1.0 max through Muse Code",
+      "reservationTransferred": true
     },
     {
       "clientRequestId": "pg-r3-dataset-grounding-20261104-v1",
@@ -57,7 +65,12 @@
       ],
       "modalReservationUSD": 0,
       "basetenReservationUSD": 0,
-      "sourceCommit": "8711232"
+      "sourceCommit": "8711232",
+      "statusAtReassignment": "interrupted",
+      "hasPendingChildRunsAtReassignment": false,
+      "supersededReason": "User reassigned all training-related tasks to Muse Wonder 1.0 max through Muse Code",
+      "reservationTransferred": true
     }
-  ]
+  ],
+  "reassignedAt": "2026-11-04T18:06:56+00:00"
 }
