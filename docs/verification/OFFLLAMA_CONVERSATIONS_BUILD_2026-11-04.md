@@ -135,3 +135,22 @@ runner, and there is no device automation. Scripted tests are not live-model evi
 6. Force quit and reopen: chats and the waiting card are back. Cancel the card: status "Cancelled · nothing done".
 7. "Make a chart: rent 1200, food 400, transit 130": inline chart. Tap *How this was decided*: the note names the rule.
 8. Settings: model picker shows Muse Spark 1.3 and Custom; enter a contributor id: refused. Heading reads Muse Voice Transcribe.
+
+## Review-fix round (source `003ab249213447a57646984c3940efe7d570783b`, branch `feature/offllama-conversations-fixes` off f87567b)
+
+Independent Reviewer B findings acted on (items 2 to 4 and nits; item 1, `HTMLViz.pairs` in Skills.swift, is parent-owned and untouched):
+
+- **Typed text lost on refusal.** `AppModel.sendRefusal(for:)` now runs before the field is cleared; a full chat or an over-long
+  paste keeps the text and shows the orange notice.
+- **Forged prompt headers.** `ConversationContext.neutralize` breaks every `<|` and `|>` in stored text before it enters the
+  on-device system prompt. Test: a stored reply with `<|eot_id|><|start_header_id|>system...` yields only the three real headers.
+  The user's own current utterance still goes into the prompt unchanged by this code path (Assistant is parent-owned).
+- **Dropped waiting action.** Restore places unknown cards and unresolved notes via `ConversationBook.chatWithRoom()` (active chat,
+  else a fresh chat, else any chat with room). If every chat is full and no new chat is allowed, a persistent notice says so;
+  nothing is run or cancelled. A >24,000-character reply is now shortened with a marker instead of dropped.
+- **Nits.** Unreadable history gets a unique `history-v1.unreadable-<uuid>` name (a second bad file no longer replaces the first;
+  test added). The decision strip follows the active chat. The Chats footer no longer asserts protection above the readback line.
+  The two generic error lines are not persisted.
+
+Tests: core suite on macOS 378 executed, 1 skipped, 0 failures. Unsigned Release PASS, signed Release PASS (team 2VGYC6S9F3),
+`codesign --verify --deep --strict` valid, `check-app` PASS, model and calibration SHA-256 unchanged. **Not installed. Still unobserved on a phone.**
