@@ -183,6 +183,7 @@ final class MetaMultimodalTests: XCTestCase {
         XCTAssertEqual(req.url?.absoluteString, "https://api.meta.ai/v1/responses")
         let j = try XCTUnwrap(JSONSerialization.jsonObject(with: req.httpBody!) as? [String: Any])
         XCTAssertEqual(j["model"] as? String, "sam-3.1")
+        XCTAssertEqual(j["store"] as? Bool, false, "Responses default store:true; segmentation must opt out")
         XCTAssertEqual((j["metadata"] as? [String: String])?["mask_encoding"], "one_bit")
         let content = try XCTUnwrap(((j["input"] as? [[String: Any]])?.first?["content"]) as? [[String: Any]])
         XCTAssertEqual(content.first?["text"] as? String, "bar")
@@ -286,6 +287,59 @@ final class MetaMultimodalTests: XCTestCase {
         XCTAssertTrue(s.textSent.contains("[PERSON_1]") && !s.textSent.contains("Priya"), s.textSent)
         XCTAssertTrue(s.line.contains("muse-spark-1.3") && s.line.contains("APP1/Exif"), s.line)
         XCTAssertEqual(r.usage.imagesProcessed, 1); XCTAssertGreaterThan(r.usage.estimatedUSD, 0)
+    }
+
+    func testSegmentConceptIsMaskedBeforeRequest() async throws {
+        let e = ScriptedEngine(); e.script(whenPromptContains: Self.sensitiveQ, logits: ["A": 5, "B": -5])
+        let fake = FakeTransport(); fake.replies["/responses"] = Self.samReply(Self.samBars)
+        let (gate, _, _) = try makeGate(e, online: true, fake: fake)
+        gate.assistant.scrubber.knownNames = ["Priya"]
+
+        let r = try await gate.glimpse(imageJPEG: Self.jpeg, intent: "Outline Priya's badge",
+                                       task: .segment(concept: "Priya's badge"))
+        guard case .segmented(let segs, let answer) = r.outcome else { return XCTFail("\(r.outcome)") }
+        XCTAssertNil(answer); XCTAssertEqual(segs.count, 5)
+        XCTAssertEqual(segs.first?.label, "Priya's badge", "labels are restored on the phone after the masked request")
+        let req = try XCTUnwrap(fake.requests.first)
+        let body = String(decoding: try XCTUnwrap(req.httpBody), as: UTF8.self).replacingOccurrences(of: "\\/", with: "/")
+        XCTAssertFalse(body.contains("Priya"), "the SAM concept is masked before transport")
+        XCTAssertTrue(body.contains(#""text":"[PERSON_1]'s badge""#), body)
+        XCTAssertEqual(r.cloudPayloadSummary?.textSent, "[PERSON_1]'s badge")
+        // The JPEG pixels themselves are what left the phone: only EXIF/GPS and the text are stripped or masked.
+        let stripped = try XCTUnwrap(JPEGMetadataStripper.strip(Self.jpeg))
+        XCTAssertEqual(r.cloudPayloadSummary?.mediaBytes, stripped.data.count)
+        XCTAssertEqual(r.cloudPayloadSummary?.strippedMetadata, ["APP1/Exif", "APP2/ICC"])
+    }
+
+    func testDescribeAndSegmentMasksExplicitAndPickedConcepts() async throws {
+        let e = ScriptedEngine(); e.script(whenPromptContains: Self.sensitiveQ, logits: ["A": 5, "B": -5])
+
+        let picked = FakeTransport()
+        picked.replies["chat/completions"] = Self.chatReply("This is Priya's badge.\nCONCEPT: priya's badge")
+        picked.replies["/responses"] = Self.samReply(Self.samBars)
+        let (pickedGate, _, _) = try makeGate(e, online: true, fake: picked)
+        pickedGate.assistant.scrubber.knownNames = ["Priya"]
+        var r = try await pickedGate.glimpse(imageJPEG: Self.jpeg, intent: "What is this?",
+                                             task: .describeAndSegment(question: "What is this?", concept: nil))
+        guard case .segmented(let pickedSegs, _) = r.outcome else { return XCTFail("\(r.outcome)") }
+        XCTAssertEqual(pickedSegs.first?.label, "priya's badge")
+        let pickedSAM = String(decoding: try XCTUnwrap(picked.requests.last?.httpBody), as: UTF8.self)
+        XCTAssertFalse(pickedSAM.contains("Priya"), "Spark's picked concept is masked too")
+        XCTAssertTrue(pickedSAM.contains("[PERSON_1]"), pickedSAM)
+
+        let explicit = FakeTransport()
+        explicit.replies["chat/completions"] = Self.chatReply("This is Priya's badge.")
+        explicit.replies["/responses"] = Self.samReply(Self.samBars)
+        let (explicitGate, _, _) = try makeGate(e, online: true, fake: explicit)
+        explicitGate.assistant.scrubber.knownNames = ["Priya"]
+        r = try await explicitGate.glimpse(imageJPEG: Self.jpeg, intent: "What is this?",
+                                           task: .describeAndSegment(question: "What is this?", concept: "Priya's badge"))
+        guard case .segmented(let explicitSegs, _) = r.outcome else { return XCTFail("\(r.outcome)") }
+        XCTAssertEqual(explicitSegs.first?.label, "Priya's badge")
+        let explicitSAM = String(decoding: try XCTUnwrap(explicit.requests.last?.httpBody), as: UTF8.self)
+        XCTAssertFalse(explicitSAM.contains("Priya"), "the supplied concept is masked before transport")
+        XCTAssertTrue(explicitSAM.contains(#""text":"[PERSON_1]'s badge""#), explicitSAM)
+        XCTAssertEqual(r.cloudPayloads.last?.textSent, "[PERSON_1]'s badge")
     }
     // MARK: live (opt-in: PG_LIVE_META=1 + META_API_KEY + PG_META_DIR; ~$0.006 per run)
 

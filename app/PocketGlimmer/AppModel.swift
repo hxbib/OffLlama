@@ -95,6 +95,9 @@ final class AppModel {
     }
 
     @ObservationIgnored private var bootTask: Task<Void, Never>?
+    @ObservationIgnored private var scrubberNamesTask: Task<Void, Never>?
+    @ObservationIgnored private var scrubberNamesTaskID = 0
+    @ObservationIgnored private var scrubberNamesCache: (authorized: Bool, names: [String])?
 
     /// Single-flight: the app's `.task` and an App Intent (Ask / Trigger) can both call boot() during launch; without this
     /// both pass the `assistant == nil` check across the model-load await and load two copies of the GGUF.
@@ -115,22 +118,32 @@ final class AppModel {
             let mem = try MemoryStore(db: db)
             _ = try? mem.consolidateIfDue()      // daily reconciliation: dedupe, supersede, purge, budget
             guard let url = Self.findModel() else { modelState = "No model file. Add a .gguf (see README)."; return }
-            let engine = try await Task.detached(priority: .userInitiated) { try LlamaCppEngine(modelURL: url) }.value
-            var profile = CalibrationProfile.uncalibrated
             // XcodeGen adds Resources/Models as a group, so calibration.json is copied flat to the bundle root; the
-            // subdirectory lookup covers a folder-reference setup. A missing/broken file must be loud: the uncalibrated
-            // fallback has no priors and tau 0.8, i.e. not the certified tau 0.90 operating point.
-            let calURL = Bundle.main.url(forResource: "calibration", withExtension: "json")
-                ?? Bundle.main.url(forResource: "calibration", withExtension: "json", subdirectory: "Models")
-            do {
-                guard let cal = calURL else { throw CocoaError(.fileNoSuchFile) }
-                profile = try CalibrationProfile.load(from: cal)
-            } catch { print("PGWARN calibration.json not loaded (\(error)); running UNCALIBRATED (tau 0.8, no priors)") }
+            // subdirectory lookup covers a folder-reference setup. A missing/broken file stops boot: the uncalibrated
+            // fallback has no priors and tau 0.8, so it would silently change the certified tau 0.90 operating point.
+            guard let calURL = Bundle.main.url(forResource: "calibration", withExtension: "json")
+                    ?? Bundle.main.url(forResource: "calibration", withExtension: "json", subdirectory: "Models") else {
+                throw NSError(domain: "PocketGlimmer.Calibration", code: 1, userInfo: [
+                    NSLocalizedDescriptionKey: "calibration.json is missing from the app bundle. Refusing to run on the uncertified tau 0.8 fallback; reinstall the app or add the bundled calibration file."])
+            }
+            let profile = try CalibrationProfile.load(from: calURL)
+            let dynamicPriorsPresent = (2...8).allSatisfy { n in
+                ["contactPick", "eventPick", "skillPick"].allSatisfy { profile.prior["\($0)#\(n)"]?.count == n }
+            }
+            guard profile.defaultTau == 0.90,
+                  profile.promptStyle == .fewShot,
+                  OptionSets.staticSets.allSatisfy({ profile.prior[DecisionPrompt.priorKey($0)]?.count == $0.activeLetters.count }),
+                  dynamicPriorsPresent,
+                  profile.temperature.values.allSatisfy({ $0 == 1 }) else {
+                throw NSError(domain: "PocketGlimmer.Calibration", code: 2, userInfo: [
+                    NSLocalizedDescriptionKey: "calibration.json is not the certified profile (tau 0.90, fewShot, priors, no temperature scaling). Refusing to start at a different operating point."])
+            }
+            let engine = try await Task.detached(priority: .userInitiated) { try LlamaCppEngine(modelURL: url) }.value
             let reflex = Reflex(engine: engine, profile: profile, telemetry: tel, source: "device")
             let a = Assistant(reflex: reflex, memory: mem, actions: actions, cloud: CloudSettings.chain(), isOnline: { OnlineFlag.shared.value })
             SkillSetup.install(on: a, memory: mem)   // open-world phone actions (docs/SKILLS.md); idempotent
-            a.scrubber.knownNames = await Self.contactNames()   // mask contact names in escalations, not only memory entities
             assistant = a; telemetry = tel; memory = mem
+            await loadScrubberNames()
             let pe = ProactiveEngine(memory: mem, reflex: reflex)
             let acts = actions
             pe.todayEvents = { day in acts.eventsOn(day) }
@@ -157,6 +170,35 @@ final class AppModel {
         }.value
     }
 
+    private static var contactsAuthorized: Bool {
+        let st = CNContactStore.authorizationStatus(for: .contacts)
+        return st == .authorized || st == .limited
+    }
+
+    /// Call after the onboarding grant so a first-session contact name is masked before any text leaves the phone.
+    func refreshScrubberNames() async { await loadScrubberNames(reload: true) }
+
+    /// One Contacts read per authorization state, serialized by `scrubberNamesTask`: concurrent sends share the read,
+    /// and a grant made in iOS Settings is picked up by the next send because the cache records authorization.
+    private func loadScrubberNames(reload: Bool = false) async {
+        let authorized = Self.contactsAuthorized
+        if !reload, scrubberNamesCache?.authorized == authorized { return }
+        if let t = scrubberNamesTask { await t.value }
+        let authorizedNow = Self.contactsAuthorized
+        if scrubberNamesCache?.authorized == authorizedNow { return }
+        guard assistant != nil else { return }
+        let t = Task {
+            let names = await Self.contactNames()
+            self.assistant?.scrubber.knownNames = names
+            self.scrubberNamesCache = (authorizedNow, names)
+        }
+        scrubberNamesTaskID += 1
+        let id = scrubberNamesTaskID
+        scrubberNamesTask = t
+        await t.value
+        if scrubberNamesTaskID == id { scrubberNamesTask = nil }
+    }
+
     func reloadCloud() { assistant?.cloud = CloudSettings.chain() }
 
     func refresh() {
@@ -169,9 +211,10 @@ final class AppModel {
     }
 
     func send(_ text: String) async {
-        guard let assistant, !text.trimmingCharacters(in: .whitespaces).isEmpty else { return }
+        guard !busy, let assistant, !text.trimmingCharacters(in: .whitespaces).isEmpty else { return }
         chat.append(.init(role: .user, text: text))
         busy = true; defer { busy = false; refresh() }
+        await loadScrubberNames()
         do {
             let turn = try await assistant.handle(text)
             let rows = turn.decisions.map { DecisionRow($0, toolCallJSON: [.toolChoice, .skillPick].contains($0.type) ? turn.action?.json : nil) }
@@ -194,8 +237,11 @@ final class AppModel {
     }
 
     func confirm(_ item: ChatItem) async {
-        guard let a = item.pending, let assistant else { return }
-        if let i = chat.firstIndex(of: item) { chat[i].pending = nil }
+        guard !busy, let assistant,
+              let i = chat.firstIndex(where: { $0.id == item.id }),
+              let a = chat[i].pending else { return }
+        chat[i].pending = nil
+        busy = true; defer { busy = false; refresh() }
         if case .acted(let t) = (try? await assistant.confirm(a)) ?? .acted("Failed") { chat.append(.init(role: .assistant, text: t)) }
     }
 
@@ -214,7 +260,8 @@ final class AppModel {
     }
 
     func cancel(_ item: ChatItem) {
-        if let i = chat.firstIndex(of: item) { chat[i].pending = nil }
+        guard let i = chat.firstIndex(where: { $0.id == item.id }), chat[i].pending != nil else { return }
+        chat[i].pending = nil
         chat.append(.init(role: .system, text: "Cancelled."))
     }
 
@@ -236,13 +283,13 @@ final class AppModel {
     }
 }
 
-/// Cloud brains: Meta first. Keys in Keychain; model ids editable in Settings.
+/// Cloud brains: Meta first. Keys in Keychain; model ids editable in Settings. Fireworks is not an app option: a key
+/// left on the phone is ignored. The generic BYOK entry remains an explicit user choice.
 enum CloudSettings {
     static func chain() -> CloudBrainChain {
         var b: [CloudBrain] = []
         let d = UserDefaults.standard
         if let k = Keychain.get("meta_key") { b.append(CloudPresets.metaModelAPI(model: d.string(forKey: "meta_model") ?? "muse-spark-1.3", apiKey: k)) }
-        if let k = Keychain.get("fireworks_key") { b.append(CloudPresets.fireworks(model: d.string(forKey: "fireworks_model") ?? "accounts/fireworks/models/muse-glimmer-30b", apiKey: k)) }
         if let k = Keychain.get("byok_key"), let u = d.string(forKey: "byok_url").flatMap(URL.init(string:)) {
             b.append(CloudPresets.custom(name: "Custom", model: d.string(forKey: "byok_model") ?? "", baseURL: u, apiKey: k))
         }

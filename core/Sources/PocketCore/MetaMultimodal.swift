@@ -300,8 +300,9 @@ public struct MetaVision: Sendable {
     /// SAM 3.1 takes one short noun phrase per request ("sticky note", not "find the sticky notes").
     public func makeSegmentRequest(imageJPEG: Data, prompt: String) throws -> URLRequest {
         try MetaAPI.requireStandardMode(segmentModel)
+        // Responses defaults store to true; opt out so the SAM output is not persisted for retrieval or chaining.
         return try post(MetaAPI.responsesPath, json: [
-            "model": segmentModel, "stream": false,
+            "model": segmentModel, "stream": false, "store": false,
             "metadata": ["mask_encoding": "one_bit", "include_confidence": "true"],
             "input": [["type": "message", "role": "user", "content": [
                 ["type": "input_text", "text": prompt],
@@ -651,9 +652,15 @@ public final class MultimodalGate: @unchecked Sendable {
             record(s); r.usage = a.usage; r.provider = "Meta Model API · \(a.model)"
             r.outcome = .answered(sc.restore(a.text, mapping: q.mapping))
         case .segment(let concept):
-            let (seg, s) = try await vision.segment(imageJPEG: stripped.data, prompt: concept)
+            let c = sc.scrub(concept)
+            let (seg, s) = try await vision.segment(imageJPEG: stripped.data, prompt: c.text)
             record(s); r.usage = seg.usage; r.provider = "Meta Model API · \(vision.segmentModel)"
-            r.outcome = .segmented(seg.segments, answer: nil)
+            let segments = seg.segments.map { segment in
+                var restored = segment
+                restored.label = sc.restore(segment.label, mapping: c.mapping)
+                return restored
+            }
+            r.outcome = .segmented(segments, answer: nil)
         case .describeAndSegment(let question, let concept):
             let q = sc.scrub(question + (concept == nil ? Self.conceptInstruction : ""))
             let (a, s1) = try await vision.describe(imageJPEG: stripped.data, question: q.text)
@@ -662,8 +669,15 @@ public final class MultimodalGate: @unchecked Sendable {
             var usage = a.usage
             var segments: [Segment] = []
             if let c = concept ?? picked {
-                let (seg, s2) = try await vision.segment(imageJPEG: stripped.data, prompt: c)
-                record(s2); segments = seg.segments; usage.imagesProcessed += seg.usage.imagesProcessed
+                let prompt = sc.scrub(c)
+                let (seg, s2) = try await vision.segment(imageJPEG: stripped.data, prompt: prompt.text)
+                record(s2)
+                segments = seg.segments.map { segment in
+                    var restored = segment
+                    restored.label = sc.restore(segment.label, mapping: prompt.mapping)
+                    return restored
+                }
+                usage.imagesProcessed += seg.usage.imagesProcessed
             }
             r.usage = usage; r.provider = "Meta Model API · \(a.model) + \(vision.segmentModel)"
             r.outcome = .segmented(segments, answer: sc.restore(answer, mapping: q.mapping))

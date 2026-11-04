@@ -48,7 +48,7 @@ targets:
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
         NSRemindersFullAccessUsageDescription: Pocket Glimmer creates and reads reminders you ask for, on this iPhone.
         NSCalendarsFullAccessUsageDescription: Pocket Glimmer creates and looks up events you ask for, on this iPhone.
-        NSMicrophoneUsageDescription: Hold the mic to talk. Audio is sent to Muse Voice Transcribe only while you hold it, then deleted.
+        NSMicrophoneUsageDescription: Hold the mic to talk. After you release it, the recording is sent to Muse Voice Transcribe, then deleted. You can turn voice off in Settings.
         NSCameraUsageDescription: Take a photo for a "glimpse". The sensitivity check runs on device before anything is sent to Muse Spark or SAM 3.1.
         NSPhotoLibraryUsageDescription: Pick a photo for a "glimpse". EXIF and location data are stripped before anything leaves the phone.
         NSContactsUsageDescription: Pocket Glimmer finds the right person when you say a name. Contacts never leave the phone.

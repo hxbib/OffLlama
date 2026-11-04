@@ -27,6 +27,7 @@ struct OnboardingView: View {
                 else {
                     Task {
                         await model.actions.requestAccess()
+                        await model.refreshScrubberNames()   // first-session contacts must be masked before any cloud send
                         _ = try? await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound])
                         model.onboarded = true
                     }
