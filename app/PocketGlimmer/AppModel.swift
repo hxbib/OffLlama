@@ -354,6 +354,14 @@ final class AppModel {
         extras = extras.filter { live.contains($0.key) }
     }
 
+    /// What the file system reports for the saved history right now, for a visible phone-side check.
+    var historyStorageStatus: String {
+        guard FileManager.default.fileExists(atPath: historyStore.fileURL.path) else { return "Nothing is saved to disk yet." }
+        let r = historyStore.attributeReadback()
+        let protection = r.protection == FileProtectionType.complete.rawValue ? "complete (unreadable while the iPhone is locked)" : (r.protection ?? "not reported")
+        return "Storage check: protection \(protection); backups \(r.excludedFromBackup == true ? "excluded" : "not excluded")."
+    }
+
     func newChat() -> String? {
         do { try book.newConversation(); persist(); return nil } catch { return "\(error)" }
     }

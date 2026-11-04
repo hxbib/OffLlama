@@ -27,9 +27,9 @@ struct ReflexView: View {
                         LabeledContent("Handled on device", value: total == 0 ? "–" : String(format: "%.0f%%", Double(local) / Double(total) * 100))
                     }
                 } header: { Text("Handled on device") } footer: {
-                    Text("Real telemetry from this phone only. Each distillation round ships as a new model file, so rounds come straight from logged rows. A decision counts as handled when its confidence clears τ.")
+                    Text("Real telemetry from this phone only. Each distillation round ships as a new model file, so rounds come straight from logged rows. A decision counts as handled on device when the model's certainty in its choice reaches the bar (τ). Certainty is not the chance that an action works or a message arrives.")
                 }
-                Section("Live") {
+                Section("Latest decisions") {
                     ForEach(model.decisions) { DecisionCard(row: $0) }
                 }
             }
