@@ -137,7 +137,62 @@
       "sourceCommit": "18762c33527f50685b3fff43fcc8b2ccc4e7c914",
       "integratedCommit": "11c07cf",
       "verification": "84 fixtures passed in parent; no Xcode or phone"
+    },
+    {
+      "role": "phone_training",
+      "taskId": "node:delegated-task:command%3Amcp%3A38efac7b-dee2-4a60-81ad-1534701d1e87%3Adelegate-task%3Apg-r3-phone-training-execution-20261104-v1",
+      "childThreadId": "thread:delegated-task:command%3Amcp%3A38efac7b-dee2-4a60-81ad-1534701d1e87%3Adelegate-task%3Apg-r3-phone-training-execution-20261104-v1",
+      "link": "<t3-thread://v2/1fc19a6b-4359-418d-a801-4f7fb5e9b320/thread:delegated-task:command%3Amcp%3A38efac7b-dee2-4a60-81ad-1534701d1e87%3Adelegate-task%3Apg-r3-phone-training-execution-20261104-v1>",
+      "providerInstanceId": "muse",
+      "model": "muse-wonder-1.0",
+      "options": [
+        {
+          "id": "reasoningEffort",
+          "value": "max"
+        }
+      ],
+      "sourceCommit": "b41ffae",
+      "statusAtDispatch": "running",
+      "modalReservationUSD": 35,
+      "basetenReservationUSD": 0
+    },
+    {
+      "role": "contract_review",
+      "taskId": "node:delegated-task:command%3Amcp%3A38efac7b-dee2-4a60-81ad-1534701d1e87%3Adelegate-task%3Apg-contract-privacy-integration-review-20261104-v1",
+      "childThreadId": "thread:delegated-task:command%3Amcp%3A38efac7b-dee2-4a60-81ad-1534701d1e87%3Adelegate-task%3Apg-contract-privacy-integration-review-20261104-v1",
+      "link": "<t3-thread://v2/1fc19a6b-4359-418d-a801-4f7fb5e9b320/thread:delegated-task:command%3Amcp%3A38efac7b-dee2-4a60-81ad-1534701d1e87%3Adelegate-task%3Apg-contract-privacy-integration-review-20261104-v1>",
+      "providerInstanceId": "opencode",
+      "model": "river08/deepseek-v4.1-flash-1017",
+      "options": [
+        {
+          "id": "variant",
+          "value": "max"
+        }
+      ],
+      "sourceCommit": "b41ffae",
+      "statusAtDispatch": "running",
+      "modalReservationUSD": 0,
+      "basetenReservationUSD": 0
+    },
+    {
+      "role": "comment_review",
+      "taskId": "node:delegated-task:command%3Amcp%3A38efac7b-dee2-4a60-81ad-1534701d1e87%3Adelegate-task%3Apg-contract-comments-review-20261104-v1",
+      "childThreadId": "thread:delegated-task:command%3Amcp%3A38efac7b-dee2-4a60-81ad-1534701d1e87%3Adelegate-task%3Apg-contract-comments-review-20261104-v1",
+      "link": "<t3-thread://v2/1fc19a6b-4359-418d-a801-4f7fb5e9b320/thread:delegated-task:command%3Amcp%3A38efac7b-dee2-4a60-81ad-1534701d1e87%3Adelegate-task%3Apg-contract-comments-review-20261104-v1>",
+      "providerInstanceId": "opencode",
+      "model": "river03/deepseek-v4.1-flash-1017",
+      "options": [
+        {
+          "id": "variant",
+          "value": "max"
+        }
+      ],
+      "sourceCommit": "b41ffae",
+      "statusAtDispatch": "running",
+      "modalReservationUSD": 0,
+      "basetenReservationUSD": 0
     }
   ],
-  "resumedAt": "2026-11-04T19:22:07+00:00"
+  "resumedAt": "2026-11-04T19:22:07+00:00",
+  "updatedAt": "2026-11-04T19:27:51+00:00"
 }

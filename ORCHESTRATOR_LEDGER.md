@@ -74,7 +74,11 @@ do not reapply it over the now-integrated implementation.
 
 `docs/training/round3_next_jobs.json` records the six run-48 task IDs and the later
 Mac repair. Read it alongside `round3_jobs.json`, which records the earlier pilot.
-New review/implementation dispatches must be appended there before handoff.
+Run 57 added phone-training execution, contract/privacy/trail review, and comment review.
+Their IDs and user-selected targets are recorded there and in `docs/training/run57_dispatches.json`.
+Phone training uses Muse Wonder max with the $35 Modal allocation. Contract review uses
+River08 and comment review River03, both DeepSeek V4.1 Flash 1017 at max.
+Independent review is pending, so this checkpoint is not declared release-ready.
 Follow a delegate's `next`; do not poll running delegates. Review source and actual
 artifacts before integrating. A passing core suite cannot prove phone behavior.
 
