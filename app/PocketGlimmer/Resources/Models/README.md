@@ -2,7 +2,7 @@
 
 - `calibration.json` (committed): the on-device `CalibrationProfile`. Generated 2026-11-04 from the **shipping GGUF**
   (sha256 a5c60a88…82c2) with `pg-cli priors` (content-free letter priors for all 12 static sets + contactPick/eventPick
-  with 1–7 candidates = 24 keys; prompt style fewShot). `defaultTau` = **0.90**, the certified operating point
+  with 1–7 candidates = 24 keys; prompt style fewShot). `defaultTau` = **0.90**, the shipping operating point
   (LEDGER 6.2; `docs/AFTER_FILL_PROPOSAL.md` Option A). No temperature entries: confidence is the raw softmax of the
   prior-corrected letter logits, exactly the `v2+cc` headline pipeline (`eval/experiments/run_prompt_variants.py`).
   `AppModel` loads it from the bundle at launch; without it the app would run *without* the contextual-calibration

@@ -14,6 +14,8 @@ tests in `core/Tests/PocketCoreTests/SkillsTests.swift`.
 
 ## Two-stage routing
 
+Explicit app/feature requests can also try `skillPick` when the trained route falls below threshold. This includes anchored message commands such as “Text Mom…”. They still need skill confidence ≥0.90 before planning an action; an uncertain explicit message asks for clarification. The real-engine rehearsal in [ENGINE_REHEARSAL_NOV4.md](ENGINE_REHEARSAL_NOV4.md) records where the exact demo commands remain uncertain.
+
 1. **Stage 1, trained `route`** (unchanged): answer_local / tool / escalate_cloud / clarify.
 2. **Stage 2, trained `toolChoice`** (unchanged). If it picks one of its six tools above τ, today's path runs exactly as
    before. The skill path runs only when

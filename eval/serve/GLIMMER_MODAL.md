@@ -1,31 +1,28 @@
-# Muse Glimmer 30B on Modal: smoke results (2026-11-04, 08:17–08:40 ET)
+# Muse Glimmer 30B on Modal: saved smoke evidence
 
-Endpoint `https://<modal-app>.modal.run/v1` runs vLLM 0.33.0 on 1x H100 80GB with bf16 `meta-models/Muse-Glimmer-30B`, served as `muse-glimmer`. It uses `reasoning_strength=low`, `--language-model-only`, and a 16k context. Raw output: `glimmer_modal_smoke.json`. Script: `smoke_glimmer.py`.
+Recorded Nov 4, 2026. These are build-host requests to a cloud H100, not iPhone measurements. The endpoint was live during the recorded session; its present availability has not been rechecked in this audit.
 
-| Check | Result |
-|---|---|
-| (a) `GET /v1/models` | `["muse-glimmer"]`. **Cold start 570.8 s** (scale-from-zero, 59.6 GB loaded from the Volume, CUDA-graph and torch.compile warmup; first boot, compile cache empty) |
-| (b) Assistant.swift escalation prompt with `[PERSON_1]` | **Placeholder kept verbatim**: "Happy birthday [PERSON_1]! Would you like to celebrate with dinner on Friday?" (3.6 s, 165 completion tokens) |
-| (c) System-2 items qa04, qa07, qa12 (`run_system2.grade`) | **3/3 PASS** (3.1 s, 10.1 s, 5.1 s) |
-| (d) Warm streaming | **TTFT 0.172 s**, decode **48.1 tok/s** (263 tokens in 5.6 s, batch 1) |
-| Auth | Without the token: `/v1/models` 401, `/invocations` 401. `/health` 200 (open by design) |
+The deployment serves `meta-models/Muse-Glimmer-30B` in bf16 through vLLM 0.33.0 as `muse-glimmer`. Configuration is in `training/serve/modal_glimmer_vllm.py`. The private endpoint and bearer token are not published.
 
-## The app's own CloudBrain code (`pg-cli cloud-probe`, `CloudPresets.modal` → `OpenAICompatibleBrain.complete`)
+| Saved check | Result | Evidence |
+|---|---|---|
+| Model discovery | `muse-glimmer` | `glimmer_modal_smoke.json`, `models` |
+| Masked landlord-message prompt | `[PERSON_1]` preserved; 2.67 seconds, 122 completion tokens | `placeholder_test` |
+| One reasoning response | 6.43 seconds, 300 completion tokens; saved answer is truncated | `reasoning_test` |
+| Whole-response throughput for that reasoning request | 300 / 6.43 = 46.7 completion tokens/second | `warm_tok_s`; includes request/prefill overhead, not isolated decoding |
+| Unauthenticated access | Saved warm check reports `/v1/models` and `/invocations` 401, `/health` 200 | `auth_without_token`; status summary, not raw HTTP captures |
+| Swift `CloudBrain` probe | 2,768 ms for the conformal-threshold explanation | `cloud_probe_swift.txt` |
 
-```
-$ pg-cli cloud-probe --url https://<modal-app>.modal.run/v1/ --model muse-glimmer \
-    'Known about the user: [PERSON_1] is my manager. User: Write one sentence asking [PERSON_1] to move our 1:1 to Thursday.'
-[Modal · muse-glimmer] 2854 ms
-Hi [PERSON_1], could we please move our 1:1 to Thursday?
-```
+The JSON also contains a separate 2,854 ms Swift-probe summary for a meeting-reschedule prompt. It is not the same request as `cloud_probe_swift.txt`; do not combine the two timings or answers.
 
-## Cost
+The saved JSON contains two completion samples. It does **not** support the earlier claims of 3/3 graded QA, 0.172-second streaming time to first token, 48.1 decode tokens/second, or an exact 570.8-second cold start. Those claims have been removed. `smoke_glimmer.py` is a runnable smoke script with a different output schema; the saved file is not evidence that every check in that script ran.
 
-Modal H100 list price is $3.95–4.56/h, billed per second only while a container is up. `min_containers=0` and `scaledown_window=300` mean **idle costs $0**. Spend for this session: about 30 GPU-minutes (≈ 9.5 min cold boot + ≈ 15 min of smoke traffic + 5 min scaledown), so about **$2–2.30 of H100**. The one-time 60 GB download ran on CPU and cost cents. Not confirmed on the Modal billing dashboard.
+## Demo preparation and limits
 
-## Caveats
+- The deployment scales to zero. Startup includes loading the weights and starting vLLM; the historical deployment log reported several minutes. No repeatable cold-start benchmark is available.
+- Warm the endpoint and verify an authenticated completion before rehearsing. A health response alone does not prove authenticated inference works.
+- The Swift client's request timeout can expire during a cold start. The app can then try the next configured brain.
+- This smoke establishes connectivity and placeholder preservation on one example. It does not establish general answer quality, privacy reliability, or production availability.
+- Scale-to-zero stops GPU compute charges only after the container has actually stopped. The configured idle window is 300 seconds; storage and other charges are separate. Use a dated billing report for spend, not an estimate based on the two request timings.
 
-- n = 3 Q&A items is a smoke test, not an evaluation.
-- Sampling uses the published settings (T = 1.0), so outputs vary from run to run.
-- Cold start is long (~9.5 min). Warm the endpoint before a demo with `curl -H "Authorization: Bearer $PG_GLIMMER_TOKEN" $PG_GLIMMER_URL/v1/models`. Expect later cold starts to be shorter now that the compile cache Volume is populated (not measured).
-- `CloudBrain.swift`'s 60 s request timeout is fine when warm. It would fail on a cold start, and the app's fallback chain then moves to the next brain.
+Deployment and app configuration: [OPEN_WEIGHTS_SYSTEM2.md](../../docs/OPEN_WEIGHTS_SYSTEM2.md).

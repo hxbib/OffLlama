@@ -23,7 +23,8 @@ p,li{font-size:42px;line-height:1.35;color:#d9dee7}
 .muted{color:#9aa4b5}
 .green{color:#4ade80}.orange{color:#fb923c}.blue{color:#7cb4ff}.white{color:#fff}
 .foot{position:absolute;left:110px;right:110px;bottom:34px;font-size:22px;line-height:1.35;color:#9aa4b5;border-top:2px solid #232b39;padding-top:18px;display:flex;justify-content:space-between;gap:40px}
-.foot .n{white-space:nowrap;color:#6b7587}
+.foot>span:first-child{min-width:0}
+.foot .n{white-space:nowrap;color:#6b7587;flex:0 0 auto}
 .badge{display:inline-block;border:3px solid #6ee7a8;color:#6ee7a8;border-radius:14px;padding:10px 26px;font-size:34px;font-weight:800;letter-spacing:.04em}
 .card{background:#141a24;border:2px solid #263042;border-radius:26px;padding:34px 38px}
 .row{display:flex;gap:40px}
@@ -114,17 +115,17 @@ td.a small{font-size:28px;color:#b7f5cf;font-weight:600;margin-left:12px}
 </head>
 <body style="margin:0;overflow:hidden">
 <section id="slide5">
-  <div class="kicker">A certified threshold, not a hand-tuned one</div>
+  <div class="kicker">Shipping threshold · measured decisions, no risk certificate</div>
   <div class="row" style="gap:60px;align-items:flex-start">
     <div class="col" style="flex:1;gap:26px">
       <div class="big">τ = 0.90</div>
-      <p><span class="green" style="font-weight:800;font-size:56px">36%</span> of decisions kept on device <span class="muted">(64/180)</span></p>
-      <p><span class="green" style="font-weight:800;font-size:56px">0</span> errors among them on the calibration split</p>
-      <p>Learn-Then-Test bound: error among kept decisions <span class="white" style="font-weight:800">≤ 10.2%</span> <span class="muted">(δ = 0.1)</span></p>
-      <div class="warn">Assumes new requests look like the calibration set (exchangeability). A statistical bound on this distribution, not a guarantee.</div>
+      <p><span class="green" style="font-weight:800;font-size:56px">44 / 120</span> decisions accepted on the report-only split</p>
+      <p><span class="green" style="font-weight:800;font-size:56px">41 / 44</span> correct among those accepted</p>
+      <p class="muted">Selection split: 64 / 180 accepted, with no errors in the reference run.</p>
+      <div class="warn">The earlier 10.2% certificate claim was too strong: model selection reused the calibration data. These counts do not guarantee success on new phone tasks.</div>
     </div>
-    <div class="chartcard"><img src="../../img/risk_coverage_test120.png" alt="Risk-coverage curve, frozen test N=120: untrained AURC 0.148, Llama-Reflex-1B AURC 0.085"></div>
+    <div class="chartcard"><img src="../../img/risk_coverage_test120.png" alt="Risk-coverage curve, report-only test N=120: untrained AURC 0.148, Llama-Reflex-1B AURC 0.085"></div>
   </div>
-  <div class="foot"><span>Calibration split N=180; Clopper–Pearson, Bonferroni over a fixed 99-point τ grid. 5% is not certified (needs ≥135 kept with 0 errors). Frozen test N=120 at τ=0.90: 37% kept (44/120), 41/44 correct. Nov 4 box re-run: 10.4% (63/180), within run-to-run noise. Chart: frozen test N=120.</span><span class="n">5 / 11</span></div>
+  <div class="foot"><span>The 10.2% calculation corrects for 99 thresholds, not model selection; reruns yield roughly 10.4–10.9%. The hand-authored data are not a deployment sample. No 5% certificate. Linux CPU; iPhone parity unmeasured. Sources: EVALUATION_CLAIMS.md, AFTER_FLOOR.md. Chart: report-only N=120.</span><span class="n">5 / 11</span></div>
 </section>
 </body></html>

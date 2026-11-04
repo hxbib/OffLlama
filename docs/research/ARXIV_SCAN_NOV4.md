@@ -1,5 +1,7 @@
 # Link scan for the last hours and the roadmap (Nov 4 2026, ~6 AM ET)
 
+> November 4 correction: earlier “certified” claims below are historical. Model selection reused cal180; the nominal bound is not a post-selection guarantee. See [evaluation limits](../EVALUATION_CLAIMS.md). Saved predictions are unchanged.
+
 Each item was opened on Nov 4 (arXiv abstract page, GitHub API + README, HF API + card, or the page itself). Verdicts:
 **use-now** = usable today with no training and no spend (in practice, writing and citations); **roadmap** = a credible next step; **n/a** = not applicable.
 Standing constraints apply: only Meta models ship, no `trust_remote_code`, no training or credit spend without Habib's yes.

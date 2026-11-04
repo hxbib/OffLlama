@@ -20,7 +20,7 @@ still need a Mac and an iPhone.
   807694080 bytes, sha256
   `a5c60a8836aa73adeb847185aa30184cd9c33c522185f59fa9ac55a9d00782c2`.
 - Calibration: `app/PocketGlimmer/Resources/Models/calibration.json` is required, not
-  optional. Its `defaultTau` is 0.90, the certified operating point. It was generated from
+  optional. Its `defaultTau` is 0.90, the shipping operating point. It was generated from
   the shipping GGUF. The base Llama model is not compatible with this calibration.
 - XcodeGen spec: `app/project.yml` uses Swift 5.0, iOS 18.0, and empty entitlements so a free
   personal team can provision it. The bundle identifier is `com.habib.pocketglimmer`.
@@ -99,7 +99,7 @@ It reports, without changing anything:
 - XcodeGen, CMake when a framework build is needed, `shasum`, and git
 - `app/Frameworks/llama.xcframework` and its device slice
 - the shipping model size and sha256, and any model already bundled in the app
-- `calibration.json` (`defaultTau` 0.90 and the certified prior keys), `builtin.json`, and
+- `calibration.json` (`defaultTau` 0.90 and the required prior keys), `builtin.json`, and
   the empty entitlements
 
 A missing Xcode, XcodeGen, or framework is a hard failure with the exact resolution. The
@@ -197,9 +197,9 @@ Calibration is not optional and is not interchangeable with the base model:
   `app/PocketGlimmer/Resources/Models/calibration.json`.
 - `defaultTau` must be 0.90. The script rejects 0.80 or a missing profile.
 - The priors were measured on the shipping GGUF. A base model with these priors is not the
-  certified operating point.
-- In the app, open any decision card. Its footer must read `τ = 0.90`. If it reads `τ =
-  0.80`, the calibration did not load and the app is running uncalibrated.
+  shipping operating point.
+- In the app, open any decision card. Its footer must read `τ = 0.90`. The current app stops startup if calibration is missing or incompatible. Seeing `τ =
+  0.80` indicates an older build or a different configuration; stop and rebuild the reviewed source.
 - `builtin.json` must also be in the bundle. It is the skills registry; the app has Swift
   built-ins as a fallback, but the shipped skill set is the JSON file.
 
@@ -261,7 +261,8 @@ Common failures:
 - Swift 6 concurrency diagnostics: keep the project in Swift 5 mode. Fix the source warning
   if it is real; do not switch the language mode to hide it.
 - `Unable to find a destination` or a missing iOS platform: install the iOS platform support
-  in Xcode > Settings > Components, then reconnect the phone and trust the computer.
+  in Xcode > Settings > Components. The generic unsigned build does not need a connected phone.
+- A missing destination for a specific device ID: reconnect that phone, unlock it and verify trust.
 
 ## 8. Signed install on the iPhone
 
@@ -312,7 +313,7 @@ Do this before recording or filling any phone number into the submission.
    for Reminders, Calendars, Contacts, and notifications.
 2. Open Settings in the app. "On-device model" shows the model name, not "No model file".
 3. Send a request that produces a decision card. Expand the card. The footer must read
-   `τ = 0.90`. If it reads `τ = 0.80`, stop; the bundled calibration did not load.
+   `τ = 0.90`. If it reads `τ = 0.80`, stop; this is not the reviewed shipping configuration.
 4. If the model was not bundled, copy it through Finder > iPhone > Files > Pocket Glimmer,
    then relaunch. Confirm the model name again.
 5. Turn on Airplane Mode, turn Wi-Fi off, and confirm the status pill reports offline. Ask a
@@ -329,12 +330,14 @@ Do this before recording or filling any phone number into the submission.
 Use airplane mode with Wi-Fi off. The status pill and the absence of network traffic are part
 of the demo evidence.
 
-1. Ask the same local-answer prompt three times, for example "Write a two-line thank-you text
+1. Record one cold launch and five consecutive warm runs of the same local-answer prompt, for example "Write a two-line thank-you text
    to my roommate".
 2. In Xcode, filter the console for `PGPERF`. Each local generation prints:
    `PGPERF prompt_tokens=... prefill_ms=... ttft_ms=... gen_tokens=... decode_tok_s=...`.
-3. Use the median of runs 2 and 3 for `ttft_ms` and `decode_tok_s`. Record the thermal state.
-   Do not quote run 1 if the phone is still warming up.
+3. Report the cold run separately. For the five warm runs, retain every sample and report the median and range
+   for `ttft_ms` and `decode_tok_s`. Record device/iOS, build SHA, model hash, settings, token counts and thermal state.
+   Do not discard slow runs or combine cold and warm measurements. Also retain complete request wall time:
+   TTFT measures generation only, not the preceding routing, retrieval and other decisions.
 4. For RAM, use the Xcode Debug navigator (⌘7) > Memory peak during a generation. For a
    cleaner number, use Product > Profile > Allocations or VM Tracker and read the peak
    Physical Footprint.
@@ -371,7 +374,7 @@ Known limitations at this baseline:
 - The repo is private until submission. A private repo is release-incomplete, not a core
   build failure. `scripts/verify_submission.sh` reports it separately.
 - The app is calibrated for tau 0.90. Lowering tau or using the base model changes the
-  certified behavior and must not be presented as the shipped operating point.
+  shipping configuration and must not be presented as the shipped operating point.
 - A free-team install expires after 7 days.
 
 ## 12. Troubleshooting

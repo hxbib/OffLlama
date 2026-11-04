@@ -1,8 +1,11 @@
 # Voice and camera: Muse Voice Transcribe, Muse Spark vision, SAM 3.1
 
-Added 2026-11-04. Three more Meta Model API capabilities. All three go through the **same decision gate** as typed
-escalation (Reflex `sensitivity` decision → masking → Standard mode only → "what left the phone" line). None of them
-is a separate path.
+> November 4 hardening: SAM concepts are masked and requests set `store: false`; the latter is schema-verified, not a new live API result. Standard mode is a training-use setting, not a promise of zero server retention. Voice audio uploads before transcript screening; image pixels are not anonymized.
+
+Added 2026-11-04. Three Meta Model API capabilities with different privacy paths. Photos get an on-device
+sensitivity check and metadata stripping before upload. Voice sends the recording for cloud transcription first;
+only the returned transcript then enters the normal text decision path. Spoken names and other audio contents
+are not masked before transcription. Neither metadata stripping nor text masking anonymizes image pixels.
 
 | Capability | What the user does | What runs |
 |---|---|---|
@@ -37,7 +40,7 @@ Prices (from [pricing-rate-limits](https://dev.meta.ai/docs/pricing-rate-limits)
 tokens; Voice Transcribe $0.18 per audio hour; SAM 3.1 $2.50 per 1,000 images. `muse-image-1.0` (image generation,
 $0.01/image) is also on the API. It is **not integrated**: a private assistant has no use for it today.
 
-## The privacy contract (in order, enforced in `MultimodalGate`)
+## Photo checks and voice handling in `MultimodalGate`
 
 1. **Sensitivity Reflex runs first, on device.** It's the same trained `OptionSets.sensitivity` decision (Decision.swift
    unchanged) on `User: <intent> [photo attached; text in photo: <on-device OCR>]`. The OCR comes from Apple Vision

@@ -9,38 +9,37 @@ Sources: JUDGE_BRIEF.md §8 hooks; README headline table; eval/results/OOS_STRES
 eval/results/SPARK_TEACHER.md; eval/results/ROUND2.md; LEDGER §6. Character counts were measured (X counts a link as
 23 characters). Every post is ≤ 280 characters. No emojis. @MetaforDevs is tagged once.
 
-**1/5** (268 chars)
+**1/5** (268 chars as X counts links)
 ```
 I'm a CS student in the Bronx and my commute has no signal. So I built a phone-sized 1B Meta model that knows when it doesn't know: Llama 3.2 1B, distilled from Muse Glimmer 30B, decides offline and asks Muse Spark only when it's unsure. Built with Llama. @MetaforDevs
 ```
 
-**2/5** (253 chars)
+**2/5** (267 chars as X counts links)
 ```
-It doesn't write out its decisions. Each is one forward pass over the answer-letter logits; a Learn-Then-Test threshold then picks act or ask. At τ=0.90: 36% kept on device, error bound ≤10.2% on those, assuming new requests resemble my calibration set.
-```
-
-**3/5** (242 chars)
-```
-I taught a 1B model to say "I'm not sure." On 120 held-out decisions: accuracy 74%→82%, decisions kept on-device 15%→51% (conf ≥0.8), calibration error 0.150→0.064. On 2,000 out-of-scope requests, it confidently kept just 5 (0.25%) at τ=0.90.
+It reads answer-letter scores in one pass, then acts, asks or falls back. At the shipping threshold of 0.90: 44/120 test decisions accepted, 41 correct. Those are measured choices, not a guarantee of complete phone tasks. The current iPhone build still needs testing.
 ```
 
-**4/5** (268 chars)
+**3/5** (255 chars as X counts links)
 ```
-Bigger teacher, worse student. Muse Spark Open (816B) matched my hand labels better than Muse Glimmer 30B, but the 1B it taught was overconfident: 13.7% vs 10.2% bound. Round 2 (Spark Open labels, H100 LoRA sweep) finished rejected too. ep1, Glimmer-only, still ships.
+On 120 report-only decisions: accuracy 74%→82%, acceptance 15%→51% at the comparison threshold of 0.8, ECE 0.150→0.064. A separate probe rendered 1,000 out-of-scope requests twice: 5/2,000 decision rows falsely confident at the shipping threshold of 0.90.
 ```
 
-**5/5** (262 chars as X counts it)
+**4/5** (256 chars as X counts links)
+```
+Bigger teacher did not mean a better student. Spark Open matched my labels better, but its student was overconfident. A second training sweep also failed the repeat-run gate. The shipping 1B still uses Glimmer-only labels. Negative results are in the repo.
+```
+
+**5/5** (262 chars as X counts links)
 ```
 Open-world actions, no retraining: 36 phone skills, one runtime decision. "Open the latest episode of Severance on Apple TV" picks the skill, then hands off to a user-installed Shortcut. Smoke: 25/27 argmax, 15/15 correct when kept. Repo: github.com/hxbib/pocket-glimmer
 ```
 
 ## Caveats behind each number (if someone asks in replies)
-- **36% / ≤10.2%:** calibration split N=180, 64/180 kept, 0 errors, Learn-Then-Test δ = 0.1. A bound under
-  exchangeability, not a guarantee. A Nov 4 re-run gave 10.4% (run-to-run noise).
-- **74→82%, 15→51%, 0.150→0.064:** frozen held-out test N=120; one item = 0.83 pts (95% CI ≈ ±7 pts). No temperature
+- **44/120, 41 correct:** report-only decisions at τ=0.90. The earlier 10.2% certificate claim is withdrawn: cal180 also selected the model. See docs/EVALUATION_CLAIMS.md. The hand-authored data do not establish a task-success or deployment guarantee.
+- **74→82%, 15→51%, 0.150→0.064:** report-only N=120; one item = 0.83 pts. No shipping choice used it, but 13 reporting runs are saved. No temperature
   scaling. Measured with llama-server on a Linux x86 CPU; the same GGUF is the one bundled for the phone.
 - **0.25% (5/2,000):** CLINC150 out-of-scope utterances, no gold labels. "False-confident" = conf ≥ τ with a
-  handle-locally pick, an upper bound on errors. The untrained 1B scores 0% only because it is never confident (mean
+  handle-locally pick, a proxy, not a measured error rate. The 2,000 rows come from 1,000 unique utterances rendered twice. The untrained 1B scores 0% only because it is never confident (mean
   top confidence 0.46–0.54). Box CPU.
 - **25/27:** N=27 author-written smoke test over 26 distinct skills (two Apple TV phrasings). Retrieval 27/27,
   argmax 25/27, 15/27 kept at τ=0.90, 15/15 correct when kept. The model was never trained on skillPick, and

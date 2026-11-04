@@ -2,16 +2,19 @@
 
 **Built with Llama** · Indie Developer track · Theme: **Build for Your World** · Solo: Habib (GitHub `hxbib`)
 
-**A 1B Meta model on an iPhone that knows when it doesn't know.** Pocket Glimmer is an assistant that keeps working
+**A 1B Meta model built for iPhone that knows when it doesn't know.** Pocket Glimmer is an assistant that keeps working
 with no signal. Llama-Reflex-1B, a Llama 3.2 1B distilled from Muse Glimmer 30B, makes every everyday decision on
 the phone in one forward pass. When it isn't sure, it asks me, confirms, or hands the question to Muse Spark 1.3,
 with my personal details masked first.
 
-Hook: memory that stays on your phone. The cloud only ever sees masked text, and only when the model is unsure.
+Hook: local memory and confidence-gated decisions. Text escalation masks known names and common identifiers.
+Optional voice transcription sends audio to the cloud; photo features send prepared images after a separate privacy check.
 
-## The three numbers (and one bound)
-Frozen held-out test split: 120 hand-labeled decisions, 10 per type, never used for selection (one item = 0.83 pts;
-95% CI on 0.82 is about ±7 pts).
+Build and demo status: the current iPhone app still needs an Xcode build and device verification. No public demo URL
+or completed form submission has been recorded. See [project status](PROJECT_STATUS.md) for the evidence and limits.
+
+## Measured decision results
+Report-only split: 120 hand-labeled decisions, 10 per type. No shipping choice used it; 13 reporting runs are saved. One item changes accuracy by 0.83 percentage points. These are Linux CPU decision tests, not phone task-success measurements.
 
 | | Untrained Llama 3.2 1B | **Llama-Reflex-1B (shipping)** |
 |---|---|---|
@@ -19,9 +22,7 @@ Frozen held-out test split: 120 hand-labeled decisions, 10 per type, never used 
 | Decisions kept on the phone (at τ=0.8, test N=120) | 15% | **51%** (61/120), 92% correct (56/61) |
 | Calibration error (ECE, 10 bins, raw letter softmax) | 0.150 | **0.064** |
 
-**Certified:** at the shipped threshold τ=0.90, error among on-device decisions is **≤10.2%** (calibration split
-N=180: 64/180 = 36% handled, 0 errors; Learn-Then-Test, δ=0.1), **assuming new requests are exchangeable with the
-calibration set**. That is a statistical statement about our eval distribution, not a guarantee.
+**Shipping threshold τ = 0.90:** 44/120 report-only decisions accepted, 41/44 correct. The selection split had 64/180 accepted with no errors. Its nominal 10.2% calculation does not account for choosing the model on those same examples and is not a post-selection guarantee. The hand-authored data do not establish a real-traffic guarantee either. [Evaluation correction](EVALUATION_CLAIMS.md).
 
 ---
 
@@ -39,13 +40,13 @@ isn't sure, it doesn't guess: it asks ("Which Sam?"), confirms, or waits until i
 Muse Spark 1.3.
 
 **How much stays on the phone (measured, not projected):**
-- At the certified threshold τ=0.90: 36% of decisions on the calibration split (64/180, 0 errors), 37% on the frozen
+- At the shipping threshold τ=0.90: 36% of decisions on the calibration split (64/180, 0 errors), 37% on the frozen
   test split (44/120, 41 correct).
 - At τ=0.8 on the frozen test split: 51% (61/120), up from 15% for the untrained model.
 - Everything else takes a safe path: ask, confirm, keep both memories, skip a nudge, or escalate. Offline, the escalated
   questions get a best-effort local answer that is labeled as such.
 
-**Privacy, concretely.** Memory is SQLite on the phone. The cloud is used only on escalation and only when online.
+**Privacy, concretely.** Memory is SQLite on the phone. For typed requests, cloud reasoning is used on escalation while online.
 A `sensitivity` decision can veto the cloud and answer on the phone ("Kept on device · nothing sent"). On escalation,
 the request, the memory snippets retrieved for it and a short profile (health, money and credential facts removed) are
 masked (names, emails, phones, addresses, card numbers) before they leave, and the app shows the exact text that was sent.
@@ -59,7 +60,7 @@ device install per the runbook, see Demo). Next: a TestFlight build, a bigger ca
 phone's own escalation log (the loop is built: `training/loop/`).
 
 ## Use of Meta AI Tooling
-Every model in the system is a Meta model. Four of them have distinct, measured jobs:
+The intended runtime models are Meta models. The core model and teacher roles are:
 
 1. **Llama 3.2 1B Instruct → Llama-Reflex-1B (the student, on the phone).** Every Reflex decision, tool call and
    route runs on it, offline, through llama.cpp + Metal. It answers each decision in one forward pass by reading the
@@ -77,7 +78,7 @@ Every model in the system is a Meta model. Four of them have distinct, measured 
 4. **Muse Spark Open 816B (an evaluated and rejected teacher).** I relabeled the training set with Spark Open on
    Baseten (k=8 votes, $11.06 for that first run) and retrained. Its labels matched my hand-written gold labels better than Glimmer's
    (178/180 on the calibration split), but the student it taught was **overconfident**: accuracy on handled 0.90 vs
-   0.96 and a looser certified bound (13.7% vs 10.2%). A stronger teacher didn't make a better-calibrated student,
+   0.96 and a looser nominal selection-set calculation (13.7% vs 10.2%). A stronger teacher didn't make a better-calibrated student,
    so the Glimmer student ships (`eval/results/SPARK_TEACHER.md`).
 
 **Lineage.** Meta pre-trained Glimmer itself on Muse Spark's outputs with logit distillation (Glimmer tech report,
@@ -94,7 +95,6 @@ model", but it targets a 24–32 GB computer. This project puts its everyday jud
 | Muse Glimmer 30B | Apache-2.0, open weights | Soft-label teacher (local IQ2_M) | Meta's agentic model, too big for the phone (see Technical Depth) |
 | Muse Spark 1.3 | Meta Model API, **Standard mode** | Escalation when confidence < τ | Strong reasoning and tool calling |
 | Muse Spark Open | Muse Model License, via Baseten | Teacher candidate, rejected on cal180 | A much larger Meta open model (816B-A42B): a fair test of "bigger teacher" |
-
 | Muse Voice Transcribe 1.0 · Muse Spark 1.3 vision · SAM 3.1 | Meta Model API, Standard mode | Voice in → same Reflex path as text; camera glimpse → sensitivity gate → Spark describes, SAM 3.1 outlines | Live-verified from Swift on Nov 4 (`docs/META_MULTIMODAL.md`) |
 | Muse Glimmer 30B, self-hosted (vLLM, Modal H100) | Apache-2.0, open weights | Optional System 2 on weights we serve ourselves; same `CloudBrain` code path | Escalation on Meta open weights end to end (`docs/OPEN_WEIGHTS_SYSTEM2.md`) |
 
@@ -110,23 +110,14 @@ memories → a `nudgeNow` decision chooses whether to interrupt. **Memory writes
 the same τ rule (docs/SKILLS.md).
 
 ## Demo
-- Video (3:00): see the CV submission form (public YouTube link).
+- Video (3:00): recording and public upload are pending. The timestamps below are the planned script.
 - How to run it: build from source on a Mac with Xcode. `app/project.yml` + XcodeGen, llama.cpp xcframework pinned at
   ddf48f8, free Apple ID signing, then copy the shipping GGUF into the app through Finder's Files sharing. Exact steps:
   `ios/MAC_DAY_RUNBOOK.md`. The model is in Git LFS (`models/`) and in release `artifacts-2026-11-01`.
 - No phone? The same Swift decision code runs against llama-server: `swift run pg-cli e2e` (18 decisions). On the
   shipping GGUF (box CPU, τ=0.9, bundled priors) it got 16/18 right at argmax, kept 10/18 on device, and all 10 kept
   were correct; every miss escalated (`eval/results/E2E_SWIFT_SHIPPING.md`).
-- Timestamps:
-  - 0:00–0:10: airplane mode on, a reminder set from a typed decision chain.
-  - 0:10–0:25: who I am and the subway moment.
-  - 0:25–1:45: real tasks offline and online: a message with structured confirmation, a money question kept on
-    device by the sensitivity decision, an event pick, the two-Sams contact pick that asks instead of guessing, and
-    one hand-off to Muse Spark 1.3 with masked names.
-  - 1:45–2:20: before/after numbers, the risk–coverage curve, the certified bound and its assumption.
-  - 2:20–2:45: the Meta stack and lineage.
-  - 2:45–3:00: close.
-- Script: `docs/DEMO_SCRIPT.md`.
+- Canonical timing and voiceover: [demo/STORYBOARD.md](demo/STORYBOARD.md). Rehearsal/evidence notes: [DEMO_SCRIPT.md](DEMO_SCRIPT.md). Keep the submitted timestamps aligned with the actual edited video.
 
 ## Technical Depth
 ![Architecture](img/architecture.png)
@@ -139,14 +130,8 @@ the same τ rule (docs/SKILLS.md).
   Messages also always confirm by rule, whatever the confidence.
 - **Distillation.** Muse Glimmer 30B (local IQ2_M) → 892 Glimmer-labeled examples → LoRA r16, 1 epoch, loss only at the
   answer letter → merge → Q4_K_M GGUF → llama.cpp Metal. Trained on CPU (bf16, 112 steps, 502 s).
-  A round-2 sweep (1,790 new Muse Spark Open labels, 11 LoRA variants on Modal H100) was run on Nov 4 under the same cal180 gate and **rejected**: the best variant (V4, teacher-confidence-weighted KL+CE) improved the certified bound to 9.6–9.8% @τ0.88 with 0.54 handled, but its ECE (0.059 fresh / 0.066 warm) crossed the 0.06 clause on repeat runs, so ep1 stays shipping. Full table and lessons: eval/results/ROUND2.md.
-- **Threshold: selective prediction with a certificate.** The reject option goes back to Chow (1970); Geifman &
-  El-Yaniv (2017) frame it as risk vs coverage. We pick τ with Learn-Then-Test (Angelopoulos, Bates et al. 2021):
-  exact binomial (Clopper–Pearson) p-values, Bonferroni over a fixed 99-point grid, α 0.05, δ 0.1, on the 180-item
-  calibration split. Tightest supported bound: **τ=0.90, 64/180 handled, 0 errors, error ≤10.2%**, under
-  exchangeability. 5% is not certified (it needs ≥135 handled rows with 0 errors). The bound re-ran at 10.4% on Nov 4
-  with a newer llama.cpp (`eval/results/REPRO_NOV4.md`). The app ships τ=0.90 as `defaultTau` in its bundled
-  `calibration.json`. The core falls back to 0.8 if no calibration file is loaded.
+  A round-2 sweep (1,790 new Muse Spark Open labels, 12 H100 candidate variants plus one CPU candidate) was run on Nov 4 under the same cal180 gate and **rejected**: the best variant (V4, teacher-confidence-weighted KL+CE) improved the nominal selection-set calculation to 9.6–9.8% @τ0.88 with 0.54 handled, but its ECE (0.059 fresh / 0.066 warm) crossed the 0.06 clause on repeat runs, so ep1 stays shipping. Full table and lessons: eval/results/ROUND2.md.
+- **Threshold: selective prediction with measured fallbacks.** The app ships τ = 0.90 in `calibration.json`. The selection-set count of 0/64 errors gives a nominal 10.2% Clopper–Pearson calculation with δ = 0.1 and a 99-threshold correction; reruns yield about 10.4–10.9%. Model selection reused that set, so it is not a valid post-selection certificate. The 5% target was not certified. [Assumptions and future independent protocol](EVALUATION_CLAIMS.md).
 - **Not one lucky threshold.** Risk–coverage on the frozen test split: the shipping curve is below the untrained one at
   essentially every coverage level. AURC 0.148 → **0.085**. At τ=0.9 it keeps 37% with 6.8% selective risk, at τ=0.8
   51% with 8.2% (`eval/results/RISK_COVERAGE.md`).
@@ -166,7 +151,7 @@ the same τ rule (docs/SKILLS.md).
 |---|---|---|---|---|
 | Llama 3.2 1B Q4_K_M, untrained + prompt debiasing (measured, Linux CPU) | 0.74 | 0.15 | 0.89 | 0.150 |
 | Llama-Reflex-1B (distilled) | 82% (98/120) | 51% at τ=0.8 (61/120) | 92% (56/61) | 0.064 |
-| Llama-Reflex-1B at the certified τ=0.90 (report only) | 82% (98/120) | 37% at τ=0.90 (44/120) | 93% (41/44) | 0.064 |
+| Llama-Reflex-1B at the shipping τ=0.90 (report only) | 82% (98/120) | 37% at τ=0.90 (44/120) | 93% (41/44) | 0.064 |
 
 - Per type (`eval/results/PER_TYPE_TAU090.md`): at τ=0.90, contactPick and eventPick stay on device 8/10, route and
   toolChoice 6/10, sensitivity 5/10. nudgeNow is weak (3/10 accurate) and never clears τ, so it always takes its safe
@@ -209,7 +194,7 @@ Each was measured, selected against on the calibration split, and kept in the re
   (`eval/results/AFTER_FLOOR_EP2.md`).
 - **nudgeNow relabel retrain (nv2):** bound 10.9%, nudgeNow unchanged (`eval/results/AFTER_FLOOR_NV2.md`).
 - **Muse Spark Open teacher:** better labels, worse student. Bound 13.7% (`eval/results/SPARK_TEACHER.md`).
-- **Quant ladder:** f16 14.5%, Q8_0 13.9%, Q3_K_M 13.9%, Q2_K 30.4%. All lose to the shipping Q4_K_M on the certified
+- **Quant ladder:** f16 14.5%, Q8_0 13.9%, Q3_K_M 13.9%, Q2_K 30.4%. All lose to the shipping Q4_K_M on the nominal selection-set
   bound (`eval/results/QUANT_IDENTITY.md`).
 - **Option-order permutation averaging:** better bound on cal180 but worse ECE, and the one test120 report didn't
   confirm it. Not shipped (`eval/results/PERM_AVG.md`).
@@ -236,28 +221,25 @@ PEFT, Unsloth (optional GPU path), matplotlib. Model weights keep their own lice
 
 ## Privacy & data handling
 - On the phone by default. Memory is SQLite on the device.
-- The cloud is used only on escalation, only when online, through Muse Spark 1.3 in **Standard mode** (`muse-spark-1.3`,
-  `core/Sources/PocketCore/CloudBrain.swift:73`). Contributor mode is never on.
+- Text reasoning can escalate to Muse Spark 1.3 in Standard mode or the optional self-hosted Glimmer endpoint. Optional voice transcription and image features make separate cloud requests.
 - A `sensitivity` decision can keep a request on the phone even when the cloud is available.
-- Names (from Contacts and memory), emails, phones, addresses and card numbers are masked before anything leaves, and
+- For text escalation, known names (from Contacts and memory), emails, phones, addresses and card numbers are masked, and
   restored in the answer. What leaves is the masked request plus masked relevant memory and a short masked profile with
   health, money and credential facts removed. The app shows the exact text that was sent.
-- Keys live in the iOS Keychain. Without a key, everything stays on the phone.
+- Voice audio is uploaded before transcript screening. Photos are prepared locally and checked, but recognizable image pixels are not anonymized. The photo gate and text scrubber can miss sensitive information.
+- Keys live in the iOS Keychain. Without configured credentials, built-in cloud inference is unavailable; app links and Shortcuts can still hand data to external services.
 - The demo uses my own data or made-up data.
 
 ## Limitations & assumptions
-- The conformal bound (≤10.2% at τ=0.90; 5% not certified) assumes exchangeability: new questions have to look like the
-  calibration set. Real phone traffic will drift, so τ needs recalibration after each round. I say "on our eval
-  distribution," not "guaranteed."
-- Gold set: 300 items written by one person (180 calibration / 120 frozen test). The ±7-point CI is real, and per-type
-  numbers (n=10) are noisy. With zero errors, a 5% bound needs at least 135 handled calibration rows.
+- The former 10.2% certificate claim is withdrawn. The 180 calibration rows also selected the model, and the statistical correction covered thresholds only. The report-only count is 3 errors in 44 accepted decisions, not a task-success guarantee.
+- The 300 examples were written by one person and stratified by type. They do not establish independent sampling from real phone traffic. The 135-zero-error-row calculation applies only under a fixed model, independent sampling and the specified 99-threshold procedure. See [evaluation limits](EVALUATION_CLAIMS.md).
 - The untrained baseline and every memory (RSS) and speed figure in the lineup come from the box's Linux x86 CPU, not an iPhone.
 - Tool arguments are filled by on-device heuristics and memory, not grammar-constrained decoding.
 - The scrubber is regex- and contact-based and will miss some identifiers.
 - **Prior art:** certified routing thresholds are not new. Uddin & Bauer (ACL 2026 SRW) set one with Clopper–Pearson
   for cloud model pairs, and Conformal Cascade (arXiv 2607.25018) and CR² (arXiv 2605.12001) are related. We haven't
   found prior art for the whole combination: the distilled student's own letter-logit confidence as the score, an
-  LTT-certified threshold, the student running offline on a phone and executing the decisions it keeps, and a privacy
+  confidence threshold, the student running offline on a phone and executing the decisions it keeps, and a privacy
   veto on escalation. That is not the same as saying none exists. Survey: `docs/research/RELATED_WORK.md`.
 - Nothing here guarantees a result; the numbers are what we measured on our eval sets.
 - The 5–8 tok/s phone figure for 30B in my early notes was an estimate from memory bandwidth. Nothing ran on a phone.
@@ -270,7 +252,7 @@ PEFT, Unsloth (optional GPU path), matplotlib. Model weights keep their own lice
 
 ## Links
 - Repo: https://github.com/hxbib/pocket-glimmer
-- Video: public YouTube link in the CV submission form.
+- Video: public upload pending. Add the verified link here and in the CV form after recording.
 - Model: `models/SHIPPING-ep1-Llama-3.2-1B-PocketGlimmer-Reflex-Q4_K_M.gguf` (Git LFS) and release `artifacts-2026-11-01`.
 
 ---

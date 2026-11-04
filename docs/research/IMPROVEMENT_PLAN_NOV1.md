@@ -1,5 +1,7 @@
 # Pocket Glimmer: Improvement Plan (written Sun Nov 1 2026, 7:30 PM ET)
 
+> November 4 correction: earlier “certified” claims below are historical. Model selection reused cal180; the nominal bound is not a post-selection guarantee. See [evaluation limits](../EVALUATION_CLAIMS.md). Saved predictions are unchanged.
+
 Scope: a research plan only. No code was changed. The budget is about 30–40 h of mostly unattended RTX 3080 Ti (12 GB) time before the Nov 3 demo recording, with little of Habib's attention. The iPhone build and the video come first.
 Rules that apply to every item: headline numbers come only from frozen test120, models are selected on cal180 only, only Meta models are used, there is no paid API use, and there is no trust_remote_code.
 

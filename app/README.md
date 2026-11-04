@@ -74,8 +74,7 @@ Pocket Glimmer; `AppModel.findModel()` checks Documents first and prefers `refle
 filename.
 
 `app/PocketGlimmer/Resources/Models/calibration.json` is required. It was generated from the
-shipping GGUF and sets `defaultTau` to 0.90, the certified operating point. A missing file
-leaves the app uncalibrated at 0.80, which does not match the shipped numbers. The base model
+shipping GGUF and sets `defaultTau` to 0.90, the shipping operating point. A missing, malformed or incompatible file stops app startup with an error. The base model
 does not share this calibration. Check a decision card: its footer must read `τ = 0.90`.
 
 ## Build and install

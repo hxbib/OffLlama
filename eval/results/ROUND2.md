@@ -1,5 +1,7 @@
 # Round 2 retrain (Nov 4 2026): Muse Spark Open label expansion + LoRA sweep. FINAL (rejected; ep1 stays shipping)
 
+> November 4 correction: earlier “certified” claims below are historical. Model selection reused cal180; the nominal bound is not a post-selection guarantee. See [evaluation limits](../../docs/EVALUATION_CLAIMS.md). Saved predictions are unchanged.
+
 Status at 07:52 ET: labeling finished; 1 of 17 candidates evaluated. The final table and verdict come at the end of this file.
 
 ## What changed versus the brief (read first)
@@ -74,7 +76,7 @@ No test120 run was made for round 2 (no winner; the frozen split stays untouched
 ### Labels and spend
 - New labels: 1,790 items via Muse Spark Open on Baseten (`meta-models/muse-spark-open-1026`, adaptive k 2→5, mean k 2.48, reasoning_effort low, temperature 1.0), weak types first; kept rows after the ≥0.6 top-vote filter: 1,750 (`training/round2/out/build_stats_r2c.json`).
 - Baseten this run: $5.56; **cumulative $16.62** (training/spark_teacher/spend.jsonl).
-- Modal: ~5 CPU-container runs (32 vCPU × ~25 min) before 07:58, then ~12 H100 trainings of ~1–3 min each incl. merge + GGUF conversion (list $4.56/h) — estimated **< $10 total**; exact figure on the Modal dashboard (apps named `pg-round`).
+- Modal: saved billing snapshot at 2026-11-04 13:19 UTC totals **$17.82792011 for pg-round2** and **$0.25687086 for pg-glimmer**, $18.08479097 combined. This supersedes the earlier “< $10” estimate and is not a current bill. Snapshot SHA-256: `bb773d928457c1fcaf186bb213392b59dbc4bc623b06457fef3b922dd2708209`.
 - Meta Model API: separate (multimodal smoke tests, eval/meta_api/spend.jsonl).
 
 ### If this ships later (not today)

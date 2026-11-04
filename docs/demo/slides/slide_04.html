@@ -23,7 +23,8 @@ p,li{font-size:42px;line-height:1.35;color:#d9dee7}
 .muted{color:#9aa4b5}
 .green{color:#4ade80}.orange{color:#fb923c}.blue{color:#7cb4ff}.white{color:#fff}
 .foot{position:absolute;left:110px;right:110px;bottom:34px;font-size:22px;line-height:1.35;color:#9aa4b5;border-top:2px solid #232b39;padding-top:18px;display:flex;justify-content:space-between;gap:40px}
-.foot .n{white-space:nowrap;color:#6b7587}
+.foot>span:first-child{min-width:0}
+.foot .n{white-space:nowrap;color:#6b7587;flex:0 0 auto}
 .badge{display:inline-block;border:3px solid #6ee7a8;color:#6ee7a8;border-radius:14px;padding:10px 26px;font-size:34px;font-weight:800;letter-spacing:.04em}
 .card{background:#141a24;border:2px solid #263042;border-radius:26px;padding:34px 38px}
 .row{display:flex;gap:40px}
@@ -123,6 +124,6 @@ td.a small{font-size:28px;color:#b7f5cf;font-weight:600;margin-left:12px}
     <tr><td class="m">Calibration error (ECE)<small>10 bins, lower is better</small></td><td class="b">0.150</td><td class="a">0.064</td></tr>
     <tr><td class="m">Area under risk–coverage (AURC)<small>lower is better</small></td><td class="b">0.148</td><td class="a">0.085</td></tr>
   </table>
-  <div class="foot"><span>Frozen held-out test set, N=120 hand-labeled decisions (10 per type), never used for selection. One item = 0.83 pts (95% CI ≈ ±7 pts). Raw letter softmax, no temperature scaling. Measured via llama-server on a Linux x86 CPU; the same GGUF is the one bundled for the phone. Sources: AFTER_FLOOR.md, RISK_COVERAGE.md.</span><span class="n">4 / 11</span></div>
+  <div class="foot"><span>Report-only split, N=120 hand-labeled decisions (10 per type); no shipping choice used it, but 13 reporting runs are saved. One item = 0.83 pts. No temperature scaling. Linux CPU decision tests, not phone task success. Sources: AFTER_FLOOR.md, RISK_COVERAGE.md, EVALUATION_CLAIMS.md.</span><span class="n">4 / 11</span></div>
 </section>
 </body></html>

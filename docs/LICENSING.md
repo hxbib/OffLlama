@@ -1,4 +1,4 @@
-# Licensing of the models we train from and ship
+# Model and dataset licensing
 
 Not legal advice. Texts fetched 2026-10-31.
 
@@ -39,3 +39,17 @@ Obligations: ship LICENSE copy + "Notice" file with the GGUF, show "Built with L
 
 ## Decision models from llama.cpp #29818
 Laya, Julia-1, lev, Kev-4B: `apache-2.0` (HF card metadata). OpenJev: `cc-by-nc-4.0` (non-commercial; don't ship). See docs/SYSTEMONE.md.
+
+## Datasets used in the expansion pool and stress test
+
+Source terms checked against the original publishers on Nov 4, 2026. The repository's MIT license does not replace these dataset terms. `training/data_scale/build_pool.py` samples English utterances, capitalizes their first character, adds a `User:` / network envelope, and maps them to our decision tasks. Round-2 teacher labels are new model outputs, not the original dataset annotations. Round 2 was rejected; these records did not replace the shipping ep1 model.
+
+| Dataset and attribution | Terms | Use here |
+|---|---|---|
+| **CLINC150**, Stefan Larson et al., *An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction*, EMNLP-IJCNLP 2019 ([paper](https://aclanthology.org/D19-1131/), [original data](https://github.com/clinc/oos-eval)) | [Creative Commons Attribution 3.0 Unported](https://github.com/clinc/oos-eval/blob/master/LICENSE) | Training-split utterances in the expansion pool; 1,000 OOS test utterances each wrapped twice as route and answerability in `clinc_oos_test_stress.jsonl`. That stress file was not training data. |
+| **MASSIVE 1.1 en-US**, Amazon.com, Inc. or its affiliates; Jack FitzGerald et al., *MASSIVE: A 1M-Example Multilingual Natural Language Understanding Dataset with 51 Typologically-Diverse Languages* (2022, [paper](https://arxiv.org/abs/2204.08582)) | [CC BY 4.0, publisher notice](https://github.com/alexa/massive/blob/main/NOTICE.md). Based on SLURP text, also CC BY 4.0. | English training utterances in the expansion pool. The dataset terms differ from the Apache-2.0 license of the modeling code. |
+| **SNIPS custom-intent data**, Snips / Sonos Voice Experience Team | [CC0 1.0 Universal](https://github.com/sonos/nlu-benchmark/blob/master/LICENSE); publisher also requests the citation below | Training utterances wrapped as route decisions in the expansion pool. [Original repository](https://github.com/sonos/nlu-benchmark). |
+
+SNIPS citation: Alice Coucke, Alaa Saade, Adrien Ball, Théodore Bluche, Alexandre Caulier, David Leroy, Clément Doumouro, Thibault Gisselbrecht, Francesco Caltagirone, Thibaut Lavril, Maël Primet, and Joseph Dureau. *Snips Voice Platform: an embedded Spoken Language Understanding system for private-by-design voice interfaces*. 2018. [arXiv:1805.10190](https://arxiv.org/abs/1805.10190).
+
+Derived records are in `training/data_scale/out/` and the teacher-labeled subsets in `training/round2/out/`. Keep this attribution and the source-license links with redistributed copies. The original local Parquet download revisions were not recorded by `build_pool.py`; this attribution does not imply a byte-for-byte reconstruction of those upstream snapshots.

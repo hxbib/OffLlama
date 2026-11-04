@@ -1,5 +1,7 @@
 # NEXT_AGENT (for an agent working from a clone on Habib's PC or Mac)
 
+> **Takeover checkpoint, Nov 4 15:50 UTC:** current source includes demo parser/routing, first-launch privacy, strict calibration and intent-result fixes. The integrated Linux core passes 108 tests (one opt-in API test skipped); app syntax parses but the current iOS app is still unbuilt. The old 10.2% certificate is withdrawn; read `docs/EVALUATION_CLAIMS.md`. Real-engine “Text Mom…” remains uncertain at τ=0.90; do not fake the compose-sheet demo. `docs/PROJECT_STATUS.md` and `ios/MAC_DAY_RUNBOOK.md` supersede old readiness claims below. A review found false passes in Mac prep; repairs and final independent review are still in progress. No phone measurements, public video or submission receipt exists. The model, calibration and test120 remain frozen.
+
 You will NOT have the Grok Bot box (/workspace/...). Everything you need is in this repo, its Git LFS files and its GitHub release. Read **LEDGER.md** first: measurement protocol (section 0), results, rejected ideas, in-flight work.
 
 ## 0a. State at 8:45 AM ET Wed Nov 4 (submission day) — read this first, then docs/FINAL_HOURS.md

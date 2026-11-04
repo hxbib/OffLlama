@@ -13,7 +13,7 @@ Source read: https://github.com/ggml-org/llama.cpp/pull/29818 (merged 2026-10-02
 | | systemone | Reflex |
 |---|---|---|
 | Temperature | fixed in the GGUF (`{arch}.decision.temperature.<type>[.<bucket>]`, buckets by option count 2 / 3_5 / 6_10 / 11) | fitted on our held-out data per decision type (`CalibrationProfile`) |
-| Confidence | `(p_max − 1/n)/(1 − 1/n)`, 0 = uniform (TypeSafe formula) | raw `p_max`; we threshold it with a conformally certified tau (`ConformalRisk`). Upstream formula exposed as `Calibration.systemOneConfidence` for parity. |
+| Confidence | `(p_max − 1/n)/(1 − 1/n)`, 0 = uniform (TypeSafe formula) | raw `p_max`; we threshold it with a confidence threshold (`ConformalRisk` supplies nominal calculations; see EVALUATION_CLAIMS.md). Upstream formula exposed as `Calibration.systemOneConfidence` for parity. |
 | Position debias | lev: 2 variants (options in reversed order), probabilities averaged → 2 passes | none (1 pass) |
 | Question types | `choice`, `score` (expected level), `noul` (P(true)) | choice only (yes/no sets are 2-option choices) |
 | Escalation | none; README says probabilities "are not guaranteed to be calibrated for your data" | fallback option when conf < tau |

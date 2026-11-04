@@ -1,4 +1,7 @@
 # AFTER fill (shipping ep1): APPLIED, Option A (τ=0.90)
+
+> November 4 correction: earlier “certified” claims below are historical. Model selection reused cal180; the nominal bound is not a post-selection guarantee. See [evaluation limits](EVALUATION_CLAIMS.md). Saved predictions are unchanged.
+
 **Status (2026-11-04 ~6:00 AM ET):** Option A applied with `TAU=0.90 scripts/apply_after_fill.sh` by the orchestrating agent under Habib's "go, complete this" directive. The values below are now in README.md, docs/SUBMISSION.md and docs/DEMO_SCRIPT.md. The script also filled the teacher-label count (892). This file is kept as the record of the decision.
 
 Drafted 2026-11-02 07:20 ET.

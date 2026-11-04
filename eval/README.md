@@ -1,5 +1,7 @@
 # eval/
 
+> The earlier 10.2% certificate claim is withdrawn. Read [evaluation limits](../docs/EVALUATION_CLAIMS.md): model selection reused cal180, and these hand-authored decisions do not establish task success or a deployment guarantee.
+
 - `gold_decisions.jsonl` — 36 hand-labeled Reflex decisions covering all 12 decision types (written for this project).
 - `score_decisions.py` — scores any student/teacher: accuracy, ECE, coverage at tau, accuracy on covered, latency.
 - `run_system2.py` + `system2_items.py` — System 2 answer quality (15 Q&A items adapted from the Gate-1 eval written this week).
@@ -32,7 +34,7 @@ New scripts:
 New reports in `results/`, all run on llama.cpp 13ec8f6 with the shipping Q4_K_M (sha256 a5c60a88…82c2). Every number cites a JSON in `experiments/`.
 - `REPRO_NOV4.md`: cal180 reproduces within llama-server noise. acc 0.794, handled@0.8 0.48, acc-on-handled 0.966, ECE 0.040, LTT bound 10.4% at τ 0.90 (63/180, 0 errors). The Nov 1 run gave 10.2% (64/180), and 5 of the 180 predictions changed.
 - `PERM_AVG.md`: does not ship. Full cyclic averaging tightens the bound to 7.8% at 47% handled but under-confidence pushes ECE up by 0.03–0.06. K=2 is borderline on cal180 and did not confirm on its single test120 run (pre-commit in `experiments/perm_test120_precommit.txt`).
-- `OOS_STRESS.md`: 2000 CLINC OOS items. Shipping false-confident rate is 7.3% at τ 0.80 and 0.25% at τ 0.90. Base is 0%, but only because it is almost never confident.
+- `OOS_STRESS.md`: 1,000 unique CLINC OOS utterances, each rendered as route and answerability (2,000 decision rows). The false-confident proxy is 7.3% at τ 0.80 and 0.25% at τ 0.90. Base is 0%, but only because it is almost never confident. These are not 2,000 independent requests or a risk certificate.
 - `LATENCY_BOX.md`: per-decision HTTP latency and prompt tokens.
 
-The test120 split was touched once in total, for perm-avg K=2, report only. All selection used cal180.
+The gold test120 file is frozen, but it has been scored in multiple reporting runs: 13 saved test120 result files exist across the project. The permutation-averaging experiment added one report-only K=2 run. Selection is documented against cal180; repeated test reporting must not be described as a single untouched evaluation.

@@ -1,0 +1,28 @@
+DEMO_REQUEST Text Mom I'll be home by 8
+DEMO_DECISION rememberOrNot argmax=no chosen=no confidence=0.5690477496531636 tau=0.9
+DEMO_DECISION route argmax=tool chosen=escalate_cloud confidence=0.8264732627775734 tau=0.9
+DEMO_DECISION skillPick argmax=s0 chosen=ask confidence=0.8103563267224864 tau=0.9
+DEMO_REPLY clarify("Which action do you want: Send an iMessage / text, Run a Shortcut by name or Summarize shared text? Please restate the request with the app, recipient and message.")
+DEMO_REQUEST Text Mom that I'll be home by 8
+DEMO_DECISION rememberOrNot argmax=no chosen=no confidence=0.6752211179189848 tau=0.9
+DEMO_DECISION route argmax=tool chosen=escalate_cloud confidence=0.8678925380532279 tau=0.9
+DEMO_DECISION skillPick argmax=s0 chosen=ask confidence=0.8054861293567888 tau=0.9
+DEMO_REPLY clarify("Which action do you want: Send an iMessage / text, Summarize shared text or Run a Shortcut by name? Please restate the request with the app, recipient and message.")
+DEMO_REQUEST Text Mom: I'll be home by 8
+DEMO_DECISION rememberOrNot argmax=no chosen=no confidence=0.5430371656118441 tau=0.9
+DEMO_DECISION route argmax=tool chosen=escalate_cloud confidence=0.8185163122383379 tau=0.9
+DEMO_DECISION skillPick argmax=s0 chosen=ask confidence=0.7871004738190366 tau=0.9
+DEMO_REPLY clarify("Which action do you want: Send an iMessage / text, Run a Shortcut by name or Summarize shared text? Please restate the request with the app, recipient and message.")
+DEMO_REQUEST Text Sam I'm running late
+DEMO_DECISION rememberOrNot argmax=no chosen=no confidence=0.4812977174043354 tau=0.9
+DEMO_DECISION route argmax=tool chosen=escalate_cloud confidence=0.8014147897877083 tau=0.9
+DEMO_DECISION skillPick argmax=s0 chosen=s0 confidence=0.9894342069344222 tau=0.9
+DEMO_DECISION contactPick argmax=c0 chosen=ask confidence=0.5734017251433788 tau=0.9
+DEMO_REPLY clarify("Which Sam? Sam Lee, Sam Ortiz")
+DEMO_REQUEST open the latest episode of Severance on Apple TV
+DEMO_DECISION rememberOrNot argmax=no chosen=no confidence=0.4130066772293031 tau=0.9
+DEMO_DECISION route argmax=tool chosen=escalate_cloud confidence=0.7615088594912895 tau=0.9
+DEMO_DECISION skillPick argmax=s0 chosen=s0 confidence=0.9951490775526141 tau=0.9
+DEMO_DECISION confirmBeforeAct argmax=act chosen=confirm confidence=0.6119366246906748 tau=0.9
+DEMO_REPLY needsConfirmation(PocketCore.PlannedAction(tool: "skill:appletv_play", args: ["show": "Severance"]), prompt: "Apple TV: play a show: Severance?")
+DEMO_FLOW completed: real shipping model and core, fixture actions only, Linux CPU

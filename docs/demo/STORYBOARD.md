@@ -1,6 +1,6 @@
 # Pocket Glimmer: canonical 3:00 storyboard (edit-ready)
 
-This is the canonical 3:00 cut. docs/DEMO_SCRIPT.md holds the τ = 0.90 shooting rules; docs/FINAL_HOURS.md should
+This is the canonical 3:00 cut. docs/DEMO_SCRIPT.md holds the τ = 0.90 rehearsal checks; docs/FINAL_HOURS.md should
 point here for the shot list. The slides are the 11 PNGs `docs/img/slide_01.png` … `slide_11.png` (1920×1080,
 rendered from `docs/demo/slides.html`; regenerate with `bash docs/demo/render_slides.sh`). In iMovie you drop phone
 clips and PNGs onto the timeline in this order and lay the voiceover on top.
@@ -24,6 +24,7 @@ clips and PNGs onto the timeline in this order and lay the voiceover on top.
 - **No phone success claims.** Do not say the app runs on an iPhone, give phone speeds, or claim a public video unless
   that take was recorded and checked. If the phone build is unavailable or unverified, use the labelled Mac/Linux
   variant at the end and keep its caption on screen.
+- **Evaluation:** the earlier 10.2% certificate is withdrawn. cal180 also selected the model. Use the measured counts on slide 5; see docs/EVALUATION_CLAIMS.md.
 - No health questions.
 
 **Rules carried over from DEMO_SCRIPT.md:**
@@ -41,7 +42,7 @@ Voiceover is verbatim, ≤ 30 words per beat, at about 2.5 words/s.
 | 1 | 0:00–0:10 | **Phone clip.** Airplane Mode ON (icon visible). Pill "Offline · fully on device". Type *"Remind me to call Mom at 7."* Cut to Reminders. | "Airplane mode is on. No signal. It still does what I asked, on the phone." | `route → tool [PHONE_CONF]%`, `toolChoice → create_reminder [PHONE_CONF]%`, then the reminder in Reminders. Tap Confirm if asked | If route escalates (orange), retype with fewer words ("Remind me 7pm call Mom"). If still orange, open on beat 2's text-Mom clip and drop this one. If no phone build, use the Mac variant |
 | 2 | 0:10–0:14 | **slide_01.png** (title) | "Pocket Glimmer: a Meta model that knows when it doesn't know." | Title + "Built with Llama" badge | Always available |
 | 3 | 0:14–0:26 | **slide_02.png** (the moment). Lower third: "Habib · CS student, Hunter College · Bronx" | "I'm Habib, a CS student at Hunter, living in the Bronx. My commute is underground. Memory stays on my phone; typed escalations send masked text." | Lower third | Alternative: phone zoom on a decision card with the same lower third (DEMO_SCRIPT 0:10–0:25) |
-| 4 | 0:26–0:42 | **Phone clip.** Still offline. *"Text Mom I'll be home by 8."* Tap Confirm → Messages compose sheet, text filled in | "Every step is a typed decision with a confidence bar. Anything that speaks for me, like a message, always asks first. That's a rule, not a guess." | `toolChoice → send_message [PHONE_CONF]%`, confirm card (orange is fine), JSON tool call, Confirm button, compose sheet | If toolChoice is orange, keep it anyway: the confirm card still appears by rule. Change VO to "It isn't sure, so it shows me first." |
+| 4 | 0:26–0:42 | **Phone clip.** Still offline. *"Text Mom I'll be home by 8."* Tap Confirm → Messages compose sheet, text filled in | "Every step is a typed decision with a confidence bar. Anything that speaks for me, like a message, always asks first. That's a rule, not a guess." | `toolChoice → send_message` or `skillPick → imessage_send [PHONE_CONF]%`, confirm card (orange is fine), JSON tool call, Confirm button, compose sheet | The exact phrase is below the skill threshold in the Linux real-model check and asks for clarification. Use a compose-sheet take only after successful device rehearsal; otherwise show the clarification and say "It asks me to restate the action" or cut the beat. Do not imply every orange tool decision reaches confirmation. |
 | 5 | 0:42–0:58 | **Phone clip.** Airplane OFF on camera (pill → "Online"). *"Help me budget: my salary is $2,100 a month and I owe $3,400 on my credit card."* | "Now I'm online. But this is my money, so it keeps it on the phone. Nothing is sent, even though the cloud is right there." | `sensitivity → sensitive [PHONE_CONF]%` and the lock badge "Kept on device · nothing sent", with "Online" pill visible. **No** Muse Spark badge | If sensitivity isn't confident, rephrase with more money words ("…my bank balance is $212"). If it still escalates, cut the beat and extend beats 6 and 10 |
 | 6 | 0:58–1:08 | **Phone clip.** *"When's my advising meeting?"* (two advising events on the calendar) | "Two advising meetings. It picks the right one on the phone, and the bar says how sure it is." | `eventPick → [event] [PHONE_CONF]%`, **green** bar, answer with date and time | If orange, keep the "Which one?" take and say: "Two advising meetings, and it isn't sure which. So it asks." The question is text, not buttons |
 | 7 | 1:08–1:17 | **Phone clip.** *"Text Sam I'm running late."* (Sam Lee + Sam Ortiz in Contacts, nothing in memory) | "Two Sams, and the small model isn't sure. So it doesn't guess. It asks." | `contactPick [PHONE_CONF]%` **orange below τ** → chat text "Which Sam? Sam Lee, Sam Ortiz" (plain text, not a picker) | If contactPick is confident (green), cut this beat; don't fake it. Do not tap an option: the core only sends a text question |
@@ -51,8 +52,8 @@ Voiceover is verbatim, ≤ 30 words per beat, at about 2.5 words/s.
 | 11 | 1:45–1:53 | **OPTIONAL phone clip (online): voice.** Hold mic, say *"Remind me to call Mom at 7"*, release | "Voice uploads to Muse Voice Transcribe first; then the transcript goes through the same decisions as typed text." | Transcript line `Muse Voice Transcribe · 2.6 s · 83 KB sent · recording deleted`, then the same decision cards. The audio leaves before any on-device check; the recording is deleted after upload unless keep-recordings is on | Only if the mic works on the device build (META_MULTIMODAL.md: API verified live, iOS UI not yet verified on a device). Otherwise use the answerability swap below, or give the 8 s to beat 12 |
 | 12 | 1:53–2:03 | **slide_03.png** (how a decision works) | "Under the hood, each decision is one forward pass. It reads the answer-letter logits, compares confidence to a threshold, then acts or falls back." | Flow boxes, τ = 0.90, the 12 chips + skillPick (dynamic) | Always available |
 | 13 | 2:03–2:15 | **slide_04.png** (before/after) | "On 120 held-out decisions, distilling from Muse Glimmer took accuracy from 74 to 82 percent, and it keeps three times as many on the phone." | Table + footer "frozen held-out test, N=120, one item = 0.83 pts" | Always available. Add phone speed only if `[PHONE_TOK_S]` was measured (DEMO_SCRIPT 1:45 row) |
-| 14 | 2:15–2:27 | **slide_05.png** (certified threshold + risk–coverage) | "The threshold isn't a guess: at 0.9, errors among kept decisions stay at or under about ten percent, assuming new requests look like my calibration set." | τ = 0.90, 36%, 0 errors, ≤ 10.2%, the orange exchangeability box, chart | Always available |
-| 15 | 2:27–2:36 | **slide_06.png** (out-of-scope) | "On 2,000 out-of-scope requests, it confidently kept five on the phone. The untrained model only looks safe because it's unsure of everything." | 0.25% and the blanket-abstention panel | Always available |
+| 14 | 2:15–2:27 | **slide_05.png** (shipping threshold + risk–coverage) | "At the shipping threshold, it accepted 44 of 120 test decisions, with 41 correct. These are measured choices, not a guarantee of complete task success." | τ = 0.90, 44/120 accepted, 41/44 correct, model-selection limitation, chart | Always available |
+| 15 | 2:27–2:36 | **slide_06.png** (out-of-scope) | "A thousand out-of-scope requests became two thousand decision tests. Five were falsely confident. The untrained model mostly abstained." | 0.25% and the blanket-abstention panel | Always available |
 | 16 | 2:36–2:46 | **slide_07.png** (Meta model roles) | "Every model is Meta's. Meta distilled Glimmer from Spark; I distilled Glimmer into a 1B for my pocket. Spark gets only the hard questions." | Student, teacher, Spark escalation, optional self-hosted Glimmer endpoint + lineage line. The endpoint card says cloud-only, saved smoke, not current liveness | Always available |
 | 17 | 2:46–2:51 | **slide_08.png** (negative results) | "I kept what failed. Round 2 was rejected; ep1 still ships." | Six cards + Round 2 line "finished · rejected · ep1 stays" | Always available |
 | 18 | 2:51–2:54 | **slide_10.png** (closed loop) | "Its doubts become the next lesson." | Loop diagram | Always available |
@@ -70,14 +71,14 @@ claims. Beat 8 is optional; if it is cut, keep slide_09 and give the 12 s to bea
 
 ## 25-second "no iPhone" variant (Mac run, labelled as such)
 
-Use only if there's no working iPhone build (FINAL_HOURS.md C-fallback), or as a teaser. The caption **"Mac run, not
+Use only if there's no working iPhone build (FINAL_HOURS.md, no-phone path), or as a teaser. The caption **"Mac run, not
 iPhone"** stays on screen for the whole terminal segment.
 
 | Time | On screen | Voiceover (verbatim) |
 |---|---|---|
 | 0:00–0:04 | slide_01.png | "Pocket Glimmer: a Meta model that knows when it doesn't know." |
 | 0:04–0:14 | Mac screen recording, Wi-Fi off (menu bar icon visible): `swift run pg-cli e2e --url http://127.0.0.1:8088 --tau 0.9 --calibration ../app/PocketGlimmer/Resources/Models/calibration.json` scrolling decisions with `conf` and `esc`. Caption: **"Mac run, not iPhone · Wi-Fi off"** | "Wi-Fi off, on my Mac: every decision gets a confidence. Below the threshold it escalates instead of guessing." |
-| 0:14–0:21 | slide_05.png | "The threshold comes with a statistical error bound, assuming new requests look like my calibration set." |
+| 0:14–0:21 | slide_05.png | "At the shipping threshold, 41 of 44 accepted test decisions were correct. That is a measurement, not a guarantee." |
 | 0:21–0:25 | slide_11.png | "Built with Llama. Open weights, small enough for a phone." |
 
 Don't read the Mac run's totals aloud unless you read them off that screen (the box run gave 16/18 argmax, 10/10
@@ -100,7 +101,6 @@ correct on kept; E2E_SWIFT_SHIPPING.md, box CPU).
 8. **Export:** File → Share → File → Resolution **1080p**, Quality High, Compress Better Quality → save as
    `pocket-glimmer-demo.mp4`.
 9. **Upload:** YouTube → upload as **Unlisted** first, wait for HD processing, watch it once → switch to **Public**
-   (the submission needs a public video, FINAL_HOURS.md §D). Title: `Pocket Glimmer: a 1B Meta model for iPhone that
-   knows when it doesn't know`.
+   (the submission needs a public video, FINAL_HOURS.md §D). Title: `Pocket Glimmer: a 1B Meta model built for iPhone`. Label a non-phone recording in the title and on screen.
 10. **Logged-out check:** open the link in a private window. It must play at full length, with sound, in HD. Paste the
     link into the submission and README only after this.

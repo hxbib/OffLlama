@@ -1,5 +1,7 @@
 # After distillation, floor run (Nov 1 2026, box CPU)
 
+> November 4 correction: earlier “certified” claims below are historical. Model selection reused cal180; the nominal bound is not a post-selection guarantee. See [evaluation limits](../../docs/EVALUATION_CLAIMS.md). Saved predictions are unchanged.
+
 Student: Llama 3.2 1B Instruct + LoRA r=16, 1 epoch over 892 Muse Glimmer teacher labels (bf16, micro-batch 2, grad accumulation to 8, gradient checkpointing; 112 steps, 502 s). Merged and quantized to Q4_K_M (808 MB GGUF), served by llama-server.
 Eval: identical pipeline to the locked baseline (eval/experiments/run_prompt_variants.py, variant v2+cc, frozen gold_test N=120; calibration split N=180; training/reliability.py 10 bins; pg_train.conformal alpha 0.05 delta 0.1).
 
