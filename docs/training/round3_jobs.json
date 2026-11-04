@@ -1,5 +1,5 @@
 {
-  "recordedAt": "2026-11-04T17:59:40+00:00",
+  "recordedAt": "2026-11-04T18:07:52+00:00",
   "note": "Dispatch states only. GPU app ID and training-start evidence come from the pilot report; a running delegate is not proof of a running GPU job.",
   "jobs": [
     {
@@ -17,13 +17,14 @@
           "value": "max"
         }
       ],
-      "modalReservationUSD": 5,
+      "modalReservationUSD": 0,
       "basetenReservationUSD": 0,
       "sourceCommit": "8711232",
       "statusAtReassignment": "interrupted",
       "hasPendingChildRunsAtReassignment": false,
       "supersededReason": "User reassigned all training-related tasks to Muse Wonder 1.0 max through Muse Code",
-      "reservationTransferred": true
+      "reservationTransferred": true,
+      "originalModalReservationUSD": 5
     },
     {
       "clientRequestId": "pg-r3-training-grounding-20261104-v1",
@@ -46,7 +47,8 @@
       "statusAtReassignment": "interrupted",
       "hasPendingChildRunsAtReassignment": false,
       "supersededReason": "User reassigned all training-related tasks to Muse Wonder 1.0 max through Muse Code",
-      "reservationTransferred": true
+      "reservationTransferred": true,
+      "originalModalReservationUSD": 0
     },
     {
       "clientRequestId": "pg-r3-dataset-grounding-20261104-v1",
@@ -69,8 +71,71 @@
       "statusAtReassignment": "interrupted",
       "hasPendingChildRunsAtReassignment": false,
       "supersededReason": "User reassigned all training-related tasks to Muse Wonder 1.0 max through Muse Code",
-      "reservationTransferred": true
+      "reservationTransferred": true,
+      "originalModalReservationUSD": 0
+    },
+    {
+      "clientRequestId": "pg-r3-duration-pilot-muse-20261104-v1",
+      "title": "Muse: run capped two-epoch V4 GPU pilot",
+      "taskId": "node:delegated-task:command%3Amcp%3A0df30b98-7eae-44f2-96c6-ca85a2fa4524%3Adelegate-task%3Apg-r3-duration-pilot-muse-20261104-v1",
+      "childThreadId": "thread:delegated-task:command%3Amcp%3A0df30b98-7eae-44f2-96c6-ca85a2fa4524%3Adelegate-task%3Apg-r3-duration-pilot-muse-20261104-v1",
+      "link": "<t3-thread://v2/1fc19a6b-4359-418d-a801-4f7fb5e9b320/thread:delegated-task:command%3Amcp%3A0df30b98-7eae-44f2-96c6-ca85a2fa4524%3Adelegate-task%3Apg-r3-duration-pilot-muse-20261104-v1>",
+      "statusAtDispatch": "running",
+      "providerInstanceId": "muse",
+      "model": "muse-wonder-1.0",
+      "options": [
+        {
+          "id": "reasoningEffort",
+          "value": "max"
+        }
+      ],
+      "modalReservationUSD": 5,
+      "basetenReservationUSD": 0,
+      "sourceCommit": "79e0884"
+    },
+    {
+      "clientRequestId": "pg-r3-training-grounding-muse-20261104-v1",
+      "title": "Muse: design the larger training and evaluation run",
+      "taskId": "node:delegated-task:command%3Amcp%3A0df30b98-7eae-44f2-96c6-ca85a2fa4524%3Adelegate-task%3Apg-r3-training-grounding-muse-20261104-v1",
+      "childThreadId": "thread:delegated-task:command%3Amcp%3A0df30b98-7eae-44f2-96c6-ca85a2fa4524%3Adelegate-task%3Apg-r3-training-grounding-muse-20261104-v1",
+      "link": "<t3-thread://v2/1fc19a6b-4359-418d-a801-4f7fb5e9b320/thread:delegated-task:command%3Amcp%3A0df30b98-7eae-44f2-96c6-ca85a2fa4524%3Adelegate-task%3Apg-r3-training-grounding-muse-20261104-v1>",
+      "statusAtDispatch": "running",
+      "providerInstanceId": "muse",
+      "model": "muse-wonder-1.0",
+      "options": [
+        {
+          "id": "reasoningEffort",
+          "value": "max"
+        }
+      ],
+      "modalReservationUSD": 0,
+      "basetenReservationUSD": 0,
+      "sourceCommit": "79e0884"
+    },
+    {
+      "clientRequestId": "pg-r3-dataset-grounding-muse-20261104-v1",
+      "title": "Muse: research scalable data and held-out evaluation",
+      "taskId": "node:delegated-task:command%3Amcp%3A0df30b98-7eae-44f2-96c6-ca85a2fa4524%3Adelegate-task%3Apg-r3-dataset-grounding-muse-20261104-v1",
+      "childThreadId": "thread:delegated-task:command%3Amcp%3A0df30b98-7eae-44f2-96c6-ca85a2fa4524%3Adelegate-task%3Apg-r3-dataset-grounding-muse-20261104-v1",
+      "link": "<t3-thread://v2/1fc19a6b-4359-418d-a801-4f7fb5e9b320/thread:delegated-task:command%3Amcp%3A0df30b98-7eae-44f2-96c6-ca85a2fa4524%3Adelegate-task%3Apg-r3-dataset-grounding-muse-20261104-v1>",
+      "statusAtDispatch": "running",
+      "providerInstanceId": "muse",
+      "model": "muse-wonder-1.0",
+      "options": [
+        {
+          "id": "reasoningEffort",
+          "value": "max"
+        }
+      ],
+      "modalReservationUSD": 0,
+      "basetenReservationUSD": 0,
+      "sourceCommit": "79e0884"
     }
   ],
-  "reassignedAt": "2026-11-04T18:06:56+00:00"
+  "reassignedAt": "2026-11-04T18:06:56+00:00",
+  "activeTaskIds": [
+    "node:delegated-task:command%3Amcp%3A0df30b98-7eae-44f2-96c6-ca85a2fa4524%3Adelegate-task%3Apg-r3-duration-pilot-muse-20261104-v1",
+    "node:delegated-task:command%3Amcp%3A0df30b98-7eae-44f2-96c6-ca85a2fa4524%3Adelegate-task%3Apg-r3-training-grounding-muse-20261104-v1",
+    "node:delegated-task:command%3Amcp%3A0df30b98-7eae-44f2-96c6-ca85a2fa4524%3Adelegate-task%3Apg-r3-dataset-grounding-muse-20261104-v1"
+  ]
 }
