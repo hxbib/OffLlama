@@ -17,6 +17,23 @@ final class SystemActions: ActionExecutor, @unchecked Sendable {
         _ = try? await contacts.requestAccess(for: .contacts)
     }
 
+    /// Explicit Contacts prompt for message flows that paused on undetermined access.
+    /// Call from a user-visible retry, not from background binding.
+    func requestContactsAccess() async -> AccessLevel {
+        _ = try? await contacts.requestAccess(for: .contacts)
+        let level: AccessLevel
+        switch CNContactStore.authorizationStatus(for: .contacts) {
+        case .authorized: level = .full
+        case .limited: level = .limited
+        case .denied: level = .denied
+        case .restricted: level = .restricted
+        case .notDetermined: level = .notDetermined
+        @unknown default: level = .denied
+        }
+        ActionDiagnostics.shared.record(phase: .permission, code: .contactsRequested)
+        return level
+    }
+
     func searchContacts(_ query: String) async throws -> [String] {
         let keys = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactOrganizationNameKey, CNContactJobTitleKey] as [CNKeyDescriptor]
         let found = try contacts.unifiedContacts(matching: CNContact.predicateForContacts(matchingName: query), keysToFetch: keys)
@@ -144,8 +161,13 @@ final class ComposeSheets: NSObject, MFMessageComposeViewControllerDelegate, MFM
         }
     }
 
-    private func finish(_ outcome: Outcome) {
-        guard let p = pending else { return }
+    private func finish(_ outcome: Outcome, controller: UIViewController) {
+        // A late callback from a dismissed sheet, or one from a controller this
+        // presentation did not create, must never resolve another attempt.
+        guard let p = pending, p.controller === controller else {
+            ActionDiagnostics.shared.record(phase: .presentation, code: .callbackIgnored)
+            return
+        }
         pending = nil
         p.controller.dismiss(animated: true)
         p.resume(outcome)
@@ -154,9 +176,9 @@ final class ComposeSheets: NSObject, MFMessageComposeViewControllerDelegate, MFM
     nonisolated func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
         MainActor.assumeIsolated {
             switch result {
-            case .sent: finish(.message(.acceptedOrQueued))
-            case .cancelled: finish(.message(.cancelled))
-            default: finish(.message(.failed))
+            case .sent: finish(.message(.acceptedOrQueued), controller: controller)
+            case .cancelled: finish(.message(.cancelled), controller: controller)
+            default: finish(.message(.failed), controller: controller)
             }
         }
     }
@@ -164,10 +186,10 @@ final class ComposeSheets: NSObject, MFMessageComposeViewControllerDelegate, MFM
     nonisolated func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         MainActor.assumeIsolated {
             switch result {
-            case .sent: finish(.mail(.queuedInOutbox))
-            case .saved: finish(.mail(.savedDraft))
-            case .cancelled: finish(.mail(.cancelled))
-            default: finish(.mail(.failed))
+            case .sent: finish(.mail(.queuedInOutbox), controller: controller)
+            case .saved: finish(.mail(.savedDraft), controller: controller)
+            case .cancelled: finish(.mail(.cancelled), controller: controller)
+            default: finish(.mail(.failed), controller: controller)
             }
         }
     }

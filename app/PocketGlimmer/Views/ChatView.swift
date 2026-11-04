@@ -1,5 +1,6 @@
 import SwiftUI
 import UIKit
+import Contacts
 import PocketCore
 
 struct ChatView: View {
@@ -219,6 +220,17 @@ struct DraftCardView: View {
                     }
                 } else {
                     Text(field.value.isEmpty ? "No matching contact" : field.value).font(.callout)
+                }
+                Button(CNContactStore.authorizationStatus(for: .contacts) == .notDetermined ? "Allow Contacts" : "Refresh contact") {
+                    Task { await model.refreshContacts(item) }
+                }
+                .disabled(model.busy)
+                .frame(minHeight: 44)
+                if CNContactStore.authorizationStatus(for: .contacts) == .denied {
+                    Button("Open iOS Settings") {
+                        if let url = URL(string: UIApplication.openSettingsURLString) { UIApplication.shared.open(url) }
+                    }
+                    .frame(minHeight: 44)
                 }
             }
         case .method:

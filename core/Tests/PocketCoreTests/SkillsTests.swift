@@ -295,14 +295,31 @@ final class SkillsTests: XCTestCase {
         let e = ScriptedEngine()
         base(e, tool: Self.noneTool)         // skillPick unscripted -> uniform -> below tau -> ask
         let (a, _) = try make(e)
-        let t = try await a.handle("message @sam on twitter")
+        let t = try await a.handle("summarize these numbers as a chart")
         guard case .clarify(let q) = t.reply else { return XCTFail("\(t.reply)") }
         XCTAssertTrue(q.hasPrefix("Did you mean: "), q)
         XCTAssertEqual(q.components(separatedBy: ", ").count + q.components(separatedBy: " or ").count - 1, 3, q)
-        XCTAssertTrue(q.contains("X (Twitter) DM"), q)
         let pick = t.decisions.first { $0.type == .skillPick }
         XCTAssertEqual(pick?.escalated, true); XCTAssertEqual(pick?.chosen.id, "ask")
         XCTAssertNil(t.action)
+        XCTAssertNil(t.pendingDraft, "non-message requests keep the bare choices clarify")
+    }
+
+    func testBelowTauExplicitMessageRetainsDraftInsteadOfChoices() async throws {
+        let e = ScriptedEngine()
+        base(e, tool: Self.noneTool)         // skillPick unscripted -> uniform -> below tau -> ask
+        let (a, effects) = try make(e)
+        let t = try await a.handle("message @sam on twitter")
+        guard case .clarify(let q) = t.reply else { return XCTFail("\(t.reply)") }
+        XCTAssertTrue(q.contains("say"), q)
+        let draft = try XCTUnwrap(t.pendingDraft, "explicit parse is retained below tau")
+        XCTAssertEqual(draft.channel, .x)
+        XCTAssertEqual(draft.contact, "sam")
+        XCTAssertTrue(draft.lowConfidence)
+        let pick = t.decisions.first { $0.type == .skillPick }
+        XCTAssertEqual(pick?.escalated, true); XCTAssertEqual(pick?.chosen.id, "ask")
+        XCTAssertNil(t.action)
+        XCTAssertEqual(effects.performCount, 0)
     }
 
     func testContactSkillBindsIdentifierAndSafeReadActs() async throws {
@@ -327,13 +344,15 @@ final class SkillsTests: XCTestCase {
         XCTAssertEqual(effects.performCount, 0)
     }
 
-    func testNoRegistryKeepsTodaysBehaviour() async throws {
+    func testNoRegistryRetainsCompiledMessagingAndTrainedTools() async throws {
         let e = ScriptedEngine()
         base(e, tool: Self.noneTool)
         let (a, _) = try make(e)
         a.skills = nil
         let t = try await a.handle("dm sam on instagram saying congrats")
-        XCTAssertEqual(t.reply, .clarify("What would you like me to do?"))
+        guard case .needsConfirmation(let card) = t.reply else { return XCTFail("\(t.reply)") }
+        XCTAssertEqual(card.capabilityID, "instagram_dm")
+        XCTAssertEqual(card.fields.first { $0.name == "body" }?.value, "congrats")
         XCTAssertFalse(t.decisions.contains { $0.type == .skillPick })
         // And a trained tool with a registry set stays on the trained path when no app word overrides it.
         base(e, tool: ["A": 5, "B": 0, "C": 0, "D": 0, "E": 0, "F": 0, "G": 0])

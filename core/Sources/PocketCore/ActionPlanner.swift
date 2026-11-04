@@ -56,8 +56,7 @@ public enum ActionPlanner {
     }
 
     static func isExplicitMessageRequest(_ utterance: String) -> Bool {
-        SkillRegistry.norm(utterance).range(of: #"^ (?:please )?(?:text|message|send (?:a )?(?:text|message) to) "#,
-                                          options: .regularExpression) != nil
+        MessageCommand.isExplicitMessageRequest(utterance)
     }
 
     /// "Email Dana …" must not enter the trained `send_message` path. The frozen toolChoice set has no send_email.
@@ -90,26 +89,29 @@ extension Assistant {
     /// Open-world tool path. Appends its decisions (skillPick, confirmBeforeAct) and sets `planned`.
     public func planSkill(_ utterance: String, ctx: String, registry: SkillRegistry, requestID: UserRequestID, sharedText: String? = nil,
                           decisions: inout [ReflexDecision], planned: inout PlannedAction?,
-                          read: inout ReadResult?) async throws -> Reply {
+                          read: inout ReadResult?, now: Date = Date(), draft: inout MessageDraft?) async throws -> Reply {
         try await planSkillCore(utterance, ctx: ctx, registry: registry, requestID: requestID, sharedText: sharedText, decisions: &decisions,
-                                planned: &planned, read: &read, fallThrough: false)
+                                planned: &planned, read: &read, fallThrough: false, now: now, draft: &draft)
             ?? .clarify("What would you like me to do?")
     }
 
     /// Before the routed branch (route != tool): an explicit app/feature request gets ONE skillPick decision. Returns nil
     /// (caller continues with the trained route unchanged) unless the request is explicit AND skillPick clears tau.
+    /// Explicit message commands always return a reply: a staged card or a retained typed
+    /// draft, never a fall-through into chat generation.
     public func skillOverride(_ utterance: String, ctx: String, route: ReflexDecision, requestID: UserRequestID, sharedText: String? = nil,
                               decisions: inout [ReflexDecision], planned: inout PlannedAction?,
-                              read: inout ReadResult?) async throws -> Reply? {
+                              read: inout ReadResult?, now: Date = Date(), draft: inout MessageDraft?) async throws -> Reply? {
         guard let reg = skills, route.chosen.id != "tool", ActionPlanner.isExplicitRequest(utterance) else { return nil }
         return try await planSkillCore(utterance, ctx: ctx, registry: reg, requestID: requestID, sharedText: sharedText, decisions: &decisions,
-                                       planned: &planned, read: &read, fallThrough: true)
+                                       planned: &planned, read: &read, fallThrough: true, now: now, draft: &draft)
     }
 
     func planSkillCore(_ utterance: String, ctx: String, registry: SkillRegistry, requestID: UserRequestID, sharedText: String? = nil,
                        decisions: inout [ReflexDecision], planned: inout PlannedAction?,
                        read: inout ReadResult?, fallThrough: Bool, preselected: Skill? = nil,
-                       explicitDraftOverride: Bool = false) async throws -> Reply? {
+                       explicitDraftOverride: Bool = false, now: Date = Date(),
+                       draft: inout MessageDraft?) async throws -> Reply? {
         var skill: Skill
         var belowTau = explicitDraftOverride
 
@@ -120,6 +122,14 @@ extension Assistant {
         } else {
             let cands = ActionPlanner.candidates(utterance, registry: registry)
             guard !cands.isEmpty else {
+                if ActionPlanner.isExplicitMessageRequest(utterance) {
+                    let (retained, question) = MessageDraft.retain(utterance: utterance, requestID: requestID,
+                                                                   lowConfidence: true, now: now)
+                    draft = retained
+                    ActionDiagnostics.shared.record(requestID: requestID, capability: retained.channel?.capabilityID,
+                                                    phase: .draft, code: .draftCreated)
+                    return .clarify(question)
+                }
                 return fallThrough ? nil : .clarify("I can't do that on this phone yet. New abilities are a JSON skill away (docs/SKILLS.md).")
             }
             let pick = try await reflex.decide(OptionSets.skillPick(candidates: cands.map(\.optionLabel)), context: ctx)
@@ -127,22 +137,38 @@ extension Assistant {
             if pick.chosen.id != "ask", let i = Int(pick.chosen.id.dropFirst()), i < cands.count {
                 skill = cands[i]
                 belowTau = pick.escalated
-            } else if ActionPlanner.isExplicitMessageRequest(utterance), let top = cands.first,
-                      top.category.reachesOtherPeople, !CapabilityCatalog.isReplyOnly(top.id),
-                      !(argsFor(top, utterance)["contact"] ?? "").isEmpty,
-                      !(argsFor(top, utterance)["body"] ?? "").isEmpty {
-                // Old behaviour clarified below tau. The contract's explicit-message draft keeps the parsed
-                // recipient/body and shows an editable card instead.
-                skill = top
-                belowTau = true
-            } else {
-                if fallThrough && !ActionPlanner.isExplicitMessageRequest(utterance) { return nil }
-                let choices = ActionPlanner.list(cands.prefix(3).map(\.title))
-                if ActionPlanner.isExplicitMessageRequest(utterance) {
-                    return .clarify("Did you mean: \(choices)? Please restate the request with the app name and recipient and message.")
+            } else if ActionPlanner.isExplicitMessageRequest(utterance) {
+                // Below tau the old path clarified with choices and dropped the parse. A
+                // complete explicit parse keeps its editable card through the normal flow;
+                // anything else keeps a typed draft so the follow-up binds instead of
+                // falling into chat.
+                let (retained, question) = MessageDraft.retain(utterance: utterance, requestID: requestID,
+                                                               lowConfidence: true, now: now)
+                if retained.isComplete, let channel = retained.channel,
+                   let channelSkill = registry.skill(id: channel.capabilityID) {
+                    skill = channelSkill
+                    belowTau = true
+                } else if retained.isComplete {
+                    return .clarify("This message needs the built-in message skill, which is missing. Nothing was done.")
+                } else {
+                    draft = retained
+                    ActionDiagnostics.shared.record(requestID: requestID, capability: retained.channel?.capabilityID,
+                                                    phase: .draft, code: .draftCreated)
+                    return .clarify(question)
                 }
+            } else {
+                if fallThrough { return nil }
+                let choices = ActionPlanner.list(cands.prefix(3).map(\.title))
                 return .clarify("Did you mean: \(choices)?")
             }
+        }
+
+        if ActionPlanner.isExplicitMessageRequest(utterance),
+           MessageChannel.channel(forCapabilityID: skill.id) == nil
+            || MessageChannel.channel(forCapabilityID: skill.id) != MessageChannel.parse(in: utterance) {
+            return try await sendMessageToolPath(utterance, ctx: ctx, requestID: requestID, sharedText: sharedText,
+                                                decisions: &decisions, planned: &planned, read: &read,
+                                                draft: &draft, now: now, toolEscalated: true)
         }
 
         if let issue = ActionValidation.requestIssue(capabilityID: skill.id, utterance: utterance) { return .clarify(issue.question) }
@@ -154,6 +180,18 @@ extension Assistant {
         let args = SkillArgs.extract(extractedFrom, utterance: utterance)
         let specs = CapabilityCatalog.current(id: skill.id)?.arguments ?? skill.argSchema
         if let missing = specs.first(where: { $0.required && (args[$0.name] ?? "").isEmpty }) {
+            if let channel = MessageChannel.channel(forCapabilityID: skill.id) {
+                var retained = MessageDraft(requestID: requestID,
+                                            contact: MessageDraft.nonempty(args["contact"]),
+                                            channel: channel,
+                                            body: MessageDraft.nonempty(args["body"]),
+                                            lowConfidence: belowTau, created: now)
+                retained.lastAsked = retained.missingField
+                draft = retained
+                ActionDiagnostics.shared.record(requestID: requestID, capability: channel.capabilityID,
+                                                phase: .draft, code: .draftCreated)
+                return .clarify(retained.question())
+            }
             return .clarify(SkillArgs.question(for: missing, skill: skill))
         }
 
@@ -360,12 +398,13 @@ public enum SkillArgs {
         return v.isEmpty ? nil : v
     }
     static let notNames: Set<String> = ["on", "to", "my", "me", "a", "an", "the", "him", "her", "them", "back", "every", "someone", "everyone", "this", "that", "message", "dm", "text"]
-    static let verbs = #"(?:dm|direct message|message|msg|text|tell|ping|send|reply to|respond to|write to|call|phone|ring|facetime|email|e-mail|whatsapp)"#
+    static let verbs = #"(?:dm|direct message|message|msg|text|sms|tell|ping|send|reply to|respond to|write to|call|phone|ring|facetime|email|e-mail|whatsapp)"#
 
     static func person(_ u: String) -> String? {
         if let h = first(#"@([A-Za-z0-9_][A-Za-z0-9_.]{0,29})"#, in: u) { return h }
         let p = #"\b"# + verbs + #"\s+(?:a\s+(?:dm|message|text)\s+to\s+|to\s+)?@?([A-Za-z][A-Za-z0-9_.']*(?-i:\s+[A-Z][a-z]+)?)"#
         guard var n = first(p, in: u) else { return first(#"\bto\s+@?([A-Z][a-z]+)\b"#, in: u, ci: false) }
+        if n.lowercased().range(of: #"'(ll|m|ve|d|re|s|t)$"#, options: .regularExpression) != nil { return nil }
         if n.hasSuffix("'s") { n = String(n.dropLast(2)) }
         let w = n.split(separator: " ").map(String.init)
         if let f = w.first, notNames.contains(f.lowercased()) { return nil }
@@ -373,7 +412,7 @@ public enum SkillArgs {
         return w.count > 1 && !["On", "At", "In", "Saying", "That"].contains(w[1]) ? n : w.first
     }
     static func body(_ u: String) -> String? {
-        first(#"[\"“]([^\"”]+)[\"”]"#, in: u, literal: true) ?? first(#"(?:\bsaying|\bthat says|\bto say|\bwith the message|:)\s+(.+)$"#, in: u, literal: true)
+        first(#"[\"“]([^\"”]+)[\"”]"#, in: u, literal: true) ?? first(#"(?:\bsaying|\bthat says|\bto say|\bwith the message|:)\s+([\s\S]+)$"#, in: u, literal: true)
             ?? first(#"\b(?:that)\s+(.+)$"#, in: u, literal: true)
     }
     static func time(_ u: String) -> String? {
@@ -388,6 +427,11 @@ public enum SkillArgs {
     }
 
     public static func extract(_ skill: Skill, utterance u: String) -> [String: String] {
+        if MessageChannel.channel(forCapabilityID: skill.id) != nil {
+            let parts = MessageDraft.messageArgs(u)
+            let handle = skill.argSchema.contains { $0.name == "contact" && $0.kind == .handle }
+            return ["contact": handle ? parts.contact?.lowercased() : parts.contact, "body": parts.body].compactMapValues { $0 }
+        }
         var a: [String: String] = [:]
         if case .native(let h) = skill.invocation, ActionPlanner.executorTools.contains(h) {
             a = ArgumentExtractor.heuristic(tool: h, utterance: u)

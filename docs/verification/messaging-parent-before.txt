@@ -1,0 +1,196 @@
+[0/1] Planning build
+Building for debugging...
+[0/14] Write sources
+[2/14] Write swift-version-24593BA9C3E375BF.txt
+[4/20] Compiling PocketCore MessageDraft.swift
+[5/37] Compiling PocketCore RequestInputStoreOwner.swift
+[6/38] Compiling PocketCore ActionDiagnostics.swift
+[7/39] Compiling PocketCore RichReply.swift
+[8/40] Compiling PocketCore SQLiteDB.swift
+[9/41] Compiling PocketCore Scrubber.swift
+[10/42] Compiling PocketCore Reflex.swift
+[11/42] Compiling PocketCore Proactive.swift
+[12/42] Compiling PocketCore RequestInputStore.swift
+/src/Sources/PocketCore/RequestInputStore.swift:749:29: warning: comparing non-optional value of type 'String' to 'nil' always returns true
+747 |         default:
+748 |             guard let blob, !blob.isEmpty, let utterance, !utterance.isEmpty, let payloadText, let mode, !mode.isEmpty,
+749 |                   utterance != nil else { throw corrupt("camera body is malformed") }
+    |                             `- warning: comparing non-optional value of type 'String' to 'nil' always returns true
+750 |             body = .camera(jpeg: blob, question: utterance, concept: concept, mode: mode, photoText: payloadText)
+751 |             expectedBytes = Int64(blob.count + utterance.utf8.count + payloadText.utf8.count + (concept?.utf8.count ?? 0) + mode.utf8.count)
+
+/src/Sources/PocketCore/RequestInputStore.swift:719:16: warning: immutable value 'transcript' was never used; consider replacing with '_' or removing it
+717 |             throw corrupt("interruption is malformed")
+718 |         }
+719 |         if let transcript, kind != "voice" || !(state == .claimed || state == .interrupted) {
+    |                `- warning: immutable value 'transcript' was never used; consider replacing with '_' or removing it
+720 |             throw corrupt("transcript is malformed")
+721 |         }
+[13/42] Compiling PocketCore CloudSettingsCheck.swift
+[14/42] Compiling PocketCore Conformal.swift
+[15/42] Compiling PocketCore ActionValidation.swift
+[16/42] Compiling PocketCore Calibration.swift
+[17/42] Compiling PocketCore CloudBrain.swift
+[18/42] Compiling PocketCore CloudPrivacy.swift
+[19/42] Compiling PocketCore Skills.swift
+[20/42] Compiling PocketCore LLMEngine.swift
+[21/42] Compiling PocketCore LlamaServerEngine.swift
+[22/42] Compiling PocketCore Telemetry.swift
+[23/42] Compiling PocketCore MetaMultimodal.swift
+[24/42] Compiling PocketCore Decision.swift
+[25/42] Compiling PocketCore KeyEntry.swift
+[26/42] Compiling PocketCore Memory.swift
+[27/42] Compiling PocketCore MemoryProfile.swift
+[28/42] Compiling PocketCore Assistant.swift
+[29/42] Emitting module PocketCore
+[30/42] Compiling PocketCore ActionPlanner.swift
+[31/42] Compiling PocketCore EffectLedger.swift
+[32/43] Wrapping AST for PocketCore for debugging
+[34/69] Compiling pg_cli main.swift
+[35/69] Emitting module pg_cli
+[36/69] Compiling PocketCoreTests MessagingReviewRegressionTests.swift
+[37/70] Write Objects.LinkFileList
+[39/70] Compiling PocketCoreTests RichReplyTests.swift
+[40/70] Compiling PocketCoreTests ActionTimeConstraintTests.swift
+[41/70] Compiling PocketCoreTests ActionValidationTests.swift
+[41/70] Linking pg-cli
+[43/70] Compiling PocketCoreTests AssistantTests.swift
+[44/70] Compiling PocketCoreTests CloudBrainTests.swift
+[45/70] Compiling PocketCoreTests CloudConfigurationTests.swift
+[46/70] Compiling PocketCoreTests CloudPrivacyTests.swift
+[47/70] Compiling PocketCoreTests CloudReadOutcomeTests.swift
+[48/70] Compiling PocketCoreTests ConformalTests.swift
+[49/70] Compiling PocketCoreTests KeyEntryTests.swift
+[50/70] Compiling PocketCoreTests MemoryProfileTests.swift
+[51/70] Emitting module PocketCoreTests
+[52/70] Compiling PocketCoreTests SkillsTests.swift
+[53/70] Compiling PocketCoreTests TakeoverRegressionTests.swift
+[54/70] Compiling PocketCoreTests RequestInputStoreTests.swift
+[55/70] Compiling PocketCoreTests ReviewTests.swift
+[56/70] Compiling PocketCoreTests MetaMultimodalTests.swift
+[57/70] Compiling PocketCoreTests CoreTests.swift
+[58/70] Compiling PocketCoreTests CuratorMemoryTests.swift
+[59/70] Compiling PocketCoreTests MemoryTests.swift
+[60/70] Compiling PocketCoreTests MessageDraftTests.swift
+[61/70] Compiling PocketCoreTests SharedReadRecoveryTests.swift
+[62/70] Compiling PocketCoreTests EffectRecoveryTests.swift
+[63/70] Compiling PocketCoreTests EffectTestSupport.swift
+[64/71] /build/x86_64-unknown-linux-gnu/debug/PocketCorePackageDiscoveredTests.derived/all-discovered-tests.swift
+[65/72] Write sources
+[66/72] Wrapping AST for PocketCoreTests for debugging
+[68/75] Emitting module PocketCorePackageDiscoveredTests
+[69/75] Compiling PocketCorePackageDiscoveredTests all-discovered-tests.swift
+[70/75] Compiling PocketCorePackageDiscoveredTests PocketCoreTests.swift
+[71/76] /build/x86_64-unknown-linux-gnu/debug/PocketCorePackageTests.derived/runner.swift
+[72/77] Write sources
+[73/77] Wrapping AST for PocketCorePackageDiscoveredTests for debugging
+[75/79] Compiling PocketCorePackageTests runner.swift
+[76/79] Emitting module PocketCorePackageTests
+[77/79] Write Objects.LinkFileList
+[78/79] Linking PocketCorePackageTests.xctest
+Build complete! (15.99s)
+Test Suite 'Selected tests' started at 2026-11-04 22:14:30.117
+Test Suite 'MessagingReviewRegressionTests' started at 2026-11-04 22:14:30.119
+Test Case 'MessagingReviewRegressionTests.testApostropheContactAnswerCompletes' started at 2026-11-04 22:14:30.119
+Test Case 'MessagingReviewRegressionTests.testApostropheContactAnswerCompletes' passed (0.005 seconds)
+Test Case 'MessagingReviewRegressionTests.testBodyChannelWordDoesNotStageWrongApp' started at 2026-11-04 22:14:30.125
+/src/Tests/PocketCoreTests/MessagingReviewRegressionTests.swift:271: error: MessagingReviewRegressionTests.testBodyChannelWordDoesNotStageWrongApp : XCTAssertEqual failed: ("instagram_dm") is not equal to ("imessage_send") - body word 'ig' hijacked the channel
+Test Case 'MessagingReviewRegressionTests.testBodyChannelWordDoesNotStageWrongApp' failed (0.026 seconds)
+Test Case 'MessagingReviewRegressionTests.testBodyQuestionDoesNotBecomeChat' started at 2026-11-04 22:14:30.151
+/src/Tests/PocketCoreTests/MessagingReviewRegressionTests.swift:249: error: MessagingReviewRegressionTests.testBodyQuestionDoesNotBecomeChat : failed - question-shaped body must stage a card, got local("Yes, 6pm works.")
+Test Case 'MessagingReviewRegressionTests.testBodyQuestionDoesNotBecomeChat' failed (0.027 seconds)
+Test Case 'MessagingReviewRegressionTests.testBodyStartingWithNoCompletes' started at 2026-11-04 22:14:30.178
+/src/Tests/PocketCoreTests/MessagingReviewRegressionTests.swift:50: error: MessagingReviewRegressionTests.testBodyStartingWithNoCompletes : failed - body starting with 'No' must fill body, got clarifyKeep("What should I say to Dana?")
+Test Case 'MessagingReviewRegressionTests.testBodyStartingWithNoCompletes' failed (0.001 seconds)
+Test Case 'MessagingReviewRegressionTests.testBodyThatIsAQuestionCompletes' started at 2026-11-04 22:14:30.179
+/src/Tests/PocketCoreTests/MessagingReviewRegressionTests.swift:35: error: MessagingReviewRegressionTests.testBodyThatIsAQuestionCompletes : failed - question-shaped body must fill body, got none
+Test Case 'MessagingReviewRegressionTests.testBodyThatIsAQuestionCompletes' failed (0.001 seconds)
+Test Case 'MessagingReviewRegressionTests.testChannelWordInBodyDoesNotHijackFirstTurn' started at 2026-11-04 22:14:30.179
+/src/Tests/PocketCoreTests/MessagingReviewRegressionTests.swift:124: error: MessagingReviewRegressionTests.testChannelWordInBodyDoesNotHijackFirstTurn : XCTAssertEqual failed: ("Optional(PocketCore.MessageChannel.instagram)") is not equal to ("Optional(PocketCore.MessageChannel.imessage)") - 
+Test Case 'MessagingReviewRegressionTests.testChannelWordInBodyDoesNotHijackFirstTurn' failed (0.0 seconds)
+Test Case 'MessagingReviewRegressionTests.testChannelWordInsideBodyDoesNotSwitchChannel' started at 2026-11-04 22:14:30.180
+/src/Tests/PocketCoreTests/MessagingReviewRegressionTests.swift:56: error: MessagingReviewRegressionTests.testChannelWordInsideBodyDoesNotSwitchChannel : failed - expected completion, got none
+Test Case 'MessagingReviewRegressionTests.testChannelWordInsideBodyDoesNotSwitchChannel' failed (0.001 seconds)
+Test Case 'MessagingReviewRegressionTests.testColonBodyExtracts' started at 2026-11-04 22:14:30.180
+Test Case 'MessagingReviewRegressionTests.testColonBodyExtracts' passed (0.001 seconds)
+Test Case 'MessagingReviewRegressionTests.testDiagnosticsCapabilityFieldIsFreeText' started at 2026-11-04 22:14:30.181
+/src/Tests/PocketCoreTests/MessagingReviewRegressionTests.swift:348: error: MessagingReviewRegressionTests.testDiagnosticsCapabilityFieldIsFreeText : XCTAssertFalse failed - capability is a free String; the secret-free claim is call-site convention, not construction
+Test Case 'MessagingReviewRegressionTests.testDiagnosticsCapabilityFieldIsFreeText' failed (0.001 seconds)
+Test Case 'MessagingReviewRegressionTests.testFollowUpBodyWithAppWordStaysOnDraft' started at 2026-11-04 22:14:30.182
+/src/Tests/PocketCoreTests/MessagingReviewRegressionTests.swift:339: error: MessagingReviewRegressionTests.testFollowUpBodyWithAppWordStaysOnDraft : failed - body containing an app word must stay on the draft, got local("Nice post!")
+Test Case 'MessagingReviewRegressionTests.testFollowUpBodyWithAppWordStaysOnDraft' failed (0.022 seconds)
+Test Case 'MessagingReviewRegressionTests.testHandleContactAnswerCompletes' started at 2026-11-04 22:14:30.204
+Test Case 'MessagingReviewRegressionTests.testHandleContactAnswerCompletes' passed (0.001 seconds)
+Test Case 'MessagingReviewRegressionTests.testLimitedContactsStillBind' started at 2026-11-04 22:14:30.205
+Test Case 'MessagingReviewRegressionTests.testLimitedContactsStillBind' passed (0.119 seconds)
+Test Case 'MessagingReviewRegressionTests.testLowercaseContactAnswerCompletes' started at 2026-11-04 22:14:30.323
+/src/Tests/PocketCoreTests/MessagingReviewRegressionTests.swift:22: error: MessagingReviewRegressionTests.testLowercaseContactAnswerCompletes : failed - lowercase name answer must bind, got none
+Test Case 'MessagingReviewRegressionTests.testLowercaseContactAnswerCompletes' failed (0.001 seconds)
+Test Case 'MessagingReviewRegressionTests.testLowercaseFollowUpDoesNotBecomeChat' started at 2026-11-04 22:14:30.325
+/src/Tests/PocketCoreTests/MessagingReviewRegressionTests.swift:231: error: MessagingReviewRegressionTests.testLowercaseFollowUpDoesNotBecomeChat : failed - lowercase follow-up must stage a card, got local("Hi Dana!"); generated=1 prompts
+Test Case 'MessagingReviewRegressionTests.testLowercaseFollowUpDoesNotBecomeChat' failed (0.037 seconds)
+Test Case 'MessagingReviewRegressionTests.testLowercaseToContactAnswerCompletes' started at 2026-11-04 22:14:30.362
+/src/Tests/PocketCoreTests/MessagingReviewRegressionTests.swift:29: error: MessagingReviewRegressionTests.testLowercaseToContactAnswerCompletes : failed - 'to dana' must bind, got none
+Test Case 'MessagingReviewRegressionTests.testLowercaseToContactAnswerCompletes' failed (0.001 seconds)
+Test Case 'MessagingReviewRegressionTests.testMultiRecipientIsRefusedPrecisely' started at 2026-11-04 22:14:30.362
+Test Case 'MessagingReviewRegressionTests.testMultiRecipientIsRefusedPrecisely' passed (0.012 seconds)
+Test Case 'MessagingReviewRegressionTests.testNamedCancelAmongMany' started at 2026-11-04 22:14:30.374
+/src/Tests/PocketCoreTests/MessagingReviewRegressionTests.swift:71: error: MessagingReviewRegressionTests.testNamedCancelAmongMany : failed - named cancel must cancel Dana, got disambiguate("Which message is this for? to Dana on Messages (needs message text) or to Mom on Messages (needs message text).")
+Test Case 'MessagingReviewRegressionTests.testNamedCancelAmongMany' failed (0.001 seconds)
+Test Case 'MessagingReviewRegressionTests.testNewExplicitBodyIsNotBlockedBySavedBody' started at 2026-11-04 22:14:30.375
+/src/Tests/PocketCoreTests/MessagingReviewRegressionTests.swift:78: error: MessagingReviewRegressionTests.testNewExplicitBodyIsNotBlockedBySavedBody : failed - new explicit request blocked by saved body: I already have the message text saved. Which app should I use to message Dana? Messages, WhatsApp, Instagram, or X?
+Test Case 'MessagingReviewRegressionTests.testNewExplicitBodyIsNotBlockedBySavedBody' failed (0.001 seconds)
+Test Case 'MessagingReviewRegressionTests.testNewlineBodyPreserved' started at 2026-11-04 22:14:30.376
+Test Case 'MessagingReviewRegressionTests.testNewlineBodyPreserved' passed (0.001 seconds)
+Test Case 'MessagingReviewRegressionTests.testNoRegistryToolNoneRetainsDraft' started at 2026-11-04 22:14:30.376
+/src/Tests/PocketCoreTests/MessagingReviewRegressionTests.swift:211: error: MessagingReviewRegressionTests.testNoRegistryToolNoneRetainsDraft : XCTAssertNotNil failed - no-registry tool=none must retain the explicit message, got clarify("What would you like me to do?")
+Test Case 'MessagingReviewRegressionTests.testNoRegistryToolNoneRetainsDraft' failed (0.012 seconds)
+Test Case 'MessagingReviewRegressionTests.testProbeCandidates' started at 2026-11-04 22:14:30.388
+PROBE candidates: ["imessage_send", "summarize_text", "email_compose"]
+Test Case 'MessagingReviewRegressionTests.testProbeCandidates' passed (0.01 seconds)
+Test Case 'MessagingReviewRegressionTests.testProbeResolutions' started at 2026-11-04 22:14:30.399
+PROBE resolve[Book a flight to Miami] = disambiguate("Is this message for Dana or Miami?")
+PROBE resolve[saying I posted it on Instagram] = none
+PROBE resolve[Call me when you land] = none
+PROBE resolve[Remind me to buy milk] = none
+PROBE resolve[I'll be late] = completed(PocketCore.MessageDraft(requestID: PocketCore.UserRequestID(raw: 0B7465D6-7E32-41E5-946A-FD1CE6A86DAE), contact: Optional("Dana"), channel: Optional(PocketCore.MessageChannel.imessage), body: Optional("I\'ll be late"), lowConfidence: false, lastAsked: nil, created: 2027-01-15 07:59:00 +0000))
+PROBE stale[yes] = disambiguate("I have an older unfinished message to to Dana on Messages (needs message text) from 2 hours ago. Is this for that one, or should I start fresh?")
+PROBE stale[start fresh] = none
+PROBE stale[that one] = disambiguate("I have an older unfinished message to to Dana on Messages (needs message text) from 2 hours ago. Is this for that one, or should I start fresh?")
+PROBE stale[forget it] = cancelled(PocketCore.UserRequestID(raw: C730804C-DC5C-4A55-AB35-155AB01FB430))
+PROBE explicit[Book a flight to Miami] = false
+PROBE explicitWords[instagram body] = Optional(PocketCore.MessageChannel.instagram)
+Test Case 'MessagingReviewRegressionTests.testProbeResolutions' passed (0.005 seconds)
+Test Case 'MessagingReviewRegressionTests.testRecipientFirstWhatsAppMessageExtractsBody' started at 2026-11-04 22:14:30.404
+/src/Tests/PocketCoreTests/MessagingReviewRegressionTests.swift:143: error: MessagingReviewRegressionTests.testRecipientFirstWhatsAppMessageExtractsBody : XCTAssertEqual failed: ("Optional("a WhatsApp message saying hi")") is not equal to ("Optional("hi")") - 
+Test Case 'MessagingReviewRegressionTests.testRecipientFirstWhatsAppMessageExtractsBody' failed (0.001 seconds)
+Test Case 'MessagingReviewRegressionTests.testSMSVerbIsExplicit' started at 2026-11-04 22:14:30.404
+/src/Tests/PocketCoreTests/MessagingReviewRegressionTests.swift:120: error: MessagingReviewRegressionTests.testSMSVerbIsExplicit : XCTAssertTrue failed - 
+Test Case 'MessagingReviewRegressionTests.testSMSVerbIsExplicit' failed (0.0 seconds)
+Test Case 'MessagingReviewRegressionTests.testSendTextToFormExtracts' started at 2026-11-04 22:14:30.405
+Test Case 'MessagingReviewRegressionTests.testSendTextToFormExtracts' passed (0.001 seconds)
+Test Case 'MessagingReviewRegressionTests.testSeveralPhoneMethodsRequireChoiceThenConfirm' started at 2026-11-04 22:14:30.405
+Test Case 'MessagingReviewRegressionTests.testSeveralPhoneMethodsRequireChoiceThenConfirm' passed (0.019 seconds)
+Test Case 'MessagingReviewRegressionTests.testStaleDraftYesDoesNotLoop' started at 2026-11-04 22:14:30.424
+/src/Tests/PocketCoreTests/MessagingReviewRegressionTests.swift:64: error: MessagingReviewRegressionTests.testStaleDraftYesDoesNotLoop : failed - 'yes' after the stale prompt only repeats the stale prompt
+Test Case 'MessagingReviewRegressionTests.testStaleDraftYesDoesNotLoop' failed (0.002 seconds)
+Test Case 'MessagingReviewRegressionTests.testThreeTurnChannelThenBody' started at 2026-11-04 22:14:30.426
+Test Case 'MessagingReviewRegressionTests.testThreeTurnChannelThenBody' passed (0.001 seconds)
+Test Case 'MessagingReviewRegressionTests.testUnrelatedCommandIsNotStagedAsBody' started at 2026-11-04 22:14:30.427
+Test Case 'MessagingReviewRegressionTests.testUnrelatedCommandIsNotStagedAsBody' passed (0.001 seconds)
+Test Case 'MessagingReviewRegressionTests.testUnrelatedCommandNotStagedAsBody' started at 2026-11-04 22:14:30.427
+Test Case 'MessagingReviewRegressionTests.testUnrelatedCommandNotStagedAsBody' passed (0.015 seconds)
+Test Case 'MessagingReviewRegressionTests.testWhatsAppVerbIsExplicit' started at 2026-11-04 22:14:30.442
+/src/Tests/PocketCoreTests/MessagingReviewRegressionTests.swift:116: error: MessagingReviewRegressionTests.testWhatsAppVerbIsExplicit : XCTAssertTrue failed - 
+Test Case 'MessagingReviewRegressionTests.testWhatsAppVerbIsExplicit' failed (0.0 seconds)
+Test Case 'MessagingReviewRegressionTests.testWrongSkillPickStillRetainsMessage' started at 2026-11-04 22:14:30.442
+/src/Tests/PocketCoreTests/MessagingReviewRegressionTests.swift:322: error: MessagingReviewRegressionTests.testWrongSkillPickStillRetainsMessage : XCTAssertTrue failed - wrong skill pick must retain the message draft, got local("OK"), draft=nil
+Test Case 'MessagingReviewRegressionTests.testWrongSkillPickStillRetainsMessage' failed (0.014 seconds)
+Test Suite 'MessagingReviewRegressionTests' failed at 2026-11-04 22:14:30.457
+	 Executed 32 tests, with 19 failures (0 unexpected) in 0.337 (0.337) seconds
+Test Suite 'Selected tests' failed at 2026-11-04 22:14:30.457
+	 Executed 32 tests, with 19 failures (0 unexpected) in 0.337 (0.337) seconds
+◇ Test run started.
+↳ Testing Library Version: 6.1.3 (1d1f7e489c9c606)
+↳ Target Platform: x86_64-unknown-linux-gnu
+✔ Test run with 0 tests passed after 0.001 seconds.

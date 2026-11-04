@@ -121,9 +121,9 @@ final class PocketEffects: PhoneEffects, @unchecked Sendable {
         case .eventCreate:
             return performEvent(action, ticket: ticket)
         case .messageSend:
-            return await performMessage(action)
+            return await performMessage(action, ticket: ticket)
         case .mailSend:
-            return await performMail(action)
+            return await performMail(action, ticket: ticket)
         case .urlTemplate(let template):
             return await performURL(action, template: template)
         case .shortcut(let name, let input):
@@ -228,7 +228,7 @@ final class PocketEffects: PhoneEffects, @unchecked Sendable {
         }
     }
 
-    private func performMessage(_ action: BoundAction) async -> EffectReport {
+    private func performMessage(_ action: BoundAction, ticket: ClaimTicket) async -> EffectReport {
         guard case .contact(let binding)? = action.arguments["contact"], let method = binding.method, method.kind == .phone else {
             return EffectReport(boundary: .notStarted(.missingContactMethod))
         }
@@ -241,15 +241,35 @@ final class PocketEffects: PhoneEffects, @unchecked Sendable {
               let exact = current.methods.first(where: { $0.kind == .phone && $0.label == method.label && $0.value.caseInsensitiveCompare(method.value) == .orderedSame }) else {
             return EffectReport(boundary: .notStarted(.missingContactMethod))
         }
+        ActionDiagnostics.shared.record(requestID: ticket.requestID, attemptID: ticket.attemptID,
+                                        capability: action.capabilityID, phase: .presentation,
+                                        code: .presentationRequested)
         let outcome = await ComposeSheets.message(to: [exact.value], body: body, label: current.displayName)
         switch outcome {
-        case .result(let result): return EffectReport(boundary: .observed(.message(result)))
-        case .unavailable: return EffectReport(boundary: .notStarted(.sheetUnavailable(.messages)))
-        case .busy: return EffectReport(boundary: .notStarted(.sheetBusy(.messages)))
+        case .result(let result):
+            let code: ActionDiagCode
+            switch result {
+            case .acceptedOrQueued: code = .presentationAccepted
+            case .cancelled: code = .presentationCancelled
+            case .failed: code = .presentationFailed
+            }
+            ActionDiagnostics.shared.record(requestID: ticket.requestID, attemptID: ticket.attemptID,
+                                            capability: action.capabilityID, phase: .presentation, code: code)
+            return EffectReport(boundary: .observed(.message(result)))
+        case .unavailable:
+            ActionDiagnostics.shared.record(requestID: ticket.requestID, attemptID: ticket.attemptID,
+                                            capability: action.capabilityID, phase: .presentation,
+                                            code: .presentationUnavailable)
+            return EffectReport(boundary: .notStarted(.sheetUnavailable(.messages)))
+        case .busy:
+            ActionDiagnostics.shared.record(requestID: ticket.requestID, attemptID: ticket.attemptID,
+                                            capability: action.capabilityID, phase: .presentation,
+                                            code: .presentationBusy)
+            return EffectReport(boundary: .notStarted(.sheetBusy(.messages)))
         }
     }
 
-    private func performMail(_ action: BoundAction) async -> EffectReport {
+    private func performMail(_ action: BoundAction, ticket: ClaimTicket) async -> EffectReport {
         guard case .contact(let binding)? = action.arguments["contact"], let method = binding.method, method.kind == .email else {
             return EffectReport(boundary: .notStarted(.missingContactMethod))
         }
@@ -260,11 +280,32 @@ final class PocketEffects: PhoneEffects, @unchecked Sendable {
         }
         let subject = Self.text(action, "subject") ?? ""
         let body = Self.text(action, "body") ?? ""
+        ActionDiagnostics.shared.record(requestID: ticket.requestID, attemptID: ticket.attemptID,
+                                        capability: action.capabilityID, phase: .presentation,
+                                        code: .presentationRequested)
         let outcome = await ComposeSheets.mail(to: [exact.value], subject: subject, body: body, label: current.displayName)
         switch outcome {
-        case .result(let result): return EffectReport(boundary: .observed(.mail(result)))
-        case .unavailable: return EffectReport(boundary: .notStarted(.sheetUnavailable(.mail)))
-        case .busy: return EffectReport(boundary: .notStarted(.sheetBusy(.mail)))
+        case .result(let result):
+            let code: ActionDiagCode
+            switch result {
+            case .queuedInOutbox: code = .presentationAccepted
+            case .savedDraft: code = .presentationAccepted
+            case .cancelled: code = .presentationCancelled
+            case .failed: code = .presentationFailed
+            }
+            ActionDiagnostics.shared.record(requestID: ticket.requestID, attemptID: ticket.attemptID,
+                                            capability: action.capabilityID, phase: .presentation, code: code)
+            return EffectReport(boundary: .observed(.mail(result)))
+        case .unavailable:
+            ActionDiagnostics.shared.record(requestID: ticket.requestID, attemptID: ticket.attemptID,
+                                            capability: action.capabilityID, phase: .presentation,
+                                            code: .presentationUnavailable)
+            return EffectReport(boundary: .notStarted(.sheetUnavailable(.mail)))
+        case .busy:
+            ActionDiagnostics.shared.record(requestID: ticket.requestID, attemptID: ticket.attemptID,
+                                            capability: action.capabilityID, phase: .presentation,
+                                            code: .presentationBusy)
+            return EffectReport(boundary: .notStarted(.sheetBusy(.mail)))
         }
     }
 

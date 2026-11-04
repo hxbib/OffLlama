@@ -261,6 +261,7 @@ public struct DraftEdit: Sendable, Equatable {
 public enum DraftEditValue: Sendable, Equatable {
     case text(String)
     case contactID(String)
+    case refreshContact
     /// The exact labelled method/value shown on this card. Revalidated against Contacts at confirm.
     case contactMethod(ContactMethod)
     case instant(Date)
@@ -1039,7 +1040,9 @@ public final class EffectLedger: @unchecked Sendable {
         }
         let readiness = readiness(record.action, contract: contract, now: now)
         let pause = readiness.pause ?? pauseFromRecord(record.phase)
-        let notice = readiness.notice.isEmpty ? record.notice : readiness.notice
+        // The stored notice names the specific cause found at bind time (no match,
+        // ambiguity, missing access); the re-derived notice is the generic fallback.
+        let notice = record.notice.isEmpty ? readiness.notice : record.notice
         var retryableBusy = false
         if case .sheetBusy = pause { retryableBusy = true }
         return DraftCard(attemptID: record.attemptID, requestID: record.requestID,
@@ -1737,8 +1740,13 @@ public struct EffectSession: Sendable {
                 queries[spec.name] = rawValue
                 switch lookup.access {
                 case .denied, .restricted:
+                    ActionDiagnostics.shared.record(capability: contract.id, phase: .permission, code: .contactsDenied)
                     pause = pause ?? .needsContactChoice
                     notice = notice.isEmpty ? "Contacts access is off. Nothing can be sent until you allow access and choose a contact." : notice
+                case .notDetermined:
+                    ActionDiagnostics.shared.record(capability: contract.id, phase: .permission, code: .contactsNotDetermined)
+                    pause = pause ?? .needsContactChoice
+                    notice = notice.isEmpty ? "Contacts access hasn't been granted yet. Allow access to look up this contact; nothing will be sent until you choose." : notice
                 default:
                     if lookup.matches.count == 1, let candidate = lookup.matches.first {
                         let filtered = Self.filterMethods(candidate.methods, contract.methodKind)
@@ -1833,6 +1841,21 @@ public struct EffectSession: Sendable {
         action.source = .userEdited
         for edit in edits {
             switch edit.value {
+            case .refreshContact:
+                guard contract.arguments.contains(where: { $0.name == edit.field && $0.kind == .contact }),
+                      let query = action.contactQueries[edit.field], !query.isEmpty else {
+                    throw EffectError.invalidEdit("This card has no saved contact search to refresh.")
+                }
+                let lookup = await effects.resolveContacts(query)
+                let allowed = lookup.access == .full || lookup.access == .limited
+                action.contactChoices[edit.field] = allowed ? lookup.matches : []
+                action.arguments[edit.field] = .contactQuery(query)
+                if allowed, lookup.matches.count == 1, let candidate = lookup.matches.first {
+                    let methods = Self.filterMethods(candidate.methods, contract.methodKind)
+                    action.arguments[edit.field] = .contact(ContactBinding(identifier: candidate.identifier,
+                                                                          displayName: candidate.displayName,
+                                                                          method: methods.count == 1 ? methods[0] : nil))
+                }
             case .text(let value):
                 guard let spec = contract.arguments.first(where: { $0.name == edit.field }) else {
                     throw EffectError.invalidEdit("Unknown field \(edit.field).")

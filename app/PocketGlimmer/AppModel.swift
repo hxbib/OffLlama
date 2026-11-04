@@ -227,6 +227,10 @@ final class AppModel {
         rounds = (try? telemetry?.shareByModel()) ?? []
     }
 
+    /// Incomplete message drafts awaiting a follow-up. Typed and request-bound; the
+    /// ledger owns staged cards, this only carries clarification across turns.
+    @ObservationIgnored private var messageDrafts: [MessageDraft] = []
+
     @discardableResult
     func send(_ text: String, sharedText: String? = nil, source: String = "share") async -> String {
         guard !busy else { return "I'm working on another request. Please try again shortly." }
@@ -236,11 +240,23 @@ final class AppModel {
         busy = true; defer { busy = false; refresh() }
         await loadScrubberNames()
         do {
-            let turn = try await assistant.handle(text, sharedText: sharedText)
+            var turn = try await assistant.handle(text, sharedText: sharedText, pendingDrafts: messageDrafts)
+            if !turn.consumedDrafts.isEmpty {
+                messageDrafts.removeAll { turn.consumedDrafts.contains($0.requestID) }
+            }
+            if let d = turn.pendingDraft {
+                if messageDrafts.count >= 5 && !messageDrafts.contains(where: { $0.requestID == d.requestID }) {
+                    turn.reply = .clarify("Five unfinished messages are waiting. Finish or cancel one before starting another. This new message was not saved as a draft.")
+                } else {
+                    messageDrafts.removeAll { $0.requestID == d.requestID }
+                    messageDrafts.append(d)
+                }
+            }
             let rows = turn.decisions.map { DecisionRow($0, toolCallJSON: [.toolChoice, .skillPick].contains($0.type) ? turn.action?.json : nil) }
             for r in rows { decisions.insert(r, at: 0) }
             let reflexMs = turn.decisions.map(\.latencyMs).reduce(0, +)
             let onDevice = String(format: "on device · %.0f ms", reflexMs)
+                + (turn.followUp.map { " · follow-up:\($0.rawValue)" } ?? "")
             switch turn.reply {
             case .local(let t):
                 chat.append(.init(role: .assistant, text: t,
@@ -251,7 +267,10 @@ final class AppModel {
             case .clarify(let t): chat.append(.init(role: .assistant, text: t, badge: onDevice, decisions: rows))
             case .cloud(let t, let p): chat.append(.init(role: .assistant, text: t, badge: prettyProvider(p), decisions: rows, cloudPromptSent: turn.cloudPromptSent))
             case .offlineFallback(let t): chat.append(.init(role: .assistant, text: t, badge: "local fallback · best effort", decisions: rows, cloudPromptSent: turn.cloudPromptSent))
-            case .needsConfirmation(let card): chat.append(.init(role: .assistant, text: card.title, badge: onDevice, card: card, decisions: rows))
+            case .needsConfirmation(let card):
+                ActionDiagnostics.shared.record(attemptID: card.attemptID, capability: card.capabilityID,
+                                                phase: .projection, code: .cardProjected)
+                chat.append(.init(role: .assistant, text: card.title, badge: onDevice, card: card, decisions: rows))
             }
             let reply = chat.last?.text ?? ""
             for c in turn.corrections { chat.append(.init(role: .system, text: "Corrected: \(c.old.value) → \(c.new.value)")) }
@@ -344,6 +363,24 @@ final class AppModel {
         }
     }
 
+    func refreshContacts(_ item: ChatItem) async {
+        guard !busy, let assistant,
+              let i = chat.firstIndex(where: { $0.id == item.id }), let card = chat[i].card else { return }
+        busy = true; defer { busy = false }
+        let access = await actions.requestContactsAccess()
+        let fields = card.fields.filter { $0.kind == .contact }
+        do {
+            let updated = try await assistant.editEffect(card.attemptID,
+                edits: fields.map { DraftEdit(field: $0.name, value: .refreshContact) }, expectedRevision: card.revision)
+            chat[i].card = updated
+            if access != .full && access != .limited {
+                chat.append(.init(role: .system, text: "Contacts access is off. Allow access in iOS Settings, then refresh the contact on this card."))
+            }
+        } catch {
+            chat.append(.init(role: .system, text: "Could not refresh this contact. Review the latest card before confirming."))
+        }
+    }
+
     /// Entry point for Shortcuts automations (App Intent). Returns the nudges it posted.
     func handleTrigger(_ t: Trigger) async -> [Nudge] {
         if assistant == nil { await boot() }
@@ -399,6 +436,17 @@ final class AppModel {
         guard let csv = try? telemetry?.csv() else { return nil }
         let u = FileManager.default.temporaryDirectory.appendingPathComponent("reflex-telemetry.csv")
         try? csv.write(to: u, atomically: true, encoding: .utf8); return u
+    }
+
+    /// Secret-free action diagnostics (JSONL, one event per line) into Documents,
+    /// visible in Files / Finder. Evidence path for messaging-action verification.
+    func exportActionDiagnostics() -> URL? {
+        let jsonl = ActionDiagnostics.shared.exportJSONL()
+        guard !jsonl.isEmpty else { return nil }
+        let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let u = docs.appendingPathComponent("action-diagnostics.jsonl")
+        guard (try? jsonl.write(to: u, atomically: true, encoding: .utf8)) != nil else { return nil }
+        return u
     }
 }
 

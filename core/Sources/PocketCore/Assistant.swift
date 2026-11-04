@@ -22,10 +22,22 @@ public enum Reply: Sendable, Equatable {
     case offlineFallback(String)
 }
 
+/// How a follow-up utterance was treated against pending message drafts. Present only
+/// when the deterministic draft path ran, which distinguishes it from classifier routing.
+public enum FollowUpOutcome: String, Sendable, Equatable {
+    case completed, updated, cancelled, kept, disambiguated
+}
+
 public struct AssistantTurn: Sendable {
     public var reply: Reply
     public var decisions: [ReflexDecision]
     public var remembered: [MemoryFact]
+    /// A retained or updated incomplete message draft, if this turn ended in message clarification.
+    public var pendingDraft: MessageDraft? = nil
+    /// Drafts this turn resolved into a staged card or cancelled. The caller drops them.
+    public var consumedDrafts: [UserRequestID] = []
+    /// Set when the deterministic follow-up path handled the utterance.
+    public var followUp: FollowUpOutcome? = nil
     /// The tool call Reflex planned (shown as JSON in the decision card), if any.
     public var action: PlannedAction? = nil
     /// Exactly what left the device on escalation (after scrubbing), for the privacy info view.
@@ -109,13 +121,15 @@ public final class Assistant: @unchecked Sendable {
         return CloudConfiguration(chain: chain, scrubber: scrubber)
     }
 
-    public func handle(_ utterance: String, now: Date = Date(), sharedText: String? = nil) async throws -> AssistantTurn {
+    public func handle(_ utterance: String, now: Date = Date(), sharedText: String? = nil,
+                       pendingDrafts: [MessageDraft] = []) async throws -> AssistantTurn {
         if let sharedText, sharedText.count > ActionValidation.sharedTextLimit {
             throw EffectError.invalidEdit("Shared text exceeds 24,000 characters. Choose a smaller excerpt.")
         }
         var decisions: [ReflexDecision] = []
         let requestID = UserRequestID()
         var readResult: ReadResult?
+        var pendingDraft: MessageDraft?
         let facts = try await memoryContext(utterance)
         let mem = MemoryDisclosure.local.render(facts)
         let online = isOnline()
@@ -141,13 +155,54 @@ public final class Assistant: @unchecked Sendable {
             }
         }
 
+        if !pendingDrafts.isEmpty {
+            switch MessageFollowUp.resolve(utterance, drafts: pendingDrafts, now: now) {
+            case .none:
+                ActionDiagnostics.shared.record(requestID: requestID, phase: .followUp, code: .followUpNewRequest)
+            case .cancelled(let id):
+                ActionDiagnostics.shared.record(requestID: requestID, phase: .followUp, code: .followUpCancelled)
+                let result = EffectResult(attemptID: AttemptID(), phase: .settled(.cancelled(.userCard)),
+                                          summary: "Cancelled. Nothing was sent or saved.")
+                return AssistantTurn(reply: .acted(result), decisions: decisions, remembered: remembered,
+                                     consumedDrafts: [id], followUp: .cancelled, corrections: corrections)
+            case .clarifyKeep(let q):
+                ActionDiagnostics.shared.record(requestID: requestID, phase: .followUp, code: .followUpKept)
+                return AssistantTurn(reply: .clarify(q), decisions: decisions, remembered: remembered,
+                                     followUp: .kept, corrections: corrections)
+            case .disambiguate(let q):
+                ActionDiagnostics.shared.record(requestID: requestID, phase: .followUp, code: .followUpDisambiguated)
+                return AssistantTurn(reply: .clarify(q), decisions: decisions, remembered: remembered,
+                                     followUp: .disambiguated, corrections: corrections)
+            case .updated(let retained):
+                ActionDiagnostics.shared.record(requestID: requestID, capability: retained.channel?.capabilityID,
+                                                phase: .followUp, code: .followUpUpdated)
+                return AssistantTurn(reply: .clarify(retained.question()), decisions: decisions, remembered: remembered,
+                                     pendingDraft: retained, followUp: .updated, corrections: corrections)
+            case .completed(let complete):
+                return try await stageCompletedDraft(complete, decisions: decisions, remembered: remembered,
+                                                     corrections: corrections, sharedText: sharedText)
+            }
+        }
+
         let route = try await reflex.decide(OptionSets.route, context: ctx)
         decisions.append(route)
+        // No registry: an explicit message command on a non-tool route still bypasses
+        // chat generation and stages or retains through the compiled message catalog.
+        if skills == nil, route.chosen.id != "tool", ActionPlanner.isExplicitMessageRequest(utterance) {
+            var planned: PlannedAction?
+            let reply = try await sendMessageToolPath(utterance, ctx: ctx, requestID: requestID, sharedText: sharedText,
+                                                      decisions: &decisions, planned: &planned, read: &readResult,
+                                                      draft: &pendingDraft, now: now, toolEscalated: route.escalated)
+            return AssistantTurn(reply: reply, decisions: decisions, remembered: remembered, pendingDraft: pendingDraft,
+                                 action: planned, corrections: corrections)
+        }
         let lmem = localMemory(mem)
         var skillAction: PlannedAction?   // explicit app/feature request + confident skillPick; no registry = no-op
         if let r = try await skillOverride(utterance, ctx: ctx, route: route, requestID: requestID, sharedText: sharedText,
-                                           decisions: &decisions, planned: &skillAction, read: &readResult) {
-            return AssistantTurn(reply: r, decisions: decisions, remembered: remembered, action: skillAction,
+                                           decisions: &decisions, planned: &skillAction, read: &readResult,
+                                           now: now, draft: &pendingDraft) {
+            return AssistantTurn(reply: r, decisions: decisions, remembered: remembered, pendingDraft: pendingDraft,
+                                 action: skillAction,
                                  cloudPromptSent: readResult?.cloudPromptSent,
                                  corrections: corrections,
                                  cloudWithheldForSensitivity: readResult?.withheldForSensitivity ?? false)
@@ -166,8 +221,9 @@ public final class Assistant: @unchecked Sendable {
         case "tool":
             var planned: PlannedAction?
             let reply = try await toolPath(utterance, ctx: ctx, requestID: requestID, sharedText: sharedText, decisions: &decisions,
-                                           planned: &planned, read: &readResult)
-            return AssistantTurn(reply: reply, decisions: decisions, remembered: remembered, action: planned,
+                                           planned: &planned, read: &readResult, now: now, draft: &pendingDraft)
+            return AssistantTurn(reply: reply, decisions: decisions, remembered: remembered, pendingDraft: pendingDraft,
+                                 action: planned,
                                  cloudPromptSent: readResult?.cloudPromptSent, corrections: corrections,
                                  cloudWithheldForSensitivity: readResult?.withheldForSensitivity ?? false)
         case "clarify":
@@ -245,7 +301,8 @@ public final class Assistant: @unchecked Sendable {
     }
 
     func toolPath(_ utterance: String, ctx: String, requestID: UserRequestID, sharedText: String?, decisions: inout [ReflexDecision],
-                  planned: inout PlannedAction?, read: inout ReadResult?) async throws -> Reply {
+                  planned: inout PlannedAction?, read: inout ReadResult?, now: Date,
+                  draft: inout MessageDraft?) async throws -> Reply {
         let tool = try await reflex.decide(OptionSets.toolChoice, context: ctx)
         decisions.append(tool)
 
@@ -255,22 +312,49 @@ public final class Assistant: @unchecked Sendable {
             return try await planSkillCore(utterance, ctx: ctx, registry: reg, requestID: requestID, sharedText: sharedText,
                                            decisions: &decisions, planned: &planned, read: &read,
                                            fallThrough: false, preselected: compose,
-                                           explicitDraftOverride: tool.escalated)
+                                           explicitDraftOverride: tool.escalated, now: now, draft: &draft)
                 ?? .clarify("What would you like me to do?")
+        }
+        // An explicit message command never runs an unrelated trained tool: route it to
+        // message planning even when toolChoice missed. The decisions stay on the turn
+        // as evidence of the miss.
+        if ActionPlanner.isExplicitMessageRequest(utterance),
+           tool.chosen.id != "send_message", (tool.chosen.id != "none" || skills == nil) {
+            ActionDiagnostics.shared.record(requestID: requestID, phase: .routing, code: .explicitMessageMatch)
+            if let reg = skills, let channel = MessageChannel.parse(in: utterance),
+               let channelSkill = reg.skill(id: channel.capabilityID) {
+                ActionDiagnostics.shared.record(requestID: requestID, capability: channel.capabilityID,
+                                                phase: .routing, code: .explicitMessageRoutedSkill)
+                return try await planSkillCore(utterance, ctx: ctx, registry: reg, requestID: requestID, sharedText: sharedText,
+                                               decisions: &decisions, planned: &planned, read: &read,
+                                               fallThrough: false, preselected: channelSkill,
+                                               explicitDraftOverride: true, now: now, draft: &draft)
+                    ?? .clarify("What would you like me to do?")
+            }
+            if skills == nil, MessageChannel.parse(in: utterance) == nil {
+                let (retained, question) = MessageDraft.retain(utterance: utterance, requestID: requestID,
+                                                               lowConfidence: true, now: now)
+                draft = retained
+                return .clarify(question)
+            }
+            return try await sendMessageToolPath(utterance, ctx: ctx, requestID: requestID, sharedText: sharedText,
+                                                 decisions: &decisions, planned: &planned, read: &read,
+                                                 draft: &draft, now: now, toolEscalated: true)
         }
         if let reg = skills, ActionPlanner.shouldUseSkills(tool: tool, utterance: utterance, registry: reg) {   // open-world skills
             return try await planSkill(utterance, ctx: ctx, registry: reg, requestID: requestID, sharedText: sharedText,
-                                       decisions: &decisions, planned: &planned, read: &read)
+                                       decisions: &decisions, planned: &planned, read: &read, now: now, draft: &draft)
         }
         guard tool.chosen.id != "none" else { return .clarify("What would you like me to do?") }
         if let id = CapabilityCatalog.capabilityID(forTool: tool.chosen.id),
            let issue = ActionValidation.requestIssue(capabilityID: id, utterance: utterance) { return .clarify(issue.question) }
-        var args = ArgumentExtractor.heuristic(tool: tool.chosen.id, utterance: utterance)
 
         if tool.chosen.id == "send_message" {
-            guard let who = args["contact"], !who.isEmpty else { return .clarify("Who should I message?") }
-            guard let body = args["body"], !body.isEmpty else { return .clarify("What should I say to \(who)?") }
+            return try await sendMessageToolPath(utterance, ctx: ctx, requestID: requestID, sharedText: sharedText,
+                                                 decisions: &decisions, planned: &planned, read: &read,
+                                                 draft: &draft, now: now, toolEscalated: tool.escalated)
         }
+        var args = ArgumentExtractor.heuristic(tool: tool.chosen.id, utterance: utterance)
         if tool.chosen.id == "lookup_contact", (args["contact"] ?? "").isEmpty {
             return .clarify("Who should I look up?")
         }
@@ -319,6 +403,76 @@ public final class Assistant: @unchecked Sendable {
             requestID: requestID, capability: capability, raw: action,
             modelAskedConfirm: conf.chosen.id == "confirm", explicitDraft: tool.escalated)
         return Self.reply(from: result, read: &read, decisions: &decisions)
+    }
+
+    /// Trained-tool message planning. A complete parse stages a confirmable card;
+    /// anything else retains a typed draft and asks exactly what is missing.
+    func sendMessageToolPath(_ utterance: String, ctx: String, requestID: UserRequestID, sharedText: String?,
+                             decisions: inout [ReflexDecision], planned: inout PlannedAction?,
+                             read: inout ReadResult?, draft: inout MessageDraft?, now: Date,
+                             toolEscalated: Bool) async throws -> Reply {
+        if let issue = ActionValidation.requestIssue(capabilityID: "imessage_send", utterance: utterance) {
+            return .clarify(issue.question)
+        }
+        let parts = MessageDraft.messageArgs(utterance)
+        let who = parts.contact
+        let body = parts.body
+        let channel = MessageChannel.parse(in: utterance)
+        guard let channel, who != nil, body != nil else {
+            var retained = MessageDraft(requestID: requestID, contact: who, channel: channel, body: body,
+                                        lowConfidence: toolEscalated, created: now)
+            retained.lastAsked = retained.missingField
+            draft = retained
+            ActionDiagnostics.shared.record(requestID: requestID, capability: channel?.capabilityID,
+                                            phase: .draft, code: .draftCreated)
+            return .clarify(retained.question())
+        }
+        ActionDiagnostics.shared.record(requestID: requestID, capability: channel.capabilityID,
+                                        phase: .routing, code: .explicitMessageRoutedTool)
+        let toolID = channel == .imessage ? "send_message" : ActionPlanner.toolPrefix + channel.capabilityID
+        let action = PlannedAction(tool: toolID, args: ["contact": who!, "body": body!])
+        planned = action
+        let conf = try await reflex.decide(OptionSets.confirmBeforeAct,
+                                           context: "\(ctx)\nPlanned action: \(action.tool) body=\(body!), contact=\(who!)")
+        decisions.append(conf)
+        guard let ledger, let effects else {
+            return .clarify("Actions are unavailable on this build. Nothing was done.")
+        }
+        let capability = CapabilityCatalog.resolve(id: channel.capabilityID, skill: skills?.skill(id: channel.capabilityID))
+        let result = try await EffectSession(ledger: ledger, effects: effects).evaluate(
+            requestID: requestID, capability: capability, raw: action,
+            modelAskedConfirm: conf.chosen.id == "confirm", explicitDraft: toolEscalated)
+        return Self.reply(from: result, read: &read, decisions: &decisions)
+    }
+
+    /// Stages a follow-up-completed draft through the same ledger session as any
+    /// other action. The card still needs an explicit Confirm; nothing auto-sends.
+    func stageCompletedDraft(_ draft: MessageDraft, decisions: [ReflexDecision], remembered: [MemoryFact],
+                             corrections: [(old: MemoryFact, new: MemoryFact)],
+                             sharedText: String?) async throws -> AssistantTurn {
+        var decisions = decisions
+        var read: ReadResult?
+        guard let contact = draft.contact, let channel = draft.channel, let body = draft.body else {
+            return AssistantTurn(reply: .clarify(draft.question()), decisions: decisions, remembered: remembered,
+                                 pendingDraft: draft, followUp: .updated, corrections: corrections)
+        }
+        guard let ledger, let effects else {
+            return AssistantTurn(reply: .clarify("Actions are unavailable on this build. Nothing was done."),
+                                 decisions: decisions, remembered: remembered,
+                                 pendingDraft: draft, followUp: .updated, corrections: corrections)
+        }
+        let capID = channel.capabilityID
+        let action = PlannedAction(tool: ActionPlanner.toolPrefix + capID, args: ["contact": contact, "body": body])
+        let capability = CapabilityCatalog.resolve(id: capID, skill: skills?.skill(id: capID))
+        let result = try await EffectSession(ledger: ledger, effects: effects).evaluate(
+            requestID: draft.requestID, capability: capability, raw: action,
+            modelAskedConfirm: false, explicitDraft: draft.lowConfidence)
+        let reply = Self.reply(from: result, read: &read, decisions: &decisions)
+        ActionDiagnostics.shared.record(requestID: draft.requestID, capability: capID,
+                                        phase: .draft, code: .draftStaged)
+        return AssistantTurn(reply: reply, decisions: decisions, remembered: remembered,
+                             consumedDrafts: [draft.requestID], followUp: .completed, action: action,
+                             corrections: corrections)
     }
 
     // MARK: effect recovery and confirmation
@@ -427,7 +581,7 @@ public enum ArgumentExtractor {
             }
             a["body"] = body.trimmed
         case "send_message":
-            let contactPattern = #"(?i:text|message|tell|send)\s+(?i:a message to\s+)?([A-Z][a-z]+(?: [A-Z][a-z]+)?)"#
+            let contactPattern = #"(?:(?i:text|sms|whatsapp|message|msg|dm|ping|tell|send)\s+(?i:a message to\s+)?|(?i:reply to|respond to|write to)\s+)([A-Z][a-z]+(?: [A-Z][a-z]+)?)"#
             var rest: String?
             if let re = try? NSRegularExpression(pattern: contactPattern),
                let m = re.firstMatch(in: u, range: NSRange(u.startIndex..., in: u)),
@@ -436,6 +590,9 @@ public enum ArgumentExtractor {
                 rest = String(u[full.upperBound...]).trimmed
             }
             var body = rest ?? ""
+            // Recipient-first commands ("send Dana a message saying hi") carry the
+            // message noun after the name; it is not body text.
+            body = first(#"^(?:an?\s+(?:(?:WhatsApp|Instagram|Twitter|X|iMessage|SMS)\s+)?(?:dm|message|text)\b\s*(?=(?:saying|that says|to say|with the message|that\b|:|on\b|via\b|$)))?([\s\S]*)$"#, in: body) ?? body
             body = first(#"^(?:(?:on|via)\s+(?:Instagram|WhatsApp|Twitter|X|iMessage|SMS)\s+)?(?:(?:that says|with the message|to say|saying|that)\b|:)\s*([\s\S]*)$"#, in: body) ?? body
             if (body.first == "\"" && body.last == "\"") || (body.first == "“" && body.last == "”"), body.count >= 2 {
                 body = String(body.dropFirst().dropLast())

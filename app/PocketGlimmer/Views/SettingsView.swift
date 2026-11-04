@@ -17,6 +17,8 @@ struct SettingsView: View {
     @State private var byokKeySaved = Keychain.presence("byok_key") == .saved
     @State private var results: [SaveLine] = []
     @State private var exportStatus = ""
+    @State private var diagnosticsURL: URL?
+    @State private var diagnosticsStatus = ""
 
     struct SaveLine: Identifiable, Equatable {
         enum Level { case good, warning, problem }
@@ -82,6 +84,16 @@ struct SettingsView: View {
                     if !exportStatus.isEmpty { Text(exportStatus).font(.caption).foregroundStyle(.secondary) }
                 } header: { Text("Distillation loop") } footer: {
                     Text("Exports recent low-confidence decisions and their request context for future model training. The app does not upload this file. Your device backup settings may include it.")
+                }
+                Section {
+                    Button("Export action diagnostics") {
+                        diagnosticsURL = model.exportActionDiagnostics()
+                        diagnosticsStatus = diagnosticsURL == nil ? "No action diagnostics are available yet." : ""
+                    }
+                    if let diagnosticsURL { ShareLink("Share diagnostics", item: diagnosticsURL) }
+                    if !diagnosticsStatus.isEmpty { Text(diagnosticsStatus).font(.caption).foregroundStyle(.secondary) }
+                } header: { Text("Action diagnostics") } footer: {
+                    Text("Exports recent action stages and outcomes using fixed codes and random request IDs. It excludes message text, contacts and API keys.")
                 }
                 Section("Apple Dictation and Vocal Shortcuts") {
                     Text("To dictate text, tap the microphone on the Apple keyboard, speak, and review the text before you send it. Whether dictation works offline depends on your iPhone, its language and its settings.")
