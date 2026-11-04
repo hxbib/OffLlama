@@ -300,3 +300,36 @@ timezone requirements were sent to that implementation. Busy inputs need request
 not a global-inbox reorder. Forget does not erase telemetry, exported copies or backups. Photo
 classification still uses an OCR prefix and heuristics, not pixel screening. All new phone gates
 remain NOT RUN. Other Muse reports await review; iPhone build, measurements and release are open.
+
+# 2026-11-04, 17:39 UTC continuation
+
+Recovered the interrupted privacy integration at `886047e`. Its window-budget regression
+failed because the complete few-shot prompt occupied 4101 UTF-8 bytes before BOS. Reduced
+the window budget from 2600 to 2400 bytes, kept prepared-turn construction file-private,
+and rejected nonfinite screening confidence. Both prompt styles plus BOS fit the conservative
+4096-token byte bound. The frozen model, DecisionPrompt, priors, tau and test120 are unchanged.
+
+The retained B/F audit independently found alias masking and training-export defects.
+Captured-payload and migrated-database tests reproduced both before repair, with six failing
+assertions across four selected tests. Active non-user aliases now join the scrubber's known
+names. The export skips absent/blank decision contexts while retaining the diagnostic rows.
+Document screening omits context entirely so labels cannot be mistaken for training prompts.
+Cloud echo fixtures now verify restored text without assuming which name owns PERSON_1.
+
+Verification on the combined source using Swift 6.1 in Docker executed **136 tests, one
+skipped, zero failures**. Logs are `/tmp/pocket-glimmer-takeover/bf-regressions-before.log`
+and `bf-integrated-after.log`. The skipped test requires opt-in live API inference.
+
+Integrated Mac preparation repair `1242605` from `35dc36a`. Shell syntax and ShellCheck pass.
+All **73 fixture checks pass**. Real model size/hash, calibration hash/schema, 36 skills and
+empty entitlements pass portable validation. Mocked Xcode/native-tool checks are shell
+behavior evidence only. Updated `ios/MAC_DAY_RUNBOOK.md` and `app/README.md` for provenance,
+clean full pin, fresh build products, resource lookup and exit 2 semantics.
+
+All four Muse Wonder 1.0 max-effort reports are archived. Parent judgments are in
+`docs/research/MUSE_REVIEW_FINDINGS.md`. Accepted date/edit-claim/contact/memory-receipt
+corrections were sent to the existing recovery implementer. The B/F email routing,
+memory-recall and cloud-provenance findings overlap that migration and were sent as well.
+Apple reasoners remain excluded by the user's Meta-only runtime requirement. No runtime
+model, training job or paid inference was added. The current iPhone app is still unbuilt.
+The action-recovery implementation and independent code review remain open.

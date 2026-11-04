@@ -1,5 +1,10 @@
 # iOS 27.0.1 capability map
 
+> Parent review update, 2026-11-04. This report is a historical source snapshot. Native torch
+> control is supported by AVFoundation; it is not inherently Shortcut-only. The UPI callback
+> is specialized device enrollment, not ordinary message delivery. See
+> [reviewed Muse findings](MUSE_REVIEW_FINDINGS.md) for corrections and current evidence limits.
+
 Audit date: 2026-11-04. Audited tree: `d782b81` (`docs: correct round-two data provenance and comparison limits`). This pass changes no product code. The iPhone app in this tree is unbuilt. Nothing here is a device measurement.
 
 Labels used below:

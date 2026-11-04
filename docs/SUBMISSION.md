@@ -112,7 +112,7 @@ the same τ rule (docs/SKILLS.md).
 ## Demo
 - Video (3:00): recording and public upload are pending. The timestamps below are the planned script.
 - How to run it: build from source on a Mac with Xcode. `app/project.yml` + XcodeGen, llama.cpp xcframework pinned at
-  ddf48f8, free Apple ID signing, then copy the shipping GGUF into the app through Finder's Files sharing. Exact steps:
+  `ddf48f85c933c1f438212a02eb21e7b001d2d37d` through the provenance-checking wrapper, free Apple ID signing, then copy the shipping GGUF into the app through Finder's Files sharing. Exact steps:
   `ios/MAC_DAY_RUNBOOK.md`. The model is in Git LFS (`models/`) and in release `artifacts-2026-11-01`.
 - No phone? The same Swift decision code runs against llama-server: `swift run pg-cli e2e` (18 decisions). On the
   shipping GGUF (box CPU, τ=0.9, bundled priors) it got 16/18 right at argmax, kept 10/18 on device, and all 10 kept

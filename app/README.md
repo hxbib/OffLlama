@@ -17,7 +17,7 @@ first-launch checks, and the PGPERF recipe. In short, from the repo root on macO
 (cd core && swift test)
 ./ios/mac_prep.sh framework --llama-src ~/src/llama.cpp   # only if app/Frameworks is empty
 ./ios/mac_prep.sh preflight
-./ios/mac_prep.sh prepare --bundle-model
+./ios/mac_prep.sh prepare --bundle-model --require-model
 ./ios/mac_prep.sh build-unsigned
 open app/PocketGlimmer.xcodeproj
 ```
@@ -33,6 +33,7 @@ active Xcode. The signed install is manual in Xcode.
   and [Xcode command-line tool reference](https://developer.apple.com/documentation/xcode/xcode-command-line-tool-reference).
 - XcodeGen: `brew install xcodegen`, <https://github.com/yonaskolb/XcodeGen>.
 - CMake only when building the xcframework: `brew install cmake`.
+- Python 3 for strict artifact validation.
 - Git LFS for `models/*.gguf`.
 
 `app/project.yml` fixes Swift 5.0, iOS 18.0, `com.habib.pocketglimmer`, and empty
@@ -42,15 +43,17 @@ entitlements for a free personal team. Do not edit the generated `.xcodeproj`; e
 
 ## llama.xcframework
 
-The app links llama.cpp at commit `ddf48f8`. Build the device slice only unless you also need
-a Simulator:
+The app links llama.cpp at commit `ddf48f85c933c1f438212a02eb21e7b001d2d37d`.
+Use a clean checkout at that exact pin. From this project root:
 
 ```bash
-git -C ~/src/llama.cpp rev-parse HEAD        # must start ddf48f8
-cd ~/src/llama.cpp
-./build-xcframework.sh ios-device
-cp -R build-apple/llama.xcframework <repo>/app/Frameworks/
+./ios/mac_prep.sh framework --llama-src ~/src/llama.cpp
 ```
+
+The wrapper stages and validates the build, records source/binary/header provenance, and
+installs it only after validation. Existing artifacts are not overwritten. A manual copy
+without the provenance marker is incomplete and returns exit 2. Preserve that copy under
+an unused backup name before rebuilding with the wrapper. See the runbook for recovery.
 
 The pinned script accepts `ios-device` and `ios-sim`; no arguments builds all seven targets,
 including visionOS and tvOS, which a device build does not need. Verified against
@@ -88,7 +91,11 @@ xcodebuild -project app/PocketGlimmer.xcodeproj -scheme PocketGlimmer \
   CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY= build
 ```
 
-`./ios/mac_prep.sh build-unsigned` runs this and then validates the built app bundle. A
+`./ios/mac_prep.sh build-unsigned` regenerates the project, removes its old app build product,
+runs this command, and validates the fresh bundle. It no longer accepts `--no-generate`.
+`check-app` follows the app's root-then-`Models`/`Skills` lookup and rejects conflicting
+resources and symlinked models. The installed Documents folder needs a separate device check.
+Exit 2 means incomplete checks or unverified framework provenance, even if compilation passed. A
 successful compile is not a device install. For signing, open the project in Xcode, select
 your personal team in Signing & Capabilities, enable Developer Mode on the iPhone, and run a
 Release build. The runbook covers the prompts and the free-team 7-day expiry.

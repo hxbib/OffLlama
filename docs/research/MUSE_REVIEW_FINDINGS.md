@@ -4,11 +4,14 @@ Review started 2026-11-04. The user assigned Muse Wonder 1.0 through Muse Code A
 maximum effort to rerun the Grok investigations. The reports compare source at `009430f`
 with the Grok reports and recovery contract; they are research, not device verification.
 
-The [journeys report](MUSE_JOURNEYS_DELTA.md) and its
-[independent notes](MUSE_JOURNEYS_INDEPENDENT_NOTES.md) have returned. The capability,
-learning and contract reports have not yet been integrated. This document records parent
-review decisions, including corrections to Muse's proposals. It takes precedence over the
-unreviewed recommendations in those reports.
+All four Muse reports have returned and are archived here. Their recommendations remain
+research until the parent verifies them against source or primary documentation. This
+review takes precedence over conflicting recommendations in the snapshots.
+
+- [User journeys](MUSE_JOURNEYS_DELTA.md) and [independent notes](MUSE_JOURNEYS_INDEPENDENT_NOTES.md).
+- [iOS capabilities](MUSE_CAPABILITY_DELTA.md).
+- [Learned workflows](MUSE_LEARNING_DELTA.md) and [independent notes](MUSE_LEARNING_INDEPENDENT_NOTES.md).
+- [Recovery contract](MUSE_CONTRACT_REVIEW.md) and [independent notes](MUSE_CONTRACT_INDEPENDENT_NOTES.md).
 
 ## Accepted requirements
 
@@ -85,10 +88,103 @@ retention and photo-filter work. Parent verification reproduced the failures bef
 
 The targeted memory/photo suite passed 30 tests (one opt-in live test skipped), and the
 decision suite passed three tests. The modified app view passed syntax parsing only.
-The two previously committed cloud-text privacy regressions remain assigned to the parallel
-privacy repair; these targeted passes do not close them or establish a green integrated suite.
+Those targeted passes did not close the cloud-text regressions. Subsequent integration of
+`886047e`, the window-budget correction and B/F alias/export repairs passes 136 tests with
+one skipped at Nov 4 17:39 UTC. Independent review and iPhone verification remain open.
 
 Photo screening still sees only the first 240 OCR characters in the model decision and cannot
 classify pixels. The deterministic floor scans all OCR but can miss unrecognized sensitive
 content. Full photo privacy is still an open requirement; the upload-off switch is the only
 unconditional block. No device acceptance row is marked passed by these repairs.
+
+## Contract corrections accepted after the remaining reports
+
+These are requirements for the running first recovery slice. They are not claims that the
+implementation has passed. The original Grok contract remains a design snapshot.
+
+| Muse finding | Parent judgment and required behavior |
+|---|---|
+| F1, displayed dates change at confirmation | Execute the stored instant. Revalidate whether it is usable without reparsing a relative phrase. An elapsed date needs an explicit edit and another review. |
+| F2, edits race with claims | Store a draft revision and atomically apply approved edits and claim that revision, or prove an equivalent serialization contract. Test the exact winning body and recipient, not only the effect count. |
+| F4, compiled policy lacks binding/execution data | Resolve argument kinds, required fields and invocation from compiled definitions. Cover every trained tool and keep reads out of effect executors. User JSON cannot supply native authority. |
+| F6, attempt UUID in memory text | Do not embed receipt tokens in user memory. Repeated identical autoreply saves use semantic subject/attribute/value verification. `MemoryStore.upsert` preserves old text on its idempotent path. |
+| F7, read confirmations disappear | Preserve required email/document review and its request-bound payload. A typed read result must preserve cloud provider, actual sent text and withheld state through immediate and confirmation paths. |
+| F8, contact method and stale choices | Bind the exact selected method and value. A last-four display suffix alone is not unique. Refresh inaccessible or removed choices without silently switching recipients. |
+| F10, two compose sheets and cancellation | Treat presenter contention as retryable only when the adapter proves nothing started. Cancel the owned presentation/continuation safely; a task cancellation alone does not prove no external action occurred. |
+| F14, custom handoff destination hidden by a title | Validate external URL templates and schemes; reject raw insertion and unsafe destinations. Show the actual resolved destination and concrete invocation before confirmation. |
+
+The current contract explicitly says to re-resolve instants, claims only by phase, and puts
+attempt tokens into memory text. Parent inspection confirmed those three contradictions.
+The remaining accepted rows close gaps in the proposed API migration and its existing
+callers. Their acceptance tests remain part of Slice 1 review.
+
+## Useful additions for later work
+
+- Native flashlight control is a real public API opportunity that Grok's platform discussion
+  missed. Apple's [torch API](https://developer.apple.com/documentation/avfoundation/avcapturedevice/settorchmodeon(level:))
+  documents locking/configuration and failure conditions. Prefer explicit on/off with read-back;
+  do not claim a Shortcut handoff already proves torch state. No native adapter has been added.
+- Approved saved workflows could be exposed as dynamic
+  [AppEntity values](https://developer.apple.com/documentation/appintents/appentity) and a staging
+  intent. The intent must stage the current approved version for review, not execute effects.
+- The future planner should honor the configured Standard-mode Meta model. Do not silently
+  replace Wonder with Spark. [Meta's overview](https://dev.meta.ai/docs/overview) documents the
+  shared request interface. Structured-output behavior still needs a fixture and a live check
+  before a planner capability is claimed.
+- `recordCorrection` and `reflexContext` have no production callers. Record explicit corrections
+  when the feedback UI exists. Cancellation alone is not a corrected training label. Do not
+  inject corrections into frozen decision prompts without a new calibration study.
+- Novel skill vocabulary can lose to an existing trained tool before retrieval. Exact approved
+  workflow triggers should work independently of the current keyword override table. This does
+  not justify changing the frozen option sets or misinterpreting words inside message bodies.
+- Before multi-step workflows, enforce order inside the atomic claim, allow one confirmed step
+  per tap, and stop after failure or ambiguity. Muse's suggested predicate incorrectly treats
+  every settled/ambiguous predecessor as permitting progress. Completion must mean a permitted
+  successful predecessor, not merely a terminal row.
+- Future callback work needs explicit waiting presentation, expiry on foreground/relaunch,
+  bounded return text and cold-start buffering. Do not reserve unused tables now.
+- Attempt bodies need visible retention/deletion and backup semantics. Purging must retain an
+  identity tombstone and sufficient receipt state to prevent replay. Muse's suggested 30-day
+  policy is a proposal, not a user preference or implemented retention guarantee.
+
+## Rejected or qualified recommendations
+
+- Apple Foundation Models and Private Cloud Compute are outside the user's Meta-only model
+  runtime constraint. Do not add either reasoner as a hackathon enhancement. OS speech/OCR
+  proposals also need a separate eligibility decision before any new model integration.
+- The UPI citation is specialized device enrollment, not a general delivery receipt for
+  Messages. Apple's [UPI callback documentation](https://developer.apple.com/documentation/messageui/mfmessagecomposeviewcontroller/setupiverificationcodesendcompletion(_:))
+  confirms carrier transmission only for its entitled SMS flow. Grok's ordinary-message
+  delivery boundary remains correct; its example must not become a product escape hatch.
+- Muse's claim that calendar sync strips an attempt note was not demonstrated. Keep the
+  conservative read-back rule until an actual SDK/device case establishes a needed change.
+  The exact identifier lookup API still requires a Mac build and phone tests.
+- Do not replace full contact-method binding with a label and last four digits. Two methods
+  can share both. Display masking is not execution identity.
+- A read-only skill may invoke cloud reasoning or consume a document. Merely deleting its
+  confirmation or marking it completed before it runs is not an acceptable shortcut.
+- A pasteboard write after app handoff may race with app suspension. Local-only/expiry options
+  are worth testing, but the suggested ordering is not yet a verified repair.
+- The proposed calendar-search token inversion cannot infer that "dentist" means "dental".
+  That semantic example is not evidence for a one-line search fix.
+- Unknown names in shared documents are a real limit of the known-name scrubber. A new name
+  extractor is not a small guaranteed fix and may itself use a non-Meta model. Do not claim
+  universal anonymization or silently add such a model. Complete-window screening guarantees
+  coverage of sent text, not perfect sensitive-content or entity detection.
+- AlarmKit was already present in Grok's journey/contract work. Re-ranking it is useful, but
+  is not a new discovery. Version-dependent LongRunningIntent, advanced snippets, DOCX import,
+  recurring calendar actions and speech support remain candidates requiring SDK/device proof.
+
+Sources above were checked on 2026-11-04. Apple's Markdown documentation was fetched after
+its HTML pages returned JavaScript shells. No current iPhone build, device interaction,
+new runtime model, paid inference, or training run resulted from these reviews.
+
+## Retained B/F audit integration
+
+The [B/F audit](HISTORY_RETAINED_BF.md) records complete retained-position coverage and the
+historical payload truncations that could not be recovered. It independently found ordinary
+email misrouting, a memory-recall placeholder, cloud skill provenance loss, null-context
+training exports and unmasked memory aliases. Parent tests reproduced the last two before
+repair. The first three overlap the active recovery/reply migration and were passed to its
+implementer with behavior tests required. The unconsumed Instagram autoreply promise and
+the sensitive-offline answerability gap remain open until their owning paths are corrected.

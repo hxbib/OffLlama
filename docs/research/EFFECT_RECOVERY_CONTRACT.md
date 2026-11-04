@@ -1,5 +1,11 @@
 # Reviewed effects
 
+> Parent review update, 2026-11-04. This is the original Grok design snapshot. The
+> [accepted Muse corrections](MUSE_REVIEW_FINDINGS.md#contract-corrections-accepted-after-the-remaining-reports)
+> supersede conflicting sketches below, especially date re-resolution, edit/claim races,
+> memory attempt tokens and reply-only confirmation. The planner must honor the configured
+> Standard-mode Meta model. Implemented privacy fixes do not prove recovery or phone behavior.
+
 Contract for one Pocket Glimmer feature: durable recovery of the effects the app can actually perform, including a later reviewed workflow saved on top of that same path. Tree `7b8d014ba35f9dec349898be3b4fa9b53fe3c3d3`. Research snapshots remain `d782b81`. The Swift below is the contract. It is not a source file to drop into the tree.
 
 This pass does not build the iOS app, train a model, change τ / priors / prompts / gold artifacts, call a paid API, read a key, push, or edit product source. Mac and iPhone are unavailable. Nothing here is a device result.

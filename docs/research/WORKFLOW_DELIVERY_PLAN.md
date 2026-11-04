@@ -89,14 +89,20 @@ API boundary also means arbitrary third-party task recovery cannot be promised.
 
 ## Current status
 
-Muse Wonder 1.0 is independently rerunning the capability investigations through the user's
-Muse Code ACP at max effort. The first reviewed additions and corrections are tracked in
-[MUSE_REVIEW_FINDINGS.md](MUSE_REVIEW_FINDINGS.md). In particular, Slice 1 must preserve the
-chosen contact method and show resolved times with their zone. Busy shared input needs a
-request-bound staging path; moving it into the global inbox before the busy guard is unsafe.
+All four Muse Wonder 1.0 investigations through Muse Code ACP at max effort have returned.
+[MUSE_REVIEW_FINDINGS.md](MUSE_REVIEW_FINDINGS.md) records parent judgments and takes
+precedence over conflicting design sketches. Slice 1 must preserve the selected contact
+method, displayed instant and reviewed draft revision through the atomic claim. Busy
+shared input needs a request-bound staging path; putting it in the global inbox first is unsafe.
 
-- Research reports integrated and reviewed; the corrections above govern implementation.
-- Two text privacy regressions are committed and failing before repair at `a4e100f`.
-- Messages and Mail status copy now describes acceptance/queueing rather than delivery.
-- Capability/run type contract, implementation and independent review are still pending.
+- The original cloud-text regressions at `a4e100f` pass after `886047e` and the window-budget
+  correction. The integrated Nov 4 17:39 UTC suite passed 136 tests, one skipped.
+- Retained-history alias/export fixes have reproduced failures and pass in the integrated suite.
+- The recovery contract is written. Its app/core implementation is running in an isolated
+  worktree and remains unintegrated. Independent implementation review is still required.
+- The retained B/F audit found email routing, memory-recall and cloud-result provenance gaps.
+  The recovery implementation owns those overlapping migrations. Its tests must cover them.
+- Messages/Mail copy describes acceptance or queueing, never confirmed delivery.
+- Mac preflight repair `1242605` passes 73 fixture checks and real resource validation on Linux.
+  Those checks do not establish an Xcode build or iPhone behavior.
 - Mac build, signed install, phone measurements, demo video and submission remain open.

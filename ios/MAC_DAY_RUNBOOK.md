@@ -18,10 +18,10 @@ newer SDK.
   current tree is unbuilt. That was a Simulator build, not a device build, and it does not
   cover today's app changes. Build the current checkout first; do not read the old source
   reference as a code error and do not revert as a shortcut.
-- Core baseline at `581fa3a`: 94 tests executed, 1 skipped, 0 failures. The integrated
-  Nov 4 15:46 UTC run executed 108 tests with 1 skipped and 0 failures. The message and
-  Apple TV regressions were fixed. Later privacy regressions and repairs still require
-  a final run. A red core is not ready; do not fall back to an older tree.
+- Core baseline at `581fa3a`: 94 tests executed, 1 skipped, 0 failures. The Nov 4 17:39 UTC integrated run
+  executed 136 tests with 1 skipped and 0 failures after cloud-text, memory-alias and
+  training-export repairs. The message, Apple TV and complete-document screening regressions
+  pass. Independent review of the new integration is still pending. A red core is not ready; do not fall back to an older tree.
 - Shipping model: `models/SHIPPING-ep1-Llama-3.2-1B-PocketGlimmer-Reflex-Q4_K_M.gguf`,
   807694080 bytes, sha256
   `a5c60a8836aa73adeb847185aa30184cd9c33c522185f59fa9ac55a9d00782c2`.
@@ -30,7 +30,7 @@ newer SDK.
   the shipping GGUF. The base Llama model is not compatible with this calibration.
 - XcodeGen spec: `app/project.yml` uses Swift 5.0, iOS 18.0, and empty entitlements so a free
   personal team can provision it. The bundle identifier is `com.habib.pocketglimmer`.
-- llama.cpp pin: `ddf48f8`. `LlamaCppEngine.swift` uses the model/context, memory, batch,
+- llama.cpp pin: `ddf48f85c933c1f438212a02eb21e7b001d2d37d`. `LlamaCppEngine.swift` uses the model/context, memory, batch,
   sampler, vocabulary, and token APIs present in the pinned header. That is a header check,
   not a compile result.
 
@@ -53,7 +53,7 @@ git lfs pull
 ./ios/mac_prep.sh framework --llama-src ~/src/llama.cpp
 
 ./ios/mac_prep.sh preflight
-./ios/mac_prep.sh prepare --bundle-model
+./ios/mac_prep.sh prepare --bundle-model --require-model
 ./ios/mac_prep.sh build-unsigned
 
 open app/PocketGlimmer.xcodeproj
@@ -86,6 +86,7 @@ The script never installs these. Install them yourself.
 - XcodeGen. XcodeGen reads `app/project.yml`.
   `brew install xcodegen` is the usual install. Project: <https://github.com/yonaskolb/XcodeGen>.
 - CMake only when `app/Frameworks/llama.xcframework` must be built. `brew install cmake`.
+- Python 3 for strict artifact validation on macOS and Linux.
 - Git LFS for `models/*.gguf`. `git lfs install` once per machine or checkout.
 
 Check the active developer directory and license yourself:
@@ -132,28 +133,26 @@ The core is the gate. It is pure Swift plus vendored SQLite and does not need th
 If it is red, stop and fix the core before touching the app. The dated baseline is in "Known
 state"; do not hardcode a test count into a release claim, because the suite changes.
 
-## 4. llama.xcframework, pinned to ddf48f8
+## 4. Build or verify the pinned llama.xcframework
 
-Skip this section if `app/Frameworks/llama.xcframework` already exists. Check it first:
+Run this from the project root with a clean llama.cpp checkout at the exact full pin:
 
 ```bash
+git -C ~/src/llama.cpp rev-parse HEAD
+git -C ~/src/llama.cpp status --porcelain --untracked-files=normal
 ./ios/mac_prep.sh framework --llama-src ~/src/llama.cpp
 ```
 
-When the framework is present the script only verifies it. It does not rebuild or overwrite
-it. When it is absent, the command above verifies that the checkout is exactly `ddf48f8`,
-runs the pinned build, copies the result into `app/Frameworks/`, and checks the device slice
-and the API used by `LlamaCppEngine.swift`.
+The commit must equal `ddf48f85c933c1f438212a02eb21e7b001d2d37d`, and the status must be empty.
+Ignored build outputs do not block a retry. The wrapper builds into the upstream output
+folder, copies into a temporary staging directory, validates the device binary and headers,
+and records their hashes with the source pin before installing the framework.
 
-Manual path, if you prefer to run each step:
-
-```bash
-git -C ~/src/llama.cpp rev-parse HEAD       # must start with ddf48f8
-cd ~/src/llama.cpp
-./build-xcframework.sh ios-device           # device slice only
-mkdir -p <repo>/app/Frameworks
-cp -R build-apple/llama.xcframework <repo>/app/Frameworks/
-```
+An existing framework is checked without overwrite. A manually copied framework without
+`.pocketglimmer-provenance.json` returns exit 2 even when its structure is usable. Preserve it
+under an unused backup name, then rerun the wrapper to build a provenance-recorded copy.
+Do not create a marker by hand for an artifact whose source is unknown. A failed build or
+staged validation leaves an existing framework untouched and permits a retry.
 
 The argument behavior was verified against the pinned script, not against current llama.cpp
 documentation:
@@ -205,7 +204,10 @@ Calibration is not optional and is not interchangeable with the base model:
 
 - `calibration.json` must be in the built app. The source file is
   `app/PocketGlimmer/Resources/Models/calibration.json`.
-- `defaultTau` must be 0.90. The script rejects 0.80 or a missing profile.
+- `defaultTau` must be the number 0.90 and `promptStyle` must be `fewShot`. The validator
+  checks all 31 prior sets, their lengths, finite values, and permitted overrides. Strings,
+  duplicate JSON keys and incompatible values fail. The exact calibration SHA-256 is
+  `b9ce25b5223103944803c2668784c484ac7eee75b33aa984e62185728970a8f1`.
 - The priors were measured on the shipping GGUF. A base model with these priors is not the
   shipping operating point.
 - In the app, open any decision card. Its footer must read `τ = 0.90`. The current app stops startup if calibration is missing or incompatible. Seeing `τ =
@@ -214,7 +216,12 @@ Calibration is not optional and is not interchangeable with the base model:
   built-ins as a fallback, but the shipped skill set is the JSON file.
 
 `./ios/mac_prep.sh check-app --app <path>` validates these resources after a build without
-requiring the simulator.
+requiring the simulator. It resolves calibration at the bundle root, then `Models/`, and
+skills at the root, then `Skills/`, as the app does. Conflicting copies and nested-only
+resources fail. Model files must be regular files at the root or in `Models/`; symlinked
+models are rejected. The installed app's `Documents/` folder is not visible to this check.
+Embedded frameworks may legitimately omit headers and module maps; source xcframeworks
+must contain them.
 
 ## 6. Generate the Xcode project
 
@@ -240,7 +247,9 @@ edit the generated project.
 ./ios/mac_prep.sh build-unsigned
 ```
 
-The command runs the same build as:
+The wrapper always regenerates the project and removes only its prior `PocketGlimmer.app`
+build product before building. `--no-generate` is no longer accepted. A successful command
+that leaves no fresh app fails validation. The build invocation is:
 
 ```bash
 xcodebuild -project app/PocketGlimmer.xcodeproj -scheme PocketGlimmer \
@@ -256,6 +265,12 @@ What success means: the current source compiled and linked for iOS, and the buil
 contains `calibration.json` with tau 0.90, `builtin.json`, the embedded `llama.framework`,
 `UIFileSharingEnabled`, and a verified model if one was bundled. Logs are under
 `ios/.build/logs/`.
+
+Exit 0 means the required checks passed. Exit 1 means a required check failed. Exit 2 means
+a required artifact/check was skipped or the source framework lacks verified provenance.
+A compile with an unverified framework can return exit 2; retain the log but do not call it
+release-ready. The wrapper's 73 Linux fixture checks include mocked Xcode and native tools.
+They verify control flow, not a real iOS binary or SDK build.
 
 What success does not mean: it is not signed, not installed, not launched, and does not prove
 Metal offload, permissions, Shortcuts, or phone performance. Section 8 is the first signed
@@ -398,7 +413,8 @@ Known limitations at this baseline:
 | Symptom | Check | Resolution |
 |---|---|---|
 | `xcodebuild: command not found` | `xcode-select -p` | Install full Xcode, then `sudo xcode-select -s /Applications/Xcode.app/Contents/Developer` |
-| `No such module 'llama'` | `app/Frameworks/llama.xcframework` | Run `./ios/mac_prep.sh framework --llama-src ~/src/llama.cpp`, then `xcodegen generate` |
+| `No such module 'llama'` | Device binary, headers and module map in `app/Frameworks/llama.xcframework` | Run `./ios/mac_prep.sh framework --llama-src ~/src/llama.cpp`, then `xcodegen generate` |
+| Framework has no usable provenance | `ios/mac_prep.sh framework` returns 2 | Preserve the old framework under an unused backup name and rebuild with the wrapper from the clean full pin |
 | Framework has only a Simulator slice | `ios/mac_prep.sh framework` | Rebuild with `./build-xcframework.sh ios-device` |
 | `xcodegen: command not found` | `command -v xcodegen` | `brew install xcodegen` |
 | Model is 132 bytes | `wc -c < models/...gguf` | `git lfs install && git lfs pull` |

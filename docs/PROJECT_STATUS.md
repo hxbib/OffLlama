@@ -39,11 +39,12 @@ Sources are [the shipping evaluation](../eval/results/AFTER_FLOOR.md), [results 
 
 ## What remains before calling the phone app finished
 
-1. Build the current source with Xcode and the pinned llama.cpp framework.
-2. Install a signed Release build with the exact shipping model and bundled calibration.
-3. Verify first launch, permissions, offline actions, confirmation/cancellation, cloud privacy behavior, and Shortcuts on the phone.
-4. Measure phone time to first token, decoding speed, peak memory, and thermal behavior.
-5. Record and upload the real demo, make the repository public at submission, and submit the form.
+1. Integrate and independently review the pending action-recovery and reply-path repairs, including email routing and truthful cloud badges.
+2. Build the current source with Xcode and the pinned llama.cpp framework.
+3. Install a signed Release build with the exact shipping model and bundled calibration.
+4. Verify first launch, permissions, offline actions, confirmation/cancellation, cloud privacy behavior, and Shortcuts on the phone.
+5. Measure phone time to first token, decoding speed, peak memory, and thermal behavior.
+6. Record and upload the real demo, make the repository public at submission, and submit the form.
 
 The [Mac runbook](../ios/MAC_DAY_RUNBOOK.md) owns the build steps. [Final hours](FINAL_HOURS.md) owns the submission steps. No phone measurements, video link, or completed submission should be inferred from passing core tests.
 
