@@ -7,9 +7,9 @@ struct OnboardingView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     private let pages: [(String, String, String)] = [
         ("airplane", "Your assistant, in your pocket", "A small Meta model runs entirely on this iPhone. Turn on Airplane Mode: it still works."),
-        ("bolt.fill", "Reflex decides in milliseconds", "Every choice is one forward pass with a confidence score. When it isn't sure, it says so and asks for help."),
-        ("brain", "It remembers, privately", "Facts you share stay in an on-device database. You can see and delete every memory."),
-        ("arrow.up.forward.circle", "Hard questions go to a bigger brain", "Only when you're online and it's allowed, with names and numbers masked first."),
+        ("bolt.fill", "Reflex decides in milliseconds", "Every choice comes with a confidence score. When it isn't sure, it asks."),
+        ("brain", "It remembers, privately", "Facts you share stay on this phone. You can see and delete every one."),
+        ("arrow.up.forward.circle", "Hard questions go to a bigger brain", "Only when you're online and allow it, with names and numbers masked first."),
     ]
     var body: some View {
         VStack(spacing: 28) {

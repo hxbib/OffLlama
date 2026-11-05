@@ -54,10 +54,10 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section {
-                    LabeledContent("Status", value: model.modelState)
-                    StatusPill()
-                } header: { Text("On-device model") }
+                Section("On-device model") {
+                    LabeledContent("Status") { StatusPill() }
+                    Text(model.modelState).font(.subheadline).foregroundStyle(.secondary)
+                }
                 Section {
                     Picker("Model", selection: metaPickerSelection) {
                         ForEach(MetaModelPresets.all, id: \.id) { Text($0.name).tag($0.id) }
@@ -73,9 +73,9 @@ struct SettingsView: View {
                     routeRow(metaPreview)
                     if metaKeySaved { Button("Remove Meta key", role: .destructive) { removeKey("meta_key", label: "Meta", clearsEntry: { metaKey = "" }) } }
                 } header: { Text("Cloud model") }
-                Section {
+                Section("Muse Voice Transcribe") {
                     Toggle("Allow audio uploads", isOn: Binding(get: { !voiceStaysOnDevice }, set: { voiceStaysOnDevice = !$0 }))
-                } header: { Text("Muse Voice Transcribe") }
+                }
                 DisclosureGroup("Other OpenAI-compatible endpoint") {
                     TextField("Base URL (…/v1/)", text: $byokURL).textInputAutocapitalization(.never).autocorrectionDisabled().keyboardType(.URL)
                     TextField("Model", text: $byokModel).textInputAutocapitalization(.never).autocorrectionDisabled()
@@ -87,29 +87,33 @@ struct SettingsView: View {
                 }
                 DisclosureGroup("Advanced") {
                     Toggle("Reuse local prompt prefix", isOn: $kvPrefix)
-                    Text("Applies on next launch. Local reuse only; a speed improvement has not been measured.")
-                        .font(.subheadline).foregroundStyle(.secondary)
-                    Text(model.historyStorageStatus).font(.subheadline).textSelection(.enabled)
+                        .accessibilityHint("Applies on next launch. Speed gain not measured.")
+                    Text(model.historyStorageStatus).font(.subheadline).foregroundStyle(.secondary).textSelection(.enabled)
                     Button("Export decisions for distillation") {
                         if let r = model.exportDistillation() {
                             exportStatus = "\(r.rows) escalated decision\(r.rows == 1 ? "" : "s") → Files › OffLlama › \(r.url.lastPathComponent)"
                         } else { exportStatus = "Export failed (model not loaded yet?)" }
                     }
                     if !exportStatus.isEmpty { Text(exportStatus).font(.caption).foregroundStyle(.secondary) }
-                    Text("Exports recent low-confidence decisions and their request context for future model training. The app does not upload this file. Your device backup settings may include it.")
-                        .font(.subheadline).foregroundStyle(.secondary)
                     Button("Export action diagnostics") {
                         diagnosticsURL = model.exportActionDiagnostics()
                         diagnosticsStatus = diagnosticsURL == nil ? "No action diagnostics are available yet." : ""
                     }
                     if let diagnosticsURL { ShareLink("Share diagnostics", item: diagnosticsURL) }
                     if !diagnosticsStatus.isEmpty { Text(diagnosticsStatus).font(.caption).foregroundStyle(.secondary) }
-                    Text("Action diagnostics exclude message text, contacts and API keys.")
-                        .font(.subheadline).foregroundStyle(.secondary)
+                    DisclosureGroup("Details") {
+                        Text("Prompt prefix reuse applies on next launch; a speed gain has not been measured.")
+                        Text("Decision export holds recent low-confidence decisions and their request context for training. The app does not upload it; device backups may include it.")
+                        Text("Action diagnostics exclude message text, contacts and API keys.")
+                    }
+                    .font(.subheadline).foregroundStyle(.secondary)
                 }
                 DisclosureGroup("Dictation and voice shortcuts") {
-                    Text("To dictate text, tap the microphone on the Apple keyboard, speak, and review the text before you send it. Whether dictation works offline depends on your iPhone, its language and its settings.")
-                    Text("For a hands-free route, make a shortcut in Shortcuts: Dictate Text, then Ask OffLlama with Request set to the Dictated Text. In Settings › Accessibility › Vocal Shortcuts, add the phrase “Hey OffLlama” and choose that shortcut. Opening the app may need your iPhone unlocked.")
+                    Label("Tap the keyboard mic, speak, then review before sending.", systemImage: "mic")
+                    Label("Shortcuts: Dictate Text → Ask OffLlama (Request: Dictated Text).", systemImage: "1.circle")
+                    Label("Accessibility › Vocal Shortcuts: add “Hey OffLlama” for that shortcut.", systemImage: "2.circle")
+                    Text("Offline dictation depends on your iPhone and language. Opening the app may need it unlocked.")
+                        .font(.subheadline).foregroundStyle(.secondary)
                 }
                 Section("About") {
                     Text("Built with Llama").font(.callout.weight(.semibold))

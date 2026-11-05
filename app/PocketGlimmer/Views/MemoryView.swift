@@ -12,13 +12,15 @@ struct MemoryView: View {
             List {
                 if model.facts.isEmpty {
                     ContentUnavailableView("Nothing remembered yet", systemImage: "brain",
-                                           description: Text("Tell me things like “I'm allergic to peanuts”. Memories are stored only on this phone; when a request escalates, the relevant ones are sent masked."))
+                                           description: Text("Try “I'm allergic to peanuts.” Memories stay on this phone."))
                 }
                 if !model.onePager.isEmpty {
-                    Section {
-                        Text(model.onePager).font(.caption.monospaced()).textSelection(.enabled)
-                    } header: { Text("Profile") } footer: {
-                        Text("What the on-device model always sees, rebuilt from your memories. Never leaves the phone unless a request escalates, and then masked.")
+                    Section("Profile") {
+                        Text(model.onePager).font(.callout).textSelection(.enabled)
+                        DisclosureGroup("Details") {
+                            Text("What the on-device model always sees, rebuilt from your memories. It leaves the phone only when a request escalates, and then masked.")
+                                .font(.subheadline).foregroundStyle(.secondary)
+                        }
                     }
                 }
                 if !model.board.isEmpty {
@@ -37,7 +39,6 @@ struct MemoryView: View {
                     Section("Recently corrected") {
                         ForEach(model.corrections, id: \.new.id) { c in
                             VStack(alignment: .leading, spacing: 4) {
-                                Label("Corrected by you", systemImage: "checkmark.circle.fill").font(.caption.weight(.semibold)).foregroundStyle(Theme.accent)
                                 Text(c.old.text).strikethrough().foregroundStyle(.secondary)
                                 Text(c.new.text)
                                 Text(c.new.updatedAt.formatted(.relative(presentation: .named))).font(.caption2).foregroundStyle(.tertiary)
@@ -50,11 +51,12 @@ struct MemoryView: View {
                         ForEach(facts) { f in
                             VStack(alignment: .leading, spacing: 3) {
                                 Text(f.text)
-                                HStack(spacing: 8) {
-                                    Text(f.attribute.replacingOccurrences(of: "_", with: " ")).font(.caption.monospaced())
-                                    if !f.aliases.isEmpty { Text("aka " + f.aliases.joined(separator: ", ")).font(.caption) }
-                                    if let e = f.expiresAt { Label(e.formatted(.relative(presentation: .named)), systemImage: "hourglass").font(.caption) }
-                                }.foregroundStyle(.secondary)
+                                if !f.aliases.isEmpty || f.expiresAt != nil {
+                                    HStack(spacing: 8) {
+                                        if !f.aliases.isEmpty { Text("aka " + f.aliases.joined(separator: ", ")) }
+                                        if let e = f.expiresAt { Label(e.formatted(.relative(presentation: .named)), systemImage: "hourglass") }
+                                    }.font(.caption).foregroundStyle(.secondary)
+                                }
                             }
                             .swipeActions { Button("Forget", role: .destructive) { model.forget(f) } }
                         }

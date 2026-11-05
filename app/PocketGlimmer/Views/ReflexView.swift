@@ -15,9 +15,10 @@ struct ReflexView: View {
             List {
                 Section {
                     if model.daily.isEmpty {
-                        Text("No decisions logged yet. Every Reflex decision you make shows up here.").foregroundStyle(.secondary)
+                        ContentUnavailableView("No decisions yet", systemImage: "bolt",
+                                               description: Text("Ask OffLlama to do something and its decisions appear here."))
                     } else {
-                        Picker("Group by", selection: $byRound) { Text("Per model round").tag(true); Text("Per day").tag(false) }
+                        Picker("Group by", selection: $byRound) { Text("By round").tag(true); Text("By day").tag(false) }
                             .pickerStyle(.segmented)
                         if byRound { RoundChart(rounds: model.rounds).frame(height: 200).padding(.vertical, 8) }
                         else { ReflexChart(days: model.daily).frame(height: 200).padding(.vertical, 8) }
@@ -25,12 +26,16 @@ struct ReflexView: View {
                         let local = model.daily.reduce(0) { $0 + $1.handledLocally }
                         LabeledContent("Decisions logged", value: "\(total)")
                         LabeledContent("Handled on device", value: total == 0 ? "–" : String(format: "%.0f%%", Double(local) / Double(total) * 100))
+                        DisclosureGroup("Details") {
+                            Text("Telemetry from this phone only. Each round is a new model file. A decision is handled on device when the model's certainty reaches the bar (τ). Certainty is not the chance an action succeeds.")
+                                .font(.subheadline).foregroundStyle(.secondary)
+                        }
                     }
-                } header: { Text("Handled on device") } footer: {
-                    Text("Real telemetry from this phone only. Each distillation round ships as a new model file, so rounds come straight from logged rows. A decision counts as handled on device when the model's certainty in its choice reaches the bar (τ). Certainty is not the chance that an action works or a message arrives.")
                 }
-                Section("Latest decisions") {
-                    ForEach(model.decisions) { DecisionCard(row: $0) }
+                if !model.decisions.isEmpty {
+                    Section("Latest") {
+                        ForEach(model.decisions) { DecisionCard(row: $0) }
+                    }
                 }
             }
             .navigationTitle("Reflex")
