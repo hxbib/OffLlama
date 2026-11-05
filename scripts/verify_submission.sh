@@ -60,8 +60,8 @@ else
   fi
 fi
 
-note "== 2. placeholders left in submission-facing docs (PHONE_* allowed only in FINAL_HOURS.md / DEMO_SCRIPT.md)"
-if git grep -nE '\[AFTER_|\[PLACEHOLDER|\[TBD' -- README.md docs/SUBMISSION.md docs/DEMO_SCRIPT.md docs/LAUNCH_CHECKLIST.md 2>/dev/null; then bad "placeholders remain"; else note "ok none"; fi
+note "== 2. placeholders left in submission-facing docs (PHONE_* allowed only in archived drafts)"
+if git grep -nE '\[AFTER_|\[PLACEHOLDER|\[TBD' -- README.md docs/SUBMISSION.md docs/archive/DEMO_SCRIPT.md docs/process/LAUNCH_CHECKLIST.md 2>/dev/null; then bad "placeholders remain"; else note "ok none"; fi
 if git grep -nE '\[PHONE_' -- README.md docs/SUBMISSION.md 2>/dev/null; then bad "[PHONE_*] in README/SUBMISSION"; else note "ok no PHONE_ in README/SUBMISSION"; fi
 
 note "== 3. forbidden claims"

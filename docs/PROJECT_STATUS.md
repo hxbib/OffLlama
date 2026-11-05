@@ -50,7 +50,7 @@ Sources are [the shipping evaluation](../eval/results/AFTER_FLOOR.md), [results 
 5. Continue improving action-to-chat fallback beyond the explicit message, reminder and calendar commands now protected. The route-context repair improves a CPU diagnostic but still leaves many action requests below the threshold.
 6. Record and upload the real demo, finalize the public repository, verify public links and submit the form.
 
-The [Mac runbook](../ios/MAC_DAY_RUNBOOK.md) owns the build steps. [Final hours](FINAL_HOURS.md) owns the submission steps. No phone measurements, video link, or completed submission should be inferred from passing core tests.
+The [Mac runbook](../ios/MAC_DAY_RUNBOOK.md) owns the build steps. [Final hours](process/FINAL_HOURS.md) owns the submission steps. No phone measurements, video link, or completed submission should be inferred from passing core tests.
 
 ## Boundaries of the original vision
 

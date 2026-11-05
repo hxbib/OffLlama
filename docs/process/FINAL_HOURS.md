@@ -5,19 +5,19 @@ Keep enough time for recording, upload, public-link checks and the form. The
 signed release candidate `4376810` is installed on the iPhone 17 Pro. Composer,
 Copy and reminder save were user-confirmed on the preceding build. The user also confirmed the new Apple TV review card and search results. Other
 final screen and action checks remain open.
-See [project status](PROJECT_STATUS.md).
+See [project status](../PROJECT_STATUS.md).
 
 ## Freeze the recording build
 
 Use the installed build whose exact source and resources appear in the
-[Apple report](verification/RESUMED_FINAL_APPLE_2026-11-05.md).
+[Apple report](../verification/RESUMED_FINAL_APPLE_2026-11-05.md).
 Do not change model, threshold or features during recording. New candidates
 remain experimental. Only fix a defect that blocks the selected demonstration,
 and rebuild and retest after any such change.
 
 ## Rehearse one complete flow
 
-The canonical [three-minute demo](demo/OFFLLAMA_THREE_MINUTE_DEMO.md) contains
+The canonical [three-minute demo](../demo/OFFLLAMA_THREE_MINUTE_DEMO.md) contains
 exact actions, narration and substitutions. In order:
 
 1. Recheck the offline answer with Airplane Mode on and Wi-Fi off.
@@ -36,12 +36,12 @@ that has not passed; never substitute a mockup for real phone footage.
 
 Record the screen and narration, export no more than three minutes, and retain
 the original footage. Keep genuine waits visible or label cuts. Use only the
-[measured benchmark figures](BENCHMARKS.md); phone speed and RAM remain unmeasured.
+[measured benchmark figures](../BENCHMARKS.md); phone speed and RAM remain unmeasured.
 The build runbook's PGPERF procedure is available if time permits a proper cold
 run and repeated warm measurements. A single fast take is not a benchmark.
 
 Upload the video publicly, then check playback while logged out. Record its
-exact URL in [the submission packet](SUBMISSION.md). Keep the local file too.
+exact URL in [the submission packet](../SUBMISSION.md). Keep the local file too.
 
 ## Repository and form
 
@@ -52,7 +52,7 @@ exact URL in [the submission packet](SUBMISSION.md). Keep the local file too.
 3. Publish the repository at final release and verify source, model and video
    access while logged out. Publication exposes the repository history and
    research branches too.
-4. Use the prepared [submission text](SUBMISSION.md). Confirm fields and optional
+4. Use the prepared [submission text](../SUBMISSION.md). Confirm fields and optional
    categories on the actual form. Habib should review the final wording against
    the footage before submission.
 5. Submit before the deadline, save the confirmation and recheck both public
@@ -63,5 +63,5 @@ Form recorded in the project plan:
 The form and eligibility have not been re-verified in this preparation pass.
 Social copy remains a draft until Habib explicitly requests posting.
 
-The [Mac runbook](../ios/MAC_DAY_RUNBOOK.md) remains the build procedure. This file
+The [Mac runbook](../../ios/MAC_DAY_RUNBOOK.md) remains the build procedure. This file
 owns final preparation order; it does not duplicate build commands or the script.

@@ -179,6 +179,7 @@ The prototype is not a general autonomous controller for every iPhone app.
 | [`eval/`](eval/) | Evaluation data, scripts, saved measurements and negative results |
 | [`docs/demo/OFFLLAMA_THREE_MINUTE_DEMO.md`](docs/demo/OFFLLAMA_THREE_MINUTE_DEMO.md) | Recording flow, narration and rehearsal gates |
 | [`docs/SUBMISSION.md`](docs/SUBMISSION.md) | Submission packet being finalized |
+| [`docs/`](docs/README.md) | Documentation index: benchmarks, evaluation limits, skills, verification records and build-week notes |
 
 The repository was originally named **Pocket Glimmer**. Historical reports retain
 that name and their original evidence boundaries. Source code is under the

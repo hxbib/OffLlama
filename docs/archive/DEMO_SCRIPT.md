@@ -1,8 +1,8 @@
-> Historical Pocket Glimmer draft. Use the current [OffLlama three-minute recording plan](demo/OFFLLAMA_THREE_MINUTE_DEMO.md) for the final video. The older claims and shots below require rechecking.
+> Historical Pocket Glimmer draft. Use the current [OffLlama three-minute recording plan](../demo/OFFLLAMA_THREE_MINUTE_DEMO.md) for the final video. The older claims and shots below require rechecking.
 
 # Pocket Glimmer: 3:00 demo video script
 
-> **Edit-ready cut: [docs/demo/STORYBOARD.md](demo/STORYBOARD.md)** (beat-by-beat timing, verbatim voiceover, fallbacks, 25 s no-iPhone variant, iMovie checklist). Finished slides: `docs/img/slide_01.png` … `slide_11.png` (1920×1080, from `docs/demo/slides.html`; re-render with `bash docs/demo/render_slides.sh`).
+> **Edit-ready cut: [docs/demo/STORYBOARD.md](STORYBOARD.md)** (beat-by-beat timing, verbatim voiceover, fallbacks, 25 s no-iPhone variant, iMovie checklist). Finished slides: `docs/img/slide_01.png` … `slide_11.png` (1920×1080, from `docs/demo/slides.html`; re-render with `bash docs/demo/render_slides.sh`).
 
 Frame: **A 1B Meta model on my iPhone that knows when it doesn't know.** Memory is stored on the phone. Text
 escalations mask known names and common identifiers. Optional voice and photo features send media to the cloud;
@@ -34,7 +34,7 @@ slide/chart render). **[Any]** = can be made on any machine.
 
 ## Timeline and voiceover
 
-Use [demo/STORYBOARD.md](demo/STORYBOARD.md) as the single 3:00 cut. The former competing timeline has been removed. Optional beats replace a shot in that timeline; they do not extend it. The storyboard also owns the clearly labeled no-phone variant.
+Use [demo/STORYBOARD.md](STORYBOARD.md) as the single 3:00 cut. The former competing timeline has been removed. Optional beats replace a shot in that timeline; they do not extend it. The storyboard also owns the clearly labeled no-phone variant.
 
 An edited demo shows examples, not a measured real-world success rate. Keep clarifications and handoffs honest: asking “Which Sam?” is not a cloud call, opening Messages is not delivery, and opening Shortcuts is not confirmed playback.
 

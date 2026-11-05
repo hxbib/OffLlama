@@ -1,8 +1,8 @@
 # OffLlama launch checklist
 
 Deadline from the user's plan: **November 5, 02:00 UTC / November 4, 9 PM ET**.
-Use [final preparation](FINAL_HOURS.md), [the recording script](demo/OFFLLAMA_THREE_MINUTE_DEMO.md)
-and [the Mac runbook](../ios/MAC_DAY_RUNBOOK.md) as the single procedures.
+Use [final preparation](FINAL_HOURS.md), [the recording script](../demo/OFFLLAMA_THREE_MINUTE_DEMO.md)
+and [the Mac runbook](../../ios/MAC_DAY_RUNBOOK.md) as the single procedures.
 
 ## Recorded evidence
 

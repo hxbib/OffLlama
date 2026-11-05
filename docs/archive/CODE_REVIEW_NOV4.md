@@ -1,6 +1,6 @@
 # Code review: Nov 4 2026 (defect-first)
 
-> November 4 correction: earlier “certified” claims below are historical. Model selection reused cal180; the nominal bound is not a post-selection guarantee. See [evaluation limits](EVALUATION_CLAIMS.md). Saved predictions are unchanged.
+> November 4 correction: earlier “certified” claims below are historical. Model selection reused cal180; the nominal bound is not a post-selection guarantee. See [evaluation limits](../EVALUATION_CLAIMS.md). Saved predictions are unchanged.
 
 Scope: `core/Sources/PocketCore/*`, `pg-cli`, `core/Tests/**`, `app/PocketGlimmer/**`, `app/project.yml`. The new skills/multimodal
 files (Skills, ActionPlanner, MetaMultimodal, SkillRunner, SkillIntents, Capture/*, GlimpseView) belong to other agents. I only
