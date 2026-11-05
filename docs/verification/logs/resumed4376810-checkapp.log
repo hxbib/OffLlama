@@ -1,0 +1,12 @@
+
+== Built app
+ok   app executable: Mach-O arm64 executable
+ok   app bundle: /Users/habib/src/pocket-glimmer/ios/.build/SignedDerivedData/Build/Products/Release-iphoneos/PocketGlimmer.app (executable PocketGlimmer, Files sharing enabled)
+ok   built app calibration: promptStyle=fewShot, defaultTau=0.90, 31 prior sets, sha256 verified
+ok   built app skills registry: 36 skills, strict schema
+ok   embedded framework Info.plist: llama.framework metadata
+ok   embedded llama.framework: native arm64 iOS Mach-O, install name and pinned symbol verified
+ok   embedded llama.framework is complete (headers/module map are legitimately absent in a built app)
+ok   bundled model: SHIPPING-ep1-Llama-3.2-1B-PocketGlimmer-Reflex-Q4_K_M.gguf (807694080 bytes, sha256 a5c60a8836aa...82c2)
+
+APP BUNDLE PASSED: calibration, skills, embedded framework, and bundled model are in place.
