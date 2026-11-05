@@ -75,7 +75,7 @@ comparison with the shipping incumbent is incomplete. No replacement ships.
 The [candidate evaluation](training/R3_PHONE_RUNTIME_EVALUATION.md) reports these
 as agreement with teacher labels on developer templates, not human-labelled phone
 accuracy. The evaluation source is preserved on
-[the research branch](https://github.com/hxbib/pocket-glimmer/tree/t3/phone-runtime-v2-evaluation).
+[the research branch](https://github.com/hxbib/OffLlama/tree/research/phone-runtime-v2-evaluation).
 Completed training and labeling work is also preserved on
 [the candidate branch](https://github.com/hxbib/pocket-glimmer/tree/research/phone-training-candidates-20261104)
 and [the Spark data branch](https://github.com/hxbib/pocket-glimmer/tree/research/spark-phone-labels-20261104).
