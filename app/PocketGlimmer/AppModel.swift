@@ -468,7 +468,7 @@ final class AppModel {
                 reply(t, badge: turn.cloudPromptSent == nil ? onDevice : "On device · answered after a cloud attempt",
                       sent: turn.cloudPromptSent, kept: turn.cloudWithheldForSensitivity)
             case .acted(let effect): reply(effect.summary, badge: ActionStatusLabel.label(for: effect.phase), attempt: effect.attemptID)
-            case .clarify(let t): reply(t, badge: onDevice)
+            case .clarify(let t): reply(t, badge: "Needs clarification")
             case .cloud(let t, let p): reply(t, badge: prettyProvider(p), sent: turn.cloudPromptSent)
             case .offlineFallback(let t): reply(t, badge: "On device · best effort", sent: turn.cloudPromptSent)
             case .needsConfirmation(let card):
