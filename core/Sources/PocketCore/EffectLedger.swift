@@ -538,7 +538,7 @@ public enum CapabilityCatalog {
         c("open_app", "Open an app", .externalHandoff, .modelMayAct,
           .shortcut(name: "PG Open App", input: "{app}"), [ArgSpec("app", .app, required: true)],
           availability: .notWired,
-          review: "Asks Shortcuts to open this app. This app does not see whether the app opened. Unavailable until a Shortcut named “PG Open App” is set up; nothing opens from this card."),
+          review: "Asks Shortcuts to open this app. This app does not see whether the app opened. Not available in this build; nothing will be opened or changed."),
         c("run_shortcut", "Run a Shortcut by name", .externalHandoff, .modelMayAct,
           .urlTemplate("shortcuts://run-shortcut?name={name}&input=text&text={text}"),
           [ArgSpec("name", .text, required: true), ArgSpec("text", .text)],
@@ -559,33 +559,33 @@ public enum CapabilityCatalog {
           .shortcut(name: "PG Create Alarm", input: "{time}|{label}"),
           [ArgSpec("time", .datetime, required: true), ArgSpec("label", .text)],
           availability: .notWired,
-          review: "Asks the Shortcut to create a Clock alarm. This app does not own or see that alarm. Unavailable until a Shortcut named “PG Create Alarm” is set up; nothing opens from this card.", version: 3),
+          review: "Asks the Shortcut to create a Clock alarm. This app does not own or see that alarm. Not available in this build; nothing will be opened or changed.", version: 3),
         c("timer_start", "Start a timer", .externalHandoff, .modelMayAct,
           .shortcut(name: "PG Start Timer", input: "{duration}"), [ArgSpec("duration", .duration, required: true)],
           availability: .notWired,
-          review: "Asks the Shortcut to start a Clock timer. This app does not see the timer. Unavailable until a Shortcut named “PG Start Timer” is set up; nothing opens from this card."),
+          review: "Asks the Shortcut to start a Clock timer. This app does not see the timer. Not available in this build; nothing will be opened or changed."),
         c("notes_create", "Create a note", .externalHandoff, .modelMayAct,
           .shortcut(name: "PG Create Note", input: "{text}"), [ArgSpec("text", .text, required: true)],
           availability: .notWired,
-          review: "Asks Shortcuts to create this note. This app does not see the saved note. Unavailable until a Shortcut named “PG Create Note” is set up; nothing opens from this card."),
+          review: "Asks Shortcuts to create this note. This app does not see the saved note. Not available in this build; nothing will be opened or changed."),
         c("photos_open", "Open Photos", .externalHandoff, .modelMayAct, .urlTemplate("photos-redirect://"), [],
           review: "Opens Photos. This app does not see what you do there."),
         c("flashlight_toggle", "Toggle flashlight", .externalHandoff, .modelMayAct,
           .shortcut(name: "PG Toggle Flashlight", input: ""), [],
           availability: .notWired,
-          review: "Asks Shortcuts to toggle the flashlight. This app does not see the result. Unavailable until a Shortcut named “PG Toggle Flashlight” is set up; nothing opens from this card."),
+          review: "Asks Shortcuts to toggle the flashlight. This app does not see the result. Not available in this build; nothing will be opened or changed."),
         c("focus_toggle", "Toggle Do Not Disturb", .externalHandoff, .modelMayAct,
           .shortcut(name: "PG Toggle Focus", input: ""), [],
           availability: .notWired,
-          review: "Asks Shortcuts to toggle Focus. This app does not see the result. Unavailable until a Shortcut named “PG Toggle Focus” is set up; nothing opens from this card."),
+          review: "Asks Shortcuts to toggle Focus. This app does not see the result. Not available in this build; nothing will be opened or changed."),
         c("low_power_toggle", "Toggle Low Power Mode", .externalHandoff, .modelMayAct,
           .shortcut(name: "PG Toggle Low Power", input: ""), [],
           availability: .notWired,
-          review: "Asks Shortcuts to toggle Low Power Mode. This app does not see the result. Unavailable until a Shortcut named “PG Toggle Low Power” is set up; nothing opens from this card."),
+          review: "Asks Shortcuts to toggle Low Power Mode. This app does not see the result. Not available in this build; nothing will be opened or changed."),
         c("weather", "Weather", .externalHandoff, .modelMayAct,
           .shortcut(name: "PG Weather", input: "{place}"), [ArgSpec("place", .place)],
           availability: .notWired,
-          review: "Asks the Shortcut for weather. This app does not see the source or the reading. Unavailable until a Shortcut named “PG Weather” is set up; nothing opens from this card."),
+          review: "Asks the Shortcut for weather. This app does not see the source or the reading. Not available in this build; nothing will be opened or changed."),
 
         // Reply-only: confirmation is preserved for email/document reads, but nothing is claimed as an effect.
         c("email_digest", "Summarize my recent emails", .localWrite, .always, .emailDigest,
@@ -1084,6 +1084,9 @@ public final class EffectLedger: @unchecked Sendable {
 
     /// Derived from the stored action. It never calls Contacts and never reparses a relative phrase.
     static func readiness(_ action: BoundAction, contract: CapabilityContract, now: Date) -> Readiness {
+        guard contract.availability == .ready else {
+            return Readiness(ready: false, pause: .contractVersionStale, notice: EffectSession.unavailableSummary(contract))
+        }
         guard action.capabilityID == contract.id, action.contractVersion == contract.version,
               action.executor == contract.executor else {
             return Readiness(ready: false, pause: .contractVersionStale, notice: "The saved action does not match this build's contract. Start a new request.")
@@ -1524,7 +1527,7 @@ public struct EffectSession: Sendable {
 
         let mustCard = contract.confirmation == .always || modelAskedConfirm || explicitDraft
         if explicitDraft {
-            let draftNotice = "The model was not confident enough to act. This is an editable draft; nothing has been sent or saved yet."
+            let draftNotice = "Review the details before confirming. Nothing has been sent or saved yet."
             notice = notice.isEmpty ? draftNotice : notice + " " + draftNotice
         }
         let record = try ledger.insertAwaiting(requestID: requestID, capabilityID: contract.id,
@@ -1718,6 +1721,9 @@ public struct EffectSession: Sendable {
                                 contract: CapabilityContract) async throws -> SessionResult {
         if Task.isCancelled {
             return .finished(try finish(attemptID: record.attemptID, phase: .settled(.cancelled(.userCard)), contract: contract))
+        }
+        guard contract.availability == .ready else {
+            return .finished(try finish(attemptID: record.attemptID, phase: .settled(.failed(.unavailable)), contract: contract))
         }
         let report = await effects.perform(action, ticket: ticket)
 
@@ -2009,10 +2015,7 @@ public struct EffectSession: Sendable {
     }
 
     static func unavailableSummary(_ contract: CapabilityContract) -> String {
-        if case .shortcut(let name, _) = contract.executor {
-            return "\(contract.title) needs a Shortcut named “\(name)”, which this app cannot confirm is set up. Nothing was opened. Build it in Shortcuts, then say “run my shortcut \(name)”."
-        }
-        return "This is this app's own alarm. It is not wired in this build; nothing was scheduled."
+        "\(contract.title) is not available in this build. Nothing was opened or changed."
     }
 
     static func rejectedSummary(_ rejected: RejectedCapability) -> String {

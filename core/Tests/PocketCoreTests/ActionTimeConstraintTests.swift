@@ -219,7 +219,7 @@ final class ActionTimeConstraintTests: XCTestCase {
         let resolvedPast = now.addingTimeInterval(-86_400)
         for (id, args) in [("alarm_create", ["time": past, "label": "test"]),
                            ("reminder_create", ["title": "test", "when": past])] {
-            let contract = try XCTUnwrap(CapabilityCatalog.current(id: id))
+            let contract = try validationHandoff(id)
             XCTAssertFalse(ActionValidation.issues(contract: contract, args: args).isEmpty, id)
             let effects = FakePhoneEffects()
             effects.instantPhrases[past] = .parsed(resolvedPast)
@@ -238,7 +238,7 @@ final class ActionTimeConstraintTests: XCTestCase {
 
     func testRelativeHandoffThatResolvedPastDoesNotBecomeConfirmable() async throws {
         let phrase = "tonight at 9pm"
-        let contract = try XCTUnwrap(CapabilityCatalog.current(id: "alarm_create"))
+        let contract = try validationHandoff("alarm_create")
         let effects = FakePhoneEffects()
         effects.instantPhrases[phrase] = .parsed(now.addingTimeInterval(-3_600))
         let session = EffectSession(ledger: try EffectLedger(db: SQLiteDB(path: ":memory:"), now: { self.now }), effects: effects)
@@ -255,7 +255,7 @@ final class ActionTimeConstraintTests: XCTestCase {
 
     func testFutureAlarmHandoffKeepsTheExactPhrase() async throws {
         let phrase = "tomorrow at 9am"
-        let contract = try XCTUnwrap(CapabilityCatalog.current(id: "alarm_create"))
+        let contract = try validationHandoff("alarm_create")
         let effects = FakePhoneEffects()
         effects.instantPhrases[phrase] = .parsed(now.addingTimeInterval(86_400))
         let session = EffectSession(ledger: try EffectLedger(db: SQLiteDB(path: ":memory:"), now: { self.now }), effects: effects)
@@ -273,7 +273,7 @@ final class ActionTimeConstraintTests: XCTestCase {
         let phrase = String(repeating: "x", count: 2_500) + " at 9am"
         for (id, args) in [("alarm_create", ["time": phrase, "label": "test"]),
                            ("reminder_create", ["title": "test", "when": phrase])] {
-            let contract = try XCTUnwrap(CapabilityCatalog.current(id: id))
+            let contract = try validationHandoff(id)
             XCTAssertFalse(ActionValidation.issues(contract: contract, args: args).isEmpty, id)
             let effects = FakePhoneEffects()
             effects.instantPhrases[phrase] = .parsed(now.addingTimeInterval(86_400))

@@ -159,7 +159,7 @@ final class TakeoverRegressionTests: XCTestCase {
         XCTAssertTrue(pick.escalated)
         // Below tau, the old path clarified. The explicit message now keeps its recipient/body as a draft card.
         guard case .needsConfirmation(let card) = turn.reply else { return XCTFail("\(turn.reply)") }
-        XCTAssertTrue(card.notice.lowercased().contains("not confident"), card.notice)
+        XCTAssertTrue(card.notice.contains("before confirming"), card.notice)
         XCTAssertEqual(card.fields.first { $0.name == "body" }?.value, "I'll be home by 8")
         XCTAssertEqual(effects.performCount, 0)
         XCTAssertFalse(ActionPlanner.isExplicitRequest("Explain how text messages work"))
@@ -243,15 +243,39 @@ final class HelperShortcutTruthTests: XCTestCase {
         XCTAssertTrue(c.reviewSentence.contains("does not start playback"))
     }
 
-    func testEveryHelperShortcutContractDisclosesSetup() {
+    func testSavedHelperCardsCannotExecuteAfterUpgrade() async throws {
+        let ledger = try EffectLedger(db: SQLiteDB(path: ":memory:"))
+        let effects = FakePhoneEffects()
+        let session = EffectSession(ledger: ledger, effects: effects)
+        for contract in CapabilityCatalog.all {
+            guard case .shortcut = contract.executor else { continue }
+            let values: [String: BoundArgument] = ["app": .text("Safari"), "time": .text("tomorrow at 9am"),
+                "label": .text("Demo"), "duration": .text("5 minutes"), "text": .text("Demo note"), "place": .text("London")]
+            let arguments = Dictionary(uniqueKeysWithValues: contract.arguments.compactMap { spec in
+                values[spec.name].map { (spec.name, $0) }
+            })
+            let action = BoundAction(capabilityID: contract.id, contractVersion: contract.version,
+                title: contract.title, arguments: arguments, source: .userUtterance, executor: contract.executor)
+            let old = try ledger.insertAwaiting(requestID: UserRequestID(), capabilityID: contract.id,
+                contractVersion: contract.version, action: action, pause: nil, notice: "")
+            XCTAssertFalse(EffectLedger.readiness(action, contract: contract, now: Date()).ready)
+            let result = try await session.confirm(attemptID: old.attemptID, edits: [], expectedRevision: old.revision)
+            guard case .staged(let card) = result else { return XCTFail("\(contract.id): \(result)") }
+            XCTAssertFalse(card.canConfirm)
+            XCTAssertTrue(card.notice.contains("not available"))
+        }
+        XCTAssertEqual(effects.performCount, 0)
+    }
+
+    func testEveryHelperShortcutContractIsUnavailable() {
         var helpers = 0
         for c in CapabilityCatalog.all {
-            guard case .shortcut(let name, _) = c.executor else { continue }
+            guard case .shortcut = c.executor else { continue }
             helpers += 1
             XCTAssertEqual(c.availability, .notWired, c.id)
             let summary = EffectSession.unavailableSummary(c)
             XCTAssertTrue(summary.contains("Nothing was opened"), summary)
-            XCTAssertTrue(summary.contains("run my shortcut \(name)"), summary)
+            XCTAssertTrue(summary.contains("not available in this build"), summary)
         }
         XCTAssertEqual(helpers, 8)
         XCTAssertEqual(CapabilityCatalog.current(id: "run_shortcut")?.availability, .ready)

@@ -375,7 +375,7 @@ final class EffectRecoveryTests: XCTestCase {
         let session = EffectSession(ledger: ledger, effects: effects)
         let card = try await stageMessage(session, effects, explicitDraft: true)
         XCTAssertTrue(card.canConfirm)
-        XCTAssertTrue(card.notice.lowercased().contains("not confident"), card.notice)
+        XCTAssertTrue(card.notice.contains("before confirming"), card.notice)
         XCTAssertEqual(effects.performCount, 0)
         let done = try await session.confirm(attemptID: card.attemptID,
                                              edits: [DraftEdit(field: "body", value: .text("Running 10 minutes late"))],

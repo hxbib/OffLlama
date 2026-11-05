@@ -867,7 +867,7 @@
         }
       },
       "id" : "open_app",
-      "reviewSentence" : "Asks Shortcuts to open this app. This app does not see whether the app opened. Unavailable until a Shortcut named “PG Open App” is set up; nothing opens from this card.",
+      "reviewSentence" : "Asks Shortcuts to open this app. This app does not see whether the app opened. Not available in this build; nothing will be opened or changed.",
       "title" : "Open an app",
       "version" : 2
     },
@@ -1206,7 +1206,7 @@
         }
       },
       "id" : "alarm_create",
-      "reviewSentence" : "Asks the Shortcut to create a Clock alarm. This app does not own or see that alarm. Unavailable until a Shortcut named “PG Create Alarm” is set up; nothing opens from this card.",
+      "reviewSentence" : "Asks the Shortcut to create a Clock alarm. This app does not own or see that alarm. Not available in this build; nothing will be opened or changed.",
       "title" : "Set an alarm",
       "version" : 3
     },
@@ -1262,7 +1262,7 @@
         }
       },
       "id" : "timer_start",
-      "reviewSentence" : "Asks the Shortcut to start a Clock timer. This app does not see the timer. Unavailable until a Shortcut named “PG Start Timer” is set up; nothing opens from this card.",
+      "reviewSentence" : "Asks the Shortcut to start a Clock timer. This app does not see the timer. Not available in this build; nothing will be opened or changed.",
       "title" : "Start a timer",
       "version" : 2
     },
@@ -1318,7 +1318,7 @@
         }
       },
       "id" : "notes_create",
-      "reviewSentence" : "Asks Shortcuts to create this note. This app does not see the saved note. Unavailable until a Shortcut named “PG Create Note” is set up; nothing opens from this card.",
+      "reviewSentence" : "Asks Shortcuts to create this note. This app does not see the saved note. Not available in this build; nothing will be opened or changed.",
       "title" : "Create a note",
       "version" : 2
     },
@@ -1421,7 +1421,7 @@
         }
       },
       "id" : "flashlight_toggle",
-      "reviewSentence" : "Asks Shortcuts to toggle the flashlight. This app does not see the result. Unavailable until a Shortcut named “PG Toggle Flashlight” is set up; nothing opens from this card.",
+      "reviewSentence" : "Asks Shortcuts to toggle the flashlight. This app does not see the result. Not available in this build; nothing will be opened or changed.",
       "title" : "Toggle flashlight",
       "version" : 2
     },
@@ -1473,7 +1473,7 @@
         }
       },
       "id" : "focus_toggle",
-      "reviewSentence" : "Asks Shortcuts to toggle Focus. This app does not see the result. Unavailable until a Shortcut named “PG Toggle Focus” is set up; nothing opens from this card.",
+      "reviewSentence" : "Asks Shortcuts to toggle Focus. This app does not see the result. Not available in this build; nothing will be opened or changed.",
       "title" : "Toggle Do Not Disturb",
       "version" : 2
     },
@@ -1525,7 +1525,7 @@
         }
       },
       "id" : "low_power_toggle",
-      "reviewSentence" : "Asks Shortcuts to toggle Low Power Mode. This app does not see the result. Unavailable until a Shortcut named “PG Toggle Low Power” is set up; nothing opens from this card.",
+      "reviewSentence" : "Asks Shortcuts to toggle Low Power Mode. This app does not see the result. Not available in this build; nothing will be opened or changed.",
       "title" : "Toggle Low Power Mode",
       "version" : 2
     },
@@ -1581,7 +1581,7 @@
         }
       },
       "id" : "weather",
-      "reviewSentence" : "Asks the Shortcut for weather. This app does not see the source or the reading. Unavailable until a Shortcut named “PG Weather” is set up; nothing opens from this card.",
+      "reviewSentence" : "Asks the Shortcut for weather. This app does not see the source or the reading. Not available in this build; nothing will be opened or changed.",
       "title" : "Weather",
       "version" : 2
     },

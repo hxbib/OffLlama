@@ -22,7 +22,7 @@ final class ActionValidationTests: XCTestCase {
         let ledger = try EffectLedger(db: SQLiteDB(path: ":memory:"))
         let effects = FakePhoneEffects()
         let session = EffectSession(ledger: ledger, effects: effects)
-        let contract = try XCTUnwrap(CapabilityCatalog.current(id: "timer_start"))
+        let contract = try validationHandoff("timer_start")
         for value in ["0 minutes", "-5 minutes", "NaN", "90", "100 hours", "1 hour then 2 minutes"] {
             let result = try await session.evaluate(requestID: UserRequestID(), capability: .compiled(contract),
                 raw: PlannedAction(tool: "skill:timer_start", args: ["duration": value]), modelAskedConfirm: false, explicitDraft: false)
@@ -47,7 +47,7 @@ final class ActionValidationTests: XCTestCase {
     func testEditedTextIsNeverTruncatedAndCanBeRepaired() async throws {
         let effects = FakePhoneEffects()
         let session = EffectSession(ledger: try EffectLedger(db: SQLiteDB(path: ":memory:")), effects: effects)
-        let contract = try XCTUnwrap(CapabilityCatalog.current(id: "notes_create"))
+        let contract = try validationHandoff("notes_create")
         let long = String(repeating: "a", count: 2001)
         let result = try await session.evaluate(requestID: UserRequestID(), capability: .compiled(contract),
             raw: PlannedAction(tool: "skill:notes_create", args: ["text": long]), modelAskedConfirm: false, explicitDraft: false)
@@ -134,4 +134,14 @@ final class ActionValidationTests: XCTestCase {
         XCTAssertFalse(engine.generatePrompts.last?.contains("Wrong later document") == true)
         XCTAssertEqual(effects.performCount, 0)
     }
+}
+
+// Synthetic ready handoffs exercise validation without claiming bundled Shortcut support.
+func validationHandoff(_ id: String) throws -> CapabilityContract {
+    var contract = try XCTUnwrap(CapabilityCatalog.current(id: id))
+    if contract.availability == .notWired {
+        contract.id = "validation_" + id
+        contract.availability = .ready
+    }
+    return contract
 }
