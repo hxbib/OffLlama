@@ -3,7 +3,7 @@
 Prepared November 4 for Habib's final recording. This is the recording plan, not a
 claim that every shot has passed on the latest build. Rehearse the exact installed
 commit once before filming. The confirmed phone result is an answer of 4 with
-Airplane Mode on and Wi-Fi off on the earlier build. Reviewed source `7bb9c49`
+Airplane Mode on and Wi-Fi off on the earlier build. Reviewed source `805debf`
 is now signed and installed, with matching model and calibration hashes. Its
 keyboard, chart, chats and message flow are awaiting manual rehearsal. Keep the
 narration aligned with what appears on screen.
@@ -25,7 +25,7 @@ behavior first, then explain the model and its measured limits.
 | 0:30–0:55 | Turn connectivity back on for the native messaging demonstration. Enter `Text Demo saying I'll be there at 7.` Use the contact verified in rehearsal. Show the recipient and exact body on the review card. | “Now I ask it to text my demo contact. An action request becomes a structured draft with the recipient and message visible. The app does not treat a chat reply as proof that a message was sent.” |
 | 0:55–1:15 | Tap Confirm. Show the native Messages composer containing the correct recipient and body. Cancel in the native sheet, then show the resulting app status. | “Confirm opens the native iOS message composer. I still control the final send. Here I cancel, and OffLlama records the cancellation. It does not claim delivery.” |
 | 1:15–1:35 | Enter `Make a chart: rent 1200, food 400, transit 130`. Show the inline chart. Open its decision details only if they identify the rule honestly. | “For structured tasks, the app can use a direct local implementation. These numbers become a chart inside the conversation. That distinction matters: model decisions and application rules are shown separately.” |
-| 1:35–1:55 | Show Chats and New chat, then return to the original conversation. Dismiss the keyboard once. Keep a waiting action only if one was intentionally created in rehearsal. | “Separate chats keep the working context organized. Recent chat context is used for local answers. The action journal keeps unfinished work visible across a restart, without automatically performing it.” |
+| 1:35–1:55 | Show Chats and New chat, then return to the original conversation. Dismiss the keyboard with its inline button and long-press a message to Copy. Keep a waiting action only if one was intentionally created in rehearsal. | “Separate chats keep the working context organized. Recent chat context is used for local answers. The action journal keeps unfinished work visible across a restart, without automatically performing it.” |
 | 1:55–2:20 | Show the concise architecture diagram in the repository, or record a slide with `Local Llama → validated action → user confirmation → native iOS`. Add a separate optional arrow to `Muse cloud reasoning`. | “The local model scores a small set of choices, including whether to answer, ask, or use an action. Low certainty takes a fallback. Typed contracts check what can actually run. Optional cloud reasoning screens text first and exposes the outbound text for inspection.” |
 | 2:20–2:45 | Show the saved shipping benchmark table with its source and `Linux decision benchmark, 120 authored examples` visibly labeled. Do not show a candidate as shipping. | “The shipping model chose the correct option in 98 of 120 authored benchmark decisions. At its current certainty threshold, it accepted 44 and got 41 of those right. These are Linux decision tests. They do not establish a phone task-success rate. Newer candidates stay experimental until they pass the same checks.” |
 | 2:45–3:00 | Return to the app, then end with OffLlama, Built with Llama, the repository URL and Habib's name. | “OffLlama connects a small local model to useful phone actions, with visible boundaries and honest outcomes. The code, evaluation and failed experiments are in the repository. Built with Llama.” |
@@ -50,7 +50,7 @@ Keep that build fixed throughout the recording.
 4. Verify all three chart values appear with the correct labels. A code block,
    plaintext chart or a request to re-enter the numbers does not pass this shot.
 5. Verify the composer stays visible while typing several lines. Verify chat
-   switching and history recovery on the phone. Check the Chats storage readback.
+   switching and history recovery on the phone. Check the storage readback in Settings → Advanced.
 6. Keep a waiting card, force quit and reopen, and verify the same card returns
    without execution. Cancel it before recording the clean take.
 7. Capture only the measured benchmark table. Use
@@ -58,10 +58,16 @@ Keep that build fixed throughout the recording.
    for the shipping decision result. Do not imply that the eight newer candidates
    are installed, or that more training has already improved the phone.
 
+Do not include an alarm, timer, Notes creation, flashlight, Focus, Low Power,
+weather-helper or arbitrary-app-opening demonstration. Those helper actions do
+not have native implementations in this recording build. An Apple TV shot may
+show search results only, after rehearsal; it must not imply automatic playback.
+
 ## Optional substitutions
 
-- A verified reminder creation can replace the chart shot. Use an explicit date
-  and time, show the review, then show the saved item in Reminders. Rehearse the
+- A verified reminder creation can replace the chart shot. Use
+  `Remind me to rehearse the demo tomorrow at 9am`, show the reviewed date and
+  time, then show the saved item in Reminders. Rehearse the
   exact phrase first. Describe this as an EventKit result, not message delivery.
 - A verified cloud answer can replace the chat-list shot. Show the provider badge
   and the exact screened outbound text. Never show an API key or private material.

@@ -26,8 +26,9 @@ combines those decisions with local memory, explicit request rules, typed action
 contracts and a persistent action journal.
 
 Supported integrations include EventKit reminders and calendar, contact lookup,
-Messages and Mail compose sheets, and a registry of 36 skills. Some skills open
-another app or a user-installed Shortcut and require a final step there. A
+Messages and Mail compose sheets, and a registry of 36 skills. Available actions use native integrations or direct app links. Eight helper
+actions without native implementations are unavailable; they do not launch
+missing Shortcuts. External app handoffs can require a final step there. A
 message request becomes a visible recipient/body draft. The user confirms and
 still controls the final send in the native composer. Opening a composer is not
 proof of delivery.
@@ -45,8 +46,8 @@ model choices, not end-to-end phone success rates. The repository includes raw
 results, negative experiments and the limits of the measurements.
 
 The user has verified a local answer of 4 to “What is 2 + 2?” with Airplane Mode on
-and Wi-Fi off. The current release candidate, source `7bb9c49`, passed independent
-repair review, unsigned and signed Release builds, resource checks and installation
+and Wi-Fi off. The current release candidate, source `805debf`, passed independent
+repair review, a signed Release build, resource checks and installation
 on an iPhone 17 Pro. Final UI and action rehearsal on that build is in progress.
 
 ## Models and their actual roles
@@ -67,7 +68,7 @@ original GitHub repository and bundle identity under the visible name OffLlama.
 
 - [Benchmarks in plain language](BENCHMARKS.md) includes the meaning, denominator
   and source of each headline number. No real-world error guarantee is claimed.
-- [Apple release-candidate verification](verification/OFFLLAMA_RELEASE_CANDIDATE_APPLE_2026-11-04.md)
+- [Apple release-candidate verification](verification/FIX_DIFF_REVIEW_805debf.md)
   records the reviewed, built and installed SHA, signatures and resource hashes.
 - [Project status](PROJECT_STATUS.md) separates implementation, build checks and
   user-observed phone behavior. Phone speed, memory and thermal figures remain

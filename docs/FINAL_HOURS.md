@@ -2,13 +2,13 @@
 
 Deadline from the user's plan: **November 5, 2026, 02:00 UTC / November 4, 9 PM ET**.
 Keep enough time for recording, upload, public-link checks and the form. The
-current signed release candidate `7bb9c49` is installed on the iPhone 17 Pro.
+current signed release candidate `805debf` is installed on the iPhone 17 Pro.
 Its manual UI and action acceptance is pending. See [project status](PROJECT_STATUS.md).
 
 ## Freeze the recording build
 
 Use the installed build whose exact source and resources appear in the
-[Apple report](verification/OFFLLAMA_RELEASE_CANDIDATE_APPLE_2026-11-04.md).
+[Apple report](verification/FIX_DIFF_REVIEW_805debf.md).
 Do not change model, threshold or features during recording. New candidates
 remain experimental. Only fix a defect that blocks the selected demonstration,
 and rebuild and retest after any such change.
@@ -19,7 +19,7 @@ The canonical [three-minute demo](demo/OFFLLAMA_THREE_MINUTE_DEMO.md) contains
 exact actions, narration and substitutions. In order:
 
 1. Recheck the offline answer with Airplane Mode on and Wi-Fi off.
-2. Check multi-line keyboard visibility, Chats, history and the storage footer.
+2. Check multi-line keyboard visibility, Chats, history and the storage readback in Settings → Advanced.
 3. Check the supplied-number chart appears inline with all three values.
 4. Use a demo contact Habib controls. Review the correct recipient and body,
    open the native Messages composer, then cancel and inspect the outcome.

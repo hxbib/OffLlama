@@ -8,10 +8,10 @@ and [the Mac runbook](../ios/MAC_DAY_RUNBOOK.md) as the single procedures.
 
 - [x] Shipping model hash, 807,694,080 bytes and calibration at threshold 0.90 verified.
 - [x] Saved 120-example decision results, explicit evaluation limits and negative experiments.
-- [x] Integrated Linux core run: 385 executed, one skipped, zero failures.
-- [x] Independent Apple repair review at `7bb9c49`: no critical/warning findings;
-  386 core tests executed, one skipped, zero failures.
-- [x] Unsigned and signed Release builds, codesign and bundle validation pass.
+- [x] Integrated Linux core run: 395 executed, one skipped, zero failures.
+- [x] Independent Apple repair review at `805debf`: no critical/warning findings;
+  396 core tests executed, one skipped, zero failures.
+- [x] Final signed Release, codesign and bundle validation pass; final unsigned build skipped for the deadline.
 - [x] That exact signed source installed on the iPhone 17 Pro; not launched by the worker.
 - [x] Earlier user observation: offline 2 + 2 = 4 with Airplane Mode on and Wi-Fi off.
 - [x] Training and Spark-labeling research checkpoints pushed; no candidate promoted.
@@ -23,10 +23,10 @@ and [the Mac runbook](../ios/MAC_DAY_RUNBOOK.md) as the single procedures.
 - [ ] Composer stays visible while typing multiple lines; Done dismisses keyboard.
 - [ ] Supplied-number chart renders inline with correct labels and values.
 - [ ] New chat, switching, Clear and relaunch behave as described.
-- [ ] Chats footer reports complete protection and backups excluded on the physical phone.
+- [ ] Settings → Advanced reports complete protection and backups excluded on the physical phone.
 - [ ] A dedicated demo contact resolves correctly; the native composer has the intended body.
 - [ ] Cancellation and a repeated message request preserve truthful action behavior.
-- [ ] Any reminder, cloud, media or Shortcut shot used in the video passes on the phone.
+- [ ] Any reminder, cloud or media shot used in the video passes on the phone.
 - [ ] Phone performance measured with the documented method, or all phone-speed/RAM claims omitted.
 
 ## Publication and submission

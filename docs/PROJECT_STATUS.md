@@ -2,11 +2,11 @@
 
 OffLlama is an iPhone assistant prototype. A small Meta model makes bounded decisions on the phone. A local database remembers facts the user shares. Harder questions can go to a configured Muse model online. The repository and bundle identity retain the original Pocket Glimmer name.
 
-The project includes the app, its trained model, training tools, evaluation data, and a demo kit. Source **`7bb9c49` is reviewed, signed and installed on the iPhone 17 Pro**. The [Apple release report](verification/OFFLLAMA_RELEASE_CANDIDATE_APPLE_2026-11-04.md) records matching model/calibration hashes, unsigned and signed Release builds, and successful installation. Its review found no critical or warning issues in the repair diffs. It did not launch or exercise the phone UI.
+The project includes the app, its trained model, training tools, evaluation data, and a demo kit. Source **`805debf` is reviewed, signed and installed on the iPhone 17 Pro**. The [Apple release report](verification/FIX_DIFF_REVIEW_805debf.md) records matching model/calibration hashes, a signed Release build, and successful installation. Its review found no critical or warning issues in the repair diffs. It did not launch or exercise the phone UI.
 
-The user previously confirmed an answer of **4 to “What is 2 + 2?” with Airplane Mode on and Wi-Fi off**, and keyboard Done dismissal on the earlier build. Current keyboard visibility, chart rendering, chats, message handoff and storage attributes await manual acceptance on `7bb9c49`. Those earlier observations do not prove the new flows.
+The user previously confirmed an answer of **4 to “What is 2 + 2?” with Airplane Mode on and Wi-Fi off**, and keyboard Done dismissal on the earlier build. Current keyboard visibility, chart rendering, chats, message handoff and storage attributes await manual acceptance on `805debf`. Those earlier observations do not prove the new flows.
 
-Core verification is **385 executed, one skipped, zero failures on Linux**, and **386 executed, one skipped, zero failures in the Apple review**. These platform-specific runs do not establish complete phone task success. The repository is still private; public video and submission confirmation are pending.
+Core verification is **395 executed, one skipped, zero failures on Linux**, and **396 executed, one skipped, zero failures in the Apple review**. These platform-specific runs do not establish complete phone task success. The repository is still private; public video and submission confirmation are pending.
 
 ## What the user can ask for
 
@@ -16,8 +16,8 @@ Core verification is **385 executed, one skipped, zero failures on Linux**, and 
 | Set a reminder or calendar event | Local routing and argument extraction, then Apple's EventKit | Core planning tests. Current permission prompts, dates, and actual saves need phone testing. |
 | Find a contact or calendar event | Contacts/EventKit search, then a confidence-gated choice | Core decision tests. Some ambiguous requests ask for clarification. |
 | Draft a message | Contact lookup and a confirmation step, then the system Messages composer | The user still taps Send. Opening a composer does not mean a message was delivered. Offline drafting does not provide offline delivery. |
-| Open an app or use a supported phone action | A registry of 36 built-in skills using public links, Shortcuts, and native handlers | Skill selection and argument tests. Many actions need an installed Shortcut, an account, or a final tap in the destination app. |
-| Play a show in Apple TV | A user-configured Shortcut receives the show name | Playback is device-dependent and unverified. Opening Shortcuts does not prove that the named Shortcut exists or that playback began. |
+| Use a supported phone action | A registry of 36 built-in skills with native handlers and public links | Eight unimplemented helper actions are unavailable. Native and link actions do not require preinstalled Shortcuts. Destination apps may require an account or final tap. |
+| Find a show on Apple TV | An encoded tv.apple.com search link | Search results were verified from the returned web page. Phone opening is awaiting rehearsal. No latest-episode or playback claim. |
 | Summarize email or a document | The user shares text or picks a PDF/text document | No automatic access to the Mail inbox. No general search through other apps' private files. |
 | Create a chart | Local parsing of supplied labels and numbers into HTML/SVG bars, displayed inline | Core tests and independent parser probes pass. Rehearse `Make a chart: rent 1200, food 400, transit 130`. Some loose comma/value-first forms still lose labels. This is a limited chart generator. |
 | Answer a simple question offline | The same small model generates text, with an answerability fallback on uncertain routes | Limited general ability. Decision accuracy does not measure answer quality. |
@@ -43,11 +43,11 @@ Sources are [the shipping evaluation](../eval/results/AFTER_FLOOR.md), [results 
 
 ## What remains before calling the phone app finished
 
-1. Complete manual acceptance of the installed build, including keyboard visibility, Chats, inline chart, repeated-message intent, native composer cancellation and the protection/backup footer.
+1. Complete manual acceptance of the installed build, including keyboard visibility, Chats, inline chart, repeated-message intent, native composer cancellation and the protection/backup readback in Settings → Advanced.
 2. Verify permission variants, EventKit saves, cloud privacy and any Shortcut selected for the demo on the phone.
 3. Measure phone time to first token, full-request time, peak memory and thermal behavior before publishing phone performance claims.
 4. Wire and verify durable busy-input/voice/camera admission and the multi-step plan core before presenting those as working app features. They are currently core units only.
-5. Resolve the broader action-to-chat fallback weakness. The route-context repair improves a CPU diagnostic but still leaves many action requests below the threshold.
+5. Continue improving action-to-chat fallback beyond the explicit message, reminder and calendar commands now protected. The route-context repair improves a CPU diagnostic but still leaves many action requests below the threshold.
 6. Record and upload the real demo, finalize the public repository, verify public links and submit the form.
 
 The [Mac runbook](../ios/MAC_DAY_RUNBOOK.md) owns the build steps. [Final hours](FINAL_HOURS.md) owns the submission steps. No phone measurements, video link, or completed submission should be inferred from passing core tests.

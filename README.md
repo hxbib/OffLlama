@@ -11,7 +11,7 @@ I'm Habib, a computer science student at Hunter College. My subway commute often
 has no signal. I wanted an assistant that could keep working there, remember
 useful facts locally, and show me what it was about to do.
 
-**Prototype status.** Reviewed source `7bb9c49` is signed and installed on an iPhone 17 Pro. On an earlier build, the user
+**Prototype status.** Reviewed source `805debf` is signed and installed on an iPhone 17 Pro. On an earlier build, the user
 verified an answer of **4 to “What is 2 + 2?” with Airplane Mode on and Wi-Fi off**.
 The action and conversation repairs passed independent review and Apple Release
 builds, with final phone acceptance still in progress. See the exact commits
@@ -41,8 +41,10 @@ and remaining checks in [project status](docs/PROJECT_STATUS.md) and the
   user-configured Shortcuts; no always-listening or locked-phone promise is made.
 
 The [action catalog](docs/SKILLS.md) describes 36 registered skills and their
-limits. Some use public app links or user-installed Shortcuts and require a final
-step in another app. OffLlama does not tap arbitrary screens, read the entire
+limits. Available actions use native integrations or public app links. Eight
+helper actions without native implementations are unavailable in this build.
+Running a Shortcut by name is optional and requires one the user already created.
+External app handoffs can require a final step in that app. OffLlama does not tap arbitrary screens, read the entire
 Messages inbox, or resolve an existing group chat by its display name.
 
 ## How a request reaches an action
@@ -134,11 +136,12 @@ phone. The preparation script verifies the pinned framework, shipping GGUF and
 calibration. An unsigned build is only a compile and bundle check. Follow the
 [Mac runbook](ios/MAC_DAY_RUNBOOK.md) for signing, installation and phone tests.
 
-The recorded Linux checkpoint at `5382349` executes **385 tests, with one opt-in
-live test skipped and zero failures**. The independent Apple review of `7bb9c49`
-executed **386 tests, with one skipped and zero failures**, and passed unsigned
-and signed Release builds, resource verification and installation.
-[The Apple report](docs/verification/OFFLLAMA_RELEASE_CANDIDATE_APPLE_2026-11-04.md)
+The final source `805debf` executes **395 Linux core tests, with one opt-in
+live test skipped and zero failures**. Independent Mac verification executed
+**396 tests, with one skipped and zero failures**, and passed signed Release,
+resource checks and installation. The extra Apple-only test checks backup exclusion.
+The final unsigned build was skipped for the deadline; the signed Release compiled
+and linked the app. [The Apple report](docs/verification/FIX_DIFF_REVIEW_805debf.md)
 separates these checks from the phone UI acceptance still pending.
 
 ## Privacy and boundaries

@@ -2,7 +2,7 @@
   "startedAt": "2026-11-05T00:08:08Z",
   "deadline": "2026-11-05T00:33:08Z",
   "baseline": "7afd2e4",
-  "installedSource": "7bb9c49",
+  "installedSource": "805debfe791ec5dee430d5f308144f448db33ed9",
   "assignment": "Gmail Claude Opus5.5 High for the user-requested final swarm",
   "shape": "Partitioned implementation, no overlapping writable source",
   "workers": [
@@ -45,7 +45,7 @@
     }
   ],
   "sourceReady": "805debf",
-  "status": "Final source frozen; fresh independent fix-diff review and Apple installation pending.",
+  "status": "Signed final source installed before deadline; physical UI and action acceptance pending.",
   "coreVerification": {
     "platform": "Linux Docker swift:6.1-noble",
     "executed": 395,
@@ -63,8 +63,20 @@
     "Unavailable saved cards cannot confirm or execute after upgrade."
   ],
   "limits": [
-    "No final installed receipt yet; installed source remains 7bb9c49.",
     "Device panel simctl unavailable; sudo Xcode selection requires password, managed agent-device version mismatch.",
     "No automated phone UI observation; native alternatives for eight unavailable helper actions are not implemented."
-  ]
+  ],
+  "installedAt": "2026-11-05T00:29:58Z",
+  "appleVerification": {
+    "executed": 396,
+    "skipped": 1,
+    "failures": 0,
+    "signedRelease": "pass",
+    "signature": "pass",
+    "bundle": "pass",
+    "install": "pass",
+    "unsignedRelease": "skipped for deadline",
+    "phoneUI": "not run",
+    "report": "docs/verification/FIX_DIFF_REVIEW_805debf.md"
+  }
 }
