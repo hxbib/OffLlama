@@ -32,7 +32,7 @@ Logs are in `docs/verification/logs/resumed4376810-*.log`. Free disk space staye
 
 ## Limits
 
-- **Install only.** The install receipt does not prove the app launches. The Apple TV card, the message wording and the new copy have not been checked on the phone. The user needs to check them. Expect the Apple TV card to open a tv.apple.com search after confirm.
+- **At review time: install only.** The reviewer did not launch the app. The later user phone check below confirms the Apple TV flow; message wording and other final screens still need phone acceptance.
 - No UI automation was tried. Device tools failed twice before because the system Xcode and the managed agent-device version do not match, and there is no new evidence that this changed. No simctl or ssh driving was used.
 - No messages were sent and no external actions were taken.
 - No unsigned build was run.
@@ -47,3 +47,11 @@ that a missing title always asks instead of chatting is not established by the
 new tests. Polite commands such as “Could you open Ted Lasso in the Apple TV app?”
 intentionally match even though they end with a question mark. No recipient
 delivery state was added; the existing typed sheet result remains non-committed.
+
+## User phone acceptance — November 5, 2026
+
+On installed build `4376810`, the user checked “Open Ted Lasso on Apple TV”
+in a new chat and reported: **“Review card and search results both work.”**
+This establishes the review card and search-result handoff on the iPhone. It
+does not establish episode selection or playback. No source change or reinstall
+followed this confirmation.

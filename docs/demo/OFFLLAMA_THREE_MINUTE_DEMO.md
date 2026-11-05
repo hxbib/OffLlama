@@ -6,8 +6,9 @@ Copy, and a reviewed reminder saved in Reminders on installed source `805debf`.
 An offline answer of 4 to “What is 2 + 2?” was confirmed on an earlier build.
 The Apple TV request still fell into chat on `805debf`; routing repair `b5fdfb0`
 and screen cleanup are now signed and installed as `4376810`. Linux ran 398 core
-tests and the Mac ran 399, each with one skip and no failures. Rehearse the new
-Apple TV flow on the phone before including it. Freeze this build for recording.
+tests and the Mac ran 399, each with one skip and no failures. The user has now
+confirmed the Apple TV review card and search results on this build. Freeze it
+for recording.
 
 ## Story
 
@@ -62,7 +63,7 @@ Keep that build fixed throughout the recording.
 Do not include an alarm, timer, Notes creation, flashlight, Focus, Low Power,
 weather-helper or arbitrary-app-opening demonstration. Those helper actions do
 not have native implementations in this recording build. An Apple TV shot may
-show search results only, after rehearsal; it must not imply automatic playback.
+show the verified search-results flow; it must not imply automatic playback.
 
 ## Optional substitutions
 

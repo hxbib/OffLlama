@@ -1,7 +1,7 @@
 {
   "integratedSource": "4376810",
   "installedSource": "4376810e5cdbaf56b2d4b5c429154d9cd61fb5a3",
-  "status": "Reviewed, signed and installed; phone acceptance pending.",
+  "status": "Reviewed, signed and installed; Apple TV card and search results user-verified on phone.",
   "ui": {
     "taskId": "node:delegated-task:command%3Amcp%3A84ec2df9-6da0-4b08-ba90-d71df51e1124%3Aremote-delegate%3Aoffllama-resumed-demo-ui-20261105-v1",
     "status": "completed",
@@ -50,7 +50,14 @@
     "signature": "pass",
     "resources": "pass",
     "install": "pass",
-    "phoneUI": "not run",
+    "phoneUI": "Apple TV review card and search results confirmed by user; other final checks pending",
     "report": "RESUMED_FINAL_APPLE_2026-11-05.md"
+  },
+  "phoneAcceptance": {
+    "source": "4376810",
+    "prompt": "Open Ted Lasso on Apple TV",
+    "reportedBy": "user",
+    "result": "Review card and search results both work",
+    "scope": "Review and search handoff, not playback"
   }
 }

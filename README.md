@@ -15,7 +15,7 @@ useful facts locally, and show me what it was about to do.
 The previous build's composer, whole-message Copy and reminder review/save were
 confirmed by the user; an offline answer of **4 to “What is 2 + 2?”** was confirmed
 earlier. The new build fixes explicit Apple TV commands falling into chat, shortens
-message statuses and simplifies the screens. Its phone acceptance is still pending.
+message statuses and simplifies the screens. The user confirmed its Apple TV review card and Ted Lasso search results on the phone; other final checks remain open.
 See [project status](docs/PROJECT_STATUS.md) and the
 [Apple build and installation report](docs/verification/RESUMED_FINAL_APPLE_2026-11-05.md).
 

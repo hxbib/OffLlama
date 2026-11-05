@@ -7,9 +7,10 @@ model/calibration and install all passed. Receipt: databaseSequenceNumber 5976.
 Report: `docs/verification/RESUMED_FINAL_APPLE_2026-11-05.md`; dispatch and exact
 links: `docs/verification/offllama_final_install_2026-11-05.json`.
 
-No app launch or new phone UI check. The user previously confirmed keyboard,
-Copy and reminder save on805debf; the explicit Apple TV card/search, concise
-message statuses and quieter screens still need phone acceptance on4376810.
+Phone follow-up: the user confirmed “Review card and search results both work”
+for “Open Ted Lasso on Apple TV” on4376810. This verifies the card and search
+handoff, not playback. Keyboard, Copy and reminder save were confirmed on805debf.
+Concise message statuses and other final screens still need phone acceptance.
 All workers finished. River02 worked; River1 did not. No new flashlight/native
 helper implementation, training, public release or form submission. Keep this
 build fixed for the user's final rehearsal and recording; patch only reproduced

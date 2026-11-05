@@ -3,8 +3,8 @@
 Deadline from the user's plan: **November 5, 2026, 02:00 UTC / November 4, 9 PM ET**.
 Keep enough time for recording, upload, public-link checks and the form. The
 signed release candidate `4376810` is installed on the iPhone 17 Pro. Composer,
-Copy and reminder save were user-confirmed on the preceding build. The new
-Apple TV routing and screen cleanup need a final phone check.
+Copy and reminder save were user-confirmed on the preceding build. The user also confirmed the new Apple TV review card and search results. Other
+final screen and action checks remain open.
 See [project status](PROJECT_STATUS.md).
 
 ## Freeze the recording build
