@@ -185,3 +185,5 @@ The repository was originally named **Pocket Glimmer**. Historical reports retai
 that name and their original evidence boundaries. Source code is under the
 [MIT license](LICENSE). Model weights and datasets retain their respective
 licenses; see [attribution and licensing](docs/LICENSING.md).
+
+Built by [Sadman Habib](https://www.linkedin.com/in/sadmanhabib/) for the Meta Global AI Developer Hackathon
