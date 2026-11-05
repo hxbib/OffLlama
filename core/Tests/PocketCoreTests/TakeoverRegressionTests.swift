@@ -111,10 +111,14 @@ final class TakeoverRegressionTests: XCTestCase {
             let confirmed = try await a.confirmEffect(card.attemptID, edits: [], expectedRevision: card.revision)
             guard case .finished(let effect) = confirmed else { return XCTFail("\(confirmed)") }
             XCTAssertEqual(effect.phase, .settled(.handedOff(.systemAcceptedURL)))
-            XCTAssertTrue(effect.summary.contains("Shortcuts was asked"), effect.summary)
+            XCTAssertFalse(effect.summary.contains("Shortcuts"), effect.summary)
+            XCTAssertFalse(effect.summary.lowercased().contains("playing"), effect.summary)
             XCTAssertEqual(effects.performCount, 1)
-            guard case .shortcut(let name, _) = effects.performed.first?.action.executor else { return XCTFail() }
-            XCTAssertEqual(name, "PG Play on Apple TV")
+            // No phantom helper Shortcut: Apple TV search over https, with the show percent-encoded.
+            guard case .urlTemplate(let template) = effects.performed.first?.action.executor else { return XCTFail() }
+            XCTAssertEqual(template, "https://tv.apple.com/search?term={show}")
+            XCTAssertEqual(SkillTemplate.fill(template, args: ["show": "Ted Lasso & Co"]),
+                           "https://tv.apple.com/search?term=Ted%20Lasso%20%26%20Co")
             XCTAssertEqual(text(effects.performed.first!.action, "show"), "Severance")
             XCTAssertTrue(runner.ran.isEmpty)
         }
@@ -227,4 +231,27 @@ final class TakeoverRegressionTests: XCTestCase {
                           cloud: CloudBrainChain(cloud), isOnline: { online })
         return (a, effects)
     }
+}
+
+final class HelperShortcutTruthTests: XCTestCase {
+    func testNoCatalogOrSkillUsesPhantomAppleTVShortcut() {
+        XCTAssertFalse(BuiltinSkills.all.contains(where: { if case .shortcut(let n, _) = $0.invocation { return n == "PG Play on Apple TV" }; return false }))
+        guard let c = CapabilityCatalog.current(id: "appletv_play") else { return XCTFail() }
+        guard case .urlTemplate(let t) = c.executor else { return XCTFail("\(c.executor)") }
+        XCTAssertTrue(t.hasPrefix("https://tv.apple.com/search?term="))
+        XCTAssertEqual(c.availability, .ready)
+        XCTAssertTrue(c.reviewSentence.contains("does not start playback"))
+    }
+
+    func testEveryHelperShortcutContractDisclosesSetup() {
+        var helpers = 0
+        for c in CapabilityCatalog.all {
+            guard case .shortcut(let name, _) = c.executor else { continue }
+            helpers += 1
+            XCTAssertTrue(c.reviewSentence.contains("Needs a Shortcut named “\(name)”"), c.id)
+        }
+        XCTAssertEqual(helpers, 8)
+        XCTAssertEqual(CapabilityCatalog.current(id: "run_shortcut")?.availability, .ready)
+    }
+
 }

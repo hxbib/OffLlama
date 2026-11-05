@@ -745,13 +745,12 @@
       ],
       "id" : "appletv_play",
       "invocation" : {
-        "input" : "{show}",
-        "name" : "PG Play on Apple TV",
-        "type" : "shortcut"
+        "template" : "https:\/\/tv.apple.com\/search?term={show}",
+        "type" : "url"
       },
-      "note" : "Configure a Shortcut named “PG Play on Apple TV” that accepts a show name as text, using actions available on your device. The playback recipe is unverified. The app only hands the show name to Shortcuts; it cannot confirm that the Shortcut exists or that playback started. If Shortcuts cannot open, the app opens a TV app search page instead.",
+      "note" : "Opens Apple TV search (tv.apple.com) for the show; no Shortcut needed. It does not start playback or choose an episode; pick the episode there.",
       "offlineCapable" : false,
-      "title" : "Apple TV: play a show"
+      "title" : "Apple TV: find a show"
     },
     {
       "aliases" : [

@@ -867,7 +867,7 @@
         }
       },
       "id" : "open_app",
-      "reviewSentence" : "Asks Shortcuts to open this app. This app does not see whether the app opened.",
+      "reviewSentence" : "Asks Shortcuts to open this app. This app does not see whether the app opened. Needs a Shortcut named “PG Open App” set up in Shortcuts first.",
       "title" : "Open an app",
       "version" : 2
     },
@@ -1139,14 +1139,13 @@
         }
       },
       "executor" : {
-        "shortcut" : {
-          "input" : "{show}",
-          "name" : "PG Play on Apple TV"
+        "urlTemplate" : {
+          "_0" : "https://tv.apple.com/search?term={show}"
         }
       },
       "id" : "appletv_play",
-      "reviewSentence" : "Asks Shortcuts to play this show. This app cannot confirm playback.",
-      "title" : "Apple TV: play a show",
+      "reviewSentence" : "Opens an Apple TV search for this show. It does not start playback or pick an episode.",
+      "title" : "Apple TV: find a show",
       "version" : 2
     },
     "decisions" : [
@@ -1207,7 +1206,7 @@
         }
       },
       "id" : "alarm_create",
-      "reviewSentence" : "Asks the Shortcut to create a Clock alarm. This app does not own or see that alarm.",
+      "reviewSentence" : "Asks the Shortcut to create a Clock alarm. This app does not own or see that alarm. Needs a Shortcut named “PG Create Alarm” set up in Shortcuts first.",
       "title" : "Set an alarm",
       "version" : 3
     },
@@ -1263,7 +1262,7 @@
         }
       },
       "id" : "timer_start",
-      "reviewSentence" : "Asks the Shortcut to start a Clock timer. This app does not see the timer.",
+      "reviewSentence" : "Asks the Shortcut to start a Clock timer. This app does not see the timer. Needs a Shortcut named “PG Start Timer” set up in Shortcuts first.",
       "title" : "Start a timer",
       "version" : 2
     },
@@ -1319,7 +1318,7 @@
         }
       },
       "id" : "notes_create",
-      "reviewSentence" : "Asks Shortcuts to create this note. This app does not see the saved note.",
+      "reviewSentence" : "Asks Shortcuts to create this note. This app does not see the saved note. Needs a Shortcut named “PG Create Note” set up in Shortcuts first.",
       "title" : "Create a note",
       "version" : 2
     },
@@ -1422,7 +1421,7 @@
         }
       },
       "id" : "flashlight_toggle",
-      "reviewSentence" : "Asks Shortcuts to toggle the flashlight. This app does not see the result.",
+      "reviewSentence" : "Asks Shortcuts to toggle the flashlight. This app does not see the result. Needs a Shortcut named “PG Toggle Flashlight” set up in Shortcuts first.",
       "title" : "Toggle flashlight",
       "version" : 2
     },
@@ -1474,7 +1473,7 @@
         }
       },
       "id" : "focus_toggle",
-      "reviewSentence" : "Asks Shortcuts to toggle Focus. This app does not see the result.",
+      "reviewSentence" : "Asks Shortcuts to toggle Focus. This app does not see the result. Needs a Shortcut named “PG Toggle Focus” set up in Shortcuts first.",
       "title" : "Toggle Do Not Disturb",
       "version" : 2
     },
@@ -1526,7 +1525,7 @@
         }
       },
       "id" : "low_power_toggle",
-      "reviewSentence" : "Asks Shortcuts to toggle Low Power Mode. This app does not see the result.",
+      "reviewSentence" : "Asks Shortcuts to toggle Low Power Mode. This app does not see the result. Needs a Shortcut named “PG Toggle Low Power” set up in Shortcuts first.",
       "title" : "Toggle Low Power Mode",
       "version" : 2
     },
@@ -1582,7 +1581,7 @@
         }
       },
       "id" : "weather",
-      "reviewSentence" : "Asks the Shortcut for weather. This app does not see the source or the reading.",
+      "reviewSentence" : "Asks the Shortcut for weather. This app does not see the source or the reading. Needs a Shortcut named “PG Weather” set up in Shortcuts first.",
       "title" : "Weather",
       "version" : 2
     },

@@ -537,7 +537,7 @@ public enum CapabilityCatalog {
           review: "Opens this http or https link in the browser. This app does not see the page."),
         c("open_app", "Open an app", .externalHandoff, .modelMayAct,
           .shortcut(name: "PG Open App", input: "{app}"), [ArgSpec("app", .app, required: true)],
-          review: "Asks Shortcuts to open this app. This app does not see whether the app opened."),
+          review: "Asks Shortcuts to open this app. This app does not see whether the app opened. Needs a Shortcut named “PG Open App” set up in Shortcuts first."),
         c("run_shortcut", "Run a Shortcut by name", .externalHandoff, .modelMayAct,
           .urlTemplate("shortcuts://run-shortcut?name={name}&input=text&text={text}"),
           [ArgSpec("name", .text, required: true), ArgSpec("text", .text)],
@@ -551,33 +551,33 @@ public enum CapabilityCatalog {
         c("spotify_play", "Spotify", .externalHandoff, .modelMayAct, .urlTemplate("spotify:search:{query}"),
           [ArgSpec("query", .query)],
           review: "Opens a Spotify search. This app does not see what plays."),
-        c("appletv_play", "Apple TV: play a show", .externalHandoff, .modelMayAct,
-          .shortcut(name: "PG Play on Apple TV", input: "{show}"), [ArgSpec("show", .query, required: true)],
-          review: "Asks Shortcuts to play this show. This app cannot confirm playback."),
+        c("appletv_play", "Apple TV: find a show", .externalHandoff, .modelMayAct,
+          .urlTemplate("https://tv.apple.com/search?term={show}"), [ArgSpec("show", .query, required: true)],
+          review: "Opens an Apple TV search for this show. It does not start playback or pick an episode."),
         c("alarm_create", "Set an alarm", .externalHandoff, .modelMayAct,
           .shortcut(name: "PG Create Alarm", input: "{time}|{label}"),
           [ArgSpec("time", .datetime, required: true), ArgSpec("label", .text)],
-          review: "Asks the Shortcut to create a Clock alarm. This app does not own or see that alarm.", version: 3),
+          review: "Asks the Shortcut to create a Clock alarm. This app does not own or see that alarm. Needs a Shortcut named “PG Create Alarm” set up in Shortcuts first.", version: 3),
         c("timer_start", "Start a timer", .externalHandoff, .modelMayAct,
           .shortcut(name: "PG Start Timer", input: "{duration}"), [ArgSpec("duration", .duration, required: true)],
-          review: "Asks the Shortcut to start a Clock timer. This app does not see the timer."),
+          review: "Asks the Shortcut to start a Clock timer. This app does not see the timer. Needs a Shortcut named “PG Start Timer” set up in Shortcuts first."),
         c("notes_create", "Create a note", .externalHandoff, .modelMayAct,
           .shortcut(name: "PG Create Note", input: "{text}"), [ArgSpec("text", .text, required: true)],
-          review: "Asks Shortcuts to create this note. This app does not see the saved note."),
+          review: "Asks Shortcuts to create this note. This app does not see the saved note. Needs a Shortcut named “PG Create Note” set up in Shortcuts first."),
         c("photos_open", "Open Photos", .externalHandoff, .modelMayAct, .urlTemplate("photos-redirect://"), [],
           review: "Opens Photos. This app does not see what you do there."),
         c("flashlight_toggle", "Toggle flashlight", .externalHandoff, .modelMayAct,
           .shortcut(name: "PG Toggle Flashlight", input: ""), [],
-          review: "Asks Shortcuts to toggle the flashlight. This app does not see the result."),
+          review: "Asks Shortcuts to toggle the flashlight. This app does not see the result. Needs a Shortcut named “PG Toggle Flashlight” set up in Shortcuts first."),
         c("focus_toggle", "Toggle Do Not Disturb", .externalHandoff, .modelMayAct,
           .shortcut(name: "PG Toggle Focus", input: ""), [],
-          review: "Asks Shortcuts to toggle Focus. This app does not see the result."),
+          review: "Asks Shortcuts to toggle Focus. This app does not see the result. Needs a Shortcut named “PG Toggle Focus” set up in Shortcuts first."),
         c("low_power_toggle", "Toggle Low Power Mode", .externalHandoff, .modelMayAct,
           .shortcut(name: "PG Toggle Low Power", input: ""), [],
-          review: "Asks Shortcuts to toggle Low Power Mode. This app does not see the result."),
+          review: "Asks Shortcuts to toggle Low Power Mode. This app does not see the result. Needs a Shortcut named “PG Toggle Low Power” set up in Shortcuts first."),
         c("weather", "Weather", .externalHandoff, .modelMayAct,
           .shortcut(name: "PG Weather", input: "{place}"), [ArgSpec("place", .place)],
-          review: "Asks the Shortcut for weather. This app does not see the source or the reading."),
+          review: "Asks the Shortcut for weather. This app does not see the source or the reading. Needs a Shortcut named “PG Weather” set up in Shortcuts first."),
 
         // Reply-only: confirmation is preserved for email/document reads, but nothing is claimed as an effect.
         c("email_digest", "Summarize my recent emails", .localWrite, .always, .emailDigest,
@@ -1408,7 +1408,7 @@ extension Disposition {
             switch record {
             case .systemAcceptedURL:
                 if case .shortcut(let name, _) = action.executor {
-                    return "Shortcuts was asked to open \(name). This app did not see what the Shortcut did."
+                    return "Shortcuts was asked to run \(name). If that Shortcut is not set up, Shortcuts shows an error. This app did not see what it did."
                 }
                 return "The system accepted a link for \(contract?.title ?? action.title). That does not show what happened in the other app."
             }
@@ -1492,7 +1492,7 @@ public struct EffectSession: Sendable {
         }
         guard contract.availability == .ready else {
             return .finished(EffectResult(attemptID: AttemptID(), phase: .settled(.failed(.unavailable)),
-                                          summary: "This is this app's own alarm. It is not wired in this build; nothing was scheduled."))
+                                          summary: Self.unavailableSummary(contract)))
         }
 
         try Task.checkCancellation()
@@ -1998,6 +1998,13 @@ public struct EffectSession: Sendable {
 
     func methodWord(_ kind: ContactMethodKind?) -> String {
         kind == .email ? "email address" : "phone number"
+    }
+
+    static func unavailableSummary(_ contract: CapabilityContract) -> String {
+        if case .shortcut(let name, _) = contract.executor {
+            return "\(contract.title) needs a Shortcut named “\(name)”, which this app cannot confirm is set up. Nothing was opened. Build it in Shortcuts, then say “run my shortcut \(name)”."
+        }
+        return "This is this app's own alarm. It is not wired in this build; nothing was scheduled."
     }
 
     static func rejectedSummary(_ rejected: RejectedCapability) -> String {
