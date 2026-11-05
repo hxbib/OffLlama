@@ -248,7 +248,10 @@ final class HelperShortcutTruthTests: XCTestCase {
         for c in CapabilityCatalog.all {
             guard case .shortcut(let name, _) = c.executor else { continue }
             helpers += 1
-            XCTAssertTrue(c.reviewSentence.contains("Needs a Shortcut named “\(name)”"), c.id)
+            XCTAssertEqual(c.availability, .notWired, c.id)
+            let summary = EffectSession.unavailableSummary(c)
+            XCTAssertTrue(summary.contains("Nothing was opened"), summary)
+            XCTAssertTrue(summary.contains("run my shortcut \(name)"), summary)
         }
         XCTAssertEqual(helpers, 8)
         XCTAssertEqual(CapabilityCatalog.current(id: "run_shortcut")?.availability, .ready)
