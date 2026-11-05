@@ -65,6 +65,23 @@ public enum ActionPlanner {
                                           options: .regularExpression) != nil
     }
 
+    /// A clear reminder or calendar command, so a non-tool route or a wrong tool pick still reaches a reviewable
+    /// card instead of generated chat. Questions, quoted text, negations and alarm/timer wording never match.
+    public static func explicitToolCommand(_ utterance: String) -> String? {
+        let raw = utterance.trimmed
+        if raw.hasSuffix("?") || raw.contains("\"") || raw.contains("“") { return nil }
+        let u = SkillRegistry.norm(utterance)
+        if u.range(of: #" (?:don t|dont|do not|never|not|cancel|delete|remove|alarm|wake me|timer|pomodoro) "#,
+                   options: .regularExpression) != nil { return nil }
+        if u.range(of: #"^ (?:please )?(?:remind me|(?:set|add|create|make) (?:a |an )?(?:new )?reminder) "#,
+                   options: .regularExpression) != nil { return "create_reminder" }
+        if u.range(of: #"^ (?:please )?(?:schedule|book|add|create|put) "#, options: .regularExpression) != nil,
+           u.range(of: #" (?:calendar|meeting|event|appointment) "#, options: .regularExpression) != nil {
+            return "create_event"
+        }
+        return nil
+    }
+
     /// Whether the skill path should run instead of today's toolChoice path.
     public static func shouldUseSkills(tool: ReflexDecision, utterance: String, registry: SkillRegistry) -> Bool {
         tool.chosen.id == "none" || explicitSkill(in: utterance, registry: registry, chosenTool: tool.chosen.id) != nil

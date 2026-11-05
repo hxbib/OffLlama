@@ -222,6 +222,14 @@ public final class Assistant: @unchecked Sendable {
                                  cloudWithheldForSensitivity: readResult?.withheldForSensitivity ?? false)
         }
 
+        if route.chosen.id != "tool", let command = ActionPlanner.explicitToolCommand(utterance) {
+            var planned: PlannedAction?
+            let reply = try await explicitCommandPath(command, utterance: utterance, requestID: requestID,
+                                                      planned: &planned, read: &readResult, decisions: &decisions)
+            return AssistantTurn(reply: reply, decisions: decisions, remembered: remembered, action: planned,
+                                 corrections: corrections)
+        }
+
         if let sharedText, route.chosen.id != "tool" {
             let result = try await reason(utterance, text: sharedText)
             decisions.append(contentsOf: result.decisions)
@@ -329,6 +337,10 @@ public final class Assistant: @unchecked Sendable {
                                            explicitDraftOverride: tool.escalated, now: now, draft: &draft)
                 ?? .clarify("What would you like me to do?")
         }
+        if let command = ActionPlanner.explicitToolCommand(utterance), tool.chosen.id != command {
+            return try await explicitCommandPath(command, utterance: utterance, requestID: requestID,
+                                                 planned: &planned, read: &read, decisions: &decisions)
+        }
         // An explicit message command never runs an unrelated trained tool: route it to
         // message planning even when toolChoice missed. The decisions stay on the turn
         // as evidence of the miss.
@@ -416,6 +428,27 @@ public final class Assistant: @unchecked Sendable {
         let result = try await EffectSession(ledger: ledger, effects: effects).evaluate(
             requestID: requestID, capability: capability, raw: action,
             modelAskedConfirm: conf.chosen.id == "confirm", explicitDraft: tool.escalated)
+        return Self.reply(from: result, read: &read, decisions: &decisions)
+    }
+
+    /// A clear reminder/calendar command the model routed elsewhere. The typed validation still applies, a missing
+    /// field is asked for, and `explicitDraft` forces the ledger's review card: nothing runs before Confirm.
+    func explicitCommandPath(_ tool: String, utterance: String, requestID: UserRequestID, planned: inout PlannedAction?,
+                             read: inout ReadResult?, decisions: inout [ReflexDecision]) async throws -> Reply {
+        guard let capID = CapabilityCatalog.capabilityID(forTool: tool) else { return .clarify("I can't do that on this phone yet.") }
+        if let issue = ActionValidation.requestIssue(capabilityID: capID, utterance: utterance) { return .clarify(issue.question) }
+        let args = ArgumentExtractor.heuristic(tool: tool, utterance: utterance)
+        let specs = CapabilityCatalog.current(id: capID)?.arguments ?? []
+        if let missing = specs.first(where: { $0.required && (args[$0.name] ?? "").isEmpty }) {
+            if missing.kind == .datetime { return .clarify(tool == "create_reminder" ? "When should I remind you?" : "When is it?") }
+            return .clarify(tool == "create_reminder" ? "What should I remind you about?" : "What should the event be called?")
+        }
+        let action = PlannedAction(tool: tool, args: args)
+        planned = action
+        guard let ledger, let effects else { return .clarify("Actions are unavailable on this build. Nothing was done.") }
+        let capability = CapabilityCatalog.resolve(id: capID, skill: skills?.skill(id: capID))
+        let result = try await EffectSession(ledger: ledger, effects: effects).evaluate(
+            requestID: requestID, capability: capability, raw: action, modelAskedConfirm: false, explicitDraft: true)
         return Self.reply(from: result, read: &read, decisions: &decisions)
     }
 
