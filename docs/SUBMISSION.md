@@ -48,7 +48,9 @@ results, negative experiments and the limits of the measurements.
 The user has verified a local answer of 4 to “What is 2 + 2?” with Airplane Mode on
 and Wi-Fi off. The current release candidate, source `805debf`, passed independent
 repair review, a signed Release build, resource checks and installation
-on an iPhone 17 Pro. Final UI and action rehearsal on that build is in progress.
+on an iPhone 17 Pro. The user confirmed its multi-line composer, whole-message
+Copy, and reminder review followed by saving in Reminders. Other flows remain
+subject to rehearsal; a further Apple TV routing repair is not yet phone-verified.
 
 ## Models and their actual roles
 

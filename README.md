@@ -13,8 +13,10 @@ useful facts locally, and show me what it was about to do.
 
 **Prototype status.** Reviewed source `805debf` is signed and installed on an iPhone 17 Pro. On an earlier build, the user
 verified an answer of **4 to “What is 2 + 2?” with Airplane Mode on and Wi-Fi off**.
-The action and conversation repairs passed independent review and Apple Release
-builds, with final phone acceptance still in progress. See the exact commits
+On `805debf`, the user also confirmed an unobstructed composer, whole-message Copy,
+and successful reminder review and saving. Apple TV still fell into chat on that
+build. Repair `b5fdfb0` passes 398 Linux core tests (one skipped, zero failures) and
+independent review; its installation and phone check are pending. See the exact commits
 and remaining checks in [project status](docs/PROJECT_STATUS.md) and the
 [verification ledger](ORCHESTRATOR_LEDGER.md).
 

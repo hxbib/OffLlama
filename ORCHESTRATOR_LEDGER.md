@@ -1,3 +1,29 @@
+## Resumed final repair — 2026-11-05 00:46 UTC
+
+User resumed after provider exhaustion and authorized any working OpenCode River
+API account. Parent remains on its selected model/settings. Installed source is
+still `805debf`. User-confirmed phone evidence: composer/Send and whole-message
+Copy both work; reminder review and actual Reminders save both work. Apple TV
+failed before the card, producing generated chat. Do not call that fixed on the
+phone until the new source is installed and exercised.
+
+Parent pushed `b5fdfb0`: explicit Apple TV commands select the compiled search
+capability independently of route/tool guesses, always through review and the
+ledger. Message statuses now use “Message submitted” / “Mail queued” without
+repeated delivery caveats; typed cancellation/failure/unknown states are retained.
+Linux Docker Swift 6.1: 398 executed, 1 skipped, 0 failures. Pre-fix regression
+failed with a fabricated local reply; post-fix matrix covers route variants,
+registry absence, title extraction, confirmation and duplicate-confirm prevention.
+
+Earlier native-flashlight and UI workers returned no edits. Native flashlight is
+NOT implemented. A fresh Gmail Claude Opus 5.5 High Mac implementation owns only
+remaining Views cleanup. A fresh OpenCode River02 DeepSeek V4.1 Flash review owns
+the core diff. Their task IDs are in `docs/verification/offllama_resumed_2026-11-05.json`.
+River1 failed “Invalid API key”; do not reuse it without changed credentials.
+No new paid training, model promotion, public release or submission occurred.
+
+---
+
 Final 25-minute user goal began November5 00:08:08UTC and ends00:33:08UTC. User reported Done covering Send, cluttered chat, ambiguous cloud language and a missing PG Play on AppleTV Shortcut on installed7bb9c49. User explicitly assigned Opus5.5 High and requested parallel workers plus Mac Simulator use. Three fresh Gmail OpusHigh workers now own separate scopes: Mac UI/composer/copy/presentation; Linux explicit supported-action routing; Linux native/Shortcut handoff contracts. Previous Mac reviewer retired terminal/nochildren before new owner. Exact assignments/links/scopes are recorded in docs/verification/offllama_final_swarm_2026-11-05.json. Worker commits due00:22UTC, leaving final integration/review/build/install. No broad new architecture, models or threshold changes. Keep essential confirmations and privacy/errors while moving technical detail out of primary chat. The built7bb9c49 remains the installed fallback until a verified new build is installed.
 
 Current checkpoint (2026-11-04, functional source 5382349; README source 7bb9c49). Both are pushed. Installed source remains 7857cd68, with user-confirmed offline 2+2=4 and Done dismissal. Integrated conversation, chart and route-context repairs execute 385 Linux core tests with one opt-in live skip and zero failures. A fresh independent Mac repair review is now building this exact source, with installation authorized only if the review and signed/resource checks pass. No new installation or phone behavior is claimed. Both previous Mac owners were retired with no pending children before this dispatch.

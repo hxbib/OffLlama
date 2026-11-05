@@ -3,7 +3,9 @@
 Deadline from the user's plan: **November 5, 2026, 02:00 UTC / November 4, 9 PM ET**.
 Keep enough time for recording, upload, public-link checks and the form. The
 current signed release candidate `805debf` is installed on the iPhone 17 Pro.
-Its manual UI and action acceptance is pending. See [project status](PROJECT_STATUS.md).
+The user confirmed its composer, Copy and reminder save. Apple TV failed before
+review; a tested routing repair and additional screen cleanup are being prepared
+for installation. See [project status](PROJECT_STATUS.md).
 
 ## Freeze the recording build
 
