@@ -1,0 +1,44 @@
+{
+  "integratedSource": "4376810",
+  "installedSource": "805debf",
+  "status": "Integrated, pushed; fresh Mac review/build/install running.",
+  "ui": {
+    "taskId": "node:delegated-task:command%3Amcp%3A84ec2df9-6da0-4b08-ba90-d71df51e1124%3Aremote-delegate%3Aoffllama-resumed-demo-ui-20261105-v1",
+    "status": "completed",
+    "source": "b78d1c6",
+    "integrated": "c774bad",
+    "parentCopyFix": "4376810"
+  },
+  "review": {
+    "taskId": "node:delegated-task:command%3Amcp%3A84ec2df9-6da0-4b08-ba90-d71df51e1124%3Adelegate-task%3Aoffllama-resumed-appletv-review-river02-20261105-v1",
+    "status": "completed",
+    "source": "b5fdfb0",
+    "report": "APPLETV_ROUTING_REVIEW_b5fdfb0.md"
+  },
+  "finalMac": {
+    "taskId": "node:delegated-task:command%3Amcp%3A84ec2df9-6da0-4b08-ba90-d71df51e1124%3Aremote-delegate%3Aoffllama-resumed-final-mac-review-install-20261105-v1",
+    "childThreadId": null,
+    "remoteChild": {
+      "environmentId": "e471ef05-c8d6-49ec-b176-96ab6da0d020",
+      "threadId": "mcp:launch:bb4445464ce5dcab0d9defdcf18dd28879ffcd0576958e5a11e0a9baf096e910",
+      "label": "Habib’s MacBook Air"
+    },
+    "link": "<t3-thread://v2/e471ef05-c8d6-49ec-b176-96ab6da0d020/mcp:launch:bb4445464ce5dcab0d9defdcf18dd28879ffcd0576958e5a11e0a9baf096e910>",
+    "childRunId": null,
+    "childNodeId": "node:delegated-task:command%3Amcp%3A84ec2df9-6da0-4b08-ba90-d71df51e1124%3Aremote-delegate%3Aoffllama-resumed-final-mac-review-install-20261105-v1",
+    "status": "running",
+    "workState": "working",
+    "hasPendingChildRuns": false,
+    "latestTerminalRunId": null,
+    "latestTerminalStatus": null,
+    "latestTerminalSummary": null,
+    "latestTerminalResultContextTransferId": null,
+    "providerInstanceId": "claudeAgent_2",
+    "model": "claude-opus-5-5",
+    "summary": null,
+    "resultContextTransferId": null,
+    "hasPendingQuestion": false,
+    "pendingApproval": null,
+    "waitTimedOut": false
+  }
+}

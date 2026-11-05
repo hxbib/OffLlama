@@ -1,3 +1,24 @@
+## Final install in progress — 2026-11-05 00:50 UTC
+
+Integrated source `4376810` is pushed: Apple TV/message status core repair plus
+four-screen cleanup and precise memory/onboarding copy. River02 authenticated
+and completed independent core review with no blockers. The UI implementation
+passed signed Release at `b78d1c6`; root integrated it as `c774bad` and adjusted
+three strings at `4376810`. No subsequent functional work is planned.
+
+A fresh Gmail Claude Opus 5.5 High reviewer owns the Mac for exact-source checks,
+signing and conditional authorized install. Dispatch is recorded in
+`docs/verification/offllama_final_install_2026-11-05.json`. Installed source remains
+`805debf` until receipt. Mac disk has roughly 2.1 GB free. Physical UI tooling is
+still blocked; do not claim screen verification from compilation or installation.
+
+Submission preflight matched shipping model/calibration, passed 7 Python tests
+and redacted tracked/history secret scans. Swift was deliberately skipped there
+because the 398-test suite ran separately; preflight exit 2 correctly reports
+that skip and PRIVATE repository. No public release was performed.
+
+---
+
 ## Resumed final repair — 2026-11-05 00:46 UTC
 
 User resumed after provider exhaustion and authorized any working OpenCode River

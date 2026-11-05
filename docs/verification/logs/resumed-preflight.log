@@ -1,0 +1,24 @@
+== 1. shipping model and calibration (LEDGER 15)
+ok model a5c60a8836aa73adeb847185aa30184cd9c33c522185f59fa9ac55a9d00782c2
+ok calibration b9ce25b5223103944803c2668784c484ac7eee75b33aa984e62185728970a8f1
+== 2. placeholders left in submission-facing docs (PHONE_* allowed only in FINAL_HOURS.md / DEMO_SCRIPT.md)
+ok none
+ok no PHONE_ in README/SUBMISSION
+== 3. forbidden claims
+ok
+== 4. secrets (tracked files + history)
+ok tracked
+ok history
+gitleaks not installed (optional)
+== 5. Python unit tests
+Ran 7 tests in 0.021s
+
+OK
+ok python tests
+SKIP: Swift check skipped by SKIP_SWIFT=1
+== 7. repo hygiene
+warning: uncommitted changes present
+== 8. release visibility
+RELEASE INCOMPLETE: repository is PRIVATE; make it public before submission
+This is a release step, not a core build or test failure.
+INCOMPLETE: a required check was skipped; this is not ALL CHECKS PASSED
