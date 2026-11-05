@@ -102,7 +102,7 @@ cancel the native message composer. Keep keys, private contacts and old chats ou
 of the recording. Demonstrate only flows that pass rehearsal.
 
 - Repository: [hxbib/pocket-glimmer](https://github.com/hxbib/pocket-glimmer).
-  Public since November 5, 01:03 UTC; checked while logged out.
+  Public since about 01:01 UTC on November 5; checked while logged out.
 - Model: [shipping model record](../models/README.md) and Git LFS artifact.
 - Video: recording and verified public upload are pending.
 - Submission receipt: pending. Check both public links before submitting.
