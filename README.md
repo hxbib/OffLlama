@@ -167,7 +167,7 @@ The prototype is not a general autonomous controller for every iPhone app.
 | --- | --- |
 | [`core/`](core/) | Swift decision engine, memory, contracts, action journal and tests |
 | [`app/`](app/) | SwiftUI app, native effects, llama.cpp engine and resources |
-| [`models/`](models/) | Shipping GGUF and adapters through Git LFS |
+| [`models/`](models/) | The shipping GGUF through Git LFS |
 | [`training/`](training/) | Teacher labeling, distillation and candidate experiments |
 | [`eval/`](eval/) | Evaluation data, scripts, saved measurements and negative results |
 | [`docs/demo/OFFLLAMA_THREE_MINUTE_DEMO.md`](docs/demo/OFFLLAMA_THREE_MINUTE_DEMO.md) | Recording flow, narration and rehearsal gates |
