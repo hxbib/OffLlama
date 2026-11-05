@@ -4,4 +4,4 @@
 
 Rejected candidates are documented in `eval/results/` (for example `AFTER_FLOOR_EP2.md`, `AFTER_FLOOR_NV2.md`, `SPARK_TEACHER.md`, `ROUND2.md`) but their weights are not distributed. The quant ladder f16 / Q8_0 / Q3_K_M / Q2_K of ep1 all lose to Q4_K_M on the nominal selection-set calculation (`eval/results/QUANT_IDENTITY.md`). Model selection reused that set, so this is not a certified error guarantee; see [evaluation limits](../docs/EVALUATION_CLAIMS.md).
 
-Fetch with `git lfs install && git lfs pull`, or download the same file from the [OffLlama shipping model release](https://github.com/hxbib/pocket-glimmer/releases/tag/artifacts-2026-11-01) and check it against its `SHA256SUMS`.
+Fetch with `git lfs install && git lfs pull`, or download the same file from the [OffLlama shipping model release](https://github.com/hxbib/OffLlama/releases/tag/artifacts-2026-11-01) and check it against its `SHA256SUMS`.

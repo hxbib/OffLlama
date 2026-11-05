@@ -101,7 +101,7 @@ Rehearse the actual installed build. Use a demo contact controlled by Habib, and
 cancel the native message composer. Keep keys, private contacts and old chats out
 of the recording. Demonstrate only flows that pass rehearsal.
 
-- Repository: [hxbib/pocket-glimmer](https://github.com/hxbib/pocket-glimmer).
+- Repository: [hxbib/OffLlama](https://github.com/hxbib/OffLlama).
   Public since about 01:01 UTC on November 5; checked while logged out.
 - Model: [shipping model record](../models/README.md) and Git LFS artifact.
 - Video: recording and verified public upload are pending.
