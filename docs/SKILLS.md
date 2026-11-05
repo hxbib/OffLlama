@@ -1,5 +1,12 @@
 # Skills: open-world phone actions without retraining
 
+> **Current OffLlama build (`4376810`).** Apple TV opens tv.apple.com search for
+> the show after a review card; it needs no Shortcut and does not start playback.
+> The eight "PG" helper skills (alarm, timer, note, flashlight, Focus, Low Power,
+> weather, open app) are unavailable and never launch a Shortcut. Running a
+> Shortcut by name still works if you already created it. Older text below that
+> says otherwise describes the earlier Pocket Glimmer design.
+
 Pocket Glimmer's 1B model was trained on 12 typed decisions (core/Sources/PocketCore/Decision.swift). Six of them are
 concrete tools (reminder, event, calendar lookup, text, contact lookup, memory recall). Everything else a person asks a
 phone to do ("DM Sam on Instagram", "wake me at 6", "summarize my last few emails", "chart these numbers") goes through
@@ -95,7 +102,7 @@ content-free priors; the app uses the bundled threshold of 0.90.
 | `calendar_find` | Check my calendar | native `find_event` | yes | no |
 | `alarm_create` | Set an alarm | Shortcut “PG Create Alarm” (input `{time}\|{label}`) | yes | no |
 | `timer_start` | Start a timer | Shortcut “PG Start Timer” (input `{duration}`) | yes | no |
-| `appletv_play` | Apple TV: play a show ("open the latest episode of Severance on Apple TV") | Shortcut “PG Play on Apple TV” (input `{show}`); hand-off only, playback not confirmed | no | no |
+| `appletv_play` | Apple TV: find a show ("open Ted Lasso on Apple TV") | Opens tv.apple.com search for `{show}` after review; no Shortcut; does not choose an episode or start playback | no | no |
 | `call` | Phone call | URL `tel:{phone}` | yes | yes |
 | `facetime` | FaceTime | URL `facetime:{phone}` | no | yes |
 | `maps_directions` | Directions in Maps | URL `maps://?daddr={place}` | no | no |
@@ -125,11 +132,12 @@ too: one extra tap.
 
 ## Shortcuts to install (each is 1 to 3 built-in actions)
 
+Not used by the current build: these helper skills are unavailable. Kept as the earlier design.
+
 | Shortcut name | Actions |
 |---|---|
 | PG Create Alarm | Receive **Text** input → Split Text by `\|` → Clock › **Create Alarm** (time = item 1, label = item 2) |
 | PG Start Timer | Receive Text → Clock › **Start Timer** (duration = input) |
-| PG Play on Apple TV | Create a Shortcut with this exact name that receives the show name as Text, using the actions actually available on the device. The playback recipe is **unverified**; do not assume “Find TV Shows,” “Play,” or “Play Up Next” actions exist. Rehearse it independently before filming. The app confirms only the handoff, and can open TV search if Shortcuts itself cannot open. |
 | PG Open App | Receive Text → **Open App** (app = input) |
 | PG Create Note | Receive Text → Notes › **Create Note** (body = input) |
 | PG Toggle Flashlight / PG Toggle Focus / PG Toggle Low Power | **Set Flashlight** / **Set Focus** / **Set Low Power Mode** → Toggle |
