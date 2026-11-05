@@ -11,11 +11,12 @@ I'm Habib, a computer science student at Hunter College. My subway commute often
 has no signal. I wanted an assistant that could keep working there, remember
 useful facts locally, and show me what it was about to do.
 
-**Prototype status.** Reviewed source `4376810` is signed and installed on an iPhone 17 Pro.
-The previous build's composer, whole-message Copy and reminder review/save were
-confirmed by the user; an offline answer of **4 to “What is 2 + 2?”** was confirmed
-earlier. The new build fixes explicit Apple TV commands falling into chat, shortens
-message statuses and simplifies the screens. The user confirmed its Apple TV review card and Ted Lasso search results on the phone; other final checks remain open.
+**Prototype status.** The reviewed build `4376810` is signed and running on my
+iPhone 17 Pro. On it, “Open Ted Lasso on Apple TV” shows a review card, and
+Confirm opens the Ted Lasso search results. On earlier builds I confirmed an
+offline answer of **4 to “What is 2 + 2?”** with Airplane Mode on and Wi-Fi off,
+the multi-line composer, whole-message Copy, and a reviewed reminder saved in
+Reminders. I have not yet checked the other flows on the phone.
 See [project status](docs/PROJECT_STATUS.md) and the
 [Apple build and installation report](docs/verification/RESUMED_FINAL_APPLE_2026-11-05.md).
 
@@ -121,7 +122,7 @@ shown on the phone is **OffLlama**, with its existing bundle identity preserved.
 
 ```bash
 git lfs install
-git lfs pull
+git lfs pull   # or download the same files from release artifacts-2026-11-01
 
 git clone https://github.com/ggml-org/llama.cpp.git ../llama.cpp
 git -C ../llama.cpp checkout ddf48f85c933c1f438212a02eb21e7b001d2d37d

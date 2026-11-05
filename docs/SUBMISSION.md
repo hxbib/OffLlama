@@ -45,12 +45,18 @@ of 0.90, it accepted 44 decisions and got 41 of those correct. These are individ
 model choices, not end-to-end phone success rates. The repository includes raw
 results, negative experiments and the limits of the measurements.
 
-The user has verified a local answer of 4 to “What is 2 + 2?” with Airplane Mode on
-and Wi-Fi off. The current release candidate, source `4376810`, passed independent
-repair review, a signed Release build, resource checks and installation
-on an iPhone 17 Pro. On the previous build, the user confirmed the multi-line composer, whole-message
-Copy, and reminder review followed by saving in Reminders. On `4376810`, the user also confirmed an Apple TV review card and successful
-opening of Ted Lasso search results. Other flows remain subject to rehearsal.
+I tested it on my iPhone 17 Pro. On earlier builds, with Airplane Mode on and
+Wi-Fi off, it answered 4 to “What is 2 + 2?” on the phone. I also confirmed the
+multi-line composer, copying a whole message, and a reviewed reminder that saved
+in Reminders. The final build, source `4376810`, passed independent review, a
+signed Release build and installation. On it, “Open Ted Lasso on Apple TV” shows
+a review card, and Confirm opens the Ted Lasso search results. I have not yet
+checked the other flows on the phone.
+
+All of this work was done during the event. The repository's first commit is
+October 31, 2026, after the October 26 kickoff. Llama 3.2 1B Instruct, llama.cpp
+and Apple's frameworks are third-party dependencies, credited in
+[licensing](LICENSING.md).
 
 ## Models and their actual roles
 
@@ -100,6 +106,14 @@ of the recording. Demonstrate only flows that pass rehearsal.
 - Model: [shipping model record](../models/README.md) and Git LFS artifact.
 - Video: recording and verified public upload are pending.
 - Submission receipt: pending. Check both public links before submitting.
+
+## Form items the kickoff rules require
+
+- **Prior work.** Confirm the statement above is true before pasting it. The
+  rules require naming any prior work and where the new work starts.
+- **Bonus prizes.** Flag each one you enter on the form. Candidates are Most
+  Viral (needs the X post link), Community Vote and Best Agentic Use-Case. The
+  project ledger rules out pitching Best Build on Meta Open Weights.
 
 ## Optional social-post draft
 
