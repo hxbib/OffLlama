@@ -230,7 +230,8 @@ final class EffectRecoveryTests: XCTestCase {
             .confirm(attemptID: card.attemptID, edits: [], expectedRevision: card.revision)
         guard case .finished(let effect) = result else { return XCTFail("\(result)") }
         XCTAssertEqual(effect.phase, .settled(.sheet(.messagesQueuedOrSent)))
-        XCTAssertTrue(effect.summary.contains("Delivery is not confirmed"), effect.summary)
+        XCTAssertTrue(effect.summary.hasPrefix("Message submitted to "), effect.summary)
+        XCTAssertFalse(effect.summary.lowercased().contains("deliver"), effect.summary)
         XCTAssertFalse(effect.phase.isCommitted)
         _ = db
     }
@@ -254,7 +255,8 @@ final class EffectRecoveryTests: XCTestCase {
         var done = try await session.confirm(attemptID: card.attemptID, edits: [], expectedRevision: card.revision)
         guard case .finished(let queued) = done else { return XCTFail() }
         XCTAssertEqual(queued.phase, .settled(.sheet(.mailQueuedInOutbox)))
-        XCTAssertTrue(queued.summary.contains("Outbox") && queued.summary.contains("Delivery is not confirmed"))
+        XCTAssertTrue(queued.summary.contains("Outbox"))
+        XCTAssertFalse(queued.summary.lowercased().contains("deliver"))
 
         effects.handler = { _, _ in EffectReport(boundary: .observed(.mail(.savedDraft))) }
         card = try await stage()

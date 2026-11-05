@@ -1409,9 +1409,9 @@ extension Disposition {
         case .sheet(let observation):
             switch observation {
             case .messagesQueuedOrSent:
-                return "Messages accepted or queued the message to \(name). Delivery is not confirmed."
+                return "Message submitted to \(name)."
             case .mailQueuedInOutbox:
-                return "Mail queued the message to \(name) in the Outbox. Delivery is not confirmed."
+                return "Mail queued the message to \(name) in the Outbox."
             case .mailDraftSaved:
                 return "Mail saved a draft to \(name). It was not sent."
             }
@@ -1437,8 +1437,8 @@ extension Disposition {
             case .sheetUnavailable(.messages): return "Messages cannot open a compose sheet on this device. Nothing was sent; this attempt will not fall back to another channel."
             case .sheetUnavailable(.mail): return "Mail cannot open a compose sheet on this device. Nothing was sent; this attempt will not fall back to another channel."
             case .urlRefused: return "The system refused to open this link. Nothing was handed off."
-            case .messageSheetFailed: return "Messages reported that it could not send this message. Delivery is not confirmed."
-            case .mailSheetFailed: return "Mail reported that it could not queue this message. Delivery is not confirmed."
+            case .messageSheetFailed: return "Messages could not send this message."
+            case .mailSheetFailed: return "Mail could not queue this message."
             case .missingContactMethod:
                 return contract?.methodKind == .email
                     ? "This contact has no usable email address. Nothing was sent."

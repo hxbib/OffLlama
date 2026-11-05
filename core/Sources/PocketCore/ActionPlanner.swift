@@ -59,6 +59,14 @@ public enum ActionPlanner {
         MessageCommand.isExplicitMessageRequest(utterance)
     }
 
+    /// An explicit destination and command can select a review card without a model guess.
+    /// Keep this anchored so a question, negation or message body cannot become an Apple TV action.
+    public static func isExplicitAppleTVRequest(_ utterance: String) -> Bool {
+        utterance.trimmed.range(
+            of: #"^(?:(?:can|could|would)\s+you\s+)?(?:please\s+)?(?:open|play|watch|put\s+on)\s+.+?\s+(?:on|in)\s+(?:the\s+)?(?:apple\s*tv|tv\s+app)(?:\s+app)?[.!?]?$"#,
+            options: [.regularExpression, .caseInsensitive]) != nil
+    }
+
     /// "Email Dana …" must not enter the trained `send_message` path. The frozen toolChoice set has no send_email.
     public static func isExplicitEmailRequest(_ utterance: String) -> Bool {
         SkillRegistry.norm(utterance).range(of: #"^ (?:please )?(?:email|e mail|mail|send (?:an? )?email|write (?:an? )?email) "#,

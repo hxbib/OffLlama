@@ -200,6 +200,16 @@ public final class Assistant: @unchecked Sendable {
                                  action: PlannedAction(tool: ActionPlanner.toolPrefix + "html_viz", args: ["data": data]),
                                  corrections: corrections)
         }
+        if ActionPlanner.isExplicitAppleTVRequest(utterance),
+           let skill = BuiltinSkills.all.first(where: { $0.id == "appletv_play" }) {
+            var planned: PlannedAction?
+            let reply = try await planSkillCore(utterance, ctx: ctx, registry: SkillRegistry(),
+                requestID: requestID, sharedText: sharedText, decisions: &decisions, planned: &planned,
+                read: &readResult, fallThrough: false, preselected: skill, explicitDraftOverride: true,
+                now: now, draft: &pendingDraft) ?? .clarify("Which show would you like to find on Apple TV?")
+            return AssistantTurn(reply: reply, decisions: decisions, remembered: remembered,
+                                 action: planned, corrections: corrections)
+        }
         // No registry: an explicit message command on a non-tool route still bypasses
         // chat generation and stages or retains through the compiled message catalog.
         if skills == nil, route.chosen.id != "tool", ActionPlanner.isExplicitMessageRequest(utterance) {

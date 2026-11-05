@@ -36,7 +36,8 @@ final class DecisionPresentationTests: XCTestCase {
 
     func testStatusLabelsNeverImplyDeliveryWithoutProof() {
         XCTAssertFalse(ActionStatusLabel.label(for: .settled(.sheet(.messagesQueuedOrSent))).lowercased().contains("delivered"))
-        XCTAssertTrue(ActionStatusLabel.label(for: .settled(.sheet(.messagesQueuedOrSent))).contains("not confirmed"))
+        XCTAssertEqual(ActionStatusLabel.label(for: .settled(.sheet(.messagesQueuedOrSent))), "Message submitted")
+        XCTAssertEqual(ActionStatusLabel.label(for: .settled(.sheet(.mailQueuedInOutbox))), "Mail queued")
         XCTAssertEqual(ActionStatusLabel.label(for: .ambiguous(.saveUnverified)), ActionStatusLabel.unverified)
         XCTAssertEqual(ActionStatusLabel.label(for: .awaitingUser(nil)), ActionStatusLabel.awaitingReview)
     }

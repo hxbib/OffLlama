@@ -22,6 +22,59 @@ final class ActionCommandRoutingTests: XCTestCase {
         return (a, effects, e)
     }
 
+    func testExplicitAppleTVAlwaysReviewsWithoutChatOrSkillGuess() async throws {
+        for route in [Self.answerLocal, Self.flatRoute, Self.toolRoute, ["A": -3, "B": -3, "C": -3, "D": 5]] {
+            for registryPresent in [false, true] {
+                let (assistant, effects, engine) = try make(route: route, tool: Self.searchMemoryTool)
+                if registryPresent { assistant.skills = SkillRegistry() }
+                engine.script(whenPromptContains: "Which phone action", logits: ["A": 0, "B": 0, "C": 0, "D": 0, "E": 0, "F": 0, "G": 0, "H": 0])
+                engine.script(whenPromptContains: "explicit confirmation", logits: ["A": 4, "B": -4])
+                let turn = try await assistant.handle("Open Ted Lasso on Apple TV")
+                guard case .needsConfirmation(let card) = turn.reply else { return XCTFail("\(turn.reply)") }
+                XCTAssertEqual(card.capabilityID, "appletv_play")
+                XCTAssertEqual(card.fields.first { $0.name == "show" }?.value, "Ted Lasso")
+                XCTAssertTrue(engine.generatePrompts.isEmpty)
+                XCTAssertEqual(effects.performCount, 0)
+                let result = try await assistant.confirmEffect(card.attemptID, expectedRevision: card.revision)
+                guard case .finished(let effect) = result else { return XCTFail("\(result)") }
+                XCTAssertEqual(effect.phase, .settled(.handedOff(.systemAcceptedURL)))
+                XCTAssertEqual(effects.performCount, 1)
+                _ = try await assistant.confirmEffect(card.attemptID, expectedRevision: card.revision)
+                XCTAssertEqual(effects.performCount, 1)
+            }
+        }
+    }
+
+    func testAppleTVLatestEpisodeStillReviewsSearchForTheShow() async throws {
+        for utterance in ["Play the latest episode of Ted Lasso on Apple TV",
+                          "Please open Ted Lasso on Apple TV.",
+                          "Could you open Ted Lasso in the Apple TV app?"] {
+            let (assistant, effects, engine) = try make(route: Self.answerLocal)
+            let turn = try await assistant.handle(utterance)
+            guard case .needsConfirmation(let card) = turn.reply else { return XCTFail("\(turn.reply)") }
+            XCTAssertEqual(card.capabilityID, "appletv_play")
+            XCTAssertEqual(card.fields.first { $0.name == "show" }?.value, "Ted Lasso")
+            XCTAssertTrue(card.reviewSentence.contains("does not start playback"))
+            XCTAssertEqual(effects.performCount, 0)
+            XCTAssertTrue(engine.generatePrompts.isEmpty)
+        }
+    }
+
+    func testAppleTVMentionDoesNotForceAnAction() async throws {
+        for utterance in ["How do I open Ted Lasso on Apple TV?",
+                          "Don't open Ted Lasso on Apple TV", "Never play Ted Lasso on Apple TV",
+                          "Text Sam open Ted Lasso on Apple TV", "Email Sam: play Ted Lasso on Apple TV",
+                          "\"Open Ted Lasso on Apple TV\"", "Is Ted Lasso on Apple TV?",
+                          "Open Ted Lasso on Apple TV and send Sam a message"] {
+            XCTAssertFalse(ActionPlanner.isExplicitAppleTVRequest(utterance), utterance)
+        }
+        let (assistant, effects, _) = try make(route: Self.answerLocal)
+        let turn = try await assistant.handle("How do I open Ted Lasso on Apple TV?")
+        guard case .local = turn.reply else { return XCTFail("\(turn.reply)") }
+        XCTAssertNil(turn.action)
+        XCTAssertEqual(effects.performCount, 0)
+    }
+
     func testConfidentChatRouteForReminderStagesCardInsteadOfGeneratedDone() async throws {
         let (a, effects, e) = try make(route: Self.answerLocal)
         effects.instantPhrases["tomorrow at 9am"] = .parsed(Date().addingTimeInterval(86_400))

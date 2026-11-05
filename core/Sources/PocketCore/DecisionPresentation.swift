@@ -81,8 +81,8 @@ public enum ActionStatusLabel {
             case .committed: return "Saved on this iPhone"
             case .sheet(let s):
                 switch s {
-                case .messagesQueuedOrSent: return "Messages sheet completed · delivery not confirmed"
-                case .mailQueuedInOutbox: return "Mail queued · delivery not confirmed"
+                case .messagesQueuedOrSent: return "Message submitted"
+                case .mailQueuedInOutbox: return "Mail queued"
                 case .mailDraftSaved: return "Mail draft saved"
                 }
             case .handedOff: return "Handed to iOS · result not confirmed"
