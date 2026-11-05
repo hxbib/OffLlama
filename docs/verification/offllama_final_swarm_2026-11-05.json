@@ -18,7 +18,7 @@
       "remoteChild": {
         "environmentId": "e471ef05-c8d6-49ec-b176-96ab6da0d020",
         "threadId": "mcp:launch:f82a84835a3eb7934614cc0877e8b073f2dc2eb8c4c76559d4bb997546ec85c0",
-        "label": "Habib’s MacBook Air"
+        "label": "Habib\u2019s MacBook Air"
       }
     },
     {
@@ -43,5 +43,28 @@
       },
       "remoteChild": null
     }
+  ],
+  "sourceReady": "805debf",
+  "status": "Final source frozen; fresh independent fix-diff review and Apple installation pending.",
+  "coreVerification": {
+    "platform": "Linux Docker swift:6.1-noble",
+    "executed": 395,
+    "skipped": 1,
+    "failures": 0,
+    "log": "/tmp/offllama-final-no-shortcut-core.log"
+  },
+  "repairs": [
+    "Removed floating Chat keyboard toolbar; inline dismissal and whole-message Copy.",
+    "Simplified outcome labels, Chats and Settings; advanced details remain accessible.",
+    "Explicit reminder/calendar commands reach review even on wrong or low-confidence model routes.",
+    "Incomplete reminder keeps an editable card until time is chosen.",
+    "Apple TV uses a direct encoded search URL, with no playback claim.",
+    "Eight unimplemented helper actions are unavailable; no assumed preinstalled Shortcuts.",
+    "Unavailable saved cards cannot confirm or execute after upgrade."
+  ],
+  "limits": [
+    "No final installed receipt yet; installed source remains 7bb9c49.",
+    "Device panel simctl unavailable; sudo Xcode selection requires password, managed agent-device version mismatch.",
+    "No automated phone UI observation; native alternatives for eight unavailable helper actions are not implemented."
   ]
 }

@@ -406,3 +406,11 @@ User reports MacBook and iPhone are back after reboot. The linked Mac answers an
 Post-reboot result: the Mac recovered 8.1 GiB, rebuilt the pinned framework with provenance, passed unsigned and signed Release builds, and installed on the iPhone after Keychain approval. The parent read the completed worker's exact one-line compile diff and integrated it. Evidence is in docs/verification/MAC_INSTALL_CHECKPOINT_2026-11-04.md and mac_install_transcript_extract.json. Device panel discovery failed twice; no runtime proof exists. User manual first launch was requested. No further UI automation was attempted.
 
 Candidate A returned its separate protected-store design. The parent reviewed the full artifact and recorded objections in docs/research/REQUEST_INPUT_DESIGN_A_REVIEW.md. Candidate B and cross-review remain pending; do not treat A as chosen. Current operator model-loading docs were corrected and the older Slice1 note marked historical.
+
+### 2026-11-05 final timed push, source frozen
+
+Functional source `805debf` is pushed. Chat has one composer, inline keyboard dismissal, full-message Copy and simpler outcome labels. Settings and Chats no longer expose technical footers by default. Explicit reminder/calendar requests reach review; missing-time reminders retain an editable card. Apple TV opens encoded search results without a helper Shortcut.
+
+The user confirmed that no Shortcuts are installed. Eight helper actions are unavailable in this build. This is not a native implementation of those actions. The saved-card upgrade bypass identified by the independent Mac reviewer is repaired at readiness and execution, with a persisted-card regression across all eight helpers. Validation coverage uses clearly synthetic ready handoffs; it does not certify production helper availability. Linux Docker Swift 6.1 ran 395 tests, one opt-in skip, zero failures.
+
+Fresh Gmail Claude Opus 5.5 High fix-diff review and conditional signed install dispatched. Installed source remains `7bb9c49` until an install receipt arrives. Device UI automation remains unavailable because system Xcode selection requires administrator access and the managed agent-device version is mismatched. No final layout or phone-action result is claimed.
