@@ -8,8 +8,8 @@ fields and eligibility before submitting. No form submission is recorded.
 
 **OffLlama**
 
-An iPhone assistant for moments without a signal. A distilled Llama 3.2 1B model
-makes local decisions and answers simple questions. Typed action drafts connect
+An iPhone assistant for moments without a signal. A distilled Llama 3.2 1B System 1
+model makes fast local decisions and answers simple questions. Typed action drafts connect
 supported requests to native iOS features, with explicit messaging confirmation
 and optional screened Muse cloud reasoning.
 
@@ -21,7 +21,10 @@ remember useful facts on my phone, and show me what it was about to do.
 
 OffLlama runs Llama-Reflex-1B, a Llama 3.2 1B model distilled from 892 Muse Glimmer
 teacher examples and packaged as an 808 MB Q4_K_M file. For structured decisions,
-it scores a small set of options rather than generating a long plan. The app
+it scores a small set of options in one pass rather than generating a long plan.
+It is the phone's System 1. Below a 0.90 confidence threshold, a decision takes its
+defined fallback, and online a request can go to an optional Muse model as System 2.
+The app
 combines those decisions with local memory, explicit request rules, typed action
 contracts and a persistent action journal.
 
@@ -62,10 +65,10 @@ and Apple's frameworks are third-party dependencies, credited in
 
 | Model | Role |
 | --- | --- |
-| Llama 3.2 1B Instruct, distilled as Llama-Reflex-1B | Shipping on-device decision model and local text generation |
+| Llama 3.2 1B Instruct, distilled as Llama-Reflex-1B | System 1: shipping on-device decision model and local text generation |
 | Muse Glimmer 30B | Teacher for the shipping student; also used in later candidate experiments |
 | Muse Spark Open | Experimental labeling and training; no Spark-trained candidate has been promoted |
-| Configured Muse Standard API model | Optional online reasoning, subject to the app's model validation |
+| Configured Muse Standard API model | System 2: optional online reasoning, subject to the app's model validation |
 | Muse Voice Transcribe | Optional cloud audio transcription; Apple keyboard Dictation is a separate input option |
 
 Model and dataset licenses are separate from the MIT source-code license.
@@ -118,7 +121,7 @@ of the recording. Demonstrate only flows that pass rehearsal.
 ## Optional social-post draft
 
 > I built OffLlama for the parts of my subway commute with no signal. A small
-> Llama model runs on my iPhone, with local memory, visible action drafts and
+> Llama System 1 model runs on my iPhone, with local memory, visible action drafts and
 > native iOS handoffs. The repo includes the model, benchmarks and experiments
 > that did not make the cut. Built with Llama.
 

@@ -1,11 +1,18 @@
 # OffLlama
 
-**Built with Llama** · A local model for useful phone actions.
+**Built with Llama** · An on-device System 1 model for useful phone actions.
 
 OffLlama runs a distilled Llama 3.2 1B model on an iPhone. It answers simple
 questions offline, makes small structured decisions, and connects supported
 requests to native iOS actions. Action contracts, visible drafts and a persistent
 journal keep model output separate from permission to act.
+
+**System 1 and System 2.** Llama-Reflex-1B is the phone's System 1. It is Llama
+3.2 1B Instruct, distilled from Muse Glimmer 30B labels to make fast decisions
+in one forward pass. It trusts its own choice only at a confidence of 0.90 or
+higher; below that, the decision takes its defined fallback. System 2 is slower,
+deliberate reasoning. Offline, the same local model writes the answer. Online, a
+request can go to an optional Muse cloud model after text screening.
 
 I'm Habib, a computer science student at Hunter College. My subway commute often
 has no signal. I wanted an assistant that could keep working there, remember
@@ -53,7 +60,7 @@ Messages inbox, or resolve an existing group chat by its display name.
 
 ```mermaid
 flowchart LR
-    Input[Text or Shortcut] --> Reflex[Local Llama decision]
+    Input[Text or Shortcut] --> Reflex["System 1: Llama-Reflex-1B decision"]
     Input --> Rules[Explicit request rules]
     Reflex --> Contract[Typed action validation]
     Rules --> Contract
@@ -63,7 +70,7 @@ flowchart LR
     Native --> Result[Record the observed result]
     Reflex --> Answer[Local answer]
     Reflex --> Screen[Text screening]
-    Screen --> Cloud[Optional Muse cloud reasoning]
+    Screen --> Cloud["System 2: optional Muse cloud reasoning"]
 ```
 
 Each Reflex decision reads option-letter logits after processing the prompt,

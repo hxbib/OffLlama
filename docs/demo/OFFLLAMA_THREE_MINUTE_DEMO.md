@@ -12,7 +12,7 @@ for recording.
 
 ## Story
 
-A small Llama model runs on the iPhone. It can answer offline, make bounded
+A small Llama model runs on the iPhone as its System 1. It can answer offline, make bounded
 decisions, and prepare native actions. The app checks action arguments and asks
 for confirmation before messaging. Larger Muse models supply optional cloud
 reasoning and experimental training labels. The demonstration should show useful
@@ -28,9 +28,9 @@ behavior first, then explain the model and its measured limits.
 | 0:55–1:15 | Tap Confirm. Show the saved result, then the matching item in Reminders. Return to OffLlama. | “I confirm, and it saves a real reminder through iOS. This is an action on my phone, with the result recorded in the app.” |
 | 1:15–1:35 | Enter `Make a chart: rent 1200, food 400, transit 130`. Show the inline chart. Open its decision details only if they identify the rule honestly. | “I can turn a few numbers into a chart right here. This uses a local chart tool—no cloud request.” |
 | 1:35–1:55 | Show Chats and New chat, then return to the original conversation. Dismiss the keyboard with its inline button and long-press a message to Copy. Keep a waiting action only if one was intentionally created in rehearsal. | “Chats keep my conversations organized. I can return to an earlier one and copy a whole reply.” |
-| 1:55–2:20 | Show the concise architecture diagram in the repository, or record a slide with `Local Llama → validated action → user confirmation → native iOS`. Add a separate optional arrow to `Muse cloud reasoning`. | “Under the hood, Llama chooses how to handle the request. The app checks the action, asks for review, and uses native iOS integrations. Larger Muse models are available for harder questions when I’m online.” |
+| 1:55–2:20 | Show the concise architecture diagram in the repository, or record a slide with `System 1: Llama-Reflex-1B → validated action → user confirmation → native iOS`. Add a separate optional arrow to `System 2: Muse cloud reasoning`. | “Under the hood, Llama-Reflex-1B is the phone’s System 1. In one fast pass, it decides how to handle the request, and when it isn’t confident, it falls back instead of guessing. The app checks the action, asks for review, and uses native iOS. When I’m online, a larger Muse model can be System 2 for harder questions.” |
 | 2:20–2:45 | Show the saved shipping benchmark table with its source and `Linux decision benchmark, 120 authored examples` visibly labeled. Do not show a candidate as shipping. | “The shipping model chose the correct option in 98 of 120 authored benchmark decisions. At its current certainty threshold, it accepted 44 and got 41 of those right. These are Linux decision tests. They do not establish a phone task-success rate. Newer candidates stay experimental until they pass the same checks.” |
-| 2:45–3:00 | Return to the app, then end with OffLlama, Built with Llama, the repository URL and Habib's name. | “OffLlama connects a small local model to useful phone actions, with visible boundaries and honest outcomes. The code, evaluation and failed experiments are in the repository. Built with Llama.” |
+| 2:45–3:00 | Return to the app, then end with OffLlama, Built with Llama, the repository URL and Habib's name. | “OffLlama connects a small System 1 model to useful phone actions, with visible boundaries and honest outcomes. The code, evaluation and failed experiments are in the repository. Built with Llama.” |
 
 The timing includes typing and short pauses. Record narration after choosing the
 successful footage. Trim narration before speeding up action footage. If a wait
