@@ -55,12 +55,9 @@ struct SettingsView: View {
         NavigationStack {
             Form {
                 Section {
-                    LabeledContent("Reflex + local answers", value: model.modelState)
+                    LabeledContent("Status", value: model.modelState)
                     StatusPill()
-                    Toggle("Reuse prompt prefix in the on-device model", isOn: $kvPrefix)
-                } header: { Text("On-device model") } footer: {
-                    Text("Off by default. When on, the on-device Llama model keeps the fixed start of each decision prompt in memory so it only reads the new part. It affects only this iPhone's model, not cloud requests, and applies on next launch. Whether it makes answers faster has not been measured.")
-                }
+                } header: { Text("On-device model") }
                 Section {
                     Picker("Model", selection: metaPickerSelection) {
                         ForEach(MetaModelPresets.all, id: \.id) { Text($0.name).tag($0.id) }
@@ -75,14 +72,10 @@ struct SettingsView: View {
                     keyStateRow(saved: metaKeySaved, entered: !metaKey.isEmpty)
                     routeRow(metaPreview)
                     if metaKeySaved { Button("Remove Meta key", role: .destructive) { removeKey("meta_key", label: "Meta", clearsEntry: { metaKey = "" }) } }
-                } header: { Text("Meta Model API · Muse Spark / Muse Wonder") } footer: {
-                    Text("Standard mode only. Contributor-mode ids are refused before any request leaves the phone, and no model is substituted for your choice. The cloud service caches repeated prompt starts on its own; there is no switch for that here. The key field is always empty; the saved key is never shown.")
-                }
+                } header: { Text("Cloud model") }
                 Section {
-                    Toggle("Voice stays on this iPhone", isOn: $voiceStaysOnDevice)
-                } header: { Text("Muse Voice Transcribe") } footer: {
-                    Text("The waveform button in chat records audio and, after you release it, uploads it to Muse Voice Transcribe, then deletes it. It needs internet and a Meta key, and it is not Apple Dictation. On: the waveform button sends nothing.")
-                }
+                    Toggle("Allow audio uploads", isOn: Binding(get: { !voiceStaysOnDevice }, set: { voiceStaysOnDevice = !$0 }))
+                } header: { Text("Muse Voice Transcribe") }
                 DisclosureGroup("Other OpenAI-compatible endpoint") {
                     TextField("Base URL (…/v1/)", text: $byokURL).textInputAutocapitalization(.never).autocorrectionDisabled().keyboardType(.URL)
                     TextField("Model", text: $byokModel).textInputAutocapitalization(.never).autocorrectionDisabled()
@@ -92,34 +85,39 @@ struct SettingsView: View {
                     routeRow(byokPreview)
                     if byokKeySaved { Button("Remove endpoint key", role: .destructive) { removeKey("byok_key", label: "Endpoint", clearsEntry: { byokKey = "" }) } }
                 }
-                Section {
+                DisclosureGroup("Advanced") {
+                    Toggle("Reuse local prompt prefix", isOn: $kvPrefix)
+                    Text("Applies on next launch. Local reuse only; a speed improvement has not been measured.")
+                        .font(.subheadline).foregroundStyle(.secondary)
+                    Text(model.historyStorageStatus).font(.subheadline).textSelection(.enabled)
                     Button("Export decisions for distillation") {
                         if let r = model.exportDistillation() {
                             exportStatus = "\(r.rows) escalated decision\(r.rows == 1 ? "" : "s") → Files › OffLlama › \(r.url.lastPathComponent)"
                         } else { exportStatus = "Export failed (model not loaded yet?)" }
                     }
                     if !exportStatus.isEmpty { Text(exportStatus).font(.caption).foregroundStyle(.secondary) }
-                } header: { Text("Distillation loop") } footer: {
                     Text("Exports recent low-confidence decisions and their request context for future model training. The app does not upload this file. Your device backup settings may include it.")
-                }
-                Section {
+                        .font(.subheadline).foregroundStyle(.secondary)
                     Button("Export action diagnostics") {
                         diagnosticsURL = model.exportActionDiagnostics()
                         diagnosticsStatus = diagnosticsURL == nil ? "No action diagnostics are available yet." : ""
                     }
                     if let diagnosticsURL { ShareLink("Share diagnostics", item: diagnosticsURL) }
                     if !diagnosticsStatus.isEmpty { Text(diagnosticsStatus).font(.caption).foregroundStyle(.secondary) }
-                } header: { Text("Action diagnostics") } footer: {
-                    Text("Exports recent action stages and outcomes using fixed codes and random request IDs. It excludes message text, contacts and API keys.")
+                    Text("Action diagnostics exclude message text, contacts and API keys.")
+                        .font(.subheadline).foregroundStyle(.secondary)
                 }
-                Section("Apple Dictation and Vocal Shortcuts") {
+                DisclosureGroup("Dictation and voice shortcuts") {
                     Text("To dictate text, tap the microphone on the Apple keyboard, speak, and review the text before you send it. Whether dictation works offline depends on your iPhone, its language and its settings.")
                     Text("For a hands-free route, make a shortcut in Shortcuts: Dictate Text, then Ask OffLlama with Request set to the Dictated Text. In Settings › Accessibility › Vocal Shortcuts, add the phrase “Hey OffLlama” and choose that shortcut. Opening the app may need your iPhone unlocked.")
                 }
                 Section("About") {
                     Text("Built with Llama").font(.callout.weight(.semibold))
-                    Text("On-device model: Llama 3.2, licensed under the Llama 3.2 Community License, Copyright © Meta Platforms, Inc. All Rights Reserved.")
-                        .font(.caption).foregroundStyle(.secondary)
+                    DisclosureGroup("Privacy and licenses") {
+                        Text("Keys stay in Keychain. Selected screened text can accompany cloud requests. Voice uploads audio before transcript screening; photos may contain recognizable details.")
+                        Text("Cloud models use Standard mode. Contributor-mode IDs are refused before requests are sent. Cloud prompt caching is managed by the provider.")
+                        Text("Llama 3.2 Community License. Copyright © Meta Platforms, Inc. All Rights Reserved.")
+                    }
                 }
                 Section {
                     Button("Save", action: save)
@@ -128,7 +126,7 @@ struct SettingsView: View {
                         Label { Text(line.text).font(.caption) } icon: { Image(systemName: line.symbol).foregroundStyle(line.tint) }
                             .accessibilityElement(children: .combine)
                     }
-                } footer: { Text("Keys are stored in the iOS Keychain on this device only. Without a working key, cloud help is unavailable and OffLlama answers on the phone. Links and Shortcuts can still open other apps.") }
+                }
             }
             .scrollDismissesKeyboard(.interactively)
             .toolbar { ToolbarItemGroup(placement: .keyboard) { Spacer(); Button("Done") { UIApplication.resignKeyboard() } } }
@@ -140,15 +138,15 @@ struct SettingsView: View {
     }
 
     @ViewBuilder private func keyStateRow(saved: Bool, entered: Bool) -> some View {
-        Label(entered ? "New key entered. Save to store it." : (saved ? "A key is saved in Keychain." : "No key saved."),
-              systemImage: saved ? "key.fill" : "key").font(.caption).foregroundStyle(.secondary)
+        Label(entered ? "Save to update key" : (saved ? "Key saved" : "No key saved"),
+              systemImage: saved ? "key.fill" : "key").font(.subheadline).foregroundStyle(.secondary)
     }
 
     @ViewBuilder private func routeRow(_ status: CloudRouteStatus) -> some View {
         let level: SaveLine.Level = status.isEnabled ? .good : (status.state == .refused ? .problem : .warning)
         let line = SaveLine(level: level, text: status.detail)
         if status.state != .notConfigured {
-            Label { Text(status.detail).font(.caption) } icon: { Image(systemName: line.symbol).foregroundStyle(line.tint) }
+            Label { Text(status.isEnabled ? "Ready" : status.detail).font(.subheadline) } icon: { Image(systemName: line.symbol).foregroundStyle(line.tint) }
                 .accessibilityElement(children: .combine)
         }
     }

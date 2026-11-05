@@ -27,8 +27,6 @@ struct ConversationListView: View {
                             Button("Delete chat", systemImage: "trash", role: .destructive) { pendingDelete = c.id }
                         }
                     }
-                } footer: {
-                    Text("Chats are kept only on this iPhone. Clearing or deleting a chat does not delete saved memories. A waiting or unverified action is tracked separately and stays findable.\n\(model.historyStorageStatus)")
                 }
             }
             .navigationTitle("Chats").navigationBarTitleDisplayMode(.inline)
@@ -70,7 +68,6 @@ struct ConversationListView: View {
                 Text(c.title).font(.body.weight(c.id == model.activeConversationID ? .semibold : .regular)).lineLimit(1)
                 HStack(spacing: 8) {
                     Text(c.updated, format: .relative(presentation: .named)).font(.caption).foregroundStyle(.secondary)
-                    Text("\(c.messages.count) message\(c.messages.count == 1 ? "" : "s")").font(.caption).foregroundStyle(.secondary)
                 }
                 if c.hasPendingActions {
                     Label("\(c.pendingActionCount) action\(c.pendingActionCount == 1 ? "" : "s") waiting or unverified", systemImage: "exclamationmark.circle")

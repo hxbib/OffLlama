@@ -431,18 +431,12 @@ public final class Assistant: @unchecked Sendable {
         return Self.reply(from: result, read: &read, decisions: &decisions)
     }
 
-    /// A clear reminder/calendar command the model routed elsewhere. The typed validation still applies, a missing
-    /// field is asked for, and `explicitDraft` forces the ledger's review card: nothing runs before Confirm.
+    /// Missing fields stay on the ledger card so the user can finish the same request without retyping it.
     func explicitCommandPath(_ tool: String, utterance: String, requestID: UserRequestID, planned: inout PlannedAction?,
                              read: inout ReadResult?, decisions: inout [ReflexDecision]) async throws -> Reply {
         guard let capID = CapabilityCatalog.capabilityID(forTool: tool) else { return .clarify("I can't do that on this phone yet.") }
         if let issue = ActionValidation.requestIssue(capabilityID: capID, utterance: utterance) { return .clarify(issue.question) }
         let args = ArgumentExtractor.heuristic(tool: tool, utterance: utterance)
-        let specs = CapabilityCatalog.current(id: capID)?.arguments ?? []
-        if let missing = specs.first(where: { $0.required && (args[$0.name] ?? "").isEmpty }) {
-            if missing.kind == .datetime { return .clarify(tool == "create_reminder" ? "When should I remind you?" : "When is it?") }
-            return .clarify(tool == "create_reminder" ? "What should I remind you about?" : "What should the event be called?")
-        }
         let action = PlannedAction(tool: tool, args: args)
         planned = action
         guard let ledger, let effects else { return .clarify("Actions are unavailable on this build. Nothing was done.") }

@@ -147,7 +147,7 @@ struct Bubble: View {
                         if !item.decisions.isEmpty || item.detail != nil {
                             Button { withAnimation(.snappy) { showDecisions.toggle() } } label: {
                                 Image(systemName: showDecisions ? "chevron.up.circle" : "info.circle")
-                                    .font(.caption).frame(minWidth: 32, minHeight: 32)
+                                    .font(.callout).frame(minWidth: 44, minHeight: 44)
                             }
                             .buttonStyle(.borderless).foregroundStyle(.tertiary)
                             .accessibilityLabel(showDecisions ? "Hide details" : "Details")
@@ -164,6 +164,7 @@ struct Bubble: View {
                 }
                 Spacer(minLength: 48)
             }
+            .contextMenu { copyButton }
             .sheet(isPresented: $showPrivacy) { PrivacySheet(sent: item.cloudPromptSent ?? "", provider: item.badge ?? "") }
         }
     }
@@ -227,12 +228,12 @@ struct DraftCardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(card.title).font(.headline)
-            Text(card.reviewSentence).font(.caption).foregroundStyle(.secondary)
+            Text(card.reviewSentence).font(.subheadline).foregroundStyle(.secondary)
             ForEach(card.fields, id: \.name) { field in
                 fieldView(field)
             }
             if !card.notice.isEmpty {
-                Text(card.notice).font(.caption).foregroundStyle(.orange)
+                Text(card.notice).font(.subheadline).foregroundStyle(.orange)
             }
             if let hint = card.duplicateHint {
                 Text(hint.note).font(.caption2).foregroundStyle(.secondary)
@@ -242,7 +243,7 @@ struct DraftCardView: View {
                     .disabled(!card.canConfirm || model.busy)
                 Button("Cancel", role: .cancel) { Task { await model.cancel(item) } }
                     .buttonStyle(.bordered).disabled(model.busy)
-            }.controlSize(.small)
+            }.controlSize(.regular)
             .accessibilityElement(children: .contain)
             .accessibilityHint(draftHint)
         }
@@ -370,11 +371,12 @@ struct DraftCardView: View {
 
 struct EmptyChat: View {
     var body: some View {
-        VStack(spacing: 10) {
-            Image(systemName: "bubble.left.and.text.bubble.right").font(.system(size: 36, weight: .light)).foregroundStyle(Theme.accent)
-            Text("Try: “Remind me to call Mom at 7”").foregroundStyle(.secondary)
-            Text("or “I'm out of oat milk”").foregroundStyle(.tertiary)
+        VStack(spacing: 14) {
+            Image(systemName: "bubble.left.and.text.bubble.right")
+                .font(.system(size: 40, weight: .light)).foregroundStyle(Theme.accent)
+                .accessibilityHidden(true)
+            Text("What's on your mind?").font(.title2.weight(.semibold))
         }
-        .font(.callout).padding(.top, 120)
+        .frame(maxWidth: .infinity).padding(.top, 80)
     }
 }

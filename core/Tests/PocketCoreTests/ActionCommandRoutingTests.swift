@@ -56,14 +56,24 @@ final class ActionCommandRoutingTests: XCTestCase {
         XCTAssertEqual(effects.performCount, 0)
     }
 
-    func testMissingTimeAsksConcreteQuestionWithoutCardOrChat() async throws {
+    func testMissingTimeKeepsEditableReminderUntilTimeIsChosen() async throws {
         let (a, effects, e) = try make(route: Self.answerLocal)
         let t = try await a.handle("Remind me to call mom")
-        guard case .clarify(let q) = t.reply else { return XCTFail("\(t.reply)") }
-        XCTAssertEqual(q, "When should I remind you?")
-        XCTAssertNil(t.action)
+        guard case .needsConfirmation(let card) = t.reply else { return XCTFail("\(t.reply)") }
+        XCTAssertFalse(card.canConfirm)
+        XCTAssertEqual(card.fields.first { $0.name == "title" }?.value, "call mom")
+        XCTAssertNil(card.fields.first { $0.name == "when" }?.instant)
         XCTAssertTrue(e.generatePrompts.isEmpty)
         XCTAssertEqual(effects.performCount, 0)
+        let edited = try await a.editEffect(card.attemptID,
+            edits: [DraftEdit(field: "when", value: .instant(Date().addingTimeInterval(3600)))],
+            expectedRevision: card.revision)
+        XCTAssertTrue(edited.canConfirm)
+        XCTAssertEqual(effects.performCount, 0)
+        let done = try await a.confirmEffect(edited.attemptID, expectedRevision: edited.revision)
+        guard case .finished(let effect) = done else { return XCTFail("\(done)") }
+        XCTAssertTrue(effect.phase.isCommitted)
+        XCTAssertEqual(effects.performCount, 1)
     }
 
     func testUnsupportedConstraintsStillRejectedOnForcedPath() async throws {
