@@ -75,7 +75,7 @@ sha256 a5c60a8836aa73adeb847185aa30184cd9c33c522185f59fa9ac55a9d00782c2
 `AppModel.findModel()` checks the bundle first, then Documents if no bundled model
 exists. Within either location it prefers a filename containing `reflex`.
 For an unbundled development build, copy the exact shipping file through
-Finder > iPhone > Files > Pocket Glimmer. Startup verifies the selected file's
+Finder > iPhone > Files > OffLlama. Startup verifies the selected file's
 byte count and SHA-256 before loading it; another `.gguf` cannot use this calibration.
 
 `app/PocketGlimmer/Resources/Models/calibration.json` is required. It was generated from the

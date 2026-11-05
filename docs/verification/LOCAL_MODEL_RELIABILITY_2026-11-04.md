@@ -1,5 +1,12 @@
 # OffLlama local-model reliability (2026-11-04)
 
+Parent interpretation, November 5: this experiment measures accepted model
+decisions on synthetic or reused calibration inputs. It does not measure actions
+executed, messages delivered, or a change in observed iPhone behavior. The parent
+reproduced the summary from all 686 saved scores, verified 98 unique decision
+inputs and complete paired conditions, and found no saved score rounded exactly
+to the threshold. Zero confident errors in this sample is not a safety guarantee.
+
 Investigator: Claude Opus 5.5 (user assignment), worktree `t3-64f5de26`, base `f87567b`, branch
 `t3/offllama-route-context-calibration`. Zero paid inference and zero GPU spend. Every model number below comes from local CPU
 runs of the shipping GGUF on my own `llama-server` (127.0.0.1:8299, llama.cpp `13ec8f6`, `-t 4 -c 4096`). Linux CPU
@@ -133,13 +140,13 @@ comparison spans builds and is not same-server variance. Both sit well below the
 - **Action requests (gold tool, 24 rows):** with a clean context the model sends 9 of 24 straight to the action path
   above tau. With 2 memories it sends 2 of 24, and with 4 memories it sends 1 on average (range 0 to 2 across seeds).
   Every one of the 24 rows lost confidence (24 down, 0 up, p = 1.2e-7).
-- **Greetings and small talk (gold answer_local, 13 rows):** 4 of 13 handled on device with a clean context. With
+- **Local-answer requests (gold answer_local, 13 rows):** 4 of 13 route decisions accepted with a clean context. With
   memory, 0 of 13. All 13 rows lost confidence, by 0.22 to 0.28 on average.
 - **Cloud-worthy requests (15 rows):** almost unaffected (-0.03 confidence). They stay above tau.
 - **Vague requests (gold clarify, 11 rows):** below tau in every condition. The model never handles clarify locally, with
   or without memory.
-- **No confident errors in any condition.** Memory does not make the model wrong while sure. It makes it unsure, which
-  sends more requests into the fallback.
+- **No confident errors were observed in these conditions.** The measured effect is mainly reduced confidence and
+  increased fallback. This small diagnostic sample cannot establish the absence of safety regressions.
 - **Argmax accuracy barely moves** (route: 48/63 bare vs 48.7 and 47.7 with memory). The damage is to confidence, and
   therefore to how often the app acts on the model's choice.
 - **toolChoice is also hurt on average, and this branch leaves it unchanged.** Handled at tau falls from 26/35 to 15 and
@@ -234,9 +241,9 @@ comparison spans builds and is not same-server variance. Both sit well below the
 
 #### What the route decision does with each request (offline, all rows)
 
-Model acts: conf >= tau and argmax is the gold option. Falls back: conf < tau. The app then takes the escalate_cloud fallback (offline: the answerability decision, then chat or an offline notice) unless a deterministic rule intercepts first. Wrong and confident: conf >= tau with the wrong option. mem2/mem4 counts are rows, mean [min, max] over 3 seeds.
+Correct route accepted: conf >= tau and argmax is the gold option. Falls back: conf < tau. The app then takes the escalate_cloud fallback (offline: the answerability decision, then chat or an offline notice) unless a deterministic rule intercepts first. This is a routing decision, not an executed action. Wrong and confident: conf >= tau with the wrong option. mem2/mem4 counts are rows, mean [min, max] over 3 seeds.
 
-| gold route | rows | condition | model acts | falls back | wrong and confident |
+| gold route | rows | condition | correct route accepted | falls back | wrong and confident |
 |---|---|---|---|---|---|
 | tool | 24 | bare | 9 | 15 | 0 |
 | tool | 24 | mem2 | 2 [2, 2] | 22 [22, 22] | 0 [0, 0] |
@@ -334,8 +341,8 @@ data also has no memory blocks, so a promoted candidate would meet the same rout
    Wonder evaluator owns any candidate evaluation. My raw probes were sent to it.
 4. **toolChoice context follow-up (code, about 20 min, parent's call).** The benchmark shows the memory block also costs
    toolChoice (handled -0.31 to -0.36 per row). Needs a test for memory-referenced events before changing it.
-5. **Do not lower tau.** Nothing measured here justifies it. The memory shift caused no confident errors, so the problem is
-   coverage, not safety.
+5. **Do not lower tau.** Nothing measured here justifies it. Reduced coverage is established in this sample; general
+   safety effects remain unmeasured.
 
 ## Commands
 

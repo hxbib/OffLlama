@@ -1,8 +1,10 @@
-# Mac and iPhone runbook: Pocket Glimmer
+# Mac and iPhone runbook: OffLlama
 
-Written 2026-11-04 on Linux. No Mac was available, so nothing in this file is an Xcode or
-device result. It records what is known, the shortest trustworthy path, and the checks that
-still need a Mac and an iPhone.
+Originally prepared on Linux; updated after the November 4 Mac verification.
+Reviewed source `7bb9c49` passed unsigned and signed Release builds and was installed
+on the iPhone 17 Pro. Exact hashes and logs are in the
+[Apple release report](../docs/verification/OFFLLAMA_RELEASE_CANDIDATE_APPLE_2026-11-04.md).
+Manual phone UI acceptance remains pending. The project and scheme retain `PocketGlimmer`.
 
 The requested phone target is **iOS 27.0.1**. The project's iOS 18.0 deployment target is
 a minimum build setting, not evidence that either version has passed these checks. Record
@@ -13,15 +15,11 @@ newer SDK.
 
 - Repository: <https://github.com/hxbib/pocket-glimmer>, branch `master`. It is not a
   local-only repo. `git pull --ff-only` gets the current code; `git lfs pull` gets the model.
-- Build provenance: the Nov 2 successful unsigned Simulator build is recorded in `613a612`
-  for the unchanged `e0e5b82` source (`git diff e0e5b82..613a612 -- app core` is empty). The
-  current tree is unbuilt. That was a Simulator build, not a device build, and it does not
-  cover today's app changes. Build the current checkout first; do not read the old source
-  reference as a code error and do not revert as a shortcut.
-- Core baseline at `581fa3a`: 94 tests executed, 1 skipped, 0 failures. The Nov 4 17:39 UTC integrated run
-  executed 136 tests with 1 skipped and 0 failures after cloud-text, memory-alias and
-  training-export repairs. The message, Apple TV and complete-document screening regressions
-  pass. Independent review of the new integration is still pending. A red core is not ready; do not fall back to an older tree.
+- Build provenance: source `7bb9c49` was reviewed, built and installed with full Xcode 27.2,
+  the pinned framework and exact model/calibration resources. Builds of later functional
+  changes require new evidence; do not reuse an old product after a failed build.
+- Core checks: the integrated Linux run executed 385 tests with one skip and no failures;
+  the Apple review executed 386 with one skip and no failures. These are not device UI checks.
 - Shipping model: `models/SHIPPING-ep1-Llama-3.2-1B-PocketGlimmer-Reflex-Q4_K_M.gguf`,
   807694080 bytes, sha256
   `a5c60a8836aa73adeb847185aa30184cd9c33c522185f59fa9ac55a9d00782c2`.
@@ -31,8 +29,8 @@ newer SDK.
 - XcodeGen spec: `app/project.yml` uses Swift 5.0, iOS 18.0, and empty entitlements so a free
   personal team can provision it. The bundle identifier is `com.habib.pocketglimmer`.
 - llama.cpp pin: `ddf48f85c933c1f438212a02eb21e7b001d2d37d`. `LlamaCppEngine.swift` uses the model/context, memory, batch,
-  sampler, vocabulary, and token APIs present in the pinned header. That is a header check,
-  not a compile result.
+  sampler, vocabulary, and token APIs present in the pinned header. The release report
+  contains the subsequent real compile and link evidence.
 
 ## Critical path
 
@@ -195,7 +193,7 @@ wc -c < models/SHIPPING-ep1-Llama-3.2-1B-PocketGlimmer-Reflex-Q4_K_M.gguf
 If the file is a few hundred bytes, it is a Git LFS pointer. Run `git lfs install` and
 `git lfs pull`.
 
-For an unbundled development build, open Finder > iPhone > Files > Pocket Glimmer
+For an unbundled development build, open Finder > iPhone > Files > OffLlama
 and copy the exact shipping `.gguf` into the app's Documents folder. `AppModel`
 checks the bundle first and uses Documents only when no bundled model exists.
 Within either location it prefers a filename containing `reflex`. Startup checks
@@ -377,7 +375,7 @@ of the demo evidence.
    labeled with the actual device, OS, Release build, and airplane-mode setting. If a number was not
    measured, leave the placeholder out of the claim.
 
-The demo beats and the permission seeding are in `docs/DEMO_SCRIPT.md`. Rehearse every
+The current demo beats are in `docs/demo/OFFLLAMA_THREE_MINUTE_DEMO.md`. Rehearse every
 offline shot on the real phone and keep only the shots that clear tau. Messages always
 confirm by rule, even when the confidence is high.
 
@@ -401,10 +399,9 @@ These cannot be settled on Linux or in a Simulator:
 
 Known limitations at this baseline:
 
-- The current tree is unbuilt. The next Mac run is the first compile of the current checkout,
-  including the skills and media work. The pinned llama header matches the engine's symbols,
-  but that is not a compile. Do not revert to `e0e5b82` and then present the old tree as the
-  current skills/media build.
+- The current reviewed release candidate is built and installed, but installation alone
+  does not prove permissions, keyboard layout, native action behavior or file protection.
+  Record those against the exact installed SHA.
 - The repo is private until submission. A private repo is release-incomplete, not a core
   build failure. `scripts/verify_submission.sh` reports it separately.
 - The app is calibrated for tau 0.90. Lowering tau or using the base model changes the
@@ -416,7 +413,7 @@ Known limitations at this baseline:
 | Symptom | Check | Resolution |
 |---|---|---|
 | `xcodebuild: command not found` | `xcode-select -p` | Install full Xcode, then `sudo xcode-select -s /Applications/Xcode.app/Contents/Developer` |
-| `No such module 'llama'` | Device binary, headers and module map in `app/Frameworks/llama.xcframework` | Run `./ios/mac_prep.sh framework --llama-src ~/src/llama.cpp`, then `xcodegen generate` |
+| `No such module 'llama'` | Device binary, headers and module map in `app/Frameworks/llama.xcframework` | Run `./ios/mac_prep.sh framework --llama-src ~/src/llama.cpp`, then `scripts/generate-offllama-project.sh` |
 | Framework has no usable provenance | `ios/mac_prep.sh framework` returns 2 | Preserve the old framework under an unused backup name and rebuild with the wrapper from the clean full pin |
 | Framework has only a Simulator slice | `ios/mac_prep.sh framework` | Rebuild with `./build-xcframework.sh ios-device` |
 | `xcodegen: command not found` | `command -v xcodegen` | `brew install xcodegen` |

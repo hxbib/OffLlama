@@ -1,8 +1,10 @@
-# Per type at the certified threshold τ=0.90 (shipping ep1, frozen test120, report only)
+# Per type at the shipping threshold τ=0.90 (ep1, frozen test120, report only)
 
 Re-analysis 2026-11-04 ~06:20 ET of `eval/results/after_floor.test.json` (no model re-run). Companion to
 `PER_TYPE_SHIPPING.md`, which reports τ=0.80. τ=0.90 is the threshold the app ships with under AFTER_FILL
-Option A (certified ≤10.2% error bound on cal180; LEDGER 6.2). n=10 per type, so one item = 10 points.
+Option A. The earlier certification claim was withdrawn because model selection reused cal180.
+The nominal selection-set calculation is not a post-selection guarantee; see
+[evaluation limits](../../docs/EVALUATION_CLAIMS.md). n=10 per type, so one item = 10 points.
 
 | Type | Acc | Handled @0.90 | Correct on handled @0.90 | Handled @0.80 | Correct on handled @0.80 |
 |---|---|---|---|---|---|

@@ -3,8 +3,10 @@
 Prepared November 4 for Habib's final recording. This is the recording plan, not a
 claim that every shot has passed on the latest build. Rehearse the exact installed
 commit once before filming. The confirmed phone result is an answer of 4 with
-Airplane Mode on and Wi-Fi off. The newer conversation build is awaiting review
-and installation. Keep the narration aligned with what appears on screen.
+Airplane Mode on and Wi-Fi off on the earlier build. Reviewed source `7bb9c49`
+is now signed and installed, with matching model and calibration hashes. Its
+keyboard, chart, chats and message flow are awaiting manual rehearsal. Keep the
+narration aligned with what appears on screen.
 
 ## Story
 

@@ -11,10 +11,10 @@ I'm Habib, a computer science student at Hunter College. My subway commute often
 has no signal. I wanted an assistant that could keep working there, remember
 useful facts locally, and show me what it was about to do.
 
-**Prototype status.** A signed build is installed on an iPhone 17 Pro, and the user
+**Prototype status.** Reviewed source `7bb9c49` is signed and installed on an iPhone 17 Pro. On an earlier build, the user
 verified an answer of **4 to “What is 2 + 2?” with Airplane Mode on and Wi-Fi off**.
-Newer action and conversation repairs have passing core tests and Apple build
-checkpoints, with final phone acceptance still in progress. See the exact commits
+The action and conversation repairs passed independent review and Apple Release
+builds, with final phone acceptance still in progress. See the exact commits
 and remaining checks in [project status](docs/PROJECT_STATUS.md) and the
 [verification ledger](ORCHESTRATOR_LEDGER.md).
 
@@ -91,7 +91,8 @@ file is **808 MB (770 MiB)**; file size is not running memory usage.
 
 ![Error versus fraction of decisions accepted, measured on the Linux test120 set](docs/img/risk_coverage_test120.png)
 
-Sources and definitions are in the [shipping results](eval/results/AFTER_FLOOR.md),
+Readable definitions, figures and the later runtime diagnostic are in
+[benchmarks](docs/BENCHMARKS.md). Sources are in the [shipping results](eval/results/AFTER_FLOOR.md),
 [threshold-specific results](eval/results/PER_TYPE_TAU090.md) and
 [evaluation limits](docs/EVALUATION_CLAIMS.md). The earlier statistical certificate
 claim was withdrawn because model selection reused the calibration data. No
@@ -134,11 +135,11 @@ calibration. An unsigned build is only a compile and bundle check. Follow the
 [Mac runbook](ios/MAC_DAY_RUNBOOK.md) for signing, installation and phone tests.
 
 The recorded Linux checkpoint at `5382349` executes **385 tests, with one opt-in
-live test skipped and zero failures**. The independent Apple checkpoint at
-`f87567b` passed unsigned and signed Release builds with matching resources.
-These are different source checkpoints. [Review evidence](docs/verification/CONVERSATIONS_INDEPENDENT_APPLE_REVIEW_2026-11-04.md)
-and [integrated repairs](docs/verification/RELEASE_CANDIDATE_INTEGRATION_2026-11-04.md)
-keep that distinction explicit.
+live test skipped and zero failures**. The independent Apple review of `7bb9c49`
+executed **386 tests, with one skipped and zero failures**, and passed unsigned
+and signed Release builds, resource verification and installation.
+[The Apple report](docs/verification/OFFLLAMA_RELEASE_CANDIDATE_APPLE_2026-11-04.md)
+separates these checks from the phone UI acceptance still pending.
 
 ## Privacy and boundaries
 
