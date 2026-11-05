@@ -37,3 +37,13 @@ Logs are in `docs/verification/logs/resumed4376810-*.log`. Free disk space staye
 - No messages were sent and no external actions were taken.
 - No unsigned build was run.
 - The untracked `app/PocketGlimmer/Support/Info.plist` and `docs/verification/MAC_BUILD_2026-11-04.md` were preserved. Their sha256 hashes match before and after.
+
+## Parent qualification
+
+The command guard protects the tested explicit title-and-destination forms. It
+is not a general Apple TV parser: requests without a show, compound requests,
+and unrelated questions retain their existing routing. The review statement
+that a missing title always asks instead of chatting is not established by the
+new tests. Polite commands such as “Could you open Ted Lasso in the Apple TV app?”
+intentionally match even though they end with a question mark. No recipient
+delivery state was added; the existing typed sheet result remains non-committed.

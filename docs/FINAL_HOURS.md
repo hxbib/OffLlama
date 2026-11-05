@@ -2,15 +2,15 @@
 
 Deadline from the user's plan: **November 5, 2026, 02:00 UTC / November 4, 9 PM ET**.
 Keep enough time for recording, upload, public-link checks and the form. The
-current signed release candidate `805debf` is installed on the iPhone 17 Pro.
-The user confirmed its composer, Copy and reminder save. Apple TV failed before
-review; a tested routing repair and additional screen cleanup are being prepared
-for installation. See [project status](PROJECT_STATUS.md).
+signed release candidate `4376810` is installed on the iPhone 17 Pro. Composer,
+Copy and reminder save were user-confirmed on the preceding build. The new
+Apple TV routing and screen cleanup need a final phone check.
+See [project status](PROJECT_STATUS.md).
 
 ## Freeze the recording build
 
 Use the installed build whose exact source and resources appear in the
-[Apple report](verification/FIX_DIFF_REVIEW_805debf.md).
+[Apple report](verification/RESUMED_FINAL_APPLE_2026-11-05.md).
 Do not change model, threshold or features during recording. New candidates
 remain experimental. Only fix a defect that blocks the selected demonstration,
 and rebuild and retest after any such change.

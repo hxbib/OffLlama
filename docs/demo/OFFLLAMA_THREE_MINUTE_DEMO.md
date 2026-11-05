@@ -5,8 +5,9 @@ proof of every shot. The user confirmed the multi-line composer, whole-message
 Copy, and a reviewed reminder saved in Reminders on installed source `805debf`.
 An offline answer of 4 to “What is 2 + 2?” was confirmed on an earlier build.
 The Apple TV request still fell into chat on `805debf`; routing repair `b5fdfb0`
-passes core tests but awaits installation and phone rehearsal. Screen cleanup is
-also in progress. Freeze the final installed build before recording.
+and screen cleanup are now signed and installed as `4376810`. Linux ran 398 core
+tests and the Mac ran 399, each with one skip and no failures. Rehearse the new
+Apple TV flow on the phone before including it. Freeze this build for recording.
 
 ## Story
 

@@ -1,3 +1,22 @@
+## Installed final build — 2026-11-05 00:51:37 UTC
+
+Reviewed = built = installed source `4376810e5cdbaf56b2d4b5c429154d9cd61fb5a3`.
+Fresh Gmail Claude Opus 5.5 High review found no blockers; no source repairs.
+Mac core: 399 executed, 1 skipped, 0 failures. Signed Release, codesign, exact
+model/calibration and install all passed. Receipt: databaseSequenceNumber 5976.
+Report: `docs/verification/RESUMED_FINAL_APPLE_2026-11-05.md`; dispatch and exact
+links: `docs/verification/offllama_final_install_2026-11-05.json`.
+
+No app launch or new phone UI check. The user previously confirmed keyboard,
+Copy and reminder save on805debf; the explicit Apple TV card/search, concise
+message statuses and quieter screens still need phone acceptance on4376810.
+All workers finished. River02 worked; River1 did not. No new flashlight/native
+helper implementation, training, public release or form submission. Keep this
+build fixed for the user's final rehearsal and recording; patch only reproduced
+blocking defects. The demo plan now prioritizes the verified reminder flow.
+
+---
+
 ## Final install in progress — 2026-11-05 00:50 UTC
 
 Integrated source `4376810` is pushed: Apple TV/message status core repair plus

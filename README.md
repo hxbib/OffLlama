@@ -11,14 +11,13 @@ I'm Habib, a computer science student at Hunter College. My subway commute often
 has no signal. I wanted an assistant that could keep working there, remember
 useful facts locally, and show me what it was about to do.
 
-**Prototype status.** Reviewed source `805debf` is signed and installed on an iPhone 17 Pro. On an earlier build, the user
-verified an answer of **4 to “What is 2 + 2?” with Airplane Mode on and Wi-Fi off**.
-On `805debf`, the user also confirmed an unobstructed composer, whole-message Copy,
-and successful reminder review and saving. Apple TV still fell into chat on that
-build. Repair `b5fdfb0` passes 398 Linux core tests (one skipped, zero failures) and
-independent review; its installation and phone check are pending. See the exact commits
-and remaining checks in [project status](docs/PROJECT_STATUS.md) and the
-[verification ledger](ORCHESTRATOR_LEDGER.md).
+**Prototype status.** Reviewed source `4376810` is signed and installed on an iPhone 17 Pro.
+The previous build's composer, whole-message Copy and reminder review/save were
+confirmed by the user; an offline answer of **4 to “What is 2 + 2?”** was confirmed
+earlier. The new build fixes explicit Apple TV commands falling into chat, shortens
+message statuses and simplifies the screens. Its phone acceptance is still pending.
+See [project status](docs/PROJECT_STATUS.md) and the
+[Apple build and installation report](docs/verification/RESUMED_FINAL_APPLE_2026-11-05.md).
 
 ## What it does
 
@@ -138,13 +137,13 @@ phone. The preparation script verifies the pinned framework, shipping GGUF and
 calibration. An unsigned build is only a compile and bundle check. Follow the
 [Mac runbook](ios/MAC_DAY_RUNBOOK.md) for signing, installation and phone tests.
 
-The final source `805debf` executes **395 Linux core tests, with one opt-in
+The final source `4376810` has **398 Linux core tests executed, with one opt-in
 live test skipped and zero failures**. Independent Mac verification executed
-**396 tests, with one skipped and zero failures**, and passed signed Release,
+**399 tests, with one skipped and zero failures**, and passed signed Release,
 resource checks and installation. The extra Apple-only test checks backup exclusion.
-The final unsigned build was skipped for the deadline; the signed Release compiled
-and linked the app. [The Apple report](docs/verification/FIX_DIFF_REVIEW_805debf.md)
-separates these checks from the phone UI acceptance still pending.
+The unsigned build was skipped; signed Release compiled and linked the app.
+[The Apple report](docs/verification/RESUMED_FINAL_APPLE_2026-11-05.md) separates
+these checks from phone UI acceptance.
 
 ## Privacy and boundaries
 

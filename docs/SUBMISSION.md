@@ -46,9 +46,9 @@ model choices, not end-to-end phone success rates. The repository includes raw
 results, negative experiments and the limits of the measurements.
 
 The user has verified a local answer of 4 to “What is 2 + 2?” with Airplane Mode on
-and Wi-Fi off. The current release candidate, source `805debf`, passed independent
+and Wi-Fi off. The current release candidate, source `4376810`, passed independent
 repair review, a signed Release build, resource checks and installation
-on an iPhone 17 Pro. The user confirmed its multi-line composer, whole-message
+on an iPhone 17 Pro. On the previous build, the user confirmed the multi-line composer, whole-message
 Copy, and reminder review followed by saving in Reminders. Other flows remain
 subject to rehearsal; a further Apple TV routing repair is not yet phone-verified.
 
@@ -70,7 +70,7 @@ original GitHub repository and bundle identity under the visible name OffLlama.
 
 - [Benchmarks in plain language](BENCHMARKS.md) includes the meaning, denominator
   and source of each headline number. No real-world error guarantee is claimed.
-- [Apple release-candidate verification](verification/FIX_DIFF_REVIEW_805debf.md)
+- [Apple release-candidate verification](verification/RESUMED_FINAL_APPLE_2026-11-05.md)
   records the reviewed, built and installed SHA, signatures and resource hashes.
 - [Project status](PROJECT_STATUS.md) separates implementation, build checks and
   user-observed phone behavior. Phone speed, memory and thermal figures remain
