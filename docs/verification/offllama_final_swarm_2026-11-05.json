@@ -1,0 +1,47 @@
+{
+  "startedAt": "2026-11-05T00:08:08Z",
+  "deadline": "2026-11-05T00:33:08Z",
+  "baseline": "7afd2e4",
+  "installedSource": "7bb9c49",
+  "assignment": "Gmail Claude Opus5.5 High for the user-requested final swarm",
+  "shape": "Partitioned implementation, no overlapping writable source",
+  "workers": [
+    {
+      "role": "UI",
+      "taskId": "node:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Aremote-delegate%3Aoffllama-final-ui-opus-mac-20261105-v1",
+      "link": "<t3-thread://v2/e471ef05-c8d6-49ec-b176-96ab6da0d020/mcp:launch:f82a84835a3eb7934614cc0877e8b073f2dc2eb8c4c76559d4bb997546ec85c0>",
+      "providerInstanceId": "claudeAgent_2",
+      "model": "claude-opus-5-5",
+      "options": {
+        "effort": "high"
+      },
+      "remoteChild": {
+        "environmentId": "e471ef05-c8d6-49ec-b176-96ab6da0d020",
+        "threadId": "mcp:launch:f82a84835a3eb7934614cc0877e8b073f2dc2eb8c4c76559d4bb997546ec85c0",
+        "label": "Habib’s MacBook Air"
+      }
+    },
+    {
+      "role": "Actions",
+      "taskId": "node:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Aoffllama-final-action-routing-opus-20261105-v1",
+      "link": "<t3-thread://v2/1fc19a6b-4359-418d-a801-4f7fb5e9b320/thread:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Aoffllama-final-action-routing-opus-20261105-v1>",
+      "providerInstanceId": "claudeAgent_arkhamog_claude",
+      "model": "claude-opus-5-5",
+      "options": {
+        "effort": "high"
+      },
+      "remoteChild": null
+    },
+    {
+      "role": "Handoff",
+      "taskId": "node:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Aoffllama-final-native-handoffs-opus-20261105-v1",
+      "link": "<t3-thread://v2/1fc19a6b-4359-418d-a801-4f7fb5e9b320/thread:delegated-task:command%3Amcp%3Ac14bd552-7a98-4a52-b11a-f64a33895d9a%3Adelegate-task%3Aoffllama-final-native-handoffs-opus-20261105-v1>",
+      "providerInstanceId": "claudeAgent_arkhamog_claude",
+      "model": "claude-opus-5-5",
+      "options": {
+        "effort": "high"
+      },
+      "remoteChild": null
+    }
+  ]
+}
