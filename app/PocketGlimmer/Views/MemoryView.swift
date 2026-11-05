@@ -12,13 +12,13 @@ struct MemoryView: View {
             List {
                 if model.facts.isEmpty {
                     ContentUnavailableView("Nothing remembered yet", systemImage: "brain",
-                                           description: Text("Try “I'm allergic to peanuts.” Memories stay on this phone."))
+                                           description: Text("Try “I'm allergic to peanuts.” Review or forget saved details here."))
                 }
                 if !model.onePager.isEmpty {
                     Section("Profile") {
                         Text(model.onePager).font(.callout).textSelection(.enabled)
                         DisclosureGroup("Details") {
-                            Text("What the on-device model always sees, rebuilt from your memories. It leaves the phone only when a request escalates, and then masked.")
+                            Text("A summary of your saved memories. Relevant details can accompany cloud requests after screening.")
                                 .font(.subheadline).foregroundStyle(.secondary)
                         }
                     }

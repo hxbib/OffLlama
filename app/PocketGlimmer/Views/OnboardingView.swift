@@ -7,7 +7,7 @@ struct OnboardingView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     private let pages: [(String, String, String)] = [
         ("airplane", "Your assistant, in your pocket", "A small Meta model runs entirely on this iPhone. Turn on Airplane Mode: it still works."),
-        ("bolt.fill", "Reflex decides in milliseconds", "Every choice comes with a confidence score. When it isn't sure, it asks."),
+        ("bolt.fill", "Small decisions, on device", "The model helps choose how to handle your request."),
         ("brain", "It remembers, privately", "Facts you share stay on this phone. You can see and delete every one."),
         ("arrow.up.forward.circle", "Hard questions go to a bigger brain", "Only when you're online and allow it, with names and numbers masked first."),
     ]
